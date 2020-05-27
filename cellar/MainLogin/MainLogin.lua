@@ -103,7 +103,7 @@ function MainLogin:Close()
     end
 end
 
-function MainLogin:LoginAction()
+function MainLogin:LoginAction()            
     local MainLoginPage = Mod.CodePku.Store:Get("page/MainLogin")
 
     if not MainLoginPage then
@@ -112,17 +112,15 @@ function MainLogin:LoginAction()
     
     local loginServer = CodePkuService:GetEnv()    
     local account = MainLoginPage:GetValue("account")
-    local password = MainLoginPage:GetValue("password")
-    local autoLogin = MainLoginPage:GetValue("autoLogin")
-    local rememberMe = MainLoginPage:GetValue("rememberMe")
+    local verify_code = MainLoginPage:GetValue("verify_code")    
 
     if not account or account == "" then
         GameLogic.AddBBS(nil, L"账号不能为空", 3000, "255 0 0")
         return false
     end
 
-    if not password or password == "" then
-        GameLogic.AddBBS(nil, L"密码不能为空", 3000, "255 0 0")
+    if not verify_code or verify_code == "" then
+        GameLogic.AddBBS(nil, L"验证码不能为空", 3000, "255 0 0")
         return false
     end
 
@@ -133,21 +131,19 @@ function MainLogin:LoginAction()
     Mod.CodePku.MsgBox:Show(L"正在登陆，请稍后...", 8000, L"链接超时", 300, 120)
 
     local function HandleLogined()
+        LOG.std('handle logined', "info", "codepku")
         Mod.CodePku.MsgBox:Close()
-
         local token = Mod.CodePku.Store:Get("user/token") or ""
 
         CodePkuServiceSession:SaveSigninInfo(
             {
                 loginServer = loginServer,
-                account = account,
-                password = password,
-                token = token,
-                autoLogin = autoLogin,
-                rememberMe = rememberMe
+                account = account,               
+                token = token,                
             }
         )
-
+        
+        LOG.std('save sign in info')
         self:EnterUserConsole()
 
         if not Mod.CodePku.Store:Get('user/isVerified') then
@@ -165,8 +161,8 @@ function MainLogin:LoginAction()
     
     CodePkuServiceSession:Login(
         account,
-        password,
-        function(response, err)
+        verify_code,
+        function(response, err)                        
             if err == 503 then
                 Mod.CodePku.MsgBox:Close()
                 return false
@@ -175,8 +171,6 @@ function MainLogin:LoginAction()
             CodePkuServiceSession:LoginResponse(response, err, HandleLogined)
         end
     )
-
-    -- enter a default codepku world
 end
 
 function MainLogin:EnterUserConsole()
@@ -246,6 +240,7 @@ function MainLogin:SetRememberMe()
 end
 
 function MainLogin:GetHistoryUsers()
+    LOG.std('history users', "info", "codepku", NPL.ToJson(SessionsData:GetSessions().allUsers))
     if self.account and #self.account > 0 then
         local allUsers = commonlib.Array:new(SessionsData:GetSessions().allUsers)
         local beExist = false
@@ -313,4 +308,33 @@ function MainLogin:RemoveAccount(username)
     end
 
     self:Refresh()
+end
+
+function MainLogin:getMobileCode()
+    local MainLoginPage = Mod.CodePku.Store:Get("page/MainLogin")
+
+    if not MainLoginPage then
+        return false
+    end
+        
+    local mobile = MainLoginPage:GetValue("account")
+    LOG.std(nil, "info", "codepku", "get mobile code: %s", mobile)
+
+    if not mobile or mobile == "" then
+        GameLogic.AddBBS(nil, L"手机号码不能为空", 3000, "255 0 0")
+        return false
+    end
+
+    Mod.CodePku.MsgBox:Show(L"正在获取验证码...", 8000, L"链接超时", 300, 120)
+
+    CodePkuServiceSession:getMobileCode(
+        mobile, 
+        function (response, err)
+            echo(err, true)    
+            Mod.CodePku.MsgBox:Close()       
+            GameLogic.AddBBS(nil, L"验证码获取成功", 3000, "255 0 0")         
+            LOG.std(nil, "info", "codepku", "get mobile code success")            
+            return false
+        end
+    )
 end

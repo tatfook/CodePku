@@ -24,16 +24,10 @@ function UserStore:Action()
             self.username = username
             self.nickname = nickname
 
-            -- if self.userType == 'vip' then
-            --     -- true or nil
-            --     commonlib.setfield("System.User.isVip", true)
-            -- end
-
             commonlib.setfield("System.User.codepkuToken", token)
-            commonlib.setfield("System.User.username", username)
-            commonlib.setfield("System.User.codepkuUsername", username)
-            commonlib.setfield("System.User.NickName", nickname)
-            -- commonlib.setfield("System.User.userType", self.userType)
+            commonlib.setfield("System.User.mobile", mobile)
+            commonlib.setfield('system.User.id', userId)            
+            commonlib.setfield("System.User.nickName", nickname)            
         end,
         SetPlayerController = function(playerController)
             self.playerController = playerController

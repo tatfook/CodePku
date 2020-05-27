@@ -21,14 +21,14 @@ local CodePkuUsersApi = NPL.export()
     password string 必须 密码
 ]]
 -- return: object
-function CodePkuUsersApi:Login(account, password, success, error)
-    if type(account) ~= "string" or type(password) ~= "string" then
+function CodePkuUsersApi:Login(mobile, verify_code, success, error)
+    if type(mobile) ~= "string" or type(verify_code) ~= "string" then
         return false
     end
 
     local params = {
-        username = account,
-        password = password
+        mobile = mobile,
+        verify_code = verify_code
     }
 
     CodePkuBaseApi:Post("/users/login", params, nil, success, error, { 503, 400 })
@@ -153,3 +153,13 @@ function CodePkuUsersApi:ResetPassword(params, success, error, noTryStatus)
     CodePkuBaseApi:Post('/users/reset_password', params, { notTokenRequest = true }, success, error, noTryStatus)
 end
 
+function CodePkuUsersApi:getMobileCode(mobile, success, error)    
+    LOG.std(nil, "info", "codepku", type(mobile));
+    if type(mobile) ~= "string" then        
+        return false
+    end
+    local params = {
+        mobile = mobile
+    }
+    CodePkuBaseApi:Post('/users/mobile-code', params, { notTokenRequest = true }, success, error, {503, 400, 422, 500})
+end

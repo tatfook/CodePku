@@ -75,7 +75,17 @@ function CodePku:init()
 				LOG.std(nil, "info", "CodePku", "add_filter ShowLoginModePage")
 				return false
 			end
-		)
+	)
+
+	-- replace load world page
+	GameLogic.GetFilters():add_filter(
+        "InternetLoadWorld.ShowPage",
+		function(bEnable, bShow)
+			    
+            return false
+        end
+	)
+	
 	LOG.std(nil, "info", "CodePku", "plugin initialized");
 end
 

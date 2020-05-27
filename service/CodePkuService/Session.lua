@@ -31,7 +31,8 @@ end
 function CodePkuServiceSession:LoginResponse(response, err, callback)
     if err == 400 then
         Mod.CodePku.MsgBox:Close()
-        GameLogic.AddBBS(nil, L"用户名或者密码错误", 3000, "255 0 0")
+        local errorMsg = response.message or "用户名或者密码错误"
+        GameLogic.AddBBS(nil, errorMsg, 3000, "255 0 0")
         return false
     end
 
@@ -40,11 +41,12 @@ function CodePkuServiceSession:LoginResponse(response, err, callback)
         GameLogic.AddBBS(nil, L"服务器连接失败", 3000, "255 0 0")
         return false
     end
-
-    local token = response["token"] or System.User.codepkuToken
-    local userId = response["id"] or 0
-    local username = response["username"] or ""
-    local nickname = response["nickname"] or ""
+    echo(response["data"]["token"])
+    
+    local token = response["data"]["token"] or System.User.codepkuToken
+    local userId = response["data"]["id"] or 0    
+    local nickname = response["data"]["nickname"] or ""
+    local mobile = response["data"]["mobile"] or ""
 
     if not response.cellphone and not response.email then
         Mod.CodePku.Store:Set("user/isVerified", false)
@@ -62,9 +64,11 @@ function CodePkuServiceSession:LoginResponse(response, err, callback)
     end
 
     local SetUserinfo = Mod.CodePku.Store:Action("user/SetUserinfo")
-    SetUserinfo(token, userId, username, nickname)
-
-
+    SetUserinfo(token, userId, mobile, nickname)
+    
+    if type(callback) == "function" then
+        callback()
+    end
     self:ResetIndulge()
 end
 
@@ -251,4 +255,8 @@ end
 
 function CodePkuServiceSession:ResetIndulge()
     self.gameTime = 0
+end
+
+function CodePkuServiceSession:getMobileCode(mobile, callback)        
+    CodePkuUsersApi:getMobileCode(mobile, callback, callback)
 end

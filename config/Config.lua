@@ -22,10 +22,10 @@ Config.env = {
 Config.defaultEnv = (ParaEngine.GetAppCommandLineByParam("codepkuenv", nil) or Config.env.ONLINE)
 
 Config.codepkuServerList = {
-  ONLINE = "https://game.codepku.com",
-  STAGE = "https://game.staging.codepku.com",
-  RELEASE = "https://game.dev.codepku.com",
-  LOCAL = "https://game.local.codepku.com"
+  ONLINE = "http://game.local.codepku.com/api/game",
+  STAGE = "https://game.staging.codepku.com/api/game",
+  RELEASE = "https://game.dev.codepku.com/api/game",
+  LOCAL = "https://game.local.codepku.com/api/game"
 }
 
 Config.storageList = {
