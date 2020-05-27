@@ -18,14 +18,17 @@ function UserStore:Action()
             self.token = token
             commonlib.setfield("System.User.codepkuToken", token)
         end,
-        SetUserinfo = function(token, userId, username, nickname)
+        SetUserinfo = function(token, userId, mobile, nickname)
+            -- username => mobile
             self.token = token
             self.userId = userId
-            self.username = username
+            self.username = mobile
             self.nickname = nickname
+            self.mobile = mobile
 
             commonlib.setfield("System.User.codepkuToken", token)
             commonlib.setfield("System.User.mobile", mobile)
+            commonlib.setfield("System.User.username", mobile)
             commonlib.setfield('system.User.id', userId)            
             commonlib.setfield("System.User.nickName", nickname)            
         end,
@@ -36,11 +39,13 @@ function UserStore:Action()
             self.token = nil
             self.userId = nil
             self.username = nil
-            self.nickname = nil            
+            self.nickname = nil    
+            self.mobile = nil        
 
             commonlib.setfield("System.User.codepkuToken", nil)
+            commonlib.setfield("System.User.mobile", nil)
             commonlib.setfield("System.User.username", nil)
-            commonlib.setfield("System.User.codepkuUsername", nil)
+            commonlib.setfield("System.User.id", nil)            
             commonlib.setfield("System.User.nickName", nil)            
         end
     }

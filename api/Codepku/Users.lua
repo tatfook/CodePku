@@ -163,3 +163,9 @@ function CodePkuUsersApi:getMobileCode(mobile, success, error)
     }
     CodePkuBaseApi:Post('/users/mobile-code', params, { notTokenRequest = true }, success, error, {503, 400, 422, 500})
 end
+
+function CodePkuUsersApi:getCourseEntry(success, error)
+    LOG.std(nil, "info", "codepku", "user api getCourseEntry")
+
+    -- CodePkuBaseApi:Get('worlds/coruse-entry', nil, )
+end
