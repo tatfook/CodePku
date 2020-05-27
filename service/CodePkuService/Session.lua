@@ -261,6 +261,6 @@ function CodePkuServiceSession:getMobileCode(mobile, callback)
     CodePkuUsersApi:getMobileCode(mobile, callback, callback)
 end
 
-function CodePkuServiceSession:courseEntry(callback)
-    CodePkuUsersApi:getCourseEntry(callback)
+function CodePkuServiceSession:courseEntryWorld(callback)
+    CodePkuUsersApi:getCourseEntryWorld(callback)
 end

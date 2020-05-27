@@ -24,8 +24,13 @@ local CodePkuService = NPL.load("(gl)/Mod/CodePku/service/CodePkuService.lua")
 
 local UserConsole = NPL.export()
 
-function UserConsole:courseEntry()
+function UserConsole:ShowPage()
 
+end
+
+function UserConsole:CourseEntry()
+
+    LOG.std(nil, "info", "codepku", "course entry world")
     if not self.notFirstTimeShown then
         -- check is signin
         if not CodePkuService:IsSignedIn() and CodePkuServiceSession:GetCurrentUserToken() then
@@ -44,6 +49,49 @@ function UserConsole:courseEntry()
         end
     end
 
+    CodePkuServiceSession:courseEntryWorld(function (response, err) 
+        LOG.std(nil, "info", "codepku", "course entry world")
+        echo(response)    
+        if (err ~= 200) then
+            GameLogic.AddBBS(nil, L"获取入口世界失败", 3000, "255 0 0")
+            return false
+        end
+        local url = response["data"]["world"]
+        local world = RemoteWorld.LoadFromHref(url, "self")        
+
+        local function LoadWorld(world, refreshMode)
+            if world then
+                if refreshMode == 'never' then
+                    if not LocalService:IsFileExistInZip(world:GetLocalFileName(), ":worldconfig.txt") then
+                        refreshMode = 'force'
+                    end
+                end
+
+                local url = world:GetLocalFileName()
+                DownloadWorld.ShowPage(url)
+                local mytimer = commonlib.Timer:new(
+                    {
+                        callbackFunc = function(timer)
+                            InternetLoadWorld.LoadWorld(
+                                world,
+                                nil,
+                                refreshMode or "auto",
+                                function(bSucceed, localWorldPath)
+                                    DownloadWorld.Close()
+                                end
+                            )
+                        end
+                    }
+                );
+
+                -- prevent recursive calls.
+                mytimer:Change(1,nil);
+            else
+                _guihelper.MessageBox(L"无效的世界文件");
+            end
+        end
+
+        LoadWorld(world, 'auto')
+    end)
     
-    local world = RemoteWorld.LoadFromHref(url, "self")
 end
