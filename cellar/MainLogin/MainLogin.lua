@@ -300,10 +300,7 @@ function MainLogin:RemoveAccount(username)
     if self.account == username then
         self.account = nil
         self.loginServer = nil
-
-        MainLoginPage:SetValue("autoLogin", false)
-        MainLoginPage:SetValue("rememberMe", false)
-        MainLoginPage:SetValue("password", "")
+                
         MainLoginPage:SetValue("showaccount", "")
     end
 
@@ -337,4 +334,25 @@ function MainLogin:getMobileCode()
             return false
         end
     )
+end
+
+function MainLogin:ShowLoginBackgroundPage()
+    local url = "Mod/CodePku/cellar/MainLogin/LoginBackgroundPage.html"
+    System.App.Commands.Call("File.MCMLWindowFrame", {
+        url = url, 
+        name = "LoginBGPage", 
+        isShowTitleBar = false,
+        DestroyOnClose = true, -- prevent many ViewProfile pages staying in memory
+        style = CommonCtrl.WindowFrame.ContainerStyle,
+        allowDrag = false,
+        zorder = -2,
+        bShow = bShow,
+        directPosition = true,
+            align = "_fi",
+            x = 0,
+            y = 0,
+            width = 0,
+            height = 0,
+        cancelShowAnimation = true,
+    });	
 end

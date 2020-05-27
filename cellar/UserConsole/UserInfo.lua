@@ -13,7 +13,6 @@ local GameLogic = commonlib.gettable("MyCompany.Aries.Game.GameLogic")
 local InternetLoadWorld = commonlib.gettable("MyCompany.Aries.Creator.Game.Login.InternetLoadWorld")
 
 local UserConsole = NPL.load("(gl)Mod/CodePku/cellar/UserConsole/Main.lua")
-local WorldList = NPL.load("(gl)Mod/CodePku/cellar/UserConsole/WorldList.lua")
 local LoginModal = NPL.load("../LoginModal/LoginModal.lua")
 local HttpRequest = NPL.load("(gl)Mod/CodePku/service/HttpRequest.lua")
 local CodePkuService = NPL.load("(gl)Mod/CodePku/service/CodePkuService.lua")
@@ -143,10 +142,7 @@ function UserInfo:LoginWithToken()
                     data,
                     err,
                     function()
-                        Mod.CodePku.MsgBox:Close()
-
-                        -- WorldList:RefreshCurrentServerList()
-
+                        Mod.CodePku.MsgBox:Close()                        
                         if type(callback) == "function" then
                             callback()
                         end
@@ -194,9 +190,7 @@ function UserInfo:CheckDoAutoSignin(callback)
                                 -- login fail
                                 GameLogic.AddBBS(nil, format("%s%d", L"自动登陆失败了， 错误码：", err), 3000, "255 0 0")
                                 return false
-                            end
-
-                            WorldList:RefreshCurrentServerList()
+                            end                            
     
                             local AfterLogined = Mod.CodePku.Store:Get('user/AfterLogined')
     
@@ -225,9 +219,7 @@ function UserInfo:CheckDoAutoSignin(callback)
                     data,
                     err,
                     function()
-                        Mod.CodePku.MsgBox:Close()
-
-                        -- WorldList:RefreshCurrentServerList()
+                        Mod.CodePku.MsgBox:Close()                        
 
                         local AfterLogined = Mod.CodePku.Store:Get('user/AfterLogined')
 
@@ -252,7 +244,7 @@ end
 function UserInfo:OnClickLogin()
     Mod.CodePku.Store:Set("user/loginText", L"请先登录")
     LoginModal:Init(function()
-        -- WorldList:RefreshCurrentServerList()
+        
     end)
 end
 

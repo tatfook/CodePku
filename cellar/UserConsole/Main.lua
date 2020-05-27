@@ -51,7 +51,10 @@ function UserConsole:CourseEntry()
 
     CodePkuServiceSession:courseEntryWorld(function (response, err) 
         LOG.std(nil, "info", "codepku", "course entry world")
-        echo(response)    
+        echo(response) 
+        if (err == 401) then
+            -- 应该自动跳转登录
+        end   
         if (err ~= 200) then
             GameLogic.AddBBS(nil, L"获取入口世界失败", 3000, "255 0 0")
             return false

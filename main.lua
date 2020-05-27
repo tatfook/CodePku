@@ -87,6 +87,15 @@ function CodePku:init()
             return false
         end
 	)
+
+	GameLogic.GetFilters():add_filter(
+		"ShowLoginBackgroundPage", 
+		function (bShow, bShowCopyRight, bShowLogo, bShowBg) 
+			LOG.std(nil, "info", "codepku", "add_filter ShowLoginBackgroundPage")
+			MainLogin:ShowLoginBackgroundPage()
+			return true
+		end
+	)
 	
 	LOG.std(nil, "info", "CodePku", "plugin initialized");
 
