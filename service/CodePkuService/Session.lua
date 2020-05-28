@@ -9,14 +9,14 @@ local KeepworkServiceSession = NPL.load("(gl)Mod/WorldShare/service/KeepworkServ
 ------------------------------------------------------------
 ]]
 
-local CodePkuService = NPL.load("../CodePkuService.lua")
+local CodePkuService = NPL.load("(gl)Mod/CodePku/service/CodePkuService.lua")
 local CodePkuUsersApi = NPL.load("(gl)Mod/CodePku/api/Codepku/Users.lua")
 local SessionsData = NPL.load("(gl)Mod/CodePku/database/SessionsData.lua")
 local Config = NPL.load("(gl)Mod/CodePku/config/Config.lua")
 
 local Encoding = commonlib.gettable("commonlib.Encoding")
 
-local CodePkuServiceSession = NPL.export()
+local CodePkuServiceSession = NPL.export({});
 
 CodePkuServiceSession.captchaKey = ''
 

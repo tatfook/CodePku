@@ -16,41 +16,7 @@ local TouchMiniKeyboard =
 TouchMiniKeyboard:Property("Name", "TouchMiniKeyboard")
 TouchMiniKeyboard.name = "default_TouchMiniKeyboard"
 
--- default to 0.5 second.
 TouchMiniKeyboard.hover_press_hold_time = 500
-
--- @param name: displayname
--- @param vKey: virtual key scan code.
--- @param allow_hover_press: this will simulate pressing the multiple buttons at the same time.
--- @param auto_mouseup: if the touch is no longer over a button, it will automatically fire the mouse up event.
--- @param col: column span, default to 1.
--- @param colorid: default to 1. we have 1,2,3,4 color themes for normalBtn, comboBtn, frequentBtn, mouseRight.
--- @param ctrl_name: when ctrl key is pressed, this button may be transformed to another button.
--- @param toggleRightMouseButton: whether to toggle right mouse button when this button is pressed.
--- @param click_only: we will only send up and down event together when button is up.
--- TouchMiniKeyboard.DefaultKeyLayout = {
--- 	{
--- 		{name="44F", col=1, colorid=2, vKey = DIK_SCANCODE.DIK_F, flyUpDown = true, click_only = true},
--- 		-- left mouse button when pressed. otherwise it default to right. drag to scroll the camera
--- 		{name="RMB", col=2, toggleRightMouseButton=true, colorid=4, camera_zoom = true, allow_hover_press = true},
--- 	},
--- 	{
--- 		{name="Shift", col=1, colorid=2, vKey = DIK_SCANCODE.DIK_LSHIFT, allow_hover_press = true},
--- 		-- tricky: when W key is pressed, we will assume right mouse button is down, so that the user can simultaneously control player facing
--- 		{name="W", col=1, vKey = DIK_SCANCODE.DIK_W, auto_mouseup = true, toggleRightMouseButton=true},
--- 		{name="E", col=1, colorid=3, vKey = DIK_SCANCODE.DIK_E},
--- 	},
--- 	{
--- 		{name="A", col=1, ctrl_name="Y", vKey = DIK_SCANCODE.DIK_A, auto_mouseup = true, toggleRightMouseButton=true},
--- 		{name="S", col=1, ctrl_name="S", vKey = DIK_SCANCODE.DIK_S, auto_mouseup = true, toggleRightMouseButton=true},
--- 		{name="D", col=1, vKey = DIK_SCANCODE.DIK_D, auto_mouseup = true, toggleRightMouseButton=true},
--- 	},
--- 	{
--- 		{name="Ctrl", col=1, colorid=2, vKey = DIK_SCANCODE.DIK_LCONTROL, allow_hover_press = true},
--- 		{name="Space", col=1, ctrl_name="Z", vKey = DIK_SCANCODE.DIK_SPACE, auto_mouseup = true},
--- 		{name="Alt", col=1, colorid=2, vKey = DIK_SCANCODE.DIK_LMENU, allow_hover_press = true},
--- 	},
--- };
 
 TouchMiniKeyboard.DefaultKeyLayout = {
     {

@@ -18,9 +18,9 @@ local GameMainLogin = commonlib.gettable("MyCompany.Aries.Game.MainLogin")
 local WorldShare = commonlib.gettable("Mod.CodePku")
 local Encoding = commonlib.gettable("commonlib.Encoding")
 
-local UserInfo = NPL.load("./UserInfo.lua")
-local CodePkuServiceSession = NPL.load("(gl)/Mod/CodePku/service/CodePkuService/session.lua")
-local CodePkuService = NPL.load("(gl)/Mod/CodePku/service/CodePkuService.lua")
+local UserInfo = NPL.load("@Mod/CodePku/celler/UserConsole/UserInfo.lua")
+local CodePkuServiceSession = NPL.load("(gl)Mod/CodePku/service/CodePkuService/Session.lua")
+local CodePkuService = NPL.load("(gl)Mod/CodePku/service/CodePkuService.lua")
 
 local UserConsole = NPL.export()
 
@@ -44,6 +44,8 @@ function UserConsole:ShowPage()
         cancelShowAnimation = true,
     });	
 end
+local Log = NPL.load("(gl)Mod/CodePku/util/Log.lua");
+Log.debug(UserInfo);
 
 function UserConsole:CourseEntry()
     LOG.std(nil, "info", "codepku", "course entry world")
@@ -68,16 +70,16 @@ function UserConsole:CourseEntry()
 
     CodePkuServiceSession:courseEntryWorld(function (response, err) 
         LOG.std(nil, "info", "codepku", "course entry world")
-        echo(response) 
+        echo(response)
         if (err == 401) then
             -- 应该自动跳转登录
-        end   
+        end
         if (err ~= 200) then
             GameLogic.AddBBS(nil, L"获取入口世界失败", 3000, "255 0 0")
             return false
         end
         local url = response["data"]["world"]
-        local world = RemoteWorld.LoadFromHref(url, "self")        
+        local world = RemoteWorld.LoadFromHref(url, "self")
 
         local function LoadWorld(world, refreshMode)
             if world then
