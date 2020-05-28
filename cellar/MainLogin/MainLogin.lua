@@ -18,7 +18,7 @@ local SessionsData = NPL.load("(gl)Mod/CodePku/database/SessionsData.lua")
 
 local MainLogin = NPL.export()
 
-function MainLogin:Show()
+function MainLogin:Show()    
     Mod.CodePku.Utils.ShowWindow({
         url = "Mod/CodePku/cellar/MainLogin/MainLogin.html", 
         name = "MainLogin", 
@@ -45,9 +45,6 @@ function MainLogin:Show()
     local PWDInfo = CodePkuServiceSession:LoadSigninInfo()
 
     if PWDInfo then
-        MainLoginPage:SetValue('autoLogin', PWDInfo.autoLogin or false)
-        MainLoginPage:SetValue('rememberMe', PWDInfo.rememberMe or false)
-        MainLoginPage:SetValue('password', PWDInfo.password or '')
         MainLoginPage:SetValue('showaccount', PWDInfo.account or '')
 
         self.loginServer = PWDInfo.loginServer
@@ -55,7 +52,7 @@ function MainLogin:Show()
     end
 
     self:Refresh()
-
+    
     if not self.notFirstTimeShown then
         self.notFirstTimeShown = true
 
@@ -67,7 +64,7 @@ function MainLogin:Show()
                 function(response, err)
                     Mod.CodePku.MsgBox:Close()
 
-                    if(err == 200 and type(response) == "table" and response.username) then
+                    if(err == 200 and type(response) == "table" and response.data.mobile) then
                         self:EnterUserConsole()
                     else
                         -- token expired

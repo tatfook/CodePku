@@ -25,13 +25,30 @@ local CodePkuService = NPL.load("(gl)/Mod/CodePku/service/CodePkuService.lua")
 local UserConsole = NPL.export()
 
 function UserConsole:ShowPage()
-
+    local url = "Mod/CodePku/cellar/UserConsole/StartLearning.html"
+    System.App.Commands.Call("File.MCMLWindowFrame", {
+        url = url, 
+        name = "UserStartLearning", 
+        isShowTitleBar = false,
+        DestroyOnClose = true, -- prevent many ViewProfile pages staying in memory
+        style = CommonCtrl.WindowFrame.ContainerStyle,
+        allowDrag = false,
+        zorder = -2,
+        bShow = bShow,
+        directPosition = true,
+            align = "_fi",
+            x = 0,
+            y = 0,
+            width = 0,
+            height = 0,
+        cancelShowAnimation = true,
+    });	
 end
 
 function UserConsole:CourseEntry()
-
     LOG.std(nil, "info", "codepku", "course entry world")
     if not self.notFirstTimeShown then
+        self.notFirstTimeShown = true
         -- check is signin
         if not CodePkuService:IsSignedIn() and CodePkuServiceSession:GetCurrentUserToken() then
             UserInfo:LoginWithToken()
