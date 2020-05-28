@@ -20,7 +20,8 @@ local MainLogin = NPL.export()
 
 function MainLogin:Show() 
     local PWDInfo = CodePkuServiceSession:LoadSigninInfo()
-    local token = System.User.codepkuToken or PWDInfo.token
+    echo(PWDInfo)
+    local token = System.User.codepkuToken or PWDInfo.token    
        
     if token then
         Mod.CodePku.MsgBox:Show(L"正在登陆，请稍后...", 8000, L"链接超时", 300, 120)        
@@ -37,12 +38,12 @@ function MainLogin:Show()
                     SetUserinfo(token, userId, mobile, nickname)
                     Mod.CodePku.Utils.SetTimeOut(function()
                         self:EnterUserConsole()
-                    end, 100)                    
+                    end, 100)  
+                else
+                    SessionsData:RemoveSession(username)            
                 end
             end
-        )
-
-        return
+        )        
     end
 
     Mod.CodePku.Utils.ShowWindow({
