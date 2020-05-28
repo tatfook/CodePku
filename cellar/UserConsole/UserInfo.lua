@@ -6,21 +6,20 @@ place: Foshan
 Desc: 
 use the lib:
 ------------------------------------------------------------
-local UserInfo = NPL.load("(gl)Mod/WorldShare/cellar/Login/UserInfo.lua")
+local UserInfo = NPL.load("(gl)Mod/CodePku/cellar/Login/UserInfo.lua")
 ------------------------------------------------------------
 ]]
 local GameLogic = commonlib.gettable("MyCompany.Aries.Game.GameLogic")
 local InternetLoadWorld = commonlib.gettable("MyCompany.Aries.Creator.Game.Login.InternetLoadWorld")
 
-local UserConsole = NPL.load("(gl)Mod/WorldShare/cellar/UserConsole/Main.lua")
-local WorldList = NPL.load("(gl)Mod/WorldShare/cellar/UserConsole/WorldList.lua")
+local UserConsole = NPL.load("(gl)Mod/CodePku/cellar/UserConsole/Main.lua")
 local LoginModal = NPL.load("../LoginModal/LoginModal.lua")
-local HttpRequest = NPL.load("(gl)Mod/WorldShare/service/HttpRequest.lua")
-local KeepworkService = NPL.load("(gl)Mod/WorldShare/service/KeepworkService.lua")
-local KeepworkServiceSession = NPL.load("(gl)Mod/WorldShare/service/KeepworkService/Session.lua")
-local Store = NPL.load("(gl)Mod/WorldShare/store/Store.lua")
-local Config = NPL.load("(gl)Mod/WorldShare/config/Config.lua")
-local SessionsData = NPL.load("(gl)Mod/WorldShare/database/SessionsData.lua")
+local HttpRequest = NPL.load("(gl)Mod/CodePku/service/HttpRequest.lua")
+local CodePkuService = NPL.load("(gl)Mod/CodePku/service/CodePkuService.lua")
+local CodePkuServiceSession = NPL.load("(gl)Mod/CodePku/service/CodePkuService/Session.lua")
+local Store = NPL.load("(gl)Mod/CodePku/store/Store.lua")
+local Config = NPL.load("(gl)Mod/CodePku/config/Config.lua")
+local SessionsData = NPL.load("(gl)Mod/CodePku/database/SessionsData.lua")
 
 local UserInfo = NPL.export()
 
@@ -37,23 +36,19 @@ local default_avatars = {
 
 local cur_index = 1
 
-function UserInfo:Site()
-    return KeepworkService:GetKeepworkUrl()
-end
-
 function UserInfo.IsSignedIn()
-    return KeepworkService:IsSignedIn()
+    return CodePkuService:IsSignedIn()
 end
 
 function UserInfo:CheckoutVerified()
-    local isVerified = Mod.WorldShare.Store:Get("user/isVerified")
+    local isVerified = Mod.CodePku.Store:Get("user/isVerified")
 
     if self.IsSignedIn() and not isVerified then
         _guihelper.MessageBox(
             L"您需要到keepwork官网进行实名认证，认证成功后需重启paracraft即可正常操作，是否现在认证？",
             function(res)
                 if (res and res == _guihelper.DialogResult.Yes) then
-                    ParaGlobal.ShellExecute("open", format("%s/wiki/user_center", self:Site()), "", "", 1)
+                    -- ParaGlobal.ShellExecute("open", format("%s/wiki/user_center", self:Site()), "", "", 1)
                 end
             end,
             _guihelper.MessageBoxButtons.YesNo
@@ -118,24 +113,24 @@ end
 
 -- for restart game
 function UserInfo:LoginWithToken()
-    local usertoken = KeepworkServiceSession:GetCurrentUserToken()
+    local usertoken = CodePkuServiceSession:GetCurrentUserToken()
 
     if type(usertoken) ~= "string" or #usertoken <= 0 then
         return false
     end
 
-    Mod.WorldShare.MsgBox:Show(L"正在自动登陆，请稍后...", 8000, L"链接超时")
+    Mod.CodePku.MsgBox:Show(L"正在自动登陆，请稍后...", 8000, L"链接超时")
 
-    KeepworkServiceSession:Profile(
+    CodePkuServiceSession:Profile(
         function(data, err)
             if err == 401 then
-                Mod.WorldShare.MsgBox:Close()
+                Mod.CodePku.MsgBox:Close()
                 -- token not exist
                 GameLogic.AddBBS(nil, format("%s%d", L"自动登陆失败了， 错误码：", err), 3000, "255 0 0")
 
                 return false
             elseif err ~= 200 then
-                Mod.WorldShare.MsgBox:Close()
+                Mod.CodePku.MsgBox:Close()
                 GameLogic.AddBBS(nil, format("%s%d", L"自动登陆失败了， 错误码：", err), 3000, "255 0 0")
 
                 return false
@@ -143,14 +138,11 @@ function UserInfo:LoginWithToken()
 
             if type(data) == 'table' and data.username then
                 data.token = usertoken
-                KeepworkServiceSession:LoginResponse(
+                CodePkuServiceSession:LoginResponse(
                     data,
                     err,
                     function()
-                        Mod.WorldShare.MsgBox:Close()
-
-                        WorldList:RefreshCurrentServerList()
-
+                        Mod.CodePku.MsgBox:Close()                        
                         if type(callback) == "function" then
                             callback()
                         end
@@ -163,24 +155,24 @@ function UserInfo:LoginWithToken()
 end
 
 function UserInfo:CheckDoAutoSignin(callback)
-    local info = KeepworkServiceSession:LoadSigninInfo()
+    local info = CodePkuServiceSession:LoadSigninInfo()
 
     if not info or not info.autoLogin or not info.account or not info.password then
         return false
     end
 
-    Mod.WorldShare.MsgBox:Show(L"正在自动登陆，请稍后...", 8000, L"链接超时")
+    Mod.CodePku.MsgBox:Show(L"正在自动登陆，请稍后...", 8000, L"链接超时")
 
-    KeepworkServiceSession:Profile(
+    CodePkuServiceSession:Profile(
         function(data, err)
             if err == 401 then
                 -- login with token error when auto login
-                KeepworkServiceSession:Login(
+                CodePkuServiceSession:Login(
                     info.account,
                     info.password,
                     function(response, err)
                         if err ~= 200 then
-                            Mod.WorldShare.MsgBox:Close()
+                            Mod.CodePku.MsgBox:Close()
 
                             info.token = nil
                             info.autoLogin = false
@@ -191,22 +183,20 @@ function UserInfo:CheckDoAutoSignin(callback)
                             return false
                         end
 
-                        KeepworkServiceSession:LoginResponse(response, err, function()
-                            Mod.WorldShare.MsgBox:Close()
+                        CodePkuServiceSession:LoginResponse(response, err, function()
+                            Mod.CodePku.MsgBox:Close()
 
                             if err ~= 200 then
                                 -- login fail
                                 GameLogic.AddBBS(nil, format("%s%d", L"自动登陆失败了， 错误码：", err), 3000, "255 0 0")
                                 return false
-                            end
-
-                            WorldList:RefreshCurrentServerList()
+                            end                            
     
-                            local AfterLogined = Mod.WorldShare.Store:Get('user/AfterLogined')
+                            local AfterLogined = Mod.CodePku.Store:Get('user/AfterLogined')
     
                             if type(AfterLogined) == 'function' then
                                 AfterLogined(true)
-                                Mod.WorldShare.Store:Remove('user/AfterLogined')
+                                Mod.CodePku.Store:Remove('user/AfterLogined')
                             end
     
                             if type(callback) == "function" then
@@ -217,7 +207,7 @@ function UserInfo:CheckDoAutoSignin(callback)
                 )
                 return false
             elseif err ~= 200 then
-                Mod.WorldShare.MsgBox:Close()
+                Mod.CodePku.MsgBox:Close()
                 GameLogic.AddBBS(nil, format("%s%d", L"自动登陆失败了， 错误码：", err), 3000, "255 0 0")
 
                 return false
@@ -225,19 +215,17 @@ function UserInfo:CheckDoAutoSignin(callback)
 
             if type(data) == 'table' and data.username then
                 data.token = info.token
-                KeepworkServiceSession:LoginResponse(
+                CodePkuServiceSession:LoginResponse(
                     data,
                     err,
                     function()
-                        Mod.WorldShare.MsgBox:Close()
+                        Mod.CodePku.MsgBox:Close()                        
 
-                        WorldList:RefreshCurrentServerList()
-
-                        local AfterLogined = Mod.WorldShare.Store:Get('user/AfterLogined')
+                        local AfterLogined = Mod.CodePku.Store:Get('user/AfterLogined')
 
                         if type(AfterLogined) == 'function' then
                             AfterLogined(true)
-                            Mod.WorldShare.Store:Remove('user/AfterLogined')
+                            Mod.CodePku.Store:Remove('user/AfterLogined')
                         end
 
                         if type(callback) == "function" then
@@ -254,9 +242,9 @@ function UserInfo:CheckDoAutoSignin(callback)
 end
 
 function UserInfo:OnClickLogin()
-    Mod.WorldShare.Store:Set("user/loginText", L"请先登录")
+    Mod.CodePku.Store:Set("user/loginText", L"请先登录")
     LoginModal:Init(function()
-        WorldList:RefreshCurrentServerList()
+        
     end)
 end
 
@@ -319,7 +307,7 @@ end
 
 function UserInfo:Logout()
     if self.IsSignedIn() and self:CanSwitchUser() then
-        KeepworkServiceSession:Logout()
-        WorldList:RefreshCurrentServerList()
+        CodePkuServiceSession:Logout()
+        -- WorldList:RefreshCurrentServerList()
     end
 end

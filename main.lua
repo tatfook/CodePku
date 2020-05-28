@@ -39,8 +39,13 @@ local Store = NPL.load("(gl)Mod/CodePku/store/Store.lua")
 local MsgBox = NPL.load("(gl)Mod/CodePku/cellar/Common/MsgBox/MsgBox.lua")
 local Utils = NPL.load("(gl)Mod/CodePku/helper/Utils.lua")
 local MainLogin = NPL.load("(gl)Mod/CodePku/cellar/MainLogin/MainLogin.lua")
+<<<<<<< HEAD
 local Log = NPL.load("(gl)Mod/CodePku/util/Log.lua")
 
+=======
+local PreventIndulge = NPL.load("(gl)Mod/CodePku/cellar/PreventIndulge/PreventIndulge.lua")
+local UserConsole = NPL.load("(gl)Mod/CodePku/cellar/UserConsole/Main.lua")
+>>>>>>> 234ea50870b74426874635ae42cd1fa14549d764
 
 local CodePku = commonlib.inherit(commonlib.gettable("Mod.ModBase"),commonlib.gettable("Mod.CodePku"));
 
@@ -95,8 +100,29 @@ function CodePku:init()
     --         return true
     --     end
 	-- )
+
+	-- replace load world page
+	GameLogic.GetFilters():add_filter(
+        "InternetLoadWorld.ShowPage",
+        function(bEnable, bShow)
+            UserConsole:CourseEntry()
+            return false
+        end
+	)
+
+	GameLogic.GetFilters():add_filter(
+		"ShowLoginBackgroundPage", 
+		function (bShow, bShowCopyRight, bShowLogo, bShowBg) 
+			LOG.std(nil, "info", "codepku", "add_filter ShowLoginBackgroundPage")
+			MainLogin:ShowLoginBackgroundPage()
+			return true
+		end
+	)
 	
 	LOG.std(nil, "info", "CodePku", "plugin initialized");
+
+	-- prevent indulage
+    PreventIndulge:Init()
 end
 
 function CodePku:OnLogin()

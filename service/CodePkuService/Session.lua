@@ -245,7 +245,7 @@ function CodePkuServiceSession:PreventIndulge(callback)
             times = 60 * 1000
         end
 
-        Mod.WorldShare.Utils.SetTimeOut(function()
+        Mod.CodePku.Utils.SetTimeOut(function()
             Handle()
         end, times)
     end
@@ -259,4 +259,8 @@ end
 
 function CodePkuServiceSession:getMobileCode(mobile, callback)        
     CodePkuUsersApi:getMobileCode(mobile, callback, callback)
+end
+
+function CodePkuServiceSession:courseEntryWorld(callback)
+    CodePkuUsersApi:getCourseEntryWorld(callback)
 end
