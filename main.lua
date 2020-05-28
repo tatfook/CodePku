@@ -93,7 +93,7 @@ function CodePku:init()
 		function (bShow, bShowCopyRight, bShowLogo, bShowBg) 
 			LOG.std(nil, "info", "codepku", "add_filter ShowLoginBackgroundPage")
 			MainLogin:ShowLoginBackgroundPage()
-			return true
+			return false
 		end
 	)
 	

@@ -89,66 +89,157 @@
                         page:SetValue("account", username)
                     end
 
-                    function get_mobile_code()                                                
+                    local isClickedGetPhoneCaptcha = false
+
+                    function get_mobile_code()   
+                        if #page:GetValue("account") ~= 11 then
+                            GameLogic.AddBBS(nil, L"手机号码位数不对", 3000, "255 0 0")
+                            return false
+                        end
+
+                        if isClickedGetPhoneCaptcha then
+                           return false 
+                        end    
+                        isClickedGetPhoneCaptcha = true
+
+                        local times = 60
+
+                        local timer = commonlib.Timer:new({
+                            callbackFunc = function(timer)
+                                page:SetValue("get_mobile_code_text", format("%s(%ds)", L"重新发送", times))
+
+                                if times == 0 then
+                                    isClickedGetPhoneCaptcha = false
+                                    page:SetValue("get_mobile_code_text", L"获取验证码")
+                                    timer:Change(nil, nil)
+                                end
+
+                                times = times - 1
+                            end
+                        })
+                        
+                        timer:Change(1000, 1000)
+
                         MainLogin:getMobileCode()
+                    end
+
+                    function show_user_agreement()
+                        MainLogin:ShowUserAgreementModal()
                     end
                 ]]>
             </script>
             <style type="text/mcss">
                 {
                     user_login = {
-                        width = 320,
+                        width = 362,
                         ["base-font-size"] = 16,
                         ["font-size"] = 16,
                         color = "#ffffff",
-                        ["padding-right"] = 40,
-                        ["padding-left"] = 40,
-                        ["padding-top"] = 20,
-                        ["padding-bottom"] = 20,
+                        ["margin-left"] = -46,
+                        ["margin-top"] = -22,
+                        ["font-family"] = "Microsoft Yahei"
+                    },
+                    modal_title = {
+                        ["font-size"] = 24,
+                        ["font-weight"] = 'bold',
+                        ["font-family"] = "Microsoft YaHei",
+                        ["margin-left"] = 188,
+                        ["margin-top"] = 8,
+                        color = "#262014",
+                        textcolor = "#262014",
                     },
                     text_field = {
                         background = "textures/worldshare_32bits.png;72 20 16 16:3 3 3 3",
                         border = "none",
-                        width = 165,
-                    },                    
-                    login_button = {
-                        ["margin-left"] = 20,
-                        width = 200,
-                        height = 33,
-                        textcolor = "#000000",
-                        color = "#000000",
-                        ["font-size"] = 18
-                        background = "textures/worldshare_32bits.png;149 104 17 16:4 4 4 4",
+                        width = 361,
+                        height = 44,
+                        ["font-size"] = 24,
+                        ["base-font-size"] = 24
                     },
+                    get_code_divider = {
+                        color =  "#40403f",
+                        ["font-size"] = 17,
+                        ["margin-left"] = -112,
+                        ["margin-top"] = 8
+                    },
+                    get_code_button = {
+                        width = 96,
+                        height = 42,
+                        color = "#40403f",
+                        textcolor = "#40403f",
+                        ["font-size"] = 17,
+                        background = '#ffffff',
+                        border = "none",
+                        ["border-left"] = "1px solid #40403f",
+                        ["margin-top"] = -44,
+                        ["margin-left"] = 258,
+                        ["font-weight"] = "bold",
+                        ["font-family"] = "Microsoft Yahei"
+                    },               
+                    login_button = {
+                        ["margin-left"] = 0,
+                        ["margin-bottom"] = 5,
+                        width = 361,
+                        height = 44,
+                        textcolor = "#ffffff",
+                        color = "#ffffff",
+                        ["font-size"] = 18,
+                        ["font-weight"] = "bold",
+                        ["font-family"] = "Microsoft Yahei",
+                        background = "textures/login/button-login.png",
+                    },
+                    helper = {
+                        color = '#ffffff',
+                        ["font-size"] = 12,
+                        ["margin-top"] = 5,
+                        ["margin-bottom"] = 6
+                    }
                 }
             </style>
-
-            <pe:container alignment="_ct" ClickThrough="true" style="position:relative;background:;margin-left:-260px;margin-top:-250px;width:520px;height:500px;">
-                <!-- <div style='<%="position:relative;margin-left:145px;margin-top: 40px;width: 231px;height: 98px;background:url(textures/worldshare_32bits.png#12 345 231 98);"%>'></div>                                 -->
-                <div style="position:relative;margin-left:100px;margin-top: 80px;padding-top: 50px;background:url(Texture/Aries/Creator/Theme/GameCommonIcon_32bits.png#267 89 34 34:8 8 8 8)">
+            <pe:container alignment="_ctt" ClickThrough="true" style="position:relative;width:960px;height:64px;margin-top:40px;background:;">
+                <div style='<%="position:relative;margin-left:326px;width:308px;height:63px;background:url(textures/login/mainlogin3_32bits.png# 1071 233 616 125);"%>'></div>
+                <!-- <div style='<%="position:relative;margin-left:326px;width:308px;height:63px;background:url(textures/login/mainlogin_32bits.png# 974 285 616 125);"%>'></div> -->
+            </pe:container>
+            <pe:container alignment="_ct" ClickThrough="true" style="position:relative;margin-top:-144px;margin-left:-236px;width:472px;height:307px;background:url(textures/login/mainlogin3_32bits.png# 20 71 944 614);">
+                <div class="modal_title"><%= L"用户登录" %></div>
+                <div ></div>
+                <div style="position:relative;margin-left:100px;padding-top: 50px;">
                     <div name="login" class="user_login">
                         <pe:if condition="<%= login_text() ~= nil %>">
                             <div style="margin-bottom:15px;"><%= login_text()%></div>
                         </pe:if>
-                        <div style="margin-bottom:12px;">
+                        <div>
                             <!-- <div style="<%='float:left;min-width:65px;' .. get_english_style('min-width:73px;') %>"><%= L"账号：" %></div> -->
-                            <select name="account"
+                            <!-- <select name="account"
                                     DataSource="<%= get_history_users() %>"
                                     EmptyText='<%= L"请输入手机号码" %>'
                                     onselect="<%= select_account %>"
                                     onremove="<%= remove_account %>"
                                     class="bbs_text text_field"
                                     style="height: 30px;">
-                            </select>
-                            <input name="showaccount" onchange="write_accout" type="text" class="bbs_text" style="height: 30px;margin-left: -165px; width: 140px;" EmptyText='<%= L"请输入手机号码" %>' />
+                            </select> -->
+                            <input name="account" value="123" type="text" class="text_field" EmptyText='<%= L"请输入手机号码" %>' />
+                            <div class="helper">若该手机未注册，我们会自动为您注册</div>
                         </div>
                         <div style="margin-bottom:12px;">
                             <!-- <div style="float:left;min-width:65px"><%= L"密码：" %></div> -->
-                            <input type="text" class="bbs_text text_field" style="height: 30px;" name="verify_code"  EmptyText='<%= L"请输入验证码" %>'/>
-                            <input type="button" class="login_button" DefaultButton="true" name="get_mobile_code_text" onclick="get_mobile_code()" value='<%= L"获取验证码"%>' />
+                            <input type="text" class="text_field" name="verify_code"  EmptyText='<%= L"请输入验证码" %>'/>
+                            <span class="get_code_divider">|</span>
+                            <input
+                                type="button"
+                                class="get_code_button"
+                                DefaultButton="true"
+                                name="get_mobile_code_text"
+                                onclick="get_mobile_code()"
+                                value='<%= L"获取验证码"%>' 
+                            />
                         </div>                        
-                        <div style="margin-top:30px;margin-bottom:15px;">       
+                        <div>       
                             <input type="button" DefaultButton="true" class="login_button" onclick="login()" value='<%= L"登 录"%>' />
+                            <div class="helper" style="margin-left: 80px">
+                                <input type="checkbox" name="user_agreement" style="margin: 2px 2px 0 0" />
+                                <div style="float: right" onclick="show_user_agreement()"><%= L"我已详细阅读并同意《隐私政策》" %></div>
+                            </div>
                         </div>                        
                     </div>
                 </div>

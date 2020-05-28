@@ -356,3 +356,7 @@ function MainLogin:ShowLoginBackgroundPage()
         cancelShowAnimation = true,
     });	
 end
+
+function MainLogin:ShowUserAgreementModal()
+    Mod.CodePku.Utils.ShowWindow(472, 307, "Mod/CodePku/cellar/UserAgreement/UserAgreement.html", "UserAgreement")
+end
