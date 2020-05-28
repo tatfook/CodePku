@@ -18,7 +18,11 @@ local GameMainLogin = commonlib.gettable("MyCompany.Aries.Game.MainLogin")
 local WorldShare = commonlib.gettable("Mod.CodePku")
 local Encoding = commonlib.gettable("commonlib.Encoding")
 
+<<<<<<< HEAD
 local UserInfo = NPL.load("./UserInfo.lua")
+=======
+local UserInfo = NPL.load("@Mod/CodePku/celler/UserConsole/UserInfo.lua")
+>>>>>>> 1b192f9d3710f55c676dd1ef652ab7d14e4f4362
 local CodePkuServiceSession = NPL.load("(gl)Mod/CodePku/service/CodePkuService/Session.lua")
 local CodePkuService = NPL.load("(gl)Mod/CodePku/service/CodePkuService.lua")
 
@@ -44,6 +48,8 @@ function UserConsole:ShowPage()
         cancelShowAnimation = true,
     });	
 end
+local Log = NPL.load("(gl)Mod/CodePku/util/Log.lua");
+Log.debug(UserInfo);
 
 function UserConsole:CourseEntry()    
     -- if not self.notFirstTimeShown then
@@ -75,7 +81,7 @@ function UserConsole:CourseEntry()
             return false
         end
         local url = response["data"]["world"]
-        local world = RemoteWorld.LoadFromHref(url, "self")        
+        local world = RemoteWorld.LoadFromHref(url, "self")
 
         local function LoadWorld(world, refreshMode)
             if world then
