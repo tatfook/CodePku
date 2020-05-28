@@ -39,8 +39,13 @@ local Store = NPL.load("(gl)Mod/CodePku/store/Store.lua")
 local MsgBox = NPL.load("(gl)Mod/CodePku/cellar/Common/MsgBox/MsgBox.lua")
 local Utils = NPL.load("(gl)Mod/CodePku/helper/Utils.lua")
 local MainLogin = NPL.load("(gl)Mod/CodePku/cellar/MainLogin/MainLogin.lua")
+<<<<<<< HEAD
+local Log = NPL.load("(gl)Mod/CodePku/util/Log.lua")
+
+=======
 local PreventIndulge = NPL.load("(gl)Mod/CodePku/cellar/PreventIndulge/PreventIndulge.lua")
 local UserConsole = NPL.load("(gl)Mod/CodePku/cellar/UserConsole/Main.lua")
+>>>>>>> 234ea50870b74426874635ae42cd1fa14549d764
 
 local CodePku = commonlib.inherit(commonlib.gettable("Mod.ModBase"),commonlib.gettable("Mod.CodePku"));
 
@@ -69,7 +74,13 @@ function CodePku:GetDesc()
 end
 
 function CodePku:init()
-		
+	Log.error("222","333","66z");	
+	Log.trace("222","333","66z");
+	Log.debug("222","333","66z");
+	Log.info("222","333","66z");
+	Log.warn("222","333","66z");
+	Log.fatal("222","333","66z");
+
 	GameLogic.GetFilters():add_filter(
 			"ShowLoginModePage",
 			function()
@@ -78,6 +89,17 @@ function CodePku:init()
 				return false
 			end
 	)
+
+	-- 重写移动端虚拟小键盘
+	-- GameLogic.GetFilters():add_filter(
+    --     "CUSTOM_TOUCHMINIKEYBOARD",
+	-- 	function()
+	-- 		NPL.load("(gl)Mod/CodePku/cellar/Common/TouchMiniKeyboard/TouchMiniKeyboard.lua");
+	-- 		local TouchMiniKeyboard = commonlib.gettable("Mod.CodePku.Common.TouchMiniKeyboard");
+	-- 		TouchMiniKeyboard.CheckShow(true);
+    --         return true
+    --     end
+	-- )
 
 	-- replace load world page
 	GameLogic.GetFilters():add_filter(
