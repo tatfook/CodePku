@@ -20,16 +20,16 @@ local CodePkuServiceSession = NPL.export()
 
 CodePkuServiceSession.captchaKey = ''
 
-function CodePkuServiceSession:Login(account, password, callback)
-    CodePkuUsersApi:Login(account, password, callback, callback)
+function CodePkuServiceSession:Login(account, verifyCode, mobileToken, callback)
+    CodePkuUsersApi:Login(account, verifyCode, mobileToken, callback, callback)
 end
 
 function CodePkuServiceSession:LoginWithToken(token, callback)
     CodePkuUsersApi:Profile(token, callback, callback)
 end
 
-function CodePkuServiceSession:LoginResponse(response, err, callback)
-    if err == 400 then
+function CodePkuServiceSession:LoginResponse(response, err, callback)    
+    if err == 400 or err == 422 or err == 500  then
         Mod.CodePku.MsgBox:Close()
         local errorMsg = response.message or "用户名或者密码错误"
         GameLogic.AddBBS(nil, errorMsg, 3000, "255 0 0")
@@ -41,18 +41,12 @@ function CodePkuServiceSession:LoginResponse(response, err, callback)
         GameLogic.AddBBS(nil, L"服务器连接失败", 3000, "255 0 0")
         return false
     end
-    echo(response["data"]["token"])
     
     local token = response["data"]["token"] or System.User.codepkuToken
     local userId = response["data"]["id"] or 0    
     local nickname = response["data"]["nickname"] or ""
     local mobile = response["data"]["mobile"] or ""
 
-    if not response.cellphone and not response.email then
-        Mod.CodePku.Store:Set("user/isVerified", false)
-    else
-        Mod.CodePku.Store:Set("user/isVerified", true)
-    end
 
     if response.vip and response.vip == 1 then
         Mod.CodePku.Store:Set("user/userType", 'vip')
@@ -106,11 +100,7 @@ end
 function CodePkuServiceSession:SaveSigninInfo(info)
     if not info then
         return false
-    end
-
-    if not info.rememberMe then
-        info.password = nil
-    end
+    end    
 
     SessionsData:SaveSession(info)
 end
@@ -262,5 +252,5 @@ function CodePkuServiceSession:getMobileCode(mobile, callback)
 end
 
 function CodePkuServiceSession:courseEntryWorld(callback)
-    CodePkuUsersApi:getCourseEntryWorld(callback)
+    CodePkuUsersApi:getCourseEntryWorld(callback, callback)
 end

@@ -145,6 +145,7 @@
                         <div style="margin-bottom:12px;">
                             <!-- <div style="float:left;min-width:65px"><%= L"密码：" %></div> -->
                             <input type="text" class="bbs_text text_field" style="height: 30px;" name="verify_code"  EmptyText='<%= L"请输入验证码" %>'/>
+                            <input type="hidden" name="mobile_token"/>
                             <input type="button" class="login_button" DefaultButton="true" name="get_mobile_code_text" onclick="get_mobile_code()" value='<%= L"获取验证码"%>' />
                         </div>                        
                         <div style="margin-top:30px;margin-bottom:15px;">       

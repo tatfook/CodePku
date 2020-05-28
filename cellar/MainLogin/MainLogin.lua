@@ -18,7 +18,33 @@ local SessionsData = NPL.load("(gl)Mod/CodePku/database/SessionsData.lua")
 
 local MainLogin = NPL.export()
 
-function MainLogin:Show()    
+function MainLogin:Show() 
+    local PWDInfo = CodePkuServiceSession:LoadSigninInfo()
+    local token = System.User.codepkuToken or PWDInfo.token
+       
+    if token then
+        Mod.CodePku.MsgBox:Show(L"正在登陆，请稍后...", 8000, L"链接超时", 300, 120)        
+        CodePkuServiceSession:LoginWithToken(
+            token,
+            function(response, err)
+                Mod.CodePku.MsgBox:Close()
+                if err == 200 then                    
+                    local userId = response["data"]["id"] or 0    
+                    local nickname = response["data"]["nickname"] or ""
+                    local mobile = response["data"]["mobile"] or ""
+                    local SetUserinfo = Mod.CodePku.Store:Action("user/SetUserinfo")
+
+                    SetUserinfo(token, userId, mobile, nickname)
+                    Mod.CodePku.Utils.SetTimeOut(function()
+                        self:EnterUserConsole()
+                    end, 100)                    
+                end
+            end
+        )
+
+        return
+    end
+
     Mod.CodePku.Utils.ShowWindow({
         url = "Mod/CodePku/cellar/MainLogin/MainLogin.html", 
         name = "MainLogin", 
@@ -42,7 +68,6 @@ function MainLogin:Show()
         return false
     end
 
-    local PWDInfo = CodePkuServiceSession:LoadSigninInfo()
 
     if PWDInfo then
         MainLoginPage:SetValue('showaccount', PWDInfo.account or '')
@@ -51,37 +76,7 @@ function MainLogin:Show()
         self.account = PWDInfo.account
     end
 
-    self:Refresh()
-    
-    if not self.notFirstTimeShown then
-        self.notFirstTimeShown = true
-
-        if System.User.codepkuToken then
-            Mod.CodePku.MsgBox:Show(L"正在登陆，请稍后...", 8000, L"链接超时", 300, 120)
-
-            CodePkuServiceSession:LoginWithToken(
-                System.User.codepkuToken,
-                function(response, err)
-                    Mod.CodePku.MsgBox:Close()
-
-                    if(err == 200 and type(response) == "table" and response.data.mobile) then
-                        self:EnterUserConsole()
-                    else
-                        -- token expired
-                        System.User.codepkuToken = nil;
-                    end
-                end
-            )
-
-            return
-        end
-
-        if PWDInfo and PWDInfo.autoLogin then
-            Mod.CodePku.Utils.SetTimeOut(function()
-                self:EnterUserConsole()
-            end, 100)
-        end
-    end
+    self:Refresh()    
 end
 
 function MainLogin:Refresh(times)
@@ -109,15 +104,21 @@ function MainLogin:LoginAction()
     
     local loginServer = CodePkuService:GetEnv()    
     local account = MainLoginPage:GetValue("account")
-    local verify_code = MainLoginPage:GetValue("verify_code")    
+    local verifyCode = MainLoginPage:GetValue("verify_code")  
+    local mobileToken = MainLoginPage:GetValue('mobile_token')  
 
     if not account or account == "" then
         GameLogic.AddBBS(nil, L"账号不能为空", 3000, "255 0 0")
         return false
     end
 
-    if not verify_code or verify_code == "" then
+    if not verifyCode or verifyCode == "" then
         GameLogic.AddBBS(nil, L"验证码不能为空", 3000, "255 0 0")
+        return false
+    end
+
+    if not mobileToken or mobileToken == "" then
+        GameLogic.AddBBS(nil, L"请先获取验证码", 3000, "255 0 0")
         return false
     end
 
@@ -158,7 +159,8 @@ function MainLogin:LoginAction()
     
     CodePkuServiceSession:Login(
         account,
-        verify_code,
+        verifyCode,
+        mobileToken,
         function(response, err)                        
             if err == 503 then
                 Mod.CodePku.MsgBox:Close()
@@ -324,11 +326,19 @@ function MainLogin:getMobileCode()
     CodePkuServiceSession:getMobileCode(
         mobile, 
         function (response, err)
-            echo(err, true)    
-            Mod.CodePku.MsgBox:Close()       
-            GameLogic.AddBBS(nil, L"验证码获取成功", 3000, "255 0 0")         
-            LOG.std(nil, "info", "codepku", "get mobile code success")            
-            return false
+            if err == 200 then  
+                Mod.CodePku.MsgBox:Close()       
+                GameLogic.AddBBS(nil, L"验证码获取成功", 3000, "255 0 0")         
+                LOG.std(nil, "info", "codepku", "get mobile code success")
+                local mobileToken = response.data.mobile_token
+                MainLoginPage:SetValue('mobile_token', mobileToken)          
+                return true
+            else 
+                local errMsg = response.message or "获取验证码失败"
+                Mod.CodePku.MsgBox:Close()   
+                GameLogic.AddBBS(nil, errMsg, 3000, "255 0 0")                         
+                return false  
+            end
         end
     )
 end
