@@ -18,12 +18,35 @@
                 function logout()
                     UserConsole:Logout()
                 end
-            ]]></script>                         
-            <div style="width: 960px; height: 360px; position:relative;">
-                <div><% currentUserName() %></div>
-                <!-- <input type="button" onclick="startLearning()" style="width:240px; height: 120px; background-color: '#ffffff';" value="start"> -->
-                <input type="button" onclick="logout()" style="width:240px; height: 120px; background-color: '#ffffff';" value="注销">
-            </div>
+            ]]></script>
+            <style type="text/mcss">
+                {
+                    logout = {
+                        width = 64.5,
+                        height = 35.5,
+                        background = "textures/login/mainlogin3_32bits.png# 30 1889 129 71)",
+                        ["margin-top"] = 32,
+                        ["margin-right"] = 42
+                    },
+                    start = {
+                        ["font-weight"] = "bold",
+                        ["font-family"] = "Microsoft Yahei",
+                        width = 310,
+                        height = 36,
+                        background = "textures/login/mainlogin3_32bits.png# 1000 1649 620 72)",
+                        ["background-color"] = '#ffffff'
+                    }
+                }
+            </style>
+            <pe:container alignment="_ctt" ClickThrough="true" style="position:relative;width:960px;height:64px;margin-top:60px;background:;">
+                <div style='<%="position:relative;margin-left:326px;width:308px;height:63px;background:url(textures/login/mainlogin3_32bits.png# 1071 233 616 125);"%>'></div>
+            </pe:container>
+            <pe:container alignment="_rt" ClickThrough="true" style="position:relative;background:;">
+                <input type="button" name="logout" value='' class="logout" onclick="logout()" style="margin: 2px 2px 0 0" />
+            </pe:container>
+            <pe:container alignment="_ctt" ClickThrough="true" style="position:relative;margin-top:210px;background:;">
+                <input type="button" DefaultButton="true" onclick="startLearning()" class="start" value='' />
+            </pe:container>
         </pe:mcml>
     </body>
 </html>

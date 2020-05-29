@@ -324,10 +324,6 @@ function MainLogin:getMobileCode()
         return false
     end
     
-    if #mobile ~= 11 then
-        GameLogic.AddBBS(nil, L"手机号码位数不对", 3000, "255 0 0")
-        return false
-    end
 
     Mod.CodePku.MsgBox:Show(L"正在获取验证码...", 8000, L"链接超时", 300, 120)
 

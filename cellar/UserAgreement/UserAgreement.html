@@ -4,11 +4,14 @@
             <script type="text/npl" refresh="false">
                 <![CDATA[
                     page = document:GetPageCtrl()
+                    local MainLoginPage = Mod.CodePku.Store:Get('page/MainLogin')
 
                     function set_agree()
+                        MainLoginPage:SetValue("agree", true)
                         page:CloseWindow()
                     end
                     function set_disagree()
+                        MainLoginPage:SetValue("agree", false)
                         page:CloseWindow()
                     end
                 ]]>
@@ -17,6 +20,7 @@
                 {
                     modal_title = {
                         ["font-size"] = 24,
+                        ["base-font-size"] = 24,
                         ["font-weight"] = 'bold',
                         ["font-family"] = "Microsoft YaHei",
                         ["margin-left"] = 126,
