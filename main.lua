@@ -42,6 +42,7 @@ local MainLogin = NPL.load("(gl)Mod/CodePku/cellar/MainLogin/MainLogin.lua")
 local Log = NPL.load("(gl)Mod/CodePku/util/Log.lua")
 local PreventIndulge = NPL.load("(gl)Mod/CodePku/cellar/PreventIndulge/PreventIndulge.lua")
 local UserConsole = NPL.load("(gl)Mod/CodePku/cellar/UserConsole/Main.lua")
+local CodePkuDownloadWorld = NPL.load("(gl)Mod/CodePku/cellar/World/DownloadWorld.lua")
 
 
 local CodePku = commonlib.inherit(commonlib.gettable("Mod.ModBase"),commonlib.gettable("Mod.CodePku"));
@@ -114,9 +115,19 @@ function CodePku:init()
 			return false
 		end
 	)
-	
-	LOG.std(nil, "info", "CodePku", "plugin initialized");
 
+	GameLogic.GetFilters():add_filter(
+		"show_custom_download_world", 
+		function (show, url) 
+			LOG.std(nil, "info", "codepku", "add_filter show_custom_download_world")
+			CodePkuDownloadWorld:ShowPage(url)
+			return "close"
+		end
+	)
+
+	-- 重写加载世界页面
+	Map3DSystem.App.MiniGames.SwfLoadingBarPage.url = "Mod/CodePKu/cellar/World/SwfLoadingBarPage.mc.html"
+	
 	-- prevent indulage
     PreventIndulge:Init()
 end
