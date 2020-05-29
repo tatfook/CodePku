@@ -19,6 +19,11 @@ local SessionsData = NPL.load("(gl)Mod/CodePku/database/SessionsData.lua")
 local MainLogin = NPL.export()
 
 function MainLogin:Show() 
+
+    if CodePkuService:IsSignedIn() then
+        self:EnterUserConsole()
+    end
+
     local PWDInfo = CodePkuServiceSession:LoadSigninInfo()
     echo(PWDInfo)
     local token = System.User.codepkuToken or PWDInfo and PWDInfo.token    
@@ -40,7 +45,7 @@ function MainLogin:Show()
                         self:EnterUserConsole()
                     end, 100)  
                 else
-                    if PWDInfo.account then
+                    if PWDInfo and PWDInfo.account then
                         SessionsData:RemoveSession(PWDInfo.account)
                     end
                 end
@@ -73,7 +78,7 @@ function MainLogin:Show()
 
 
     if PWDInfo then
-        MainLoginPage:SetValue('showaccount', PWDInfo.account or '')
+        MainLoginPage:SetValue('account', PWDInfo.account or '')
 
         self.loginServer = PWDInfo.loginServer
         self.account = PWDInfo.account
@@ -147,10 +152,6 @@ function MainLogin:LoginAction()
         LOG.std('save sign in info')
         self:EnterUserConsole()
 
-        if not Mod.CodePku.Store:Get('user/isVerified') then
-            -- RegisterModal:ShowBindingPage()
-        end
-
         local AfterLogined = Mod.CodePku.Store:Get('user/AfterLogined')
 
         if type(AfterLogined) == 'function' then
@@ -169,7 +170,6 @@ function MainLogin:LoginAction()
                 Mod.CodePku.MsgBox:Close()
                 return false
             end
-
             CodePkuServiceSession:LoginResponse(response, err, HandleLogined)
         end
     )

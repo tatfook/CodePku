@@ -7,12 +7,18 @@
         <pe:mcml>  
             <script type="text/npl" refresh="false"><![CDATA[                
                 UserConsole = NPL.load('./Main.lua')
+                CodePkuService = NPL.load("(gl)Mod/CodePku/service/CodePkuService.lua")
+
+                local page = document:GetPageCtrl()
+                Mod.CodePku.Store:Set("page/StartLearning", page)
+
                 function startLearning()
                     UserConsole:CourseEntry()
                 end
                 function currentUserName()
-                    LOG.std(nil, "info", "codepku", System.User.username)
-                    return System.User.username
+                    local username = CodePkuService:GetAccount()
+                    LOG.std(nil, "info", "codepku", username)
+                    return username
                 end
 
                 function logout()
