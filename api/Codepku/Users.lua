@@ -21,14 +21,15 @@ local CodePkuUsersApi = NPL.export()
     password string 必须 密码
 ]]
 -- return: object
-function CodePkuUsersApi:Login(mobile, verify_code, success, error)
-    if type(mobile) ~= "string" or type(verify_code) ~= "string" then
+function CodePkuUsersApi:Login(mobile, verifyCode, mobileToken, success, error)
+    if type(mobile) ~= "string" or type(verifyCode) ~= "string" or type(mobileToken) ~= "string" then
         return false
     end
 
     local params = {
         mobile = mobile,
-        verify_code = verify_code
+        verify_code = verifyCode,
+        mobile_token = mobileToken
     }
 
     CodePkuBaseApi:Post("/users/login", params, nil, success, error, { 503, 400 })

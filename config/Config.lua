@@ -25,7 +25,7 @@ Config.codepkuServerList = {
   ONLINE = "https://game.dev.codepku.com/api/game",
   STAGE = "https://game.staging.codepku.com/api/game",
   RELEASE = "https://game.dev.codepku.com/api/game",
-  LOCAL = "https://game.local.codepku.com/api/game"
+  LOCAL = "http://game.local.codepku.com/api/game"
 }
 
 Config.storageList = {

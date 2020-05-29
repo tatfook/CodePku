@@ -97,10 +97,18 @@
                             return false
                         end
 
+                        if page:GetValue("account") == "" then
+                            GameLogic.AddBBS(nil, L"手机号码不能为空", 3000, "255 0 0")
+                            return false
+                        end
+
                         if isClickedGetPhoneCaptcha then
                            return false 
-                        end    
+                        end
+
                         isClickedGetPhoneCaptcha = true
+                        
+                        Mod.CodePku.MsgBox:Show(L"正在获取验证码...", 8000, L"链接超时", 300, 120)
 
                         local times = 60
 
@@ -117,10 +125,26 @@
                                 times = times - 1
                             end
                         })
-                        
+
                         timer:Change(1000, 1000)
 
-                        MainLogin:getMobileCode()
+                        CodePkuServiceSession:getMobileCode(
+                            page:GetValue("account"), 
+                            function (response, err)
+                                if err == 200 then  
+                                    Mod.CodePku.MsgBox:Close()       
+                                    GameLogic.AddBBS(nil, L"验证码获取成功", 3000, "255 0 0")         
+                                    LOG.std(nil, "info", "codepku", "get mobile code success")
+                                    local mobileToken = response.data.mobile_token
+                                    page:SetValue('mobile_token', mobileToken)
+                                else 
+                                    local errMsg = response.message or "获取验证码失败"
+                                    Mod.CodePku.MsgBox:Close()   
+                                    GameLogic.AddBBS(nil, errMsg, 3000, "255 0 0")
+                                    isClickedGetPhoneCaptcha = false
+                                end
+                            end
+                        )
                     end
 
                     function show_user_agreement()
@@ -218,7 +242,7 @@
                                     class="bbs_text text_field"
                                     style="height: 30px;">
                             </select> -->
-                            <input name="account" value="123" type="text" class="text_field" EmptyText='<%= L"请输入手机号码" %>' />
+                            <input name="account" type="text" class="text_field" EmptyText='<%= L"请输入手机号码" %>' />
                             <div class="helper">若该手机未注册，我们会自动为您注册</div>
                         </div>
                         <div style="margin-bottom:12px;">
@@ -233,6 +257,7 @@
                                 onclick="get_mobile_code()"
                                 value='<%= L"获取验证码"%>' 
                             />
+                            <input type="hidden" name="mobile_token"/>
                         </div>                        
                         <div>       
                             <input type="button" DefaultButton="true" class="login_button" onclick="login()" value='<%= L"登 录"%>' />

@@ -72,8 +72,8 @@ function HttpRequest:GetUrl(params, callback, noTryStatus)
             ---- debug code ----
             local debugUrl = type(params) == "string" and params or formatParams.url
             local method = type(params) == "table" and params.method and params.method or "GET"
-
-            echo("in httprequest.lua geturl", true)
+            
+            echo(data)
             
             LOG.std("HttpRequest", "debug", "Request", "Status Code: %s, Method: %s, URL: %s, Params: %s", err, method, debugUrl, NPL.ToJson(formatParams, true))
             ---- debug code ----
