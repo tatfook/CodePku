@@ -368,6 +368,6 @@ function MainLogin:ShowLoginBackgroundPage()
     });	
 end
 
-function MainLogin:ShowUserAgreementModal()
-    Mod.CodePku.Utils.ShowWindow(472, 307, "Mod/CodePku/cellar/UserAgreement/UserAgreement.html", "UserAgreement")
+function MainLogin:ShowUserAgreementModal()	
+    Mod.CodePku.Utils.ShowWindow(568, 368, "Mod/CodePku/cellar/UserAgreement/UserAgreement.html", "UserAgreement")
 end
