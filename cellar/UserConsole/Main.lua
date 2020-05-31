@@ -17,7 +17,8 @@ local GameMainLogin = commonlib.gettable("MyCompany.Aries.Game.MainLogin")
 
 local WorldShare = commonlib.gettable("Mod.CodePku")
 local Encoding = commonlib.gettable("commonlib.Encoding")
-local UserInfo = NPL.load("./UserInfo.lua")
+
+local UserInfo = NPL.load("@Mod/CodePku/celler/UserConsole/UserInfo.lua")
 local CodePkuServiceSession = NPL.load("(gl)Mod/CodePku/service/CodePkuService/Session.lua")
 local CodePkuService = NPL.load("(gl)Mod/CodePku/service/CodePkuService.lua")
 

@@ -8,93 +8,151 @@ local TouchSession = commonlib.gettable("MyCompany.Aries.Game.Common.TouchSessio
 local EntityManager = commonlib.gettable("MyCompany.Aries.Game.EntityManager")
 local Screen = commonlib.gettable("System.Windows.Screen")
 
-local TouchMiniKeyboard =
-    commonlib.inherit(
-    commonlib.gettable("System.Core.ToolBase"),
-    commonlib.gettable("Mod.CodePku.Common.TouchMiniKeyboard")
+local Log = NPL.load("(gl)Mod/CodePku/util/Log.lua");
+
+--设计图原始尺寸
+local WidthDesign = 1920;
+local HeightDesign = 1080;
+
+--屏幕尺寸
+local WidthScreen = Screen:GetWidth();
+local HeightScreen = Screen:GetHeight();
+
+--设计图与屏幕对比率
+local WidthContrast = WidthScreen / WidthDesign;
+local HeightContrast = HeightScreen / HeightDesign;
+
+local TouchMiniKeyboard = commonlib.inherit(
+        commonlib.gettable("System.Core.ToolBase"),
+        commonlib.gettable("Mod.CodePku.Common.TouchMiniKeyboard")
 )
 TouchMiniKeyboard:Property("Name", "TouchMiniKeyboard")
-TouchMiniKeyboard.name = "default_TouchMiniKeyboard"
 
 TouchMiniKeyboard.hover_press_hold_time = 500
 
 TouchMiniKeyboard.DefaultKeyLayout = {
     {
-        name = "上",
-        key = "",
-        background = "Texture/whitedot.png",
-        top = 10,
-        left = 10,
-        width = 10,
-        height = 10
+        name = "up",
+        background = "textures/keyboard/up_btn.png",
+        left = 100,
+        top = 0,
+        width = 100,
+        height = 100,
+        vKey = DIK_SCANCODE.DIK_W,
+        flyUpDown = true,
+        click_only = true
+    },
+    {
+        name = "down",
+        background = "textures/keyboard/down_btn.png",
+        left = 100,
+        top = 200,
+        width = 100,
+        height = 100,
+        vKey = DIK_SCANCODE.DIK_S,
+        flyUpDown = true,
+        click_only = true
+    },
+    {
+        name = "left",
+        background = "textures/keyboard/left_btn.png",
+        left = 0,
+        top = 100,
+        width = 100,
+        height = 100,
+        vKey = DIK_SCANCODE.DIK_A,
+        flyUpDown = true,
+        click_only = true
+    },
+    {
+        name = "right",
+        background = "textures/keyboard/right_btn.png",
+        left = 200,
+        top = 100,
+        width = 100,
+        height = 100,
+        vKey = DIK_SCANCODE.DIK_F,
+        flyUpDown = true,
+        click_only = true
+    },
+    {
+        name = "center",
+        background = "textures/keyboard/center_btn.png",
+        left = 105,
+        top = 105,
+        width = 90,
+        height = 90,
+        vKey = nil,
+        flyUpDown = true,
+        click_only = true
     }
 }
 
 function TouchMiniKeyboard:ctor()
-    self.alignment = "_lt"
-    self.zorder = -10
-
-    -- normalBtn, comboBtn, frequentBtn, mouseRight
-    self.colors = {
-        {normal = "#ffffff", pressed = "#888888"},
-        {normal = "#cccccc", pressed = "#333333"},
-        {normal = "#8888ff", pressed = "#3333cc"},
-        {normal = "#888888", pressed = "#ff6600"}
-    }
-
-    self.finger_size = 10
-    self.transparency = 1
+    self.alignment = "_lt";
+    self.zorder = -10;
+    self.colors = { normal = "#ffffff", pressed = "#888888" };
+    self.finger_size = 10;
+    self.transparency = 1;
 
     self.keylayout = TouchMiniKeyboard.DefaultKeyLayout
 end
 
--- function TouchMiniKeyboard:LoadKeyboardLayout(keyLayout)
---     local oldLayout = self.keylayout
---     self.keylayout = keyLayout or TouchMiniKeyboard.DefaultKeyLayout
---     if (self.keylayout ~= oldLayout) then
---         local _parent = ParaUI.GetUIObject(self.id or self.name)
---         if (_parent:IsValid()) then
---             local visible = _parent.visible
---             self:CreateWindow()
---             if (visible) then
---                 _parent.visible = true
---                 _parent:ApplyAnim()
---             end
---         end
---     end
--- end
-
-local s_instance
-function TouchMiniKeyboard.GetSingleton()
-    if (not s_instance) then
-        s_instance = TouchMiniKeyboard:new():Init("TouchMiniKeyboard")
-        s_instance:SetTransparency(0.5)
+--单例实例化
+local newInstance
+function TouchMiniKeyboard.getSingleton()
+    if (not newInstance) then
+        newInstance = TouchMiniKeyboard:new():init()
     end
-    return s_instance
+    return newInstance
 end
 
--- static method
-function TouchMiniKeyboard.CheckShow(bShow)
-    TouchMiniKeyboard.GetSingleton():Show(bShow)
+--初始化虚拟按钮
+function TouchMiniKeyboard:init()
+    self:Create();
+    return self;
 end
 
--- all input can be nil.
--- @param name: parent name. it should be a unique name
--- @param left, top: left, top position where to show.
--- @param width: if width is not specified, it will use all the screen space left from x.
-function TouchMiniKeyboard:Init(name, left, top, width)
-    self.name = name or self.name
-    self:SetPosition(left, top, width)
-    return self
+function TouchMiniKeyboard.checkShow(show)
+    TouchMiniKeyboard.getSingleton():show(show)
 end
 
--- @bShow: if nil, it will toggle show and hide.
-function TouchMiniKeyboard:Show(bShow)
-    local _parent = self:GetUIControl()
-    if (bShow == nil) then
-        bShow = not _parent.visible
+function TouchMiniKeyboard:show(show)
+    local directionContainer = self:getDirectionContainer();
+    if (show == nil) then
+        show = not directionContainer.visible;
     end
-    _parent.visible = bShow
+    directionContainer.visible = show;
+end
+
+--创建按钮
+function TouchMiniKeyboard:create()
+    local directionContainer = self:getDirectionContainer();
+    directionContainer:RemoveAll();
+    directionContainer.visible = false;
+
+    for _, item in ipairs(self.keylayout) do
+        if (item.name) then
+            item.width = item.width * WidthContrast;
+            item.height = item.height * HeightContrast;
+            item.left = item.left * WidthContrast;
+            item.top = item.top * HeightContrast;
+
+            local button = ParaUI.CreateUIObject(
+                    "button",
+                    item.name,
+                    "_lt",
+                    item.left,
+                    item.top,
+                    item.width,
+                    item.height
+            )
+            button.background = item.background;
+            button.enabled = false;
+            _guihelper.SetUIColor(button, "#FFFFFF")
+            directionContainer:AddChild(button)
+        end
+    end
 end
 
 function TouchMiniKeyboard:Destroy()
@@ -103,7 +161,6 @@ function TouchMiniKeyboard:Destroy()
     self.id = nil
 end
 
--- @param alpha: 0-1
 function TouchMiniKeyboard:SetTransparency(alpha)
     if (self.transparency ~= alpha) then
         self.transparency = alpha
@@ -114,85 +171,111 @@ function TouchMiniKeyboard:SetTransparency(alpha)
     return self
 end
 
--- @param left: position where to show. default to one button width
--- @param top: default to 2/5 height of the screen
--- @param width: if width is not specified, use 1/3 height of the screen
-function TouchMiniKeyboard:SetPosition(left, top, width)
-    width = width or math.floor(Screen:GetHeight() / 4 * 1.25)
-    self.width = width
-    self.button_width = math.floor(self.width / 3)
-    self.button_height = self.button_width
-    self.height = self.button_height * 4
+TouchMiniKeyboard.DirectionName = "DIRECTION";
 
-    self.left = left or self.button_width * 0.4
-    self.top = top or math.floor(Screen:GetHeight() / 2 + self.button_height * 0.2)
+--方向键容器
+function TouchMiniKeyboard:getDirectionContainer()
 
-    -- 50% padding between keys
-    self.key_margin = math.floor(math.min(self.finger_size, self.button_width * 0.11) * 0.5)
+    local container = ParaUI.GetUIObject(self.directionId or self.DirectionName);
 
-    self:CreateWindow()
+    local left = WidthContrast * 100;
+    local top = HeightScreen - (HeightContrast * 400);
+    local width = WidthContrast * 300;
+    local height = HeightContrast * 300;
+
+    if (not container:IsValid()) then
+        container = ParaUI.CreateUIObject("container", self.DirectionName, self.alignment, left, top, width, height);
+        container.background = "";
+        container:AttachToRoot();
+        container.zorder = self.zorder;
+
+        container:SetScript(
+                "ontouch",
+                function()
+                    self:OnTouch(msg)
+                end
+        )
+        container:SetScript(
+                "onmousedown",
+                function()
+                    self:OnMouseDown()
+                end
+        )
+        container:SetScript(
+                "onmouseup",
+                function()
+                    self:OnMouseUp()
+                end
+        )
+        container:SetScript(
+                "onmousemove",
+                function()
+                    self:OnMouseMove()
+                end
+        )
+        self.directionId = container.id;
+    else
+        container:Reposition(self.alignment, left, top, width, height);
+    end
+
+    return container;
 end
-
--- function TouchMiniKeyboard:GetButtonWidth()
---     return self.button_width
--- end
 
 function TouchMiniKeyboard:GetUIControl()
     local _parent = ParaUI.GetUIObject(self.id or self.name)
 
     if (not _parent:IsValid()) then
-        _parent =
-            ParaUI.CreateUIObject("container", self.name, self.alignment, self.left, self.top, self.width, self.height)
+        _parent = ParaUI.CreateUIObject("container", self.name, self.alignment, self.left, self.top, self.width, self.height)
         _parent.background = ""
         _parent:AttachToRoot()
         _parent.zorder = self.zorder
         _parent:SetScript(
-            "ontouch",
-            function()
-                self:OnTouch(msg)
-            end
+                "ontouch",
+                function()
+                    self:OnTouch(msg)
+                end
         )
         _parent:SetScript(
-            "onmousedown",
-            function()
-                self:OnMouseDown()
-            end
+                "onmousedown",
+                function()
+                    self:OnMouseDown()
+                end
         )
         _parent:SetScript(
-            "onmouseup",
-            function()
-                self:OnMouseUp()
-            end
+                "onmouseup",
+                function()
+                    self:OnMouseUp()
+                end
         )
         _parent:SetScript(
-            "onmousemove",
-            function()
-                self:OnMouseMove()
-            end
+                "onmousemove",
+                function()
+                    self:OnMouseMove()
+                end
         )
 
         self.id = _parent.id
     else
-        _parent:Reposition(self.alignment, self.left, self.top, self.width, self.height)
+        _parent:Reposition(self.alignment, 0, 0, WidthScreen, HeightScreen)
     end
     return _parent
 end
 
 -- simulate the touch event with id=-1
 function TouchMiniKeyboard:OnMouseDown()
-    local touch = {type = "WM_POINTERDOWN", x = mouse_x, y = mouse_y, id = -1, time = 0}
+    local touch = { type = "WM_POINTERDOWN", x = mouse_x, y = mouse_y, id = -1, time = 0 }
     self:OnTouch(touch)
 end
 
 -- simulate the touch event
 function TouchMiniKeyboard:OnMouseUp()
-    local touch = {type = "WM_POINTERUP", x = mouse_x, y = mouse_y, id = -1, time = 0}
+    local touch = { type = "WM_POINTERUP", x = mouse_x, y = mouse_y, id = -1, time = 0 }
     self:OnTouch(touch)
 end
 
 -- simulate the touch event
 function TouchMiniKeyboard:OnMouseMove()
-    local touch = {type = "WM_POINTERUPDATE", x = mouse_x, y = mouse_y, id = -1, time = 0}
+    local touch = { type = "WM_POINTERUPDATE", x = mouse_x, y = mouse_y, id = -1, time = 0 }
     self:OnTouch(touch)
 end
 
@@ -245,13 +328,12 @@ function TouchMiniKeyboard:OnTouch(touch)
                     if (focus_entity and not focus_entity:IsControlledExternally()) then
                         keydownBtn.delta = delta
                         if (not keydownBtn.timer) then
-                            keydownBtn.timer =
-                                commonlib.Timer:new(
-                                {
-                                    callbackFunc = function(timer)
-                                        focus_entity:MoveEntityByDisplacement(0, -keydownBtn.delta * 0.02, 0)
-                                    end
-                                }
+                            keydownBtn.timer = commonlib.Timer:new(
+                                    {
+                                        callbackFunc = function(timer)
+                                            focus_entity:MoveEntityByDisplacement(0, -keydownBtn.delta * 0.02, 0)
+                                        end
+                                    }
                             )
                             keydownBtn.timer:Change(0, 30)
                         end
@@ -265,17 +347,16 @@ function TouchMiniKeyboard:OnTouch(touch)
                     if (not btnItem.hover_press_start) then
                         btnItem.hover_press_start = true
                         if (not btnItem.timer) then
-                            btnItem.timer =
-                                commonlib.Timer:new(
-                                {
-                                    callbackFunc = function(timer)
-                                        if (keydownBtn.isKeyDown and keydownBtn.hover_testing_btn == btnItem) then
-                                            keydownBtn.hover_press_btns = keydownBtn.hover_press_btns or {}
-                                            keydownBtn.hover_press_btns[btnItem] = true
-                                            self:SetKeyState(btnItem, true)
+                            btnItem.timer = commonlib.Timer:new(
+                                    {
+                                        callbackFunc = function(timer)
+                                            if (keydownBtn.isKeyDown and keydownBtn.hover_testing_btn == btnItem) then
+                                                keydownBtn.hover_press_btns = keydownBtn.hover_press_btns or {}
+                                                keydownBtn.hover_press_btns[btnItem] = true
+                                                self:SetKeyState(btnItem, true)
+                                            end
                                         end
-                                    end
-                                }
+                                    }
                             )
                             btnItem.timer:Change(self.hover_press_hold_time)
                         end
@@ -356,18 +437,18 @@ function TouchMiniKeyboard:SetKeyState(btnItem, isDown)
 
     if (btnItem.name == "Ctrl") then
 
-            for _, item in ipairs(self.keylayout) do
-                if (item.ctrl_name) then
-                    local keyBtn = parent:GetChild(item.name)
-                    if (isDown) then
-                        keyBtn.text = item.ctrl_name
-                        _guihelper.SetUIColor(keyBtn, self.colors[3].normal)
-                    else
-                        keyBtn.text = self:GetItemDisplayText(item)
-                        _guihelper.SetUIColor(keyBtn, self.colors[item.colorid or 1].normal)
-                    end
+        for _, item in ipairs(self.keylayout) do
+            if (item.ctrl_name) then
+                local keyBtn = parent:GetChild(item.name)
+                if (isDown) then
+                    keyBtn.text = item.ctrl_name
+                    _guihelper.SetUIColor(keyBtn, self.colors[3].normal)
+                else
+                    keyBtn.text = self:GetItemDisplayText(item)
+                    _guihelper.SetUIColor(keyBtn, self.colors[item.colorid or 1].normal)
                 end
             end
+        end
 
     end
 
@@ -416,45 +497,15 @@ end
 function TouchMiniKeyboard:GetButtonItem(x, y)
     x = x - self.left
     y = y - self.top
-        for _, item in ipairs(self.keylayout) do
-            if (item.top and item.top <= y and y <= item.bottom and item.left <= x and x <= item.right) then
-                return item
-            end
-        end
-end
-
-local Table = NPL.load("(gl)Mod/CodePku/util/Table.lua");
-
-
--- private: calculate and create layout.  columns(16) * rows(5)
-function TouchMiniKeyboard:CreateWindow()
-    local _parent = self:GetUIControl()
-    _parent:RemoveAll()
-    _parent.visible = false;
-
-
-    for _,item in ipairs(self.keylayout) do
-        
-    
-
-
-        if (item.name) then
-            local button =
-                ParaUI.CreateUIObject(
-                "button",
-                item.name,
-                "_lt",
-                item.top,
-                item.left,
-                item.width,
-                item.height
-            )
-            button.background = item.background;
-            button.enabled = false;
-            button.text = item.name;
-            _guihelper.SetUIColor(button, self.colors[1].normal)
-            _guihelper.SetButtonFontColor(button, "#000000")
-            _parent:AddChild(button)
+    for _, item in ipairs(self.keylayout) do
+        if (item.top and item.top <= y and y <= item.bottom and item.left <= x and x <= item.right) then
+            return item
         end
     end
 end
+
+function TouchMiniKeyboard:getDirectionBtn(x, y)
+
+end
+
+
