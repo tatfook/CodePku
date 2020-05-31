@@ -11,3 +11,8 @@ function TouchMiniKeyboard:show(show)
     DirectionKeyboard.getSingleton():show(show);
     FeatKeyboard.getSingleton():show(show);
 end
+
+function TouchMiniKeyboard.CheckShow(show)
+    DirectionKeyboard.getSingleton():show(show);
+    FeatKeyboard.getSingleton():show(show);
+end

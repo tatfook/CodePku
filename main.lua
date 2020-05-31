@@ -88,14 +88,22 @@ function CodePku:init()
 	)
 
 	-- 重写移动端虚拟小键盘
-	 GameLogic.GetFilters():add_filter(
-         "CUSTOM_TOUCHMINIKEYBOARD",
-	 	function()
-	 		local TouchMiniKeyboard = NPL.load("(gl)Mod/CodePku/cellar/Common/TouchMiniKeyboard/Main.lua");
-	 		TouchMiniKeyboard:show(true);
-             return true
-         end
-	 )
+	GameLogic.GetFilters():add_filter(
+			"TouchMiniKeyboard",
+			function()
+				local TouchMiniKeyboard = NPL.load("(gl)Mod/CodePku/cellar/Common/TouchMiniKeyboard/Main.lua");
+				return TouchMiniKeyboard;
+			end
+	)
+
+	GameLogic.GetFilters():add_filter(
+			"TouchVirtualKeyboardIcon",
+			function()
+				local TouchVirtualKeyboardIcon = NPL.load("(gl)Mod/CodePku/cellar/Common/TouchMiniKeyboard/TouchVirtualKeyboardIcon.lua");
+				return TouchVirtualKeyboardIcon;
+			end
+	)
+
 
 	-- replace load world page
 	GameLogic.GetFilters():add_filter(
