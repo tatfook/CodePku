@@ -47,6 +47,14 @@ function UserConsole:ShowPage()
     });	
 end
 
+function UserConsole:ClosePage()
+    local UserConsolePage = Mod.CodePku.Store:Get('page/StartLearning')
+
+    if UserConsolePage then        
+        UserConsolePage:CloseWindow()
+    end
+end
+
 function UserConsole:CourseEntry()    
     CodePkuServiceSession:CourseEntryWorld(function (response, err)         
         if (err == 401) then
@@ -144,7 +152,7 @@ function UserConsole:HandleWorldId(pid)
                             nil,
                             refreshMode or "auto",
                             function(bSucceed, localWorldPath)
-                                DownloadWorld.Close()
+                                -- DownloadWorld.Close()
                             end
                         )
                     end

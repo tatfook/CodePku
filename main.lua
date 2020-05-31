@@ -144,7 +144,30 @@ function CodePku:init()
                 return url
             end
         end
-    )
+	)
+	
+	GameLogic.GetFilters():add_filter(
+		"OnShowEscFrame",
+		function (bShow) 
+			return false
+		end
+	)
+
+
+	-- 下载世界进度条
+	GameLogic.GetFilters():add_filter(
+		"downloadFile_notify",
+		function (downloadState, text, currentFileSize, totalFileSize)
+			return true
+		end
+	)
+
+	GameLogic.GetFilters():add_filter(
+		"desktop_menu",
+		function (menuItems) 
+			return {}
+		end
+	)
 
 	-- 重写加载世界页面
 	Map3DSystem.App.MiniGames.SwfLoadingBarPage.url = "Mod/CodePKu/cellar/World/SwfLoadingBarPage.mc.html"
@@ -158,6 +181,7 @@ end
 -- called when a new world is loaded. 
 
 function CodePku:OnWorldLoad()
+	UserConsole:ClosePage()
 end
 -- called when a world is unloaded. 
 
@@ -168,6 +192,5 @@ function CodePku:OnDestroy()
 end
 
 function CodePku:OnInitDesktop()
-	-- we will show our own UI here
-	return true;
+	-- we will show our own UI here	
 end

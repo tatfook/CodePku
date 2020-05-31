@@ -18,15 +18,15 @@ function PreventIndulge.Init()
     -- prevent indulge
     CodePkuServiceSession:PreventIndulge(function(str)
         if str == '40MINS' then
-            GameLogic.AddBBS(nil, L"你已经连续使用了40分钟，建议您休息下眼睛，眺望远方会有助于放松。", 10000, "255 0 0")
+            GameLogic.AddBBS(nil, L"您已连续使用了40分钟，建议您休息下眼睛，眺望远方会有助于放松。", 10000, "255 0 0")
         end
  
         if str == '2HOURS' then
-            GameLogic.AddBBS(nil, L"你已经连续使用了2个小时，建议站起来活动下身体，休息下眼睛，创作虽然有趣，也请不要忽略其他的工作学习。", 10000, "255 0 0")
+            GameLogic.AddBBS(nil, L"您已连续使用了2个小时，建议站起来活动下身体，休息下眼睛，创作虽然有趣，也请不要忽略其他的工作学习。", 10000, "255 0 0")
         end
     
         if str == '4HOURS' then
-            GameLogic.AddBBS(nil, L"你已连续使用了4个小时，真的有些久了，是时候离开电脑，与家人朋友享受下户外的清新空气。", 10000, "255 0 0")
+            GameLogic.AddBBS(nil, L"您已连续使用了4个小时，真的有些久了，是时候离开电脑，与家人朋友享受下户外的清新空气。", 10000, "255 0 0")
         end
 
         if str == '22:30' then
