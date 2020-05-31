@@ -31,7 +31,7 @@ DirectionKeyboard.colors = { normal = "#ffffff", pressed = "#888888" };
 DirectionKeyboard.defaultKeyLayout = {
     {
         name = "up",
-        background = "textures/up_btn.png",
+        background = "textures/keyboard/up_btn.png",
         left = 100,
         top = 0,
         width = 100,
@@ -40,7 +40,7 @@ DirectionKeyboard.defaultKeyLayout = {
     },
     {
         name = "down",
-        background = "textures/down_btn.png",
+        background = "textures/keyboard/down_btn.png",
         left = 100,
         top = 200,
         width = 100,
@@ -49,7 +49,7 @@ DirectionKeyboard.defaultKeyLayout = {
     },
     {
         name = "left",
-        background = "textures/left_btn.png",
+        background = "textures/keyboard/left_btn.png",
         left = 0,
         top = 100,
         width = 100,
@@ -58,7 +58,7 @@ DirectionKeyboard.defaultKeyLayout = {
     },
     {
         name = "right",
-        background = "textures/right_btn.png",
+        background = "textures/keyboard/right_btn.png",
         left = 200,
         top = 100,
         width = 100,
@@ -67,7 +67,7 @@ DirectionKeyboard.defaultKeyLayout = {
     },
     {
         name = "center",
-        background = "textures/center_btn.png",
+        background = "textures/keyboard/center_btn.png",
         left = 105,
         top = 105,
         width = 90,

@@ -91,7 +91,7 @@ function FeatKeyboard:getJumpBtn()
                 height
         );
 
-        button.background = "textures/jump_btn.png";
+        button.background = "textures/keyboard/jump_btn.png";
         _guihelper.SetUIColor(button, self.colors.normal);
         button.enabled = true;
         button.zorder = self.zorder;
@@ -135,7 +135,7 @@ function FeatKeyboard:getFBtn()
                 height
         );
 
-        button.background = "textures/F_btn.png";
+        button.background = "textures/keyboard/F_btn.png";
         _guihelper.SetUIColor(button, self.colors.normal);
         button.enabled = true;
         button.zorder = self.zorder;
@@ -179,7 +179,7 @@ function FeatKeyboard:getXBtn()
                 height
         );
 
-        button.background = "textures/X_btn.png";
+        button.background = "textures/keyboard/X_btn.png";
         _guihelper.SetUIColor(button, self.colors.normal);
         button.enabled = true;
         button.zorder = self.zorder;
@@ -223,7 +223,7 @@ function FeatKeyboard:getShiftBtn()
                 height
         );
 
-        button.background = "textures/shift_btn.png";
+        button.background = "textures/keyboard/shift_btn.png";
         _guihelper.SetUIColor(button, self.colors.normal);
         button.enabled = true;
         button.zorder = self.zorder;
@@ -289,7 +289,7 @@ function FeatKeyboard:getZoomBtn()
                 Design:adapterHeight(100)
         );
 
-        button.background = "textures/zoom_btn.png";
+        button.background = "textures/keyboard/zoom_btn.png";
         _guihelper.SetUIColor(button, self.colors.normal);
         button.enabled = true;
         button.zorder = self.zorder;
