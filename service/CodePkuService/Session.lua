@@ -68,6 +68,8 @@ end
 
 function CodePkuServiceSession:Logout()
     if CodePkuService:IsSignedIn() then
+        local account = CodePkuService:GetAccount()
+        SessionsData:RemoveSession(account)
         local Logout = Mod.CodePku.Store:Action("user/Logout")
         Logout()
         self:ResetIndulge()

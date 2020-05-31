@@ -1,0 +1,120 @@
+<html>
+    <body>
+        <pe:mcml>
+            <script type="text/npl" refresh="false">
+                <![CDATA[
+                    page = document:GetPageCtrl()
+                    local MainLoginPage = Mod.CodePku.Store:Get('page/MainLogin')
+
+                    function set_agree()
+                        MainLoginPage:SetValue("agree", true)
+                        page:CloseWindow()
+                    end
+                    function set_disagree()
+                        MainLoginPage:SetValue("agree", false)
+                        page:CloseWindow()
+                    end
+                ]]>
+            </script>
+            <style type="text/mcss">
+                {
+                    modal_title = {
+                        ["font-size"] = 24,
+                        ["base-font-size"] = 24,
+                        ["font-weight"] = 'bold',
+                        ["font-family"] = "Microsoft YaHei",
+                        ["margin-left"] = 126,
+                        ["margin-top"] = 8,
+                        color = "#262014",
+                        textcolor = "#262014",
+                    },
+                    modal_body = {
+                        width = 396,
+                        height = 200,
+                        ["margin-left"] = 36,
+                        ["margin-top"] = -22,
+                        background = ''
+                    },
+                    user_agreement = {
+                        width = 418,
+                        height = 160,
+                        ["base-font-size"] = 16,
+                        ["font-size"] = 16,
+                        color = "#ffffff",
+                        ["font-family"] = "Microsoft Yahei",
+                        ["margin-top"] = 24,
+                        ["margin-left"] = 24,
+                        background = '',
+
+                    },
+                    agree_button = {
+                        ["margin-left"] = 79,
+                        width = 132,
+                        height = 32,
+                        textcolor = "#ffffff",
+                        color = "#ffffff",
+                        ["font-size"] = 18,
+                        ["font-weight"] = "bold",
+                        ["font-family"] = "Microsoft Yahei",
+                        background = "textures/login/mainlogin3_32bits.png# 234 1889 263 63",
+                    },
+                    disagree_button = {
+                        width = 132,
+                        height = 32,
+                        textcolor = "#ffffff",
+                        color = "#ffffff",
+                        ["font-size"] = 18,
+                        ["font-weight"] = "bold",
+                        ["font-family"] = "Microsoft Yahei",
+                        background = "textures/login/mainlogin3_32bits.png# 560 1889 263 63",
+                    }
+                }
+            </style>
+                <div style="width:472px;height:307px;background:url(textures/login/mainlogin3_32bits.png# 20 71 944 614);">
+                    <div class="modal_title"><%= L"用户协议及隐私政策" %></div>
+                    <pe:treeview name="user_agreement" class="user_agreement" VerticalScrollBarOffsetX="10" VerticalScrollBarStep=“20”>
+                        <div style="color: #ffffff; padding: 6px">
+                            <div style="height: 14px;width: 24px;"></div>
+                            1.前言<br />
+                            1.1 欢迎使用深圳市编玩边学教育科技有限公司应用（以下简称“编玩边学”），在此特别提醒您（用户）在注册成为编玩边学用户之前，请认真阅读本协议，确保您充分理解本协议中各条款。请您审慎阅读并选择接受或不接受本协议。当用户点选“【我已经阅读并同意《用户信息服务协议》】”，即表示用户>同意并承诺遵守本协议。<br />
+                            <br />
+                            2.用户服务<br />
+                            2.1 为了给您提供更准确、更有针对性的服务，本公司会在您自愿选择服务或提供信息的情况下收集您的个人信息，并将这些信息进行整合，以便向您提供更好的用户服务。请您在注册时及时、详尽及准确的提供个人资料，并不断更新注册资料，符合及时、详尽准确的要求。所有原始键入的资料将引用为注>册资料。如果因注册信息不真实而引起的问题，由您自行承担相应的后果。<br />
+                            <br />
+                            2.2 用户知悉并同意：注册、留资成功则表示用户同意编玩边学课程顾问致电提供服务。<br />
+                            <br />
+                            3.用户使用规则<br />
+                            3.1 用户不得以任何不合法的方式、为任何不合法的目的、或以任何与本协议不一致的方式使用本应用和服务。<br />
+                            <br />
+                            3.2 用户应保管好自己的帐号和密码（包括但不限于：编玩边学帐号密码、支付平台账号密码），如因用户未保管好自己的帐号和密码而对自己、对编玩边学造成损害的，用户将负全部责任。另外，用户应对用户帐号中的所有活动和事件负全责。用户同意若发现有非法使用用户的帐号或出现安全漏洞的情况>，立即通告编玩边学应用，编玩边学将会尽力予以妥善解决。<br />
+                            <br />
+                            3.3 用户违反法律法规、国家政策、编玩边学规则或本协议而引起的一切责任，由用户负全部责任。如造成第三方损害，用户应当独立承担责任；如造成编玩边学损害，用户应当承担赔偿责任。编玩边学有权根据相关协议或规则进行违规判定，并采取相应限制或处罚措施，包括但不限于：限制或冻结用户的>账号；限制或停止某项单独服务或全部服务等。对因此可能造成的任何损失，由用户自行承担，且编玩边学保留进一步追究用户法律责任的权利。<br />
+                            <br />
+                            4.隐私协议<br />
+                            4.1 我司承诺在本应用上收集的用户个人信息（包括但不限于姓名、手机号等），仅为用户提供服务之用，不会泄露给第三方机构与个人。<br />
+                            <br />
+                            4.2 用户在本应用上产生的行为信息（包括但不限于浏览页面，点击、注册的行为，来源与去向等），编玩边学有权根据公司需求进行分析、处理，并适当公开。<br />
+                            <br />
+                            4.3 用户有义务保障自己账户的安全性，不将密码、验证码、支付账号以及对应密码告诉任何第三方，否则由此带来的任何损失由用户自行承担。<br />
+                            <br />
+                            4.4 就下列相关事宜的发生，编玩边学不承担任何法律责任：<br />
+                            <br />
+                            4.4.1 由于您将密码告知他人或与他人共享注册账户，私自转让账户而导致的任何个人信息的泄露；<br />
+                            4.4.2 任何由于黑客攻击、电脑病毒侵入造成的信息泄露；<br />
+                            4.4.3因不可抗力导致的信息泄露；<br />
+                            4.4.4其他非因编玩边学原因导致的个人信息的泄露。<br />
+                            本协议最终解释权归深圳市编玩边学教育科技有限公司所有<br />
+                            <div style="height: 36px;width: 36px;"></div>
+                        </div>
+                    </pe:treeview>
+                    
+                    <pe:container alignment="_ltt" style="background:; margin-top: 12px; margin-left: 64px" ClickThrough="true">
+                        <div>
+                            <input type="button" DefaultButton="true" class="disagree_button" onclick="set_disagree()" value='' />       
+                            <input type="button" DefaultButton="true" class="agree_button" onclick="set_agree()" value='' />
+                        </div>
+                    </pe:container>
+                </div>
+        </pe:mcml>
+    </body>
+</html>

@@ -7,18 +7,52 @@
         <pe:mcml>  
             <script type="text/npl" refresh="false"><![CDATA[                
                 UserConsole = NPL.load('./Main.lua')
+                CodePkuService = NPL.load("(gl)Mod/CodePku/service/CodePkuService.lua")
+
+                local page = document:GetPageCtrl()
+                Mod.CodePku.Store:Set("page/StartLearning", page)
+
                 function startLearning()
                     UserConsole:CourseEntry()
                 end
                 function currentUserName()
-                    LOG.std(nil, "info", "codepku", System.User.username)
-                    return System.User.username
+                    local username = CodePkuService:GetAccount()
+                    LOG.std(nil, "info", "codepku", username)
+                    return username
                 end
-            ]]></script>                         
-            <div>
-                <div><% currentUserName() %></div>
-                <input type="button" onclick="startLearning()" style="width:100%;height: 100%;">
-            </div>
+
+                function logout()
+                    UserConsole:Logout()
+                end
+            ]]></script>
+            <style type="text/mcss">
+                {
+                    logout = {
+                        width = 64.5,
+                        height = 35.5,
+                        background = "textures/login/mainlogin3_32bits.png# 30 1889 129 71)",
+                        ["margin-top"] = 32,
+                        ["margin-right"] = 42
+                    },
+                    start = {
+                        ["font-weight"] = "bold",
+                        ["font-family"] = "Microsoft Yahei",
+                        width = 310,
+                        height = 36,
+                        background = "textures/login/mainlogin3_32bits.png# 1000 1649 620 72)",
+                        ["background-color"] = '#ffffff'
+                    }
+                }
+            </style>
+            <pe:container alignment="_ctt" style="position:relative;width:960px;height:64px;margin-top:60px;background:;">
+                <div style='<%="position:relative;margin-left:326px;width:308px;height:63px;background:url(textures/login/mainlogin3_32bits.png# 1071 233 616 125);"%>'></div>
+            </pe:container>
+            <pe:container alignment="_rt" ClickThrough="true" style="position:relative;background:;">
+                <input type="button" name="logout" align="right" value='' class="logout" onclick="logout()" style="margin: 2px 2px 0 0" />
+            </pe:container>
+            <pe:container alignment="_ct" ClickThrough="true" style="position:relative;width:310px;height:36px;margin-left:-155px;margin-top:-100px;background:;">
+                <input type="button" DefaultButton="true" onclick="startLearning()" class="start" value='' />
+            </pe:container>
         </pe:mcml>
     </body>
 </html>

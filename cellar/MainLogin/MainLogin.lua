@@ -19,8 +19,14 @@ local SessionsData = NPL.load("(gl)Mod/CodePku/database/SessionsData.lua")
 local MainLogin = NPL.export()
 
 function MainLogin:Show() 
+
+    if CodePkuService:IsSignedIn() then
+        self:EnterUserConsole()
+    end
+
     local PWDInfo = CodePkuServiceSession:LoadSigninInfo()
-    local token = System.User.codepkuToken or PWDInfo.token
+    echo(PWDInfo)
+    local token = System.User.codepkuToken or PWDInfo and PWDInfo.token    
        
     if token then
         Mod.CodePku.MsgBox:Show(L"正在登陆，请稍后...", 8000, L"链接超时", 300, 120)        
@@ -37,12 +43,14 @@ function MainLogin:Show()
                     SetUserinfo(token, userId, mobile, nickname)
                     Mod.CodePku.Utils.SetTimeOut(function()
                         self:EnterUserConsole()
-                    end, 100)                    
+                    end, 100)  
+                else
+                    if PWDInfo and PWDInfo.account then
+                        SessionsData:RemoveSession(PWDInfo.account)
+                    end
                 end
             end
-        )
-
-        return
+        )        
     end
 
     Mod.CodePku.Utils.ShowWindow({
@@ -70,7 +78,7 @@ function MainLogin:Show()
 
 
     if PWDInfo then
-        MainLoginPage:SetValue('showaccount', PWDInfo.account or '')
+        MainLoginPage:SetValue('account', PWDInfo.account or '')
 
         self.loginServer = PWDInfo.loginServer
         self.account = PWDInfo.account
@@ -144,10 +152,6 @@ function MainLogin:LoginAction()
         LOG.std('save sign in info')
         self:EnterUserConsole()
 
-        if not Mod.CodePku.Store:Get('user/isVerified') then
-            -- RegisterModal:ShowBindingPage()
-        end
-
         local AfterLogined = Mod.CodePku.Store:Get('user/AfterLogined')
 
         if type(AfterLogined) == 'function' then
@@ -166,7 +170,6 @@ function MainLogin:LoginAction()
                 Mod.CodePku.MsgBox:Close()
                 return false
             end
-
             CodePkuServiceSession:LoginResponse(response, err, HandleLogined)
         end
     )
@@ -320,6 +323,7 @@ function MainLogin:getMobileCode()
         GameLogic.AddBBS(nil, L"手机号码不能为空", 3000, "255 0 0")
         return false
     end
+    
 
     Mod.CodePku.MsgBox:Show(L"正在获取验证码...", 8000, L"链接超时", 300, 120)
 
@@ -362,4 +366,8 @@ function MainLogin:ShowLoginBackgroundPage()
             height = 0,
         cancelShowAnimation = true,
     });	
+end
+
+function MainLogin:ShowUserAgreementModal()
+    Mod.CodePku.Utils.ShowWindow(472, 307, "Mod/CodePku/cellar/UserAgreement/UserAgreement.html", "UserAgreement")
 end

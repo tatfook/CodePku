@@ -26,14 +26,16 @@ local UserConsole = NPL.export()
 
 function UserConsole:ShowPage()
     local url = "Mod/CodePku/cellar/UserConsole/StartLearning.html"
+    -- Mod.CodePku.Utils.ShowWindow(850, 470, url, "StartLearning", nil, nil, nil, false, 10)
+    
     System.App.Commands.Call("File.MCMLWindowFrame", {
         url = url, 
-        name = "UserStartLearning", 
+        name = "StartLearning", 
         isShowTitleBar = false,
         DestroyOnClose = true, -- prevent many ViewProfile pages staying in memory
         style = CommonCtrl.WindowFrame.ContainerStyle,
         allowDrag = false,
-        zorder = -2,
+        zorder = -1,
         bShow = bShow,
         directPosition = true,
             align = "_fi",
@@ -44,28 +46,8 @@ function UserConsole:ShowPage()
         cancelShowAnimation = true,
     });	
 end
-local Log = NPL.load("(gl)Mod/CodePku/util/Log.lua");
-Log.debug(UserInfo);
 
 function UserConsole:CourseEntry()    
-    -- if not self.notFirstTimeShown then
-    --     self.notFirstTimeShown = true
-    --     -- check is signin
-    --     if not CodePkuService:IsSignedIn() and CodePkuServiceSession:GetCurrentUserToken() then
-    --         UserInfo:LoginWithToken()
-    --         return false
-    --     end
-
-    --     -- for protocol
-    --     if not CodePkuService:IsSignedIn() and CodePkuServiceSession:GetUserTokenFromUrlProtocol() then
-    --         UserInfo:LoginWithToken()
-    --         return false
-    --     end
-
-    --     if not CodePkuService:IsSignedIn() then 
-    --         UserInfo:CheckDoAutoSignin()
-    --     end
-    -- end    
     CodePkuServiceSession:courseEntryWorld(function (response, err)         
         if (err == 401) then
             GameLogic.AddBBS(nil, L"请先登录", 3000, "255 0 0")
@@ -76,7 +58,8 @@ function UserConsole:CourseEntry()
             GameLogic.AddBBS(nil, L"获取入口世界失败", 3000, "255 0 0")
             return false
         end
-        local url = response["data"]["world"]
+        local url = response and response.data and response.data.world
+        echo(url)
         local world = RemoteWorld.LoadFromHref(url, "self")
 
         local function LoadWorld(world, refreshMode)
@@ -103,15 +86,21 @@ function UserConsole:CourseEntry()
                         end
                     }
                 );
-
                 -- prevent recursive calls.
                 mytimer:Change(1,nil);
             else
                 _guihelper.MessageBox(L"无效的世界文件");
             end
         end
-
         LoadWorld(world, 'auto')
-    end)
-    
+    end) 
+end
+
+function UserConsole:Logout()
+    CodePkuServiceSession:Logout()
+    local StartLearningPage = Mod.CodePku.Store:Get('page/StartLearning')
+    if StartLearningPage then
+        StartLearningPage:CloseWindow()
+    end
+    GameMainLogin:next_step({IsLoginModeSelected = false})
 end
