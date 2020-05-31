@@ -156,7 +156,7 @@ function DirectionKeyboard:getContainer()
         container:SetScript(
                 "ontouch",
                 function()
-                    self:handleTouch();
+                    self:handleTouch(msg);
                 end
         )
         container:SetScript(
