@@ -97,7 +97,7 @@ function DirectionKeyboard:init()
     for _, item in ipairs(self.defaultKeyLayout) do
         if item.name then
             item.width = Design:adapterWidth(item.width);
-            item.height = Design:adapterHeight(item.height);
+            item.height = Design:adapterWidth(item.height);
 
             item.left = Design:adapterWidth(item.left);
             item.right = item.width + item.left;
@@ -142,9 +142,9 @@ end
 function DirectionKeyboard:getContainer()
     local container = ParaUI.GetUIObject(self.id or self.name);
     self.left = Design:adapterWidth(100);
-    self.top = Screen:GetHeight() - Design:adapterHeight(400);
+    self.top = Screen:GetHeight() - Design:adapterWidth(400);
     self.width = Design:adapterWidth(300);
-    self.height = Design:adapterHeight(300);
+    self.height = Design:adapterWidth(300);
 
     if not container:IsValid() then
         container = ParaUI.CreateUIObject("container", self.name, self.align, self.left, self.top, self.width, self.height);
@@ -218,6 +218,16 @@ function DirectionKeyboard:handleTouch(touch)
         local keydownBtn = touchSession:GetField("keydownBtn");
         if keydownBtn then
             self:updateButtonState(button, false);
+        end
+    elseif touch.type == "WM_POINTERUPDATE" then
+        local keydownBtn = touchSession:GetField("keydownBtn");
+
+        if button and button ~= keydownBtn then
+            if keydownBtn.isPressed then
+                self:updateButtonState(keydownBtn, false);
+                touchSession:SetField("keydownBtn", button);
+                self:SetKeyState(button, true);
+            end
         end
     end
 end

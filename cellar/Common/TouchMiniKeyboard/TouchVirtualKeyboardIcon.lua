@@ -41,7 +41,7 @@ local s_instance;
 function TouchVirtualKeyboardIcon.GetSingleton()
 	if(not s_instance) then
 		s_instance = TouchVirtualKeyboardIcon:new():Init("TouchVirtualKeyboardIcon");
-		s_instance:SetTransparency(0.5);
+		--s_instance:SetTransparency(0.5);
 	end
 	return s_instance;
 end
@@ -191,7 +191,7 @@ function TouchVirtualKeyboardIcon:ShowKeyboard(bShow)
 			self:Show(true);
 		end
 		keyboard:SetTransparency(1);
-		self:SetTransparency(1);
+		--self:SetTransparency(1);
 		--self:SetText(L"关闭");
 		keyboard:Show(true);
 		local obj = Keyboard:GetKeyFocus();
@@ -209,7 +209,7 @@ function TouchVirtualKeyboardIcon:ShowKeyboard(bShow)
 		end
 	else
 		--self:SetText(self.text);
-		self:SetTransparency(self.default_transparency);
+		--self:SetTransparency(self.default_transparency);
 		keyboard:Show(false);
 
 		if(self.hideIconWhenClosed) then
@@ -249,7 +249,7 @@ function TouchVirtualKeyboardIcon:GetKeyBoard()
 		self.keyboard:SetTransparency(self.default_transparency);
 		self.keyboard:Connect("hidden", self, function()
 			--self:SetText(self.text);
-			self:SetTransparency(self.default_transparency);
+			--self:SetTransparency(self.default_transparency);
 		end)
 	end
 	return self.keyboard;
