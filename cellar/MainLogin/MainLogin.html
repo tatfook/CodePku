@@ -152,111 +152,93 @@
             </script>
             <style type="text/mcss">
                 {
-                    user_login = {
-                        width = 362,
-                        ["base-font-size"] = 12,
-                        ["font-size"] = 12,
-                        color = "#ffffff",
-                        ["margin-left"] = -46,
-                        ["margin-top"] = -22,
-                        ["font-family"] = "Microsoft Yahei"
-                    },
                     modal_title = {
-                        ["font-size"] = 24,
-                        ["base-font-size"] = 24,
+                        ["font-size"] = 30,
+                        ["base-font-size"] = 30,
                         ["font-weight"] = 'bold',
                         ["font-family"] = "Microsoft YaHei",
-                        ["margin-left"] = 188,
-                        ["margin-top"] = 8,
                         color = "#262014",
                         textcolor = "#262014",
+                        ["margin-top"] = 12,
+                        ["text-align"] = "center"
                     },
                     text_field = {
                         background = "textures/worldshare_32bits.png;72 20 16 16:3 3 3 3",
                         border = "none",
-                        width = 361,
-                        height = 44,
-                        ["font-size"] = 24,
-                        ["base-font-size"] = 24
+                        width = 434,
+                        height = 52,
+                        ["font-size"] = 19,
+                        ["base-font-size"] = 19
                     },
                     get_code_divider = {
                         color =  "#40403f",
-                        ["font-size"] = 17,
-                        ["margin-left"] = -126,
-                        ["margin-top"] = 8
+                        ["font-size"] = 24,
+                        ["margin-left"] = -138,
+                        ["margin-top"] = 7.2
                     },
                     get_code_button = {
-                        width = 110,
-                        height = 42,
+                        width = 128,
+                        height = 52,
                         color = "#40403f",
                         textcolor = "#40403f",
-                        ["font-size"] = 17,
-                        background = '#ffffff',
+                        ["font-size"] = 19.2,
+                        ["base-font-size"] = 19.2,
                         border = "none",
-                        ["border-left"] = "1px solid #40403f",
-                        ["margin-top"] = -44,
-                        ["margin-left"] = 244,
                         ["font-weight"] = "bold",
-                        ["font-family"] = "Microsoft Yahei"
+                        ["font-family"] = "Microsoft Yahei",
+                        ["margin-top"] = -7.2,
+                        background = "#ffffff"
                     },               
                     login_button = {
-                        ["margin-left"] = 0,
-                        ["margin-bottom"] = 5,
-                        width = 361,
-                        height = 44,
+                        width = 434,
+                        height = 52,
                         textcolor = "#ffffff",
                         color = "#ffffff",
-                        ["font-size"] = 18,
+                        ["font-size"] = 20.4,
                         ["font-weight"] = "bold",
                         ["font-family"] = "Microsoft Yahei",
                         background = "textures/login/button-login.png",
                     },
                     helper = {
                         color = '#ffffff',
-                        ["font-size"] = 12,
-                        ["margin-top"] = 5,
-                        ["margin-bottom"] = 6
+                        ["font-size"] = 13.2,
+                        ["margin-top"] = 10.8,
+                        ["margin-bottom"] = 10.8
                     }
                 }
             </style>
-            <pe:container alignment="_ctt" ClickThrough="true" style="position:relative;width:960px;height:64px;margin-top:60px;background:;">
-                <div style='<%="position:relative;margin-left:326px;width:308px;height:63px;background:url(textures/login/mainlogin_32bits.png# 1071 233 616 125);"%>'></div>
+            <pe:container alignment="_ctt" ClickThrough="true" style="position:relative;width:370px;height:75px;margin-top:42px;background:;">
+                <div style='<%="width:370px;height:75px;background:url(textures/login/mainlogin_32bits.png# 1071 233 616 125);"%>'></div>
             </pe:container>
-            <pe:container alignment="_ct" ClickThrough="true" style="position:relative;margin-top:-114px;margin-left:-236px;width:472px;height:307px;background:url(textures/login/mainlogin_32bits.png# 20 71 944 614);">
+            <pe:container alignment="_ct" ClickThrough="true" style="position:relative;margin-top:-145px;margin-left:-284px;width:568px;height:368px;background:url(textures/login/mainlogin_32bits.png# 20 71 944 614);">
                 <div class="modal_title"><%= L"用户登录" %></div>
-                <div style="position:relative;margin-left:100px;padding-top: 50px;">
-                    <div name="login" class="user_login">
-                        <pe:if condition="<%= login_text() ~= nil %>">
-                            <div style="margin-bottom:15px;"><%= login_text()%></div>
-                        </pe:if>
-                        <div>
-                            <input name="account" type="text" class="text_field" EmptyText='<%= L"请输入手机号码" %>' />
-                            <div class="helper">若该手机未注册，我们会自动为您注册</div>
-                        </div>
-                        <div style="margin-bottom:12px;">
-                            <!-- <div style="float:left;min-width:65px"><%= L"密码：" %></div> -->
-                            <input type="text" class="text_field" name="verify_code"  EmptyText='<%= L"请输入验证码" %>'/>
-                            <span class="get_code_divider">|</span>
-                            <input
-                                type="button"
-                                class="get_code_button"
-                                DefaultButton="true"
-                                name="get_mobile_code_text"
-                                onclick="get_mobile_code()"
-                                value='<%= L"获取验证码"%>' 
-                            />
-                            <input type="hidden" name="mobile_token"/>
-                        </div>
-                        <div>
-                            <input type="button" DefaultButton="true" class="login_button" onclick="login()" value='<%= L"登 录"%>' />
-                            <div class="helper" style="margin-left: 80px">
-                                <input type="checkbox" name="agree" checked="checked" style="margin: 2px 2px 0 0" />
-                                <div style="float: right" onclick="show_user_agreement()">
-                                    <%= L"我已详细阅读并同意" %>
-                                    <div style="color:#6dd245;float: right"><%= L"《隐私政策》" %></div>
-                                </div>
+                <div style="position:relative;padding-top:28px;padding-left:64px;">
+                    <div>
+                        <input name="account" type="text" class="text_field" EmptyText='<%= L"请输入手机号码" %>' />
+                        <div class="helper">若该手机未注册，我们会自动为您注册</div>
+                    </div>
+                    <div style="margin-bottom:18px;">
+                        <input type="text" class="text_field" name="verify_code"  EmptyText='<%= L"请输入验证码" %>'/>
+                        <span class="get_code_divider">|</span>
+                        <input
+                            type="button"
+                            class="get_code_button"
+                            DefaultButton="true"
+                            name="get_mobile_code_text"
+                            onclick="get_mobile_code()"
+                            value='<%= L"获取验证码"%>' 
+                        />
+                        <input type="hidden" name="mobile_token"/>
+                    </div>
+                    <div>
+                        <input type="button" DefaultButton="true" class="login_button" onclick="login()" value='<%= L"登 录"%>' />
+                        <div class="helper" style="margin-left:111px;">
+                            <input type="checkbox" name="agree" checked="checked" style="margin-right:7px; width:18px;height:18px;" />
+                            <div style="float: right" onclick="show_user_agreement()">
+                                <%= L"我已详细阅读并同意" %>
+                                <div style="color:#6dd245;float: right"><%= L"《隐私政策》" %></div>
                             </div>
-                        </div>                        
+                        </div>
                     </div>
                 </div>
             </pe:container>

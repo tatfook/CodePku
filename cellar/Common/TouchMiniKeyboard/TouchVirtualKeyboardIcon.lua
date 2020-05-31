@@ -23,6 +23,7 @@ NPL.load("(gl)script/ide/System/Windows/Keyboard.lua");
 local Keyboard = commonlib.gettable("System.Windows.Keyboard");
 local TouchSession = commonlib.gettable("MyCompany.Aries.Game.Common.TouchSession")
 local Screen = commonlib.gettable("System.Windows.Screen");
+local Design = NPL.load("(gl)Mod/CodePku/util/Design.lua");
 
 local TouchVirtualKeyboardIcon = commonlib.inherit(commonlib.gettable("System.Core.ToolBase"), commonlib.gettable("Mod.CodePku.Common.TouchMiniKeyboard.TouchVirtualKeyboardIcon"));
 TouchVirtualKeyboardIcon:Property("Name", "TouchVirtualKeyboardIcon");
@@ -32,7 +33,7 @@ function TouchVirtualKeyboardIcon:ctor()
 	self.zorder = 1000;
 	self.transparency = 1;
 	self.color = {normal="#ffffff"}
-	self.text = "KB";
+	self.text = "";
 	self.default_transparency = 0.5;
 end
 
@@ -118,11 +119,17 @@ end
 -- @param top: default to 2/5 height of the screen
 -- @param width: if width is not specified, use 1/3 height of the screen
 function TouchVirtualKeyboardIcon:SetPosition(left, top, width)
-	width = width or math.floor(Screen:GetHeight() / 12)
-	self.width = width;
-	self.left = math.floor(left or width * 0.2);
-	self.top = math.floor(top or width*1.5);
-	self.height = width;
+	--width = width or math.floor(Screen:GetHeight() / 12)
+	--self.width = width;
+	--self.left = math.floor(left or width * 0.2);
+	--self.top = math.floor(top or width*1.5);
+	--self.height = width;
+
+	self.width = Design:adapterWidth(100);
+	self.height = Design:adapterHeight(100);
+
+	self.top = Design:adapterHeight(141);
+	self.left = Design:adapterWidth(100);
 
 	local bLastVisible = self:isVisible();
 	self:CreateWindow();
@@ -142,7 +149,7 @@ function TouchVirtualKeyboardIcon:GetUIControl()
 	
 	if(not _parent:IsValid()) then
 		_parent = ParaUI.CreateUIObject("container",self.name, self.alignment,self.left,self.top,self.width,self.height);
-		_parent.background = "Texture/whitedot.png";
+		_parent.background = "textures/keyboard/keyboard_btn.png";
 		_guihelper.SetUIColor(_parent, self.color.normal);
 		_parent:AttachToRoot();
 		_parent.zorder = self.zorder;
@@ -185,7 +192,7 @@ function TouchVirtualKeyboardIcon:ShowKeyboard(bShow)
 		end
 		keyboard:SetTransparency(1);
 		self:SetTransparency(1);
-		self:SetText(L"关闭");
+		--self:SetText(L"关闭");
 		keyboard:Show(true);
 		local obj = Keyboard:GetKeyFocus();
 		if(obj) then
@@ -201,7 +208,7 @@ function TouchVirtualKeyboardIcon:ShowKeyboard(bShow)
 			keyboard:SetFocusedMode(false);
 		end
 	else
-		self:SetText(self.text);
+		--self:SetText(self.text);
 		self:SetTransparency(self.default_transparency);
 		keyboard:Show(false);
 
@@ -241,7 +248,7 @@ function TouchVirtualKeyboardIcon:GetKeyBoard()
 		self.keyboard = TouchVirtualKeyboard:new():Init("TouchVirtualKeyboard", math.floor(self.left+self.width + self.width * 0.2));
 		self.keyboard:SetTransparency(self.default_transparency);
 		self.keyboard:Connect("hidden", self, function()
-			self:SetText(self.text);
+			--self:SetText(self.text);
 			self:SetTransparency(self.default_transparency);
 		end)
 	end
