@@ -71,7 +71,7 @@ function UserConsole:CourseEntry()
                 end
 
                 local url = world:GetLocalFileName()
-                DownloadWorld.ShowPage(url)
+                -- DownloadWorld.ShowPage(url)
                 local mytimer = commonlib.Timer:new(
                     {
                         callbackFunc = function(timer)
@@ -103,4 +103,31 @@ function UserConsole:Logout()
         StartLearningPage:CloseWindow()
     end
     GameMainLogin:next_step({IsLoginModeSelected = false})
+end
+
+function UserConsole:GetProjectId(url)
+    if (tonumber(url or '') or 99999) < 99999 then
+        return url
+    end
+
+    local pid = string.match(url or '', "^p(%d+)$")
+
+    if not pid then
+        pid = string.match(url or '', "/pbl/project/(%d+)")
+    end
+
+    return pid or false
+end
+
+function UserConsole:HandleWorldId(pid)
+    if not pid then
+        return false
+    end
+
+    pid = tonumber(pid)
+
+    local world
+    local overtimeEnter = false
+    local fetchSuccess = false
+
 end
