@@ -158,17 +158,17 @@ function FileDownloader:Start(src, dest, callbackFunc, cachePolicy)
                     self.text = ''
                 end
 
-                BroadcastHelper.PushLabel(
-                    {
-                        id = "noWrap",
-                        label = format(L"文件%s: %s", self.text, text),
-                        max_duration = 10000,
-                        color = "255 0 0",
-                        scaling = 1.1,
-                        bold = true,
-                        shadow = true
-                    }
-                )
+                -- BroadcastHelper.PushLabel(
+                --     {
+                --         id = "noWrap",
+                --         label = format(L"文件%s: %s", self.text, text),
+                --         max_duration = 10000,
+                --         color = "255 0 0",
+                --         scaling = 1.1,
+                --         bold = true,
+                --         shadow = true
+                --     }
+                -- )
             end
         end
     )

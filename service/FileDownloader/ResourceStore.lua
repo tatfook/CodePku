@@ -287,7 +287,7 @@ function ResourceStore:PutItem(item, bForceFlush)
 	item.entry.version_id = self.version_id_
 	item.entry.payload_id = item.payload.id
 	if (not web_db:InsertEntry(item.entry)) then
-		log("warning: insert InsertEntry failed. when ResourceStore:PutItem\n")
+		log("warning: insert xxxxxxxxInsertEntry failed. when ResourceStore:PutItem\n")
 		web_db:End(true)
 		return
 	end

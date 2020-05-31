@@ -19,61 +19,43 @@
             <style type="text/mcss">
                 {
                     modal_title = {
-                        ["font-size"] = 24,
-                        ["base-font-size"] = 24,
+                        ["font-size"] = 30,
+                        ["base-font-size"] = 30,
                         ["font-weight"] = 'bold',
                         ["font-family"] = "Microsoft YaHei",
-                        ["margin-left"] = 126,
-                        ["margin-top"] = 8,
                         color = "#262014",
                         textcolor = "#262014",
-                    },
-                    modal_body = {
-                        width = 396,
-                        height = 200,
-                        ["margin-left"] = 36,
-                        ["margin-top"] = -22,
-                        background = ''
+                        ["margin-top"] = 12,
+                        ["text-align"] = "center"
                     },
                     user_agreement = {
-                        width = 418,
-                        height = 160,
-                        ["base-font-size"] = 16,
-                        ["font-size"] = 16,
+                        width = 504.6,
+                        height = 195,
+                        ["base-font-size"] = 18,
+                        ["font-size"] = 18,
                         color = "#ffffff",
                         ["font-family"] = "Microsoft Yahei",
-                        ["margin-top"] = 24,
-                        ["margin-left"] = 24,
-                        background = '',
-
+                        ["margin-top"] = 28.8,
+                        ["margin-left"] = 28.8,
+                        background = ''
                     },
                     agree_button = {
-                        ["margin-left"] = 79,
-                        width = 132,
-                        height = 32,
-                        textcolor = "#ffffff",
-                        color = "#ffffff",
-                        ["font-size"] = 18,
-                        ["font-weight"] = "bold",
-                        ["font-family"] = "Microsoft Yahei",
+                        ["margin-left"] = 94.8,
+                        width = 144,
+                        height = 37.3,
                         background = "textures/login/mainlogin_32bits.png# 234 1889 263 63",
                     },
                     disagree_button = {
-                        width = 132,
-                        height = 32,
-                        textcolor = "#ffffff",
-                        color = "#ffffff",
-                        ["font-size"] = 18,
-                        ["font-weight"] = "bold",
-                        ["font-family"] = "Microsoft Yahei",
+                        width = 144,
+                        height = 37.3,
                         background = "textures/login/mainlogin_32bits.png# 560 1889 263 63",
                     }
                 }
             </style>
-                <div style="width:472px;height:307px;background:url(textures/login/mainlogin_32bits.png# 20 71 944 614);">
+                <div style="width:568px;height:368px;background:url(textures/login/mainlogin_32bits.png# 20 71 944 614);">
                     <div class="modal_title"><%= L"用户协议及隐私政策" %></div>
                     <pe:treeview name="user_agreement" class="user_agreement" VerticalScrollBarOffsetX="10" VerticalScrollBarStep=“20”>
-                        <div style="color: #ffffff; padding: 6px">
+                        <div style="color: #ffffff;">
                             <div style="height: 14px;width: 24px;"></div>
                             1.前言<br />
                             1.1 欢迎使用深圳市编玩边学教育科技有限公司应用（以下简称“编玩边学”），在此特别提醒您（用户）在注册成为编玩边学用户之前，请认真阅读本协议，确保您充分理解本协议中各条款。请您审慎阅读并选择接受或不接受本协议。当用户点选“【我已经阅读并同意《用户信息服务协议》】”，即表示用户>同意并承诺遵守本协议。<br />
@@ -108,11 +90,9 @@
                         </div>
                     </pe:treeview>
                     
-                    <pe:container alignment="_ltt" style="background:; margin-top: 12px; margin-left: 64px" ClickThrough="true">
-                        <div>
+                    <pe:container alignment="_lt" style="margin-top:16px;margin-left:90px;background:;" ClickThrough="true">
                             <input type="button" DefaultButton="true" class="disagree_button" onclick="set_disagree()" value='' />       
                             <input type="button" DefaultButton="true" class="agree_button" onclick="set_agree()" value='' />
-                        </div>
                     </pe:container>
                 </div>
         </pe:mcml>
