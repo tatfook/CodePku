@@ -154,7 +154,7 @@ function CodePkuUsersApi:ResetPassword(params, success, error, noTryStatus)
     CodePkuBaseApi:Post('/users/reset_password', params, { notTokenRequest = true }, success, error, noTryStatus)
 end
 
-function CodePkuUsersApi:getMobileCode(mobile, success, error)    
+function CodePkuUsersApi:GetMobileCode(mobile, success, error)    
     LOG.std(nil, "info", "codepku", type(mobile));
     if type(mobile) ~= "string" then        
         return false
@@ -165,7 +165,7 @@ function CodePkuUsersApi:getMobileCode(mobile, success, error)
     CodePkuBaseApi:Post('/users/mobile-code', params, { notTokenRequest = true }, success, error, {503, 400, 422, 500})
 end
 
-function CodePkuUsersApi:getCourseEntryWorld(success, error)
+function CodePkuUsersApi:GetCourseEntryWorld(success, error)
     LOG.std(nil, "info", "codepku", "user api getCourseEntry")
 
     CodePkuBaseApi:Get('/worlds/course-entry', nil, { notTokenRequest = false }, success, error, {503, 404, 500})
