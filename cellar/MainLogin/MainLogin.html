@@ -162,72 +162,87 @@
                         ["font-family"] = "Microsoft Yahei"
                     },
                     modal_title = {
-                        ["font-size"] = 24,
-                        ["base-font-size"] = 24,
+                        ["font-size"] = 49,
+                        ["base-font-size"] = 49,
                         ["font-weight"] = 'bold',
                         ["font-family"] = "Microsoft YaHei",
-                        ["margin-left"] = 188,
-                        ["margin-top"] = 8,
+                        ["margin-left"] = 369,
+                        ["margin-top"] = 16,
                         color = "#262014",
                         textcolor = "#262014",
                     },
                     text_field = {
                         background = "textures/worldshare_32bits.png;72 20 16 16:3 3 3 3",
                         border = "none",
-                        width = 361,
-                        height = 44,
+                        width = 722,
+                        height = 88,
                         ["font-size"] = 24,
                         ["base-font-size"] = 24
                     },
                     get_code_divider = {
-                        color =  "#40403f",
-                        ["font-size"] = 17,
-                        ["margin-left"] = -126,
-                        ["margin-top"] = 8
+                        color = "#40403f",
+                        ["font-size"] = 32,
+                        ["font-weight"] = "bold",
+                        ["base-font-size"] = 32,
+                        ["margin-left"] = -213,
+                        ["margin-top"] = 18
                     },
                     get_code_button = {
-                        width = 110,
-                        height = 42,
+                        width = 160,
+                        height = 60,
                         color = "#40403f",
                         textcolor = "#40403f",
-                        ["font-size"] = 17,
+                        ["font-size"] = 64,
+                        ["base-font-size"] = 64,
                         background = '#ffffff',
                         border = "none",
                         ["border-left"] = "1px solid #40403f",
-                        ["margin-top"] = -44,
-                        ["margin-left"] = 244,
+                        ["margin-top"] = -74,
+                        ["margin-left"] = 532,
                         ["font-weight"] = "bold",
                         ["font-family"] = "Microsoft Yahei"
                     },               
                     login_button = {
                         ["margin-left"] = 0,
-                        ["margin-bottom"] = 5,
-                        width = 361,
-                        height = 44,
-                        textcolor = "#ffffff",
-                        color = "#ffffff",
-                        ["font-size"] = 18,
+                        ["margin-top"] = -70,
+                        width = 722,
+                        height = 88,
+                        ["font-size"] = 34,
+                        ["base-font-size"] = 34,
                         ["font-weight"] = "bold",
                         ["font-family"] = "Microsoft Yahei",
                         background = "textures/login/button-login.png",
+                        position = "relative"
+                    },
+                    login_button_text = {
+                        ["margin-left"] = 0,
+                        ["margin-top"] = 40,
+                        width = 722,
+                        height = 88,
+                        ["font-size"] = 34,
+                        ["base-font-size"] = 34,
+                        ["font-weight"] = "bold",
+                        ["font-family"] = "Microsoft Yahei",
+                        color = "#ffffff",
                     },
                     helper = {
                         color = '#ffffff',
-                        ["font-size"] = 12,
+                        ["font-size"] = 22,
+                        ["base-font-size"] = 22,
                         ["margin-top"] = 5,
                         ["margin-bottom"] = 6
                     }
                 }
             </style>
-            <pe:container alignment="_ctt" ClickThrough="true" style="position:relative;width:960px;height:64px;margin-top:60px;background:;">
-                <div style='<%="position:relative;margin-left:326px;width:308px;height:63px;background:url(textures/login/mainlogin_32bits.png# 1071 233 616 125);"%>'></div>
+            <pe:container alignment="_ctt" ClickThrough="true" style="position:relative;width:1920px;height:128px;margin-top:120px;background:;">
+                <div style='<%="position:relative;margin-left:657px;width:606px;height:115px;background:url(textures/login/mainlogin_32bits.png# 1071 233 616 125);"%>'></div>
             </pe:container>
-            <pe:container alignment="_ct" ClickThrough="true" style="position:relative;margin-top:-114px;margin-left:-236px;width:472px;height:307px;background:url(textures/login/mainlogin_32bits.png# 20 71 944 614);">
+            <pe:container alignment="_ct" ClickThrough="true" style="position:relative;margin-top:-228px;margin-left:-472px;width:935px;height:605px;background:url(textures/login/mainlogin_32bits.png# 20 71 944 614);">
                 <div class="modal_title"><%= L"用户登录" %></div>
-                <div style="position:relative;margin-left:100px;padding-top: 50px;">
+                <div style="position:relative;margin-left:147px;padding-top: 100px;">
                     <div name="login" class="user_login">
                         <pe:if condition="<%= login_text() ~= nil %>">
-                            <div style="margin-bottom:15px;"><%= login_text()%></div>
+                            <div style="margin-bottom:30px;"><%= login_text()%></div>
                         </pe:if>
                         <div>
                             <input name="account" type="text" class="text_field" EmptyText='<%= L"请输入手机号码" %>' />
@@ -248,9 +263,13 @@
                             <input type="hidden" name="mobile_token"/>
                         </div>
                         <div>
-                            <input type="button" DefaultButton="true" class="login_button" onclick="login()" value='<%= L"登 录"%>' />
-                            <div class="helper" style="margin-left: 80px">
-                                <input type="checkbox" name="agree" checked="checked" style="margin: 2px 2px 0 0" />
+                            <!-- <input type="button" DefaultButton="true" class="login_button" onclick="login()" value='<%= L"登 录"%>' /> -->
+                            <div class="login_button_text" onclick="login()" style="text-align: center">
+                                <%= L"登 录"%>
+                                <div class="login_button"></div>
+                            </div>
+                            <div class="helper" style="margin-left:192px;margin-top: -8px">
+                                <input type="checkbox" name="agree" checked="checked" style="margin-right:10px;margin-top:2px;width:30px;height:30px" />
                                 <div style="float: right" onclick="show_user_agreement()">
                                     <%= L"我已详细阅读并同意" %>
                                     <div style="color:#6dd245;float: right"><%= L"《隐私政策》" %></div>
