@@ -48,7 +48,7 @@ function UserConsole:ShowPage()
 end
 
 function UserConsole:CourseEntry()    
-    CodePkuServiceSession:courseEntryWorld(function (response, err)         
+    CodePkuServiceSession:CourseEntryWorld(function (response, err)         
         if (err == 401) then
             GameLogic.AddBBS(nil, L"请先登录", 3000, "255 0 0")
             -- todo 看下怎么回到登录页面
@@ -126,8 +126,54 @@ function UserConsole:HandleWorldId(pid)
 
     pid = tonumber(pid)
 
-    local world
-    local overtimeEnter = false
-    local fetchSuccess = false
+    local function LoadWorld(world, refreshMode)
+        if world then
+            if refreshMode == 'never' then
+                if not LocalService:IsFileExistInZip(world:GetLocalFileName(), ":worldconfig.txt") then
+                    refreshMode = 'force'
+                end
+            end
 
+            local url = world:GetLocalFileName()
+            -- DownloadWorld.ShowPage(url)
+            local mytimer = commonlib.Timer:new(
+                {
+                    callbackFunc = function(timer)
+                        InternetLoadWorld.LoadWorld(
+                            world,
+                            nil,
+                            refreshMode or "auto",
+                            function(bSucceed, localWorldPath)
+                                DownloadWorld.Close()
+                            end
+                        )
+                    end
+                }
+            );
+            -- prevent recursive calls.
+            mytimer:Change(1,nil);
+        else
+            _guihelper.MessageBox(L"无效的世界文件");
+        end
+    end
+
+    CodePkuServiceSession:CourseWorldByKeepworkId(pid, function (response, error)        
+        if (error == 401) then
+            GameLogic.AddBBS(nil, L"请先登录", 3000, "255 0 0")
+            -- todo 看下怎么回到登录页面
+            return false
+        end   
+        if (error ~= 200) then
+            GameLogic.AddBBS(nil, L"获取入口世界失败", 3000, "255 0 0")
+            return false
+        end
+        local url = response and response.data and response.data.world
+        
+        if not url then
+            GameLogic.AddBBS(nil, L"获取入口世界失败", 3000, "255 0 0")
+            return false
+        end
+        local world = RemoteWorld.LoadFromHref(url, "self")
+        LoadWorld(world, 'auto')    
+    end)
 end

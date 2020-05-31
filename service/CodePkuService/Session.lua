@@ -11,6 +11,7 @@ local KeepworkServiceSession = NPL.load("(gl)Mod/WorldShare/service/KeepworkServ
 
 local CodePkuService = NPL.load("(gl)Mod/CodePku/service/CodePkuService.lua")
 local CodePkuUsersApi = NPL.load("(gl)Mod/CodePku/api/Codepku/Users.lua")
+local CodePkuWorldsApi = NPL.load("(gl)Mod/CodePku/api/Codepku/Worlds.lua")
 local SessionsData = NPL.load("(gl)Mod/CodePku/database/SessionsData.lua")
 local Config = NPL.load("(gl)Mod/CodePku/config/Config.lua")
 
@@ -250,9 +251,13 @@ function CodePkuServiceSession:ResetIndulge()
 end
 
 function CodePkuServiceSession:getMobileCode(mobile, callback)        
-    CodePkuUsersApi:getMobileCode(mobile, callback, callback)
+    CodePkuUsersApi:GetMobileCode(mobile, callback, callback)
 end
 
-function CodePkuServiceSession:courseEntryWorld(callback)
-    CodePkuUsersApi:getCourseEntryWorld(callback, callback)
+function CodePkuServiceSession:CourseEntryWorld(callback)
+    CodePkuWorldsApi:GetCourseEntryWorld(callback, callback)
+end
+
+function CodePkuServiceSession:CourseWorldByKeepworkId(keepworkProjectId, callback)
+    CodePkuWorldsApi:GetByKeepworkProjectId(keepworkProjectId, callback, callback)
 end
