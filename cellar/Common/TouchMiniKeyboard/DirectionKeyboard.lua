@@ -102,7 +102,7 @@ function DirectionKeyboard:init()
             item.left = Design:adapterWidth(item.left);
             item.right = item.width + item.left;
 
-            item.top = Design:adapterHeight(item.top);
+            item.top = Design:adapterWidth(item.top);
             item.bottom = item.height + item.top;
 
             local button = ParaUI.CreateUIObject(
