@@ -156,27 +156,31 @@ function DirectionKeyboard:getContainer()
         container:SetScript(
                 "ontouch",
                 function()
+                    echo(6666)
                     self:handleTouch(msg);
                 end
-        )
+        );
+
         container:SetScript(
                 "onmousedown",
                 function()
                     self:handleMouseDown();
                 end
-        )
+        );
+
         container:SetScript(
                 "onmouseup",
                 function()
                     self:handleMouseUp();
                 end
-        )
+        );
+
         container:SetScript(
                 "onmousemove",
                 function()
                     self:handleMouseMove();
                 end
-        )
+        );
 
         self.id = container.id;
     else
@@ -204,6 +208,12 @@ function DirectionKeyboard:handleMouseUp()
     self:handleTouch(touch);
 end
 
+--处理鼠标其他事件
+function DirectionKeyboard:handleOther()
+    local touch = { type = "OTHER", x = mouse_x, y = mouse_y, id = -1, time = 0 };
+    self:handleTouch(touch);
+end
+
 --处理触摸事件
 function DirectionKeyboard:handleTouch(touch)
     local touchSession = TouchSession.GetTouchSession(touch);
@@ -217,7 +227,7 @@ function DirectionKeyboard:handleTouch(touch)
     elseif touch.type == "WM_POINTERUP" then
         local keydownBtn = touchSession:GetField("keydownBtn");
         if keydownBtn then
-            self:updateButtonState(button, false);
+            self:updateButtonState(keydownBtn, false);
         end
     elseif touch.type == "WM_POINTERUPDATE" then
         local keydownBtn = touchSession:GetField("keydownBtn");
@@ -225,9 +235,15 @@ function DirectionKeyboard:handleTouch(touch)
         if button and button ~= keydownBtn then
             if keydownBtn.isPressed then
                 self:updateButtonState(keydownBtn, false);
-                touchSession:SetField("keydownBtn", button);
-                self:SetKeyState(button, true);
             end
+
+            touchSession:SetField("keydownBtn", button);
+            self:updateButtonState(button, true);
+        end
+    else
+        if button then
+            touchSession:SetField("keydownBtn", button);
+            self:updateButtonState(button, true);
         end
     end
 end
@@ -262,6 +278,8 @@ function DirectionKeyboard:updateButtonState(button, isPressed)
     else
         self:emitKeyEvent(button, isPressed);
     end
+
+    Mouse:SetTouchButtonSwapped(isPressed);
 end
 
 --发送键盘指令

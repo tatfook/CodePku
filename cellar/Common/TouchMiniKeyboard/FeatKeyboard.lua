@@ -304,6 +304,9 @@ function FeatKeyboard:getZoomBtn()
     end);
 
     container:SetScript("onmousemove", function()
+
+        Mouse:SetTouchButtonSwapped(true);
+
         local touchSession = TouchSession.GetTouchSession({ type = "WM_POINTERUPDATE", x = mouse_x, y = mouse_y, id = -1, time = 0 });
 
         local dx,dy = touchSession:GetOffsetFromStartLocation();
@@ -323,6 +326,7 @@ function FeatKeyboard:getZoomBtn()
 
     container:SetScript("onmouseup", function()
         _guihelper.SetUIColor(button, self.colors.normal);
+        Mouse:SetTouchButtonSwapped(false);
     end);
 
     return button;
