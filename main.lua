@@ -73,7 +73,7 @@ end
 function CodePku:init()
 	-- Log.error("222","333","66z");	
 	-- Log.trace("222","333","66z");
-	-- Log.debug("222","333","66z");
+	 Log.debug(System.os.GetPlatform());
 	-- Log.info("222","333","66z");
 	-- Log.warn("222","333","66z");
 	-- Log.fatal("222","333","66z");
