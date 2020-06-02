@@ -43,7 +43,7 @@ local Log = NPL.load("(gl)Mod/CodePku/util/Log.lua")
 local PreventIndulge = NPL.load("(gl)Mod/CodePku/cellar/PreventIndulge/PreventIndulge.lua")
 local UserConsole = NPL.load("(gl)Mod/CodePku/cellar/UserConsole/Main.lua")
 local CodePkuDownloadWorld = NPL.load("(gl)Mod/CodePku/cellar/World/DownloadWorld.lua")
-
+local DownloadWorld = commonlib.gettable("MyCompany.Aries.Game.MainLogin.DownloadWorld")
 
 local CodePku = commonlib.inherit(commonlib.gettable("Mod.ModBase"),commonlib.gettable("Mod.CodePku"));
 
@@ -159,7 +159,7 @@ function CodePku:init()
 	GameLogic.GetFilters():add_filter(
 		"downloadFile_notify",
 		function (downloadState, text, currentFileSize, totalFileSize)
-			return true
+			DownloadWorld.UpdateProgressText2(text)
 		end
 	)
 
