@@ -1,0 +1,62 @@
+<!-- "script/apps/Aries/Creator/Game/Areas/EscFramePage.html" -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+</head>
+<body>
+    <pe:mcml>
+<script refresh="false" type="text/npl" src="EscFramePage.lua"><![CDATA[
+NPL.load("(gl)script/apps/Aries/Creator/Game/World/WorldStacks.lua");
+WorldStacks = commonlib.gettable("MyCompany.Aries.Game.WorldStacks");
+NPL.load("(gl)script/apps/Aries/Creator/Game/Areas/ServerPage.lua");
+local ServerPage = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.ServerPage");
+GameLogic = commonlib.gettable("MyCompany.Aries.Game.GameLogic")
+EscFramePage = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.EscFramePage");
+EscFramePage.OnInit();
+
+function ClosePage()
+    Page:CloseWindow();
+end
+
+function OnLeave()
+    GameLogic.RunCommand("/menu file.exit");
+end
+
+
+function OnSettings()
+    GameLogic.RunCommand("/menu file.settings");
+end
+
+
+
+
+function OnClickButton(name,mcmlNode)
+    ClosePage();
+    if(name=="systemSetting") then
+        OnSettings();
+    elseif(name=="exitWorld") then
+        OnLeave();
+    end
+end
+
+]]></script>
+<div style="height:64px;width:300px;">
+    <pe:if condition='<%=WorldStacks:GetReturnWorld() ~= nil%>'>
+        <input type="button" value='<%=WorldStacks:GetReturnWorld():GetDisplayName()%>' class="mc_big_button" style="color:#572712;font-size:16px;width:300px;height:52px;" onclick="OnReturnLastWorld" />    
+    </pe:if>
+</div>
+<aries:window mode="thin" style="width:300px;" title='<%=L"系统设置"%>' onclose="ClosePage">
+<div style="padding-bottom:10px;">    
+    <div style="margin-top:15px;">            
+        <input type="button" value='<%=L"系统设置"%>' name= "systemSetting" style="margin-left:33px;width:100px;height:24px;color:#ffffff;" class="mc_light_grey_button_with_fillet" onclick="OnClickButton"/>
+        <input type="button" value='<%=L"退出世界"%>' name= "exitWorld" style="margin-left:33px;width:100px;height:24px;color:#ffffff;" class="mc_light_grey_button_with_fillet" onclick="OnClickButton"/>
+    </div>
+    </div>
+</div>
+</aries:window>
+</pe:mcml>
+</body>
+</html>
+

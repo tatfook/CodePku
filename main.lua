@@ -43,7 +43,9 @@ local Log = NPL.load("(gl)Mod/CodePku/util/Log.lua")
 local PreventIndulge = NPL.load("(gl)Mod/CodePku/cellar/PreventIndulge/PreventIndulge.lua")
 local UserConsole = NPL.load("(gl)Mod/CodePku/cellar/UserConsole/Main.lua")
 local CodePkuDownloadWorld = NPL.load("(gl)Mod/CodePku/cellar/World/DownloadWorld.lua")
+local CodePkuEscFramePage = NPL.load("(gl)Mod/CodePku/cellar/Areas/EscFramePage.lua")
 
+local DownloadWorld = commonlib.gettable("MyCompany.Aries.Game.MainLogin.DownloadWorld")
 
 local CodePku = commonlib.inherit(commonlib.gettable("Mod.ModBase"),commonlib.gettable("Mod.CodePku"));
 
@@ -71,13 +73,6 @@ function CodePku:GetDesc()
 end
 
 function CodePku:init()
-	-- Log.error("222","333","66z");	
-	-- Log.trace("222","333","66z");
-	-- Log.debug("222","333","66z");
-	-- Log.info("222","333","66z");
-	-- Log.warn("222","333","66z");
-	-- Log.fatal("222","333","66z");
-
 	GameLogic.GetFilters():add_filter(
 			"ShowLoginModePage",
 			function()
@@ -99,8 +94,7 @@ function CodePku:init()
 	GameLogic.GetFilters():add_filter(
 			"TouchVirtualKeyboardIcon",
 			function()
-				NPL.load("(gl)Mod/CodePku/cellar/Common/TouchMiniKeyboard/TouchVirtualKeyboardIcon.lua");
-				local TouchVirtualKeyboardIcon = commonlib.gettable("Mod.CodePku.Common.TouchMiniKeyboard.TouchVirtualKeyboardIcon")
+				local TouchVirtualKeyboardIcon = NPL.load("(gl)Mod/CodePku/cellar/Common/TouchMiniKeyboard/TouchVirtualKeyboardIcon.lua");
 				return TouchVirtualKeyboardIcon;
 			end
 	)
@@ -147,19 +141,19 @@ function CodePku:init()
         end
 	)
 	
-	GameLogic.GetFilters():add_filter(
-		"OnShowEscFrame",
-		function (bShow) 
-			return false
-		end
-	)
+	-- GameLogic.GetFilters():add_filter(
+	-- 	"OnShowEscFrame",
+	-- 	function (bShow) 
+	-- 		return false
+	-- 	end
+	-- )
 
 
 	-- 下载世界进度条
 	GameLogic.GetFilters():add_filter(
 		"downloadFile_notify",
 		function (downloadState, text, currentFileSize, totalFileSize)
-			return true
+			DownloadWorld.UpdateProgressText2(text)
 		end
 	)
 
@@ -170,11 +164,25 @@ function CodePku:init()
 		end
 	)
 
+	GameLogic.GetFilters():add_filter(
+		"downloadworld_shown_src", 
+		function (url)
+			return ""
+		end
+	)
+
+	GameLogic.GetFilters():add_filter(
+		"EscFramePage.ShowPage",
+		function (bShow)
+			CodePkuEscFramePage:ShowPage(bShow)
+			return true
+		end
+	)
 	-- 重写加载世界页面
 	Map3DSystem.App.MiniGames.SwfLoadingBarPage.url = "Mod/CodePKu/cellar/World/SwfLoadingBarPage.mc.html"
 	
 	-- prevent indulage
-    PreventIndulge:Init()
+	PreventIndulge:Init()
 end
 
 function CodePku:OnLogin()

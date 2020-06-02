@@ -79,7 +79,7 @@ function UserConsole:CourseEntry()
                 end
 
                 local url = world:GetLocalFileName()
-                -- DownloadWorld.ShowPage(url)
+                DownloadWorld.ShowPage(url)
                 local mytimer = commonlib.Timer:new(
                     {
                         callbackFunc = function(timer)
@@ -143,7 +143,7 @@ function UserConsole:HandleWorldId(pid)
             end
 
             local url = world:GetLocalFileName()
-            -- DownloadWorld.ShowPage(url)
+            DownloadWorld.ShowPage(url)
             local mytimer = commonlib.Timer:new(
                 {
                     callbackFunc = function(timer)
