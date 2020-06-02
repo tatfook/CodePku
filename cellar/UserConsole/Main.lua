@@ -152,7 +152,7 @@ function UserConsole:HandleWorldId(pid)
                             nil,
                             refreshMode or "auto",
                             function(bSucceed, localWorldPath)
-                                -- DownloadWorld.Close()
+                                DownloadWorld.Close()
                             end
                         )
                     end

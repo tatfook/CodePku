@@ -78,7 +78,7 @@ function FeatKeyboard:getJumpBtn()
     local left = Design:adapterWidth(1656);
     local top = Design:adapterHeight(771);
     local width = Design:adapterWidth(100);
-    local height = Design:adapterHeight(100);
+    local height = Design:adapterWidth(100);
 
     if not button:IsValid() then
         button = ParaUI.CreateUIObject(
@@ -122,7 +122,7 @@ function FeatKeyboard:getFBtn()
     local left = Design:adapterWidth(1722);
     local top = Design:adapterHeight(606);
     local width = Design:adapterWidth(100);
-    local height = Design:adapterHeight(100);
+    local height = Design:adapterWidth(100);
 
     if not button:IsValid() then
         button = ParaUI.CreateUIObject(
@@ -166,7 +166,7 @@ function FeatKeyboard:getXBtn()
     local left = Design:adapterWidth(1722);
     local top = Design:adapterHeight(441);
     local width = Design:adapterWidth(100);
-    local height = Design:adapterHeight(100);
+    local height = Design:adapterWidth(100);
 
     if not button:IsValid() then
         button = ParaUI.CreateUIObject(
@@ -210,7 +210,7 @@ function FeatKeyboard:getShiftBtn()
     local left = Design:adapterWidth(1722);
     local top = Design:adapterHeight(141);
     local width = Design:adapterWidth(100);
-    local height = Design:adapterHeight(100);
+    local height = Design:adapterWidth(100);
 
     if not button:IsValid() then
         button = ParaUI.CreateUIObject(
@@ -253,10 +253,10 @@ function FeatKeyboard:getZoomBtn()
     local button = ParaUI.GetUIObject(buttonName);
     local container = ParaUI.GetUIObject(containerName);
 
-    local left = Design:adapterWidth(99);
-    local top = Design:adapterHeight(141);
-    local width = Design:adapterWidth(120);
-    local height = Design:adapterHeight(200);
+    local left = Design:adapterWidth(75);
+    local top = Design:adapterHeight(361);
+    local width = Design:adapterWidth(150);
+    local height = Design:adapterWidth(200);
 
     if not container:IsValid() then
         container = ParaUI.CreateUIObject(
@@ -271,7 +271,7 @@ function FeatKeyboard:getZoomBtn()
 
         container.enabled = true;
         container.background = "";
-        container.zorder = self.zorder;
+        container.zorder = 10;
 
         container:AttachToRoot();
     else
@@ -283,16 +283,16 @@ function FeatKeyboard:getZoomBtn()
                 "button",
                 name,
                 self.align,
-                Design:adapterWidth(10),
+                Design:adapterWidth(25),
                 Design:adapterHeight(50),
                 Design:adapterWidth(100),
-                Design:adapterHeight(100)
+                Design:adapterWidth(100)
         );
 
         button.background = "textures/keyboard/zoom_btn.png";
         _guihelper.SetUIColor(button, self.colors.normal);
         button.enabled = true;
-        button.zorder = self.zorder;
+        --button.zorder = self.zorder - 2;
 
         container:AddChild(button);
     end
@@ -304,7 +304,11 @@ function FeatKeyboard:getZoomBtn()
     end);
 
     container:SetScript("onmousemove", function()
+
+        Mouse:SetTouchButtonSwapped(true);
+
         local touchSession = TouchSession.GetTouchSession({ type = "WM_POINTERUPDATE", x = mouse_x, y = mouse_y, id = -1, time = 0 });
+
         local dx,dy = touchSession:GetOffsetFromStartLocation();
 
         local cameraStartDist = touchSession:GetField("cameraDist");
@@ -322,6 +326,7 @@ function FeatKeyboard:getZoomBtn()
 
     container:SetScript("onmouseup", function()
         _guihelper.SetUIColor(button, self.colors.normal);
+        Mouse:SetTouchButtonSwapped(false);
     end);
 
     return button;
