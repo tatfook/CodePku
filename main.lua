@@ -94,7 +94,8 @@ function CodePku:init()
 	GameLogic.GetFilters():add_filter(
 			"TouchVirtualKeyboardIcon",
 			function()
-				local TouchVirtualKeyboardIcon = NPL.load("(gl)Mod/CodePku/cellar/Common/TouchMiniKeyboard/TouchVirtualKeyboardIcon.lua");
+				NPL.load("(gl)Mod/CodePku/cellar/Common/TouchMiniKeyboard/TouchVirtualKeyboardIcon.lua");
+				local TouchVirtualKeyboardIcon = commonlib.gettable("Mod.CodePku.Common.TouchMiniKeyboard.TouchVirtualKeyboardIcon")
 				return TouchVirtualKeyboardIcon;
 			end
 	)

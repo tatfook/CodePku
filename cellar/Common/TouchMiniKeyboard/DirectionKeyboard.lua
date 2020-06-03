@@ -289,3 +289,8 @@ function DirectionKeyboard:emitKeyEvent(button, isPressed)
     end
 end
 
+function DirectionKeyboard:Destroy()
+    DirectionKeyboard._super.Destroy(self)
+    ParaUI.Destroy(self.id or self.name)
+    self.id = nil
+end

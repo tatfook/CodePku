@@ -281,7 +281,7 @@ function FeatKeyboard:getZoomBtn()
     if not button:IsValid() then
         button = ParaUI.CreateUIObject(
                 "button",
-                name,
+                buttonName,
                 self.align,
                 Design:adapterWidth(25),
                 Design:adapterHeight(50),
@@ -299,7 +299,10 @@ function FeatKeyboard:getZoomBtn()
 
     container:SetScript("onmousedown", function()
         local touchSession = TouchSession.GetTouchSession({ type = "WM_POINTERDOWN", x = mouse_x, y = mouse_y, id = -1, time = 0 });
-        _guihelper.SetUIColor(button, self.colors.pressed);
+
+        local buttonUI = container:GetChild(buttonName);
+        _guihelper.SetUIColor(buttonUI, self.colors.pressed);
+
         touchSession:SetField("cameraDist", GameLogic.options:GetCameraObjectDistance());
     end);
 
@@ -325,10 +328,22 @@ function FeatKeyboard:getZoomBtn()
     end);
 
     container:SetScript("onmouseup", function()
-        _guihelper.SetUIColor(button, self.colors.normal);
+
+        local buttonUI = container:GetChild(buttonName);
+        _guihelper.SetUIColor(buttonUI, self.colors.normal);
+
         Mouse:SetTouchButtonSwapped(false);
     end);
 
     return button;
 end
 
+
+function FeatKeyboard:Destroy()
+    FeatKeyboard._super.Destroy(self)
+    ParaUI.Destroy("zoom-container")
+    ParaUI.Destroy("Shift")
+    ParaUI.Destroy("X")
+    ParaUI.Destroy("F")
+    ParaUI.Destroy("jump")
+end
