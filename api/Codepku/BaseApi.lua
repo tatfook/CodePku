@@ -63,11 +63,10 @@ function CodePkuBaseApi:Delete(url, params, headers, success, error, noTryStatus
 end
 
 -- public
-function CodePkuBaseApi:ErrorCollect(method, url, error)
+function CodePkuBaseApi:ErrorCollect(method, url, error)    
 
     return function(data, err)
-        -- send directly
-        
+        -- send directly        
         if type(error) == 'function' then
             error(data, err)
         end

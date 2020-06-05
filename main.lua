@@ -114,7 +114,8 @@ function CodePku:init()
 	GameLogic.GetFilters():add_filter(
 		"ShowLoginBackgroundPage", 
 		function (bShow, bShowCopyRight, bShowLogo, bShowBg) 
-			LOG.std(nil, "info", "codepku", "add_filter ShowLoginBackgroundPage")
+			LOG.std(nil, "info", "codepku", "add_filter ShowLoginBackgroundPage")			
+			MainLogin:ShowLoadingPage()
 			MainLogin:ShowLoginBackgroundPage()
 			return false
 		end
@@ -141,15 +142,7 @@ function CodePku:init()
                 return url
             end
         end
-	)
-	
-	-- GameLogic.GetFilters():add_filter(
-	-- 	"OnShowEscFrame",
-	-- 	function (bShow) 
-	-- 		return false
-	-- 	end
-	-- )
-
+	)	
 
 	-- 下载世界进度条
 	GameLogic.GetFilters():add_filter(
@@ -231,6 +224,13 @@ function CodePku:init()
 		end
 	)
 
+	-- GameLogic.GetFilters():add_filter(
+	-- 	"movie_text_html",
+	-- 	function () 
+	-- 		return "Mod/CodePku/cellar/GUI/Movie/MovieText.html"
+	-- 	end
+	-- )
+
 	-- 重写加载世界页面
 	Map3DSystem.App.MiniGames.SwfLoadingBarPage.url = "Mod/CodePKu/cellar/World/SwfLoadingBarPage.mc.html"
 	
@@ -255,4 +255,7 @@ end
 
 function CodePku:OnInitDesktop()
 	-- we will show our own UI here	
+	log("CodePku:OnInitDesktop")
+	-- UserConsole:ShowPage()
+	-- return true
 end

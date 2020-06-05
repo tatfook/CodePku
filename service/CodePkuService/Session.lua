@@ -59,8 +59,7 @@ function CodePkuServiceSession:LoginResponse(response, err, callback)
     end
 
     local SetUserinfo = Mod.CodePku.Store:Action("user/SetUserinfo")
-    SetUserinfo(token, userId, mobile, nickname)
-    
+    SetUserinfo(token, userId, mobile, nickname)    
     if type(callback) == "function" then
         callback()
     end

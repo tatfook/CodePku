@@ -1,0 +1,24 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" >
+<head>
+<title>2020.05.27</title>
+</head>
+<body> 
+<pe:mcml>
+<script type="text/npl" refresh="false"><![CDATA[
+    local page = document:GetPageCtrl()
+    Mod.CodePku.Store:Set("page/Loading", page)
+    UIAnimManager.LoadUIAnimationFile("Mod/CodePku/script/UIAnimation/CommonProgress.lua.table");
+]]></script>
+<div style="position:relative;background:url(Texture/whitedot.png);background-color:#000000cc;width:512px;height:300px;color:#ffffff">    
+    <div style="margin-left:192px;margin:10px;">
+        <div style="width: 128px;height:128px;background:textures/clock.png;background-animation:url(Mod/CodePku/script/UIAnimation/CommonProgress.lua.table#WaitingSpin)"></div>        
+    </div>
+    <div style="margin-top:10px">
+        <label name="progressText" style="font-size:14px;width:512px;text-align:center;height:25px;" value='<%=L"正在加载..."%>'></label><br />        
+    </div>
+</div>
+</pe:mcml>
+</body>
+</html>
+
