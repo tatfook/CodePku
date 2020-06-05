@@ -224,12 +224,25 @@ function CodePku:init()
 		end
 	)
 
-	-- GameLogic.GetFilters():add_filter(
-	-- 	"movie_text_html",
-	-- 	function () 
-	-- 		return "Mod/CodePku/cellar/GUI/Movie/MovieText.html"
-	-- 	end
-	-- )
+	GameLogic.GetFilters():add_filter(
+		"ShowExitDialog",
+		function () 
+			local Desktop = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop");			
+			local dialog = {
+				text = L"确定要退出当前世界么？", 
+				callback = function(res)
+					Desktop.is_exiting = false;
+					if(res and res == _guihelper.DialogResult.OK) then
+						Desktop.ForceExit(bRestart);
+					elseif(res and res == _guihelper.DialogResult.Cancel) then
+						Desktop.ForceExit(bRestart);
+					end
+				end,
+				messageBoxButton = _guihelper.MessageBoxButtons.OKCancel
+			}
+			return dialog
+		end
+	)
 
 	-- 重写加载世界页面
 	Map3DSystem.App.MiniGames.SwfLoadingBarPage.url = "Mod/CodePKu/cellar/World/SwfLoadingBarPage.mc.html"
