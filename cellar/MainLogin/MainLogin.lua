@@ -19,11 +19,14 @@ local SessionsData = NPL.load("(gl)Mod/CodePku/database/SessionsData.lua")
 local MainLogin = NPL.export()
 
 function MainLogin:Show() 
-
+    log('<=======')
+    log(CodePkuService:IsSignedIn()) 
+    log('=======>')
     if CodePkuService:IsSignedIn() then
-        self:EnterUserConsole()
+        self:EnterUserConsole();
+        return false;
     end
-
+    log('NOOOOOOOO!!!!!!')
     local PWDInfo = CodePkuServiceSession:LoadSigninInfo()
     echo(PWDInfo)
     local token = System.User.codepkuToken or PWDInfo and PWDInfo.token    
@@ -325,7 +328,7 @@ function MainLogin:getMobileCode()
     end
     
 
-    Mod.CodePku.MsgBox:Show(L"正在获取验证码...", 8000, L"链接超时", 300, 120)
+    -- Mod.CodePku.MsgBox:Show(L"正在获取验证码...", 8000, L"链接超时", 300, 120)
 
     CodePkuServiceSession:getMobileCode(
         mobile, 
@@ -339,7 +342,7 @@ function MainLogin:getMobileCode()
                 return true
             else 
                 local errMsg = response.message or "获取验证码失败"
-                Mod.CodePku.MsgBox:Close()   
+                -- Mod.CodePku.MsgBox:Close()   
                 GameLogic.AddBBS(nil, errMsg, 3000, "255 0 0")                         
                 return false  
             end

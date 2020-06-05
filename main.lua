@@ -44,7 +44,8 @@ local PreventIndulge = NPL.load("(gl)Mod/CodePku/cellar/PreventIndulge/PreventIn
 local UserConsole = NPL.load("(gl)Mod/CodePku/cellar/UserConsole/Main.lua")
 local CodePkuDownloadWorld = NPL.load("(gl)Mod/CodePku/cellar/World/DownloadWorld.lua")
 local CodePkuEscFramePage = NPL.load("(gl)Mod/CodePku/cellar/Areas/EscFramePage.lua")
-
+local CodePkuSystemSettingsPage = NPL.load("(gl)Mod/CodePku/cellar/Areas/SystemSettingsPage.lua")
+			
 local DownloadWorld = commonlib.gettable("MyCompany.Aries.Game.MainLogin.DownloadWorld")
 
 local CodePku = commonlib.inherit(commonlib.gettable("Mod.ModBase"),commonlib.gettable("Mod.CodePku"));
@@ -166,9 +167,28 @@ function CodePku:init()
 	)
 
 	GameLogic.GetFilters():add_filter(
-		"downloadworld_shown_src", 
-		function (url)
-			return ""
+		"download_remote_world_show_bbs", 
+		function ()
+			return false
+		end
+	)
+	
+	GameLogic.GetFilters():add_filter(
+		"file_downloader_show_label", 
+		function ()
+			return false
+		end
+	)
+	GameLogic.GetFilters():add_filter(
+		"AriesWindow.CustomStyle", 
+		function (rootName, mcmlNode, bindingContext, _parent, left, top, right, bottom, myLayout, css, mode)
+			local codepku_pe_aries_window = NPL.load("(gl)Mod/CodePku/cellar/Common/AriesWindow/pe_aries_window.lua");
+			if (mode == "center") then
+				codepku_pe_aries_window.create_center(rootName, mcmlNode, bindingContext, _parent, left, top, right, bottom, myLayout, css);
+			elseif (mode == "thin" or mode == "mc") then
+				codepku_pe_aries_window.create_thin_mc(rootName, mcmlNode, bindingContext, _parent, left, top, right, bottom, myLayout, css);
+			end
+			return false;
 		end
 	)
 
@@ -179,6 +199,38 @@ function CodePku:init()
 			return true
 		end
 	)
+
+	GameLogic.GetFilters():add_filter(
+		"EnterTextDialog.PageParams",
+		function (showParams)
+			local CodePkuEnterTextDialog = NPL.load("(gl)Mod/CodePku/cellar/GUI/EnterTextDialog.lua")
+			return CodePkuEnterTextDialog.PageParams(showParams)
+		end
+	)
+
+	GameLogic.GetFilters():add_filter(
+		"SystemSettingsPage.PageParams",
+		function ()
+			return CodePkuSystemSettingsPage.PageParams()
+		end
+	)
+
+	GameLogic.GetFilters():add_filter(
+		"SystemSettingsPage.CheckBoxBackground",
+		function (page, name, bChecked)
+			CodePkuSystemSettingsPage.CheckBoxBackground(page, name, bChecked)
+			return false
+		end
+	)
+
+	GameLogic.GetFilters():add_filter(
+		"InventoryPage.PageParams",
+		function ()
+			local CodePkuInventoryPage = NPL.load("(gl)Mod/CodePku/cellar/Areas/InventoryPage.lua")
+			return CodePkuInventoryPage.PageParams()
+		end
+	)
+
 	-- 重写加载世界页面
 	Map3DSystem.App.MiniGames.SwfLoadingBarPage.url = "Mod/CodePKu/cellar/World/SwfLoadingBarPage.mc.html"
 	

@@ -13,6 +13,7 @@ WorldStacks = commonlib.gettable("MyCompany.Aries.Game.WorldStacks");
 NPL.load("(gl)script/apps/Aries/Creator/Game/Areas/ServerPage.lua");
 local ServerPage = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.ServerPage");
 GameLogic = commonlib.gettable("MyCompany.Aries.Game.GameLogic")
+NPL.load("(gl)script/apps/Aries.Creator.Game.Desktop.EscFramePage.lua");
 EscFramePage = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.EscFramePage");
 EscFramePage.OnInit();
 
@@ -42,19 +43,46 @@ function OnClickButton(name,mcmlNode)
 end
 
 ]]></script>
-<div style="height:64px;width:300px;">
+<style type="text/mcss">
+{
+    green_button = {
+        color = "#ffffff",
+        textcolor = "#ffffff",
+        width = 308,
+        height = 61,
+        ["font-size"] = 30,
+        ["base-font-size"] = 30,
+        border = "none",
+        ["font-weight"] = "bold",
+        ["font-family"] = "Microsoft Yahei",
+        background = "textures/modal/common_32bits.png#11 728 512 104",
+        ["margin-top"] = 24
+    }
+}
+</style>
+<!-- <div style="height:64px;width:300px;">
     <pe:if condition='<%=WorldStacks:GetReturnWorld() ~= nil%>'>
         <input type="button" value='<%=WorldStacks:GetReturnWorld():GetDisplayName()%>' class="mc_big_button" style="color:#572712;font-size:16px;width:300px;height:52px;" onclick="OnReturnLastWorld" />    
     </pe:if>
-</div>
-<aries:window mode="thin" style="width:300px;" title='<%=L"系统设置"%>' onclose="ClosePage">
-<div style="padding-bottom:10px;">    
-    <div style="margin-top:15px;">            
-        <input type="button" value='<%=L"系统设置"%>' name= "systemSetting" style="margin-left:33px;width:100px;height:24px;color:#ffffff;" class="mc_light_grey_button_with_fillet" onclick="OnClickButton"/>
-        <input type="button" value='<%=L"退出世界"%>' name= "exitWorld" style="margin-left:33px;width:100px;height:24px;color:#ffffff;" class="mc_light_grey_button_with_fillet" onclick="OnClickButton"/>
+</div> -->
+<aries:window
+    mode="center"
+    width="600"
+    height="374"
+    title='<%=L"系统设置"%>'
+    title_height="69.6"
+    onclose="ClosePage"
+    close_height="38"
+    style="showline: false;"
+>
+<pe:container alignment="_ctt" style="background:;">
+    <div style="margin-top:5px;">
+        <input type="button" value='<%=L"设置"%>' name= "systemSetting" class="green_button" onclick="OnClickButton"/>
+        <input type="button" value='<%=L"继续学习"%>' name= "continue" class="green_button" onclick="ClosePage"/>
+        <input type="button" value='<%=L"退出世界"%>' name= "exitWorld" class="green_button" onclick="OnClickButton"/>
     </div>
     </div>
-</div>
+</pe:container>
 </aries:window>
 </pe:mcml>
 </body>

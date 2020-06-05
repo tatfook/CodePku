@@ -2,7 +2,7 @@ local EscFramePage = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.Es
 
 local CodePkuEscFramePage = NPL.export()
 
-function CodePkuEscFramePage:ShowPage(bShow)    
+function CodePkuEscFramePage:ShowPage(bShow)
     NPL.load("(gl)script/apps/Aries/Creator/Game/Areas/DesktopMenuPage.lua");
     local DesktopMenuPage = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.DesktopMenuPage");
             
@@ -29,10 +29,10 @@ function CodePkuEscFramePage:ShowPage(bShow)
         app_key = MyCompany.Aries.Creator.Game.Desktop.App.app_key, 
         directPosition = true,
             align = "_ct",
-            x = -300/2,
-            y = -300/2,
-            width = 300,
-            height = 350,
+            x = -600/2,
+            y = -374/2,
+            width = 600,
+            height = 374,
         };
     System.App.Commands.Call("File.MCMLWindowFrame", params);
     if(bShow ~= false) then
