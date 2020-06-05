@@ -241,6 +241,14 @@ function CodePku:init()
 	)
 
 	GameLogic.GetFilters():add_filter(
+		"SkinPage.PageParams",
+		function ()
+			local CodePkuSkinPage = NPL.load("(gl)Mod/CodePku/cellar/Areas/SkinPage.lua")
+			return CodePkuSkinPage.PageParams()
+		end
+	)
+
+	GameLogic.GetFilters():add_filter(
 		"ShowExitDialog",
 		function () 
 			local Desktop = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop");			
