@@ -39,9 +39,9 @@ function CodePkuSystemSettingsPage.PageParams()
 		directPosition = true,
 			align = "_ct",
 			x = -480/2,
-			y = -568/2,
+			y = -536/2,
 			width = 490,
-			height = 568,
+			height = 536,
 	};
 end
 

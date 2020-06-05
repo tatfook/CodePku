@@ -135,7 +135,7 @@ function UserConsole:HandleWorldId(pid)
         return false
     end
 
-    pid = tonumber(pid)
+    pid = 11925 --tonumber(pid)
 
     local function LoadWorld(world, refreshMode)
         if world then

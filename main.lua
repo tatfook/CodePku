@@ -223,6 +223,22 @@ function CodePku:init()
 			return CodePkuInventoryPage.PageParams()
 		end
 	)
+	
+	GameLogic.GetFilters():add_filter(
+		"InventoryPage.PageParams",
+		function ()
+			local CodePkuInventoryPage = NPL.load("(gl)Mod/CodePku/cellar/Areas/InventoryPage.lua")
+			return CodePkuInventoryPage.PageParams()
+		end
+	)
+
+	GameLogic.GetFilters():add_filter(
+		"ChestPage.PageParams",
+		function ()
+			local CodePkuChestPage = NPL.load("(gl)Mod/CodePku/cellar/GUI/ChestPage.lua")
+			return CodePkuChestPage.PageParams()
+		end
+	)
 
 	-- GameLogic.GetFilters():add_filter(
 	-- 	"movie_text_html",

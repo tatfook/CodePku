@@ -28,7 +28,7 @@ local CodePkuEnterTextDialog = NPL.export();
 function CodePkuEnterTextDialog.PageParams(showParams)
 	local params = {
 			url = "Mod/CodePku/cellar/GUI/EnterTextDialog.html", 
-			name = "EnterTextDialog.ShowPage", 
+			name = "EnterTextDialog.ShowPage",
 			isShowTitleBar = false,
 			DestroyOnClose = true,
 			bToggleShowHide=false, 

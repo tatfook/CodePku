@@ -15,6 +15,7 @@ local help_disable_btn_bg = "Texture/Aries/Common/Teen/control/help_disable_32bi
 
 local mc_window_bg = "textures/modal/common_32bits.png#11 1105 980 380;" -- thin
 local mc_window_bg_866_384 = "textures/modal/bag_box_32bits.png#74 75 1444 640" -- 背包造型背景
+local mc_window_bg_854 = "textures/modal/bag_box_32bits.png#66 2735 854 854" -- 箱子背景
 local center_mc_window_bg = "textures/modal/common_32bits.png#11 53 1000 624;"
 local mc_close_btn_bg = "textures/modal/common_32bits.png#27 906 64 64";
 local mc_line = "textures/modal/bag_box_32bits.png#74 1767 962 2;";
@@ -38,6 +39,8 @@ function codepku_pe_aries_window.create_thin_mc(rootName, mcmlNode, bindingConte
 	log(height)
 	if (width > 800 and height < 400) then
 		_this.background = mc_window_bg_866_384;
+	elseif (width == 512) then
+		_this.background = mc_window_bg_854;
 	else
 		_this.background = mc_window_bg;
 	end
@@ -70,17 +73,19 @@ function codepku_pe_aries_window.create_thin_mc(rootName, mcmlNode, bindingConte
 	_parent:AddChild(_this);
 	
 	local onclose = mcmlNode:GetString("onclose");
-
+	log('BTN_SIZE')
+	log(title_height)
+	log(btn_size)
 	if(onclose and onclose ~= "")then
 		if (mcmlNode:GetNumber("close_height")) then
 			local btn_size = mcmlNode:GetNumber("close_height")
-			_this = ParaUI.CreateUIObject("button", "close_btn", "_rt", -(btn_size / 2) - btn_size, (title_height-btn_size) / 2, btn_size, btn_size)
+			_this = ParaUI.CreateUIObject("button", "close_btn", "_rt", -(btn_size / 2) - btn_size, (title_height-btn_size) * 0.65, btn_size, btn_size)
 		else
 			local btn_size = title_height - 4 --2
 			if(title_height>=32) then
-				_this = ParaUI.CreateUIObject("button", "close_btn", "_rt", -btn_size-10, 1, btn_size, btn_size);	
+				_this = ParaUI.CreateUIObject("button", "close_btn", "_rt", -btn_size-10, 8, btn_size, btn_size);	
 			else
-				_this = ParaUI.CreateUIObject("button", "close_btn", "_rt", -btn_size-1, 1, btn_size, btn_size);	
+				_this = ParaUI.CreateUIObject("button", "close_btn", "_rt", -btn_size-1, 8, btn_size * 0.6, btn_size * 0.6);	
 			end
 		end
 		

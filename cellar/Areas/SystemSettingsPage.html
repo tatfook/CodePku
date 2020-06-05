@@ -94,9 +94,9 @@ end
 </style>
 
 <!--<aries:window title="系统设置" style="width:350px;height:430px;" onclose="MyCompany.Aries.Creator.Game.Desktop.SystemSettingsPage.OnCancel">-->
-    <div style="width:490px;height:568px;" class="bw_mc_panel">
+    <div style="position:relative;width:490px;height:536px;" class="bw_mc_panel">
         <!-- <input type="button" class="mc_close_button" onclick="MyCompany.Aries.Creator.Game.Desktop.SystemSettingsPage.OnCancel" /> -->
-        <div style="margin-left:20px;margin-top:20px;height:38px;padding-left:70px;width:450px;">
+        <div style="margin-left:20px;margin-top:16px;height:32px;padding-left:70px;width:450px;">
             <pe:repeat DataSource="<%=GetTabviewButtons()%>" >
                 <pe:repeatitem style="min-width:74px;">
                     <pe:if condition='<%=GetCategoryDSIndex() == Eval("index") %>' >
@@ -115,14 +115,14 @@ end
         
         </div>
         <!-- <div style="margin-left:0px;margin-top:-1px;width:350px;height:1px;background:url(Texture/Aries/Creator/Theme/GameCommonIcon_32bits.png#344 66 1 8)"/> -->
-        <div style="padding-left:53.4px;margin-top:13px;width:458.4px;height:444px;" class="">
-            <pe:treeview style="margin-top:6px;margin-bottom:16px;color:#cccccc;background:url(Texture/Aries/Creator/Theme/GameCommonIcon_32bits.png#0 0 4 4:2 2 2 2);" VerticalScrollBarStep="25" VerticalScrollBarPageSize="100" >
+        <div style="padding-left:53.4px;margin-top:13px;width:458.4px;height:430px;">
+            <pe:treeview style="margin-top:10px;margin-bottom:16px;color:#cccccc;background:url(Texture/Aries/Creator/Theme/GameCommonIcon_32bits.png#0 0 4 4:2 2 2 2);" VerticalScrollBarStep="25" VerticalScrollBarPageSize="100" >
                 <div style="color:#F4F4F4;base-font-size:16.8px;">
                 <pe:if condition='<%=GetCategoryDSIndex() == 1 %>' >
-                    <div style="height:25px;margin-top:11.4px;">
+                    <div style="height:25px;margin-top:9.6px;">
                         <div style="float:left;margin-left:5px;width:120px;height:20px;text-align:center;font-size:16.8px;" ><%=L"分辨率" %></div>
                         <div style="float:left;margin-left:20px;font-size:16.8px;">
-                            <select name = "ScreenResolution" AllowUserEdit="false" style="height:27px;font-size:16.8px;">
+                            <select name = "ScreenResolution" AllowUserEdit="false" style="height:27px;font-size:16.8px;background:url(textures/modal/setting_32bits.png#1210 370 268 46);">
                                 <option value="400 × 266">400 × 266</option>
                                 <option value="400 × 300">400 × 300</option>
                                 <option value="480 × 280">480 × 280</option>
@@ -139,7 +139,7 @@ end
                             </select>
                         </div>
                     </div>
-                    <div style="height:25px;margin-top:11.4px;">
+                    <div style="height:25px;margin-top:9.6px;">
                         <div style="float:left;margin-left:5px;width:120px;height:20px;text-align:center;font-size:16.8px;" ><%=L"立体输出" %></div>
                         <div style="float:left;margin-left:20px;">
                             <select name="stereomode" AllowUserEdit="false" style="height:27px;font-size:16.8px;" onselect="SystemSettingsPage.OnChangeStereoMode">
@@ -149,7 +149,7 @@ end
                             </select>
                         </div>
                     </div>
-                    <div style="height:25px;margin-top:11.4px;">
+                    <div style="height:25px;margin-top:9.6px;">
                         <div style="float:left;margin-left:5px;width:120px;height:20px;text-align:center;font-size:16.8px;" ><%=L"左右眼间距" %></div>
                         <div style="float:left;margin-top:-2px;margin-left:20px;">
                             <pe:sliderbar
@@ -169,67 +169,67 @@ end
                             />
                         </div>
                     </div>
-                    <!--<div style="height:25px;margin-top:11.4px;">
+                    <!--<div style="height:25px;margin-top:9.6px;">
                         <div style="float:left;margin-left:5px;width:120px;height:20px;text-align:center;font-size:16.8px;" >图像品质</div>
                         <div style="float:left;margin-top:-2px;margin-left:20px;">
                             <input name='' value='' type="button" onclick='' enabled="false" style="width:160.8px;height:27.6px;font-size:16.8px;" class="mc_light_grey_button_with_fillet"/>
                         </div>
                     </div>
-                    <div style="height:25px;margin-top:11.4px;">
+                    <div style="height:25px;margin-top:9.6px;">
                         <div style="float:left;margin-left:5px;width:120px;height:20px;text-align:center;font-size:16.8px;" >全屏</div>
                         <div style="float:left;margin-top:-2px;margin-left:20px;">
                             <input name="btn_FullScreenMode" value="" type="button" enabled="false" onclick="ChangeFullScreenMode" style="width:160.8px;height:27.6px;font-size:16.8px;" class="mc_light_grey_button_with_fillet"/>
                         </div>
                     </div>-->
-                    <div style="height:25px;margin-top:11.4px;">
+                    <div style="height:25px;margin-top:9.6px;">
                         <div style="float:left;margin-left:5px;width:120px;height:20px;text-align:center;font-size:16.8px;" ><%=L"能见度" %></div>
                         <div style="float:left;margin-top:-2px;margin-left:20px;">
                             <input name='btn_RenderDist' value='' type="button" onclick='SystemSettingsPage.OnClickChangeRenderDist' style="width:160.8px;height:27.6px;font-size:16.8px;" class="mc_light_grey_button_with_fillet"/>
                         </div>
                     </div>
-                    <!--<div style="height:25px;margin-top:11.4px;">
+                    <!--<div style="height:25px;margin-top:9.6px;">
                         <div style="float:left;margin-left:5px;width:120px;height:20px;text-align:center;font-size:16.8px;" >性能</div>
                         <div style="float:left;margin-top:-2px;margin-left:20px;">
                             <input name='' value='' type="button" enabled="false" onclick='' style="width:160.8px;height:27.6px;font-size:16.8px;" class="mc_light_grey_button_with_fillet"/>
                         </div>
                     </div>-->
-                    <div style="height:25px;margin-top:11.4px;">
+                    <div style="height:25px;margin-top:9.6px;">
                         <div style="float:left;margin-left:5px;width:120px;height:20px;text-align:center;font-size:16.8px;" ><%=L"视角摇晃" %></div>
                         <div style="float:left;margin-top:-2px;margin-left:20px;">
                             <input name='btn_ViewBobbing' value='' type="button" onclick='SystemSettingsPage.OnToggleViewBobbing' style="width:160.8px;height:27.6px;font-size:16.8px;" class="mc_light_grey_button_with_fillet"/>
                         </div>
                     </div>
-                    <div style="height:25px;margin-top:11.4px;">
+                    <div style="height:25px;margin-top:9.6px;">
                         <div style="float:left;margin-left:5px;width:120px;height:20px;text-align:center;font-size:16.8px;" ><%=L"显示角色" %></div>
                         <div style="float:left;margin-top:-2px;margin-left:20px;">
                             <input name='btn_ShowPlayer' value='' type="button" onclick='SystemSettingsPage.OnClickEnableShowMainPlayer' style="width:160.8px;height:27.6px;font-size:16.8px;" class="mc_light_grey_button_with_fillet"/>
                         </div>
                     </div>
-                    <div style="height:25px;margin-top:11.4px;">
+                    <div style="height:25px;margin-top:9.6px;">
                         <div style="float:left;margin-left:5px;width:120px;height:20px;text-align:center;font-size:16.8px;" ><%=L"真实光影" %></div>
                         <div style="float:left;margin-top:-2px;margin-left:20px;">
                             <input name='btn_Shader' value='' type="button" onclick='SystemSettingsPage.OnClickEnableShader' style="width:160.8px;height:27.6px;font-size:16.8px;" class="mc_light_grey_button_with_fillet"/>
                         </div>
                     </div>
-                    <div style="height:25px;margin-top:11.4px;">
+                    <div style="height:25px;margin-top:9.6px;">
                         <div style="float:left;margin-left:5px;width:120px;height:20px;text-align:center;font-size:16.8px;" ><%=L"禁止光影命令" %></div>
                         <div style="float:left;margin-top:-2px;margin-left:20px;">
                             <input name='btn_DisableShaderCmd' value='' type="button" onclick='SystemSettingsPage.OnClickDisableShaderCommand' style="width:160.8px;height:27.6px;font-size:16.8px;" class="mc_light_grey_button_with_fillet"/>
                         </div>
                     </div>
-                    <div style="height:25px;margin-top:11.4px;">
+                    <div style="height:25px;margin-top:9.6px;">
                         <div style="float:left;margin-left:5px;width:120px;height:20px;text-align:center;font-size:16.8px;" ><%=L"水面反射" %></div>
                         <div style="float:left;margin-top:-2px;margin-left:20px;">
                             <input name='btn_WaterReflection' value='' type="button" onclick='SystemSettingsPage.OnClickEnableWaterReflection' style="width:160.8px;height:27.6px;font-size:16.8px;" class="mc_light_grey_button_with_fillet"/>
                         </div>
                     </div>
-                    <div style="height:25px;margin-top:11.4px;">
+                    <div style="height:25px;margin-top:9.6px;">
                         <div style="float:left;margin-left:5px;width:120px;height:20px;text-align:center;font-size:16.8px;" ><%=L"场景投影" %></div>
                         <div style="float:left;margin-top:-2px;margin-left:20px;">
                             <input name='btn_Shadow' value='' type="button" onclick='SystemSettingsPage.OnClickEnableShadow' style="width:160.8px;height:27.6px;font-size:16.8px;" class="mc_light_grey_button_with_fillet"/>
                         </div>
                     </div>
-                    <div style="height:25px;margin-top:11.4px;">
+                    <div style="height:25px;margin-top:9.6px;">
                         <div style="float:left;margin-left:5px;width:120px;height:20px;text-align:center;font-size:16.8px;"><%=L"UI放缩" %></div>
                         <div style="float:left;margin-top:-2px;margin-left:20px;">
                             <input type="button" style="width:57.6px;height:27.6px;background:url(textures/modal/setting_32bits.png#964 370 96 46);color:#ffffff;" name="orignalScaling" value='<%=L"重置"%>' onclick='SystemSettingsPage.OnClickResetUIScaling' />
@@ -254,61 +254,61 @@ end
                     </div>
                 </pe:if>
                 <pe:if condition='<%=GetCategoryDSIndex() == 2 %>' >
-                    <div style="height:25px;margin-top:11.4px;">
+                    <div style="height:25px;margin-top:9.6px;">
                         <div style="float:left;margin-left:5px;width:120px;height:20px;text-align:center;font-size:16.8px;" ><%=L"反转鼠标" %></div>
                         <div style="float:left;margin-top:-2px;margin-left:20px;">
                             <input name='btn_MouseInverse' value='' type="button" onclick='SystemSettingsPage.OnClickEnableMouseInverse' style="width:160.8px;height:27.6px;font-size:16.8px;" class="mc_light_grey_button_with_fillet"/>
                         </div>
                     </div>
-                    <div style="height:25px;margin-top:11.4px;">
+                    <div style="height:25px;margin-top:9.6px;">
                         <div style="float:left;margin-left:5px;width:120px;height:20px;text-align:center;font-size:16.8px;" ><%=L"鼠标灵敏度" %></div>
                         <div style="float:left;margin-top:-2px;margin-left:20px;">
                             <input name='' value='' type="button" onclick='' enabled="false" style="width:160.8px;height:27.6px;font-size:16.8px;" class="mc_light_grey_button_with_fillet"/>
                         </div>
                     </div>
-                    <div style="height:25px;margin-top:11.4px;">
+                    <div style="height:25px;margin-top:9.6px;">
                         <div style="float:left;margin-left:5px;width:120px;height:20px;text-align:center;font-size:16.8px;" ><%=L"锁定摄像机" %></div>
                         <div style="float:left;margin-top:-2px;margin-left:20px;">
                             <input name='btn_LockCamera' value="" enabled="false" type="button" onclick='' style="width:160.8px;height:27.6px;font-size:16.8px;" class="mc_light_grey_button_with_fillet"/>
                         </div>
                     </div>
-                    <div style="height:25px;margin-top:11.4px;">
+                    <div style="height:25px;margin-top:9.6px;">
                         <div style="float:left;margin-left:5px;width:120px;height:20px;text-align:center;font-size:16.8px;" ><%=L"平滑摄像机" %></div>
                         <div style="float:left;margin-top:-2px;margin-left:20px;">
                             <input name='' value="" type="button" onclick='' enabled="false" style="width:160.8px;height:27.6px;font-size:16.8px;" class="mc_light_grey_button_with_fillet"/>
                         </div>
                     </div>
-                    <div style="height:25px;margin-top:11.4px;">
+                    <div style="height:25px;margin-top:9.6px;">
                         <div style="float:left;margin-left:5px;width:120px;height:20px;text-align:center;font-size:16.8px;" ><%=L"锁定鼠标滚轮" %></div>
                         <div style="float:left;margin-top:-2px;margin-left:20px;">
                             <input name='' value="" type="button" onclick='' enabled="false" style="width:160.8px;height:27.6px;font-size:16.8px;" class="mc_light_grey_button_with_fillet"/>
                         </div>
                     </div>
-                    <div style="height:25px;margin-top:11.4px;">
+                    <div style="height:25px;margin-top:9.6px;">
                         <div style="float:left;margin-left:5px;width:120px;height:20px;text-align:center;font-size:16.8px;" ><%=L"UI自动缩放" %></div>
                         <div style="float:left;margin-top:-2px;margin-left:20px;">
                             <input name='' value="" type="button" onclick='' enabled="false" style="width:160.8px;height:27.6px;font-size:16.8px;" class="mc_light_grey_button_with_fillet"/>
                         </div>
                     </div>
-                    <div style="height:25px;margin-top:11.4px;">
+                    <div style="height:25px;margin-top:9.6px;">
                         <div style="float:left;margin-left:5px;width:120px;height:20px;text-align:center;font-size:16.8px;" ><%=L"允许传送" %></div>
                         <div style="float:left;margin-top:-2px;margin-left:20px;">
                             <input name='' value="" type="button" onclick='' enabled="false" style="width:160.8px;height:27.6px;font-size:16.8px;" class="mc_light_grey_button_with_fillet"/>
                         </div>
                     </div>
-                    <div style="height:25px;margin-top:11.4px;">
+                    <div style="height:25px;margin-top:9.6px;">
                         <div style="float:left;margin-left:5px;width:120px;height:20px;text-align:center;font-size:16.8px;" ><%=L"允许作弊" %></div>
                         <div style="float:left;margin-top:-2px;margin-left:20px;">
                             <input name='' value='' type="button" onclick='' enabled="false" style="width:160.8px;height:27.6px;font-size:16.8px;" class="mc_light_grey_button_with_fillet"/>
                         </div>
                     </div>
-                    <div style="height:25px;margin-top:11.4px;">
+                    <div style="height:25px;margin-top:9.6px;">
                         <div style="float:left;margin-left:5px;width:120px;height:20px;text-align:center;font-size:16.8px;" ><%=L"音乐" %></div>
                         <div style="float:left;margin-top:-2px;margin-left:20px;">
                             <input name="btn_EnableSound" value="" type="button" onclick="SystemSettingsPage.OnClickEnableSound" style="width:160.8px;height:27.6px;font-size:16.8px;" class="mc_light_grey_button_with_fillet"/>
                         </div>
                     </div>
-                    <div style="height:25px;margin-top:11.4px;">
+                    <div style="height:25px;margin-top:9.6px;">
                         <div style="float:left;margin-left:5px;width:120px;height:20px;text-align:center;font-size:16.8px;" ><%=L"音量" %></div>
                         <div style="float:left;margin-top:-2px;margin-left:20px;">
                             <input name='btn_SoundVolume' value="" type="button" onclick='SystemSettingsPage.OnClickChangeSoundVolume' style="width:160.8px;height:27.6px;font-size:16.8px;" class="mc_light_grey_button_with_fillet"/>
@@ -316,61 +316,61 @@ end
                     </div>
                 </pe:if>
                 <pe:if condition='<%=GetCategoryDSIndex() == 3 %>' >
-                    <div style="height:25px;margin-top:11.4px;">
+                    <div style="height:25px;margin-top:9.6px;">
                         <div style="float:left;margin-left:5px;width:120px;height:20px;text-align:center;font-size:16.8px;" ><%=L"消除方块" %></div>
                         <div style="float:left;margin-top:2px;margin-left:20px;width:160.8px;height:27.6px;" class="mc_light_grey_button_with_fillet">
                             <div align="center" style="margin-top:3px;width:15.6px;height:22.8px;background:url(textures/modal/setting_32bits.png#1098 103 26 38)"/>
                         </div>
                     </div>
-                    <div style="height:25px;margin-top:11.4px;">
+                    <div style="height:25px;margin-top:9.6px;">
                         <div style="float:left;margin-left:5px;width:120px;height:20px;text-align:center;font-size:16.8px;" ><%=L"放置方块" %></div>
                         <div style="float:left;margin-top:2px;margin-left:20px;width:160.8px;height:27.6px;" class="mc_light_grey_button_with_fillet">
                             <div align="center" style="margin-top:3px;width:15.6px;height:22.8px;background:url(textures/modal/setting_32bits.png#1385 103 26 38)"/>
                         </div>
                     </div>
-                    <div style="height:25px;margin-top:11.4px;">
+                    <div style="height:25px;margin-top:9.6px;">
                         <div style="float:left;margin-left:5px;width:120px;height:20px;text-align:center;font-size:16.8px;" ><%=L"选择方块" %></div>
                         <div style="float:left;margin-top:2px;margin-left:20px;width:160.8px;height:27.6px;" class="mc_light_grey_button_with_fillet">
                             <div align="center" style="margin-top:3px;width:15.6px;height:22.8px;background:url(textures/modal/setting_32bits.png#1239 103 26 38)"/>
                         </div>
                     </div>
-                    <div style="height:25px;margin-top:11.4px;">
+                    <div style="height:25px;margin-top:9.6px;">
                         <div style="float:left;margin-left:5px;width:120px;height:20px;text-align:center;font-size:16.8px;" ><%=L"向前" %></div>
                         <div style="float:left;padding-top:2.7px;margin-top:0px;margin-left:20px;width:160.8px;height:27.6px;text-align:center;font-size:16.8px;" class="mc_light_grey_button_with_fillet">W</div>
                     </div>
-                    <div style="height:25px;margin-top:11.4px;">
+                    <div style="height:25px;margin-top:9.6px;">
                         <div style="float:left;margin-left:5px;width:120px;height:20px;text-align:center;font-size:16.8px;" ><%=L"向左" %></div>
                         <div style="float:left;padding-top:2.7px;margin-top:0px;margin-left:20px;width:160.8px;height:27.6px;text-align:center;font-size:16.8px;" class="mc_light_grey_button_with_fillet">A</div>
                     </div>
-                    <div style="height:25px;margin-top:11.4px;">
+                    <div style="height:25px;margin-top:9.6px;">
                         <div style="float:left;margin-left:5px;width:120px;height:20px;text-align:center;font-size:16.8px;" ><%=L"后退" %></div>
                         <div style="float:left;padding-top:2.7px;margin-top:0px;margin-left:20px;width:160.8px;height:27.6px;text-align:center;font-size:16.8px;" class="mc_light_grey_button_with_fillet">S</div>
                     </div>
-                    <div style="height:25px;margin-top:11.4px;">
+                    <div style="height:25px;margin-top:9.6px;">
                         <div style="float:left;margin-left:5px;width:120px;height:20px;text-align:center;font-size:16.8px;" ><%=L"向右" %></div>
                         <div style="float:left;padding-top:2.7px;margin-top:0px;margin-left:20px;width:160.8px;height:27.6px;text-align:center;font-size:16.8px;" class="mc_light_grey_button_with_fillet">D</div>
                     </div>
-                    <div style="height:25px;margin-top:11.4px;">
+                    <div style="height:25px;margin-top:9.6px;">
                         <div style="float:left;margin-left:5px;width:120px;height:20px;text-align:center;font-size:16.8px;" ><%=L"跳跃" %></div>
                         <div style="float:left;padding-top:2.7px;margin-top:0px;margin-left:20px;width:160.8px;height:27.6px;text-align:center;font-size:16.8px;" class="mc_light_grey_button_with_fillet">Space</div>
                     </div>
-                    <div style="height:25px;margin-top:11.4px;">
+                    <div style="height:25px;margin-top:9.6px;">
                         <div style="float:left;margin-left:5px;width:120px;height:20px;text-align:center;font-size:16.8px;" ><%=L"潜行" %></div>
                         <div style="float:left;padding-top:2.7px;margin-top:0px;margin-left:20px;width:160.8px;height:27.6px;text-align:center;font-size:16.8px;" class="mc_light_grey_button_with_fillet">Shift</div>
                     </div>
-                    <div style="height:25px;margin-top:11.4px;">
+                    <div style="height:25px;margin-top:9.6px;">
                         <div style="float:left;margin-left:5px;width:120px;height:20px;text-align:center;font-size:16.8px;" ><%=L"飞翔" %></div>
                         <div style="float:left;padding-top:2.7px;margin-top:0px;margin-left:20px;width:160.8px;height:27.6px;text-align:center;font-size:16.8px;" class="mc_light_grey_button_with_fillet">F</div>
                     </div>
-                    <div style="height:25px;margin-top:11.4px;">
+                    <div style="height:25px;margin-top:9.6px;">
                         <div style="float:left;margin-left:5px;width:120px;height:20px;text-align:center;font-size:16.8px;" ><%=L"帮助" %></div>
                         <div style="float:left;padding-top:2.7px;margin-top:0px;margin-left:20px;width:160.8px;height:27.6px;text-align:center;font-size:16.8px;" class="mc_light_grey_button_with_fillet">F1</div>
                     </div>
-                    <div style="height:25px;margin-top:11.4px;">
+                    <div style="height:25px;margin-top:9.6px;">
                         <div style="float:left;margin-left:5px;width:120px;height:20px;text-align:center;font-size:16.8px;" ><%=L"撤销上步操作" %></div>
                         <div style="float:left;padding-top:2.7px;margin-top:0px;margin-left:20px;width:160.8px;height:27.6px;text-align:center;font-size:16.8px;" class="mc_light_grey_button_with_fillet">Ctrl + Z</div>
                     </div>
-                    <div style="height:25px;margin-top:11.4px;">
+                    <div style="height:25px;margin-top:9.6px;">
                         <div style="float:left;margin-left:5px;width:120px;height:20px;text-align:center;font-size:16.8px;" ><%=L"返回上步操作" %></div>
                         <div style="float:left;padding-top:2.7px;margin-top:0px;margin-left:20px;width:160.8px;height:27.6px;text-align:center;font-size:16.8px;" class="mc_light_grey_button_with_fillet">Ctrl + Y</div>
                     </div>
@@ -397,10 +397,10 @@ end
                     </div>
                 </pe:if>
                 </div>
-                <div style="height: 16px;width:26px;"></div>
+                <div style="height: 12px;width:26px;"></div>
             </pe:treeview>
         </div>
-        <pe:container alignment="_ctt" style="margin-top:2px;background:;" >
+        <pe:container alignment="_ctt" style="position:relative;margin-top:-4px;background:;" >
             <input type="button" name="OK" value='<%=L"确定" %>' class="green_button" onclick="SystemSettingsPage.OnOK()"/>
             <input type="button" name="Cancel" value='<%=L"关闭" %>' class="orange_button" style="margin-left: 82px;" onclick="SystemSettingsPage.OnCancel()"/>
         </pe:container>
