@@ -126,12 +126,12 @@ function UserInfo:LoginWithToken()
             if err == 401 then
                 Mod.CodePku.MsgBox:Close()
                 -- token not exist
-                GameLogic.AddBBS(nil, format("%s%d", L"自动登陆失败了， 错误码：", err), 3000, "255 0 0")
+                GameLogic.AddBBS(nil, format("%s%d", L"自动登陆失败了， 错误码：", err), 3000, "255 0 0", 21)
 
                 return false
             elseif err ~= 200 then
                 Mod.CodePku.MsgBox:Close()
-                GameLogic.AddBBS(nil, format("%s%d", L"自动登陆失败了， 错误码：", err), 3000, "255 0 0")
+                GameLogic.AddBBS(nil, format("%s%d", L"自动登陆失败了， 错误码：", err), 3000, "255 0 0", 21)
 
                 return false
             end
@@ -179,7 +179,7 @@ function UserInfo:CheckDoAutoSignin(callback)
                             SessionsData:SaveSession(info)
 
                             -- token not exist
-                            GameLogic.AddBBS(nil, format("%s%d", L"自动登陆失败了， 错误码：", err), 3000, "255 0 0")
+                            GameLogic.AddBBS(nil, format("%s%d", L"自动登陆失败了， 错误码：", err), 3000, "255 0 0", 21)
                             return false
                         end
 
@@ -188,7 +188,7 @@ function UserInfo:CheckDoAutoSignin(callback)
 
                             if err ~= 200 then
                                 -- login fail
-                                GameLogic.AddBBS(nil, format("%s%d", L"自动登陆失败了， 错误码：", err), 3000, "255 0 0")
+                                GameLogic.AddBBS(nil, format("%s%d", L"自动登陆失败了， 错误码：", err), 3000, "255 0 0", 21)
                                 return false
                             end                            
     
@@ -208,7 +208,7 @@ function UserInfo:CheckDoAutoSignin(callback)
                 return false
             elseif err ~= 200 then
                 Mod.CodePku.MsgBox:Close()
-                GameLogic.AddBBS(nil, format("%s%d", L"自动登陆失败了， 错误码：", err), 3000, "255 0 0")
+                GameLogic.AddBBS(nil, format("%s%d", L"自动登陆失败了， 错误码：", err), 3000, "255 0 0", 21)
 
                 return false
             end

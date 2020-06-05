@@ -58,12 +58,12 @@ end
 function UserConsole:CourseEntry()    
     CodePkuServiceSession:CourseEntryWorld(function (response, err)         
         if (err == 401) then
-            GameLogic.AddBBS(nil, L"请先登录", 3000, "255 0 0")
+            GameLogic.AddBBS(nil, L"请先登录", 3000, "255 0 0", 21)
             -- todo 看下怎么回到登录页面
             return false
         end   
         if (err ~= 200) then
-            GameLogic.AddBBS(nil, L"获取入口世界失败", 3000, "255 0 0")
+            GameLogic.AddBBS(nil, L"获取入口世界失败", 3000, "255 0 0", 21)
             return false
         end
         local url = response and response.data and response.data.world
@@ -135,7 +135,7 @@ function UserConsole:HandleWorldId(pid)
         return false
     end
 
-    pid = 11925 --tonumber(pid)
+    pid = tonumber(pid)
 
     local function LoadWorld(world, refreshMode)
         if world then
@@ -170,18 +170,18 @@ function UserConsole:HandleWorldId(pid)
 
     CodePkuServiceSession:CourseWorldByKeepworkId(pid, function (response, error)        
         if (error == 401) then
-            GameLogic.AddBBS(nil, L"请先登录", 3000, "255 0 0")
+            GameLogic.AddBBS(nil, L"请先登录", 3000, "255 0 0", 21)
             -- todo 看下怎么回到登录页面
             return false
         end   
         if (error ~= 200) then
-            GameLogic.AddBBS(nil, L"获取入口世界失败", 3000, "255 0 0")
+            GameLogic.AddBBS(nil, L"获取入口世界失败", 3000, "255 0 0", 21)
             return false
         end
         local url = response and response.data and response.data.world
         
         if not url then
-            GameLogic.AddBBS(nil, L"获取入口世界失败", 3000, "255 0 0")
+            GameLogic.AddBBS(nil, L"获取入口世界失败", 3000, "255 0 0", 21)
             return false
         end
         local world = RemoteWorld.LoadFromHref(url, "self")

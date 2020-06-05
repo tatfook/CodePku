@@ -110,7 +110,7 @@ function WorldList:Sync()
 
     Compare:Init(function(result)
         if not result then
-            GameLogic.AddBBS(nil, L"同步失败", 3000, "255 0 0")
+            GameLogic.AddBBS(nil, L"同步失败", 3000, "255 0 0", 21)
             Mod.WorldShare.MsgBox:Close()
             return false
         end

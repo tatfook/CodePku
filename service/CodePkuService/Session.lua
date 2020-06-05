@@ -33,13 +33,13 @@ function CodePkuServiceSession:LoginResponse(response, err, callback)
     if err == 400 or err == 422 or err == 500  then
         Mod.CodePku.MsgBox:Close()
         local errorMsg = response.message or "用户名或者密码错误"
-        GameLogic.AddBBS(nil, errorMsg, 3000, "255 0 0")
+        GameLogic.AddBBS(nil, errorMsg, 3000, "255 0 0", 21)
         return false
     end
 
     if type(response) ~= "table" then
         Mod.CodePku.MsgBox:Close()
-        GameLogic.AddBBS(nil, L"服务器连接失败", 3000, "255 0 0")
+        GameLogic.AddBBS(nil, L"服务器连接失败", 3000, "255 0 0", 21)
         return false
     end
     

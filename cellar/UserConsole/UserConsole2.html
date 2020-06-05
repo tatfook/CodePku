@@ -41,7 +41,7 @@
                     local currentEnterWorld = Mod.WorldShare.Store:Get('world/currentEnterWorld')
 
                     if currentEnterWorld and currentEnterWorld.foldername == currentWorld.foldername then
-                        GameLogic.AddBBS(nil, L"不能重命名当前编辑的世界", 3000, "255 0 0")
+                        GameLogic.AddBBS(nil, L"不能重命名当前编辑的世界", 3000, "255 0 0", 21)
                         return false
                     end
 

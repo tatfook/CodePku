@@ -129,17 +129,17 @@ function MainLogin:LoginAction()
     local mobileToken = MainLoginPage:GetValue('mobile_token')  
 
     if not account or account == "" then
-        GameLogic.AddBBS(nil, L"账号不能为空", 3000, "255 0 0")
+        GameLogic.AddBBS(nil, L"账号不能为空", 3000, "255 0 0", 21)
         return false
     end
 
     if not verifyCode or verifyCode == "" then
-        GameLogic.AddBBS(nil, L"验证码不能为空", 3000, "255 0 0")
+        GameLogic.AddBBS(nil, L"验证码不能为空", 3000, "255 0 0", 21)
         return false
     end
 
     if not mobileToken or mobileToken == "" then
-        GameLogic.AddBBS(nil, L"请先获取验证码", 3000, "255 0 0")
+        GameLogic.AddBBS(nil, L"请先获取验证码", 3000, "255 0 0", 21)
         return false
     end
 
@@ -333,7 +333,7 @@ function MainLogin:getMobileCode()
     LOG.std(nil, "info", "codepku", "get mobile code: %s", mobile)
 
     if not mobile or mobile == "" then
-        GameLogic.AddBBS(nil, L"手机号码不能为空", 3000, "255 0 0")
+        GameLogic.AddBBS(nil, L"手机号码不能为空", 3000, "255 0 0", 21)
         return false
     end
     
@@ -345,7 +345,7 @@ function MainLogin:getMobileCode()
         function (response, err)
             if err == 200 then  
                 Mod.CodePku.MsgBox:Close()       
-                GameLogic.AddBBS(nil, L"验证码获取成功", 3000, "255 0 0")         
+                GameLogic.AddBBS(nil, L"验证码获取成功", 3000, "255 0 0", 21)         
                 LOG.std(nil, "info", "codepku", "get mobile code success")
                 local mobileToken = response.data.mobile_token
                 MainLoginPage:SetValue('mobile_token', mobileToken)          
@@ -353,7 +353,7 @@ function MainLogin:getMobileCode()
             else 
                 local errMsg = response.message or "获取验证码失败"
                 -- Mod.CodePku.MsgBox:Close()   
-                GameLogic.AddBBS(nil, errMsg, 3000, "255 0 0")                         
+                GameLogic.AddBBS(nil, errMsg, 3000, "255 0 0", 21)                         
                 return false  
             end
         end
