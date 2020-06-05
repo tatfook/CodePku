@@ -147,7 +147,7 @@ function MainLogin:LoginAction()
         return false
     end
 
-    Mod.CodePku.MsgBox:Show(L"正在登录，请稍后...", 8000, L"链接超时", 300, 120)
+    -- Mod.CodePku.MsgBox:Show(L"正在登录，请稍后...", 8000, L"链接超时", 300, 120)
 
     local function HandleLogined()
         LOG.std('handle logined', "info", "codepku")

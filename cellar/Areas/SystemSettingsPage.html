@@ -24,10 +24,10 @@ end
 
 function GetTabviewButtons()
     -- 隐藏其他
-    local ds = SystemSettingsPage.category_ds;
+    local ds = SystemSettingsPage.category_ds;    
     local new_ds = {}
     for k, v in pairs(ds) do
-        if k < #ds then
+        if k + 1 < #ds then
             new_ds[k] = v
         end
     end
