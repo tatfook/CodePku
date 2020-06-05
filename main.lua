@@ -233,7 +233,9 @@ function CodePku:init()
 
 	-- 重写加载世界页面
 	Map3DSystem.App.MiniGames.SwfLoadingBarPage.url = "Mod/CodePKu/cellar/World/SwfLoadingBarPage.mc.html"
-	
+
+	local guiHelperDefaultTemplate = "Mod/CodePku/cellar/GUI/DefaultMessageBox.html"
+	_guihelper.SetDefaultMsgBoxMCMLTemplate(guiHelperDefaultTemplate)
 	-- prevent indulage
 	PreventIndulge:Init()
 end
@@ -259,3 +261,4 @@ function CodePku:OnInitDesktop()
 	-- UserConsole:ShowPage()
 	-- return true
 end
+
