@@ -78,8 +78,10 @@ function UserConsole:CourseEntry()
                     end
                 end
 
-                local url = world:GetLocalFileName()
+                local url = world:GetLocalFileName()               
                 DownloadWorld.ShowPage(url)
+                echo("loadworld")
+                echo(world)
                 local mytimer = commonlib.Timer:new(
                     {
                         callbackFunc = function(timer)
@@ -88,6 +90,7 @@ function UserConsole:CourseEntry()
                                 nil,
                                 refreshMode or "auto",
                                 function(bSucceed, localWorldPath)
+                                    echo({localWorldPath = localWorldPath})
                                     DownloadWorld.Close()
                                 end
                             )
@@ -132,7 +135,7 @@ function UserConsole:HandleWorldId(pid)
         return false
     end
 
-    pid = 11912 -- tonumber(pid)
+    pid = tonumber(pid)
 
     local function LoadWorld(world, refreshMode)
         if world then

@@ -18,21 +18,14 @@ local SessionsData = NPL.load("(gl)Mod/CodePku/database/SessionsData.lua")
 
 local MainLogin = NPL.export()
 
-function MainLogin:Show() 
-    log('<=======')
-    log(CodePkuService:IsSignedIn()) 
-    log('=======>')
-    if CodePkuService:IsSignedIn() then
-        self:EnterUserConsole();
-        return false;
-    end
-    log('NOOOOOOOO!!!!!!')
+function MainLogin:Show()     
+    self:CloseLoadingPage()
     local PWDInfo = CodePkuServiceSession:LoadSigninInfo()
     echo(PWDInfo)
     local token = System.User.codepkuToken or PWDInfo and PWDInfo.token    
        
     if token then
-        Mod.CodePku.MsgBox:Show(L"正在登录，请稍后...", 8000, L"链接超时", 300, 120)
+        -- Mod.CodePku.MsgBox:Show(L"正在登录，请稍候...", 8000, L"链接超时", 300, 120)
         CodePkuServiceSession:LoginWithToken(
             token,
             function(response, err)
@@ -44,50 +37,67 @@ function MainLogin:Show()
                     local SetUserinfo = Mod.CodePku.Store:Action("user/SetUserinfo")
 
                     SetUserinfo(token, userId, mobile, nickname)
+               
                     Mod.CodePku.Utils.SetTimeOut(function()
                         self:EnterUserConsole()
                     end, 100)  
                 else
+                    -- auto login failed
                     if PWDInfo and PWDInfo.account then
                         SessionsData:RemoveSession(PWDInfo.account)
                     end
+                    Mod.CodePku.Utils.ShowWindow({
+                        url = "Mod/CodePku/cellar/MainLogin/MainLogin.html", 
+                        name = "MainLogin", 
+                        isShowTitleBar = false,
+                        DestroyOnClose = true, -- prevent many ViewProfile pages staying in memory
+                        style = CommonCtrl.WindowFrame.ContainerStyle,
+                        zorder = -1,
+                        allowDrag = false,
+                        directPosition = true,
+                            align = "_fi",
+                            x = 0,
+                            y = 0,
+                            width = 0,
+                            height = 0,
+                        cancelShowAnimation = true,
+                    }) 
                 end
             end
-        )        
-    end
-
-    Mod.CodePku.Utils.ShowWindow({
-        url = "Mod/CodePku/cellar/MainLogin/MainLogin.html", 
-        name = "MainLogin", 
-        isShowTitleBar = false,
-        DestroyOnClose = true, -- prevent many ViewProfile pages staying in memory
-        style = CommonCtrl.WindowFrame.ContainerStyle,
-        zorder = -1,
-        allowDrag = false,
-        directPosition = true,
-            align = "_fi",
-            x = 0,
-            y = 0,
-            width = 0,
-            height = 0,
-        cancelShowAnimation = true,
-    })
-
-    local MainLoginPage = Mod.CodePku.Store:Get('page/MainLogin')
+        )         
+    else                
+        Mod.CodePku.Utils.ShowWindow({
+            url = "Mod/CodePku/cellar/MainLogin/MainLogin.html", 
+            name = "MainLogin", 
+            isShowTitleBar = false,
+            DestroyOnClose = true, -- prevent many ViewProfile pages staying in memory
+            style = CommonCtrl.WindowFrame.ContainerStyle,
+            zorder = -1,
+            allowDrag = false,
+            directPosition = true,
+                align = "_fi",
+                x = 0,
+                y = 0,
+                width = 0,
+                height = 0,
+            cancelShowAnimation = true,
+        })
     
-    if not MainLoginPage then
-        return false
-    end
-
-
-    if PWDInfo then
-        MainLoginPage:SetValue('account', PWDInfo.account or '')
-
-        self.loginServer = PWDInfo.loginServer
-        self.account = PWDInfo.account
-    end
-
-    self:Refresh()    
+        local MainLoginPage = Mod.CodePku.Store:Get('page/MainLogin')
+        
+        if not MainLoginPage then
+            return false
+        end
+                    
+        if PWDInfo then
+            MainLoginPage:SetValue('account', PWDInfo.account or '')
+    
+            self.loginServer = PWDInfo.loginServer
+            self.account = PWDInfo.account
+        end
+    
+        self:Refresh() 
+    end  
 end
 
 function MainLogin:Refresh(times)
@@ -373,4 +383,36 @@ end
 
 function MainLogin:ShowUserAgreementModal()	
     Mod.CodePku.Utils.ShowWindow(568, 368, "Mod/CodePku/cellar/UserAgreement/UserAgreement.html", "UserAgreement")
+end
+
+function MainLogin:ShowLoadingPage()
+    echo("MainLogin:ShowLoadingPage")    
+    local url = "Mod/CodePku/cellar/MainLogin/Loading.html"
+    local width, height=512, 300;
+
+    Mod.CodePku.Utils.ShowWindow({
+        url = url, 
+        name = "Loading", 
+        isShowTitleBar = false,
+        DestroyOnClose = true, -- prevent many ViewProfile pages staying in memory
+        style = CommonCtrl.WindowFrame.ContainerStyle,
+        zorder = -1,
+        allowDrag = false,
+        directPosition = true,
+            align = "_ct",
+            x = -width/2,
+            y = -height/2,
+            width = width,
+            height = height,
+        cancelShowAnimation = true,
+    })
+end
+
+function MainLogin:CloseLoadingPage()
+    echo("MainLogin:CloseLoadingPage")
+    local LoadingPage = Mod.CodePku.Store:Get('page/Loading')
+
+    if LoadingPage then
+        LoadingPage:CloseWindow()
+    end
 end
