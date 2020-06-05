@@ -70,17 +70,17 @@
                         local authcode = page:GetValue("get_mobile_code_text")
 
                         if not account or account == "" then
-                            GameLogic.AddBBS(nil, L"请输入手机号码", 3000, "255 0 0")
+                            GameLogic.AddBBS(nil, L"请输入手机号码", 3000, "255 0 0", 21)
                             return false
                         end
 
                         if not authcode or authcode == "" then
-                            GameLogic.AddBBS(nil, L"请输入验证码", 3000, "255 0 0")
+                            GameLogic.AddBBS(nil, L"请输入验证码", 3000, "255 0 0", 21)
                             return false
                         end
 
                         if not agree then
-                            GameLogic.AddBBS(nil, L"请同意用户协议", 3000, "255 0 0")
+                            GameLogic.AddBBS(nil, L"请同意用户协议", 3000, "255 0 0", 21)
                             return false
                         end
 
@@ -91,12 +91,12 @@
 
                     function get_mobile_code()   
                         if #page:GetValue("account") ~= 11 then
-                            GameLogic.AddBBS(nil, L"手机号码位数不对", 3000, "255 0 0")
+                            GameLogic.AddBBS(nil, L"手机号码位数不对", 3000, "255 0 0", 21)
                             return false
                         end
 
                         if page:GetValue("account") == "" then
-                            GameLogic.AddBBS(nil, L"手机号码不能为空", 3000, "255 0 0")
+                            GameLogic.AddBBS(nil, L"手机号码不能为空", 3000, "255 0 0", 21)
                             return false
                         end
 
@@ -131,14 +131,14 @@
                             function (response, err)
                                 if err == 200 then  
                                     Mod.CodePku.MsgBox:Close()       
-                                    GameLogic.AddBBS(nil, L"验证码获取成功", 3000, "255 0 0")         
+                                    GameLogic.AddBBS(nil, L"验证码获取成功", 3000, "255 0 0", 21)         
                                     LOG.std(nil, "info", "codepku", "get mobile code success")
                                     local mobileToken = response.data.mobile_token
                                     page:SetValue('mobile_token', mobileToken)
                                 else 
                                     local errMsg = response.message or "获取验证码失败"
                                     Mod.CodePku.MsgBox:Close()   
-                                    GameLogic.AddBBS(nil, errMsg, 3000, "255 0 0")
+                                    GameLogic.AddBBS(nil, errMsg, 3000, "255 0 0", 21)
                                     isClickedGetPhoneCaptcha = false
                                 end
                             end
@@ -168,7 +168,9 @@
                         width = 434,
                         height = 52,
                         ["font-size"] = 19,
-                        ["base-font-size"] = 19
+                        ["base-font-size"] = 19,
+                        ["text-align"] = "left",
+                        ["text-valign"] = "center"
                     },
                     get_code_divider = {
                         color =  "#40403f",
@@ -197,7 +199,7 @@
                         ["font-size"] = 20.4,
                         ["font-weight"] = "bold",
                         ["font-family"] = "Microsoft Yahei",
-                        background = "textures/login/button-login.png",
+                        background = "textures/login/button_login.png",
                     },
                     helper = {
                         color = '#ffffff',
@@ -207,9 +209,9 @@
                     }
                 }
             </style>
-            <pe:container alignment="_ctt" ClickThrough="true" style="position:relative;width:370px;height:75px;margin-top:42px;background:;">
+            <!-- <pe:container alignment="_ctt" ClickThrough="true" style="position:relative;width:370px;height:75px;margin-top:42px;background:;">
                 <div style='<%="width:370px;height:75px;background:url(textures/login/mainlogin_32bits.png# 1071 233 616 125);"%>'></div>
-            </pe:container>
+            </pe:container> -->
             <pe:container alignment="_ct" ClickThrough="true" style="position:relative;margin-top:-145px;margin-left:-284px;width:568px;height:368px;background:url(textures/login/mainlogin_32bits.png# 20 71 944 614);">
                 <div class="modal_title"><%= L"用户登录" %></div>
                 <div style="position:relative;padding-top:28px;padding-left:64px;">

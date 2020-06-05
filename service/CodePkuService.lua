@@ -25,7 +25,6 @@ end
 
 function CodePkuService:IsSignedIn()
     local token = Mod.CodePku.Store:Get("user/token")
-
     return token ~= nil
 end
 
