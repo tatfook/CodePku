@@ -17,20 +17,20 @@ end
 <aries:window
     mode="thin"
     title='<%=L"输入窗"%>'
-    style="width:588px;"
-    height="248"
+    style="width:640px;"
+    height="280"
     onclose="OnClose"
     title_height="45"
     close_height="26.4"
 >
-<div style="margin:5px; margin-right:24px;">
+<div style="position:relative;margin:5px; margin-right:24px;">
     <div style="color:#262013;margin:5px;font-size:20.4px;base-font-size:20.4px;margin-left:16px;">
         <%=EnterTextDialog.GetText()%>
     </div>
     <div style="margin-left: 16px;">
         <pe:if condition='<%=EnterTextDialog.IsSingleLine()%>'>
             
-            <input type="text" name="text" style="height:38.4px;background:url(textures/modal/common_32bits.png#12 1578 514 51:3 3 3 3);"/>
+            <input type="text" name="text" style="height:38.4px;background:url(textures/modal/common_32bits.png#12 1578 514 51:3 3 3 3);font-size:20.4px;base-font-size:20.4px;text-align:center;text-valign:center;"/>
             <!-- <input type="text" name="text" style="height:24px;"/> -->
         </pe:if>
         <pe:if condition='<%=EnterTextDialog.IsMultiLine()%>'>
@@ -51,13 +51,12 @@ end
         </pe:if>
     </div>
     <pe:if condition='<%=not EnterTextDialog.IsButtons()%>'>
-        <pe:container alignment="_ctt" style="text-align: center;background:;width:147px;">
+        <pe:container alignment="_ct" style="width:147px;margin-left:-73.5px;margin-top:-15px;">
             <input
                 type="button"
                 name="OK"
                 DefaultButton="true"
                 style="
-                    margin-right:20px;
                     width:147px;
                     height:37px;
                     background:url(textures/modal/common_32bits.png#16 1726 245 62);
@@ -65,7 +64,6 @@ end
                     base-font-size:16.8px;
                     color: #ffffff;
                     font-weight: bold;
-                    margin-top: 11px;
                     "
                 onclick="EnterTextDialog.OnOK"
                 value='<%=L"确定"%>'

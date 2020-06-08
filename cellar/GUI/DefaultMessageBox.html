@@ -12,31 +12,40 @@ end
 {
 my_button = { color = "#000000", background = "Texture/whitedot.png", ["background-color"]="#808080" },
 green_button = {
-            background = "textures/modal/setting_32bits.png#964 718 246 62",
-            color = "#ffffff",
-            width = 98.4,
-            height = 24.8
-        },
+    background = "textures/modal/setting_32bits.png#964 718 246 62",
+    color = "#ffffff",
+    width = 147,
+    height = 37.2,
+    ["font-weight"] = "bold",
+    ["font-size"] = 16.8,
+    ["base-font-size"] = 16.8
+},
 orange_button = {
     background = "textures/modal/setting_32bits.png#964 842 246 62",
     color = "#ffffff",
-    width = 98.4,
-    height = 24.8
+    width = 147,
+    height = 37.2,
+    ["font-weight"] = "bold",
+    ["font-size"] = 16.8,
+    ["base-font-size"] = 16.8
 },
 gray_button = {
     background = "textures/modal/bag_box_32bits.png#74 2124 176 74",
     color = "#ffffff",
-    width = 98.4,
-    height = 24.8
+    width = 147,
+    height = 37.2,
+    ["font-weight"] = "bold",
+    ["font-size"] = 16.8,
+    ["base-font-size"] = 16.8
 }
 }
 </style>
-<aries:window mode="thin" style="background-color:#000000;width:340px;" title="信息" onclose="ClosePage">
+<aries:window mode="thin" style="background-color:#000000;width:420px;" title="信息" onclose="ClosePage">
   <!-- <div style="background-color:#cccccc;width:330px;margin:5px;">
       <div style="color:#808080;position:relative;margin-left:5px;">信息</div>
       <input type="button" align="right" class="my_button" style="width:32px;height:26px;background:url()" value='X' onclick="ClosePage"/>
   </div> -->
-  <div style="padding:5px;width:330px;color:#cccccc">
+  <div style="padding:10px;width:330px;color:#262014;font-size:20.4px;base-font-size:20.4px;">
         <pe:if condition='<%=type(_guihelper.values.icon)=="string"%>'>
             <img style="margin-right:5px;width:24px;height:24px;" src='<%=_guihelper.values.icon%>'/>
         </pe:if>
@@ -52,7 +61,7 @@ gray_button = {
             <pe:if condition='<%=_guihelper.values.icon==_guihelper.MessageBoxIcon.Stop%>'>Stop!</pe:if>
             <pe:if condition='<%=_guihelper.values.icon==_guihelper.MessageBoxIcon.Question%>'>?</pe:if>
         </pe:if>    
-        <div style="float:left;padding:16px;max-height:140px;color:#000000">
+        <div style="float:left;padding:16px;max-height:140px;">
             <!-- tricky: always reference content like below. It allows MCML code that needs page:Refresh to work inside content.-->
             <script refresh="false" IsInitialized='<%=_guihelper.values.IsInitialized%>'>
                 document.write(_guihelper.values.content);
@@ -62,20 +71,20 @@ gray_button = {
   <pe:if condition='<%=_guihelper.values.buttons~=_guihelper.MessageBoxButtons.Nothing%>'>
     <div style="padding:5px;padding-bottom:15px;">
       <pe:if condition='<%=_guihelper.values.buttons==_guihelper.MessageBoxButtons.OKCancel%>'>
-          <input type="button" class="green_button" hotkey="DIK_RETURN" name="OK" value='<%=L"确定"%>' style="margin-left:57px;margin-top:5px;width:90px;"  onclick="_guihelper.OnMessageBoxClick()"/>
-          <input type="button" class="orange_button" name="Cancel" value='<%=L"取消"%>' style="margin-left:15px;margin-top:5px;width:90px;" onclick="_guihelper.OnMessageBoxClick()"/>
+          <input type="button" class="green_button" hotkey="DIK_RETURN" name="OK" value='<%=L"确定"%>' style="margin-left:44px;margin-top:5px;"  onclick="_guihelper.OnMessageBoxClick()"/>
+          <input type="button" class="orange_button" name="Cancel" value='<%=L"取消"%>' style="margin-left:15px;margin-top:5px;" onclick="_guihelper.OnMessageBoxClick()"/>
       </pe:if>
       <pe:if condition='<%=_guihelper.values.buttons==_guihelper.MessageBoxButtons.OK%>'>
-          <input type="button" class="green_button" hotkey="DIK_RETURN" name="OK" value='<%=L"确定"%>' style="margin-left:125px;margin-top:5px;width:90px;" onclick="_guihelper.OnMessageBoxClick()"/>
+          <input type="button" class="green_button" hotkey="DIK_RETURN" name="OK" value='<%=L"确定"%>' style="margin-left:125px;margin-top:5px;" onclick="_guihelper.OnMessageBoxClick()"/>
       </pe:if>
       <pe:if condition='<%=_guihelper.values.buttons==_guihelper.MessageBoxButtons.YesNo%>'>
-          <input type="button" class="green_button" hotkey="DIK_RETURN" name="Yes" value='<%=L"是"%>' style="margin-left:57px;margin-top:5px;width:90px;" onclick="_guihelper.OnMessageBoxClick()"/>
-          <input type="button" class="orange_button" name="No" value='<%=L"否"%>' style="margin-left:15px;margin-top:5px;width:90px;" onclick="_guihelper.OnMessageBoxClick()"/>
+          <input type="button" class="green_button" hotkey="DIK_RETURN" name="Yes" value='<%=L"是"%>' style="margin-left:44px;margin-top:5px;" onclick="_guihelper.OnMessageBoxClick()"/>
+          <input type="button" class="orange_button" name="No" value='<%=L"否"%>' style="margin-left:15px;margin-top:5px;" onclick="_guihelper.OnMessageBoxClick()"/>
       </pe:if>
       <pe:if condition='<%=_guihelper.values.buttons==_guihelper.MessageBoxButtons.YesNoCancel%>'>
-            <input type="button" class="green_button" hotkey="DIK_RETURN" name="Yes" value='<%=L"是"%>' style="margin-left:20px;margin-top:5px;width:90px;" onclick="_guihelper.OnMessageBoxClick()"/>
-            <input type="button" class="orange_button" name="No" value='<%=L"否"%>' style="margin-left:15px;margin-top:5px;width:90px;" onclick="_guihelper.OnMessageBoxClick()"/>
-            <input type="button" class="gray_button" name="Cancel" value='<%=L"取消"%>' style="margin-left:15px;margin-top:5px;width:90px;" onclick="_guihelper.OnMessageBoxClick()"/>
+            <input type="button" class="green_button" hotkey="DIK_RETURN" name="Yes" value='<%=L"是"%>' style="margin-left:20px;margin-top:5px;" onclick="_guihelper.OnMessageBoxClick()"/>
+            <input type="button" class="orange_button" name="No" value='<%=L"否"%>' style="margin-left:15px;margin-top:5px;" onclick="_guihelper.OnMessageBoxClick()"/>
+            <input type="button" class="gray_button" name="Cancel" value='<%=L"取消"%>' style="margin-left:15px;margin-top:5px;" onclick="_guihelper.OnMessageBoxClick()"/>
       </pe:if>
       <pe:if condition='<%=_guihelper.values.buttons==_guihelper.MessageBoxButtons.AbortRetryIgnore%>'>
         <input type="button" class="green_button" name="Abort" value='<%=L"终止"%>' style="margin-left:5px;width:100px;" onclick="_guihelper.OnMessageBoxClick()"/>
@@ -83,8 +92,8 @@ gray_button = {
         <input type="button" class="gray_button" name="Ignore" value='<%=L"忽略"%>' style="margin-left:25px;width:100px;" onclick="_guihelper.OnMessageBoxClick()"/>
       </pe:if>
       <pe:if condition='<%=_guihelper.values.buttons==_guihelper.MessageBoxButtons.RetryCancel%>'>
-        <input type="button" class="green_button" name="Retry" value='<%=L"重试"%>' style="margin-left:57px;margin-top:5px;width:90px;" onclick="_guihelper.OnMessageBoxClick()"/>
-        <input type="button" class="orange_button" name="Cancel" value='<%=L"取消"%>' style="margin-left:15px;margin-top:5px;width:90px;" onclick="_guihelper.OnMessageBoxClick()"/>
+        <input type="button" class="green_button" name="Retry" value='<%=L"重试"%>' style="margin-left:44px;margin-top:5px;" onclick="_guihelper.OnMessageBoxClick()"/>
+        <input type="button" class="orange_button" name="Cancel" value='<%=L"取消"%>' style="margin-left:15px;margin-top:5px;" onclick="_guihelper.OnMessageBoxClick()"/>
       </pe:if>
     </div>
   </pe:if>

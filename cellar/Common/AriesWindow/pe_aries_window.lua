@@ -31,12 +31,9 @@ function codepku_pe_aries_window.create_thin_mc(rootName, mcmlNode, bindingConte
 	local icon = mcmlNode:GetString("icon") or ""; --32 32
 	local background = mcmlNode:GetString("background") or "";
 	
-	local title_height = mcmlNode:GetNumber("title_height") or 28;
+	local title_height = mcmlNode:GetNumber("title_height") or 45;
 	
 	local _this = ParaUI.CreateUIObject("container", "c", "_lt", left, top, w, h);
-	log('<<<  ')
-	log(width)
-	log(height)
 	if (width > 800 and height < 400) then
 		_this.background = mc_window_bg_866_384;
 	elseif (width == 512) then
@@ -73,21 +70,21 @@ function codepku_pe_aries_window.create_thin_mc(rootName, mcmlNode, bindingConte
 	_parent:AddChild(_this);
 	
 	local onclose = mcmlNode:GetString("onclose");
-	log('BTN_SIZE')
-	log(title_height)
-	log(btn_size)
+
 	if(onclose and onclose ~= "")then
-		if (mcmlNode:GetNumber("close_height")) then
-			local btn_size = mcmlNode:GetNumber("close_height")
-			_this = ParaUI.CreateUIObject("button", "close_btn", "_rt", -(btn_size / 2) - btn_size, (title_height-btn_size) * 0.65, btn_size, btn_size)
-		else
-			local btn_size = title_height - 4 --2
-			if(title_height>=32) then
-				_this = ParaUI.CreateUIObject("button", "close_btn", "_rt", -btn_size-10, 8, btn_size, btn_size);	
-			else
-				_this = ParaUI.CreateUIObject("button", "close_btn", "_rt", -btn_size-1, 8, btn_size * 0.6, btn_size * 0.6);	
-			end
-		end
+		local btn_size = mcmlNode:GetNumber("close_height") or 26.4
+		_this = ParaUI.CreateUIObject("button", "close_btn", "_rt", -(btn_size / 2) - btn_size, (title_height-btn_size) * 0.65, btn_size, btn_size)
+		-- if (close_height) then
+		-- 	local btn_size = mcmlNode:GetNumber("close_height")
+		-- 	_this = ParaUI.CreateUIObject("button", "close_btn", "_rt", -(btn_size / 2) - btn_size, (title_height-btn_size) * 0.65, btn_size, btn_size)
+		-- else
+		-- 	local btn_size = title_height - 4 --2
+		-- 	if(title_height>=32) then
+		-- 		_this = ParaUI.CreateUIObject("button", "close_btn", "_rt", -btn_size-10, 8, btn_size, btn_size);	
+		-- 	else
+		-- 		_this = ParaUI.CreateUIObject("button", "close_btn", "_rt", -btn_size-1, 8, btn_size * 0.6, btn_size * 0.6);	
+		-- 	end
+		-- end
 		
 		_this.background = mc_close_btn_bg;
 		_parent:AddChild(_this);
@@ -139,7 +136,7 @@ function codepku_pe_aries_window.create_center(rootName, mcmlNode, bindingContex
 	local icon = mcmlNode:GetString("icon") or ""; --32 32
 	local background = mcmlNode:GetString("background") or "";
 	
-	local title_height = mcmlNode:GetNumber("title_height") or 40;
+	local title_height = mcmlNode:GetNumber("title_height") or 45;
 	
 	local _this = ParaUI.CreateUIObject("container", "c", "_lt", left, top, w, h);
 	_this.background = center_mc_window_bg;
@@ -170,20 +167,21 @@ function codepku_pe_aries_window.create_center(rootName, mcmlNode, bindingContex
 	_parent:AddChild(_this);
 	
 	local onclose = mcmlNode:GetString("onclose");
-
 	if(onclose and onclose ~= "")then
-		if (mcmlNode:GetNumber("close_height")) then
-			local btn_size = mcmlNode:GetNumber("close_height")
+		local btn_size = mcmlNode:GetNumber("close_height") or 26.4
 			_this = ParaUI.CreateUIObject("button", "close_btn", "_rt", -(btn_size / 2) - btn_size, (title_height-btn_size) / 2, btn_size, btn_size)
-		else
-			--local btn_size = title_height - 2
-			local btn_size = 26
-			if(title_height>=32) then
-				_this = ParaUI.CreateUIObject("button", "close_btn", "_rt", -btn_size-8, (title_height - btn_size) / 2, btn_size, btn_size);	
-			else
-				_this = ParaUI.CreateUIObject("button", "close_btn", "_rt", -btn_size-1, 1, btn_size, btn_size);	
-			end
-		end
+		-- if (mcmlNode:GetNumber("close_height")) then
+		-- 	local btn_size = mcmlNode:GetNumber("close_height")
+		-- 	_this = ParaUI.CreateUIObject("button", "close_btn", "_rt", -(btn_size / 2) - btn_size, (title_height-btn_size) / 2, btn_size, btn_size)
+		-- else
+		-- 	--local btn_size = title_height - 2
+		-- 	local btn_size = 26
+		-- 	if(title_height>=32) then
+		-- 		_this = ParaUI.CreateUIObject("button", "close_btn", "_rt", -btn_size-8, (title_height - btn_size) / 2, btn_size, btn_size);	
+		-- 	else
+		-- 		_this = ParaUI.CreateUIObject("button", "close_btn", "_rt", -btn_size-1, 1, btn_size, btn_size);	
+		-- 	end
+		-- end
 		
 		_this.background = mc_close_btn_bg;
 		_parent:AddChild(_this);
