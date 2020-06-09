@@ -10,14 +10,14 @@
     Mod.CodePku.Store:Set("page/Loading", page)
     UIAnimManager.LoadUIAnimationFile("Mod/CodePku/script/UIAnimation/CommonProgress.lua.table");
 ]]></script>
-<div style="position:relative;background:url(Texture/whitedot.png);background-color:#000000cc;width:512px;height:300px;color:#ffffff">    
+<aries:window  mode="thin" title_height="0" height="256" style="position:relative;background:url(Texture/whitedot.png);background-color:#000000cc;width:520px;color:#000000cc">    
     <div style="margin-left:192px;margin:10px;">
         <div style="width: 128px;height:128px;background:textures/clock.png;background-animation:url(Mod/CodePku/script/UIAnimation/CommonProgress.lua.table#WaitingSpin)"></div>        
     </div>
-    <div style="margin-top:10px">
+    <div style="margin:10px">
         <label name="progressText" style="font-size:14px;width:512px;text-align:center;height:25px;" value='<%=L"正在加载..."%>'></label><br />        
     </div>
-</div>
+</aries:window>
 </pe:mcml>
 </body>
 </html>
