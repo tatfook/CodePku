@@ -16,10 +16,8 @@ local Log = NPL.load("(gl)Mod/CodePku/util/Log.lua");
 local Table = NPL.load("(gl)Mod/CodePku/util/Table.lua");
 local Design = NPL.load("(gl)Mod/CodePku/util/Design.lua");
 
-local DirectionKeyboard = commonlib.inherit(
-        commonlib.gettable("System.Core.ToolBase"),
-        commonlib.gettable("Mod.CodePku.Common.TouchMiniKeyboard.DirectionKeyboard")
-);
+local DirectionKeyboard = commonlib.inherit(commonlib.gettable("System.Core.ToolBase"),
+    commonlib.gettable("Mod.CodePku.Common.TouchMiniKeyboard.DirectionKeyboard"));
 
 DirectionKeyboard.name = "DIRECTION_KEYBOARD";
 DirectionKeyboard.clickRate = 500;
@@ -77,7 +75,6 @@ DirectionKeyboard.defaultKeyLayout = {
 }
 
 function DirectionKeyboard:ctor()
-
 end
 
 --单例实例化
@@ -105,15 +102,13 @@ function DirectionKeyboard:init()
             item.top = Design:adapterWidth(item.top);
             item.bottom = item.height + item.top;
 
-            local button = ParaUI.CreateUIObject(
-                    "button",
-                    item.name,
-                    "_lt",
-                    item.left,
-                    item.top,
-                    item.width,
-                    item.height
-            );
+            local button = ParaUI.CreateUIObject("button",
+                item.name,
+                "_lt",
+                item.left,
+                item.top,
+                item.width,
+                item.height);
 
             button.background = item.background;
             button.enabled = false;
@@ -153,34 +148,25 @@ function DirectionKeyboard:getContainer()
 
         container.zorder = self.zorder;
 
-        container:SetScript(
-                "ontouch",
-                function()
-                    echo(6666)
-                    self:handleTouch(msg);
-                end
-        );
+        container:SetScript("ontouch",
+            function()
+                self:handleTouch(msg);
+            end);
 
-        container:SetScript(
-                "onmousedown",
-                function()
-                    self:handleMouseDown();
-                end
-        );
+        container:SetScript("onmousedown",
+            function()
+                self:handleMouseDown();
+            end);
 
-        container:SetScript(
-                "onmouseup",
-                function()
-                    self:handleMouseUp();
-                end
-        );
+        container:SetScript("onmouseup",
+            function()
+                self:handleMouseUp();
+            end);
 
-        container:SetScript(
-                "onmousemove",
-                function()
-                    self:handleMouseMove();
-                end
-        );
+        container:SetScript("onmousemove",
+            function()
+                self:handleMouseMove();
+            end);
 
         self.id = container.id;
     else
@@ -223,6 +209,7 @@ function DirectionKeyboard:handleTouch(touch)
         if button then
             touchSession:SetField("keydownBtn", button);
             self:updateButtonState(button, true);
+            button.isDragged = nil;
         end
     elseif touch.type == "WM_POINTERUP" then
         local keydownBtn = touchSession:GetField("keydownBtn");
@@ -231,6 +218,7 @@ function DirectionKeyboard:handleTouch(touch)
         end
     elseif touch.type == "WM_POINTERUPDATE" then
         local keydownBtn = touchSession:GetField("keydownBtn");
+        keydownBtn.isDragged = true;
 
         if button and button ~= keydownBtn then
             if keydownBtn.isPressed then
@@ -240,11 +228,11 @@ function DirectionKeyboard:handleTouch(touch)
             touchSession:SetField("keydownBtn", button);
             self:updateButtonState(button, true);
         end
-    else
-        if button then
-            touchSession:SetField("keydownBtn", button);
-            self:updateButtonState(button, true);
-        end
+        --    else
+        --        if button then
+        --            touchSession:SetField("keydownBtn", button);
+        --            self:updateButtonState(button, true);
+        --        end
     end
 end
 
@@ -270,14 +258,7 @@ function DirectionKeyboard:updateButtonState(button, isPressed)
         _guihelper.SetUIColor(buttonUI, self.colors.normal);
     end
 
-    if button.onlyClick then
-        if not isPressed then
-            self:emitKeyEvent(button, true);
-            self:emitKeyEvent(button, false);
-        end
-    else
-        self:emitKeyEvent(button, isPressed);
-    end
+    self:emitKeyEvent(button, isPressed);
 
     Mouse:SetTouchButtonSwapped(isPressed);
 end
