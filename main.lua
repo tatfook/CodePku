@@ -250,8 +250,10 @@ function CodePku:init()
 
 	GameLogic.GetFilters():add_filter(
 		"ShowExitDialog",
-		function () 
-			local Desktop = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop");			
+		function (bRestart) 
+			local Desktop = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop");	
+			echo("showexitDialog")
+			echo(bRestart)		
 			local dialog = {
 				text = L"确定要退出当前世界么？", 
 				callback = function(res)
