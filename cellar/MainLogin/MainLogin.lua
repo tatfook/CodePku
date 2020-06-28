@@ -189,19 +189,17 @@ function MainLogin:LoginAction()
 end
 
 function MainLogin:EnterUserConsole()
-    ParaWorldLessons.CheckShowOnStartup(function(bBeginLessons)
-        if not bBeginLessons then
-            System.options.loginmode = "local"
+    local MainLoginPage = Mod.CodePku.Store:Get("page/MainLogin")
 
-            local MainLoginPage = Mod.CodePku.Store:Get("page/MainLogin")
-
-            if MainLoginPage then
-                MainLoginPage:CloseWindow()
-            end
-
-            GameMainLogin:next_step({IsLoginModeSelected = true})
-        end
-    end)
+    if MainLoginPage then
+        MainLoginPage:CloseWindow()
+    end
+    GameMainLogin:next_step({IsLoginModeSelected = true})
+    -- ParaWorldLessons.CheckShowOnStartup(function(bBeginLessons)
+    --     if not bBeginLessons then
+    --         System.options.loginmode = "local"                    
+    --     end
+    -- end)
 end
 
 function MainLogin:SetAutoLogin()

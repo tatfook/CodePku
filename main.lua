@@ -174,20 +174,20 @@ function CodePku:init()
 	)
 	GameLogic.GetFilters():add_filter(
 		"AriesWindow.CustomStyle", 
-		function (rootName, mcmlNode, bindingContext, _parent, left, top, right, bottom, myLayout, css, mode)
+		function (show, rootName, mcmlNode, bindingContext, _parent, left, top, right, bottom, myLayout, css, mode)							
 			local codepku_pe_aries_window = NPL.load("(gl)Mod/CodePku/cellar/Common/AriesWindow/pe_aries_window.lua");
 			if (mode == "center") then
 				codepku_pe_aries_window.create_center(rootName, mcmlNode, bindingContext, _parent, left, top, right, bottom, myLayout, css);
 			elseif (mode == "thin" or mode == "mc") then
 				codepku_pe_aries_window.create_thin_mc(rootName, mcmlNode, bindingContext, _parent, left, top, right, bottom, myLayout, css);
 			end
-			return false;
+			return true;
 		end
 	)
 
 	GameLogic.GetFilters():add_filter(
 		"EscFramePage.ShowPage",
-		function (bShow)
+		function (default, bShow)
 			CodePkuEscFramePage:ShowPage(bShow)
 			return true
 		end
