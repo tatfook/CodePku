@@ -7,6 +7,8 @@
             <script type="text/npl">
                 <![CDATA[
                     NPL.load("(gl)script/apps/Aries/Creator/Game/Login/Rebranding.lua")
+                    local Config = NPL.load("(gl)Mod/CodePku/config/Config.lua")
+
                     Rebranding = commonlib.gettable("MyCompany.Aries.Creator.Game.Rebranding")
                     local GameMainLogin = commonlib.gettable("MyCompany.Aries.Game.MainLogin")
                     local MainLogin = NPL.load("./MainLogin.lua")                                                            
@@ -130,8 +132,14 @@
                             page:GetValue("account"), 
                             function (response, err)
                                 if err == 200 then  
-                                    -- Mod.CodePku.MsgBox:Close()       
-                                    GameLogic.AddBBS(nil, L"验证码获取成功", 3000, "255 0 0", 21)         
+                                    -- Mod.CodePku.MsgBox:Close()
+
+                                    if Config.defaultEnv == Config.env.RELEASE then
+                                        GameLogic.AddBBS(nil, L"验证码获取成功", 3000, "255 0 0", 21)
+                                    else
+                                        GameLogic.AddBBS(nil, L("验证码是："..response.data.code), 7000, "255 0 0", 21)
+                                    end
+
                                     LOG.std(nil, "info", "codepku", "get mobile code success")
                                     local mobileToken = response.data.mobile_token
                                     page:SetValue('mobile_token', mobileToken)

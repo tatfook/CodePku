@@ -16,7 +16,7 @@ local CodePkuBaseApi = NPL.export()
 
 -- private
 function CodePkuBaseApi:GetApi()
-    return Config.codepkuServerList[BaseApi:GetEnv()] or ""
+    return Config.defaultServer or ""
 end
 
 -- private

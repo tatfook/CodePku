@@ -15,11 +15,13 @@ local Config = NPL.export()
 Config.env = {
   ONLINE = "ONLINE",
   STAGE = "STAGE",
+  STAGING = "STAGING",
+  DEV = "DEV",
   RELEASE = "RELEASE",
   LOCAL = "LOCAL"
 }
 
-Config.defaultEnv = (ParaEngine.GetAppCommandLineByParam("codepkuenv", nil) or Config.env.ONLINE)
+Config.defaultEnv = (ParaEngine.GetAppCommandLineByParam("codepkuenv", nil) or Config.env.RELEASE)
 
 Config.codepkuServerList = {
   ONLINE = "https://game.codepku.com/api/game",
@@ -27,6 +29,15 @@ Config.codepkuServerList = {
   RELEASE = "https://game.dev.codepku.com/api/game",
   LOCAL = "http://game.local.codepku.com/api/game"
 }
+
+Config.codepkuServer = {
+  RELEASE = "https://game.codepku.com/api/game",
+  STAGING = "https://game.staging.codepku.com/api/game",
+  DEV = "https://game.dev.codepku.com/api/game",
+  LOCAL = "http://game.local.codepku.com/api/game"
+}
+
+Config.defaultServer = Config.codepkuServer[Config.defaultEnv];
 
 Config.storageList = {
   ONLINE = "https://api.keepwork.com/storage/v0",
