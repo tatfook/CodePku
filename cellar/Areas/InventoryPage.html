@@ -96,7 +96,7 @@ end
     <div style="position:relative;margin-top:2px;margin-left:290px;width:1px;height:188px;"class="mc_line"/> -->
     <div style="float:left;width:280px;height:185px;">
         <pe:if condition="<%= System.options.mc %>">
-            <input type="button" value='<%=L"改变外貌"%>' style="margin-left:28px;margin-top:15px;text-offset-y:-3;height:38.4px;min-width:105.6px;font-size:20.4px;base-font-size:20.4px;color:#ffffff;background:url(textures/modal/bag_box_32bits.png#74 2124 176 74);" onclick="SwitchSkin"/>    
+            <input type="button" value='<%=L"改变外貌"%>' style="margin-left:28px;margin-top:15px;text-offset-y:-3;height:38.4px;min-width:105.6px;font-size:20.4px;base-font-size:20.4px;color:#ffffff;background:url(codepku/image/textures/modal/bag_box_32bits.png#74 2124 176 74);" onclick="SwitchSkin"/>    
         </pe:if>
         <div style="margin-top:30px;margin-left:20px;height:145px;">
             <div style="float:left;margin-left:15px;width:32px;">
@@ -185,7 +185,7 @@ end
         <pe:gridview name="MyInventoryBagItems" style="margin-top:15px;height:281px;" DataSource="<%=DS_Func_PlayerItems%>" CellPadding="1" DefaultNodeHeight = "56" ItemsPerLine="9" AllowPaging="false" RememberScrollPos="true" RememberLastPage="true" pagesize="36">
             <Columns>
                 <div style="margin-left:2px;font-weight:bold;" class="mc_item">
-                    <pe:mc_slot bagpos ='<%=Eval("slotNumber")%>' style="margin:1px;width:56px;height:56px;background2:url(textures/modal/bag_box_32bits.png#74 2325 94 94);"></pe:mc_slot>
+                    <pe:mc_slot bagpos ='<%=Eval("slotNumber")%>' style="margin:1px;width:56px;height:56px;background2:url(codepku/image/textures/modal/bag_box_32bits.png#74 2325 94 94);"></pe:mc_slot>
                 </div>
 			</Columns>
         </pe:gridview>

@@ -3,7 +3,7 @@ local pe_aries_window = commonlib.gettable("MyCompany.Aries.mcml_controls.pe_ari
 local codepku_pe_aries_window = NPL.export()
 local lite_window_bg = "Texture/Aries/Common/Teen/control/window_none_title_icon_32bits.png;0 0 256 164:80 40 120 20";
 
-local window_bg = "textures/modal/common_32bits.png#11 1105 980 380;"
+local window_bg = "codepku/image/textures/modal/common_32bits.png#11 1105 980 380;"
 local window_title_bg = "Texture/Aries/Common/Teen/control/window_none_ribbon_bg_32bits.png;0 0 220 70:113 29 102 32";--220 70
 local window_title_highlight_bg = "Texture/Aries/Common/Teen/control/window_title_center_bg_32bits.png;0 0 425 38";--425 38
 local window_ribbon_bg = "Texture/Aries/Common/Teen/control/window_title_ribbon_32bits.png;0 0 660 42";--660 42
@@ -13,12 +13,12 @@ local help_btn_bg = "Texture/Aries/Common/Teen/control/help_32bits.png;0 0 20 20
 local close_btn_bg = "Texture/Aries/Common/Teen/control/close_button2_32bits.png;0 0 30 20";
 local help_disable_btn_bg = "Texture/Aries/Common/Teen/control/help_disable_32bits.png;0 0 20 20";
 
-local mc_window_bg = "textures/modal/common_32bits.png#11 1105 980 380;" -- thin
-local mc_window_bg_866_384 = "textures/modal/bag_box_32bits.png#74 75 1444 640" -- 背包造型背景
-local mc_window_bg_854 = "textures/modal/bag_box_32bits.png#66 2735 854 854" -- 箱子背景
-local center_mc_window_bg = "textures/modal/common_32bits.png#11 53 1000 624;"
-local mc_close_btn_bg = "textures/modal/common_32bits.png#27 906 64 64";
-local mc_line = "textures/modal/bag_box_32bits.png#74 1767 962 2;";
+local mc_window_bg = "codepku/image/textures/modal/common_32bits.png#11 1105 980 380;" -- thin
+local mc_window_bg_866_384 = "codepku/image/textures/modal/bag_box_32bits.png#74 75 1444 640" -- 背包造型背景
+local mc_window_bg_854 = "codepku/image/textures/modal/bag_box_32bits.png#66 2735 854 854" -- 箱子背景
+local center_mc_window_bg = "codepku/image/textures/modal/common_32bits.png#11 53 1000 624;"
+local mc_close_btn_bg = "codepku/image/textures/modal/common_32bits.png#27 906 64 64";
+local mc_line = "codepku/image/textures/modal/bag_box_32bits.png#74 1767 962 2;";
 -- local mc_line = "Texture/Aries/Creator/Theme/GameCommonIcon_32bits.png;352 66 1 1";
 
 

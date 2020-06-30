@@ -33,7 +33,7 @@ TouchMiniKeyboard.hover_press_hold_time = 500
 TouchMiniKeyboard.DefaultKeyLayout = {
     {
         name = "up",
-        background = "textures/keyboard/up_btn.png",
+        background = "codepku/image/textures/keyboard/up_btn.png",
         left = 100,
         top = 0,
         width = 100,
@@ -44,7 +44,7 @@ TouchMiniKeyboard.DefaultKeyLayout = {
     },
     {
         name = "down",
-        background = "textures/keyboard/down_btn.png",
+        background = "codepku/image/textures/keyboard/down_btn.png",
         left = 100,
         top = 200,
         width = 100,
@@ -55,7 +55,7 @@ TouchMiniKeyboard.DefaultKeyLayout = {
     },
     {
         name = "left",
-        background = "textures/keyboard/left_btn.png",
+        background = "codepku/image/textures/keyboard/left_btn.png",
         left = 0,
         top = 100,
         width = 100,
@@ -66,7 +66,7 @@ TouchMiniKeyboard.DefaultKeyLayout = {
     },
     {
         name = "right",
-        background = "textures/keyboard/right_btn.png",
+        background = "codepku/image/textures/keyboard/right_btn.png",
         left = 200,
         top = 100,
         width = 100,
@@ -77,7 +77,7 @@ TouchMiniKeyboard.DefaultKeyLayout = {
     },
     {
         name = "center",
-        background = "textures/keyboard/center_btn.png",
+        background = "codepku/image/textures/keyboard/center_btn.png",
         left = 105,
         top = 105,
         width = 90,
