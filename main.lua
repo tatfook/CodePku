@@ -74,6 +74,14 @@ function CodePku:GetDesc()
 end
 
 function CodePku:init()
+	local HttpRequest = NPL.load("(gl)Mod/CodePku/service/HttpRequest.lua");	
+	local manifestUrl = "http://cdnwanxue.codepku.com/assets_manifest_codepku.txt?version=" .. os.time();
+	HttpRequest:Get(manifestUrl, nil, nil, function (res, err)	
+		local assetManifest = ParaIO.open("assets_manifest_codepku.txt", 'w');
+		assetManifest:WriteString(res);
+		assetManifest:close();
+	end, nil, nil)
+
 	GameLogic.GetFilters():add_filter(
 			"ShowLoginModePage",
 			function()
@@ -274,7 +282,7 @@ function CodePku:init()
 	local guiHelperDefaultTemplate = "Mod/CodePku/cellar/GUI/DefaultMessageBox.html"
 	_guihelper.SetDefaultMsgBoxMCMLTemplate(guiHelperDefaultTemplate)
 	-- prevent indulage
-	PreventIndulge:Init()
+	PreventIndulge:Init()		
 end
 
 function CodePku:OnLogin()
