@@ -76,11 +76,14 @@ end
 function CodePku:init()
 	local HttpRequest = NPL.load("(gl)Mod/CodePku/service/HttpRequest.lua");	
 	local manifestUrl = "http://cdnwanxue.codepku.com/assets_manifest_codepku.txt?version=" .. os.time();
-	HttpRequest:Get(manifestUrl, nil, nil, function (res, err)	
-		local assetManifest = ParaIO.open("assets_manifest_codepku.txt", 'w');
-		assetManifest:WriteString(res);
-		assetManifest:close();
-	end, nil, nil)
+	local _, _, asset = System.os.GetUrl(manifestUrl);
+	local assetManifest = ParaIO.open("assets_manifest_codepku.txt", 'w');
+	assetManifest:WriteString(asset);
+	assetManifest:close();	
+
+	local asset_manager = ParaEngine.GetAttributeObject():GetChild("AssetManager");
+	local asset_manifest = asset_manager:GetChild("CAssetManifest");
+	asset_manifest:SetField("LoadManifestFile", "assets_manifest_codepku.txt");
 
 	GameLogic.GetFilters():add_filter(
 			"ShowLoginModePage",
