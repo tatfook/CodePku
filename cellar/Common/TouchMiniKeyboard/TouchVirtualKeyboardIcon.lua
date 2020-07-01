@@ -149,7 +149,7 @@ function TouchVirtualKeyboardIcon:GetUIControl()
 	
 	if(not _parent:IsValid()) then
 		_parent = ParaUI.CreateUIObject("container",self.name, self.alignment,self.left,self.top,self.width,self.height);
-		_parent.background = "textures/keyboard/keyboard_btn.png";
+		_parent.background = "codepku/image/textures/keyboard/keyboard_btn.png";
 		_guihelper.SetUIColor(_parent, self.color.normal);
 		_parent:AttachToRoot();
 		_parent.zorder = self.zorder;

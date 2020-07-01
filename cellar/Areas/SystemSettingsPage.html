@@ -71,15 +71,15 @@ end
 <style type="text/mcss">
     {
         bw_mc_panel = {
-            background = "textures/modal/setting_32bits.png#41 36 826 958",
+            background = "codepku/image/textures/modal/setting_32bits.png#41 36 826 958",
             width = 490,
             height = 568,
         },
         mc_light_grey_button_with_fillet = {
-            background = "textures/modal/setting_32bits.png#964 476 268 46",
+            background = "codepku/image/textures/modal/setting_32bits.png#964 476 268 46",
         },
         green_button = {
-            background = "textures/modal/setting_32bits.png#964 718 246 62",
+            background = "codepku/image/textures/modal/setting_32bits.png#964 718 246 62",
             color = "#ffffff",
             width = 147,
             height = 37.2,
@@ -88,7 +88,7 @@ end
             ["base-font-size"] = 16.8
         },
         orange_button = {
-            background = "textures/modal/setting_32bits.png#964 842 246 62",
+            background = "codepku/image/textures/modal/setting_32bits.png#964 842 246 62",
             color = "#ffffff",
             width = 147,
             height = 37.2,
@@ -108,7 +108,7 @@ end
                     <pe:if condition='<%=GetCategoryDSIndex() == Eval("index") %>' >
                         <input type="button" value='<%=Eval("text")%>' name='<%=Eval("index")%>' onclick="OnChangeTabview" 
                             style="font-weight:bold;margin-right:40px;margin-top:1px;color:#ffffff;font-size:27.6px;min-width:73.2px;
-                            height:37.8px;background:url(textures/modal/setting_32bits.png#341 336 100 100);" />
+                            height:37.8px;background:url(codepku/image/textures/modal/setting_32bits.png#341 336 100 100);" />
                     </pe:if>
                     <pe:if condition='<%=GetCategoryDSIndex() ~= Eval("index") %>' >
                         <input type="button" value='<%=Eval("text")%>' name='<%=Eval("index")%>' onclick="OnChangeTabview"
@@ -117,7 +117,7 @@ end
                     </pe:if>
                 </pe:repeatitem>
             </pe:repeat>
-            <input type="button" align="right" style="margin-top:7px;width:26px;height:26px;background:url(textures/modal/setting_32bits.png#977 949 44 44);" onclick="SystemSettingsPage.OnCancel()"/>
+            <input type="button" align="right" style="margin-top:7px;width:26px;height:26px;background:url(codepku/image/textures/modal/setting_32bits.png#977 949 44 44);" onclick="SystemSettingsPage.OnCancel()"/>
         
         </div>
         <!-- <div style="margin-left:0px;margin-top:-1px;width:350px;height:1px;background:url(Texture/Aries/Creator/Theme/GameCommonIcon_32bits.png#344 66 1 8)"/> -->
@@ -128,7 +128,7 @@ end
                     <div style="height:25px;margin-top:9.6px;">
                         <div style="float:left;margin-left:5px;width:120px;height:20px;text-align:center;font-size:16.8px;" ><%=L"分辨率" %></div>
                         <div style="float:left;margin-left:20px;font-size:16.8px;">
-                            <select name = "ScreenResolution" AllowUserEdit="false" style="height:27px;font-size:16.8px;background:url(textures/modal/setting_32bits.png#1210 370 268 46);">
+                            <select name = "ScreenResolution" AllowUserEdit="false" style="height:27px;font-size:16.8px;background:url(codepku/image/textures/modal/setting_32bits.png#1210 370 268 46);">
                                 <option value="400 × 266">400 × 266</option>
                                 <option value="400 × 300">400 × 300</option>
                                 <option value="480 × 280">480 × 280</option>
@@ -166,10 +166,10 @@ end
                                 value="0.1"
                                 style="float:left;height:27.6px;width:160.8px"
                                 onchange="SystemSettingsPage.OnChangeStereoEyeDist"
-                                button_bg="textures/modal/setting_32bits.png#977 106 30 30"
+                                button_bg="codepku/image/textures/modal/setting_32bits.png#977 106 30 30"
                                 button_width="18"
                                 button_height="18"
-                                background="textures/modal/setting_32bits.png#962 257 342 30"
+                                background="codepku/image/textures/modal/setting_32bits.png#962 257 342 30"
                                 background_width="205.2"
                                 background_height="18"
                             />
@@ -238,7 +238,7 @@ end
                     <div style="height:25px;margin-top:9.6px;">
                         <div style="float:left;margin-left:5px;width:120px;height:20px;text-align:center;font-size:16.8px;"><%=L"UI放缩" %></div>
                         <div style="float:left;margin-top:-2px;margin-left:20px;">
-                            <input type="button" style="width:57.6px;height:27.6px;background:url(textures/modal/setting_32bits.png#964 370 96 46);color:#ffffff;" name="orignalScaling" value='<%=L"重置"%>' onclick='SystemSettingsPage.OnClickResetUIScaling' />
+                            <input type="button" style="width:57.6px;height:27.6px;background:url(codepku/image/textures/modal/setting_32bits.png#964 370 96 46);color:#ffffff;" name="orignalScaling" value='<%=L"重置"%>' onclick='SystemSettingsPage.OnClickResetUIScaling' />
                             <div style="float:left;margin-left:5px;">
                                 <pe:sliderbar
                                     name="UI_Scaling"
@@ -248,10 +248,10 @@ end
                                     value="<%=GameLogic.options:GetUIScaling() %>"
                                     style="float:left;height:25px;width:100px;"
                                     onchange="SystemSettingsPage.OnChangeUIScaling"
-                                    button_bg="textures/modal/setting_32bits.png#977 106 30 30"
+                                    button_bg="codepku/image/textures/modal/setting_32bits.png#977 106 30 30"
                                     button_width="18"
                                     button_height="18"
-                                    background="textures/modal/setting_32bits.png#962 257 342 30"
+                                    background="codepku/image/textures/modal/setting_32bits.png#962 257 342 30"
                                     background_width="141"
                                     background_height="18"
                                 />
@@ -325,19 +325,19 @@ end
                     <div style="height:25px;margin-top:9.6px;">
                         <div style="float:left;margin-left:5px;width:120px;height:20px;text-align:center;font-size:16.8px;" ><%=L"消除方块" %></div>
                         <div style="float:left;margin-top:2px;margin-left:20px;width:160.8px;height:27.6px;" class="mc_light_grey_button_with_fillet">
-                            <div align="center" style="margin-top:3px;width:15.6px;height:22.8px;background:url(textures/modal/setting_32bits.png#1098 103 26 38)"/>
+                            <div align="center" style="margin-top:3px;width:15.6px;height:22.8px;background:url(codepku/image/textures/modal/setting_32bits.png#1098 103 26 38)"/>
                         </div>
                     </div>
                     <div style="height:25px;margin-top:9.6px;">
                         <div style="float:left;margin-left:5px;width:120px;height:20px;text-align:center;font-size:16.8px;" ><%=L"放置方块" %></div>
                         <div style="float:left;margin-top:2px;margin-left:20px;width:160.8px;height:27.6px;" class="mc_light_grey_button_with_fillet">
-                            <div align="center" style="margin-top:3px;width:15.6px;height:22.8px;background:url(textures/modal/setting_32bits.png#1385 103 26 38)"/>
+                            <div align="center" style="margin-top:3px;width:15.6px;height:22.8px;background:url(codepku/image/textures/modal/setting_32bits.png#1385 103 26 38)"/>
                         </div>
                     </div>
                     <div style="height:25px;margin-top:9.6px;">
                         <div style="float:left;margin-left:5px;width:120px;height:20px;text-align:center;font-size:16.8px;" ><%=L"选择方块" %></div>
                         <div style="float:left;margin-top:2px;margin-left:20px;width:160.8px;height:27.6px;" class="mc_light_grey_button_with_fillet">
-                            <div align="center" style="margin-top:3px;width:15.6px;height:22.8px;background:url(textures/modal/setting_32bits.png#1239 103 26 38)"/>
+                            <div align="center" style="margin-top:3px;width:15.6px;height:22.8px;background:url(codepku/image/textures/modal/setting_32bits.png#1239 103 26 38)"/>
                         </div>
                     </div>
                     <div style="height:25px;margin-top:9.6px;">

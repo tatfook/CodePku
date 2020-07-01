@@ -47,5 +47,5 @@ end
 
 function CodePkuSystemSettingsPage.CheckBoxBackground(page, name, bChecked) 
 	-- 系统设置弹框 - 各开关checked状态时的绿色背景
-	page:CallMethod(name, "SetUIBackground", bChecked and "textures/modal/setting_32bits.png#964 595 268 46" or "textures/modal/setting_32bits.png#964 476 268 46");
+	page:CallMethod(name, "SetUIBackground", bChecked and "codepku/image/textures/modal/setting_32bits.png#964 595 268 46" or "codepku/image/textures/modal/setting_32bits.png#964 476 268 46");
 end

@@ -74,6 +74,17 @@ function CodePku:GetDesc()
 end
 
 function CodePku:init()
+	local HttpRequest = NPL.load("(gl)Mod/CodePku/service/HttpRequest.lua");	
+	local manifestUrl = "http://cdnwanxue.codepku.com/assets_manifest_codepku.txt?version=" .. os.time();
+	local _, _, asset = System.os.GetUrl(manifestUrl);
+	local assetManifest = ParaIO.open("assets_manifest_codepku.txt", 'w');
+	assetManifest:WriteString(asset);
+	assetManifest:close();	
+
+	local asset_manager = ParaEngine.GetAttributeObject():GetChild("AssetManager");
+	local asset_manifest = asset_manager:GetChild("CAssetManifest");
+	asset_manifest:SetField("LoadManifestFile", "assets_manifest_codepku.txt");
+
 	GameLogic.GetFilters():add_filter(
 			"ShowLoginModePage",
 			function()
@@ -251,9 +262,7 @@ function CodePku:init()
 	GameLogic.GetFilters():add_filter(
 		"ShowExitDialog",
 		function (bRestart) 
-			local Desktop = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop");	
-			echo("showexitDialog")
-			echo(bRestart)		
+			local Desktop = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop");				
 			local dialog = {
 				text = L"确定要退出当前世界么？", 
 				callback = function(res)
@@ -276,7 +285,7 @@ function CodePku:init()
 	local guiHelperDefaultTemplate = "Mod/CodePku/cellar/GUI/DefaultMessageBox.html"
 	_guihelper.SetDefaultMsgBoxMCMLTemplate(guiHelperDefaultTemplate)
 	-- prevent indulage
-	PreventIndulge:Init()
+	PreventIndulge:Init()		
 end
 
 function CodePku:OnLogin()

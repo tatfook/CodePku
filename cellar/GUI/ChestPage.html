@@ -40,7 +40,7 @@ end
 <style type="text/mcss">
     {
         mc_light_grey_button_with_fillet = {
-            background = "textures/modal/bag_box_32bits.png#74 2547 128 64",
+            background = "codepku/image/textures/modal/bag_box_32bits.png#74 2547 128 64",
             width = 76.8,
             height = 38.4,
             ["font-size"] = 20.4,
@@ -49,7 +49,7 @@ end
             ["padding-top"] = 6
         }
         mc_line = {
-            background = "textures/modal/bag_box_32bits.png#74 1767 962 2"
+            background = "codepku/image/textures/modal/bag_box_32bits.png#74 1767 962 2"
         }
     }
 </style>
@@ -59,13 +59,13 @@ end
         <div style="margin-left:22px;margin-top:8px;font-size:12px;margin-bottom:2px;">
             <div style="float:left;" class="mc_light_grey_button_with_fillet">Shift</div>
             <div style="float:left;margin-left:10.5px;margin-right:10.5px;margin-top:2px;font-size:20.4px;base-font-size:20.4px;color:#5f5f5f;">+</div>
-            <div style="float:left;width:22.3px;height:37.2px;background:url(textures/modal/bag_box_32bits.png#1666 525 37 62)"/>
+            <div style="float:left;width:22.3px;height:37.2px;background:url(codepku/image/textures/modal/bag_box_32bits.png#1666 525 37 62)"/>
             <div style="float:left;margin-left:10.5px;margin-top:2px;font-size:20.4px;base-font-size:20.4px;color:#5f5f5f;"><%=L": 一键提取物品"%></div>
         </div>
         <pe:gridview name="ChestBagItems" style="height:150px;margin-left:18px;" DataSource="<%=DS_Func_Items%>" CellPadding="1" DefaultNodeHeight = "42" ItemsPerLine="9" AllowPaging="false" RememberScrollPos="true" RememberLastPage="true" pagesize="27">
             <Columns>
                 <div style="margin-left:4px;font-weight:bold;" class="mc_item">
-                    <pe:mc_slot ContainerView='<%=GetContainerView()%>' DestInventory='<%=EntityManager.GetPlayer().inventory %>' bagpos ='<%=Eval("slotNumber")%>' style="margin:1px;width:42px;height:42px;background2:url(textures/modal/bag_box_32bits.png#74 2325 94 94)"></pe:mc_slot>
+                    <pe:mc_slot ContainerView='<%=GetContainerView()%>' DestInventory='<%=EntityManager.GetPlayer().inventory %>' bagpos ='<%=Eval("slotNumber")%>' style="margin:1px;width:42px;height:42px;background2:url(codepku/image/textures/modal/bag_box_32bits.png#74 2325 94 94)"></pe:mc_slot>
                 </div>
 			</Columns>
         </pe:gridview>
@@ -75,14 +75,14 @@ end
         <div style="margin-left:22px;font-size:12px;margin-bottom:2px;">
             <div style="float:left;" class="mc_light_grey_button_with_fillet">Shift</div>
             <div style="float:left;margin-left:10.5px;margin-right:10.5px;margin-top:2px;font-size:20.4px;base-font-size:20.4px;color:#5f5f5f;">+</div>
-            <div style="float:left;width:22.3px;height:37.2px;background:url(textures/modal/bag_box_32bits.png#1666 525 37 62)"/>
+            <div style="float:left;width:22.3px;height:37.2px;background:url(codepku/image/textures/modal/bag_box_32bits.png#1666 525 37 62)"/>
             <div style="float:left;margin-left:10.5px;margin-top:2px;font-size:20.4px;base-font-size:20.4px;color:#5f5f5f;"><%=L": 一键提取物品"%></div>
             <div style="float:left;margin-left:55px;margin-top:2px;font-size:20.4px;base-font-size:20.4px;color:#5f5f5f;"><%=L"背包"%></div>
         </div>
         <pe:gridview name="ChestMyItems" style="height:190px;margin-left:18px;" DataSource="<%=DS_Func_PlayerItems%>" CellPadding="1" DefaultNodeHeight = "42" ItemsPerLine="9" AllowPaging="false" RememberScrollPos="true" RememberLastPage="true" pagesize="36">
             <Columns>
                 <div style="margin-left:4px;font-weight:bold;" class="mc_item">
-                    <pe:mc_slot bagpos ='<%=Eval("slotNumber")%>' DestInventory='<%=ChestPage.GetEntity().inventory %>' style="margin:1px;width:42px;height:42px;background2:url(textures/modal/bag_box_32bits.png#74 2325 94 94)"></pe:mc_slot>
+                    <pe:mc_slot bagpos ='<%=Eval("slotNumber")%>' DestInventory='<%=ChestPage.GetEntity().inventory %>' style="margin:1px;width:42px;height:42px;background2:url(codepku/image/textures/modal/bag_box_32bits.png#74 2325 94 94)"></pe:mc_slot>
                 </div>
 			</Columns>
         </pe:gridview>
