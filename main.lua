@@ -81,9 +81,9 @@ function CodePku:init()
 
 	NPL.load("(gl)script/apps/Aries/Creator/Game/Login/ParaWorldLoginDocker.lua");
 	local ParaWorldLoginDocker = commonlib.gettable("MyCompany.Aries.Game.MainLogin.ParaWorldLoginDocker")
-	local redistFolder = ParaWorldLoginDocker.GetAppFolder("paracraft");
+	local redistFolder = ParaWorldLoginDocker.GetCurrentRedistFolder();
 	redistFolder = redistFolder:gsub("\\", "/");
-
+	
 	local assetManifest = ParaIO.open(redistFolder.."assets_manifest_codepku.txt", 'w');
 	assetManifest:WriteString(asset);
 	assetManifest:close();
