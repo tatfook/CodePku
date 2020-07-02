@@ -74,16 +74,23 @@ function CodePku:GetDesc()
 end
 
 function CodePku:init()
-	local HttpRequest = NPL.load("(gl)Mod/CodePku/service/HttpRequest.lua");	
+	ParaAsset.SetAssetServerUrl("http://cdn.wanxue.codepku.com/update61/assetdownload/update/");
+
 	local manifestUrl = "http://cdnwanxue.codepku.com/assets_manifest_codepku.txt?version=" .. os.time();
 	local _, _, asset = System.os.GetUrl(manifestUrl);
-	local assetManifest = ParaIO.open("assets_manifest_codepku.txt", 'w');
+
+	NPL.load("(gl)script/apps/Aries/Creator/Game/Login/ParaWorldLoginDocker.lua");
+	local ParaWorldLoginDocker = commonlib.gettable("MyCompany.Aries.Game.MainLogin.ParaWorldLoginDocker")
+	local redistFolder = ParaWorldLoginDocker.GetAppFolder("paracraft");
+	redistFolder = redistFolder:gsub("\\", "/");
+
+	local assetManifest = ParaIO.open(redistFolder.."assets_manifest_codepku.txt", 'w');
 	assetManifest:WriteString(asset);
-	assetManifest:close();	
+	assetManifest:close();
 
 	local asset_manager = ParaEngine.GetAttributeObject():GetChild("AssetManager");
 	local asset_manifest = asset_manager:GetChild("CAssetManifest");
-	asset_manifest:SetField("LoadManifestFile", "assets_manifest_codepku.txt");
+	asset_manifest:SetField("LoadManifestFile", redistFolder.."assets_manifest_codepku.txt");
 
 	GameLogic.GetFilters():add_filter(
 			"ShowLoginModePage",
