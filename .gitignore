@@ -1,1 +1,11 @@
+.vs
+npl_packages
+*.db
+*.opendb
+*.user
+*.sdf
+*.suo
+*.log
+*.txt
+Debug
 .DS_Store

@@ -1,7 +1,8 @@
-# CodePku
-Paracraft的mod，基于编玩边学
+# This is a paracraft plugin (Mod)
 
-## Install
-```
-git clone git@github.com:tatfook/CodePku.git
-```
+Reference:
+- [How To Create Paracraft Mod](https://github.com/LiXizhi/NPLRuntime/wiki/TutorialParacraftMod)
+- [Download paracraft](http://www.paracraft.cn)
+
+
+
