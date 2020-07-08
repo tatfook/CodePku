@@ -45,10 +45,10 @@ end
         <pe:if condition='<%=EnterTextDialog.IsButtons()%>'>
             <pe:repeat DataSource="<%=EnterTextDialog.GetButtonsDS()%>">
                 <pe:repeatitem>
-                    <pe:if condition="<%= System.options.IsMobilePlatform %>">
+                    <pe:if condition="<%= System.os.IsMobilePlatform() %>">
                     <input type="button" style="margin-bottom:5px;width:360px;color:#ffffff;font-size:14px;height:25px;background:url(Texture/Aries/Creator/Theme/GameCommonIcon_32bits.png#179 89 21 21:8 8 8 8)" name='<%=Eval("index")%>' value='<%=Eval("text")%>' onclick="EnterTextDialog.OnClickButton"/>
                     </pe:if>
-                    <pe:if condition="<%= not System.options.IsMobilePlatform %>">
+                    <pe:if condition="<%= not System.os.IsMobilePlatform() %>">
                         <input type="button" style="margin-bottom:5px;width:590px;;color:#ffffff;font-size:14px;height:25px;background:url(Texture/Aries/Creator/Theme/GameCommonIcon_32bits.png#179 89 21 21:8 8 8 8)" name='<%=Eval("index")%>' value='<%=Eval("text")%>' onclick="EnterTextDialog.OnClickButton"/>
                     </pe:if>
                 </pe:repeatitem>

@@ -67,12 +67,12 @@
                     <%= currentUserName() %> ，欢迎进入玩学世界
                 </pe:container>
             </pe:container>
-            <pe:if condition="<%= System.options.IsMobilePlatform %>">
+            <pe:if condition="<%= System.os.IsMobilePlatform() %>">
                 <pe:container alignment="_ctt" ClickThrough="true" style="position:relative;width:372px;margin-top:247.2px;height:42.6px;background:codepku/image/textures/login/mainlogin_32bits.png# 1000 1649 620 72);">
                 <!-- <input type="button" DefaultButton="true" onclick="startLearning()" class="start" value='' /> -->
                 </pe:container>
             </pe:if>
-            <pe:if condition="<%= not System.options.IsMobilePlatform %>">
+            <pe:if condition="<%= not System.os.IsMobilePlatform() %>">
                 <pe:container alignment="_ct" ClickThrough="true" class="click_window">
                 <!-- <input type="button" DefaultButton="true" onclick="startLearning()" class="start" value='' /> -->
                 </pe:container>
