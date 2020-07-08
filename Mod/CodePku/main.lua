@@ -286,6 +286,13 @@ function CodePku:init()
 		end
 	)
 
+	GameLogic.GetFilters():add_filter(
+		"GameName",
+		function ()
+			return "玩学世界"
+		end
+	)
+
 	-- 重写加载世界页面
 	Map3DSystem.App.MiniGames.SwfLoadingBarPage.url = "Mod/CodePKu/cellar/World/SwfLoadingBarPage.mc.html"
 
