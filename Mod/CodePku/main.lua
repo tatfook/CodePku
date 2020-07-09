@@ -171,13 +171,6 @@ function CodePku:init()
 	)
 
 	GameLogic.GetFilters():add_filter(
-		"desktop_menu",
-		function (menuItems) 
-			return {}
-		end
-	)
-
-	GameLogic.GetFilters():add_filter(
 		"download_remote_world_show_bbs", 
 		function ()
 			return false
