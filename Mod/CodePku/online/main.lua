@@ -80,10 +80,11 @@ connectCodePku 145 parallel           # 联机进入世界ID为145的平行世�
 			GeneralGameClientClass:LoadWorld({
 				worldId = (worldId and worldId ~= 0) and worldId or nil,
 				parallelWorldName = parallelWorldName,
-				ip = (options.host and options.host ~= "") and options.host or Config.defaultOnlineServer.host or nil,
-				port = (options.port and options.port ~= "") and options.port or Config.defaultOnlineServer.port or nil,
+				ip = (options.host and options.host ~= "") and options.host or nil,
+				port = (options.port and options.port ~= "") and options.port or nil,
 				username = (options.u and options.u ~= "") and options.u or System.User.username or nil,
 				password = (options.p and options.p ~= "") and options.p or nil,
+				url = (options.url and options.url ~= "") and options.url or nil
 			});
 		end,
 	}

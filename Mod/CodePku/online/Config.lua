@@ -25,7 +25,8 @@ Config.defaultEnv = (ParaEngine.GetAppCommandLineByParam("codepkuenv", nil) or C
 Config.onlineServer = {
     [Config.env.DEV] = {
         host = "gameserver.dev.codepku.com",
-        port = 9900
+        port = 9900,
+        defaultWorldId = 1
     },
     [Config.env.RELEASE] = {
         host = "gameserver.codepku.com",

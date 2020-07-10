@@ -66,44 +66,51 @@ function UserConsole:CourseEntry()
             GameLogic.AddBBS(nil, L"获取入口世界失败", 3000, "255 0 0", 21)
             return false
         end
-        local url = response and response.data and response.data.world
-        echo(url)
-        local world = RemoteWorld.LoadFromHref(url, "self")
 
-        local function LoadWorld(world, refreshMode)
-            if world then
-                if refreshMode == 'never' then
-                    if not LocalService:IsFileExistInZip(world:GetLocalFileName(), ":worldconfig.txt") then
-                        refreshMode = 'force'
-                    end
-                end
+        local GeneralGameServerMod = commonlib.gettable("Mod.GeneralGameServerMod");
+        local GeneralGameClientClass = GeneralGameServerMod:GetClientClass("CodePku");
+        GeneralGameClientClass:LoadWorld({
+            worldId = response.data.keepwork_project_id,
+            url = response.data.world,
+        });
+        -- local url = response and response.data and response.data.world
+        -- echo(url)
+        -- local world = RemoteWorld.LoadFromHref(url, "self")
 
-                local url = world:GetLocalFileName()               
-                DownloadWorld.ShowPage(url)
-                echo("loadworld")
-                echo(world)
-                local mytimer = commonlib.Timer:new(
-                    {
-                        callbackFunc = function(timer)
-                            InternetLoadWorld.LoadWorld(
-                                world,
-                                nil,
-                                refreshMode or "auto",
-                                function(bSucceed, localWorldPath)
-                                    echo({localWorldPath = localWorldPath})
-                                    DownloadWorld.Close()
-                                end
-                            )
-                        end
-                    }
-                );
-                -- prevent recursive calls.
-                mytimer:Change(1,nil);
-            else
-                _guihelper.MessageBox(L"无效的世界文件");
-            end
-        end
-        LoadWorld(world, 'auto')
+        -- local function LoadWorld(world, refreshMode)
+        --     if world then
+        --         if refreshMode == 'never' then
+        --             if not LocalService:IsFileExistInZip(world:GetLocalFileName(), ":worldconfig.txt") then
+        --                 refreshMode = 'force'
+        --             end
+        --         end
+
+        --         local url = world:GetLocalFileName()               
+        --         DownloadWorld.ShowPage(url)
+        --         echo("loadworld")
+        --         echo(world)
+        --         local mytimer = commonlib.Timer:new(
+        --             {
+        --                 callbackFunc = function(timer)
+        --                     InternetLoadWorld.LoadWorld(
+        --                         world,
+        --                         nil,
+        --                         refreshMode or "auto",
+        --                         function(bSucceed, localWorldPath)
+        --                             echo({localWorldPath = localWorldPath})
+        --                             DownloadWorld.Close()
+        --                         end
+        --                     )
+        --                 end
+        --             }
+        --         );
+        --         -- prevent recursive calls.
+        --         mytimer:Change(1,nil);
+        --     else
+        --         _guihelper.MessageBox(L"无效的世界文件");
+        --     end
+        -- end
+        -- LoadWorld(world, 'auto')
     end) 
 end
 
