@@ -45,6 +45,7 @@ local UserConsole = NPL.load("(gl)Mod/CodePku/cellar/UserConsole/Main.lua")
 local CodePkuDownloadWorld = NPL.load("(gl)Mod/CodePku/cellar/World/DownloadWorld.lua")
 local CodePkuEscFramePage = NPL.load("(gl)Mod/CodePku/cellar/Areas/EscFramePage.lua")
 local CodePkuSystemSettingsPage = NPL.load("(gl)Mod/CodePku/cellar/Areas/SystemSettingsPage.lua")
+local AntiStuckPage = NPL.load("(gl)Mod/CodePku/cellar/GUI/AntiStuck.lua")
 			
 local DownloadWorld = commonlib.gettable("MyCompany.Aries.Game.MainLogin.DownloadWorld")
 
@@ -283,6 +284,14 @@ function CodePku:init()
 				messageBoxButton = _guihelper.MessageBoxButtons.OKCancel
 			}
 			return dialog
+		end
+	)
+
+	GameLogic.GetFilters().add_filter(
+		"AntiStuckPage:AntiStuck",
+		function (bShow)
+			AntiStuckPage:ShowPage(bShow)
+			return true
 		end
 	)
 
