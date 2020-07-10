@@ -34,6 +34,7 @@ NPL.load("(gl)script/apps/Aries/Creator/Game/Network/NetworkMain.lua")
 NPL.load("(gl)script/ide/System/Encoding/guid.lua")
 NPL.load("(gl)script/apps/Aries/Creator/Game/Login/ParaWorldLessons.lua")
 NPL.load("(gl)script/ide/System/Encoding/jwt.lua")
+NPL.load("(gl)Mod/CodePku/Online/main.lua");
 
 local Store = NPL.load("(gl)Mod/CodePku/store/Store.lua")
 local MsgBox = NPL.load("(gl)Mod/CodePku/cellar/Common/MsgBox/MsgBox.lua")
@@ -301,7 +302,10 @@ function CodePku:init()
 	local guiHelperDefaultTemplate = "Mod/CodePku/cellar/GUI/DefaultMessageBox.html"
 	_guihelper.SetDefaultMsgBoxMCMLTemplate(guiHelperDefaultTemplate)
 	-- prevent indulage
-	PreventIndulge:Init()		
+	PreventIndulge:Init()
+
+	local Online = commonlib.gettable("Mod.CodePku.Online");
+	Online:Init();
 end
 
 function CodePku:OnLogin()
@@ -309,6 +313,24 @@ end
 -- called when a new world is loaded. 
 
 function CodePku:OnWorldLoad()
+	local HttpRequest = NPL.load("(gl)Mod/CodePku/service/HttpRequest.lua")
+	echo("************");
+
+	HttpRequest:Post("https://game.dev.codepku.com/api/game/learn-records/", {
+		testarr = {
+			x = 1,
+			y = 2,
+			z = 6
+		}
+	}, {
+		Authorization = "bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczpcL1wvZ2FtZS5kZXYuY29kZXBrdS5jb21cL2FwaVwvZ2FtZVwvdXNlcnNcL2F1dGhvcml6YXRpb25zIiwiaWF0IjoxNTk0Mjk0NTg0LCJleHAiOjE1OTQ2NTQ1ODQsIm5iZiI6MTU5NDI5NDU4NCwianRpIjoiZmdKVndXeGlBRWFaQ3Z6cCIsInN1YiI6NCwicHJ2IjoiYzQ4MDZiNDZmZDVmYWE4N2VkYzhjNmVlZmMzOWIwMWFiOTBlZDMxOSJ9.7-bDRrpyHOLnFQRH_tK1NByj4X2XeQUs_vuJoTl8D2s"
+	}, function (response)
+		echo("************222");
+		echo(response);
+	end, function (response)
+		echo("************333");
+		echo(response);
+	end)
 	UserConsole:ClosePage()
 end
 -- called when a world is unloaded. 
