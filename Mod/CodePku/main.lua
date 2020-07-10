@@ -301,12 +301,14 @@ function CodePku:init()
 		end
 	)
 
-	-- GameLogic.GetFilters():add_filter(
-	-- 	"WorldName.ResetWindowTitle",
-	-- 	function (title)
-	-- 		return title
-	-- 	end
-	-- )
+	GameLogic.GetFilters():add_filter(
+		"WorldName.ResetWindowTitle",
+		function (title, windowTitle)
+			echo("WorldName.ResetWindowTitle")
+			
+			return windowTitle
+		end
+	)
 
 
 	-- 重写加载世界页面
