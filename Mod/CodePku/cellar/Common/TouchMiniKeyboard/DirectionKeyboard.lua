@@ -218,23 +218,27 @@ function DirectionKeyboard:handleTouch(touch)
         end
     elseif touch.type == "WM_POINTERUPDATE" then
         local keydownBtn = touchSession:GetField("keydownBtn");
-        keydownBtn.isDragged = true;
 
-        if button and button ~= keydownBtn then
-            if keydownBtn.isPressed then
-                self:updateButtonState(keydownBtn, false);
+        if keydownBtn then
+            keydownBtn.isDragged = true;
+
+            if button and button ~= keydownBtn then
+                if keydownBtn.isPressed then
+                    self:updateButtonState(keydownBtn, false);
+                end
+
+                touchSession:SetField("keydownBtn", button);
+                self:updateButtonState(button, true);
             end
-
-            touchSession:SetField("keydownBtn", button);
-            self:updateButtonState(button, true);
+        else
+            if button then
+                touchSession:SetField("keydownBtn", button);
+                self:updateButtonState(button, true);
+            end
         end
-        --    else
-        --        if button then
-        --            touchSession:SetField("keydownBtn", button);
-        --            self:updateButtonState(button, true);
-        --        end
     end
 end
+
 
 --获取当前坐标的按钮对象
 function DirectionKeyboard:getButtonItem(x, y)
