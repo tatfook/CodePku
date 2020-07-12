@@ -8,7 +8,8 @@ use the lib:
 local UserConsole = NPL.load("(gl)Mod/CodePku/cellar/UserConsole/Main.lua")
 ------------------------------------------------------------
 ]]
-
+NPL.load("(gl)script/apps/Aries/Creator/WorldCommon.lua");
+local WorldCommon = commonlib.gettable("MyCompany.Aries.Creator.WorldCommon")
 local InternetLoadWorld = commonlib.gettable("MyCompany.Aries.Creator.Game.Login.InternetLoadWorld")
 local RemoteWorld = commonlib.gettable("MyCompany.Aries.Creator.Game.Login.RemoteWorld")
 local DownloadWorld = commonlib.gettable("MyCompany.Aries.Game.MainLogin.DownloadWorld")
@@ -72,6 +73,7 @@ function UserConsole:CourseEntry()
         GeneralGameClientClass:LoadWorld({
             worldId = response.data.keepwork_project_id,
             url = response.data.world,
+            courewares = response.data
         });
         -- local url = response and response.data and response.data.world
         -- echo(url)
@@ -144,7 +146,7 @@ function UserConsole:HandleWorldId(pid)
 
     pid = tonumber(pid)
 
-    local function LoadWorld(world, refreshMode)
+    local function LoadWorld(world, refreshMode,courewares)
         if world then
             if refreshMode == 'never' then
                 if not LocalService:IsFileExistInZip(world:GetLocalFileName(), ":worldconfig.txt") then
@@ -162,6 +164,9 @@ function UserConsole:HandleWorldId(pid)
                             nil,
                             refreshMode or "auto",
                             function(bSucceed, localWorldPath)
+                                WorldCommon.LoadWorldTag(localWorldPath)                                    
+                                WorldCommon.SetWorldTag("courewares",courewares);
+                
                                 DownloadWorld.Close()
                             end
                         )
@@ -191,7 +196,10 @@ function UserConsole:HandleWorldId(pid)
             GameLogic.AddBBS(nil, L"获取入口世界失败", 3000, "255 0 0", 21)
             return false
         end
+
+        WorldCommon.SetWorldTag("courewares",response.data);
+
         local world = RemoteWorld.LoadFromHref(url, "self")
-        LoadWorld(world, 'auto')    
+        LoadWorld(world, 'auto',response.data)    
     end)
 end

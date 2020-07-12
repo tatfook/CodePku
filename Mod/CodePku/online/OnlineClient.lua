@@ -23,6 +23,9 @@ local Common = commonlib.gettable("Mod.GeneralGameServerMod.Core.Common.Common")
 local Log = commonlib.gettable("Mod.GeneralGameServerMod.Core.Common.Log");
 local Connection = commonlib.gettable("Mod.GeneralGameServerMod.Core.Common.Connection");
 
+NPL.load("(gl)script/apps/Aries/Creator/WorldCommon.lua");
+local WorldCommon = commonlib.gettable("MyCompany.Aries.Creator.WorldCommon")
+
 local Config = NPL.load("(gl)Mod/CodePku/Online/Config.lua");
 
 local GeneralGameWorld = commonlib.gettable("Mod.GeneralGameServerMod.Core.Client.GeneralGameWorld");
@@ -125,7 +128,9 @@ function OnlineClient:LoadWorld(options)
                                     nil,
                                     refreshMode or "auto",
                                     function(bSucceed, localWorldPath)
-                                        echo({localWorldPath = localWorldPath})
+                                        WorldCommon.LoadWorldTag(localWorldPath)                                    
+                                        WorldCommon.SetWorldTag("courewares",options.courewares);
+
                                         DownloadWorld.Close()
                                     end
                                 )
