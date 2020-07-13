@@ -70,10 +70,10 @@ function UserConsole:CourseEntry()
 
         local GeneralGameServerMod = commonlib.gettable("Mod.GeneralGameServerMod");
         local GeneralGameClientClass = GeneralGameServerMod:GetClientClass("CodePku");
+        commonlib.setfield("System.Codepku.Coursewares", response.data);
         GeneralGameClientClass:LoadWorld({
             worldId = response.data.keepwork_project_id,
-            url = response.data.world,
-            courewares = response.data
+            url = response.data.world
         });
         -- local url = response and response.data and response.data.world
         -- echo(url)
@@ -146,7 +146,7 @@ function UserConsole:HandleWorldId(pid)
 
     pid = tonumber(pid)
 
-    local function LoadWorld(world, refreshMode,courewares)
+    local function LoadWorld(world, refreshMode)
         if world then
             if refreshMode == 'never' then
                 if not LocalService:IsFileExistInZip(world:GetLocalFileName(), ":worldconfig.txt") then
@@ -163,10 +163,7 @@ function UserConsole:HandleWorldId(pid)
                             world,
                             nil,
                             refreshMode or "auto",
-                            function(bSucceed, localWorldPath)
-                                WorldCommon.LoadWorldTag(localWorldPath)                                    
-                                WorldCommon.SetWorldTag("courewares",courewares);
-                
+                            function(bSucceed, localWorldPath)          
                                 DownloadWorld.Close()
                             end
                         )
@@ -197,9 +194,9 @@ function UserConsole:HandleWorldId(pid)
             return false
         end
 
-        WorldCommon.SetWorldTag("courewares",response.data);
-
         local world = RemoteWorld.LoadFromHref(url, "self")
-        LoadWorld(world, 'auto',response.data)    
+        commonlib.setfield("System.Codepku.Coursewares", response.data);
+
+        LoadWorld(world, 'auto')    
     end)
 end

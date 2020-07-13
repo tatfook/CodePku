@@ -128,9 +128,6 @@ function OnlineClient:LoadWorld(options)
                                     nil,
                                     refreshMode or "auto",
                                     function(bSucceed, localWorldPath)
-                                        WorldCommon.LoadWorldTag(localWorldPath)                                    
-                                        WorldCommon.SetWorldTag("courewares",options.courewares);
-
                                         DownloadWorld.Close()
                                     end
                                 )
