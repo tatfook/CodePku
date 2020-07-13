@@ -303,6 +303,14 @@ function CodePku:init()
 		end
 	)
 
+	-- 主界面ui按钮
+	GameLogic.GetFilters():add_filter(
+		"MainUIButtons",
+		function()
+			local MainUIButtons = NPL.load("(gl)Mod/CodePku/cellar/Common/TouchMiniButtons/Main.lua");
+			return MainUIButtons;
+		end
+	)
 
 	-- 重写加载世界页面
 	Map3DSystem.App.MiniGames.SwfLoadingBarPage.url = "Mod/CodePKu/cellar/World/SwfLoadingBarPage.mc.html"
