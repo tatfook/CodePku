@@ -44,16 +44,31 @@ end
     <div style = '<%=format("position: relative;width:1920;height:%s;", (1080-size)/2)%>' onclick="CloseInteract"></div>
     <div style = '<%=format("position: relative;width:%s;height:%s;top:%s;", (1920-size)/2,size,(1080-size)/2)%>' onclick="CloseInteract"></div>
     <div style = '<%=format("position: relative;background:url(codepku/image/textures/mainuibuttons/interact/roulette.png);width:%s;height:%s;top:%s;left:%s;", size,size,(1080-size)/2, (1920-size)/2)%>'>
-        <input type="button" style="position:relative; width:100;height:100;margin-left:150;margin-top:5;background:url(codepku/image/textures/mainuibuttons/interact/see_info.png);" onclick="ClickSeeInfo" />
+        <div style="position:relative; width:100;height:100;margin-left:150;margin-top:5;">
+            <input type="button" style="width:70;height:70;margin-left:15;background:url(codepku/image/textures/mainuibuttons/interact/see_info.png);" onclick="ClickSeeInfo" />
+            <div style="width:100;height:20;text-align: center;font-size: 22px;base-font-size: 22px;">查看信息</div>
+        </div>
+        
         <pe:if condition='<%= not is_friend%>'>
-        <input type="button" style="position:relative; width:100;height:100;margin-left:5;margin-top:150;background:url(codepku/image/textures/mainuibuttons/interact/add_friend.png);" onclick="ClickAddFriend" />
+            <div style="position:relative; width:100;height:100;margin-left:5;margin-top:150;">
+                <input type="button" style="width:70;height:70;margin-left:15;background:url(codepku/image/textures/mainuibuttons/interact/add_friend.png);" onclick="ClickAddFriend" />
+                <div style="width:100;height:20;text-align: center;font-size: 22px;base-font-size: 22px;">添加好友</div>
+            </div>
         </pe:if>
         <pe:if condition='<%=is_friend%>'>
-        <input type="button" style="position:relative; width:100;height:100;margin-left:5;margin-top:150;background:url(codepku/image/textures/mainuibuttons/interact/del_friend.png);" onclick="ClickDelFriend" />
+            <div style="position:relative; width:100;height:100;margin-left:5;margin-top:150;">
+                <input type="button" style="width:70;height:70;margin-left:15;background:url(codepku/image/textures/mainuibuttons/interact/del_friend.png);" onclick="ClickDelFriend" />
+                <div style="width:100;height:20;text-align: center;font-size: 22px;base-font-size: 22px;">删除好友</div>
+            </div>
         </pe:if>
-
-        <input type="button" style="position:relative; width:100;height:100;margin-left:295;margin-top:150;background:url(codepku/image/textures/mainuibuttons/interact/chat.png);" onclick="ClickChat" />
-        <input type="button" style="position:relative; width:100;height:100;margin-left:150;margin-top:295;background:url(codepku/image/textures/mainuibuttons/interact/email.png);" onclick="ClickEmail" />
+        <div style="position:relative; width:100;height:100;margin-left:295;margin-top:150;">
+            <input type="button" style="width:70;height:70;margin-left:15;background:url(codepku/image/textures/mainuibuttons/interact/chat.png);" onclick="ClickChat" />
+            <div style="width:100;height:20;text-align: center;font-size: 22px;base-font-size: 22px;">私聊</div>
+        </div>
+        <div style="position:relative; width:100;height:100;margin-left:150;margin-top:295;">
+            <input type="button" style="width:70;height:70;margin-left:15;background:url(codepku/image/textures/mainuibuttons/interact/email.png);" onclick="ClickEmail" />
+            <div style="width:100;height:20;text-align: center;font-size: 22px;base-font-size: 22px;">邮件</div>
+        </div>
 
         <div style="position:relative; width:100;height:100;left:150;top:120;background:url(codepku/image/textures/mainuibuttons/interact/head.png);"></div>
         <div style="position:relative; width:180;height:120;left:110;top:230;font-size: 22px;base-font-size:22px;text-align:center;"><%=name%></div>
