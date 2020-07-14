@@ -33,7 +33,7 @@ function SharePage:ShowPage(bShow)
         enable_esc_key = true,
         bShow = bShow,
         click_through = false, 
-        zorder = -1,
+        zorder = 20,
         app_key = MyCompany.Aries.Creator.Game.Desktop.App.app_key, 
         directPosition = true,
         align = "_ct",

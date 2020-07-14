@@ -17,7 +17,7 @@ function MainUIButtons.show_common_ui()
 		isShowTitleBar = false,
 		DestroyOnClose = true, -- prevent many ViewProfile pages staying in memory
 		style = CommonCtrl.WindowFrame.ContainerStyle,
-		zorder = 1,
+		zorder = 10,
         allowDrag = false,
         click_through = false,
 		directPosition = true,
@@ -41,7 +41,7 @@ function MainUIButtons.show_function_ui()
 		isShowTitleBar = false,
 		DestroyOnClose = true, -- prevent many ViewProfile pages staying in memory
 		style = CommonCtrl.WindowFrame.ContainerStyle,
-		zorder = 1,
+		zorder = 10,
         allowDrag = false,
         -- click_through = false,
 		directPosition = true,
@@ -61,7 +61,7 @@ function MainUIButtons.show_dialog_ui()
 		isShowTitleBar = false,
 		DestroyOnClose = true, -- prevent many ViewProfile pages staying in memory
 		style = CommonCtrl.WindowFrame.ContainerStyle,
-		zorder = 1,
+		zorder = 10,
         allowDrag = false,
 		-- click_through = false,
 		directPosition = true,
@@ -115,7 +115,7 @@ function MainUIButtons.show_interact_ui(obj)
 		isShowTitleBar = false,
 		DestroyOnClose = true, -- prevent many ViewProfile pages staying in memory
 		style = CommonCtrl.WindowFrame.ContainerStyle,
-		zorder = 1,
+		zorder = 10,
         allowDrag = false,
 		click_through = false,
 		directPosition = true,
