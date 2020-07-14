@@ -9,7 +9,9 @@
     <pe:mcml>
 <script refresh="false" type="text/npl" src="UserInfo.lua"><![CDATA[
 NPL.load("(gl)script/apps/Aries.Creator.Game.Desktop.UserInfo.lua");
+NPL.load("(gl)script/apps/Aries.Creator.Game.Desktop.Share.lua");
 UserInfo = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.UserInfoPage")
+SharePage = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.SharePage")
 xueshidian = 123456
 fensi = 123456
 dianzan = 123456
@@ -21,6 +23,8 @@ user_options_list ={}
 user_options_list[1] = {{index =1,url ='shouye1'},{index =2,url ='shuxing'},{index =3,url ='juese'},{index =4,url ='waiguan'},{index =5,url ='beibao'},{index =6,url ='chengjiu'},{index =7,url ='dongtai'}}
 user_options_list[5] = {{index =1,url ='quanbu1'},{index =2,url ='daoju'},{index =3,url ='libao'},{index =4,url ='cailiao'},{index =5,url ='lantu'}}
 
+
+SharePage.OnInit();
 UserInfo.OnInit();
 function ClosePage()
     Page:CloseWindow();
@@ -62,6 +66,10 @@ function OnClickButton(name,mcmlNode)
         echo('aaa')
         OnClose();
     end
+end
+
+function SharePageFunc()
+    SharePage:ShowPage()
 end
 
 
@@ -133,7 +141,7 @@ end
             <div style="position:relative;width:611;height:735;margin-top:300;margin-left:324;font-size:18;base-font-size:40;background:url(codepku/image/textures/mainuibuttons/touxiangbeijing.png)">
                 <div style="position:relative;width:611;height:735;text-align:center;font-size:18;base-font-size:40;background:url(codepku/image/textures/mainuibuttons/wanjiatouxiang.png)"></div>
                 <div style="position:relative;width:50;height:50;margin-left:500;margin-top:550;background:url(codepku/image/textures/mainuibuttons/shuru.png);"onclick="ClosePage"></div>
-                <div style="position:relative;width:50;height:50;margin-left:500;margin-top:620;background:url(codepku/image/textures/mainuibuttons/fenxiang.png);"onclick="ClosePage"></div>
+                <div style="position:relative;width:50;height:50;margin-left:500;margin-top:620;background:url(codepku/image/textures/mainuibuttons/fenxiang.png);"onclick="SharePageFunc"></div>
             </div>
             <div style="position:relative;width:739;height:734;margin-left:1030;margin-top:300;background:url(codepku/image/textures/mainuibuttons/jiayuanbeijing.png);">
                 <div style="position:relative;width:670;height:410;margin-left:36;margin-top:30;background:url(codepku/image/textures/mainuibuttons/jiayuan.png);"></div>
