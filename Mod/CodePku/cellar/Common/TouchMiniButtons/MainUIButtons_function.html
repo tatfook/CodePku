@@ -25,6 +25,14 @@ function ClickFunctionButton()
     Page:Refresh(0)
 end
 
+NPL.load("(gl)script/apps/Aries.Creator.Game.Desktop.UserInfo.lua");
+UserInfoPage = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.UserInfoPage")
+UserInfoPage.OnInit()
+
+function ClickUserInfo()
+    UserInfoPage:ShowPage()
+end
+
 
 ]]></script>
 <style type="text/mcss">
@@ -33,7 +41,7 @@ end
 <pe:container alignment="_rb" width="720" height="100" style="border:none;background:none;">
     <pe:if condition='<%= is_open %>'>
         <div style="position:relative;left:0;width:90; height:90; background: url(codepku/image/textures/mainuibuttons/function/close_button.png);" onclick="ClickClose"></div>
-        <div style="position:relative;left:90;width:90; height:90; background: url(codepku/image/textures/mainuibuttons/function/user_info.png);" onclick="ClickFunctionButton"></div>
+        <div style="position:relative;left:90;width:90; height:90; background: url(codepku/image/textures/mainuibuttons/function/user_info.png);" onclick="ClickUserInfo"></div>
         <div style="position:relative;left:180;width:90; height:90; background: url(codepku/image/textures/mainuibuttons/function/bag.png);" onclick="ClickFunctionButton"></div>
         <div style="position:relative;left:270;width:90; height:90; background: url(codepku/image/textures/mainuibuttons/function/friends.png);" onclick="ClickFunctionButton"></div>
         <div style="position:relative;left:360;width:90; height:90; background: url(codepku/image/textures/mainuibuttons/function/rank.png);" onclick="ClickFunctionButton"></div>
