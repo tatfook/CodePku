@@ -51,6 +51,8 @@ local MainEntrencePage = NPL.load("(gl)Mod/CodePku/cellar/GUI/FastEntrence/MainE
 local SystemEntrence = NPL.load("(gl)Mod/CodePku/cellar/GUI/FastEntrence/SystemEntrence.lua")
 local CompeteEntrence = NPL.load("(gl)Mod/CodePku/cellar/GUI/FastEntrence/CompeteEntrence.lua")
 local TopicEntrence = NPL.load("(gl)Mod/CodePku/cellar/GUI/FastEntrence/TopicEntrence.lua")
+local UserInfoPage = NPL.load("(gl)Mod/CodePku/cellar/GUI/UserInfo.lua")
+local SharePage = NPL.load("(gl)Mod/CodePku/cellar/GUI/Share.lua")
 
 			
 local DownloadWorld = commonlib.gettable("MyCompany.Aries.Game.MainLogin.DownloadWorld")
@@ -178,13 +180,6 @@ function CodePku:init()
 	)
 
 	GameLogic.GetFilters():add_filter(
-		"desktop_menu",
-		function (menuItems) 
-			return {}
-		end
-	)
-
-	GameLogic.GetFilters():add_filter(
 		"download_remote_world_show_bbs", 
 		function ()
 			return false
@@ -298,6 +293,35 @@ function CodePku:init()
 		function (bShow)
 			AntiStuckPage:ShowPage(bShow)
 			return true
+	GameLogic.GetFilters():add_filter(
+		"GameName",
+		function ()
+			return L"玩学世界"
+		end
+	)
+
+	GameLogic.GetFilters():add_filter(
+		"GameDescription",
+		function ()
+			return L"3D沉浸式游戏化教育平台"
+		end
+	)
+
+	GameLogic.GetFilters():add_filter(
+		"WorldName.ResetWindowTitle",
+		function (title, windowTitle)
+			echo("WorldName.ResetWindowTitle")
+			
+			return windowTitle
+		end
+	)
+
+	-- 主界面ui按钮
+	GameLogic.GetFilters():add_filter(
+		"MainUIButtons",
+		function()
+			local MainUIButtons = NPL.load("(gl)Mod/CodePku/cellar/Common/TouchMiniButtons/Main.lua");
+			return MainUIButtons;
 		end
 	)
 

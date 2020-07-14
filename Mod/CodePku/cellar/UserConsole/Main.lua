@@ -8,7 +8,8 @@ use the lib:
 local UserConsole = NPL.load("(gl)Mod/CodePku/cellar/UserConsole/Main.lua")
 ------------------------------------------------------------
 ]]
-
+NPL.load("(gl)script/apps/Aries/Creator/WorldCommon.lua");
+local WorldCommon = commonlib.gettable("MyCompany.Aries.Creator.WorldCommon")
 local InternetLoadWorld = commonlib.gettable("MyCompany.Aries.Creator.Game.Login.InternetLoadWorld")
 local RemoteWorld = commonlib.gettable("MyCompany.Aries.Creator.Game.Login.RemoteWorld")
 local DownloadWorld = commonlib.gettable("MyCompany.Aries.Game.MainLogin.DownloadWorld")
@@ -69,9 +70,10 @@ function UserConsole:CourseEntry()
 
         local GeneralGameServerMod = commonlib.gettable("Mod.GeneralGameServerMod");
         local GeneralGameClientClass = GeneralGameServerMod:GetClientClass("CodePku");
+        commonlib.setfield("System.Codepku.Coursewares", response.data);
         GeneralGameClientClass:LoadWorld({
             worldId = response.data.keepwork_project_id,
-            url = response.data.world,
+            url = response.data.world
         });
         -- local url = response and response.data and response.data.world
         -- echo(url)
@@ -161,7 +163,7 @@ function UserConsole:HandleWorldId(pid)
                             world,
                             nil,
                             refreshMode or "auto",
-                            function(bSucceed, localWorldPath)
+                            function(bSucceed, localWorldPath)          
                                 DownloadWorld.Close()
                             end
                         )
@@ -191,7 +193,10 @@ function UserConsole:HandleWorldId(pid)
             GameLogic.AddBBS(nil, L"获取入口世界失败", 3000, "255 0 0", 21)
             return false
         end
+
         local world = RemoteWorld.LoadFromHref(url, "self")
+        commonlib.setfield("System.Codepku.Coursewares", response.data);
+
         LoadWorld(world, 'auto')    
     end)
 end

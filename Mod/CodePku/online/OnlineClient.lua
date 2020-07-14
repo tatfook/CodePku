@@ -19,9 +19,13 @@ NPL.load("Mod/GeneralGameServerMod/Core/Client/EntityOtherPlayer.lua");
 local NetClientHandler = commonlib.gettable("Mod.GeneralGameServerMod.Core.Client.NetClientHandler");
 local EntityMainPlayer = commonlib.gettable("Mod.GeneralGameServerMod.Core.Client.EntityMainPlayer");
 local EntityOtherPlayer = commonlib.gettable("Mod.GeneralGameServerMod.Core.Client.EntityOtherPlayer");
+local EntityMob = commonlib.gettable("MyCompany.Aries.Game.EntityManager.EntityMob")  -- for npc
 local Common = commonlib.gettable("Mod.GeneralGameServerMod.Core.Common.Common");
 local Log = commonlib.gettable("Mod.GeneralGameServerMod.Core.Common.Log");
 local Connection = commonlib.gettable("Mod.GeneralGameServerMod.Core.Common.Connection");
+
+NPL.load("(gl)script/apps/Aries/Creator/WorldCommon.lua");
+local WorldCommon = commonlib.gettable("MyCompany.Aries.Creator.WorldCommon")
 
 local Config = NPL.load("(gl)Mod/CodePku/Online/Config.lua");
 
@@ -125,7 +129,6 @@ function OnlineClient:LoadWorld(options)
                                     nil,
                                     refreshMode or "auto",
                                     function(bSucceed, localWorldPath)
-                                        echo({localWorldPath = localWorldPath})
                                         DownloadWorld.Close()
                                     end
                                 )
@@ -211,6 +214,67 @@ end
 -- 获取当前系统世界信息
 function OnlineClient:GetWorldInfo()
     -- return {};
+end
+
+
+-- 名称颜色： 队友 (蓝色), 好友 (绿色), 其他角色(白色), NPC(橙色)		
+MyHeadOnTextColor = "255 255 255"			
+TeamHeadOnTextColor = "0 0 255"
+FriendHeadOnTextColor = "0 128 0" 
+OtherHeadOnTextColor = "255 255 255"
+NPCHeadOnTextColor = "255 165 0"
+
+RandomHeadOnTextColors = {TeamHeadOnTextColor, FriendHeadOnTextColor, OtherHeadOnTextColor}
+
+-- 设置联机情况下不同玩家颜色 -- 该方法暂未生效，预留给后面切换颜色使用
+function EntityMainPlayer:ShowHeadOnDisplay(bShow)
+    local obj = self:GetInnerObject();
+	System.ShowHeadOnDisplay(true, obj, self:GetDisplayName(), MyHeadOnTextColor);	
+    return obj;
+end
+
+
+function EntityOtherPlayer:ShowHeadOnDisplay(bShow)
+    local obj = self:GetInnerObject();
+    objColor = RandomHeadOnTextColors[math.random(#RandomHeadOnTextColors)]
+	System.ShowHeadOnDisplay(true, obj, self:GetDisplayName(), objColor);	
+    return obj;
+end
+
+
+function EntityMob:ShowHeadOnDisplay(bShow)
+    local obj = self:GetInnerObject();
+	System.ShowHeadOnDisplay(true, obj, self:GetDisplayName(), NPCHeadOnTextColor);	
+    return obj;
+end
+
+
+-- 设置联机情况下不同玩家颜色 -- 进入界面时生效
+function EntityMainPlayer:CreateInnerObject(...)
+	local obj = EntityMainPlayer._super.CreateInnerObject(self, self:GetMainAssetPath(), true, 0, 1);
+
+	if(self:IsShowHeadOnDisplay() and System.ShowHeadOnDisplay) then
+		System.ShowHeadOnDisplay(true, obj, self:GetDisplayName(), MyHeadOnTextColor);	
+	end
+	return obj;
+end
+
+
+function EntityOtherPlayer:CreateInnerObject(...)
+	local obj = EntityOtherPlayer._super.CreateInnerObject(self, self:GetMainAssetPath(), true, 0, 1);
+
+    objColor = RandomHeadOnTextColors[math.random(#RandomHeadOnTextColors)]
+
+	if(self:IsShowHeadOnDisplay() and System.ShowHeadOnDisplay) then
+		System.ShowHeadOnDisplay(true, obj, self:GetDisplayName(), objColor);	
+	end
+	return obj;
+end
+
+function EntityOtherPlayer:OnClick(x, y, z, mouse_button)
+    local MainUIButtons = NPL.load("(gl)Mod/CodePku/cellar/Common/TouchMiniButtons/Main.lua");
+	MainUIButtons.show_interact_ui(self)
+    
 end
 
 

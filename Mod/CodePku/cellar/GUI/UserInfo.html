@@ -1,0 +1,175 @@
+<!-- "script/apps/Aries/Creator/Game/Areas/EscFramePage.html" -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+</head>
+<body>
+    <pe:mcml>
+<script refresh="false" type="text/npl" src="UserInfo.lua"><![CDATA[
+NPL.load("(gl)script/apps/Aries.Creator.Game.Desktop.UserInfo.lua");
+NPL.load("(gl)script/apps/Aries.Creator.Game.Desktop.Share.lua");
+UserInfo = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.UserInfoPage")
+SharePage = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.SharePage")
+xueshidian = 123456
+fensi = 123456
+dianzan = 123456
+name = '名字最长七个字'
+user_id = '玩学号: 123456798'
+choose_index = 1
+choose_index5 = 1
+user_options_list ={}
+user_options_list[1] = {{index =1,url ='shouye1'},{index =2,url ='shuxing'},{index =3,url ='juese'},{index =4,url ='waiguan'},{index =5,url ='beibao'},{index =6,url ='chengjiu'},{index =7,url ='dongtai'}}
+user_options_list[5] = {{index =1,url ='quanbu1'},{index =2,url ='daoju'},{index =3,url ='libao'},{index =4,url ='cailiao'},{index =5,url ='lantu'}}
+
+
+SharePage.OnInit();
+UserInfo.OnInit();
+function ClosePage()
+    Page:CloseWindow();
+end
+
+
+function OnConfirm()
+    GameLogic.RunCommand("/goto,home")
+end
+
+function OnLeave()
+    Page:CloseWindow();
+end
+
+function OnClose()
+    ClosePage()
+end
+
+function Choose(index)
+    user_options = user_options_list[1]
+    user_options[choose_index].url =string.sub(user_options[choose_index].url ,1,string.len(user_options[choose_index].url)-1)
+    choose_index =index
+    user_options[choose_index].url = user_options[choose_index].url..1
+    Page:Refresh(0);
+end
+function Choose5(index)
+    user_options = user_options_list[5]
+    user_options[choose_index5].url =string.sub(user_options[choose_index5].url ,1,string.len(user_options[choose_index5].url)-1)
+    choose_index5 =index
+    user_options[choose_index5].url = user_options[choose_index5].url..1
+    Page:Refresh(0);
+end
+
+function OnClickButton(name,mcmlNode)
+    ClosePage();
+    if(name=="confirm") then
+        OnConfirm();
+    elseif(name=="cancel") then
+        echo('aaa')
+        OnClose();
+    end
+end
+
+function SharePageFunc()
+    SharePage:ShowPage()
+end
+
+
+]]>   
+</script>
+<style type="text/mcss">
+{
+    green_button = {
+        color = "#ffffff",
+        textcolor = "#ffffff",
+        width = 100,
+        height = 61,
+        ["font-size"] = 30,
+        ["base-font-size"] = 30,
+        border = "none",
+        ["font-weight"] = "bold",
+        ["font-family"] = "Microsoft Yahei",
+        background = "codepku/image/textures/mainuibuttons/info_title/user_center.png",
+        ["margin-top"] = 24,
+        ["margin-left"] = 120,
+    },
+    
+    /* title_class = {
+        color = "#000000",
+        ["font-size"] = 30,
+        padding = 20,
+        ["base-font-size"] = 30,
+        ["font-weight"] = "bold",
+        
+    } */
+}
+</style>
+<!-- <aries:window
+    mode="center"
+    width="800"
+    height="650"
+    title='<%=L"首页"%>'
+    title_height="60"
+    onclose= "ClosePage"
+    close_height="40"
+    style="showline: false;"
+> -->
+
+<pe:container alignment="_lt" >
+    <div style="width:1920;height:1080;background:url(codepku/image/textures/mainuibuttons/user_info_back.png);" >
+        <div style="position:relative;width:160;height:43;margin-left:960;margin-top:16;background:url(codepku/image/textures/mainuibuttons/info_title/user_center.png);"onclick="ClosePage"></div>
+        <div style="position:relative;width:45;height:50;margin-left:1815;margin-top:16;background:url(codepku/image/textures/mainuibuttons/info_title/cancel.png);"onclick="ClosePage"></div>
+        <div style="position:relative;width:45;height:50;margin-left:86;margin-top:16;background:url(codepku/image/textures/mainuibuttons/info_title/help.png);"onclick="ClosePage"></div>
+        <div style = "position:relative;margin-top:100">
+            <pe:repeat  DataSource="<%=user_options_list[1]%>">
+                    <pe:repeatitem>
+                        <div name='<%= Eval("index")%>' style='<%=format("width:275;height:97;text-align:center;margin-top:20;font-size:18;base-font-size:40;background:url(codepku/image/textures/mainuibuttons/options/%s.png)",Eval("url"))%>' onclick="Choose"></div>
+                    </pe:repeatitem>
+            </pe:repeat>
+        </div>
+        <div style="position:relative;width:275;height:97;margin-top:960;font-size:18;base-font-size:40;background:url(codepku/image/textures/mainuibuttons/options/shezhi.png)"></div>
+        <pe:if condition='<%=choose_index == 1%>'>
+            <!-- 首页 -->
+            <div style="position:relative;width:1447;height:137;margin-left:324;margin-top:140;background:url(codepku/image/textures/mainuibuttons/user_name_info/name_info.png);">
+                <div style="position:relative;width:210;text-align:left;margin-left:154;margin-top:25;font-size:25;base-font-size:25;"><%= name%></div>
+                <div style="position:relative;width:300;text-align:left;margin-left:154;margin-top:75;font-size:25;base-font-size:25;"><%= user_id%></div>
+                <div style="position:relative;width:76;height:61;margin-left:1115;margin-top:20;background:url(codepku/image/textures/mainuibuttons/user_name_info/xueshi.png);"></div>
+                <div style="position:relative;width:61;text-align:center;margin-left:1120;margin-top:75;font-size:18;base-font-size:18;"><%= xueshidian%></div>
+                <div style="position:relative;width:61;height:61;margin-left:1233;margin-top:20;background:url(codepku/image/textures/mainuibuttons/user_name_info/fensi.png);"></div>
+                <div style="position:relative;width:61;text-align:center;margin-left:1233;margin-top:75;font-size:18;base-font-size:18;"><%= fensi%></div>
+                <div style="position:relative;width:61;height:61;margin-left:1350;margin-top:20;background:url(codepku/image/textures/mainuibuttons/user_name_info/dianzan.png);"></div>
+                <div style="position:relative;width:61;text-align:center;margin-left:1350;margin-top:75;font-size:18;base-font-size:18;"><%= dianzan%></div>
+            </div>
+            <div style="position:relative;width:611;height:735;margin-top:300;margin-left:324;font-size:18;base-font-size:40;background:url(codepku/image/textures/mainuibuttons/touxiangbeijing.png)">
+                <div style="position:relative;width:611;height:735;text-align:center;font-size:18;base-font-size:40;background:url(codepku/image/textures/mainuibuttons/wanjiatouxiang.png)"></div>
+                <div style="position:relative;width:50;height:50;margin-left:500;margin-top:550;background:url(codepku/image/textures/mainuibuttons/shuru.png);"onclick="ClosePage"></div>
+                <div style="position:relative;width:50;height:50;margin-left:500;margin-top:620;background:url(codepku/image/textures/mainuibuttons/fenxiang.png);"onclick="SharePageFunc"></div>
+            </div>
+            <div style="position:relative;width:739;height:734;margin-left:1030;margin-top:300;background:url(codepku/image/textures/mainuibuttons/jiayuanbeijing.png);">
+                <div style="position:relative;width:670;height:410;margin-left:36;margin-top:30;background:url(codepku/image/textures/mainuibuttons/jiayuan.png);"></div>
+                <div style="position:relative;width:380;text-align:left;margin-left:324;margin-top:450;font-size:30;base-font-size:30;"><%= '这是一个家园的名字'%></div>
+                <div style="position:relative;width:380;text-align:left;margin-left:120;margin-top:572;font-size:30;base-font-size:30;"><%= name%></div>
+                <div style="position:relative;width:380;text-align:left;margin-left:440;margin-top:572;font-size:30;base-font-size:30;"><%= name%></div>
+                <div style="position:relative;width:380;text-align:left;margin-left:120;margin-top:630;font-size:30;base-font-size:30;"><%= name%></div>
+                <div style="position:relative;width:380;text-align:left;margin-left:440;margin-top:630;font-size:30;base-font-size:30;"><%= name%></div>  
+            </div> 
+        </pe:if>
+        <pe:if condition='<%=choose_index == 5%>'>
+            <!-- 背包 -->
+            <div style="position:relative;width:1377;height:911;margin-left:300;margin-top:120;background:url(codepku/image/textures/mainuibuttons/beibaobeijing.png);">
+                <div style="position:relative;margin-left:52;margin-top:40;width:611;height:735;text-align:center;font-size:40;base-font-size:40;background:url(codepku/image/textures/mainuibuttons/wanjiatouxiang.png)"></div>
+            </div>
+            <div style = "position:relative;margin-top:100;margin-left:1700;">
+                <pe:repeat  DataSource="<%=user_options_list[5]%>">
+                        <pe:repeatitem>
+                            <div name='<%=Eval("index")%>' style='<%=format("width:145;height:85;text-align:center;margin-top:20;font-size:18;base-font-size:40;background:url(codepku/image/textures/mainuibuttons/options/%s.png)",Eval("url"))%>' onclick="Choose5"></div>
+                        </pe:repeatitem>
+                </pe:repeat>
+            </div>
+            
+        </pe:if>
+    </div>
+</pe:container>
+<!-- </aries:window> -->
+</pe:mcml>
+</body>
+</html>
+ 
