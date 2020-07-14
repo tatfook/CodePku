@@ -47,6 +47,7 @@ local CodePkuDownloadWorld = NPL.load("(gl)Mod/CodePku/cellar/World/DownloadWorl
 local CodePkuEscFramePage = NPL.load("(gl)Mod/CodePku/cellar/Areas/EscFramePage.lua")
 local CodePkuSystemSettingsPage = NPL.load("(gl)Mod/CodePku/cellar/Areas/SystemSettingsPage.lua")
 local UserInfoPage = NPL.load("(gl)Mod/CodePku/cellar/GUI/UserInfo.lua")
+local SharePage = NPL.load("(gl)Mod/CodePku/cellar/GUI/Share.lua")
 
 			
 local DownloadWorld = commonlib.gettable("MyCompany.Aries.Game.MainLogin.DownloadWorld")
