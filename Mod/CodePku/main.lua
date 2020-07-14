@@ -46,6 +46,11 @@ local UserConsole = NPL.load("(gl)Mod/CodePku/cellar/UserConsole/Main.lua")
 local CodePkuDownloadWorld = NPL.load("(gl)Mod/CodePku/cellar/World/DownloadWorld.lua")
 local CodePkuEscFramePage = NPL.load("(gl)Mod/CodePku/cellar/Areas/EscFramePage.lua")
 local CodePkuSystemSettingsPage = NPL.load("(gl)Mod/CodePku/cellar/Areas/SystemSettingsPage.lua")
+local AntiStuckPage = NPL.load("(gl)Mod/CodePku/cellar/GUI/AntiStuck.lua")
+local MainEntrencePage = NPL.load("(gl)Mod/CodePku/cellar/GUI/FastEntrence/MainEntrence.lua")
+local SystemEntrence = NPL.load("(gl)Mod/CodePku/cellar/GUI/FastEntrence/SystemEntrence.lua")
+local CompeteEntrence = NPL.load("(gl)Mod/CodePku/cellar/GUI/FastEntrence/CompeteEntrence.lua")
+local TopicEntrence = NPL.load("(gl)Mod/CodePku/cellar/GUI/FastEntrence/TopicEntrence.lua")
 local UserInfoPage = NPL.load("(gl)Mod/CodePku/cellar/GUI/UserInfo.lua")
 local SharePage = NPL.load("(gl)Mod/CodePku/cellar/GUI/Share.lua")
 
@@ -175,6 +180,13 @@ function CodePku:init()
 	)
 
 	GameLogic.GetFilters():add_filter(
+		"desktop_menu",
+		function (menuItems) 
+			return {}
+		end
+	)
+
+	GameLogic.GetFilters():add_filter(
 		"download_remote_world_show_bbs", 
 		function ()
 			return false
@@ -283,6 +295,14 @@ function CodePku:init()
 		end
 	)
 
+	GameLogic.GetFilters().add_filter(
+		"AntiStuckPage:AntiStuck",
+		function (bShow)
+			AntiStuckPage:ShowPage(bShow)
+			return true
+		end
+	)
+	
 	GameLogic.GetFilters():add_filter(
 		"GameName",
 		function ()
