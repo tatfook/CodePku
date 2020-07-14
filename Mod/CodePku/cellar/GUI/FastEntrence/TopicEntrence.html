@@ -1,0 +1,64 @@
+<!-- "script/apps/Aries/Creator/Game/Areas/EscFramePage.html" -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+</head>
+<body>
+    <pe:mcml>
+<script refresh="false" type="text/npl" src="TopicEntrence.lua"><![CDATA[
+NPL.load("(gl)script/apps/Aries/Creator/Game/World/WorldStacks.lua");
+WorldStacks = commonlib.gettable("MyCompany.Aries.Game.WorldStacks");
+NPL.load("(gl)script/apps/Aries/Creator/Game/Areas/ServerPage.lua");
+local ServerPage = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.ServerPage");
+GameLogic = commonlib.gettable("MyCompany.Aries.Game.GameLogic")
+NPL.load("(gl)script/apps/Aries.Creator.Game.Desktop.MainEntrencePage.lua");
+local env_imp = commonlib.gettable("MyCompany.Aries.Game.Code.env_imp");
+MainEntrencePage = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.MainEntrencePage");
+local TopicEntrencePage = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.TopicEntrencePage");
+MainEntrencePage.OnInit();
+
+function ClosePage()
+    Page:CloseWindow();
+end
+
+
+
+function OnClose()
+    ClosePage()
+    MainEntrencePage:ShowPage()
+end
+
+
+function OnClickSubject(name)
+
+end
+
+
+
+]]></script>
+<style type="text/mcss">
+{
+    
+}
+</style>
+
+    <div style="width:1920;height: 1080;background:url(codepku/image/textures/fastentrence/topic_board.png);">
+        <div style='width:100px;height:100px;background:url(codepku/image/textures/fastentrence/return.png);margin-left: 100px;margin-top: 20px;' onclick="OnClose"></div>
+        <div style="width:200;height:900;margin-left: 20px;margin-top:70px;">
+            <div style="background: url(codepku/image/textures/fastentrence/topic/chinese.png);width:220;height:100;margin-left:-18;margin-bottom: 30;" name='chinese' onclick="OnClickSubject"></div>
+            <div style="background: url(codepku/image/textures/fastentrence/topic/math.png);width:220;height:100;margin-left:-18;margin-bottom: 30;" name='math' onclick="OnClickSubject"></div>
+            <div style="background: url(codepku/image/textures/fastentrence/topic/english.png);width:220;height:100;margin-left:-18;margin-bottom: 30;" name='english' onclick="OnClickSubject"></div>
+            <div style="background: url(codepku/image/textures/fastentrence/topic/other.png);width:220;height:100;margin-left:-18;margin-bottom: 30;" name='other' onclick="OnClickSubject"></div>
+            <div style="background: url(codepku/image/textures/fastentrence/topic/reco.png);width:220;height:100;margin-left:-18;margin-bottom: 30;" name='reco' onclick="OnClickSubject"></div>
+            <div style="background: url(codepku/image/textures/fastentrence/topic/store.png);width:220;height:100;margin-left:-18;margin-bottom: 30;" name='store' onclick="OnClickSubject"></div>
+        </div>
+    
+    </div>
+    
+
+</pe:mcml>
+</body>
+</html>
+

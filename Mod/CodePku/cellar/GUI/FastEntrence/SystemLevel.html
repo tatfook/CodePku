@@ -1,0 +1,144 @@
+<!-- "script/apps/Aries/Creator/Game/Areas/SystemEntrencePage.html" -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+</head>
+<body>
+    <pe:mcml>
+<script refresh="false" type="text/npl" src="SystemEntrence.lua"><![CDATA[
+NPL.load("(gl)script/apps/Aries/Creator/Game/World/WorldStacks.lua");
+WorldStacks = commonlib.gettable("MyCompany.Aries.Game.WorldStacks");
+NPL.load("(gl)script/apps/Aries/Creator/Game/Areas/ServerPage.lua");
+local ServerPage = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.ServerPage");
+GameLogic = commonlib.gettable("MyCompany.Aries.Game.GameLogic")
+NPL.load("(gl)script/apps/Aries.Creator.Game.Desktop.SystemEntrencePage.lua");
+local env_imp = commonlib.gettable("MyCompany.Aries.Game.Code.env_imp");
+SystemEntrencePage = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.SystemEntrencePage");
+SystemLevelPage = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.SystemLevelPage");
+local MainEntrencePage = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.MainEntrencePage");
+local SystemEntrencePage_ChooseGrade = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.SystemEntrencePage_ChooseGrade");
+
+SystemLevelPage.OnInit();
+
+SystemLevelPage.last_clicked_index = 1
+
+SystemLevelPage.subjects = {
+    [1] = {name='推荐', title='reco_clicked', index=1, subject_id=2},
+    [2] = {name='语文', title='chinese', index=2, subject_id=1},
+    [3] = {name='数学', title='math', index=3, subject_id=2},
+    [4] = {name='英语', title='english', index=4, subject_id=3},
+    [5] = {name='其他', title='other', index=5},
+    [6] = {name='收藏', title='store', index=6},
+}
+
+
+
+function ClosePage()
+    Page:CloseWindow();
+    
+end
+
+function OnClose()
+    ClosePage()
+    SystemEntrencePage.ShowPage()
+end
+
+function GetSubjects()
+    return SystemLevelPage.subjects
+end
+
+function OnClickSubject(name)
+    SystemLevelPage.subjects[name].title = SystemLevelPage.subjects[name].title..'_clicked'
+    SystemLevelPage.subjects[SystemLevelPage.last_clicked_index].title = string.gsub(SystemLevelPage.subjects[SystemLevelPage.last_clicked_index].title, '_clicked', '')
+    SystemLevelPage.last_clicked_index = name
+    SystemLevelPage.courses = SystemLevelPage.GetLevels(SystemLevelPage.grade_id,SystemLevelPage.semester_id,SystemLevelPage.subjects[SystemLevelPage.last_clicked_index].subject_id)
+    Page:Refresh(0)
+end
+
+function GetLevels(grade_id, semester_id, subject_id)
+    response = request:get(string.format('/coursewares/entrance/system?grade=%d&semester=%d&subject=%d&', grade_id, semester_id, subject_id),nil,{sync = sync})
+    if response.code == 200 then
+        return response.data
+    end
+end
+
+function GetCourseName(course_wares)
+    return course_wares.name
+end
+
+function GetCourseCover(course_wares)
+    return course_wares.cover
+end
+
+function GetCourseWorldID(course_wares)
+    return course_wares.keepwork_project_id
+end
+
+function GetDivisible(index)
+    if index % 5 == 0 then
+        return index / 5
+    else
+        return index/5
+    end
+end
+
+
+function prev_page()
+    if SystemLevelPage~=nil then
+        if (SystemLevelPage.page > 1) then
+            SystemLevelPage.page = SystemLevelPage.page - 1
+            SystemLevelPage.courses = SystemLevelPage.GetLevels(SystemLevelPage.grade_id,SystemLevelPage.semester_id,SystemLevelPage.subjects[SystemLevelPage.last_clicked_index].subject_id)
+            Page:Refresh(0)
+        end
+    end
+end
+
+function next_page()
+    if SystemLevelPage~=nil then
+        if (SystemLevelPage.page <= SystemLevelPage.total_courses%10) then
+        SystemLevelPage.page = SystemLevelPage.page + 1
+            SystemLevelPage.courses = SystemLevelPage.GetLevels(SystemLevelPage.grade_id,SystemLevelPage.semester_id,SystemLevelPage.subjects[SystemLevelPage.last_clicked_index].subject_id)
+            Page:Refresh(0)
+        end
+    end
+end
+
+]]></script>
+<style type="text/mcss">
+{
+    
+}
+</style>
+
+    <div style="margin-top:5px;width:1920;height: 1080;background:url(codepku/image/textures/fastentrence/system_level_board.png)">
+        <div style='width:100px;height:100px;background:url(codepku/image/textures/fastentrence/return.png);margin-left: 100px;margin-top: 20px;' onclick="OnClose"></div>
+        <div style="width:200;height:900;margin-left: 20px;margin-top:70px;">
+            <pe:repeat DataSource="<%=GetSubjects()%>">
+                <pe:repeatitem>
+                    <div style="<%=format('background:url(codepku/image/textures/fastentrence/system/%s.png);width:220;height:100;margin-left:-18;margin-bottom: 30;', Eval('title'))%>" name='<%=Eval("index")%>' onclick='OnClickSubject'></div>
+                </pe:repeatitem>
+            </pe:repeat>
+        </div>
+        <div style="width:1500;height:600;margin-left: 310px;margin-top:-800px">
+            <pe:repeat DataSource="<%=SystemLevelPage.courses%>">
+                <pe:repeatitem>
+                    <div style="<%=format('position:absolute;width:300px;height:100;background:url(codepku/image/textures/fastentrence/system_level_1.png);margin-left:%d;margin-top:%d;base-font-size:28px;font-size:28px;text-align: center;', Eval('index')%5*300, GetDivisible(Eval('index'))*300-Eval('index')%5*60)%>"><div style="margin-top:35px"><%= GetCourseName(Eval('course')) %></div></div>
+                    <div style="<%=format('position:absolute;width:300px;height:200;background:url(codepku/image/textures/fastentrence/system_level_2.png);margin-left:%d;margin-top:%d;', Eval('index')%5*300, 100+GetDivisible(Eval('index'))*300-Eval('index')%5*60)%>">
+                        <div style="<%=format('width:290px;height:190;background:url(%s);', Eval('cover'))%>"></div>
+                    </div>
+                </pe:repeatitem>
+            </pe:repeat>
+        </div>
+        <div style='width:800;height:100;margin-left:600;margin-top:-150;'></div>
+            <div style='width:75;height:75;margin-left:900;margin-top:-125;background:url(codepku/image/textures/fastentrence/prev.png);' onclick="prev_page"></div>
+            <div style='base_font_size:40px;font-size:40px;margin-left: 1000;margin-top:-110;'><%=SystemLevelPage.page%></div>
+            <div style='width:75;height:75;margin-left: 1050;margin-top:-125;background:url(codepku/image/textures/fastentrence/next.png);' onclick="next_page"></div>
+        </div>
+    </div>
+
+</pe:mcml>
+</body>
+</html>
+

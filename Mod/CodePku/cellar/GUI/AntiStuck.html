@@ -24,7 +24,7 @@ end
 
 
 function OnConfirm()
-    GameLogic.RunCommand("/goto home")
+    GameLogic.RunCommand("/goto 18777 96 18637")
 end
 
 
@@ -90,7 +90,7 @@ end
     style="showline: false;"
 >
 <pe:container alignment="_ctt">
-    <div style="margin-top:5px;">
+    <div style="margin-top:5px;width:530;height: 280;">
         <div class="title_class"><%=L"此操作将离开参加的活动区域，所有奖励都会被放弃，是否要脱离卡死？"%></div>
         <input type="button" value='<%=L"确认"%>' name="confirm" class="green_button" onclick="OnClickButton"/>
         <input type="button" value='<%=L"取消"%>' name="cancel" class="green_button" onclick="OnClickButton"/>
