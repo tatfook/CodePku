@@ -62,15 +62,6 @@ function SystemLevelPage.GetLevels(grade_id, semester_id, subject_id)
             table.insert(list, l)
         end
     end
-    i = 1
-    while i <= 12 do
-        list[i] = {}
-        list[i]['cover'] = "https://scratch-works-staging-1253386414.file.myqcloud.com/game/admin/courseUnitCover/67b740316fc831ea61d3af149affac99.png"
-        list[i]['course'] = {}
-        list[i]['index'] = (i-1) % 10
-        list[i]['course']['name'] = '测试'
-        i = i + 1
-    end
     if response.data.code == 200 then
         SystemLevelPage.total_courses = #list
         return slice(list, (page-1)*10+1, page*10)
