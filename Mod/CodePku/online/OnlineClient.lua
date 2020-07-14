@@ -271,5 +271,12 @@ function EntityOtherPlayer:CreateInnerObject(...)
 	return obj;
 end
 
+function EntityOtherPlayer:OnClick(x, y, z, mouse_button)
+    local MainUIButtons = NPL.load("(gl)Mod/CodePku/cellar/Common/TouchMiniButtons/Main.lua");
+	MainUIButtons.show_interact_ui(self)
+    
+end
+
+
 -- 初始化成单列模式
 OnlineClient:InitSingleton();

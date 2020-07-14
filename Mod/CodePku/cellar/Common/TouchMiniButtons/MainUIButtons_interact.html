@@ -1,0 +1,69 @@
+<!-- "Mod/CodePku/cellar/Common/TouchMiniButtons/MainUIButtons_interact.html" -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" >
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+</head>
+
+<body>
+<pe:mcml>
+<script refresh="false" type="text/npl" src="MainUIButtons.lua"><![CDATA[
+size = 400
+is_friend = false
+name = Page:GetRequestParam("pname")
+
+function CloseInteract()
+    Page:CloseWindow();
+end
+
+function ClickSeeInfo()
+end
+
+function ClickChat()
+end
+
+function ClickEmail()
+end
+
+function ClickAddFriend()
+    is_friend = true
+    Page:Refresh(0)
+end
+
+function ClickDelFriend()
+    is_friend = false
+    Page:Refresh(0)
+end
+
+
+]]></script>
+<style type="text/mcss">
+</style>
+<pe:container alignment="_lt" width="1920" height="1080" style="background: none;">
+    <div style = '<%=format("position: relative;width:1920;height:%s;", (1080-size)/2)%>' onclick="CloseInteract"></div>
+    <div style = '<%=format("position: relative;width:%s;height:%s;top:%s;", (1920-size)/2,size,(1080-size)/2)%>' onclick="CloseInteract"></div>
+    <div style = '<%=format("position: relative;background:url(codepku/image/textures/mainuibuttons/interact/roulette.png);width:%s;height:%s;top:%s;left:%s;", size,size,(1080-size)/2, (1920-size)/2)%>'>
+        <input type="button" style="position:relative; width:100;height:100;margin-left:150;margin-top:5;background:url(codepku/image/textures/mainuibuttons/interact/see_info.png);" onclick="ClickSeeInfo" />
+        <pe:if condition='<%= not is_friend%>'>
+        <input type="button" style="position:relative; width:100;height:100;margin-left:5;margin-top:150;background:url(codepku/image/textures/mainuibuttons/interact/add_friend.png);" onclick="ClickAddFriend" />
+        </pe:if>
+        <pe:if condition='<%=is_friend%>'>
+        <input type="button" style="position:relative; width:100;height:100;margin-left:5;margin-top:150;background:url(codepku/image/textures/mainuibuttons/interact/del_friend.png);" onclick="ClickDelFriend" />
+        </pe:if>
+
+        <input type="button" style="position:relative; width:100;height:100;margin-left:295;margin-top:150;background:url(codepku/image/textures/mainuibuttons/interact/chat.png);" onclick="ClickChat" />
+        <input type="button" style="position:relative; width:100;height:100;margin-left:150;margin-top:295;background:url(codepku/image/textures/mainuibuttons/interact/email.png);" onclick="ClickEmail" />
+
+        <div style="position:relative; width:100;height:100;left:150;top:120;background:url(codepku/image/textures/mainuibuttons/interact/head.png);"></div>
+        <div style="position:relative; width:180;height:120;left:110;top:230;font-size: 22px;base-font-size:22px;text-align:center;"><%=name%></div>
+
+    </div>
+    <div style = '<%=format("position: relative;width:%s;height:%s;top:%s;left:%s;", (1920-size)/2,size,(1080-size)/2, (1920+size)/2)%>' onclick="CloseInteract"></div>
+    <div style = '<%=format("position: relative;width:1920;height:%s;top:%s;", (1080-size)/2, (1080+size)/2)%>' onclick="CloseInteract"></div>
+
+
+</pe:container>
+</pe:mcml> 
+</body>
+</html>
