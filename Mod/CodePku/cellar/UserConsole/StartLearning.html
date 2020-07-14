@@ -41,7 +41,15 @@
                         height = 42.6,
                         background = "codepku/image/textures/login/mainlogin_32bits.png# 1000 1649 620 72)",
                         ["background-color"] = '#ffffff',
-                    }
+                    },
+                    click_window = {
+                        ["position"] = "relative",
+                        width = 372,
+                        height = 42.6,
+                        background = "codepku/image/textures/login/mainlogin_32bits.png# 1000 1649 620 72)",
+                        ["margin-left"] = -186,
+                        ["margin-top"] = -21.3,
+                    },
                 }
             </style>
             <pe:container alignment="_fi" ClickThrough="true" style="position: relative;background:;">
@@ -59,9 +67,16 @@
                     <%= currentUserName() %> ，欢迎进入玩学世界
                 </pe:container>
             </pe:container>
-            <pe:container alignment="_ctt" ClickThrough="true" style="position:relative;width:372px;margin-top:247.2px;height:42.6px;background:codepku/image/textures/login/mainlogin_32bits.png# 1000 1649 620 72);">
+            <pe:if condition="<%= System.os.IsMobilePlatform() %>">
+                <pe:container alignment="_ctt" ClickThrough="true" style="position:relative;width:372px;margin-top:247.2px;height:42.6px;background:codepku/image/textures/login/mainlogin_32bits.png# 1000 1649 620 72);">
                 <!-- <input type="button" DefaultButton="true" onclick="startLearning()" class="start" value='' /> -->
-            </pe:container>
+                </pe:container>
+            </pe:if>
+            <pe:if condition="<%= not System.os.IsMobilePlatform() %>">
+                <pe:container alignment="_ct" ClickThrough="true" class="click_window">
+                <!-- <input type="button" DefaultButton="true" onclick="startLearning()" class="start" value='' /> -->
+                </pe:container>
+            </pe:if>
         </pe:mcml>
     </body>
 </html>
