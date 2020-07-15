@@ -50,3 +50,25 @@ end
 function EntityOtherPlayer:SetSuperPlayerInfo(playerInfo)
     EntityOtherPlayer._super.SetPlayerInfo(self, playerInfo);
 end
+
+TeamHeadOnTextColor = "0 0 255"
+FriendHeadOnTextColor = "0 128 0" 
+OtherHeadOnTextColor = "255 255 255"
+length_limit = 7
+RandomHeadOnTextColors = {TeamHeadOnTextColor, FriendHeadOnTextColor, OtherHeadOnTextColor}
+
+function EntityOtherPlayer:CreateInnerObject(...)
+	local obj = EntityOtherPlayer._super.CreateInnerObject(self, self:GetMainAssetPath(), true, 0, 1);
+
+    objColor = RandomHeadOnTextColors[math.random(#RandomHeadOnTextColors)]
+
+    display_name = self:GetDisplayName()
+    if(#display_name > 7) then
+        display_name = string.sub(display_name,1,length_limit)
+    end
+
+	if(self:IsShowHeadOnDisplay() and System.ShowHeadOnDisplay) then
+		System.ShowHeadOnDisplay(true, obj, display_name, objColor);	
+	end
+	return obj;
+end

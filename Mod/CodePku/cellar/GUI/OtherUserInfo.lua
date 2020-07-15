@@ -25,7 +25,7 @@ function  OtherUserInfoPage.GetUserInfo(id)
     response = request:get('/users/profile/' .. id,nil,{sync = true})
     if response.status == 200 then
         data = response.data.data
-        OtherUserInfo.name = data.nickname or data.mobile
+        OtherUserInfo.name = data.nickname or string.sub(data.mobile,1,7)
         OtherUserInfo.id = data.id
         OtherUserInfo.gender = data.gender
         return true

@@ -50,12 +50,6 @@ end
 
 -- 名称颜色： 队友 (蓝色), 好友 (绿色), 其他角色(白色), NPC(橙色)		
 MyHeadOnTextColor = "255 255 255"			
-TeamHeadOnTextColor = "0 0 255"
-FriendHeadOnTextColor = "0 128 0" 
-OtherHeadOnTextColor = "255 255 255"
-NPCHeadOnTextColor = "255 165 0"
-
-RandomHeadOnTextColors = {TeamHeadOnTextColor, FriendHeadOnTextColor, NPCHeadOnTextColor}
 
 
 -- 设置头顶信息
@@ -80,9 +74,11 @@ function EntityPlayerHelper:SetHeadOnDisplay()
     </div>
 </pe:mcml>
     ]], (textWidth + 2) / 2 + (isVip and 8 or 0), isVip and "true" or "false", vipIconUrl, color, username);
-    player:SetHeadOnDisplay({url=ParaXML.LuaXML_ParseString(mcml)});
+    -- player:SetHeadOnDisplay({url=ParaXML.LuaXML_ParseString(mcml)});
 end
 
+
+NPCHeadOnTextColor = "255 165 0"
 
 function EntityMob:ShowHeadOnDisplay(bShow)
     local obj = self:GetInnerObject();
