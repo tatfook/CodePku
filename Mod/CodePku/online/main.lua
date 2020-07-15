@@ -26,7 +26,7 @@ function Online:Init()
 	NPL.load("(gl)Mod/GeneralGameServerMod/main.lua");                                    -- 此行可省略 GGS是内置模块, 程序启动会自动加载
 	local GeneralGameServerMod = commonlib.gettable("Mod.GeneralGameServerMod");      -- 获取GGS模块
 
-	NPL.load("(gl)Mod/Codepku/online/OnlineClient.lua");
+	NPL.load("(gl)Mod/CodePku/online/OnlineClient.lua");
 	local OnlineClient = commonlib.gettable("Mod.CodePku.OnlineClient");
 	GeneralGameServerMod:RegisterClientClass("CodePku", OnlineClient);
 
