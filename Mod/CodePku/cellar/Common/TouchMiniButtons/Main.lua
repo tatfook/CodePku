@@ -79,7 +79,11 @@ function MainUIButtons.ShowPage()
 			MainUIButtons.show_common_ui()
 			MainUIButtons.show_function_ui()
 			MainUIButtons.show_dialog_ui(false)
-			-- ParaUI.SetMinimumScreenSize(1920,1080,true);
+			if(System.os.IsMobilePlatform())then
+				ParaUI.SetMinimumScreenSize(950,560,true);
+			else
+				ParaUI.SetMinimumScreenSize(1920,1080,true);
+			end
 		end
 	end
 end
