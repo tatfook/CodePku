@@ -9,6 +9,8 @@
 <body>
 <pe:mcml>
 <script refresh="false" type="text/npl" src="MainSceneUIButtons.lua"><![CDATA[
+NPL.load("(gl)script/apps/Aries.Creator.Game.Desktop.OtherUserInfos.lua");
+UserInfoPage = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.OtherUserInfoPage")
 size = 400
 is_friend = false
 name = Page:GetRequestParam("pname")
@@ -19,7 +21,7 @@ function CloseInteract()
 end
 
 function ClickSeeInfo()
-    GameLogic.AddBBS("CodeGlobals", L"功能开发中", 3000, "#ff0000");
+    UserInfoPage:ShowPage(pid)
 end
 
 function ClickChat()

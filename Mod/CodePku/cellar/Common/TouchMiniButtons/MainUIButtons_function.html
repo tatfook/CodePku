@@ -33,6 +33,10 @@ function ClickUserInfo()
     UserInfoPage:ShowPage()
 end
 
+function ClickBag()
+    UserInfoPage:ShowPage(5)
+end
+
 
 ]]></script>
 <style type="text/mcss">
@@ -42,7 +46,7 @@ end
     <pe:if condition='<%= is_open %>'>
         <div style="position:relative;left:0;width:90; height:90; background: url(codepku/image/textures/mainuibuttons/function/close_button.png);" onclick="ClickClose"></div>
         <div style="position:relative;left:90;width:90; height:90; background: url(codepku/image/textures/mainuibuttons/function/user_info.png);" onclick="ClickUserInfo"></div>
-        <div style="position:relative;left:180;width:90; height:90; background: url(codepku/image/textures/mainuibuttons/function/bag.png);" onclick="ClickFunctionButton"></div>
+        <div style="position:relative;left:180;width:90; height:90; background: url(codepku/image/textures/mainuibuttons/function/bag.png);" onclick="ClickBag"></div>
         <div style="position:relative;left:270;width:90; height:90; background: url(codepku/image/textures/mainuibuttons/function/friends.png);" onclick="ClickFunctionButton"></div>
         <div style="position:relative;left:360;width:90; height:90; background: url(codepku/image/textures/mainuibuttons/function/rank.png);" onclick="ClickFunctionButton"></div>
         <div style="position:relative;left:450;width:90; height:90; background: url(codepku/image/textures/mainuibuttons/function/school.png);" onclick="ClickFunctionButton"></div>

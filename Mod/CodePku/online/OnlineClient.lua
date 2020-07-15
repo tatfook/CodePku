@@ -251,7 +251,12 @@ end
 
 -- 设置联机情况下不同玩家颜色 -- 进入界面时生效
 function EntityMainPlayer:CreateInnerObject(...)
-	local obj = EntityMainPlayer._super.CreateInnerObject(self, self:GetMainAssetPath(), true, 0, 1);
+    local obj = EntityMainPlayer._super.CreateInnerObject(self, self:GetMainAssetPath(), true, 0, 1);
+    
+    userid = commonlib.getfield('System.User.id')
+
+    info = {UserId=userid}
+    self:SetPlayerInfo(info)
 
 	if(self:IsShowHeadOnDisplay() and System.ShowHeadOnDisplay) then
 		System.ShowHeadOnDisplay(true, obj, self:GetDisplayName(), MyHeadOnTextColor);	

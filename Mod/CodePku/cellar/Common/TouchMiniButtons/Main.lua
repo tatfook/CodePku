@@ -101,7 +101,10 @@ function MainUIButtons.show_interact_ui(obj)
 
 	pname = string.sub(pname,1,length_limit)
 
-	pid = obj.entityId
+	info = obj:GetPlayerInfo()
+
+	pid = info["UserId"]
+	echo("click other player:"..pid)
 
 	System.App.Commands.Call("File.MCMLWindowFrame", {
 		url = format("Mod/CodePku/cellar/Common/TouchMiniButtons/MainUIButtons_interact.html?pname=%s&pid=%s", pname, pid), 

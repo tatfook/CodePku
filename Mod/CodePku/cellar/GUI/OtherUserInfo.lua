@@ -28,6 +28,9 @@ function  OtherUserInfoPage.GetUserInfo(id)
         OtherUserInfo.name = data.nickname or data.mobile
         OtherUserInfo.id = data.id
         OtherUserInfo.gender = data.gender
+        return true
+    else
+        return false
     end
 end
 
@@ -36,28 +39,32 @@ function OtherUserInfoPage:ShowPage(id,bShow)
     local DesktopMenuPage = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.DesktopMenuPage");
     OtherUserInfoPage.bForceHide = bShow == false;
 
-    OtherUserInfoPage.GetUserInfo(id)
+    res = OtherUserInfoPage.GetUserInfo(id)
+    if res then
+        local params = {
+            url = "Mod/CodePku/cellar/GUI/OtherUserInfo.html", 
+            name = "OtherUserInfoPage.ShowPage", 
+            isShowTitleBar = false,
+            DestroyOnClose = true,
+            bToggleShowHide=true, 
+            style = CommonCtrl.WindowFrame.ContainerStyle,
+            allowDrag = false,
+            enable_esc_key = true,
+            bShow = bShow,
+            click_through = false, 
+            zorder = -1,
+            app_key = MyCompany.Aries.Creator.Game.Desktop.App.app_key, 
+            directPosition = true,
+            align = "_ct",
+            x = -1920/2,
+            y = -1080/2,
+            width = 1920,
+            height = 1080,
+            };
+        System.App.Commands.Call("File.MCMLWindowFrame", params);
+        ParaUI.SetMinimumScreenSize(1920,1080,true);
+    else
+        GameLogic.AddBBS("CodeGlobals", L"用户数据错误", 3000, "#ff0000");
+    end
 
-    local params = {
-        url = "Mod/CodePku/cellar/GUI/OtherUserInfo.html", 
-        name = "OtherUserInfoPage.ShowPage", 
-        isShowTitleBar = false,
-        DestroyOnClose = true,
-        bToggleShowHide=true, 
-        style = CommonCtrl.WindowFrame.ContainerStyle,
-        allowDrag = false,
-        enable_esc_key = true,
-        bShow = bShow,
-        click_through = false, 
-        zorder = -1,
-        app_key = MyCompany.Aries.Creator.Game.Desktop.App.app_key, 
-        directPosition = true,
-        align = "_ct",
-        x = -1920/2,
-        y = -1080/2,
-        width = 1920,
-        height = 1080,
-        };
-    System.App.Commands.Call("File.MCMLWindowFrame", params);
-    ParaUI.SetMinimumScreenSize(1920,1080,true);
 end

@@ -29,7 +29,7 @@ function UserStore:Action()
             commonlib.setfield("System.User.codepkuToken", token)
             commonlib.setfield("System.User.mobile", mobile)
             commonlib.setfield("System.User.username", mobile)
-            commonlib.setfield('system.User.id', userId)            
+            commonlib.setfield('System.User.id', userId)            
             commonlib.setfield("System.User.nickName", nickname)            
         end,
         SetPlayerController = function(playerController)
