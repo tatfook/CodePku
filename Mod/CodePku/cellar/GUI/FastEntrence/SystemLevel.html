@@ -29,8 +29,9 @@ SystemLevelPage.subjects = {
     [2] = {name='语文', title='chinese', index=2, subject_id=1},
     [3] = {name='数学', title='math', index=3, subject_id=2},
     [4] = {name='英语', title='english', index=4, subject_id=3},
-    [5] = {name='其他', title='other', index=5},
-    [6] = {name='收藏', title='store', index=6},
+    [5] = {name='物理', title='physics', index=5, subject_id=4},
+    [6] = {name='化学', title='chemestry', index=6, subject_id=5},
+    [7] = {name='生物', title='biology', index=7, subject_id=6},
 }
 
 
@@ -97,7 +98,7 @@ end
 
 function next_page()
     if SystemLevelPage~=nil then
-        if (SystemLevelPage.page <= SystemLevelPage.total_courses%10) then
+        if (SystemLevelPage.page < SystemLevelPage.total_courses%10) then
         SystemLevelPage.page = SystemLevelPage.page + 1
             SystemLevelPage.courses = SystemLevelPage.GetLevels(SystemLevelPage.grade_id,SystemLevelPage.semester_id,SystemLevelPage.subjects[SystemLevelPage.last_clicked_index].subject_id)
             Page:Refresh(0)

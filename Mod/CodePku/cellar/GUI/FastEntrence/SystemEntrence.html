@@ -127,7 +127,7 @@ end
 
 function next_page()
     if SystemEntrencePage~=nil then
-        if (SystemEntrencePage.page < #GradeDetails['primary']) then
+        if (SystemEntrencePage.page < #GradeDetails[SystemEntrencePage.school]) then
             SystemEntrencePage.page = SystemEntrencePage.page + 1
             Page:Refresh(0)
         end
