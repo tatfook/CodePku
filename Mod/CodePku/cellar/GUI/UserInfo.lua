@@ -62,4 +62,5 @@ function UserInfoPage:ShowPage(PageIndex,bShow)
         };
     System.App.Commands.Call("File.MCMLWindowFrame", params);
     ParaUI.SetMinimumScreenSize(1920,1080,true);
+	ParaUI.SetMaximumScreenSize(1920,1080,true);
 end
