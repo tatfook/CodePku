@@ -43,12 +43,24 @@ function MainEntrencePage:ShowPage(bShow)
         zorder = 20,
         app_key = MyCompany.Aries.Creator.Game.Desktop.App.app_key, 
         directPosition = true,
-            align = "_ct",
-            x = -width/2,
-            y = -height/2,
-            width = width,
-            height = height,
+        align = "_fi",
+        x = 0,
+        y = 0,
+        width = 0,
+        height = 0,
+            -- align = "_ct",
+            -- x = -1920/2,
+            -- y = -1080/2,
+            -- width = 1920,
+            -- height = 1080,
         };
     System.App.Commands.Call("File.MCMLWindowFrame", params);
-    ParaUI.SetMinimumScreenSize(1920,1080,true);
+    -- if(System.os.IsMobilePlatform())then
+    --     ParaUI.SetMinimumScreenSize(960,540,true);
+    --     ParaUI.SetMaximumScreenSize(960,540,true);
+    -- else
+    --     ParaUI.SetMinimumScreenSize(1920,1080,true);
+    --     ParaUI.SetMaximumScreenSize(1920,1080,true);
+    -- end
+    -- ParaUI.SetMinimumScreenSize(1920,1080,true);
 end
