@@ -5,7 +5,7 @@ Date: 2020-07-10 16:23:49
 Desc: 玩学世界联机模块
 Example:
 ------------------------------------------------------------
-NPL.load("(gl)Mod/CodePku/Online/main.lua");
+NPL.load("(gl)Mod/CodePku/online/main.lua");
 local Online = commonlib.gettable("Mod.CodePku.Online");
 Online:init();
 -------------------------------------------------------

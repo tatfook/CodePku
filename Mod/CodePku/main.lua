@@ -34,7 +34,7 @@ NPL.load("(gl)script/apps/Aries/Creator/Game/Network/NetworkMain.lua")
 NPL.load("(gl)script/ide/System/Encoding/guid.lua")
 NPL.load("(gl)script/apps/Aries/Creator/Game/Login/ParaWorldLessons.lua")
 NPL.load("(gl)script/ide/System/Encoding/jwt.lua")
-NPL.load("(gl)Mod/CodePku/Online/main.lua");
+NPL.load("(gl)Mod/CodePku/online/main.lua");
 
 local Store = NPL.load("(gl)Mod/CodePku/store/Store.lua")
 local MsgBox = NPL.load("(gl)Mod/CodePku/cellar/Common/MsgBox/MsgBox.lua")
