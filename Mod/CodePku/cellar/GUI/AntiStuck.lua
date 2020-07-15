@@ -38,10 +38,10 @@ function AntiStuckPage:ShowPage(bShow)
         app_key = MyCompany.Aries.Creator.Game.Desktop.App.app_key, 
         directPosition = true,
             align = "_ct",
-            x = -600/2,
-            y = -374/2,
-            width = 600,
-            height = 374,
+            x = -1000/2,
+            y = -600/2,
+            width = 1000,
+            height = 600,
         };
     System.App.Commands.Call("File.MCMLWindowFrame", params);
 end
