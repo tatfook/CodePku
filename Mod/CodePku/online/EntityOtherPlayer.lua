@@ -23,11 +23,11 @@ end
 
 -- 玩家被点击
 function EntityOtherPlayer:OnClick(x,y,z, mouse_button,entity,side)
-    echo("6666666666666666");
+    -- info = self:GetPlayerInfo()
+    -- echo(info.userinfo.id)
 
-    echo(self:GetPlayerInfo());
-
-    -- 阻止默认行为     
+    local MainUIButtons = NPL.load("(gl)Mod/CodePku/cellar/Common/TouchMiniButtons/Main.lua");
+    MainUIButtons.show_interact_ui(self)
     return true;
 end
 
