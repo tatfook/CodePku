@@ -74,19 +74,31 @@ end
     
 }
 </style>
-
-    <div style="width:1920;height: 1080;background:url(codepku/image/textures/fastentrence/main.png);">
-        <div style='width:350;height:120px;margin-left:800;background:url(codepku/image/textures/fastentrence/fast_entrence_pic.png);'>
-            <div style='width:300;height:70px;margin-left:20;margin-top:20;background:url(codepku/image/textures/fastentrence/fast_entrence_text.png);'></div>
-        </div>
-        <div style='width:120px;height:120px;margin-left:1800;margin-top:-120;background:url(codepku/image/textures/fastentrence/close.png);' onclick="OnClose"></div>
-        <div style='float: left;width: 588;height: 744;background:url(codepku/image/textures/fastentrence/system.png);margin:50;' name='system' onclick="onClickPage"></div>
-        <div style='float: left;width: 588;height: 744;background:url(codepku/image/textures/fastentrence/topic.png);margin:50;' name='topic' onclick="onClickPage"></div>
-        <div style='float: left;width: 500;height: 374;background:url(codepku/image/textures/fastentrence/build.png);margin-top:50;' name='build'></div>
-        <div style='float: left;width: 500;height: 374;background:url(codepku/image/textures/fastentrence/compete.png);margin-top:-420;margin-left:1375px' name='compete' onclick="onClickPage"></div>
+<pe:container alignment="_fi" width="100%" height="100%" ClickThrough="true" style="position:relative;background:url(codepku/image/textures/fastentrence/main.png# 0 0 1920 1080);">
+    <pe:container alignment="_ctt" ClickThrough="true" width="18%" height="11%" style="position:relative;background:url(codepku/image/textures/fastentrence/fast_entrence_pic.png);">
+        <pe:container alignment="_ctt" width="80%" height="76%" style='margin-top:12%;background:url(codepku/image/textures/fastentrence/fast_entrence_text.png);'></pe:container>
+    </pe:container>
+    <pe:container alignment="_rt" ClickThrough="true" width="6%" height="11%" style="background:url(codepku/image/textures/fastentrence/close.png);">
+    </pe:container>
+    <pe:container alignment="_ctl" width="100%" height="66%" style="position:relative;background:url();">
+        <pe:container alignment="_lt" width="29%" height="100%" style='position:relative;background:url(codepku/image/textures/fastentrence/system.png);' name='system' onclick="onClickPage"></pe:container>
+        <pe:container alignment="_ctt" width="29%" height="100%" style='position:relative;background:url(codepku/image/textures/fastentrence/topic.png);' name='topic' onclick="onClickPage"></pe:container>
+        <pe:container alignment="_rt" width="29%" height="100%" style='position:relative;background:url();' onclick="onClickPage">
+            <div width="100%" height="50%" style="background:url(codepku/image/textures/fastentrence/build.png)" name='build'></div>
+            <div width="100%" height="100%" style="background:url(codepku/image/textures/fastentrence/compete.png)" name='compete' onclick="onClickPage"></div>
+        </pe:container>
+    </pe:container>
+</pe:container>
+<!-- <div style="width:1920;height: 1080;background:url(codepku/image/textures/fastentrence/main.png);">
+    <div style='width:350;height:120px;margin-left:800;background:url(codepku/image/textures/fastentrence/fast_entrence_pic.png);'>
+        <div style='width:300;height:70px;margin-left:20;margin-top:20;background:url(codepku/image/textures/fastentrence/fast_entrence_text.png);'></div>
     </div>
-    
-
+    <div style='width:120px;height:120px;margin-left:1800;margin-top:-120;background:url(codepku/image/textures/fastentrence/close.png);' onclick="OnClose"></div>
+    <div style='float: left;width: 588;height: 744;background:url(codepku/image/textures/fastentrence/system.png);margin:50;' name='system' onclick="onClickPage"></div>
+    <div style='float: left;width: 588;height: 744;background:url(codepku/image/textures/fastentrence/topic.png);margin:50;' name='topic' onclick="onClickPage"></div>
+    <div style='float: left;width: 500;height: 374;background:url(codepku/image/textures/fastentrence/build.png);margin-top:50;' name='build'></div>
+    <div style='float: left;width: 500;height: 374;background:url(codepku/image/textures/fastentrence/compete.png);margin-top:-420;margin-left:1375px' name='compete' onclick="onClickPage"></div>
+</div> -->
 </pe:mcml>
 </body>
 </html>
