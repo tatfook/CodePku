@@ -7,33 +7,34 @@
 </head>
 <body>
     <pe:mcml>
-<script refresh="false" type="text/npl" src="UserInfo.lua"><![CDATA[
-NPL.load("(gl)script/apps/Aries.Creator.Game.Desktop.UserInfo.lua");
-NPL.load("(gl)script/apps/Aries.Creator.Game.Desktop.Share.lua");
-UserInfoPage = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.UserInfoPage")
-SharePage = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.SharePage")
-UserInfo = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.UserInfo")
+<script refresh="false" type="text/npl" src="OtherUserInfo.lua"><![CDATA[
+NPL.load("(gl)script/apps/Aries.Creator.Game.Desktop.OtherUserInfo.lua");
+local CodeApi = commonlib.gettable("Mod.CodePkuCommon.Code.Blockly.CodeApi");
+OtherUserInfoPage = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.OtherUserInfoPage")
+local OtherUserInfo = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.OtherUserInfo")
+
 xueshidian = 123456
 fensi = 123456
 dianzan = 123456
-name = UserInfo.name
-user_id = '玩学号:'..UserInfo.id
+name = OtherUserInfo.name
+gender = OtherUserInfo.gender
 identity = 10
-gender = UserInfo.gender
+
 vip_id = 20
-choose_index = UserInfoPage.PageIndex or 1
+user_id = "玩学号：" .. OtherUserInfo.id
+choose_index = 1
 choose_index5 = 1
-
 user_options_list ={}
-user_options_list[1] = {{index =1,url ='shouye'},{index =2,url ='shuxing'},{index =3,url ='juese'},{index =4,url ='waiguan'},{index =5,url ='beibao'},{index =6,url ='chengjiu'},{index =7,url ='dongtai'}}
-user_options_list[1][choose_index].url = user_options_list[1][choose_index].url ..1
-user_options_list[5] = {{index =1,url ='quanbu1'},{index =2,url ='daoju'},{index =3,url ='libao'},{index =4,url ='cailiao'},{index =5,url ='lantu'}}
+user_options_list[1] = {{index =1,url ='shouye1'},{index =2,url ='chengjiu'},{index =3,url ='dongtai'}}
 
-
+OtherUserInfoPage.OnInit();
 function ClosePage()
     Page:CloseWindow();
 end
 
+function Undefinde()
+    GameLogic.RunCommand("/tip 开发中敬请期待")
+end
 
 function OnConfirm()
     GameLogic.RunCommand("/goto,home")
@@ -70,14 +71,6 @@ function OnClickButton(name,mcmlNode)
         echo('aaa')
         OnClose();
     end
-end
-
-function SharePageFunc()
-    SharePage:ShowPage()
-end
-
-function Undefinde()
-    GameLogic.RunCommand("/tip -duration 1500 开发中敬请期待")
 end
 
 
@@ -123,9 +116,9 @@ end
 
 <pe:container alignment="_lt" >
     <div style="width:1920;height:1080;background:url(codepku/image/textures/userinfo/user_info_back.png);" >
-        <div style="position:relative;width:160;height:43;margin-left:960;margin-top:16;background:url(codepku/image/textures/userinfo/info_title/user_center.png);"></div>
+        <div style="position:relative;width:160;height:43;margin-left:960;margin-top:16;background:url(codepku/image/textures/userinfo/info_title/user_center.png);"onclick="ClosePage"></div>
         <div style="position:relative;width:45;height:50;margin-left:1815;margin-top:16;background:url(codepku/image/textures/userinfo/info_title/cancel.png);"onclick="ClosePage"></div>
-        <div style="position:relative;width:45;height:50;margin-left:86;margin-top:16;background:url(codepku/image/textures/userinfo/info_title/help.png);"onclick="Undefinde"></div>
+        <div style="position:relative;width:45;height:50;margin-left:86;margin-top:16;background:url(codepku/image/textures/userinfo/info_title/help.png);"onclick="ClosePage"></div>
         <div style = "position:relative;margin-top:100">
             <pe:repeat  DataSource="<%=user_options_list[1]%>">
                     <pe:repeatitem>
@@ -133,8 +126,8 @@ end
                     </pe:repeatitem>
             </pe:repeat>
         </div>
-        <div style="position:relative;width:275;height:97;margin-top:960;font-size:18;base-font-size:40;background:url(codepku/image/textures/userinfo/options/shezhi.png)"onclick="Undefinde"></div>
         <pe:if condition='<%=choose_index == 1%>'>
+            
             <!-- 首页 -->
             <div style="position:relative;width:1447;height:137;margin-left:324;margin-top:140;background:url(codepku/image/textures/userinfo/user_name_info/name_info.png);">
                 <div style='<%=format("position:relative;width:41;height:41;margin-left:500;margin-top:20;background:url(codepku/image/textures/userinfo/user_name_info/%s.png);",gender)%>'></div>
@@ -145,23 +138,23 @@ end
                 <div style="position:relative;width:300;text-align:left;margin-left:154;margin-top:75;font-size:25;base-font-size:25;"><%= user_id%></div>
                 <div style="position:relative;width:76;height:61;margin-left:1115;margin-top:20;background:url(codepku/image/textures/userinfo/user_name_info/xueshi.png);"></div>
                 <div style="position:relative;width:61;text-align:center;margin-left:1120;margin-top:75;font-size:18;base-font-size:18;"><%= xueshidian%></div>
-                <div style="position:relative;width:61;height:61;margin-left:1233;margin-top:20;background:url(codepku/image/textures/userinfo/user_name_info/fensi.png);"></div>
+                <div style="position:relative;width:61;height:61;margin-left:1233;margin-top:20;background:url(codepku/image/textures/userinfo/user_name_info/fensi.png);" onclick="Undefinde"></div>
                 <div style="position:relative;width:61;text-align:center;margin-left:1233;margin-top:75;font-size:18;base-font-size:18;"><%= fensi%></div>
-                <div style="position:relative;width:61;height:61;margin-left:1350;margin-top:20;background:url(codepku/image/textures/userinfo/user_name_info/dianzan.png);"></div>
+                <div style="position:relative;width:61;height:61;margin-left:1350;margin-top:20;background:url(codepku/image/textures/userinfo/user_name_info/dianzan.png);" onclick="Undefinde"></div>
                 <div style="position:relative;width:61;text-align:center;margin-left:1350;margin-top:75;font-size:18;base-font-size:18;"><%= dianzan%></div>
             </div>
             <div style="position:relative;width:611;height:735;margin-top:300;margin-left:324;font-size:18;base-font-size:40;background:url(codepku/image/textures/userinfo/touxiangbeijing.png)">
                 <div style="position:relative;width:611;height:735;text-align:center;font-size:18;base-font-size:40;background:url(codepku/image/textures/userinfo/wanjiatouxiang.png)"></div>
-                <div style="position:relative;width:50;height:50;margin-left:500;margin-top:550;background:url(codepku/image/textures/userinfo/shuru.png);"onclick="Undefinde"></div>
-                <div style="position:relative;width:50;height:50;margin-left:500;margin-top:620;background:url(codepku/image/textures/userinfo/fenxiang.png);"onclick="SharePageFunc"></div>
+                <div style="position:relative;width:50;height:50;margin-left:500;margin-top:550;background:url(codepku/image/textures/userinfo/shuru.png);"onclick="ClosePage"></div>
+                <div style="position:relative;width:50;height:50;margin-left:500;margin-top:620;background:url(codepku/image/textures/userinfo/fenxiang.png);"onclick="ClosePage"></div>
             </div>
             <div style="position:relative;width:739;height:734;margin-left:1030;margin-top:300;background:url(codepku/image/textures/userinfo/jiayuanbeijing.png);">
                 <div style="position:relative;width:670;height:410;margin-left:36;margin-top:30;background:url(codepku/image/textures/userinfo/jiayuan.png);"></div>
                 <div style="position:relative;width:380;text-align:left;margin-left:324;margin-top:450;font-size:30;base-font-size:30;"><%= '这是一个家园的名字'%></div>
-                <div style="position:relative;width:380;text-align:left;margin-left:120;margin-top:572;font-size:30;base-font-size:30;"><%= '学校:xxx'%></div>
-                <div style="position:relative;width:380;text-align:left;margin-left:440;margin-top:572;font-size:30;base-font-size:30;"><%= '称号:xxx'%></div>
-                <div style="position:relative;width:380;text-align:left;margin-left:120;margin-top:630;font-size:30;base-font-size:30;"><%= '荣誉:xxx'%></div>
-                <div style="position:relative;width:380;text-align:left;margin-left:440;margin-top:630;font-size:30;base-font-size:30;"><%= '生涯:xxx'%></div>  
+                <div style="position:relative;width:380;text-align:left;margin-left:120;margin-top:572;font-size:30;base-font-size:30;"><%= name%></div>
+                <div style="position:relative;width:380;text-align:left;margin-left:440;margin-top:572;font-size:30;base-font-size:30;"><%= name%></div>
+                <div style="position:relative;width:380;text-align:left;margin-left:120;margin-top:630;font-size:30;base-font-size:30;"><%= name%></div>
+                <div style="position:relative;width:380;text-align:left;margin-left:440;margin-top:630;font-size:30;base-font-size:30;"><%= name%></div>  
             </div> 
         </pe:if>
         <pe:if condition='<%=choose_index == 5%>'>

@@ -1,48 +1,46 @@
-local UserInfoPage = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.UserInfoPage")
-local UserInfo = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.UserInfo")
+local OtherUserInfoPage = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.OtherUserInfoPage")
+local OtherUserInfo = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.OtherUserInfo")
 local request = NPL.load("(gl)Mod/CodePkuCommon/api/BaseRequest.lua");
 local page;
 
-function UserInfoPage.OnInit()
-	UserInfoPage.OneTimeInit();
+
+function OtherUserInfoPage.OnInit()
+	OtherUserInfoPage.OneTimeInit();
 	page = document:GetPageCtrl();
 end
 
-function UserInfoPage.OneTimeInit()
-	if(UserInfoPage.is_inited) then
+function OtherUserInfoPage.OneTimeInit()
+	if(OtherUserInfoPage.is_inited) then
 		return;
 	end
-	UserInfoPage.is_inited = true;
+	OtherUserInfoPage.is_inited = true;
 end
 
 -- clicked a block
-function UserInfoPage.OnClickBlock(block_id)
-
+function OtherUserInfoPage.OnClickBlock(block_id)
 end
 
 -- 获取用户信息
-function UserInfoPage.GetUserInfo()
-    response = request:get('/users/profile',nil,{sync = true})
+function  OtherUserInfoPage.GetUserInfo(id)
+    response = request:get('/users/profile/' .. id,nil,{sync = true})
     if response.status == 200 then
         data = response.data.data
-        UserInfo.name = data.nickname or data.mobile
-        UserInfo.id = data.id
-        UserInfo.gender = data.gender
+        OtherUserInfo.name = data.nickname or data.mobile
+        OtherUserInfo.id = data.id
+        OtherUserInfo.gender = data.gender
     end
 end
 
-function UserInfoPage:ShowPage(PageIndex,bShow)
+function OtherUserInfoPage:ShowPage(id,bShow)
     NPL.load("(gl)script/apps/Aries/Creator/Game/Areas/DesktopMenuPage.lua");
     local DesktopMenuPage = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.DesktopMenuPage");
-    UserInfoPage.bForceHide = bShow == false;
-    UserInfoPage.PageIndex = PageIndex
-    
+    OtherUserInfoPage.bForceHide = bShow == false;
 
-    UserInfoPage.GetUserInfo()
+    OtherUserInfoPage.GetUserInfo(id)
 
     local params = {
-        url = "Mod/CodePku/cellar/GUI/UserInfo.html", 
-        name = "UserInfo.ShowPage", 
+        url = "Mod/CodePku/cellar/GUI/OtherUserInfo.html", 
+        name = "OtherUserInfoPage.ShowPage", 
         isShowTitleBar = false,
         DestroyOnClose = true,
         bToggleShowHide=true, 
@@ -51,7 +49,7 @@ function UserInfoPage:ShowPage(PageIndex,bShow)
         enable_esc_key = true,
         bShow = bShow,
         click_through = false, 
-        zorder = 20,
+        zorder = -1,
         app_key = MyCompany.Aries.Creator.Game.Desktop.App.app_key, 
         directPosition = true,
         align = "_ct",
