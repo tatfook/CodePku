@@ -61,7 +61,6 @@ end
 
 
 function MainUIButtons.ShowPage()
-	echo("---------------------")
 	if System.Codepku and System.Codepku.Coursewares and System.Codepku.Coursewares.category then 
 		local wid = System.Codepku.Coursewares.category
 
