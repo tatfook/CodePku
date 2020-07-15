@@ -43,7 +43,6 @@ function TopicEntrencePage:ShowPage(bShow)
     NPL.load("(gl)script/apps/Aries/Creator/Game/Areas/DesktopMenuPage.lua");
     local DesktopMenuPage = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.DesktopMenuPage");
     local countdown = 10;
-    TopicEntrencePage.GetCourse(0)
     TopicEntrencePage.bForceHide = bShow == false;
     local params = {
         url = "Mod/CodePku/cellar/GUI/FastEntrence/TopicEntrence.html", 
