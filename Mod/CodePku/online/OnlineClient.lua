@@ -13,12 +13,12 @@ NPL.load("Mod/GeneralGameServerMod/Core/Client/GeneralGameWorld.lua");
 NPL.load("Mod/GeneralGameServerMod/Core/Common/Connection.lua");
 NPL.load("Mod/GeneralGameServerMod/Core/Common/Log.lua");
 NPL.load("Mod/GeneralGameServerMod/Core/Common/Common.lua");
-NPL.load("Mod/GeneralGameServerMod/Core/Client/NetClientHandler.lua");
+NPL.load("Mod/CodePku/online/NetClientHandler.lua");
 NPL.load("Mod/GeneralGameServerMod/Core/Client/EntityMainPlayer.lua");
-NPL.load("Mod/GeneralGameServerMod/Core/Client/EntityOtherPlayer.lua");
-local NetClientHandler = commonlib.gettable("Mod.GeneralGameServerMod.Core.Client.NetClientHandler");
+NPL.load("Mod/CodePku/online/EntityOtherPlayer.lua");
+local NetClientHandler = commonlib.gettable("Mod.CodePku.Online.NetClientHandler");
 local EntityMainPlayer = commonlib.gettable("Mod.GeneralGameServerMod.Core.Client.EntityMainPlayer");
-local EntityOtherPlayer = commonlib.gettable("Mod.GeneralGameServerMod.Core.Client.EntityOtherPlayer");
+local EntityOtherPlayer = commonlib.gettable("Mod.CodePku.Online.EntityOtherPlayer");
 local EntityMob = commonlib.gettable("MyCompany.Aries.Game.EntityManager.EntityMob")  -- for npc
 local Common = commonlib.gettable("Mod.GeneralGameServerMod.Core.Common.Common");
 local Log = commonlib.gettable("Mod.GeneralGameServerMod.Core.Common.Log");
@@ -276,11 +276,11 @@ function EntityOtherPlayer:CreateInnerObject(...)
 	return obj;
 end
 
-function EntityOtherPlayer:OnClick(x, y, z, mouse_button)
-    local MainUIButtons = NPL.load("(gl)Mod/CodePku/cellar/Common/TouchMiniButtons/Main.lua");
-    MainUIButtons.show_interact_ui(self)
+-- function EntityOtherPlayer:OnClick(x, y, z, mouse_button)
+--     local MainUIButtons = NPL.load("(gl)Mod/CodePku/cellar/Common/TouchMiniButtons/Main.lua");
+--     MainUIButtons.show_interact_ui(self)
     
-end
+-- end
 
 
 -- 初始化成单列模式

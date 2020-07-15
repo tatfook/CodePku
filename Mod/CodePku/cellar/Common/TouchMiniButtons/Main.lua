@@ -90,38 +90,38 @@ distance = 10
 length_limit = 7
 
 function MainUIButtons.show_interact_ui(obj)
-	local x, y, z = obj:GetPosition()
-	local px, py, pz = EntityManager.GetPlayer():GetPosition()
-	if(math.abs(x-px) > distance or math.abs(y-py) > distance or math.abs(z-pz) > distance) then
-		GameLogic.AddBBS("CodeGlobals", L"距离玩家过远，走进点再尝试。", 3000, "#ff0000");
-		return
-	end
+	-- local x, y, z = obj:GetPosition()
+	-- local px, py, pz = EntityManager.GetPlayer():GetPosition()
+	-- if(math.abs(x-px) > distance or math.abs(y-py) > distance or math.abs(z-pz) > distance) then
+	-- 	GameLogic.AddBBS("CodeGlobals", L"距离玩家过远，走进点再尝试。", 3000, "#ff0000");
+	-- 	return
+	-- end
 
-	local pname = obj:GetDisplayName()
+	-- local pname = obj:GetDisplayName()
 
-	pname = string.sub(pname,1,length_limit)
+	-- pname = string.sub(pname,1,length_limit)
 
-	info = obj:GetPlayerInfo()
+	-- info = obj:GetPlayerInfo()
 
-	pid = info["UserId"]
-	echo("click other player:"..pid)
+	-- -- pid = info["UserId"]
+	-- -- echo("click other player:"..pid)
 
-	System.App.Commands.Call("File.MCMLWindowFrame", {
-		url = format("Mod/CodePku/cellar/Common/TouchMiniButtons/MainUIButtons_interact.html?pname=%s&pid=%s", pname, pid), 
-		name = "MainUIButtons_interact", 
-		isShowTitleBar = false,
-		DestroyOnClose = true, -- prevent many ViewProfile pages staying in memory
-		style = CommonCtrl.WindowFrame.ContainerStyle,
-		zorder = 10,
-        allowDrag = false,
-		click_through = false,
-		directPosition = true,
-			align = "_lt",
-			x = 0,
-			y = 0,
-			width = 1920,
-			height = 1080,
-	});
+	-- System.App.Commands.Call("File.MCMLWindowFrame", {
+	-- 	url = format("Mod/CodePku/cellar/Common/TouchMiniButtons/MainUIButtons_interact.html?pname=%s&pid=%s", pname, pid), 
+	-- 	name = "MainUIButtons_interact", 
+	-- 	isShowTitleBar = false,
+	-- 	DestroyOnClose = true, -- prevent many ViewProfile pages staying in memory
+	-- 	style = CommonCtrl.WindowFrame.ContainerStyle,
+	-- 	zorder = 10,
+    --     allowDrag = false,
+	-- 	click_through = false,
+	-- 	directPosition = true,
+	-- 		align = "_lt",
+	-- 		x = 0,
+	-- 		y = 0,
+	-- 		width = 1920,
+	-- 		height = 1080,
+	-- });
 
-	ParaUI.SetMinimumScreenSize(1920,1080,true);
+	-- ParaUI.SetMinimumScreenSize(1920,1080,true);
 end
