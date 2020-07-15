@@ -14,6 +14,8 @@ NPL.load("Mod/GeneralGameServerMod/Core/Common/Config.lua");
 local Config = commonlib.gettable("Mod.GeneralGameServerMod.Core.Common.Config");
 local Log = commonlib.gettable("Mod.GeneralGameServerMod.Core.Common.Log");
 local EntityPlayerHelper = commonlib.inherit(nil, commonlib.gettable("Mod.CodePku.Online.EntityPlayerHelper"));
+local EntityMob = commonlib.gettable("MyCompany.Aries.Game.EntityManager.EntityMob")  -- for npc
+
 
 function EntityPlayerHelper:Init(entityPlayer, isMainPlayer)
     self.entityPlayer = entityPlayer;
@@ -45,6 +47,17 @@ function EntityPlayerHelper:SetPlayerInfo(playerInfo)
     if (isSetHeadOnDisplay) then self:SetHeadOnDisplay(); end
 end
 
+
+-- 名称颜色： 队友 (蓝色), 好友 (绿色), 其他角色(白色), NPC(橙色)		
+MyHeadOnTextColor = "255 255 255"			
+TeamHeadOnTextColor = "0 0 255"
+FriendHeadOnTextColor = "0 128 0" 
+OtherHeadOnTextColor = "255 255 255"
+NPCHeadOnTextColor = "255 165 0"
+
+RandomHeadOnTextColors = {TeamHeadOnTextColor, FriendHeadOnTextColor, NPCHeadOnTextColor}
+
+
 -- 设置头顶信息
 function EntityPlayerHelper:SetHeadOnDisplay()
     local player = self:GetEntityPlayer();
@@ -54,7 +67,9 @@ function EntityPlayerHelper:SetHeadOnDisplay()
     local state = playerInfo.state;
     local isVip = userinfo.isVip;
     Log:Info("username: %s, state: %s, vip: %s", username, state, isVip);
-    local color = state == "online" and (self.isMainPlayer and "#ffffff" or "#0cff05") or "#6d6d6b";
+
+    objColor = RandomHeadOnTextColors[math.random(#RandomHeadOnTextColors)]
+    local color = state == "online" and (self.isMainPlayer and MyHeadOnTextColor or objColor) or MyHeadOnTextColor;
     local textWidth = _guihelper.GetTextWidth(username, System.DefaultLargeFontString);
     local vipIconUrl = "Texture/Aries/Creator/keepwork/chat/vip_32bits.png#0 0 18 18";
     local mcml = string.format([[
@@ -68,3 +83,9 @@ function EntityPlayerHelper:SetHeadOnDisplay()
     player:SetHeadOnDisplay({url=ParaXML.LuaXML_ParseString(mcml)});
 end
 
+
+function EntityMob:ShowHeadOnDisplay(bShow)
+    local obj = self:GetInnerObject();
+	System.ShowHeadOnDisplay(true, obj, self:GetDisplayName(), NPCHeadOnTextColor);	
+    return obj;
+end
