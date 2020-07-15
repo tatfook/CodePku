@@ -62,13 +62,7 @@ function OtherUserInfoPage:ShowPage(id,bShow)
             height = 1080,
             };
         System.App.Commands.Call("File.MCMLWindowFrame", params);
-        if(System.os.IsMobilePlatform())then
-            ParaUI.SetMinimumScreenSize(960,540,true);
-            ParaUI.SetMaximumScreenSize(960,540,true);
-        else
-            ParaUI.SetMinimumScreenSize(1920,1080,true);
-            ParaUI.SetMaximumScreenSize(1920,1080,true);
-        end
+        ParaUI.SetMinimumScreenSize(1920,1080,true);
     else
         GameLogic.AddBBS("CodeGlobals", L"用户数据错误", 3000, "#ff0000");
     end

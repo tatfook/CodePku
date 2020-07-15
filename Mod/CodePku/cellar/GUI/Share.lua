@@ -43,11 +43,5 @@ function SharePage:ShowPage(bShow)
         height = 1080,
         };
     System.App.Commands.Call("File.MCMLWindowFrame", params);
-    if(System.os.IsMobilePlatform())then
-        ParaUI.SetMinimumScreenSize(960,540,true);
-        ParaUI.SetMaximumScreenSize(960,540,true);
-    else
-        ParaUI.SetMinimumScreenSize(1920,1080,true);
-        ParaUI.SetMaximumScreenSize(1920,1080,true);
-    end
+    ParaUI.SetMinimumScreenSize(1920,1080,true);
 end

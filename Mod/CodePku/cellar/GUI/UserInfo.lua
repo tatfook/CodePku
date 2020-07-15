@@ -30,18 +30,29 @@ function UserInfoPage.GetUserInfo()
         UserInfo.gender = data.gender
     end
 end
+width = 1920
+	height = 1080
+	if(System.os.IsMobilePlatform())then
+		width = 960
+		height = 540
+	end
 
 function UserInfoPage:ShowPage(PageIndex,bShow)
     NPL.load("(gl)script/apps/Aries/Creator/Game/Areas/DesktopMenuPage.lua");
     local DesktopMenuPage = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.DesktopMenuPage");
     UserInfoPage.bForceHide = bShow == false;
     UserInfoPage.PageIndex = PageIndex
-    
+    width = 1920
+	height = 1080
+	if(System.os.IsMobilePlatform())then
+		width = 960
+		height = 540
+	end
 
     UserInfoPage.GetUserInfo()
 
     local params = {
-        url = "Mod/CodePku/cellar/GUI/UserInfo.html", 
+        url = format("Mod/CodePku/cellar/GUI/UserInfo.html?width=%s&height=%s",width, height ), 
         name = "UserInfo.ShowPage", 
         isShowTitleBar = false,
         DestroyOnClose = true,
@@ -61,11 +72,5 @@ function UserInfoPage:ShowPage(PageIndex,bShow)
         height = 1080,
         };
     System.App.Commands.Call("File.MCMLWindowFrame", params);
-    if(System.os.IsMobilePlatform())then
-        ParaUI.SetMinimumScreenSize(960,540,true);
-        ParaUI.SetMaximumScreenSize(960,540,true);
-    else
-        ParaUI.SetMinimumScreenSize(1920,1080,true);
-        ParaUI.SetMaximumScreenSize(1920,1080,true);
-    end
+    ParaUI.SetMinimumScreenSize(1920,1080,true);
 end
