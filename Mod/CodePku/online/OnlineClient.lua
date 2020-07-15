@@ -27,7 +27,7 @@ local Connection = commonlib.gettable("Mod.GeneralGameServerMod.Core.Common.Conn
 NPL.load("(gl)script/apps/Aries/Creator/WorldCommon.lua");
 local WorldCommon = commonlib.gettable("MyCompany.Aries.Creator.WorldCommon")
 
-local Config = NPL.load("(gl)Mod/CodePku/Online/Config.lua");
+local Config = NPL.load("(gl)Mod/CodePku/online/Config.lua");
 
 local GeneralGameWorld = commonlib.gettable("Mod.GeneralGameServerMod.Core.Client.GeneralGameWorld");
 local Packets = commonlib.gettable("Mod.GeneralGameServerMod.Core.Common.Packets");
