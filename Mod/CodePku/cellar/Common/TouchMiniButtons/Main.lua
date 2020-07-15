@@ -61,29 +61,27 @@ end
 
 
 function MainUIButtons.ShowPage()
+	echo("---------------------")
 	if System.Codepku and System.Codepku.Coursewares and System.Codepku.Coursewares.category then 
 		local wid = System.Codepku.Coursewares.category
-	else
-		return
-	end
 
-	local worldtable = {3}
+		local worldtable = {3}
 
-	local show = false
-	for _, v in ipairs(worldtable) do
-		if(v == wid) then
-			show = true
+		local show = false
+		for _, v in ipairs(worldtable) do
+			if(v == wid) then
+				show = true
+			end
 		end
-	end
-	if(show)then
-		-- for temp test, view the effect of mobile phone
-		-- local TouchMiniKeyboard = NPL.load("(gl)Mod/CodePku/cellar/Common/TouchMiniKeyboard/Main.lua");
-		-- TouchMiniKeyboard.CheckShow(true)
-
-		MainUIButtons.show_common_ui()
-		MainUIButtons.show_function_ui()
-		MainUIButtons.show_dialog_ui(false)
-		ParaUI.SetMinimumScreenSize(1920,1080,true);
+		if(show)then
+			-- for temp test, view the effect of mobile phone
+			-- local TouchMiniKeyboard = NPL.load("(gl)Mod/CodePku/cellar/Common/TouchMiniKeyboard/Main.lua");
+			-- TouchMiniKeyboard.CheckShow(true)
+			MainUIButtons.show_common_ui()
+			MainUIButtons.show_function_ui()
+			MainUIButtons.show_dialog_ui(false)
+			ParaUI.SetMinimumScreenSize(1920,1080,true);
+		end
 	end
 end
 
