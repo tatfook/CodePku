@@ -1,0 +1,27 @@
+<!-- "Mod/CodePku/cellar/Common/TouchMiniButtons/MainUIButtons_dialog_clsoe.html" -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" >
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+</head>
+
+<body>
+<pe:mcml>
+<script refresh="false" type="text/npl" src="MainSceneUIButtons.lua"><![CDATA[
+MainSceneUIButtons = commonlib.gettable("Mod.CodePku.Common.TouchMiniButtons.MainSceneUIButtons");
+
+function ClickOpen() 
+    Page:CloseWindow();
+    MainSceneUIButtons.show_dialog_ui(true)
+end
+
+]]></script>
+<style type="text/mcss">
+</style>
+<pe:container alignment="_lb" width="100" height="100" style="background: none;">
+    <div style="position:relative;width:100; height:100; background: url(codepku/image/textures/mainuibuttons/dialog/open_button.png);" onclick="ClickOpen"></div>
+</pe:container>
+</pe:mcml> 
+</body>
+</html>

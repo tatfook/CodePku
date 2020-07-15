@@ -8,7 +8,8 @@
 
 <body>
 <pe:mcml>
-<script refresh="false" type="text/npl" src="MainUIButtons.lua"><![CDATA[
+<script refresh="false" type="text/npl" src="MainSceneUIButtons.lua"><![CDATA[
+MainSceneUIButtons = commonlib.gettable("Mod.CodePku.Common.TouchMiniButtons.MainSceneUIButtons");
 DialogMessages = commonlib.gettable("Mod.CodePku.Common.MainUIButtons.DialogMessages")
 MessageTopics = {"全部","世界","本地","公会","私聊","系统"}
 MessageColors = {"#FFFFFF","#00F5FF","#D3D3D3","#7FFF00","#EEB4B4","#FF0000"}
@@ -38,7 +39,7 @@ DialogMessages[5] = {
     text = "666666"
 }
 
-is_dialog_open = true
+is_dialog_open = false
 categories = {{index=1, text="全部"},{index=2, text="世界"},{index=3, text="本地"},{index=4, text="公会"},{index=5, text="私聊"}}
 
 function GetCategories()
@@ -50,22 +51,15 @@ function GetDialogMessages()
     return DialogMessages
 end
 
-
-function ClickClsoe() 
-    is_dialog_open = false
-    Page:Refresh(0);
-end
-
-function ClickOpen() 
-    is_dialog_open = true
-    Page:Refresh(0);
+function ClickClose() 
+    Page:CloseWindow();
+    MainSceneUIButtons.show_dialog_ui(false)
 end
 
 ]]></script>
 <style type="text/mcss">
 </style>
 <pe:container alignment="_lb" width="400" height="350" style="background: none;">
-    <pe:if condition='<%= is_dialog_open %>'>
         <div style="width:400;height:350;background-color: #00000050;">
 
         <div style="font-size: 24;base-font-size:24; height: 40;">
@@ -74,7 +68,7 @@ end
                      <div style='<%=format("position:relative; width:55; height:35;line-height:30;text-align:center;left: %s;top:0;background-color: #ffff00;", Eval("index") * 60 - 45)%>'><%=Eval("text")%></div>
                 </pe:repeatitem>
             </pe:repeat>
-            <div style="position:relative;left:350;width:50; height:50; background: url(codepku/image/textures/mainuibuttons/dialog/close_button.png);" onclick="ClickClsoe"></div>
+            <div style="position:relative;left:350;width:50; height:50; background: url(codepku/image/textures/mainuibuttons/dialog/close_button.png);" onclick="ClickClose"></div>
         </div>
         <div style="font-size: 24;base-font-size:24;left:15">
             <pe:repeat DataSource="<%=GetDialogMessages()%>">
@@ -93,11 +87,7 @@ end
             </pe:repeat>
         </div>
         </div>
-    </pe:if>
 
-    <pe:if condition='<%= not is_dialog_open %>'>
-        <div style="position:relative;top: 250;width:100; height:100; background: url(codepku/image/textures/mainuibuttons/dialog/open_button.png);" onclick="ClickOpen"></div>
-    </pe:if>
 </pe:container>
 </pe:mcml> 
 </body>

@@ -1,9 +1,10 @@
-NPL.load("./MainUIButtons.lua");
+NPL.load("./MainSceneUIButtons.lua");
 NPL.load("(gl)script/apps/Aries/Creator/WorldCommon.lua");
 
 local Log = NPL.load("(gl)Mod/CodePku/util/Log.lua");
 local WorldCommon = commonlib.gettable("MyCompany.Aries.Creator.WorldCommon")
 local EntityManager = commonlib.gettable("MyCompany.Aries.Game.EntityManager")
+local MainSceneUIButtons = commonlib.gettable("Mod.CodePku.Common.TouchMiniButtons.MainSceneUIButtons");
 
 local MainUIButtons = NPL.export();
 
@@ -43,7 +44,7 @@ function MainUIButtons.show_function_ui()
 		style = CommonCtrl.WindowFrame.ContainerStyle,
 		zorder = 10,
         allowDrag = false,
-        -- click_through = false,
+        click_through = true,
 		directPosition = true,
 			align = "_rb",
 			x = -width,
@@ -54,23 +55,8 @@ function MainUIButtons.show_function_ui()
 end
 
 
-function MainUIButtons.show_dialog_ui()
-    System.App.Commands.Call("File.MCMLWindowFrame", {
-		url = format("Mod/CodePku/cellar/Common/TouchMiniButtons/MainUIButtons_dialog.html"), 
-		name = "MainUIButtons_dialog", 
-		isShowTitleBar = false,
-		DestroyOnClose = true, -- prevent many ViewProfile pages staying in memory
-		style = CommonCtrl.WindowFrame.ContainerStyle,
-		zorder = 10,
-        allowDrag = false,
-		-- click_through = false,
-		directPosition = true,
-			align = "_lb",
-			x = 0,
-			y = -350,
-			width = 400,
-			height = 350,
-	});
+function MainUIButtons.show_dialog_ui(bshow)
+	MainSceneUIButtons.show_dialog_ui(bshow)
 end
 
 
@@ -86,9 +72,13 @@ function MainUIButtons.ShowPage()
 		end
 	end
 	if(show)then
+		-- for temp test, view the effect of mobile phone
+		-- local TouchMiniKeyboard = NPL.load("(gl)Mod/CodePku/cellar/Common/TouchMiniKeyboard/Main.lua");
+		-- TouchMiniKeyboard.CheckShow(true)
+
 		MainUIButtons.show_common_ui()
 		MainUIButtons.show_function_ui()
-		MainUIButtons.show_dialog_ui()
+		MainUIButtons.show_dialog_ui(false)
 		ParaUI.SetMinimumScreenSize(1920,1080,true);
 	end
 end
