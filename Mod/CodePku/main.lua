@@ -46,6 +46,7 @@ local UserConsole = NPL.load("(gl)Mod/CodePku/cellar/UserConsole/Main.lua")
 local CodePkuDownloadWorld = NPL.load("(gl)Mod/CodePku/cellar/World/DownloadWorld.lua")
 local CodePkuEscFramePage = NPL.load("(gl)Mod/CodePku/cellar/Areas/EscFramePage.lua")
 local CodePkuSystemSettingsPage = NPL.load("(gl)Mod/CodePku/cellar/Areas/SystemSettingsPage.lua")
+local OtherUserInfoPage = NPL.load("(gl)Mod/CodePku/cellar/GUI/OtherUserInfo.lua")
 local UserInfoPage = NPL.load("(gl)Mod/CodePku/cellar/GUI/UserInfo.lua")
 local SharePage = NPL.load("(gl)Mod/CodePku/cellar/GUI/Share.lua")
 
