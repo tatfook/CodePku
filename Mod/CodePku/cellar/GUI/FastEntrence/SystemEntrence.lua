@@ -122,6 +122,7 @@ function SystemLevelPage:ShowPage(bShow, grade_id, semester_id, page)
     SystemLevelPage.grade_id = grade_id
     SystemLevelPage.semester_id = semester_id
     SystemLevelPage.page = page or 1
+    SystemLevelPage.courses = SystemLevelPage.GetLevels(grade_id, semester_id, 2)
     local params = {
         url = "Mod/CodePku/cellar/GUI/FastEntrence/SystemLevel.html", 
         name = "SystemLevelPage.ShowPage", 

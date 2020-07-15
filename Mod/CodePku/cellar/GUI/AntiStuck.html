@@ -1,4 +1,4 @@
-<!-- "script/apps/Aries/Creator/Game/Areas/BreakDown.html" -->
+<!-- "script/apps/Aries/Creator/Game/Areas/EscFramePage.html" -->
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -6,35 +6,49 @@
     <title></title>
 </head>
 <body>
-<pe:mcml>
-<script refresh="true" type="text/npl"><![CDATA[
-
-
-local page = document:GetPageCtrl()
-Mod.CodePku.Store:Set("page/MainLogin", page)
+    <pe:mcml>
+<script refresh="false" type="text/npl" src="AntiStuck.lua"><![CDATA[
+NPL.load("(gl)script/apps/Aries/Creator/Game/World/WorldStacks.lua");
+WorldStacks = commonlib.gettable("MyCompany.Aries.Game.WorldStacks");
+NPL.load("(gl)script/apps/Aries/Creator/Game/Areas/ServerPage.lua");
+local ServerPage = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.ServerPage");
+GameLogic = commonlib.gettable("MyCompany.Aries.Game.GameLogic")
+NPL.load("(gl)script/apps/Aries.Creator.Game.Desktop.AntiStuckPage.lua");
+local env_imp = commonlib.gettable("MyCompany.Aries.Game.Code.env_imp");
+AntiStuckPage = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.AntiStuckPage");
+AntiStuckPage.OnInit();
 
 function ClosePage()
     Page:CloseWindow();
 end
 
-function OnClickButton()
-    ClosePage();
+
+function OnConfirm()
     GameLogic.RunCommand("/home")
 end
 
---倒计时
-times = 10
-local timer = commonlib.Timer:new({
-    callbackFunc = function(timer)
-        if times == 0 then
-            ClosePage()
-        end
 
-        times = times - 1
-        page:SetValue("cancel", format("%s( %d秒 )", L"取消", times))
+function OnClose()
+    
+end
+
+
+function OnClickButton(name,mcmlNode)
+    ClosePage();
+    if(name=="confirm") then
+        OnConfirm();
+    elseif(name=="cancel") then
+        OnClose();
     end
-})
-timer:Change(1000, 1000)
+end
+
+local countdown = 10;
+
+function Getcountdown()
+    value = string.format("取消 (剩余%d秒)",countdown);
+    start_countdown()
+    return value;
+end
 
 ]]></script>
 <style type="text/mcss">
@@ -42,27 +56,29 @@ timer:Change(1000, 1000)
     green_button = {
         color = "#ffffff",
         textcolor = "#ffffff",
-        width = 150,
-        height = 30,
+        width = 100,
+        height = 61,
         ["font-size"] = 30,
         ["base-font-size"] = 30,
         border = "none",
         ["font-weight"] = "bold",
         ["font-family"] = "Microsoft Yahei",
         background = "codepku/image/textures/modal/common_32bits.png#11 728 512 104",
-        ["margin-top"] = 50
-        ["margin-left"] = 80
-    },
-    text_tips = {
-        ["font-weight"] = "bold",
+        ["margin-top"] = 24,
+        ["margin-left"] = 120,
+
+    }
+
+    title_class = {
+        color = "#000000",
         ["font-size"] = 30,
-        ["base-font-size"] = 30,
         padding = 20,
-        ["white-space"] = "normal"
+        ["base-font-size"] = 30,
+        ["font-weight"] = "bold",
+        
     }
 }
 </style>
-
 <aries:window
     mode="center"
     width="600"
@@ -73,11 +89,11 @@ timer:Change(1000, 1000)
     close_height="38"
     style="showline: false;"
 >
-<pe:container alignment="_ctt" style="background:;">
-    <div style="margin-top:10px;">
-        <div class="text_tips">此操作将离开参加的活动区域，所有奖励都会被放弃，是否要脱离卡死？</div>
-        <input type="button" value='<%=L"取消( "..times.."秒 )"%>' name= "cancel" class="green_button" onclick="ClosePage"/>
-        <input type="button" value='<%=L"确认"%>' name= "ReturnHome" class="green_button" onclick="OnClickButton"/>
+<pe:container alignment="_ctt">
+    <div style="margin-top:5px;width:530;height: 280;">
+        <div class="title_class"><%=L"此操作将离开参加的活动区域，所有奖励都会被放弃，是否要脱离卡死？"%></div>
+        <input type="button" value='<%=L"确认"%>' name="confirm" class="green_button" onclick="OnClickButton"/>
+        <input type="button" value='<%=L"取消"%>' name="cancel" class="green_button" onclick="OnClickButton"/>
     </div>
     </div>
 </pe:container>
