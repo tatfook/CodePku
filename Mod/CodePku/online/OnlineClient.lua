@@ -273,7 +273,7 @@ end
 
 function EntityOtherPlayer:OnClick(x, y, z, mouse_button)
     local MainUIButtons = NPL.load("(gl)Mod/CodePku/cellar/Common/TouchMiniButtons/Main.lua");
-	MainUIButtons.show_interact_ui(self)
+    MainUIButtons.show_interact_ui(self)
     
 end
 

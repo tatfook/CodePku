@@ -13,7 +13,7 @@ local MainEntrencePage = commonlib.gettable("MyCompany.Aries.Creator.Game.Deskto
 local AntiStuckPage = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.AntiStuckPage");
 
 function ClickCommonButton()
-    Page:Refresh(0)
+    GameLogic.AddBBS("CodeGlobals", L"功能开发中", 3000, "#ff0000");
 end
 
 function ClickAntiJamming()
@@ -22,7 +22,6 @@ end
 
 function ClickMainEntrence()
     MainEntrencePage.ShowPage()
-    
 end
 
 

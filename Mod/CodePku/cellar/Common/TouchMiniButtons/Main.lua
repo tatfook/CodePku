@@ -61,7 +61,11 @@ end
 
 
 function MainUIButtons.ShowPage()
-	local wid = System.Codepku.Coursewares.category
+	if System.Codepku and System.Codepku.Coursewares and System.Codepku.Coursewares.category then 
+		local wid = System.Codepku.Coursewares.category
+	else
+		return
+	end
 
 	local worldtable = {3}
 
@@ -99,8 +103,10 @@ function MainUIButtons.show_interact_ui(obj)
 
 	pname = string.sub(pname,1,length_limit)
 
+	pid = obj.entityId
+
 	System.App.Commands.Call("File.MCMLWindowFrame", {
-		url = format("Mod/CodePku/cellar/Common/TouchMiniButtons/MainUIButtons_interact.html?pname=%s", pname), 
+		url = format("Mod/CodePku/cellar/Common/TouchMiniButtons/MainUIButtons_interact.html?pname=%s&pid=%s", pname, pid), 
 		name = "MainUIButtons_interact", 
 		isShowTitleBar = false,
 		DestroyOnClose = true, -- prevent many ViewProfile pages staying in memory

@@ -12,18 +12,22 @@
 size = 400
 is_friend = false
 name = Page:GetRequestParam("pname")
+pid = Page:GetRequestParam("pid")
 
 function CloseInteract()
     Page:CloseWindow();
 end
 
 function ClickSeeInfo()
+    GameLogic.AddBBS("CodeGlobals", L"功能开发中", 3000, "#ff0000");
 end
 
 function ClickChat()
+    GameLogic.AddBBS("CodeGlobals", L"功能开发中", 3000, "#ff0000");
 end
 
 function ClickEmail()
+    GameLogic.AddBBS("CodeGlobals", L"功能开发中", 3000, "#ff0000");
 end
 
 function ClickAddFriend()
