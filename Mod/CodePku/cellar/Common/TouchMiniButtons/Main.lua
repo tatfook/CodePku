@@ -108,10 +108,18 @@ function MainUIButtons.show_interact_ui(obj)
 	pname = string.sub(pname,1,length_limit)
 
 	info = obj:GetPlayerInfo()
-    pid = info.userinfo.id
+	pid = info.userinfo.id
+	
+	width = 1920
+	height = 1080
+	if(System.os.IsMobilePlatform())then
+		width = 960
+		height = 540
+	end
+	
 
 	System.App.Commands.Call("File.MCMLWindowFrame", {
-		url = format("Mod/CodePku/cellar/Common/TouchMiniButtons/MainUIButtons_interact.html?pname=%s&pid=%s", pname, pid), 
+		url = format("Mod/CodePku/cellar/Common/TouchMiniButtons/MainUIButtons_interact.html?pname=%s&pid=%swidth=%s&height=%s", pname, pid,width,height), 
 		name = "MainUIButtons_interact", 
 		isShowTitleBar = false,
 		DestroyOnClose = true, -- prevent many ViewProfile pages staying in memory
@@ -123,15 +131,10 @@ function MainUIButtons.show_interact_ui(obj)
 			align = "_lt",
 			x = 0,
 			y = 0,
-			width = 1920,
-			height = 1080,
+			width = width,
+			height = height,
 	});
 
-	if(System.os.IsMobilePlatform())then
-		ParaUI.SetMinimumScreenSize(960,540,true);
-		ParaUI.SetMaximumScreenSize(960,540,true);
-	else
-		ParaUI.SetMinimumScreenSize(1920,1080,true);
-		ParaUI.SetMaximumScreenSize(1920,1080,true);
-	end
+	ParaUI.SetMinimumScreenSize(1920,1080,true);
+
 end

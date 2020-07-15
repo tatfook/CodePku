@@ -23,8 +23,14 @@ function MainEntrencePage:ShowPage(bShow)
     local DesktopMenuPage = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.DesktopMenuPage");
     local countdown = 10;
     MainEntrencePage.bForceHide = bShow == false;
+    width = 1920
+	height = 1080
+	if(System.os.IsMobilePlatform())then
+		width = 960
+		height = 540
+	end
     local params = {
-        url = "Mod/CodePku/cellar/GUI/FastEntrence/MainEntrence.html", 
+        url = format("Mod/CodePku/cellar/GUI/FastEntrence/MainEntrence.html?width=%s&height=%s", width, height), 
         name = "MainEntrence.ShowPage", 
         isShowTitleBar = false,
         DestroyOnClose = true,
@@ -38,17 +44,11 @@ function MainEntrencePage:ShowPage(bShow)
         app_key = MyCompany.Aries.Creator.Game.Desktop.App.app_key, 
         directPosition = true,
             align = "_ct",
-            x = -1920/2,
-            y = -1080/2,
-            width = 1920,
-            height = 1080,
+            x = -width/2,
+            y = -height/2,
+            width = width,
+            height = height,
         };
     System.App.Commands.Call("File.MCMLWindowFrame", params);
-    if(System.os.IsMobilePlatform())then
-        ParaUI.SetMinimumScreenSize(960,540,true);
-        ParaUI.SetMaximumScreenSize(960,540,true);
-    else
-        ParaUI.SetMinimumScreenSize(1920,1080,true);
-        ParaUI.SetMaximumScreenSize(1920,1080,true);
-    end
+    ParaUI.SetMinimumScreenSize(1920,1080,true);
 end

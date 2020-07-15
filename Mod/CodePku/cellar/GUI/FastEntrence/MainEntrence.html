@@ -67,6 +67,9 @@ function onClickPage(name)
 end
 
 
+width = Page:GetRequestParam("width")
+height = Page:GetRequestParam("height")
+
 
 ]]></script>
 <style type="text/mcss">
@@ -75,7 +78,7 @@ end
 }
 </style>
 
-    <div style="width:1920;height: 1080;background:url(codepku/image/textures/fastentrence/main.png);">
+    <div style='<%=format("width:%s;height: %s;background:url(codepku/image/textures/fastentrence/main.png);",width,height)%>'>
         <div style='width:350;height:120px;margin-left:800;background:url(codepku/image/textures/fastentrence/fast_entrence_pic.png);'>
             <div style='width:300;height:70px;margin-left:20;margin-top:20;background:url(codepku/image/textures/fastentrence/fast_entrence_text.png);'></div>
         </div>
