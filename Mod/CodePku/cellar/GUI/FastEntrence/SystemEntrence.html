@@ -8,19 +8,10 @@
 <body>
     <pe:mcml>
 <script refresh="false" type="text/npl" src="SystemEntrence.lua"><![CDATA[
-NPL.load("(gl)script/apps/Aries/Creator/Game/World/WorldStacks.lua");
-WorldStacks = commonlib.gettable("MyCompany.Aries.Game.WorldStacks");
-NPL.load("(gl)script/apps/Aries/Creator/Game/Areas/ServerPage.lua");
-local ServerPage = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.ServerPage");
-GameLogic = commonlib.gettable("MyCompany.Aries.Game.GameLogic")
-NPL.load("(gl)script/apps/Aries.Creator.Game.Desktop.SystemEntrencePage.lua");
-local env_imp = commonlib.gettable("MyCompany.Aries.Game.Code.env_imp");
 SystemEntrencePage = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.SystemEntrencePage");
 SystemLevelPage = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.SystemLevelPage");
 local MainEntrencePage = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.MainEntrencePage");
-local SystemEntrencePage_ChooseGrade = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.SystemEntrencePage_ChooseGrade");
 
-SystemEntrencePage.OnInit();
 
 local GradeDetails = {}
 GradeDetails['primary'] = {
@@ -73,8 +64,10 @@ function OnClose()
 end
 
 function OnCloseChoose()
-    SystemEntrencePage.on_choose = false
-    Page:Refresh(0)
+    --SystemEntrencePage.on_choose = false
+    --Page:Refresh(0)
+    ClosePage()
+    MainEntrencePage.ShowPage()
 end
 
 function OnChoose()
@@ -140,16 +133,13 @@ function OnClickGrade(name)
         table.insert(l, a)
     end
     ClosePage()
-    SystemLevelPage.OnInit()
     SystemLevelPage:ShowPage(true,l[1], l[2], 1)
 end
 
 
 ]]></script>
 <style type="text/mcss">
-{
-    
-}
+
 </style>
 
     <div style="margin-top:5px;width:1920;height: 1080;background:url(codepku/image/textures/fastentrence/system_board.png)">
@@ -167,7 +157,11 @@ end
                 <div style='width:100px;height:100px;background:url(codepku/image/textures/fastentrence/return.png);margin-left: 100px;margin-top: 20px;'></div>
                 <div style='float:left;width:100px;height:50px;margin-left:1000;margin-top:-70;background:url(codepku/image/textures/fastentrence/system_name.png)'></div>
             </div>
-            <div style='position: absolute;width:1200;height:750;background:url(codepku/image/textures/fastentrence/choose_grade_board.png);margin-top:100;margin-left:350px'>
+            
+            <div style='float: left;width: 450;height: 650;background:url(codepku/image/textures/fastentrence/primary.png);margin-left:100;margin-top:100;' name='primary'></div>
+            <div style='float: left;width: 450;height: 650;background:url(codepku/image/textures/fastentrence/middle.png);margin-left:100;margin-top:100;' name='middle'></div>
+            <div style='float: left;width: 450;height:650;background:url(codepku/image/textures/fastentrence/high.png);margin-left:100;margin-top:100;' name='high'></div>
+            <div style='position: absolute;width:1200;height:750;background:url(codepku/image/textures/fastentrence/choose_grade_board.png);margin-top:-600;margin-left:350px'>
                 <div style='width:200;height:100;margin-top:70;margin-left:570;base_font_size:40px;font-size:40px;'><%=GetSchoolClass()%></div>
                 <div style='width:80;height:80;background:url(codepku/image/textures/fastentrence/close_2.png);margin-top:-120;margin-left:1040;' onclick="OnCloseChoose"></div>
                     <div style='width:500;height:300;margin-top: 20;margin-left:140;'>
@@ -183,10 +177,6 @@ end
                         <div style='width:75;height:75;margin-left: 270;margin-top:-75;background:url(codepku/image/textures/fastentrence/next.png);' onclick="next_page"></div>
                     </div>
             </div>
-            <div style='float: left;width: 450;height: 650;background:url(codepku/image/textures/fastentrence/primary.png);margin-left:100;margin-top:100;' name='primary'></div>
-            <div style='float: left;width: 450;height: 650;background:url(codepku/image/textures/fastentrence/middle.png);margin-left:100;margin-top:100;' name='middle'></div>
-            <div style='float: left;width: 450;height:650;background:url(codepku/image/textures/fastentrence/high.png);margin-left:100;margin-top:100;' name='high'></div>
-            
         </pe:if>
         
     </div>
