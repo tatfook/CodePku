@@ -5,7 +5,11 @@ local viewport = ViewportManager:GetSceneViewport();
 NPL.load("(gl)script/apps/Aries/Creator/Game/Code/CodeWindow.lua");
 local AdaptWindow = commonlib.inherit(commonlib.gettable("MyCompany.Aries.Game.Code.CodeWindow"), commonlib.gettable("Mod.CodePku.GUI.Window.AdaptWindow"));
 
-
+-- params example
+-- params = {
+--      url="Mod/CodePku/cellar/Common/TouchMiniButtons/MainUIButtons_dialog.html", 
+--      alignment="_lb", left = 0, top = -350, width = 400, height = 350,
+-- }
 function AdaptWindow:QuickWindow(params)
     local window = AdaptWindow:new();
     window:Show({
@@ -16,6 +20,11 @@ function AdaptWindow:QuickWindow(params)
         width = params.width, 
         height = params.height, 
         parent = viewport:GetUIObject(true),
+
+        zorder=params.zorder or 1, 
+        allowDrag=params.allowDrag or false, 
+        
+        -- can add more
     });
     window:SetMinimumScreenSize(1920,1080);
 
