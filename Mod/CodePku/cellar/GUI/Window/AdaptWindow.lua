@@ -23,6 +23,8 @@ function AdaptWindow:QuickWindow(params)
 
         zorder=params.zorder or 1, 
         allowDrag=params.allowDrag or false, 
+
+        click_through=params.click_through or false,
         
         -- can add more
     });
