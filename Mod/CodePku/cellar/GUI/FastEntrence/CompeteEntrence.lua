@@ -1,4 +1,5 @@
-local AdaptWindow = commonlib.gettable("Mod.CodePku.GUI.Window.AdaptWindow")
+NPL.load("(gl)Mod/CodePku/cellar/GUI/Window/AdaptWindow.lua");
+local AdaptWindow = commonlib.gettable("Mod.CodePku.GUI.Window.AdaptWindow");
 local CompeteEntrencePage = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.CompeteEntrencePage");
 
 function CompeteEntrencePage:ShowPage(bShow)
@@ -12,9 +13,9 @@ function CompeteEntrencePage:ShowPage(bShow)
         click_through = false, 
         zorder = 20,
         directPosition = true,
-        align = "_ct",
-        x = 0,
-        y = 0,
+        alignment = "_ct",
+        x = -1920/2,
+        y = -1080/2,
         width = 1920,
         height = 1080,
         };
