@@ -80,13 +80,7 @@ function MainUIButtons.ShowPage()
 			MainUIButtons.show_function_ui()
 			MainUIButtons.show_dialog_ui(false)
 
-			if(System.os.IsMobilePlatform())then
-				ParaUI.SetMinimumScreenSize(960,540,true);
-				ParaUI.SetMaximumScreenSize(960,540,true);
-			else
-				ParaUI.SetMinimumScreenSize(1920,1080,true);
-				ParaUI.SetMaximumScreenSize(1920,1080,true);
-			end
+			-- ParaUI.SetMinimumScreenSize(1920,1080,true);
 		end
 	end
 end
@@ -135,6 +129,6 @@ function MainUIButtons.show_interact_ui(obj)
 			height = height,
 	});
 
-	ParaUI.SetMinimumScreenSize(1920,1080,true);
+	-- ParaUI.SetMinimumScreenSize(1920,1080,true);
 
 end

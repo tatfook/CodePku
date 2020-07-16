@@ -80,49 +80,13 @@ function Undefinde()
     GameLogic.RunCommand("/tip -duration 1500 开发中敬请期待")
 end
 
-
 ]]>   
 </script>
 <style type="text/mcss">
-{
-    green_button = {
-        color = "#ffffff",
-        textcolor = "#ffffff",
-        width = 100,
-        height = 61,
-        ["font-size"] = 30,
-        ["base-font-size"] = 30,
-        border = "none",
-        ["font-weight"] = "bold",
-        ["font-family"] = "Microsoft Yahei",
-        background = "codepku/image/textures/userinfo/info_title/user_center.png",
-        ["margin-top"] = 24,
-        ["margin-left"] = 120,
-    },
-    
-    /* title_class = {
-        color = "#000000",
-        ["font-size"] = 30,
-        padding = 20,
-        ["base-font-size"] = 30,
-        ["font-weight"] = "bold",
-        
-    } */
-}
 </style>
-<!-- <aries:window
-    mode="center"
-    width="800"
-    height="650"
-    title='<%=L"首页"%>'
-    title_height="60"
-    onclose= "ClosePage"
-    close_height="40"
-    style="showline: false;"
-> -->
 
-<pe:container alignment="_lt" >
-    <div style="width:1920;height:1080;background:url(codepku/image/textures/userinfo/user_info_back.png);" >
+<pe:container alignment="_lt" width="1920" height="1080">
+    <div style='<%=format("width:1920;height:1080;background:url(codepku/image/textures/userinfo/user_info_back.png);")%>' >
         <div style="position:relative;width:160;height:43;margin-left:960;margin-top:16;background:url(codepku/image/textures/userinfo/info_title/user_center.png);"></div>
         <div style="position:relative;width:45;height:50;margin-left:1815;margin-top:16;background:url(codepku/image/textures/userinfo/info_title/cancel.png);"onclick="ClosePage"></div>
         <div style="position:relative;width:45;height:50;margin-left:86;margin-top:16;background:url(codepku/image/textures/userinfo/info_title/help.png);"onclick="Undefinde"></div>
