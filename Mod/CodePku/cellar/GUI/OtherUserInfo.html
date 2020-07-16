@@ -33,7 +33,7 @@ function ClosePage()
 end
 
 function Undefinde()
-    GameLogic.RunCommand("/tip 开发中敬请期待")
+    GameLogic.RunCommand("/tip -duration 1500 开发中敬请期待")
 end
 
 function OnConfirm()
@@ -55,13 +55,7 @@ function Choose(index)
     user_options[choose_index].url = user_options[choose_index].url..1
     Page:Refresh(0);
 end
-function Choose5(index)
-    user_options = user_options_list[5]
-    user_options[choose_index5].url =string.sub(user_options[choose_index5].url ,1,string.len(user_options[choose_index5].url)-1)
-    choose_index5 =index
-    user_options[choose_index5].url = user_options[choose_index5].url..1
-    Page:Refresh(0);
-end
+
 
 function OnClickButton(name,mcmlNode)
     ClosePage();
@@ -77,42 +71,9 @@ end
 ]]>   
 </script>
 <style type="text/mcss">
-{
-    green_button = {
-        color = "#ffffff",
-        textcolor = "#ffffff",
-        width = 100,
-        height = 61,
-        ["font-size"] = 30,
-        ["base-font-size"] = 30,
-        border = "none",
-        ["font-weight"] = "bold",
-        ["font-family"] = "Microsoft Yahei",
-        background = "codepku/image/textures/userinfo/info_title/user_center.png",
-        ["margin-top"] = 24,
-        ["margin-left"] = 120,
-    },
-    
-    /* title_class = {
-        color = "#000000",
-        ["font-size"] = 30,
-        padding = 20,
-        ["base-font-size"] = 30,
-        ["font-weight"] = "bold",
-        
-    } */
-}
+
 </style>
-<!-- <aries:window
-    mode="center"
-    width="800"
-    height="650"
-    title='<%=L"首页"%>'
-    title_height="60"
-    onclose= "ClosePage"
-    close_height="40"
-    style="showline: false;"
-> -->
+
 
 <pe:container alignment="_lt" width="1920" height="1080">
     <div style="width:1920;height:1080;background:url(codepku/image/textures/userinfo/user_info_back.png);" >
@@ -154,20 +115,6 @@ end
                 <div style="position:relative;width:380;text-align:left;margin-left:120;margin-top:630;font-size:30;base-font-size:30;"><%= name%></div>
                 <div style="position:relative;width:380;text-align:left;margin-left:440;margin-top:630;font-size:30;base-font-size:30;"><%= name%></div>  
             </div> 
-        </pe:if>
-        <pe:if condition='<%=choose_index == 5%>'>
-            <!-- 背包 -->
-            <div style="position:relative;width:1377;height:911;margin-left:300;margin-top:120;background:url(codepku/image/textures/userinfo/beibaobeijing.png);">
-                <div style="position:relative;margin-left:52;margin-top:40;width:611;height:735;text-align:center;font-size:40;base-font-size:40;background:url(codepku/image/textures/userinfo/wanjiatouxiang.png)"></div>
-            </div>
-            <div style = "position:relative;margin-top:100;margin-left:1700;">
-                <pe:repeat  DataSource="<%=user_options_list[5]%>">
-                        <pe:repeatitem>
-                            <div name='<%=Eval("index")%>' style='<%=format("width:145;height:85;text-align:center;margin-top:20;font-size:18;base-font-size:40;background:url(codepku/image/textures/userinfo/options/%s.png)",Eval("url"))%>' onclick="Choose5"></div>
-                        </pe:repeatitem>
-                </pe:repeat>
-            </div>
-            
         </pe:if>
     </div>
 </pe:container>
