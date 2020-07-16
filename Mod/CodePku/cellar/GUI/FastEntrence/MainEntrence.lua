@@ -11,9 +11,9 @@ function MainEntrencePage:ShowPage(bShow)
         enable_esc_key = true,
         click_through = false, 
         zorder = 20,
-        align = "_ct",
-        x = 0,
-        y = 0,
+        alignment = "_ct",
+        x = -1920/2,
+        y = -1080/2,
         width = 1920,
         height = 1080,
         };
