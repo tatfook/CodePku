@@ -166,7 +166,7 @@ end
                     <div style='width:700;height:500;margin-top: 20;margin-left:140;'>
                         <pe:repeat DataSource="<%=GetGradeDetails(SystemEntrencePage.school, SystemEntrencePage.page)%>">
                             <pe:repeatitem>
-                                <div style="<%=format('background:url(codepku/image/textures/fastentrence/choose_grade/%s/%d/%d.png);position:relative;width:326;height:128;background-color: #ffffff;text-align:center;left: %s;top:%s', SystemEntrencePage.school, SystemEntrencePage.page, Eval('index'), ((Eval('index')+1)%2)*400+70, math.floor(((Eval('index')-1)/2))*150)%>" name="<%=format('%d %d',Eval('grade_id'), Eval('semester_id'))%>" onclick='OnClickGrade' grade_id='<%=Eval("grade_id")%>' semester_id='<%=Eval("semester_id")%>'></div>
+                                <div style="<%=format('background:url(codepku/image/textures/fastentrence/choose_grade/block_blue.png);position:relative;width:326;height:128;background-color: #ffffff;text-align:center;left: %s;top:%s', ((Eval('index')+1)%2)*400+70, math.floor(((Eval('index')-1)/2))*150)%>" name="<%=format('%d %d',Eval('grade_id'), Eval('semester_id'))%>" onclick='OnClickGrade' grade_id='<%=Eval("grade_id")%>' semester_id='<%=Eval("semester_id")%>'><div style="margin-top:40;font-size: 28px;"><%=Eval('name')%></div></div>
                             </pe:repeatitem>
                         </pe:repeat>
                     </div>

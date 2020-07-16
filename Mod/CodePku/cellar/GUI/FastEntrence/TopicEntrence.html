@@ -106,7 +106,7 @@ end
 
 <div style="margin-top:5px;width:1920;height: 1080;background:url(codepku/image/textures/fastentrence/topic_board.png)">
     <div style='width:100px;height:100px;background:url(codepku/image/textures/fastentrence/return.png);margin-left: 100px;margin-top: 20px;' onclick="OnClose"></div>
-    <div style="width:200px;height:800px;margin-left: 20px;margin-right: 20px;margin-top:70px;float: left;">
+    <div style="width:200px;height:900px;margin-left: 20px;margin-right: 20px;margin-top:70px;float: left;">
         <pe:repeat DataSource="<%=GetSubjects()%>">
             <pe:repeatitem>
                 <div style="<%=format('background:url(codepku/image/textures/fastentrence/topic/%s.png);width:220;height:100;margin-left:-18;margin-bottom: 30;', Eval('title'))%>" name='<%=Eval("index")%>' onclick='OnClickSubject'></div>
