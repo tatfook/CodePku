@@ -87,7 +87,7 @@ function MainUIButtons.show_interact_ui(obj)
 	height = 1080
 
 	params = {
-		format("Mod/CodePku/cellar/Common/TouchMiniButtons/MainUIButtons_interact.html?pname=%s&pid=%s", pname, pid),
+		url = format("Mod/CodePku/cellar/Common/TouchMiniButtons/MainUIButtons_interact.html?pname=%s&pid=%s", pname, pid),
 		alignment="_lt", left = 0, top = 0, width = width, height = height,
 		click_through = false,
 	}

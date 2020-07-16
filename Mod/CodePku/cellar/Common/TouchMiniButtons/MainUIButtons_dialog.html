@@ -59,34 +59,35 @@ end
 ]]></script>
 <style type="text/mcss">
 </style>
-<pe:container alignment="_lb" width="400" height="350" style="background: none;">
-        <div style="width:400;height:350;background-color: #00000050;">
+<pe:container alignment="_lb" width="400" height="350">
+    <div style="width:400;height:350;background-color: #00000050;">
 
-        <div style="font-size: 24;base-font-size:24; height: 40;">
-            <pe:repeat DataSource="<%=GetCategories()%>">
-                <pe:repeatitem>
-                     <div style='<%=format("position:relative; width:55; height:35;line-height:30;text-align:center;left: %s;top:0;background-color: #ffff00;", Eval("index") * 60 - 45)%>'><%=Eval("text")%></div>
-                </pe:repeatitem>
-            </pe:repeat>
-            <div style="position:relative;left:350;width:50; height:50; background: url(codepku/image/textures/mainuibuttons/dialog/close_button.png);" onclick="ClickClose"></div>
-        </div>
-        <div style="font-size: 24;base-font-size:24;left:15">
-            <pe:repeat DataSource="<%=GetDialogMessages()%>">
-                <pe:repeatitem>
-                    <pe:if condition='<%=Eval("kind") ~= 6%>'>
-                    <div style='<%=format("width:370; line-height:35;word-wrap:break-word;color:%s", MessageColors[Eval("kind")])%>'>
-                    <%=format("【%s】%s: %s", MessageTopics[Eval("kind")], Eval("sender"), Eval("text"))%>
-                    </div>
-                    </pe:if>
-                    <pe:if condition='<%= Eval("kind") == 6 %>'>
-                    <div style='<%=format("width:370; line-height:35;word-wrap:break-word;color:%s", MessageColors[Eval("kind")])%>'>
-                        <%=format("【%s】 %s", MessageTopics[Eval("kind")], Eval("text"))%>
-                    </div>
-                    </pe:if>
-                </pe:repeatitem>
-            </pe:repeat>
-        </div>
-        </div>
+    <div style="position:relative;font-size: 24;base-font-size:24; height: 40;">
+        <pe:repeat DataSource="<%=GetCategories()%>">
+            <pe:repeatitem>
+                    <div style='<%=format("position:relative; width:55; height:35;line-height:30;text-align:center;left: %s;top:0;background-color: #ffff00;", Eval("index") * 60 - 45)%>'><%=Eval("text")%></div>
+            </pe:repeatitem>
+        </pe:repeat>
+    </div>
+    <div style="position:relative;left:350;width:50; height:50; background: url(codepku/image/textures/mainuibuttons/dialog/close_button.png);" onclick="ClickClose"></div>
+
+    <div style="font-size: 24;base-font-size:24;left:15;top:50">
+        <pe:repeat DataSource="<%=GetDialogMessages()%>">
+            <pe:repeatitem>
+                <pe:if condition='<%=Eval("kind") ~= 6%>'>
+                <div style='<%=format("width:370; line-height:35;word-wrap:break-word;color:%s", MessageColors[Eval("kind")])%>'>
+                <%=format("【%s】%s: %s", MessageTopics[Eval("kind")], Eval("sender"), Eval("text"))%>
+                </div>
+                </pe:if>
+                <pe:if condition='<%= Eval("kind") == 6 %>'>
+                <div style='<%=format("width:370; line-height:35;word-wrap:break-word;color:%s", MessageColors[Eval("kind")])%>'>
+                    <%=format("【%s】 %s", MessageTopics[Eval("kind")], Eval("text"))%>
+                </div>
+                </pe:if>
+            </pe:repeatitem>
+        </pe:repeat>
+    </div>
+    </div>
 
 </pe:container>
 </pe:mcml> 
