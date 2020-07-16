@@ -25,7 +25,6 @@ function AdaptWindow:QuickWindow(params)
         allowDrag=params.allowDrag or false, 
 
         click_through=params.click_through or false,
-        
         -- can add more
     });
     window:SetMinimumScreenSize(1920,1080);
