@@ -36,20 +36,9 @@ function UserInfoPage:ShowPage(PageIndex,bShow)
     -- local DesktopMenuPage = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.DesktopMenuPage");
     UserInfoPage.bForceHide = bShow == false;
     UserInfoPage.PageIndex = PageIndex
-
     UserInfoPage.GetUserInfo()
-
-    NPL.load("(gl)script/ide/System/Scene/Viewports/ViewportManager.lua");
-    local ViewportManager = commonlib.gettable("System.Scene.Viewports.ViewportManager");
-    local viewport = ViewportManager:GetSceneViewport();
-
-    NPL.load("(gl)script/apps/Aries/Creator/Game/Code/CodeWindow.lua");
-    local Window = commonlib.gettable("MyCompany.Aries.Game.Code.CodeWindow")
-	local window = Window:new();
-	window:Show({
-		url="Mod/CodePku/cellar/GUI/UserInfo.html", 
-        alignment="_ct", left = -960, top = -540, width = 1920, height = 1080,
-        parent = viewport:GetUIObject(true),
-	});
-    window:SetMinimumScreenSize(1920,1080);
+    NPL.load("(gl)Mod/CodePku/cellar/GUI/Window/AdaptWindow.lua");
+    local AdaptWindow = commonlib.gettable("Mod.CodePku.GUI.Window.AdaptWindow")
+    AdaptWindow:QuickWindow({url="Mod/CodePku/cellar/GUI/UserInfo.html", 
+    alignment="_ct", left = -960, top = -540, width = 1920, height = 1080,zorder =20})
 end
