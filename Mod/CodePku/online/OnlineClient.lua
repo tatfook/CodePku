@@ -17,6 +17,8 @@ NPL.load("Mod/CodePku/online/NetClientHandler.lua");
 NPL.load("Mod/GeneralGameServerMod/Core/Client/EntityMainPlayer.lua");
 NPL.load("Mod/CodePku/online/EntityOtherPlayer.lua");
 NPL.load("Mod/CodePku/online/EntityMainPlayer.lua");
+NPL.load("Mod/GeneralGameServerMod/Core/Client/GeneralGameClient.lua");
+
 local NetClientHandler = commonlib.gettable("Mod.CodePku.Online.NetClientHandler");
 local EntityMainPlayer = commonlib.gettable("Mod.CodePku.Online.EntityMainPlayer");
 local EntityOtherPlayer = commonlib.gettable("Mod.CodePku.Online.EntityOtherPlayer");
@@ -32,7 +34,7 @@ local Config = NPL.load("(gl)Mod/CodePku/online/Config.lua");
 local GeneralGameWorld = commonlib.gettable("Mod.GeneralGameServerMod.Core.Client.GeneralGameWorld");
 local Packets = commonlib.gettable("Mod.GeneralGameServerMod.Core.Common.Packets");
 
-local OnlineClient = commonlib.inherit(commonlib.gettable("System.Core.ToolBase"), commonlib.gettable("Mod.CodePku.OnlineClient"));
+local OnlineClient = commonlib.inherit(commonlib.gettable("Mod.GeneralGameServerMod.Core.Client.GeneralGameClient"), commonlib.gettable("Mod.CodePku.OnlineClient"));
 
 function OnlineClient:ctor()
     self.inited = false;
