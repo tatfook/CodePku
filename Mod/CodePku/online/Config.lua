@@ -5,7 +5,7 @@ Date: 2020-07-10 16:23:49
 Desc: 玩学世界联机配置
 Example:
 ------------------------------------------------------------
-local Config = NPL.load("(gl)Mod/CodePku/Online/Config.lua");
+local Config = NPL.load("(gl)Mod/CodePku/online/Config.lua");
 -------------------------------------------------------
 ]]
 
@@ -25,10 +25,11 @@ Config.defaultEnv = (ParaEngine.GetAppCommandLineByParam("codepkuenv", nil) or C
 Config.onlineServer = {
     [Config.env.DEV] = {
         host = "gameserver.dev.codepku.com",
-        port = 9900
+        port = 9900,
+        defaultWorldId = 1
     },
     [Config.env.RELEASE] = {
-        host = "gameserver.codepku.com",
+        host = "steve.codemc.cn",
         port = 9900
     }
 };

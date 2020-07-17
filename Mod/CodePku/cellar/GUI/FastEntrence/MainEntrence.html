@@ -1,0 +1,82 @@
+<!-- "script/apps/Aries/Creator/Game/Areas/EscFramePage.html" -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+</head>
+<body>
+    <pe:mcml onloadscript="script/apps/Aries/app_main.lua" callbackfunction="MyCompany.Aries.MSGProc">
+<script refresh="false" type="text/npl" src="MainEntrence.lua"><![CDATA[
+MainEntrencePage = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.MainEntrencePage");
+local SystemEntrencePage = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.SystemEntrencePage");
+local TopicEntrencePage = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.TopicEntrencePage");
+local CompeteEntrencePage = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.CompeteEntrencePage");
+
+function ClosePage()
+    Page:CloseWindow();
+end
+
+
+function TurnToSystemEntrence()
+    ClosePage()
+    SystemEntrencePage:ShowPage(true, nil, false)
+end
+
+function TurnToTopicEntrence()
+    ClosePage()
+    TopicEntrencePage:ShowPage(true)
+end
+
+function TurnToBuildEntrence()
+    print('333')
+end
+
+function TurnToCompeteEntrence()
+    ClosePage()
+    print(CompeteEntrencePage)
+    print(CompeteEntrencePage.ShowPage)
+    CompeteEntrencePage.ShowPage(true)
+end
+
+
+function OnClose()
+    ClosePage()
+end
+
+
+function onClickPage(name)
+    ClosePage()
+    if(name=="system") then
+        TurnToSystemEntrence();
+    elseif(name=="topic") then
+        TurnToTopicEntrence();
+    elseif(name=="build") then
+        TurnToBuildEntrence()
+    elseif(name=="compete") then
+        TurnToCompeteEntrence()
+    end
+end
+
+
+
+]]></script>
+<style type="text/mcss">
+
+</style>
+    <pe:container alignment="_lt" width="1920" height="1080">
+        <div style="width:1920;height: 1080;background:url(codepku/image/textures/fastentrence/main.png);">
+            <div style='width:350;height:120px;margin-left:800;background:url(codepku/image/textures/fastentrence/fast_entrence_pic.png);'>
+                <div style='width:300;height:70px;margin-left:20;margin-top:20;background:url(codepku/image/textures/fastentrence/fast_entrence_text.png);'></div>
+            </div>
+            <div style='width:120px;height:120px;margin-left:1800;margin-top:-120;background:url(codepku/image/textures/fastentrence/close.png);' onclick="OnClose"></div>
+            <div style='float: left;width: 588;height: 744;background:url(codepku/image/textures/fastentrence/system.png);margin:50;' name='system' onclick="onClickPage"></div>
+            <div style='float: left;width: 588;height: 744;background:url(codepku/image/textures/fastentrence/topic.png);margin:50;' name='topic' onclick="onClickPage"></div>
+            <div style='float: left;width: 500;height: 374;background:url(codepku/image/textures/fastentrence/build.png);margin-top:50;' name='build'></div>
+            <div style='float: left;width: 500;height: 374;background:url(codepku/image/textures/fastentrence/compete.png);margin-top:-420;margin-left:1375px' name='compete' onclick="onClickPage"></div>
+        </div>
+    </pe:container>
+</pe:mcml>
+</body>
+</html>
+

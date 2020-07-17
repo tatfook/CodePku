@@ -34,7 +34,7 @@ NPL.load("(gl)script/apps/Aries/Creator/Game/Network/NetworkMain.lua")
 NPL.load("(gl)script/ide/System/Encoding/guid.lua")
 NPL.load("(gl)script/apps/Aries/Creator/Game/Login/ParaWorldLessons.lua")
 NPL.load("(gl)script/ide/System/Encoding/jwt.lua")
-NPL.load("(gl)Mod/CodePku/Online/main.lua");
+NPL.load("(gl)Mod/CodePku/online/main.lua");
 
 local Store = NPL.load("(gl)Mod/CodePku/store/Store.lua")
 local MsgBox = NPL.load("(gl)Mod/CodePku/cellar/Common/MsgBox/MsgBox.lua")
@@ -46,6 +46,15 @@ local UserConsole = NPL.load("(gl)Mod/CodePku/cellar/UserConsole/Main.lua")
 local CodePkuDownloadWorld = NPL.load("(gl)Mod/CodePku/cellar/World/DownloadWorld.lua")
 local CodePkuEscFramePage = NPL.load("(gl)Mod/CodePku/cellar/Areas/EscFramePage.lua")
 local CodePkuSystemSettingsPage = NPL.load("(gl)Mod/CodePku/cellar/Areas/SystemSettingsPage.lua")
+local AntiStuckPage = NPL.load("(gl)Mod/CodePku/cellar/GUI/AntiStuck.lua")
+local MainEntrencePage = NPL.load("(gl)Mod/CodePku/cellar/GUI/FastEntrence/MainEntrence.lua")
+local SystemEntrence = NPL.load("(gl)Mod/CodePku/cellar/GUI/FastEntrence/SystemEntrence.lua")
+local CompeteEntrence = NPL.load("(gl)Mod/CodePku/cellar/GUI/FastEntrence/CompeteEntrence.lua")
+local TopicEntrence = NPL.load("(gl)Mod/CodePku/cellar/GUI/FastEntrence/TopicEntrence.lua")
+local OtherUserInfoPage = NPL.load("(gl)Mod/CodePku/cellar/GUI/OtherUserInfo.lua")
+local UserInfoPage = NPL.load("(gl)Mod/CodePku/cellar/GUI/UserInfo.lua")
+local SharePage = NPL.load("(gl)Mod/CodePku/cellar/GUI/Share.lua")
+
 			
 local DownloadWorld = commonlib.gettable("MyCompany.Aries.Game.MainLogin.DownloadWorld")
 
@@ -172,6 +181,13 @@ function CodePku:init()
 	)
 
 	GameLogic.GetFilters():add_filter(
+		"desktop_menu",
+		function (menuItems) 
+			return {}
+		end
+	)
+
+	GameLogic.GetFilters():add_filter(
 		"download_remote_world_show_bbs", 
 		function ()
 			return false
@@ -280,6 +296,14 @@ function CodePku:init()
 		end
 	)
 
+	GameLogic.GetFilters().add_filter(
+		"AntiStuckPage:AntiStuck",
+		function (bShow)
+			AntiStuckPage:ShowPage(bShow)
+			return true
+		end
+	)
+	
 	GameLogic.GetFilters():add_filter(
 		"GameName",
 		function ()
@@ -303,6 +327,14 @@ function CodePku:init()
 		end
 	)
 
+	-- 主界面ui按钮
+	GameLogic.GetFilters():add_filter(
+		"MainUIButtons",
+		function()
+			local MainUIButtons = NPL.load("(gl)Mod/CodePku/cellar/Common/TouchMiniButtons/Main.lua");
+			return MainUIButtons;
+		end
+	)
 
 	-- 重写加载世界页面
 	Map3DSystem.App.MiniGames.SwfLoadingBarPage.url = "Mod/CodePKu/cellar/World/SwfLoadingBarPage.mc.html"

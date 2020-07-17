@@ -10,20 +10,25 @@ Example:
 ]]
 
 NPL.load("Mod/GeneralGameServerMod/Core/Client/GeneralGameWorld.lua");
-NPL.load("Mod/GeneralGameServerMod/Core/Common/Config.lua");
 NPL.load("Mod/GeneralGameServerMod/Core/Common/Connection.lua");
 NPL.load("Mod/GeneralGameServerMod/Core/Common/Log.lua");
 NPL.load("Mod/GeneralGameServerMod/Core/Common/Common.lua");
-NPL.load("Mod/GeneralGameServerMod/Core/Client/NetClientHandler.lua");
+NPL.load("Mod/CodePku/online/NetClientHandler.lua");
 NPL.load("Mod/GeneralGameServerMod/Core/Client/EntityMainPlayer.lua");
-NPL.load("Mod/GeneralGameServerMod/Core/Client/EntityOtherPlayer.lua");
-local NetClientHandler = commonlib.gettable("Mod.GeneralGameServerMod.Core.Client.NetClientHandler");
-local EntityMainPlayer = commonlib.gettable("Mod.GeneralGameServerMod.Core.Client.EntityMainPlayer");
-local EntityOtherPlayer = commonlib.gettable("Mod.GeneralGameServerMod.Core.Client.EntityOtherPlayer");
+NPL.load("Mod/CodePku/online/EntityOtherPlayer.lua");
+NPL.load("Mod/CodePku/online/EntityMainPlayer.lua");
+local NetClientHandler = commonlib.gettable("Mod.CodePku.Online.NetClientHandler");
+local EntityMainPlayer = commonlib.gettable("Mod.CodePku.Online.EntityMainPlayer");
+local EntityOtherPlayer = commonlib.gettable("Mod.CodePku.Online.EntityOtherPlayer");
 local Common = commonlib.gettable("Mod.GeneralGameServerMod.Core.Common.Common");
 local Log = commonlib.gettable("Mod.GeneralGameServerMod.Core.Common.Log");
 local Connection = commonlib.gettable("Mod.GeneralGameServerMod.Core.Common.Connection");
-local Config = commonlib.gettable("Mod.GeneralGameServerMod.Core.Common.Config");
+
+NPL.load("(gl)script/apps/Aries/Creator/WorldCommon.lua");
+local WorldCommon = commonlib.gettable("MyCompany.Aries.Creator.WorldCommon")
+
+local Config = NPL.load("(gl)Mod/CodePku/online/Config.lua");
+
 local GeneralGameWorld = commonlib.gettable("Mod.GeneralGameServerMod.Core.Client.GeneralGameWorld");
 local Packets = commonlib.gettable("Mod.GeneralGameServerMod.Core.Common.Packets");
 
@@ -85,7 +90,7 @@ function OnlineClient:LoadWorld(options)
     local curWorldId = GameLogic.options:GetProjectId();
 
     -- 确定世界ID
-    options.worldId = options.worldId or curWorldId or Config.defaultWorldId;
+    options.worldId = options.worldId or curWorldId or Config.defaultOnlineServer.defaultWorldId;
     options.username = options.username or self:GetUserInfo().username;
     -- only reload world if world id does not match
     local isReloadWorld = options.worldId ~= curWorldId; 
@@ -98,7 +103,49 @@ function OnlineClient:LoadWorld(options)
     self.IsReplaceWorld = true;
 
     if (isReloadWorld) then
-        GameLogic.RunCommand(string.format("/loadworld %d", worldId));
+        if (options.url)then
+            local InternetLoadWorld = commonlib.gettable("MyCompany.Aries.Creator.Game.Login.InternetLoadWorld")
+            local RemoteWorld = commonlib.gettable("MyCompany.Aries.Creator.Game.Login.RemoteWorld")
+            local DownloadWorld = commonlib.gettable("MyCompany.Aries.Game.MainLogin.DownloadWorld")
+
+            local world = RemoteWorld.LoadFromHref(options.url, "self")
+            local function LoadWorld(world, refreshMode)
+                if world then
+                    if refreshMode == 'never' then
+                        if not LocalService:IsFileExistInZip(world:GetLocalFileName(), ":worldconfig.txt") then
+                            refreshMode = 'force'
+                        end
+                    end
+
+                    local url = world:GetLocalFileName()               
+                    DownloadWorld.ShowPage(url)
+                    echo("loadworld")
+                    echo(world)
+                    local mytimer = commonlib.Timer:new(
+                        {
+                            callbackFunc = function(timer)
+                                InternetLoadWorld.LoadWorld(
+                                    world,
+                                    nil,
+                                    refreshMode or "auto",
+                                    function(bSucceed, localWorldPath)
+                                        DownloadWorld.Close()
+                                    end
+                                )
+                            end
+                        }
+                    );
+                    -- prevent recursive calls.
+                    mytimer:Change(1,nil);
+                else
+                    _guihelper.MessageBox(L"无效的世界文件");
+                end
+            end
+
+            LoadWorld(world, 'auto');
+        else
+            GameLogic.RunCommand(string.format("/loadworld %d", worldId));
+        end
     else
         self:OnWorldLoaded();
     end
@@ -127,8 +174,8 @@ end
 
 -- 连接控制服务器
 function OnlineClient:ConnectControlServer(options)
-    Log:Debug("ServerIp: %s, ServerPort: %s", Config.serverIp, Config.serverPort);
-    self.controlServerConnection = Connection:new():InitByIpPort(Config.serverIp, Config.serverPort, self);
+    Log:Debug("ServerIp: %s, ServerPort: %s", Config.defaultOnlineServer.host, Config.defaultOnlineServer.port);
+    self.controlServerConnection = Connection:new():InitByIpPort(Config.defaultOnlineServer.host, Config.defaultOnlineServer.port, self);
     self.controlServerConnection:SetDefaultNeuronFile("Mod/GeneralGameServerMod/Core/Server/ControlServer.lua");
     self.controlServerConnection:Connect(5, function(success)
         if (not success) then
@@ -145,8 +192,8 @@ end
 -- 发送获取世界服务器
 function OnlineClient:handleWorldServer(packetWorldServer)
     local options = self.options;
-    options.ip = packetWorldServer.ip;
-    options.port = packetWorldServer.port;
+    options.ip = packetWorldServer.ip or Config.defaultOnlineServer.host;
+    options.port = packetWorldServer.port or Config.defaultOnlineServer.port;
     if (not options.ip or not options.port) then
         Log:Info("服务器繁忙, 暂无合适的世界服务器提供");
         return;
@@ -161,7 +208,7 @@ end
 
 -- 获取当前认证用户信息
 function OnlineClient:GetUserInfo()
-    -- return {};
+    return System.User;
 end
 
 -- 获取当前系统世界信息

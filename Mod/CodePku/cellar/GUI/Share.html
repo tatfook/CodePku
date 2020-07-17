@@ -1,0 +1,57 @@
+<!-- "script/apps/Aries/Creator/Game/Areas/EscFramePage.html" -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+</head>
+<body>
+    <pe:mcml>
+<script refresh="false" type="text/npl" src="UserInfo.lua"><![CDATA[
+NPL.load("(gl)script/apps/Aries.Creator.Game.Desktop.Share.lua");
+SharePage = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.SharePage")
+UserInfo = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.UserInfo")
+
+SharePage.OnInit();
+
+function ClosePage()
+    Page:CloseWindow();
+end
+
+
+function OnConfirm()
+    GameLogic.RunCommand("/goto,home")
+end
+
+function OnLeave()
+    Page:CloseWindow();
+end
+
+function OnClose()
+    ClosePage()
+end
+
+
+]]>   
+</script>
+
+
+
+<pe:container alignment="_lt" width="1920" height="1080">
+    <div style="width:1920;height:1080;background:url(codepku/image/textures/userinfo/share/back.png);" >
+        <p style="position:relative;margin-top:180;margin-left:220;width:400;height:563;font-size:18;base-font-size:40;color: white;font-family:Microsoft Yahei;">心情寄语。。。。。。。。。。。。。。。</p>
+        <div style="position:relative;margin-top:200;margin-left:700;width:611;height:735;font-size:18;base-font-size:40;background:url(codepku/image/textures/userinfo/wanjiatouxiang.png);"></div>
+        <p style="position:relative;margin-top:863;margin-left:760;width:300;text-align:center;font-size:18;base-font-size:40;color: white;font-family:Microsoft Yahei;"><%= UserInfo.name%></p>
+        <p style="position:relative;margin-top:800;margin-left:1390;width:400;height:563;font-size:18;base-font-size:40;color: white;font-family:Microsoft Yahei;">分享到</p>
+        <div style="position:relative;margin-top:100;margin-left:1600;width:203;height:203;font-size:18;background:url(codepku/image/textures/userinfo/share/qrcode.png);"></div>
+        <div onclick="ClosePage" style="position:relative;margin-top:810;margin-left:1760;width:45;height:50;font-size:18;background:url(codepku/image/textures/userinfo/share/exit.png);"></div>
+        <div style="position:relative;margin-top:863;margin-left:1520;width:79;height:63;font-size:18;background:url(codepku/image/textures/userinfo/share/wechat.png);"></div>
+        <div style="position:relative;margin-top:863;margin-left:1620;width:65;height:68;font-size:18;background:url(codepku/image/textures/userinfo/share/QQlogo.png);"></div>
+
+    </div>
+</pe:container>
+
+</pe:mcml>
+</body>
+</html>
+ 
