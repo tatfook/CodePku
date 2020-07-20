@@ -6,7 +6,7 @@
     <title></title>
 </head>
 <body>
-    <pe:mcml>
+    <pe:mcml onloadscript="script/apps/Aries/app_main.lua" callbackfunction="MyCompany.Aries.MSGProc">
 <script refresh="false" type="text/npl" src="SystemEntrence.lua"><![CDATA[
 GameLogic = commonlib.gettable("MyCompany.Aries.Game.GameLogic")
 SystemEntrencePage = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.SystemEntrencePage");

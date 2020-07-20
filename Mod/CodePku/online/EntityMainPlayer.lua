@@ -22,6 +22,9 @@ MyHeadOnTextColor = "255 255 255"
 function EntityMainPlayer:CreateInnerObject(...)
     local obj = EntityMainPlayer._super.CreateInnerObject(self, self:GetMainAssetPath(), true, 0, 1);
 
+	userid = System.User.id
+	self:SetPlayerInfo(info)
+
 	if(self:IsShowHeadOnDisplay() and System.ShowHeadOnDisplay) then
 		System.ShowHeadOnDisplay(true, obj, self:GetDisplayName(), MyHeadOnTextColor);	
 	end
