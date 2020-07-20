@@ -11,6 +11,10 @@ local MainUIButtons = NPL.export();
 
 MainUIButtons.hasshown = false
 
+MainUIButtons.common_window = nil
+MainUIButtons.function_window = nil
+MainUIButtons.dialog_window = nil
+
 function MainUIButtons.show_common_ui()
 	local width = 410
 	local height = 110
@@ -19,7 +23,7 @@ function MainUIButtons.show_common_ui()
 		url="Mod/CodePku/cellar/Common/TouchMiniButtons/MainUIButtons_common.html", 
 		alignment="_lt", left = 0, top = 0, width = width, height = height,
 	}
-	local window = AdaptWindow:QuickWindow(params)
+	MainUIButtons.common_window = AdaptWindow:QuickWindow(params)
 end
 
 
@@ -32,37 +36,52 @@ function MainUIButtons.show_function_ui()
 		alignment="_rb", left = -width, top = -height, width = width, height = height,
 		click_through = true,
 	}
-	local window = AdaptWindow:QuickWindow(params)
+	MainUIButtons.function_window = AdaptWindow:QuickWindow(params)
 end
 
 
 function MainUIButtons.show_dialog_ui(bshow)
-	MainSceneUIButtons.show_dialog_ui(bshow)
+	MainUIButtons.dialog_window = MainSceneUIButtons.show_dialog_ui(bshow)
 end
 
 
 function MainUIButtons.ShowPage()
+	local show = false
 	if System.Codepku and System.Codepku.Coursewares and System.Codepku.Coursewares.category then 
 		local wid = System.Codepku.Coursewares.category
 
 		local worldtable = {3}
 
-		local show = false
 		for _, v in ipairs(worldtable) do
 			if(v == wid) then
 				show = true
 			end
 		end
-		if(show and not MainUIButtons.hasshown)then
-			-- for temp test, view the effect of mobile phone
-			-- local TouchMiniKeyboard = NPL.load("(gl)Mod/CodePku/cellar/Common/TouchMiniKeyboard/Main.lua");
-			-- TouchMiniKeyboard.CheckShow(true)
+	end
+
+	if(show)then
+		if(not MainUIButtons.hasshown) then
 			MainUIButtons.show_common_ui()
 			MainUIButtons.show_function_ui()
 			MainUIButtons.show_dialog_ui(false)
 
 			MainUIButtons.hasshown = true
 		end
+	else
+		if MainUIButtons.common_window ~= nil then
+			MainUIButtons.common_window:CloseWindow()
+			MainUIButtons.common_window = nil
+		end
+		if MainUIButtons.function_window ~= nil then
+			MainUIButtons.function_window:CloseWindow()
+			MainUIButtons.function_window = nil
+		end
+		if MainUIButtons.dialog_window ~= nil then
+			MainUIButtons.dialog_window:CloseWindow()
+			MainUIButtons.dialog_window = nil
+		end
+
+		MainUIButtons.hasshown = false
 	end
 end
 
