@@ -37,6 +37,15 @@ function ChangePage(index)
     FriendUI:ShowPage(index)
 end
 
+FriendData = {
+    {head="1.png", name="111111111", level=1, gender = "m", online=true, last_time = ''},
+    {head="2.png", name="sdfsdf", level=3, gender = "f", online=true, last_time = ''},
+    {head="1.png", name="222", level=5, gender = "m", online=false, last_time = '2020-7-20 12:00'},
+    {head="2.png", name="rrr", level=4, gender = "f", online=false, last_time = '2020-7-20 17:00'},
+    {head="1.png", name="9999", level=2, gender = "m", online=false, last_time = '2020-7-17 12:00'}
+}
+
+
 ]]>
 </script>
 <style type="text/mcss">
@@ -70,7 +79,7 @@ end
             </pe:if>
         </pe:repeatitem>
     </pe:repeat>
-
+    
 </pe:container>
 </pe:mcml>
 </body>

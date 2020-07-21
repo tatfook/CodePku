@@ -17,7 +17,6 @@ menu = {
     {index = 1, text = "my_friend"},
     {index = 2, text = "recent_player"},
     {index = 3, text = "black_list"},
-    {index = 4, text = "private_chat"},
 }
 
 function ClosePage()
@@ -39,11 +38,16 @@ end
 
 
 FriendData = {
-    {head="1.png", name="111111111", level=1, gender = "m", online=true, last_time = ''},
-    {head="2.png", name="sdfsdf", level=3, gender = "f", online=true, last_time = ''},
-    {head="1.png", name="222", level=5, gender = "m", online=false, last_time = '2020-7-20 12:00'},
-    {head="2.png", name="rrr", level=4, gender = "f", online=false, last_time = '2020-7-20 17:00'},
-    {head="1.png", name="9999", level=2, gender = "m", online=false, last_time = '2020-7-17 12:00'}
+    {id=11,head="1.png", name="111111111", level=1, gender = "m", online=true, last_time = ''},
+    {id=22,head="2.png", name="sdfsdf", level=3, gender = "f", online=true, last_time = ''},
+    {id=35,head="1.png", name="222", level=5, gender = "m", online=false, last_time = '2020-7-20 12:00'},
+    {id=47,head="2.png", name="rrr", level=4, gender = "f", online=false, last_time = '2020-7-20 17:00'},
+    {id=56,head="1.png", name="9999", level=2, gender = "m", online=false, last_time = '2020-7-17 12:00'},
+    {id=67,head="1.png", name="9999", level=2, gender = "m", online=false, last_time = '2020-7-17 12:00'},
+    {id=72,head="1.png", name="9999", level=2, gender = "m", online=false, last_time = '2020-7-17 12:00'},
+    {id=85,head="1.png", name="9999", level=2, gender = "m", online=false, last_time = '2020-7-17 12:00'},
+    {id=90,head="1.png", name="9999", level=2, gender = "m", online=false, last_time = '2020-7-17 12:00'},
+    {id=104,head="1.png", name="9999", level=2, gender = "m", online=false, last_time = '2020-7-17 12:00'}
 }
 
 function getFriendData()
@@ -55,45 +59,47 @@ end
 <style type="text/mcss">
 
 </style>
-<pe:container alignment="_lt" width="1920" height="1080" style="background: url(codepku/image/textures/friend/background.png)">
-    <div style="position:relative; width: 500;height: 145;
-    background: url(codepku/image/textures/friend/title_logo.png);">
-        <div style="width: 164;height: 83;margin-top: 30;margin-left: 140;
-        background: url(codepku/image/textures/friend/title.png);">
-        </div>
+<pe:container alignment="_lt" width="1920" height="1080" style="background: url(codepku/image/textures/friend/main/bg.png)">
+    <div style="position:relative; width: 164;height: 83;left:170;top:20;
+    background: url(codepku/image/textures/friend/main/title.png);">
     </div>
-    
-    <div style="position:relative; margin-left: 1775;width: 80;height: 80;margin-top: 20;
-    background: url(codepku/image/textures/friend/close.png);" onclick="ClosePage"></div>
+    <div style="position:relative; margin-left: 40;width: 100;height: 60;margin-top: 35;
+    background: url(codepku/image/textures/friend/main/return.png);" onclick="ClosePage"></div>
 
     <div style="position:relative; margin-left: 1300;margin-top: 150;width: 225;height: 70;
-    background: url(codepku/image/textures/friend/add_friend.png);" onclick="ClosePage"></div>
+    background: url(codepku/image/textures/friend/main/add_friend.png);" onclick="ClosePage"></div>
     <div style="position:relative; margin-left: 1640;margin-top: 150;width: 225;height: 70;
-    background: url(codepku/image/textures/friend/friend_apply.png);" onclick="ClosePage"></div>
+    background: url(codepku/image/textures/friend/main/friend_apply.png);" onclick="ClosePage"></div>
 
-    <pe:repeat DataSource="<%=menu%>">
+    <!-- left bar menu -->
+    <pe:repeat DataSource="<%=menu%>" style="position:relative;top:235">
         <pe:repeatitem>
             <pe:if condition='<%=Eval("index") ~= cur_index%>'>
-            <div style='<%=format("position:relative; width:280; height:93;left: 40;top:%s;background: url(codepku/image/textures/friend/menu/%s.png);",
-            Eval("index")*125 + 110, Eval("text"))%>' name='<%=Eval("index")%>' onclick="ChangePage"></div>
+            <div style='<%=format("width:367; height:120;left: 0;margin-top:30;background: url(codepku/image/textures/friend/menu/%s.png);",
+            Eval("text"))%>' name='<%=Eval("index")%>' onclick="ChangePage"></div>
             </pe:if>
             <pe:if condition='<%=Eval("index") == cur_index%>'>
-            <div style='<%=format("position:relative; width:280; height:93;left: 40;top:%s;background: url(codepku/image/textures/friend/menu/%s.png);",
-            Eval("index")*125 + 110, Eval("text").."_active")%>'></div>
+            <div style='<%=format("width:429; height:150;left: 0;margin-top:30;background: url(codepku/image/textures/friend/menu/%s.png);",
+            Eval("text").."_active")%>'></div>
             </pe:if>
         </pe:repeatitem>
     </pe:repeat>
 
 
-    <pe:gridview name="MyFriend" style="position:relative;margin-top:270;margin-left: 400;
-    height:400;width: 1500;background-color: #ff00ff50;" DataSource='<%=FriendData %>' CellPadding="10" 
-    DefaultNodeHeight = "100" ItemsPerLine="1" AllowPaging="false" RememberScrollPos="true" RememberLastPage="true" pagesize="1">
-        <Columns>
-            <div style="width: 1000;height: 83;margin-top: 10;
-            background: url(codepku/image/textures/friend/item_bg.png);">
-            <%=Eval("name")%>
-            </div>
-        </Columns>
+    <pe:gridview name="MyFriend" style="position:relative;margin-top:270;margin-left: 450;
+    height:700;width: 1400;background-color: #ff00ff50;" DataSource='<%=FriendData %>' CellPadding="10" ItemsPerLine="1" AllowPaging="false" RememberScrollPos="true" RememberLastPage="true" 
+    VerticalScrollBarStep="36" VerticalScrollBarOffsetX="8">
+    <Columns>
+    <div style="width: 1200;height: 160;">
+        <div style="position:relative;width:1146;height:130;top:15;left:15;background: url(codepku/image/textures/friend/item/bg.png);"></div>
+        <div style="position:relative;width:160;height:160;background: url(codepku/image/textures/friend/item/head.png);"></div>
+        <div style='<%=format("position:relative;width:100;height:100;left: 20;top: 20;background: url(codepku/image/textures/friend/head/%s);", Eval("head"))%>'></div>
+        <div style="position:relative;width:200;height:40;left:200;top:20;font-size: 40;color: #FFA500;"><%=Eval("name")%></div>
+        <div style="position:relative;width:200;height:40;left:200;top:100;font-size: 30;color: #FFA500;">ID: <%=Eval("id")%></div>
+        <div style='<%=format("position:relative;width:37;height:37;left:400;top:25;background: url(codepku/image/textures/friend/item/%s.png);", Eval("gender"))%>'></div>
+    
+    </div>
+    </Columns>
     </pe:gridview>
 
 
