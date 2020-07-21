@@ -14,7 +14,6 @@
     
     local page = document:GetPageCtrl()
     local last_clicked_index = 1
-    local last_navig_clicked_index = 1
     local page_num = 1
     local select_button_clicked = 0
     local show_flag = 0
@@ -37,7 +36,9 @@
     }
     local select_method = {
         ['默认排序'] = 'default_select',
-        ['ID'] = 'ID_select'
+        ['ID'] = 'ID_select',
+        ['热度'] = 'hot_select',
+        ['人数'] = 'pepole_select'
     }
 
     function get_full_course()
@@ -99,7 +100,7 @@
         Page:Refresh(0)
     end
     
-    function sort_course(course,sort_method)
+    function sort_course(course, sort_method)
         local sort_course = commonlib.deepcopy(course)
         if sort_method == 'default_select' then
             sort_course = course
@@ -159,11 +160,13 @@
     end
     
     function OnClickSubject(name)
-        subjects[name].title = subjects[name].title..'_clicked'
-        subjects[last_clicked_index].title = string.gsub(subjects[last_clicked_index].title, '_clicked', '')
-        last_clicked_index = name
-        topic_course = get_full_course()
-        Page:Refresh(0)
+        if last_clicked_index ~= name then
+            subjects[name].title = subjects[name].title..'_clicked'
+            subjects[last_clicked_index].title = string.gsub(subjects[last_clicked_index].title, '_clicked', '')
+            last_clicked_index = name
+            topic_course = get_full_course()
+            Page:Refresh(0)
+        end
     end
     
     function ChangeTopicPage(name)
@@ -177,22 +180,21 @@
     end
     
     function OnClickNavig(name)
-    
     end
 
 
-function OnClickCourse(name)
-    GameLogic.RunCommand(string.format("/connectCodePku %d", name));
-    Page:CloseWindow()
-end
-
-function GetDivisible(index)
-    if index % 5 == 0 then
-        return index / 5
-    else
-        return index/5
+    function OnClickCourse(name)
+        GameLogic.RunCommand(string.format("/connectCodePku %d", name));
+        Page:CloseWindow()
     end
-end
+
+    function GetDivisible(index)
+        if index % 5 == 0 then
+            return index / 5
+        else
+            return index/5
+        end
+    end
 
 
 ]]></script>
@@ -200,8 +202,10 @@ end
 </style>
 <pe:if condition='<%=SelectIsClicked() == 1 %>' >
     <div style="width: 240px; height: 120px; position: absolute; z-index: 10; margin-left: 1648px; margin-top: 248px;">
-        <div style="width: 240px; height: 50px; text-align: center; line-height: 50px; base-font-size:28px; font-size:28px; background-color: #88e0e9; color: #0d99a7;" name="default_select" onclick="OnSelectedItem">默认排序</div>
-        <div style="width: 240px; height: 50px; margin-top: 4px; text-align: center; line-height: 50px; base-font-size:28px; font-size:28px; background-color: #88e0e9; color: #0d99a7;" name="ID_select" onclick="OnSelectedItem">ID</div>
+        <div style="width: 240px; height: 50px; margin-top: 2px; background: url(codepku/image/textures/fastentrence/topic/default_select.png);" name="default_select" onclick="OnSelectedItem"></div>
+        <div style="width: 240px; height: 50px; margin-top: 2px; background: url(codepku/image/textures/fastentrence/topic/ID_select.png);" name="ID_select" onclick="OnSelectedItem"></div>
+        <div style="width: 240px; height: 50px; margin-top: 2px; background: url(codepku/image/textures/fastentrence/topic/hot_select.png);" name="hot_select" onclick="OnSelectedItem"></div>
+        <div style="width: 240px; height: 50px; margin-top: 2px; background: url(codepku/image/textures/fastentrence/topic/pepole_select.png);" name="pepole_select" onclick="OnSelectedItem"></div>
     </div>
 </pe:if>
 <div style="margin-top:5px;width:1920;height: 1080;background:url(codepku/image/textures/fastentrence/topic_board.png);">
