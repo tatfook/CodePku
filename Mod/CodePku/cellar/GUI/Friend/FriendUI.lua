@@ -5,7 +5,7 @@ local AdaptWindow = commonlib.gettable("Mod.CodePku.GUI.Window.AdaptWindow")
 local FriendUI = commonlib.gettable("Mod.CodePku.GUI.FriendUI")
 
 FriendUI.ui = nil
-params={
+FriendUI.params={
     myfriend = {
         url="Mod/CodePku/cellar/GUI/Friend/MyFriend.html",
         alignment="_ct", left = -960, top = -540, width = 1920, height = 1080,zorder =20
@@ -32,12 +32,12 @@ function FriendUI:ShowPage(PageIndex)
 
     PageIndex = tonumber(PageIndex)
     if PageIndex == 1 then
-        FriendUI.ui = AdaptWindow:QuickWindow(params["myfriend"])
+        FriendUI.ui = AdaptWindow:QuickWindow(FriendUI.params["myfriend"])
     elseif PageIndex == 2 then
-        FriendUI.ui = AdaptWindow:QuickWindow(params["recentplayer"])
+        FriendUI.ui = AdaptWindow:QuickWindow(FriendUI.params["recentplayer"])
     elseif PageIndex == 3 then
-        FriendUI.ui = AdaptWindow:QuickWindow(params["blacklist"])
+        FriendUI.ui = AdaptWindow:QuickWindow(FriendUI.params["blacklist"])
     elseif PageIndex == 4 then
-        FriendUI.ui = AdaptWindow:QuickWindow(params["privatechat"])
+        FriendUI.ui = AdaptWindow:QuickWindow(FriendUI.params["privatechat"])
     end
 end
