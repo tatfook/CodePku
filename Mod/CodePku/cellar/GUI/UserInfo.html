@@ -17,51 +17,30 @@ UserInfo = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.UserInfo")
 
     -- =============================================================================== start 背包
 
-    local goods_table = {
-        [1] = { category = "药品", category_sort = 1, name = "茯苓汤", name_sort = "fulingtang", remain = 2},
-        [2] = { category = "药品", category_sort = 1, name = "四合散", name_sort = "sihesan", remain = 2},
-        [3] = { category = "药品", category_sort = 1, name = "瞪眼丸", name_sort = "dengyanwan", remain = 3},
-        [4] = { category = "药品", category_sort = 1, name = "鹤顶红", name_sort = "hedinghong", remain = 4},
-        [5] = { category = "食物", category_sort = 2, name = "馒头", name_sort = "mantou", remain = 22},
-        [6] = { category = "食物", category_sort = 2, name = "米饭", name_sort = "mifan", remain = 12},
-        [7] = { category = "食物", category_sort = 2, name = "包子", name_sort = "baozi", remain = 21},
-        [8] = { category = "食物", category_sort = 2, name = "面条", name_sort = "miantiao", remain = 5},
-        [9] = { category = "食物", category_sort = 2, name = "鸡肉", name_sort = "jirou", remain = 2},
-        [10] = { category = "食物", category_sort = 2, name = "牛肉", name_sort = "niurou", remain = 6},
-        [11] = { category = "兵器", category_sort = 3, name = "天问", name_sort = "tianwen", remain = 2},
-        [12] = { category = "兵器", category_sort = 3, name = "渊虹", name_sort = "yuanhong", remain = 2},
-        [13] = { category = "兵器", category_sort = 3, name = "鲨齿", name_sort = "shachi", remain = 7},
-        [14] = { category = "兵器", category_sort = 4, name = "墨眉", name_sort = "momei", remain = 8},
-        [15] = { category = "兵器", category_sort = 3, name = "水寒", name_sort = "shuihan", remain = 9},
-        [16] = { category = "兵器", category_sort = 5, name = "太阿", name_sort = "taie", remain = 10},
-        [17] = { category = "兵器", category_sort = 3, name = "赤霄", name_sort = "chixiao", remain = 11},
-        [18] = { category = "兵器", category_sort = 6, name = "干将", name_sort = "ganjing", remain = 2},
-        [19] = { category = "兵器", category_sort = 3, name = "莫邪", name_sort = "moye", remain = 89},
-        [20] = { category = "兵器", category_sort = 3, name = "雪霁", name_sort = "xueji", remain = 55},
-        [21] = { category = "兵器", category_sort = 7, name = "秋骊", name_sort = "qiuli", remain = 34},
-        [22] = { category = "兵器", category_sort = 3, name = "凌虚", name_sort = "lingxu", remain = 33},
-        [23] = { category = "兵器", category_sort = 7, name = "非攻", name_sort = "feigong", remain = 55},
-        [24] = { category = "兵器", category_sort = 3, name = "赤练", name_sort = "chilian", remain = 22},
-        [25] = { category = "兵器", category_sort = 2, name = "含光", name_sort = "hanguang", remain = 20},
-    }
+    
 
-    local backpack_table = {}
+    
     local nowPage = 1
     local maxPage = 1
     local pageSize = 20
 
     -- 每个格子记录了该格子的序号和页号，以及该格子所要展示的信息
     function create_backpack_table()
+        local items_table = UserInfoPage.GetItemInfo()
+        local backpack_table = {}
         local now_Page = 1
-        local i = 1
-        local length = #goods_table
-        local test_table = {}
+        local i, j = 1, 1
+        local length = #items_table
+        local item = {}
         while(i <= length)do
             if(i > pageSize*now_Page)then
                 now_Page = now_Page + 1
             end
-            test_table = goods_table[i]
-            backpack_table[i] = {pageNum = now_Page, grid_id = i, info = test_table}
+            item = items_table[i]
+            if choose_index5 == 1 or item.category_id == choose_index5 then
+                backpack_table[j] = {pageNum = now_Page, grid_id = j, info = item}
+                j = j + 1
+            end
             i = i + 1
         end
         maxPage = now_Page
@@ -74,6 +53,7 @@ UserInfo = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.UserInfo")
         local now_backpack_table = {}
         local m = 1
         local length = #mytable
+        echo(string.format('length: %d', length))
         while(m <= length)do
             if(m > pageSize*(nowPage-1) and m <= pageSize*nowPage)then
                 table.insert(now_backpack_table, mytable[m].info)
@@ -85,17 +65,6 @@ UserInfo = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.UserInfo")
 
     --显示指定页号的背包信息
     function show_now_backpack()
-
-        local flag = -1
-
-        if("食物" == "食物")then
-            flag = 1
-        else
-            flag = 0
-        end
-
-        print("0000000000000000000000000000000000000000===================="..flag)
-
         return get_now_backpack(nowPage)
     end
 
@@ -125,8 +94,8 @@ UserInfo = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.UserInfo")
 
     function sort_backpack()
         local i = 1
-        local length = #goods_table
-        goods_table = bubble_sort(goods_table)
+        local length = #items_table
+        items_table = bubble_sort(items_table)
         Page:Refresh(0.02)   
         
     end
@@ -154,7 +123,7 @@ UserInfo = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.UserInfo")
         local m = 1
 
         while(m <= length)do
-            print("----------------------------"..a_table[m].category_sort)
+            print("----------------------------"..a_table[m].category_id)
             m = m + 1
         end
 
@@ -324,9 +293,8 @@ end
             
             <div style="width: 680; height: 868; margin-top: 121; margin-left: 915; text-align: center; float: left;">
                 <pe:repeat DataSource="<%= show_now_backpack() %>">
-                    <div style="width: 150; height: 145; float: left; background-color: #7210ce; margin-left: 20px; margin-top: 32px;">
-                        <div style="width: 150px; height: 75px; font-size: 50px; line-height: 75px;"><%=Eval('category')%></div>
-                        <div style="width: 150px; height: 75px; font-size: 50px; line-height: 75px;"><%=Eval('name')%></div> 
+                    <div style="width: 150; height: 145; float: left; background:url(codepku/image/textures/tmp_icon.jpg); margin-left: 20px; margin-top: 32px;">
+                        <div style='font-size: 20; : margin: 120;'><%=remain%></div>
                     </div>
                 </pe:repeat>
             </div>
@@ -334,7 +302,8 @@ end
             <div style="position:relative; margin-left:105; margin-top: 700px; width: 145px;  text-align: center; float: left;">
                 <div style = "width:145;height:85; font-size: 40px; line-height: 85px; background-color: #7210ce;" onclick="prePage">上一页</div>
                 <div style = "margin-top: 30; width:145;height:85; font-size: 40px; line-height: 85px; background-color: #7210ce;" onclick="nextPage">下一页</div>
-                <div style = "margin-top:30; width:145; height:85; font-size: 40px; line-height: 85px; background-color: #7210ce;" onclick="sort_backpack">整理</div>
+                        <div style="width: 150px; height: 75px; font-size: 50px; line-height: 75px;"><%=Eval('name')%></div> 
+                <div style = "width:145; height:85; font-size: 40px; line-height: 85px; background:url(codepku/image/textures/userinfo/options/zhengli.png);" onclick="sort_backpack"></div>
             </div> 
                    
             
