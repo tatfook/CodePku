@@ -31,35 +31,38 @@ UserInfo = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.UserInfo")
         [11] = { category = "兵器", category_sort = 3, name = "天问", name_sort = "tianwen", remain = 2},
         [12] = { category = "兵器", category_sort = 3, name = "渊虹", name_sort = "yuanhong", remain = 2},
         [13] = { category = "兵器", category_sort = 3, name = "鲨齿", name_sort = "shachi", remain = 7},
-        [14] = { category = "兵器", category_sort = 3, name = "墨眉", name_sort = "momei", remain = 8},
+        [14] = { category = "兵器", category_sort = 4, name = "墨眉", name_sort = "momei", remain = 8},
         [15] = { category = "兵器", category_sort = 3, name = "水寒", name_sort = "shuihan", remain = 9},
-        [16] = { category = "兵器", category_sort = 3, name = "太阿", name_sort = "taie", remain = 10},
+        [16] = { category = "兵器", category_sort = 5, name = "太阿", name_sort = "taie", remain = 10},
         [17] = { category = "兵器", category_sort = 3, name = "赤霄", name_sort = "chixiao", remain = 11},
-        [18] = { category = "兵器", category_sort = 3, name = "干将", name_sort = "ganjing", remain = 2},
+        [18] = { category = "兵器", category_sort = 6, name = "干将", name_sort = "ganjing", remain = 2},
         [19] = { category = "兵器", category_sort = 3, name = "莫邪", name_sort = "moye", remain = 89},
         [20] = { category = "兵器", category_sort = 3, name = "雪霁", name_sort = "xueji", remain = 55},
-        [21] = { category = "兵器", category_sort = 3, name = "秋骊", name_sort = "qiuli", remain = 34},
+        [21] = { category = "兵器", category_sort = 7, name = "秋骊", name_sort = "qiuli", remain = 34},
         [22] = { category = "兵器", category_sort = 3, name = "凌虚", name_sort = "lingxu", remain = 33},
-        [23] = { category = "兵器", category_sort = 3, name = "非攻", name_sort = "feigong", remain = 55},
+        [23] = { category = "兵器", category_sort = 7, name = "非攻", name_sort = "feigong", remain = 55},
         [24] = { category = "兵器", category_sort = 3, name = "赤练", name_sort = "chilian", remain = 22},
-        [25] = { category = "兵器", category_sort = 3, name = "含光", name_sort = "hanguang", remain = 20},
+        [25] = { category = "兵器", category_sort = 2, name = "含光", name_sort = "hanguang", remain = 20},
     }
 
     local backpack_table = {}
     local nowPage = 1
     local maxPage = 1
-
     local pageSize = 20
+
+    -- 每个格子记录了该格子的序号和页号，以及该格子所要展示的信息
     function create_backpack_table()
         local now_Page = 1
         local i = 1
-        for k, v in pairs(goods_table)do
+        local length = #goods_table
+        local test_table = {}
+        while(i <= length)do
             if(i > pageSize*now_Page)then
                 now_Page = now_Page + 1
-            end            
-            local test_table = {pageNum = now_Page, grid_id = i, content = v}
-            backpack_table[i] = test_table
-            i = i + 1          
+            end
+            test_table = goods_table[i]
+            backpack_table[i] = {pageNum = now_Page, grid_id = i, info = test_table}
+            i = i + 1
         end
         maxPage = now_Page
         return backpack_table
@@ -67,18 +70,32 @@ UserInfo = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.UserInfo")
 
     --获取指定页号的背包信息
     function get_now_backpack(needPage)
-        create_backpack_table()
+        local mytable = create_backpack_table()
         local now_backpack_table = {}
-        for k, v in pairs(goods_table)do
-            if(k > pageSize*(nowPage-1) and k <= pageSize*nowPage)then
-                table.insert(now_backpack_table, v)
-            end                  
+        local m = 1
+        local length = #mytable
+        while(m <= length)do
+            if(m > pageSize*(nowPage-1) and m <= pageSize*nowPage)then
+                table.insert(now_backpack_table, mytable[m].info)
+            end
+            m = m + 1
         end
         return now_backpack_table
     end
 
     --显示指定页号的背包信息
     function show_now_backpack()
+
+        local flag = -1
+
+        if("食物" == "食物")then
+            flag = 1
+        else
+            flag = 0
+        end
+
+        print("0000000000000000000000000000000000000000===================="..flag)
+
         return get_now_backpack(nowPage)
     end
 
@@ -107,10 +124,70 @@ UserInfo = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.UserInfo")
     end
 
     function sort_backpack()
-            table.sort(goods_table, function(a, b)
-            return a.category_sort < b.category_sort
-        end)
-        Page:Refresh(0.02)       
+        local i = 1
+        local length = #goods_table
+        goods_table = bubble_sort(goods_table)
+        Page:Refresh(0.02)   
+        
+    end
+
+    function bubble_sort(a_table)
+        local length = #a_table
+        local i = 1
+        local j = 1
+        local temp = {}
+
+        while(i <= length)do
+            while(j <= length-i)do
+                if(a_table[j].category > a_table[j+1].category)then
+                    print(a_table[j].name_sort.."------1111111---------================---------111111-----"..a_table[j+1].name_sort)
+                    temp = a_table[j]
+                    a_table[j] = a_table[j+1]
+                    a_table[j+1] = temp
+                end
+                j = j + 1
+            end
+            i = i + 1
+            j = 1
+        end
+
+        local m = 1
+
+        while(m <= length)do
+            print("----------------------------"..a_table[m].category_sort)
+            m = m + 1
+        end
+
+        i = 1
+        j = 1
+        local x = 1
+        while(i <= length)do
+            while(j <= length-i)do
+                if(a_table[j].category == a_table[j+1].category)then
+                    if(a_table[j].name > a_table[j+1].name)then
+                        print("111111111111111111111==============="..x)
+                        x = x + 1
+                        temp = a_table[j]
+                        a_table[j] = a_table[j+1]
+                        a_table[j+1] = temp
+                    end   
+                end
+                j = j + 1
+            end
+            i = i + 1
+            j = 1
+        end
+
+
+        m=1
+        while(m <= length)do
+            print("=========================="..a_table[m].name_sort)
+            m = m + 1
+        end
+
+
+
+        return a_table
     end
 
 -- ============================================================================ end 背包
@@ -196,9 +273,9 @@ end
         <div style="position:relative;width:45;height:50;margin-left:86;margin-top:16;background:url(codepku/image/textures/userinfo/info_title/help.png);"onclick="Undefinde"></div>
         <div style = "position:relative;margin-top:100">
             <pe:repeat  DataSource="<%=user_options_list[1]%>">
-                    <pe:repeatitem>
-                        <div name='<%= Eval("index")%>' style='<%=format("width:275;height:97;text-align:center;margin-top:20;font-size:18;base-font-size:40;background:url(codepku/image/textures/userinfo/options/%s.png)",Eval("url"))%>' onclick="Choose"></div>
-                    </pe:repeatitem>
+                <pe:repeatitem>
+                    <div name='<%= Eval("index")%>' style='<%=format("width:275;height:97;text-align:center;margin-top:20;font-size:18;base-font-size:40;background:url(codepku/image/textures/userinfo/options/%s.png)",Eval("url"))%>' onclick="Choose"></div>
+                </pe:repeatitem>
             </pe:repeat>
         </div>
         <div style="position:relative;width:275;height:97;margin-top:960;font-size:18;base-font-size:40;background:url(codepku/image/textures/userinfo/options/shezhi.png)"onclick="Undefinde"></div>
@@ -239,20 +316,20 @@ end
             </div>
             <div style = "position:relative;margin-top:100;margin-left:1700;">
                 <pe:repeat  DataSource="<%=user_options_list[5]%>">
-                        <pe:repeatitem>
-                            <div name='<%=Eval("index")%>' style='<%=format("width:145;height:85;text-align:center;margin-top:20;font-size:18;base-font-size:40;background:url(codepku/image/textures/userinfo/options/%s.png)",Eval("url"))%>' onclick="Choose5"></div>
-                        </pe:repeatitem>
+                    <pe:repeatitem>
+                        <div name='<%=Eval("index")%>' style='<%=format("width:145;height:85;text-align:center;margin-top:20;font-size:18;base-font-size:40;background:url(codepku/image/textures/userinfo/options/%s.png)",Eval("url"))%>' onclick="Choose5"></div>
+                    </pe:repeatitem>
                 </pe:repeat>
             </div>
             
-                <div style="width: 680; height: 868; margin-top: 121; margin-left: 915; text-align: center; float: left;">
-                    <pe:repeat DataSource="<%= show_now_backpack() %>">
-                        <div style="width: 150; height: 145; float: left; background-color: #7210ce; margin-left: 20px; margin-top: 32px;">
-                            <div style="width: 150px; height: 75px; font-size: 50px; line-height: 75px;"><%=Eval('category')%></div>
-                            <div style="width: 150px; height: 75px; font-size: 50px; line-height: 75px;"><%=Eval('name')%></div> 
-                        </div>
-                    </pe:repeat>
-                </div>
+            <div style="width: 680; height: 868; margin-top: 121; margin-left: 915; text-align: center; float: left;">
+                <pe:repeat DataSource="<%= show_now_backpack() %>">
+                    <div style="width: 150; height: 145; float: left; background-color: #7210ce; margin-left: 20px; margin-top: 32px;">
+                        <div style="width: 150px; height: 75px; font-size: 50px; line-height: 75px;"><%=Eval('category')%></div>
+                        <div style="width: 150px; height: 75px; font-size: 50px; line-height: 75px;"><%=Eval('name')%></div> 
+                    </div>
+                </pe:repeat>
+            </div>
             
             <div style="position:relative; margin-left:105; margin-top: 700px; width: 145px;  text-align: center; float: left;">
                 <div style = "width:145;height:85; font-size: 40px; line-height: 85px; background-color: #7210ce;" onclick="prePage">上一页</div>
