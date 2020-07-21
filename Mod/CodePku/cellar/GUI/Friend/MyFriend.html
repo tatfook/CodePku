@@ -1,0 +1,104 @@
+<!-- "Mod/CodePku/cellar/Gui/FriendUI/MyFriend.html" -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+</head>
+
+<body>
+<pe:mcml>
+<script refresh="false" type="text/npl" src="FriendUI.lua">
+<![CDATA[
+local FriendUI = commonlib.gettable("Mod.CodePku.GUI.FriendUI")
+cur_index = 1
+menu = {
+    {index = 1, text = "my_friend"},
+    {index = 2, text = "recent_player"},
+    {index = 3, text = "black_list"},
+    {index = 4, text = "private_chat"},
+}
+
+function ClosePage()
+    Page:CloseWindow();
+end
+
+function AddFriend()
+    Page:Refresh(0);
+end
+
+function FriendApply()
+    Page:Refresh(0);
+end
+
+
+function ChangePage(index)
+    FriendUI:ShowPage(index)
+end
+
+
+FriendData = {
+    {head="1.png", name="111111111", level=1, gender = "m", online=true, last_time = ''},
+    {head="2.png", name="sdfsdf", level=3, gender = "f", online=true, last_time = ''},
+    {head="1.png", name="222", level=5, gender = "m", online=false, last_time = '2020-7-20 12:00'},
+    {head="2.png", name="rrr", level=4, gender = "f", online=false, last_time = '2020-7-20 17:00'},
+    {head="1.png", name="9999", level=2, gender = "m", online=false, last_time = '2020-7-17 12:00'}
+}
+
+function getFriendData()
+    return FriendData
+end
+
+]]>
+</script>
+<style type="text/mcss">
+
+</style>
+<pe:container alignment="_lt" width="1920" height="1080" style="background: url(codepku/image/textures/friend/background.png)">
+    <div style="position:relative; width: 500;height: 145;
+    background: url(codepku/image/textures/friend/title_logo.png);">
+        <div style="width: 164;height: 83;margin-top: 30;margin-left: 140;
+        background: url(codepku/image/textures/friend/title.png);">
+        </div>
+    </div>
+    
+    <div style="position:relative; margin-left: 1775;width: 80;height: 80;margin-top: 20;
+    background: url(codepku/image/textures/friend/close.png);" onclick="ClosePage"></div>
+
+    <div style="position:relative; margin-left: 1300;margin-top: 150;width: 225;height: 70;
+    background: url(codepku/image/textures/friend/add_friend.png);" onclick="ClosePage"></div>
+    <div style="position:relative; margin-left: 1640;margin-top: 150;width: 225;height: 70;
+    background: url(codepku/image/textures/friend/friend_apply.png);" onclick="ClosePage"></div>
+
+    <pe:repeat DataSource="<%=menu%>">
+        <pe:repeatitem>
+            <pe:if condition='<%=Eval("index") ~= cur_index%>'>
+            <div style='<%=format("position:relative; width:280; height:93;left: 40;top:%s;background: url(codepku/image/textures/friend/menu/%s.png);",
+            Eval("index")*125 + 110, Eval("text"))%>' name='<%=Eval("index")%>' onclick="ChangePage"></div>
+            </pe:if>
+            <pe:if condition='<%=Eval("index") == cur_index%>'>
+            <div style='<%=format("position:relative; width:280; height:93;left: 40;top:%s;background: url(codepku/image/textures/friend/menu/%s.png);",
+            Eval("index")*125 + 110, Eval("text").."_active")%>'></div>
+            </pe:if>
+        </pe:repeatitem>
+    </pe:repeat>
+
+
+    <pe:gridview name="MyFriend" style="position:relative;margin-top:270;margin-left: 400;
+    height:400;width: 1500;background-color: #ff00ff50;" DataSource='<%=FriendData %>' CellPadding="10" 
+    DefaultNodeHeight = "100" ItemsPerLine="1" AllowPaging="false" RememberScrollPos="true" RememberLastPage="true" pagesize="1">
+        <Columns>
+            <div style="width: 1000;height: 83;margin-top: 10;
+            background: url(codepku/image/textures/friend/item_bg.png);">
+            <%=Eval("name")%>
+            </div>
+        </Columns>
+    </pe:gridview>
+
+
+</pe:container>
+</pe:mcml>
+</body>
+
+</html>

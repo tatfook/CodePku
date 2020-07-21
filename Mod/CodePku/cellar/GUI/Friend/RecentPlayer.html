@@ -1,0 +1,78 @@
+<!-- "Mod/CodePku/cellar/Gui/FriendUI/MyFriend.html" -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+</head>
+
+<body>
+<pe:mcml>
+<script refresh="false" type="text/npl" src="FriendUI.lua">
+<![CDATA[
+local FriendUI = commonlib.gettable("Mod.CodePku.GUI.FriendUI")
+cur_index = 2
+menu = {
+    {index = 1, text = "my_friend"},
+    {index = 2, text = "recent_player"},
+    {index = 3, text = "black_list"},
+    {index = 4, text = "private_chat"},
+}
+
+function ClosePage()
+    Page:CloseWindow();
+end
+
+function AddFriend()
+    Page:Refresh(0);
+end
+
+function FriendApply()
+    Page:Refresh(0);
+end
+
+
+function ChangePage(index)
+    FriendUI:ShowPage(index)
+end
+
+]]>
+</script>
+<style type="text/mcss">
+
+</style>
+<pe:container alignment="_lt" width="1920" height="1080" style="background: url(codepku/image/textures/friend/background.png)">
+    <div style="position:relative; width: 500;height: 145;
+    background: url(codepku/image/textures/friend/title_logo.png);">
+        <div style="width: 164;height: 83;margin-top: 30;margin-left: 140;
+        background: url(codepku/image/textures/friend/title.png);">
+        </div>
+    </div>
+    
+    <div style="position:relative; margin-left: 1775;width: 80;height: 80;margin-top: 20;
+    background: url(codepku/image/textures/friend/close.png);" onclick="ClosePage"></div>
+
+    <div style="position:relative; margin-left: 1300;margin-top: 150;width: 225;height: 70;
+    background: url(codepku/image/textures/friend/add_friend.png);" onclick="ClosePage"></div>
+    <div style="position:relative; margin-left: 1640;margin-top: 150;width: 225;height: 70;
+    background: url(codepku/image/textures/friend/friend_apply.png);" onclick="ClosePage"></div>
+
+    <pe:repeat DataSource="<%=menu%>">
+        <pe:repeatitem>
+            <pe:if condition='<%=Eval("index") ~= cur_index%>'>
+            <div style='<%=format("position:relative; width:280; height:93;left: 40;top:%s;background: url(codepku/image/textures/friend/menu/%s.png);",
+            Eval("index")*125 + 110, Eval("text"))%>' name='<%=Eval("index")%>' onclick="ChangePage"></div>
+            </pe:if>
+            <pe:if condition='<%=Eval("index") == cur_index%>'>
+            <div style='<%=format("position:relative; width:280; height:93;left: 40;top:%s;background: url(codepku/image/textures/friend/menu/%s.png);",
+            Eval("index")*125 + 110, Eval("text").."_active")%>'></div>
+            </pe:if>
+        </pe:repeatitem>
+    </pe:repeat>
+
+</pe:container>
+</pe:mcml>
+</body>
+
+</html>
