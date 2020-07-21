@@ -8,83 +8,178 @@
 <body>
     <pe:mcml onloadscript="script/apps/Aries/app_main.lua" callbackfunction="MyCompany.Aries.MSGProc">
 <script refresh="false" type="text/npl" src="TopicEntrence.lua"><![CDATA[
-TopicEntrencePage = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.TopicEntrencePage");
-MainEntrencePage = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.MainEntrencePage");
+    TopicEntrencePage = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.TopicEntrencePage");
+    MainEntrencePage = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.MainEntrencePage");
 
-
-local last_clicked_index = 1
-local last_navig_clicked_index = 1
-local page_num = 1
-
-local subjects = {
-    [1] = {name='推荐', title='reco', index=1, subject_id=2},
-    [2] = {name='语文', title='chinese', index=2, subject_id=1},
-    [3] = {name='数学', title='math', index=3, subject_id=2},
-    [4] = {name='英语', title='english', index=4, subject_id=3},
-    [5] = {name='物理', title='physics', index=5, subject_id=4},
-    [6] = {name='化学', title='chemestry', index=6, subject_id=5},
-    [7] = {name='生物', title='biology', index=7, subject_id=6},
-}
-local navig = {
-    [1] = {name="古诗", title="gushi", index=1},
-    [2] = {name="文章", title="wenzhang", index=2},
-    [3] = {name="诗词", title="shici", index=3},
-    [4] = {name="名言", title="mingyan", index=4},
-    [5] = {name="其他", title="qita", index=5},
-}
-local topic_course = {
-    [1] = {img = "https://scratch-works-staging-1253386414.file.myqcloud.com/game/admin/courseUnitCover/da76db9593ccaf73fd42939713750b10.png", name = "1", id = 1},
-    [2] = {img = "https://scratch-works-staging-1253386414.file.myqcloud.com/game/admin/courseUnitCover/da76db9593ccaf73fd42939713750b10.png", name = "2", id = 2},
-    [3] = {img = "https://scratch-works-staging-1253386414.file.myqcloud.com/game/admin/courseUnitCover/da76db9593ccaf73fd42939713750b10.png", name = "3", id = 3},
-    [4] = {img = "https://scratch-works-staging-1253386414.file.myqcloud.com/game/admin/courseUnitCover/da76db9593ccaf73fd42939713750b10.png", name = "4", id = 4},
-    [5] = {img = "https://scratch-works-staging-1253386414.file.myqcloud.com/game/admin/courseUnitCover/da76db9593ccaf73fd42939713750b10.png", name = "5", id = 5},
-    [6] = {img = "https://scratch-works-staging-1253386414.file.myqcloud.com/game/admin/courseUnitCover/da76db9593ccaf73fd42939713750b10.png", name = "6", id = 6},
-    [7] = {img = "https://scratch-works-staging-1253386414.file.myqcloud.com/game/admin/courseUnitCover/da76db9593ccaf73fd42939713750b10.png", name = "7", id = 7},
-}
-
-function ClosePage()
-    Page:CloseWindow();
     
-end
+    local page = document:GetPageCtrl()
+    local last_clicked_index = 1
+    local last_navig_clicked_index = 1
+    local page_num = 1
+    local select_button_clicked = 0
+    local show_flag = 0
+    
+    local subjects = {
+        [1] = {name='推荐', title='reco_clicked', index=1, subject_id=3},
+        [2] = {name='语文', title='chinese', index=2, subject_id=1},
+        [3] = {name='数学', title='math', index=3, subject_id=2},
+        [4] = {name='英语', title='english', index=4, subject_id=3},
+        [5] = {name='物理', title='physics', index=5, subject_id=4},
+        [6] = {name='化学', title='chemestry', index=6, subject_id=5},
+        [7] = {name='生物', title='biology', index=7, subject_id=6},
+    }
+    local navig = {
+        [1] = {name="古诗", title="gushi", index=1},
+        [2] = {name="文章", title="wenzhang", index=2},
+        [3] = {name="诗词", title="shici", index=3},
+        [4] = {name="名言", title="mingyan", index=4},
+        [5] = {name="其他", title="qita", index=5},
+    }
+    local select_method = {
+        ['默认排序'] = 'default_select',
+        ['ID'] = 'ID_select'
+    }
 
-function OnClose()
-    ClosePage()
-    MainEntrencePage.ShowPage()
-end
+    function get_full_course()
+        course = TopicEntrencePage.GetCourse(subjects[last_clicked_index].subject_id)
+        return course
+    end
 
-function GetSubjects()
-    return subjects
-end
+    local topic_course = get_full_course()
 
-function GetNavig()
-    return navig
-end
-
-function get_topic_course()
-    course = TopicEntrencePage.GetCourse(subjects[last_clicked_index].subject_id)
-    return course
-end
-
-function OnClickSubject(name)
-    subjects[name].title = subjects[name].title..'_clicked'
-    subjects[last_clicked_index].title = string.gsub(subjects[last_clicked_index].title, '_clicked', '')
-    last_clicked_index = name
-    Page:Refresh(0)
-end
-
-function ChangeTopicPage(name)
-    if name == 'page_left' and page_num > 1 then
-        page_num = page_num - 1
-        Page:Refresh(0)
-    elseif name == 'page_right' and #topic_course > page_num*6 then
-        page_num = page_num + 1
+    function ClosePage()
+        Page:CloseWindow();
+    end
+    
+    function OnClose()
+        ClosePage()
+        MainEntrencePage:ShowPage()
+    end
+    
+    function GetSubjects()
+        return subjects
+    end
+    
+    function GetNavig()
+        return navig
+    end
+    
+    function SelectIsClicked()
+        return select_button_clicked
+    end
+    
+    function GetPageNum()
+        return page_num
+    end
+    
+    function get_searchByName_table()
+        search_course = {}
+        local i = 1
+        --searchByName = page:GetValue("searchByName")
+        for k, v in pairs(topic_course) do
+            if(v.name == TopicEntrencePage.searchByName) then
+                search_course[i] = v;
+                search_course[i].index = (i-1) % 10
+                i = i+1
+            end
+        end
+        return search_course
+    end
+    
+    function f_searchByName()
+        searchByName = page:GetValue("searchByName")
+        TopicEntrencePage.searchByName = searchByName
+        if searchByName == "" then
+            show_flag = 0
+            page:SetValue("searchByName",'')
+        else
+            show_flag = 1
+            page:SetValue("searchByName",searchByName)
+        end
         Page:Refresh(0)
     end
-end
+    
+    function sort_course(course,sort_method)
+        local sort_course = commonlib.deepcopy(course)
+        if sort_method == 'default_select' then
+            sort_course = course
+        elseif sort_method == 'ID_select' then
+            table.sort(sort_course, function(a, b)
+                return a.id > b.id
+            end)
+        end
+        local i = 0
+        for k, v in pairs(sort_course) do
+            v.index = i%10
+            i = i + 1
+        end
+        return sort_course
+    end
+    
+    function OnIsClickedSelect()
+        if select_button_clicked == 1 then
+            select_button_clicked = 0
+        else
+            select_button_clicked = 1
+        end
+        Page:Refresh(0.01)
+    end
+    
+    function OnSelectedItem(name)
+        select_button_clicked = 0
+        if name == 'default_select' then
+            TopicEntrencePage.sortMethod = '默认排序'
+        elseif name == 'ID_select' then
+            TopicEntrencePage.sortMethod = 'ID'
+        end
+        Page:Refresh(0.01)
+    end
+    
+    function GetConditionalCourse()
+        local conditional_course = {}
+        if show_flag == 0 then
+            conditional_course = sort_course(topic_course, select_method[TopicEntrencePage.sortMethod])
+        else
+            conditional_course = get_searchByName_table()
+        end
+        return conditional_course
+    end
+    
+    function get_topic_course(conditional_course)
+        page_course = {}
+        num = (page_num - 1)*10
+        for i = 1, 10 do
+            if num + i <= #conditional_course then
+                page_course[i] = conditional_course[num+i]
+            else
+                break
+            end
+        end
+        return page_course
+    end
+    
+    function OnClickSubject(name)
+        subjects[name].title = subjects[name].title..'_clicked'
+        subjects[last_clicked_index].title = string.gsub(subjects[last_clicked_index].title, '_clicked', '')
+        last_clicked_index = name
+        topic_course = get_full_course()
+        Page:Refresh(0)
+    end
+    
+    function ChangeTopicPage(name)
+        if name == 'page_left' and page_num > 1 then
+            page_num = page_num - 1
+            Page:Refresh(0)
+        elseif name == 'page_right' and #topic_course > page_num*10 then
+            page_num = page_num + 1
+            Page:Refresh(0)
+        end
+    end
+    
+    function OnClickNavig(name)
+    
+    end
 
-function OnClickNavig(name)
-
-end
 
 function OnClickCourse(name)
     GameLogic.RunCommand(string.format("/connectCodePku %d", name));
@@ -103,8 +198,13 @@ end
 ]]></script>
 <style type="text/mcss">
 </style>
-
-<div style="margin-top:5px;width:1920;height: 1080;background:url(codepku/image/textures/fastentrence/topic_board.png)">
+<pe:if condition='<%=SelectIsClicked() == 1 %>' >
+    <div style="width: 240px; height: 120px; position: absolute; z-index: 10; margin-left: 1648px; margin-top: 248px;">
+        <div style="width: 240px; height: 50px; text-align: center; line-height: 50px; base-font-size:28px; font-size:28px; background-color: #88e0e9; color: #0d99a7;" name="default_select" onclick="OnSelectedItem">默认排序</div>
+        <div style="width: 240px; height: 50px; margin-top: 4px; text-align: center; line-height: 50px; base-font-size:28px; font-size:28px; background-color: #88e0e9; color: #0d99a7;" name="ID_select" onclick="OnSelectedItem">ID</div>
+    </div>
+</pe:if>
+<div style="margin-top:5px;width:1920;height: 1080;background:url(codepku/image/textures/fastentrence/topic_board.png);">
     <div style='width:100px;height:100px;background:url(codepku/image/textures/fastentrence/return.png);margin-left: 100px;margin-top: 20px;' onclick="OnClose"></div>
     <div style="width:200px;height:900px;margin-left: 20px;margin-right: 20px;margin-top:70px;float: left;">
         <pe:repeat DataSource="<%=GetSubjects()%>">
@@ -113,33 +213,44 @@ end
             </pe:repeatitem>
         </pe:repeat>
     </div>
-    <div style="width:1630px;height:770px;margin-left: 20px;margin-top:50px;float: left;">
-        <div style="width: 650px;height: 50px;margin-top: 40px;">
-            
+    <div style="width:1650px;height:770px;margin-left: 20px;margin-top:50px;float: left;">
+        <div style="width: 1630px;height: 100px;">
+            <!--搜索-->
+            <div style="width: 340px; height: 65px; margin-left: 1008px; float: left;">
+                <input name="searchByName" type="text" style="width: 266px; height: 62px; background-color: #ffffff; font-size: 42px; float: left;" value="<%=TopicEntrencePage.searchByName%>"/>
+                <div style="width: 72px; height: 62px; float: left;" onclick="f_searchByName">
+                    <div style="width: 40px; height: 40px;margin-left: 18px;margin-top: 10px; background:url(codepku/image/textures/fastentrence/topic/search.png);"></div>
+                </div>
+            </div>
+
+            <!--选择框-->
+            <div style="width: 240px;height: 500px; margin-left: 40px; float: left;">
+                <div style="width: 245px;height: 60px;">
+                    <input type="text" style="width:175px; height:62px; font-size: 35px;background-color: #ffffff;" name="sort_input" value="<%=TopicEntrencePage.sortMethod%>"/>
+                    <div style="width: 70px; height: 62px; float: left;"  onclick="OnIsClickedSelect">
+                        <div style="width: 30px; height: 30px;margin-left: 20px;margin-top: 15px; background:url(codepku/image/textures/fastentrence/topic/sort.png); float: left;"></div>
+                    </div>
+                </div>
+            </div>
         </div>
         <div style="width: 1630px;height: 675px;">
-            <pe:repeat DataSource="<%=get_topic_course()%>">
+            <pe:repeat DataSource="<%=get_topic_course(GetConditionalCourse())%>">
                 <pe:repeatitem>
-                    <div style="<%=format('position:absolute;width:290px;height:100;background:url(codepku/image/textures/fastentrence/system_level_1.png);margin-left:%d;margin-top:%d;base-font-size:28px;font-size:28px;text-align: center;', Eval('index')%5*310+20, 20+GetDivisible(Eval('index'))*300-Eval('index')%5*60)%>"><div style="margin-top:35px"><%= Eval('name') %></div></div>
-                    <div style="<%=format('position:absolute;width:290px;height:200;background:url(codepku/image/textures/fastentrence/system_level_2.png);margin-left:%d;margin-top:%d;', Eval('index')%5*310+20, 120+GetDivisible(Eval('index'))*300-Eval('index')%5*60)%>">
+                    <div style="<%=format('position:absolute; z-index: 5; width:290px;height:100;background:url(codepku/image/textures/fastentrence/system_level_1.png);margin-left:%d;margin-top:%d;base-font-size:28px;font-size:28px;text-align: center;', Eval('index')%5*310+20, 20+GetDivisible(Eval('index'))*300-Eval('index')%5*60)%>"><div style="margin-top:35px"><%= Eval('name') %></div></div>
+                    <div style="<%=format('position:absolute; z-index: 5; width:290px;height:200;background:url(codepku/image/textures/fastentrence/system_level_2.png);margin-left:%d;margin-top:%d;', Eval('index')%5*310+20, 120+GetDivisible(Eval('index'))*300-Eval('index')%5*60)%>">
                         <div style="<%=format('width:290px;height:200;background:url(%s);', Eval('img'))%>" name="<%=Eval('id')%>" onclick="OnClickCourse"></div>
                     </div>
                 </pe:repeatitem>
             </pe:repeat>
         </div>
-        <div style="width: 1630px; height: 100px; text-align: center;">
-            <div style="background:url(codepku/image/textures/fastentrence/prev.png);width: 100px; height: 100px;float: left; margin-left:700" name="page_left" onclick="ChangeTopicPage">
-                <img src="codepku/image/textures/fastentrence/topic/page_left.png" style="float: left;"/>
-            </div>
-            <div style="width: 100px; height: 100px;float: left; margin-left:800;margin-top:-70;font-size: 40px;base-font-size:40px;"><%=page_num%></div>
-            <div style="background:url(codepku/image/textures/fastentrence/next.png);width: 100px; height: 100px;float: left;margin-left:900;margin-top:-130" name="page_right" onclick="ChangeTopicPage">
-                <img src="codepku/image/textures/fastentrence/topic/page_right.png" style="float: left;"/>
-            </div>
+        <!--翻页-->
+        <div style="width: 1630px; height: 50px;margin-left: 740px; float: left;">
+            <div style="width: 50px; height: 50px;float: left; background: url(codepku/image/textures/fastentrence/topic/page_left.png);" name="page_left" onclick="ChangeTopicPage"></div>
+            <div style="width: 50px;height: 50px;font-size: 40px;color: #ffffff;float: left; text-align: center; line-height: 40px;"><%=GetPageNum()%></div>
+            <div style="width: 50px; height: 50px;float: left; background: url(codepku/image/textures/fastentrence/topic/page_right.png);" name="page_right" onclick="ChangeTopicPage"></div>
         </div>
     </div>
 </div>
-
-
 </pe:mcml>
 </body>
 </html>

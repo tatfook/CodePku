@@ -26,6 +26,8 @@ function TopicEntrencePage.GetCourse(subject_id)
 end
 
 function TopicEntrencePage:ShowPage(bShow)
+    TopicEntrencePage.searchByName = nil
+    TopicEntrencePage.sortMethod = '默认排序'
     local params = {
         url = "Mod/CodePku/cellar/GUI/FastEntrence/TopicEntrence.html", 
         name = "TopicEntrence.ShowPage", 
