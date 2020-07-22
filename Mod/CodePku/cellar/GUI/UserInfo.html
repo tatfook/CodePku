@@ -13,6 +13,156 @@ NPL.load("(gl)script/apps/Aries.Creator.Game.Desktop.Share.lua");
 UserInfoPage = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.UserInfoPage")
 SharePage = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.SharePage")
 UserInfo = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.UserInfo")
+
+
+    -- =============================================================================== start 背包
+
+    
+
+    
+    local nowPage = 1
+    local maxPage = 1
+    local pageSize = 20
+
+    -- 每个格子记录了该格子的序号和页号，以及该格子所要展示的信息
+    function create_backpack_table()
+        local items_table = UserInfoPage.GetItemInfo()
+        local backpack_table = {}
+        local now_Page = 1
+        local i, j = 1, 1
+        local length = #items_table
+        local item = {}
+        while(i <= length)do
+            if(i > pageSize*now_Page)then
+                now_Page = now_Page + 1
+            end
+            item = items_table[i]
+            if choose_index5 == 1 or item.category_id == choose_index5 then
+                backpack_table[j] = {pageNum = now_Page, grid_id = j, info = item}
+                j = j + 1
+            end
+            i = i + 1
+        end
+        maxPage = now_Page
+        return backpack_table
+    end
+
+    --获取指定页号的背包信息
+    function get_now_backpack(needPage)
+        local mytable = create_backpack_table()
+        local now_backpack_table = {}
+        local m = 1
+        local length = #mytable
+        echo(string.format('length: %d', length))
+        while(m <= length)do
+            if(m > pageSize*(nowPage-1) and m <= pageSize*nowPage)then
+                table.insert(now_backpack_table, mytable[m].info)
+            end
+            m = m + 1
+        end
+        return now_backpack_table
+    end
+
+    --显示指定页号的背包信息
+    function show_now_backpack()
+        return get_now_backpack(nowPage)
+    end
+
+
+    function prePage()
+        if(nowPage > 1)then
+            nowPage = nowPage -1;
+            Page:Refresh(0.02)
+        end
+    end
+
+    function nextPage()
+        if(nowPage < maxPage)then
+            nowPage = nowPage + 1;
+            Page:Refresh(0.02)
+        end
+    end
+
+
+    function getNowPage()
+        return nowPage
+    end
+
+    function getMaxPage()
+        return maxPage
+    end
+
+    function sort_backpack()
+        local i = 1
+        local length = #items_table
+        items_table = bubble_sort(items_table)
+        Page:Refresh(0.02)   
+        
+    end
+
+    function bubble_sort(a_table)
+        local length = #a_table
+        local i = 1
+        local j = 1
+        local temp = {}
+
+        while(i <= length)do
+            while(j <= length-i)do
+                if(a_table[j].category > a_table[j+1].category)then
+                    print(a_table[j].name_sort.."------1111111---------================---------111111-----"..a_table[j+1].name_sort)
+                    temp = a_table[j]
+                    a_table[j] = a_table[j+1]
+                    a_table[j+1] = temp
+                end
+                j = j + 1
+            end
+            i = i + 1
+            j = 1
+        end
+
+        local m = 1
+
+        while(m <= length)do
+            print("----------------------------"..a_table[m].category_id)
+            m = m + 1
+        end
+
+        i = 1
+        j = 1
+        local x = 1
+        while(i <= length)do
+            while(j <= length-i)do
+                if(a_table[j].category == a_table[j+1].category)then
+                    if(a_table[j].name > a_table[j+1].name)then
+                        print("111111111111111111111==============="..x)
+                        x = x + 1
+                        temp = a_table[j]
+                        a_table[j] = a_table[j+1]
+                        a_table[j+1] = temp
+                    end   
+                end
+                j = j + 1
+            end
+            i = i + 1
+            j = 1
+        end
+
+
+        m=1
+        while(m <= length)do
+            print("=========================="..a_table[m].name_sort)
+            m = m + 1
+        end
+
+
+
+        return a_table
+    end
+
+-- ============================================================================ end 背包
+
+
+
 xueshidian = 123456
 fensi = 123456
 dianzan = 123456
@@ -92,9 +242,9 @@ end
         <div style="position:relative;width:45;height:50;margin-left:86;margin-top:16;background:url(codepku/image/textures/userinfo/info_title/help.png);"onclick="Undefinde"></div>
         <div style = "position:relative;margin-top:100">
             <pe:repeat  DataSource="<%=user_options_list[1]%>">
-                    <pe:repeatitem>
-                        <div name='<%= Eval("index")%>' style='<%=format("width:275;height:97;text-align:center;margin-top:20;font-size:18;base-font-size:40;background:url(codepku/image/textures/userinfo/options/%s.png)",Eval("url"))%>' onclick="Choose"></div>
-                    </pe:repeatitem>
+                <pe:repeatitem>
+                    <div name='<%= Eval("index")%>' style='<%=format("width:275;height:97;text-align:center;margin-top:20;font-size:18;base-font-size:40;background:url(codepku/image/textures/userinfo/options/%s.png)",Eval("url"))%>' onclick="Choose"></div>
+                </pe:repeatitem>
             </pe:repeat>
         </div>
         <div style="position:relative;width:275;height:97;margin-top:960;font-size:18;base-font-size:40;background:url(codepku/image/textures/userinfo/options/shezhi.png)"onclick="Undefinde"></div>
@@ -135,11 +285,27 @@ end
             </div>
             <div style = "position:relative;margin-top:100;margin-left:1700;">
                 <pe:repeat  DataSource="<%=user_options_list[5]%>">
-                        <pe:repeatitem>
-                            <div name='<%=Eval("index")%>' style='<%=format("width:145;height:85;text-align:center;margin-top:20;font-size:18;base-font-size:40;background:url(codepku/image/textures/userinfo/options/%s.png)",Eval("url"))%>' onclick="Choose5"></div>
-                        </pe:repeatitem>
+                    <pe:repeatitem>
+                        <div name='<%=Eval("index")%>' style='<%=format("width:145;height:85;text-align:center;margin-top:20;font-size:18;base-font-size:40;background:url(codepku/image/textures/userinfo/options/%s.png)",Eval("url"))%>' onclick="Choose5"></div>
+                    </pe:repeatitem>
                 </pe:repeat>
             </div>
+            
+            <div style="width: 680; height: 868; margin-top: 121; margin-left: 915; text-align: center; float: left;">
+                <pe:repeat DataSource="<%= show_now_backpack() %>">
+                    <div style="width: 150; height: 145; float: left; background:url(codepku/image/textures/tmp_icon.jpg); margin-left: 20px; margin-top: 32px;">
+                        <div style='font-size: 20; : margin: 120;'><%=remain%></div>
+                    </div>
+                </pe:repeat>
+            </div>
+            
+            <div style="position:relative; margin-left:105; margin-top: 700px; width: 145px;  text-align: center; float: left;">
+                <div style = "width:145;height:85; font-size: 40px; line-height: 85px; background-color: #7210ce;" onclick="prePage">上一页</div>
+                <div style = "margin-top: 30; width:145;height:85; font-size: 40px; line-height: 85px; background-color: #7210ce;" onclick="nextPage">下一页</div>
+                        <div style="width: 150px; height: 75px; font-size: 50px; line-height: 75px;"><%=Eval('name')%></div> 
+                <div style = "width:145; height:85; font-size: 40px; line-height: 85px; background:url(codepku/image/textures/userinfo/options/zhengli.png);" onclick="sort_backpack"></div>
+            </div> 
+                   
             
         </pe:if>
     </div>

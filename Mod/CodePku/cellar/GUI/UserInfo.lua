@@ -31,6 +31,40 @@ function UserInfoPage.GetUserInfo()
     end
 end
 
+-- 获取道具信息
+function UserInfoPage.GetItemInfo()
+    --response = request:get('/some/url')
+    -- 测试数据
+    response = {
+        [1] = {category_id=2, name='道具1', remain=200, max_stacked=99},
+        [2] = {category_id=2, name='道具2', remain=100, max_stacked=99},
+        [3] = {category_id=2, name='道具3', remain=99, max_stacked=99},
+        [4] = {category_id=2, name='道具4', remain=66, max_stacked=99},
+    }
+    
+    data = {}
+    -- 拆分堆叠道具
+    for i, v in ipairs(response) do
+        if v.remain ~= v.max_stacked then -- 拆分堆叠数，1表示不拆分
+            stack = math.floor(v.remain/ v.max_stacked) + 1
+        else
+            stack = 1
+        end
+        l = commonlib.deepcopy(response[i])
+        s = 1
+        while s < stack do
+            l.remain = v.max_stacked
+            table.insert(data, l)
+            s = s + 1
+        end
+        if stack > 1 then
+            v.remain = v.remain % v.max_stacked
+        end
+        table.insert(data, v)
+    end
+    return data
+end
+
 function UserInfoPage:ShowPage(PageIndex,bShow)
     -- NPL.load("(gl)script/apps/Aries/Creator/Game/Areas/DesktopMenuPage.lua");
     -- local DesktopMenuPage = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.DesktopMenuPage");
