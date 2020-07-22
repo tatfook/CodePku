@@ -13,13 +13,12 @@ NPL.load("(gl)script/apps/Aries.Creator.Game.Desktop.Share.lua");
 UserInfoPage = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.UserInfoPage")
 SharePage = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.SharePage")
 UserInfo = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.UserInfo")
+PropsInfo = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.PropsInfo");
+
 
 
     -- =============================================================================== start 背包
 
-    
-
-    
     local nowPage = 1
     local maxPage = 1
     local pageSize = 20
@@ -51,12 +50,13 @@ UserInfo = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.UserInfo")
     function get_now_backpack(needPage)
         local mytable = create_backpack_table()
         local now_backpack_table = {}
-        local m = 1
+        local m, n = 1, 1
         local length = #mytable
-        echo(string.format('length: %d', length))
-        while(m <= length)do
+        while (m <= length) do
             if(m > pageSize*(nowPage-1) and m <= pageSize*nowPage)then
+                mytable[m].info.index = n
                 table.insert(now_backpack_table, mytable[m].info)
+                n = n + 1
             end
             m = m + 1
         end
@@ -65,7 +65,8 @@ UserInfo = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.UserInfo")
 
     --显示指定页号的背包信息
     function show_now_backpack()
-        return get_now_backpack(nowPage)
+        local_backpack = get_now_backpack(nowPage)
+        return local_backpack
     end
 
 
@@ -222,6 +223,12 @@ function OnClickButton(name,mcmlNode)
     end
 end
 
+function OnClickItem(item)
+    echo(string.format('item: %s, name:%s. category_id: %d', item, item.name, item.category_id))
+    PropsInfo:ShowPage(item)
+end
+
+
 function SharePageFunc()
     SharePage:ShowPage()
 end
@@ -293,8 +300,8 @@ end
             
             <div style="width: 680; height: 868; margin-top: 121; margin-left: 915; text-align: center; float: left;">
                 <pe:repeat DataSource="<%= show_now_backpack() %>">
-                    <div style="width: 150; height: 145; float: left; background:url(codepku/image/textures/tmp_icon.jpg); margin-left: 20px; margin-top: 32px;">
-                        <div style='font-size: 20; : margin: 120;'><%=remain%></div>
+                    <div style="width: 150; height: 145; float: left; background:url(codepku/image/textures/tmp_icon.jpg); margin-left: 20px; margin-top: 32px;" name="<%=local_backpack[Eval('index')]%>" onclick="OnClickItem">
+                        <div style='font-size: 20; margin: 120;'><%=num%></div>
                     </div>
                 </pe:repeat>
             </div>

@@ -36,29 +36,29 @@ function UserInfoPage.GetItemInfo()
     --response = request:get('/some/url')
     -- 测试数据
     response = {
-        [1] = {category_id=2, name='道具1', remain=200, max_stacked=99},
-        [2] = {category_id=2, name='道具2', remain=100, max_stacked=99},
-        [3] = {category_id=2, name='道具3', remain=99, max_stacked=99},
-        [4] = {category_id=2, name='道具4', remain=66, max_stacked=99},
+        [1] = {category_id=2, name='道具1', num=200, max_stacked=99, rest_time='1天', tool_type = "稀有道具", scene = "单词爱跑酷",describe='666666666', url='codepku/image/textures/tmp_icon.jpg'},
+        [2] = {category_id=2, name='道具2', num=100, max_stacked=99, rest_time='2天', tool_type = "传说道具", scene = "主场景",describe='哇 传说'},
+        [3] = {category_id=3, name='道具3', num=99, max_stacked=99, rest_time='3天', tool_type = "稀有道具", scene = "竞技区大厅",describe='777777777777'},
+        [4] = {category_id=3, name='道具4', num=66, max_stacked=99, rest_time='4天', tool_type = "时装", scene = "全部",describe='fff'},
     }
     
     data = {}
     -- 拆分堆叠道具
     for i, v in ipairs(response) do
-        if v.remain ~= v.max_stacked then -- 拆分堆叠数，1表示不拆分
-            stack = math.floor(v.remain/ v.max_stacked) + 1
+        if v.num ~= v.max_stacked then -- 拆分堆叠数，1表示不拆分
+            stack = math.floor(v.num/ v.max_stacked) + 1
         else
             stack = 1
         end
         l = commonlib.deepcopy(response[i])
         s = 1
         while s < stack do
-            l.remain = v.max_stacked
+            l.num = v.max_stacked
             table.insert(data, l)
             s = s + 1
         end
         if stack > 1 then
-            v.remain = v.remain % v.max_stacked
+            v.num = v.num % v.max_stacked
         end
         table.insert(data, v)
     end
