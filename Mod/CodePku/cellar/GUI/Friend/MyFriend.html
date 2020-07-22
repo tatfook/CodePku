@@ -37,6 +37,14 @@ function ChangePage(index)
 end
 
 
+function ClickChat(uid)
+    echo("chat")
+end
+
+function ClickDelete(uid)
+    echo("delete")
+end
+
 FriendData = {
     {id=11,head="1.png", name="111111111", level=1, gender = "m", online=true, last_time = ''},
     {id=22,head="2.png", name="sdfsdf", level=3, gender = "f", online=true, last_time = ''},
@@ -54,6 +62,13 @@ function getFriendData()
     return FriendData
 end
 
+function AddFriend()
+    FriendUI:ShowPopup(1)
+end
+
+function FriendApply()
+end
+
 ]]>
 </script>
 <style type="text/mcss">
@@ -66,10 +81,10 @@ end
     <div style="position:relative; margin-left: 40;width: 100;height: 60;margin-top: 35;
     background: url(codepku/image/textures/friend/main/return.png);" onclick="ClosePage"></div>
 
-    <div style="position:relative; margin-left: 1300;margin-top: 150;width: 225;height: 70;
-    background: url(codepku/image/textures/friend/main/add_friend.png);" onclick="ClosePage"></div>
-    <div style="position:relative; margin-left: 1640;margin-top: 150;width: 225;height: 70;
-    background: url(codepku/image/textures/friend/main/friend_apply.png);" onclick="ClosePage"></div>
+    <div style="position:relative; margin-left: 450;margin-top: 140;width: 225;height: 70;
+    background: url(codepku/image/textures/friend/main/add_friend.png);" onclick="AddFriend"></div>
+    <div style="position:relative; margin-left: 1600;margin-top: 140;width: 225;height: 70;
+    background: url(codepku/image/textures/friend/main/friend_apply.png);" onclick="FriendApply"></div>
 
     <!-- left bar menu -->
     <pe:repeat DataSource="<%=menu%>" style="position:relative;top:235">
@@ -97,7 +112,9 @@ end
         <div style="position:relative;width:200;height:40;left:200;top:20;font-size: 40;color: #FFA500;"><%=Eval("name")%></div>
         <div style="position:relative;width:200;height:40;left:200;top:100;font-size: 30;color: #FFA500;">ID: <%=Eval("id")%></div>
         <div style='<%=format("position:relative;width:37;height:37;left:400;top:25;background: url(codepku/image/textures/friend/item/%s.png);", Eval("gender"))%>'></div>
-    
+        
+        <div style="position:relative;width:100;height:60;top:50;left:850;background: url(codepku/image/textures/friend/my_friend/delete.png);" onclick="ClickDelete"></div>
+        <div style="position:relative;width:100;height:60;top:50;left:1000;background: url(codepku/image/textures/friend/my_friend/chat.png);" onclick="ClickChat"></div>
     </div>
     </Columns>
     </pe:gridview>

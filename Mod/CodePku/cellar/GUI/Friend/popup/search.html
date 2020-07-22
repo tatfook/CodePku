@@ -1,0 +1,44 @@
+<!-- "Mod/CodePku/cellar/Gui/FriendUI/MyFriend.html" -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+</head>
+
+<body>
+<pe:mcml>
+<script refresh="false" type="text/npl" src="FriendUI.lua">
+<![CDATA[
+local FriendUI = commonlib.gettable("Mod.CodePku.GUI.FriendUI")
+
+function ClosePage()
+    Page:CloseWindow();
+end
+
+function ClickSearch()
+    nameorid = page:GetValue("nameorid")
+    echo("Todo ClickSearch"..nameorid)
+end
+
+]]>
+</script>
+
+<div style="width:1020;height: 550;margin-left:450;margin-top:265;background: url(codepku/image/textures/friend/main/popup.png)">
+    <div style="position:relative; left:170;top:40;font-size: 40;">
+        添加好友
+    </div>
+    <div style="position:relative; margin-left: 900;width: 50;height: 50;margin-top: 40;
+    background: url(codepku/image/textures/friend/main/close.png);" onclick="ClosePage">
+    </div>
+    <input name="nameorid" type="text" style="position:relative;margin-left: 160; margin-top: 300;width: 500; height: 60; 
+    background: url(codepku/image/textures/friend/add_friend/input_bg.png); font-size: 42px; float: left;color:#ffffff" placeholder="请输入玩家名称或ID"/>
+
+    <div style="position:relative;margin-left: 700; margin-top: 295;width: 109; height: 70; background: url(codepku/image/textures/friend/add_friend/search.png);"></div>
+
+</div>
+</pe:mcml>
+</body>
+
+</html>
