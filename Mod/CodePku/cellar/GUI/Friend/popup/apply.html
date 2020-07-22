@@ -1,0 +1,82 @@
+<!-- "Mod/CodePku/cellar/Gui/FriendUI/MyFriend.html" -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+</head>
+
+<body>
+<pe:mcml>
+<script refresh="false" type="text/npl" src="FriendUI.lua">
+<![CDATA[
+local FriendUI = commonlib.gettable("Mod.CodePku.GUI.FriendUI")
+
+FriendData = {
+    {id=11,head="1.png", name="111111111", level=1, gender = "m", online=true, last_time = ''},
+    {id=22,head="2.png", name="sdfsdf", level=3, gender = "f", online=true, last_time = ''},
+    {id=35,head="1.png", name="222", level=5, gender = "m", online=false, last_time = '2020-7-20 12:00'},
+    {id=47,head="2.png", name="rrr", level=4, gender = "f", online=false, last_time = '2020-7-20 17:00'},
+    {id=56,head="1.png", name="9999", level=2, gender = "m", online=false, last_time = '2020-7-17 12:00'},
+    {id=67,head="1.png", name="9999", level=2, gender = "m", online=false, last_time = '2020-7-17 12:00'},
+    {id=72,head="1.png", name="9999", level=2, gender = "m", online=false, last_time = '2020-7-17 12:00'},
+    {id=85,head="1.png", name="9999", level=2, gender = "m", online=false, last_time = '2020-7-17 12:00'},
+    {id=90,head="1.png", name="9999", level=2, gender = "m", online=false, last_time = '2020-7-17 12:00'},
+    {id=104,head="1.png", name="9999", level=2, gender = "m", online=false, last_time = '2020-7-17 12:00'}
+}
+
+function ClosePage()
+    Page:CloseWindow();
+end
+
+function ClickSearch()
+    nameorid = page:GetValue("nameorid")
+    echo("Todo ClickSearch"..nameorid)
+end
+
+function ClickRefuse()
+    echo("Todo ClickRefuse")
+end
+
+function ClickAgree()
+    echo("Todo ClickAgree")
+end
+
+function ClickBlacklist()
+    echo("Todo ClickBlacklist")
+end
+
+]]>
+</script>
+
+<div style="width:1020;height: 550;margin-left:450;margin-top:265;background: url(codepku/image/textures/friend/main/popup.png)">
+    <!--title-->
+    <div style="position:relative; left:160;top:45;width: 192;height:50;background: url(codepku/image/textures/friend/main/apply_title.png);"></div>
+    <div style="position:relative; margin-left: 900;width: 50;height: 50;margin-top: 40;background: url(codepku/image/textures/friend/main/close.png);" onclick="ClosePage"></div>
+    <!--context-->
+    <pe:gridview name="MyFriend" style="position:relative;margin-top:190;margin-left: 50;
+height:280;width: 920;background-color: #ff00ff50;" DataSource='<%=FriendData %>' CellPadding="10" ItemsPerLine="1" AllowPaging="false" RememberScrollPos="true" RememberLastPage="true">
+    <Columns>
+        <div style="width: 850;height: 130;">
+            <pe:div style="position:relative; width:850; height:130; margin-left: 20; background: url(codepku/image/textures/friend/friend_apply/item_bg.png);"></pe:div>
+            <pe:div style="position:relative; width:110; height:110; margin-top: 10; margin-left: 40; background: url(codepku/image/textures/friend/friend_apply/item_head.png);"></pe:div>
+            <pe:div style='<%=format("position:relative; width:90; height:90; left: 55;top: 20;background: url(codepku/image/textures/friend/head/%s);", Eval("head"))%>'></pe:div>
+            <div style="position:relative; width:250; height:40; left:170;font-size: 40;color: #FFA500;"><%=Eval("name")%></div>
+            <div style="position:relative; width:250; height:30; left:170;top:45;font-size: 30;color: #00ff22;"><%=Eval("online")%></div>
+            <div style="position:relative; width:250; height:30; left:170;top:85;font-size: 30;color: #FFA500;">ID: <%=Eval("id")%></div>
+            <pe:div style='<%=format("position:relative;width:25;height:25;left:380;top:20;background: url(codepku/image/textures/friend/item/%s.png);", Eval("gender"))%>'></pe:div>
+            
+            <pe:div style="position:relative;width:70;height:40;top:45;left:520;background: url(codepku/image/textures/friend/friend_apply/refuse.png);" onclick="ClickRefuse"></pe:div>
+            <pe:div style="position:relative;width:70;height:40;top:45;left:640;background: url(codepku/image/textures/friend/friend_apply/agree.png);" onclick="ClickAgree"></pe:div>
+            <pe:div style="position:relative;width:70;height:40;top:45;left:760;background: url(codepku/image/textures/friend/friend_apply/blacklist.png);" onclick="ClickBlacklist"></pe:div>
+                
+        </div>
+    </Columns>
+    </pe:gridview>
+
+</div>
+</pe:mcml>
+</body>
+
+</html>

@@ -31,6 +31,10 @@ FriendUI.popparams={
         url="Mod/CodePku/cellar/GUI/Friend/popup/search.html",
         alignment="_ct", left = -960, top = -540, width = 1920, height = 1080,zorder =30
     },
+    apply = {
+        url="Mod/CodePku/cellar/GUI/Friend/popup/apply.html",
+        alignment="_ct", left = -960, top = -540, width = 1920, height = 1080,zorder =30
+    },
 }
 
 FriendUI.vars = {}
@@ -64,5 +68,9 @@ function FriendUI:ShowPopup(PopIndex)
 
     if PopIndex == 1 then
         FriendUI.popui = AdaptWindow:QuickWindow(FriendUI.popparams["search"])
+    elseif PopIndex == 2 then
+        FriendUI.popui = AdaptWindow:QuickWindow(FriendUI.popparams["add"])
+    elseif PopIndex == 3 then
+        FriendUI.popui = AdaptWindow:QuickWindow(FriendUI.popparams["apply"])
     end
 end
