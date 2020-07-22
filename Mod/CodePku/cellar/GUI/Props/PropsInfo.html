@@ -63,13 +63,19 @@
 
     function OnClose()
         ClosePage()
-        UserInfoPage:ShowPage(5)
     end
 
     function show_more()
-        show_flag = 1
-        print("==================="..show_flag)
+        if(more_flag == 1)then
+            more_flag = 0
+        else
+            more_flag = 1
+        end        
         Page:Refresh(0)
+    end
+
+    function get_more_flag()
+        return more_flag
     end
 
     
@@ -102,30 +108,32 @@
         </div>
     </div>
 
-    <div style="width: 880px; height: 300px; margin-top: 30px;margin-left: 150px; font-size: 50px; background:url(codepku/image/textures/tool_ui/bottom_box.png)">
+    <div style="position: absolute; z-index: 10; width: 880px; height: 300px; margin-top: 30px;margin-left: 150px; font-size: 50px; background:url(codepku/image/textures/tool_ui/bottom_box.png)">
         <div style="margin-top: 20px; margin-left: 20px;">（描述栏）：</div>
         <div style="margin-top: 20px; margin-left: 20px;"><%=get_describe()%></div>
     </div>
+    
 
-    <div style="font-size: 45px; line-height: 80px; font-weight: bolder; text-align: center; ">
-        <div style="width: 300px; height: 80px; margin-left: 198px; margin-top: 25px; float: left; background:url(codepku/image/textures/tool_ui/more.png)" onclick="show_more">
-            <div style="width: 25px; height: 25px; margin-top: 25px; margin-left: 200px; background:url(codepku/image/textures/tool_ui/open.png)"></div>
+    <div style="position: absolute; z-index: 5; height: 320px; margin-top: 120px; margin-left: 10px; font-size: 45px; line-height: 80px; font-weight: bolder; text-align: center;">
+        <div style="width: 300px; height: 80px; margin-left: 198px; background-color: #b81a1a; margin-top: 240px; float: left; background:url(codepku/image/textures/tool_ui/more.png)" onclick="show_more">
+            <pe:if condition="<%= get_more_flag() == 0 %>">
+                <div style="width: 25px; height: 25px; margin-top: 25px; margin-left: 200px; background:url(codepku/image/textures/tool_ui/open.png)"></div>
+            </pe:if>
+            <pe:if condition="<%= get_more_flag() == 1 %>">
+                <div style="width: 25px; height: 25px; margin-top: 25px; margin-left: 200px; background:url(codepku/image/textures/tool_ui/close.png)"></div>
+            </pe:if>
         </div>
-        <pe:if condition = "<%= more_flag == 1%>">
-            <div style="margin-top: -195px; margin-left: 198px; width: 300px; height: 255px; ">
-                <div style="width: 300px; height: 80px;   background:url(codepku/image/textures/tool_ui/more.png)" onclick="show_more">
-                    <div style="width: 25px; height: 25px; margin-top: 25px; margin-left: 200px; background:url(codepku/image/textures/tool_ui/open.png)"></div>
-                </div>
-                <div style="width: 300px; height: 80px;margin-top: -7px; background:url(codepku/image/textures/tool_ui/more.png)" onclick="show_more">
-                    <div style="width: 25px; height: 25px; margin-top: 25px; margin-left: 200px; background:url(codepku/image/textures/tool_ui/open.png)"></div>
-                </div>
-                <div style=" width: 300px; height: 80px; margin-top: -7px;  background:url(codepku/image/textures/tool_ui/more.png)" onclick="show_more">
-                    <div style="width: 25px; height: 25px; margin-top: 25px; margin-left: 200px; background:url(codepku/image/textures/tool_ui/open.png)"></div>
-                </div>
+        <pe:if condition = "<%= get_more_flag() == 1 %>">
+            <div style="margin-left: 198px; width: 300px; margin-top: -315px; height: 235px; ">
+                <div style="position: relative; margin-top: 19px; width: 300px; height: 80px; background-color: #3fb81a; background:url(codepku/image/textures/tool_ui/combine.png)" onclick="show_more"></div>
+                <div style="position: relative; margin-top: 91px; width: 300px; height: 80px;  background:url(codepku/image/textures/tool_ui/abandon.png)" onclick="show_more"></div>
+                <div style="position: relative; margin-top: 163px;  width: 300px; height: 80px; background:url(codepku/image/textures/tool_ui/sell.png)" onclick="show_more"></div>
             </div>
         </pe:if>
-        <div style="width: 300px; height: 80px;margin-top: -80px;  margin-left: 680px; float: left; background:url(codepku/image/textures/tool_ui/use.png)"></div>
+        <div style="position: relative;  width: 300px; height: 80px; margin-top: -80px; margin-left: 670px; background:url(codepku/image/textures/tool_ui/use.png)"></div>
     </div>
+
+
 
 </div>
 

@@ -5,7 +5,7 @@ local PropsInfo = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.Props
 function PropsInfo:ShowPage(props, bShow)
     PropsInfo.props = props
     local params = {
-        url = "Mod/CodePku/A-test/PropsInfo.html", 
+        url = "Mod/CodePku/cellar/GUI/Props/PropsInfo.html", 
         name = "PropsInfo.ShowPage", 
         DestroyOnClose = true,
         allowDrag = false,
