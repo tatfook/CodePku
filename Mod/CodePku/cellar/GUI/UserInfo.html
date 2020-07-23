@@ -94,10 +94,11 @@ PropsInfo = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.PropsInfo")
     end
 
     function sort_backpack()
-        local i = 1
-        local length = #items_table
-        items_table = bubble_sort(items_table)
-        Page:Refresh(0.02)   
+        params= '?sort=1'
+        r = UserInfoPage.GetItemInfo(params)
+        echo(string.format('++++++++ %s ', r))
+        UserInfo.props = r
+        Page:Refresh(0)   
         
     end
 
@@ -238,10 +239,10 @@ end
                     </pe:repeatitem>
                 </pe:repeat>
             </div>
-                <pe:gridview style="width: 780; height: 868; margin-top: 121; margin-left: 915; text-align: center; float: left;" name='backpack_items' DataSource="<%=show_now_backpack()%>" DefaultNodeHeight = "200" ItemsPerLine="4" AllowPaging="false" RememberScrollPos="true" RememberLastPage="true">
+                <pe:gridview style="width: 780; height: 868; margin-top: 121; margin-left: 915; text-align: center; float: left;" name='backpack_items' DataSource="<%=UserInfo.props%>" DefaultNodeHeight = "200" ItemsPerLine="4" AllowPaging="false" RememberScrollPos="true" RememberLastPage="true">
                     <Columns>
                         <div style='width:150;height:150;background:url(codepku/image/textures/userinfo/item_board.png);float: left;margin-right: 40;'>
-                            <div style="<%=string.format('width: 150; height: 150;  background:url(%s); ', Eval('prop_icon'))%>" name="<%=local_backpack[Eval('index')]%>" onclick="OnClickItem">
+                            <div style="<%=string.format('width: 150; height: 150;  background:url(%s); ', Eval('prop_icon'))%>" name="<%=UserInfo.props[Eval('index')]%>" onclick="OnClickItem">
                                 <div style='font-size: 30; margin-top: 100;padding-right: 20;color: #fdfdfd;text-align: right;font-weight: bold;'><%=prop_num%></div>
                             </div>
                         </div>
