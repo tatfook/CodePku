@@ -21,7 +21,7 @@ PropsInfo = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.PropsInfo")
 
     local nowPage = 1
     local maxPage = 1
-    local pageSize = 20
+    local pageSize = 1000
 
     -- 每个格子记录了该格子的序号和页号，以及该格子所要展示的信息
     function create_backpack_table()
@@ -99,65 +99,6 @@ PropsInfo = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.PropsInfo")
         items_table = bubble_sort(items_table)
         Page:Refresh(0.02)   
         
-    end
-
-    function bubble_sort(a_table)
-        local length = #a_table
-        local i = 1
-        local j = 1
-        local temp = {}
-
-        while(i <= length)do
-            while(j <= length-i)do
-                if(a_table[j].category > a_table[j+1].category)then
-                    print(a_table[j].name_sort.."------1111111---------================---------111111-----"..a_table[j+1].name_sort)
-                    temp = a_table[j]
-                    a_table[j] = a_table[j+1]
-                    a_table[j+1] = temp
-                end
-                j = j + 1
-            end
-            i = i + 1
-            j = 1
-        end
-
-        local m = 1
-
-        while(m <= length)do
-            print("----------------------------"..a_table[m].category_id)
-            m = m + 1
-        end
-
-        i = 1
-        j = 1
-        local x = 1
-        while(i <= length)do
-            while(j <= length-i)do
-                if(a_table[j].category == a_table[j+1].category)then
-                    if(a_table[j].name > a_table[j+1].name)then
-                        print("111111111111111111111==============="..x)
-                        x = x + 1
-                        temp = a_table[j]
-                        a_table[j] = a_table[j+1]
-                        a_table[j+1] = temp
-                    end   
-                end
-                j = j + 1
-            end
-            i = i + 1
-            j = 1
-        end
-
-
-        m=1
-        while(m <= length)do
-            print("=========================="..a_table[m].name_sort)
-            m = m + 1
-        end
-
-
-
-        return a_table
     end
 
 -- ============================================================================ end 背包
@@ -297,19 +238,25 @@ end
                     </pe:repeatitem>
                 </pe:repeat>
             </div>
-            
-            <div style="width: 680; height: 868; margin-top: 121; margin-left: 915; text-align: center; float: left;">
-                <pe:repeat DataSource="<%= show_now_backpack() %>">
+                <pe:gridview style="width: 780; height: 868; margin-top: 121; margin-left: 915; text-align: center; float: left;" name='backpack_items' DataSource="<%=show_now_backpack()%>" DefaultNodeHeight = "200" ItemsPerLine="4" AllowPaging="false" RememberScrollPos="true" RememberLastPage="true">
+                    <Columns>
+                        <div style='width:150;height:150;background:url(codepku/image/textures/userinfo/item_board.png);float: left;margin-right: 40;'>
+                            <div style="width: 150; height: 150;  background:url(codepku/image/textures/tmp_icon.jpg); " name="<%=local_backpack[Eval('index')]%>" onclick="OnClickItem">
+                                <div style='font-size: 20; margin: 120;'><%=num%></div>
+                            </div>
+                        </div>
+                    </Columns>
+                </pe:gridview>
+                <!-- <pe:repeat DataSource="<%= show_now_backpack() %>">
                     <div style="width: 150; height: 145; float: left; background:url(codepku/image/textures/tmp_icon.jpg); margin-left: 20px; margin-top: 32px;" name="<%=local_backpack[Eval('index')]%>" onclick="OnClickItem">
                         <div style='font-size: 20; margin: 120;'><%=num%></div>
                     </div>
-                </pe:repeat>
-            </div>
+                </pe:repeat> -->
             
-            <div style="position:relative; margin-left:105; margin-top: 700px; width: 145px;  text-align: center; float: left;">
-                <div style = "width:145;height:85; font-size: 40px; line-height: 85px; background-color: #7210ce;" onclick="prePage">上一页</div>
+            <div style="position:relative; margin-left:0; margin-top: 900px; width: 145px;  text-align: center; float: left;">
+                <!-- <div style = "width:145;height:85; font-size: 40px; line-height: 85px; background-color: #7210ce;" onclick="prePage">上一页</div>
                 <div style = "margin-top: 30; width:145;height:85; font-size: 40px; line-height: 85px; background-color: #7210ce;" onclick="nextPage">下一页</div>
-                        <div style="width: 150px; height: 75px; font-size: 50px; line-height: 75px;"><%=Eval('name')%></div> 
+                        <div style="width: 150px; height: 75px; font-size: 50px; line-height: 75px;"></div>  -->
                 <div style = "width:145; height:85; font-size: 40px; line-height: 85px; background:url(codepku/image/textures/userinfo/options/zhengli.png);" onclick="sort_backpack"></div>
             </div> 
                    

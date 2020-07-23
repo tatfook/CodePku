@@ -4,15 +4,15 @@ local request = NPL.load("(gl)Mod/CodePkuCommon/api/BaseRequest.lua");
 local page;
 
 function UserInfoPage.OnInit()
-	UserInfoPage.OneTimeInit();
-	page = document:GetPageCtrl();
+    UserInfoPage.OneTimeInit();
+    page = document:GetPageCtrl();
 end
 
 function UserInfoPage.OneTimeInit()
-	if(UserInfoPage.is_inited) then
-		return;
-	end
-	UserInfoPage.is_inited = true;
+    if(UserInfoPage.is_inited) then
+        return;
+    end
+    UserInfoPage.is_inited = true;
 end
 
 -- clicked a block
@@ -36,7 +36,7 @@ function UserInfoPage.GetItemInfo()
     --response = request:get('/some/url')
     -- 测试数据
     response = {
-        [1] = {category_id=2, name='道具1', num=200, max_stacked=99, rest_time='1天', tool_type = "稀有道具", scene = "单词爱跑酷",describe='666666666', url='codepku/image/textures/tmp_icon.jpg'},
+        [1] = {category_id=2, name='道具1', num=42, max_stacked=2, rest_time='1天', tool_type = "稀有道具", scene = "单词爱跑酷",describe='666666666', url='codepku/image/textures/tmp_icon.jpg'},
         [2] = {category_id=2, name='道具2', num=100, max_stacked=99, rest_time='2天', tool_type = "传说道具", scene = "主场景",describe='哇 传说'},
         [3] = {category_id=3, name='道具3', num=99, max_stacked=99, rest_time='3天', tool_type = "稀有道具", scene = "竞技区大厅",describe='777777777777'},
         [4] = {category_id=3, name='道具4', num=66, max_stacked=99, rest_time='4天', tool_type = "时装", scene = "全部",describe='fff'},
