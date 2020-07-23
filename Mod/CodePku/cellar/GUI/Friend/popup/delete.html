@@ -1,0 +1,86 @@
+<!-- "Mod/CodePku/cellar/Gui/FriendUI/MyFriend.html" -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+</head>
+
+<body>
+<pe:mcml>
+<script refresh="false" type="text/npl" src="FriendUI.lua">
+<![CDATA[
+local FriendUI = commonlib.gettable("Mod.CodePku.GUI.FriendUI")
+
+FriendData = {
+    {id=11,head="1.png", name="111111111", level=1, gender = "m", online=true, last_time = ''},
+    {id=22,head="2.png", name="sdfsdf", level=3, gender = "f", online=true, last_time = ''},
+    {id=35,head="1.png", name="222", level=5, gender = "m", online=false, last_time = '2020-7-20 12:00'},
+    {id=47,head="2.png", name="rrr", level=4, gender = "f", online=false, last_time = '2020-7-20 17:00'},
+    {id=56,head="1.png", name="9999", level=2, gender = "m", online=false, last_time = '2020-7-17 12:00'},
+    {id=67,head="1.png", name="9999", level=2, gender = "m", online=false, last_time = '2020-7-17 12:00'},
+    {id=72,head="1.png", name="9999", level=2, gender = "m", online=false, last_time = '2020-7-17 12:00'},
+    {id=85,head="1.png", name="9999", level=2, gender = "m", online=false, last_time = '2020-7-17 12:00'},
+    {id=90,head="1.png", name="9999", level=2, gender = "m", online=false, last_time = '2020-7-17 12:00'},
+    {id=104,head="1.png", name="9999", level=2, gender = "m", online=false, last_time = '2020-7-17 12:00'}
+}
+
+mytable = {id=35,head="1.png", name="2777777777777722", level=5, gender = "m", online=true, last_time = '2020-7-20 12:00'}
+
+mytable = {id=47,head="2.png", name="rrr", level=4, gender = "f", online=true, last_time = '2020-7-20 17:00'}
+
+online_color = "#0fc962"
+
+function isOnline()
+    if(mytable.online == true)then
+        return "在线"
+    else
+        online_color = "#3b8bc0"
+        return "离线"
+    end
+end
+
+function ClosePage()
+    Page:CloseWindow();
+end
+
+function ClickChat()
+    nameorid = page:GetValue("nameorid")
+    echo("Todo add_friend")
+end
+
+function addFriend()
+    nameorid = page:GetValue("nameorid")
+    echo("Todo add_friend")
+end
+
+function report()
+    nameorid = page:GetValue("nameorid")
+    echo("Todo report")
+end
+
+]]>
+</script>
+
+<div style="width:1020;height: 550;margin-left:450;margin-top:265;background: url(codepku/image/textures/friend/main/popup.png)">
+    <div style="position:relative; left:160;top:45;width: 192;height:50;background: url(codepku/image/textures/friend/main/delete_title.png);"></div>
+    <div style="position:relative; margin-left: 900;width: 50;height: 50;margin-top: 40;
+    background: url(codepku/image/textures/friend/main/close.png);" onclick="ClosePage">
+    </div>
+
+    <div style="width: 915px; height: 280px; margin-top: 190px; margin-left: 50px;">
+       <div style="margin-left: 60px; margin-top: 30px; font-size: 50px; color: #2ce0d7;">
+            <span>你确定删除</span>
+            <span><%= mytable.name %></span>
+            <span>吗？</span>
+        </div>
+        <div style="width: 200px; height: 80px; margin-top: 80px; float: left; margin-left: 150px; background: url(codepku/image/textures/friend/delete_friend/confirm.png);"></div>
+        <div style="width: 200px; height: 80px; margin-top: 80px; float: left; margin-left: 200px; background: url(codepku/image/textures/friend/delete_friend/cancel.png);"></div>
+    </div>
+
+</div>
+</pe:mcml>
+</body>
+
+</html>

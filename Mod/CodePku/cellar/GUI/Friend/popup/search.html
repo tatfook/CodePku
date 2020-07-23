@@ -18,8 +18,13 @@ function ClosePage()
 end
 
 function ClickSearch()
-    nameorid = page:GetValue("nameorid")
-    echo("Todo ClickSearch"..nameorid)
+
+ --   nameorid = page:GetValue("nameorid")
+ --   echo("Todo ClickSearch"..nameorid)
+
+    -- 添加搜索到的好友
+    FriendUI:ShowPopup(2)
+
 end
 
 ]]>
@@ -34,7 +39,6 @@ end
     background: url(codepku/image/textures/friend/add_friend/input_bg.png); font-size: 42px; float: left;color:#ffffff" placeholder="请输入玩家名称或ID"/>
 
     <div style="position:relative;margin-left: 700; margin-top: 295;width: 109; height: 70; background: url(codepku/image/textures/friend/add_friend/search.png);" onclick="ClickSearch"></div>
-
 </div>
 </pe:mcml>
 </body>
