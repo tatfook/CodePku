@@ -18,8 +18,15 @@ function ClosePage()
 end
 
 function ClickSearch()
-    nameorid = page:GetValue("nameorid")
-    echo("Todo ClickSearch"..nameorid)
+    nameorid = Page:GetValue("nameorid")
+    if #nameorid>0 then
+        FriendUI:Search(nameorid)
+        if FriendUI.vars["search"] then
+            FriendUI:ShowPopup(2)
+        else
+            GameLogic.AddBBS("CodeGlobals", L"找不到符合要求的用户", 3000, "#00FF00");
+        end
+    end
 end
 
 ]]>
@@ -34,7 +41,6 @@ end
     background: url(codepku/image/textures/friend/add_friend/input_bg.png); font-size: 42px; float: left;color:#ffffff" placeholder="请输入玩家名称或ID"/>
 
     <div style="position:relative;margin-left: 700; margin-top: 295;width: 109; height: 70; background: url(codepku/image/textures/friend/add_friend/search.png);" onclick="ClickSearch"></div>
-
 </div>
 </pe:mcml>
 </body>

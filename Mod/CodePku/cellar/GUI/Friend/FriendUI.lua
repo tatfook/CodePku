@@ -35,9 +35,42 @@ FriendUI.popparams={
         url="Mod/CodePku/cellar/GUI/Friend/popup/apply.html",
         alignment="_ct", left = -960, top = -540, width = 1920, height = 1080,zorder =30
     },
+    add = {
+        url="Mod/CodePku/cellar/GUI/Friend/popup/add.html",
+        alignment="_ct", left = -960, top = -540, width = 1920, height = 1080,zorder =30
+    },
+    delete = {
+        url="Mod/CodePku/cellar/GUI/Friend/popup/delete.html",
+        alignment="_ct", left = -960, top = -540, width = 1920, height = 1080,zorder =30
+    }
 }
 
 FriendUI.vars = {}
+
+
+function FriendUI:Search(nameorid)
+    local response = request:get('/users/search?keyword='..nameorid,nil,{sync = true})
+    if (response.status == 200 and response.data.code == 200) then
+        FriendUI.vars["search"] = {
+            friend_id = response.data.data.id,
+            nickname = response.data.data.nickname or response.data.data.mobile,
+            gender = response.data.data.gender,
+            head = response.data.data.avatar_url,
+            is_online = true,  -- Todo
+            last_time = response.data.data.updated_at,  -- Todo
+        }
+    else
+        FriendUI.vars["search"] = nil;
+    end
+end
+
+
+function FriendUI:Add_Friend(fid)
+    local response = request:get('/contacts?friend_id='..fid,nil,{sync = true})
+    if (response.status == 200 and response.data.code == 200) then
+        GameLogic.AddBBS("CodeGlobals", format(L"已向%s发送了好友申请", string.sub(FriendUI.vars["search"].nickname,1,7)), 3000, "#00FF00");
+    end
+end
 
 
 function FriendUI:ShowPage(PageIndex)
@@ -72,5 +105,7 @@ function FriendUI:ShowPopup(PopIndex)
         FriendUI.popui = AdaptWindow:QuickWindow(FriendUI.popparams["add"])
     elseif PopIndex == 3 then
         FriendUI.popui = AdaptWindow:QuickWindow(FriendUI.popparams["apply"])
+    elseif  PopIndex == 4 then
+        FriendUI.popui = AdaptWindow:QuickWindow(FriendUI.popparams["delete"])
     end
 end

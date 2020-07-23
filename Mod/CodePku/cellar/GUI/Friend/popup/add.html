@@ -1,0 +1,95 @@
+<!-- "Mod/CodePku/cellar/Gui/FriendUI/MyFriend.html" -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+</head>
+
+<body>
+<pe:mcml>
+<script refresh="false" type="text/npl" src="FriendUI.lua">
+<![CDATA[
+local FriendUI = commonlib.gettable("Mod.CodePku.GUI.FriendUI")
+
+online_color = "#00ff22"
+mytable = {
+    friend_id = FriendUI.vars.search.friend_id,
+    nickname = FriendUI.vars.search.nickname,
+    gender = FriendUI.vars.search.gender,
+    head = FriendUI.vars.search.head,
+    is_online = FriendUI.vars.search.is_online,
+    last_time = FriendUI.vars.search.last_time,
+}
+
+echo(mytable.head)
+
+function isOnline()
+    if(mytable.is_online)then
+        return "在线"
+    else
+        online_color = "#f13709"
+        return "离线"
+    end
+end
+
+function getName()
+    if(#mytable.nickname <= 7) then
+        return mytable.nickname
+    else
+        return string.sub(mytable.nickname,1,7)
+    end
+end
+
+function ClosePage()
+    Page:CloseWindow();
+end
+
+function ClickChat(fid)
+    echo("Todo add_friend")
+end
+
+function addFriend(fid)
+    FriendUI:Add_Friend(fid)
+end
+
+function report(fid)
+    echo("Todo report")
+end
+
+]]>
+</script>
+
+<div style="width:1020;height: 550;margin-left:450;margin-top:265;background: url(codepku/image/textures/friend/main/popup.png)">
+    <div style="position:relative; left:160;top:45;width: 192;height:50;background: url(codepku/image/textures/friend/main/add_title.png);"></div>
+    <div style="position:relative; margin-left: 900;width: 50;height: 50;margin-top: 40;
+    background: url(codepku/image/textures/friend/main/close.png);" onclick="ClosePage">
+    </div>
+
+    <div style="width: 835; height: 139; margin-top: 250; margin-left: 100; background: url(codepku/image/textures/friend/add_friend/item_bg.png);">
+        <div style="position:relative;width:120;height:120; margin-top: 10; margin-left: 30; background: url(codepku/image/textures/friend/item/head.png);"></div>
+        <!-- head -->
+        <div style='<%=format("position:relative;width:100;height:100;left: 40;top: 20; background: url(%s);", mytable.head)%>'></div>
+
+        <div style="position:relative; left: 190; top: 10; ">
+            <div style="height:40; font-size: 40;float: left; color: #ffffff;"><%=getName()%></div>
+            <pe:if condition="<%=mytable.gender ~=0%>">
+            <div style='<%=format("width:37; height:37; top: 10px; left: 5px; float: left; background: url(codepku/image/textures/friend/item/%s.png);", mytable.gender)%>'></div>
+            </pe:if>
+        </div>
+    
+        <div style='<%=format("position:relative;width:200; height:40; left:190;top:80;font-size: 35; font-weight: bold; color: %s;", online_color )%>'><%=isOnline()%></div>
+
+        
+        <div style="position:relative;width:65;height:45;top:50;left:500;background: url(codepku/image/textures/friend/my_friend/chat.png);" name='<%=mytable.friend_id%>' onclick="ClickChat"></div>
+        <div style="position:relative;width:65;height:45;top:50;left:620;background: url(codepku/image/textures/friend/add_friend/add.png);" name='<%=mytable.friend_id%>' onclick="addFriend"></div>
+
+        <div style="position:relative;width:65;height:45;top:50;left:740;background: url(codepku/image/textures/friend/add_friend/report.png);" name='<%=mytable.friend_id%>' onclick="report"></div>
+    </div>
+
+</div>
+</pe:mcml>
+</body>
+
+</html>
