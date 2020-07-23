@@ -57,10 +57,13 @@ function UserInfoPage.GetItemInfo()
             table.insert(data, l)
             s = s + 1
         end
-        if stack > 1 then
+        if stack > 1 and v.num % v.max_stacked ~= 0 then
             v.num = v.num % v.max_stacked
+            table.insert(data, v)
+        elseif stack == 1 then
+            table.insert(data, v)
         end
-        table.insert(data, v)
+        
     end
     return data
 end
