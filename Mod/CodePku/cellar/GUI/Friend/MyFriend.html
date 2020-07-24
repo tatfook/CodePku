@@ -59,7 +59,8 @@ FriendData = {
 }
 
 function getFriendData()
-    return FriendData
+    
+    return FriendUI.vars["friends"] or {}
 end
 
 function AddFriend()
@@ -95,11 +96,11 @@ end
     <pe:repeat DataSource="<%=menu%>" style="position:relative;top:235">
         <pe:repeatitem>
             <pe:if condition='<%=Eval("index") ~= cur_index%>'>
-            <div style='<%=format("width:367; height:120;left: 0;margin-top:30;background: url(codepku/image/textures/friend/menu/%s.png);",
+            <div style='<%=format("width:275; height:107;left: 67;margin-top:30;background: url(codepku/image/textures/friend/menu/%s.png);",
             Eval("text"))%>' name='<%=Eval("index")%>' onclick="ChangePage"></div>
             </pe:if>
             <pe:if condition='<%=Eval("index") == cur_index%>'>
-            <div style='<%=format("width:429; height:150;left: 0;margin-top:30;background: url(codepku/image/textures/friend/menu/%s.png);",
+            <div style='<%=format("width:294; height:107;left: 48;margin-top:30;background: url(codepku/image/textures/friend/menu/%s.png);",
             Eval("text").."_active")%>'></div>
             </pe:if>
         </pe:repeatitem>
@@ -107,17 +108,23 @@ end
 
 
     <pe:gridview name="MyFriend" style="position:relative;margin-top:270;margin-left: 450;
-    height:700;width: 1400;background-color: #ff00ff50;" DataSource='<%=FriendData %>' CellPadding="10" ItemsPerLine="1" AllowPaging="false" RememberScrollPos="true" RememberLastPage="true" 
+    height:700;width: 1400;background-color: #ff00ff50;" DataSource='<%=getFriendData() %>' CellPadding="10" ItemsPerLine="1" AllowPaging="false" RememberScrollPos="true" RememberLastPage="true" 
     VerticalScrollBarStep="36" VerticalScrollBarOffsetX="8">
     <Columns>
     <div style="width: 1200;height: 160;">
         <div style="position:relative;width:1146;height:130;top:15;left:15;background: url(codepku/image/textures/friend/item/bg.png);"></div>
         <div style="position:relative;width:160;height:160;background: url(codepku/image/textures/friend/item/head.png);"></div>
-        <div style='<%=format("position:relative;width:100;height:100;left: 20;top: 20;background: url(codepku/image/textures/friend/head/%s);", Eval("head"))%>'></div>
-        <div style="position:relative;width:200;height:40;left:200;top:20;font-size: 40;color: #FFA500;"><%=Eval("name")%></div>
-        <div style="position:relative;width:200;height:40;left:200;top:100;font-size: 30;color: #FFA500;">ID: <%=Eval("id")%></div>
-        <div style='<%=format("position:relative;width:37;height:37;left:400;top:25;background: url(codepku/image/textures/friend/item/%s.png);", Eval("gender"))%>'></div>
-        
+        <div style='<%=format("position:relative;width:120;height:120;left: 20;top: 20;background: url(%s);", Eval("head"))%>'></div>
+
+        <div style="position:relative; left: 200; top: 20; ">
+            <div style="height:40; font-size: 40;float: left; color: #FFA500;"><%=Eval("nickname")%></div>
+            <pe:if condition='<%=Eval("gender") ~=0%>'>
+                <div style='<%=format("width:37; height:37; top: 3; left: 20; float: left; background: url(codepku/image/textures/friend/item/%s.png);", Eval("gender"))%>'></div>
+            </pe:if>
+        </div>
+
+        <div style="position:relative;width:200;height:40;left:200;top:100;font-size: 30;color: #FFA500;">ID: <%=Eval("friend_id")%></div>
+
         <div style="position:relative;width:100;height:60;top:50;left:850;background: url(codepku/image/textures/friend/my_friend/delete.png);" onclick="ClickDelete"></div>
         <div style="position:relative;width:100;height:60;top:50;left:1000;background: url(codepku/image/textures/friend/my_friend/chat.png);" onclick="ClickChat"></div>
     </div>

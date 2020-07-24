@@ -66,9 +66,63 @@ end
 
 
 function FriendUI:Add_Friend(fid)
-    local response = request:get('/contacts?friend_id='..fid,nil,{sync = true})
+    local response = request:post('/contacts',{friend_id=fid},{sync = true})
     if (response.status == 200 and response.data.code == 200) then
         GameLogic.AddBBS("CodeGlobals", format(L"已向%s发送了好友申请", string.sub(FriendUI.vars["search"].nickname,1,7)), 3000, "#00FF00");
+    end
+end
+
+
+function FriendUI:GetApply()
+    local response = request:get('/contacts/new-friends',nil,{sync = true})
+    if (response.status == 200 and response.data.code == 200) then
+        FriendUI.vars["apply"] = {}
+
+        for index, data in ipairs(response.data.data) do
+            FriendUI.vars["apply"][index] = {
+                id = data.id,
+                friend_id = data.user.id,
+                nickname = data.user.nickname or string.sub(data.user.mobile,1,7),
+                gender = data.user.gender,
+                head = data.user.avatar_url,
+                is_online = true,  -- Todo
+                last_time = data.user.updated_at,  -- Todo
+                remark = data.remark,
+            }
+        end
+    else
+        FriendUI.vars["apply"] = nil;
+    end
+end
+
+
+function FriendUI:HandleApply(aid, hkind)
+    local response = request:put('/contacts/new-friends/'..aid,{status=hkind},{sync = true})
+    if (response.status == 200 and response.data.code == 200) then
+        return true
+    end
+    return false
+end
+
+function FriendUI:GetFriend()
+    local response = request:get('/contacts',nil,{sync = true})
+    if (response.status == 200 and response.data.code == 200) then
+        FriendUI.vars["friends"] = {}
+
+        for index, data in ipairs(response.data.data) do
+            FriendUI.vars["friends"][index] = {
+                id = data.id,
+                friend_id = data.friend.id,
+                nickname = data.friend.nickname or string.sub(data.friend.mobile,1,7),
+                gender = data.friend.gender,
+                head = data.friend.avatar_url,
+                is_online = true,  -- Todo
+                last_time = data.friend.updated_at,  -- Todo
+                remark = data.remark,
+            }
+        end
+    else
+        FriendUI.vars["friends"] = nil;
     end
 end
 
@@ -81,6 +135,7 @@ function FriendUI:ShowPage(PageIndex)
 
     PageIndex = tonumber(PageIndex)
     if PageIndex == 1 then
+        FriendUI:GetFriend()
         FriendUI.ui = AdaptWindow:QuickWindow(FriendUI.params["myfriend"])
     elseif PageIndex == 2 then
         FriendUI.ui = AdaptWindow:QuickWindow(FriendUI.params["recentplayer"])
