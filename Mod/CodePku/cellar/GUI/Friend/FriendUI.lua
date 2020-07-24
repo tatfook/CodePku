@@ -49,6 +49,7 @@ FriendUI.vars = {}
 
 
 function FriendUI:Search(nameorid)
+    local request = NPL.load("(gl)Mod/CodePkuCommon/api/BaseRequest.lua");
     local response = request:get('/users/search?keyword='..nameorid,nil,{sync = true})
     if (response.status == 200 and response.data.code == 200) then
         FriendUI.vars["search"] = {
@@ -66,6 +67,7 @@ end
 
 
 function FriendUI:Add_Friend(fid)
+    local request = NPL.load("(gl)Mod/CodePkuCommon/api/BaseRequest.lua");
     local response = request:post('/contacts',{friend_id=fid},{sync = true})
     if (response.status == 200 and response.data.code == 200) then
         GameLogic.AddBBS("CodeGlobals", format(L"已向%s发送了好友申请", string.sub(FriendUI.vars["search"].nickname,1,7)), 3000, "#00FF00");
@@ -74,6 +76,7 @@ end
 
 
 function FriendUI:GetApply()
+    local request = NPL.load("(gl)Mod/CodePkuCommon/api/BaseRequest.lua");
     local response = request:get('/contacts/new-friends',nil,{sync = true})
     if (response.status == 200 and response.data.code == 200) then
         FriendUI.vars["apply"] = {}
@@ -100,6 +103,7 @@ end
 
 
 function FriendUI:HandleApply(aid, hkind)
+    local request = NPL.load("(gl)Mod/CodePkuCommon/api/BaseRequest.lua");
     local response = request:put('/contacts/new-friends/'..aid,{status=hkind},{sync = true})
     if (response.status == 200 and response.data.code == 200) then
         return true
