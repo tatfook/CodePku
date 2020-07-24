@@ -84,6 +84,7 @@ function FriendUI:GetApply()
         for index, data in ipairs(response.data.data) do
             if data.status == 0 then
                 FriendUI.vars["apply"][aindex] = {
+                    index = index,
                     id = data.id,
                     friend_id = data.user.id,
                     nickname = data.user.nickname or string.sub(data.user.mobile,1,7),
@@ -131,6 +132,18 @@ function FriendUI:GetFriend()
         end
     else
         FriendUI.vars["friends"] = nil;
+    end
+end
+
+
+function FriendUI:DeleteFriend(lid)
+    local request = NPL.load("(gl)Mod/CodePkuCommon/api/BaseRequest.lua");
+    local response = request:delete('/contacts/delete/'..lid,nil,{sync = true})
+    if (response.status == 200 and response.data.code == 200) then
+        GameLogic.AddBBS("CodeGlobals", format(L"删除了%s", FriendUI.vars["cur"].nickname), 3000, "#00FF00")
+        FriendUI.vars["cur"] = nil
+        FriendUI:GetFriend()
+        FriendUI:ShowPage(1)
     end
 end
 

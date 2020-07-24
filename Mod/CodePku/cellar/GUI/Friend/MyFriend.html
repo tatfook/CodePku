@@ -51,7 +51,11 @@ function FriendApply()
     FriendUI:ShowPopup(3)
 end
 
-function ClickDelete()
+function ClickDelete(lindex)
+    data = getFriendData()
+    FriendUI.vars["cur"] = data[lindex]
+    echo("------------------------")
+    echo(FriendUI.vars["cur"])
     FriendUI:ShowPopup(4)
 end
 
@@ -113,8 +117,8 @@ end
             <div style="position:relative; width:250; height:30; left:700;top:60;font-size: 40;color: #f13709;">离线</div>
         </pe:if>
 
-        <div style="position:relative;width:100;height:60;top:50;left:1120;background: url(codepku/image/textures/friend/my_friend/delete.png);" onclick="ClickDelete"></div>
-        <div style="position:relative;width:100;height:60;top:50;left:1260;background: url(codepku/image/textures/friend/my_friend/chat.png);" onclick="ClickChat"></div>
+        <div style="position:relative;width:100;height:60;top:50;left:1120;background: url(codepku/image/textures/friend/my_friend/delete.png);" name='<%=Eval("index")%>' onclick="ClickDelete"></div>
+        <div style="position:relative;width:100;height:60;top:50;left:1260;background: url(codepku/image/textures/friend/my_friend/chat.png);" name='<%=Eval("index")%>' onclick="ClickChat"></div>
     </div>
     </Columns>
     </pe:gridview>
