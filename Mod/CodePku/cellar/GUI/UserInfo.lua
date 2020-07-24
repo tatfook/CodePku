@@ -28,6 +28,16 @@ function UserInfoPage.GetUserInfo()
         UserInfo.name = data.nickname or data.mobile
         UserInfo.id = data.id
         UserInfo.gender = data.gender
+        wallets = data.user_wallets
+        echo(string.format( "wallets: %s,  length:  %d", wallets, #wallets))
+        UserInfo.money = {goldcoin=0, wanxuecoin=0}
+        for i, v in ipairs(wallets) do 
+            if v.currency_id == 1 then
+                UserInfo.money.goldcoin = v.amount
+            elseif v.currency_id == 2 then
+                UserInfo.money.wanxuecoin = v.amount
+            end
+        end
     end
 end
 

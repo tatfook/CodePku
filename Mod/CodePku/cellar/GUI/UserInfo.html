@@ -94,12 +94,9 @@ PropsInfo = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.PropsInfo")
     end
 
     function sort_backpack()
-        params= '?sort=1'
-        r = UserInfoPage.GetItemInfo(params)
-        echo(string.format('++++++++ %s ', r))
-        UserInfo.props = r
+        params = '?sort=1'
+        UserInfo.props = UserInfoPage.GetItemInfo(params)
         Page:Refresh(0)   
-        
     end
 
 -- ============================================================================ end 背包
@@ -152,6 +149,8 @@ function Choose5(index)
     user_options[choose_index5].url =string.sub(user_options[choose_index5].url ,1,string.len(user_options[choose_index5].url)-1)
     choose_index5 =index
     user_options[choose_index5].url = user_options[choose_index5].url..1
+    -- local params = ''
+    -- UserInfo.props = UserInfoPage.GetItemInfo(params)
     Page:Refresh(0);
 end
 
@@ -186,9 +185,10 @@ end
 
 <pe:container alignment="_lt" width="1920" height="1080">
     <div style='<%=format("width:1920;height:1080;background:url(codepku/image/textures/userinfo/user_info_back.png);")%>' >
-        <div style="position:relative;width:160;height:43;margin-left:960;margin-top:16;background:url(codepku/image/textures/userinfo/info_title/user_center.png);"></div>
-        <div style="position:relative;width:45;height:50;margin-left:1815;margin-top:16;background:url(codepku/image/textures/userinfo/info_title/cancel.png);"onclick="ClosePage"></div>
-        <div style="position:relative;width:45;height:50;margin-left:86;margin-top:16;background:url(codepku/image/textures/userinfo/info_title/help.png);"onclick="Undefinde"></div>
+        <div style="position:relative;width:75;height:75;margin-left:75;margin-top:0;"onclick="ClosePage"></div>
+        <div style="position:relative;width:160;height:43;margin-left:960;margin-top:16;background:url(codepku/image/textures/userinfo/info_title/user_center.png);"onclick="ClosePage"></div>
+        <div style="position:relative;width:180;height:45;margin-left:1500;margin-top:20;background: url(codepku/image/textures/userinfo/money_1.png);color: white;font-size: 20px;font-weight: bold;"onclick="ClosePage"><div style="margin-left:50;margin-top:10"><%=UserInfo.money.goldcoin%></div></div>
+        <div style="position:relative;width:180;height:45;margin-left:1700;margin-top:20;background: url(codepku/image/textures/userinfo/money_2.png);color: white;font-size: 20px;font-weight: bold;"onclick="ClosePage"><div style="margin-left:50;margin-top:10"><%=UserInfo.money.wanxuecoin%></div></div>
         <div style = "position:relative;margin-top:100">
             <pe:repeat  DataSource="<%=user_options_list[1]%>">
                 <pe:repeatitem>
