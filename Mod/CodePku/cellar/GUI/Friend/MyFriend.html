@@ -23,14 +23,6 @@ function ClosePage()
     Page:CloseWindow();
 end
 
-function AddFriend()
-    Page:Refresh(0);
-end
-
-function FriendApply()
-    Page:Refresh(0);
-end
-
 
 function ChangePage(index)
     FriendUI:ShowPage(index)
@@ -45,21 +37,8 @@ function ClickDelete(uid)
     echo("delete")
 end
 
-FriendData = {
-    {id=11,head="1.png", name="111111111", level=1, gender = "m", online=true, last_time = ''},
-    {id=22,head="2.png", name="sdfsdf", level=3, gender = "f", online=true, last_time = ''},
-    {id=35,head="1.png", name="222", level=5, gender = "m", online=false, last_time = '2020-7-20 12:00'},
-    {id=47,head="2.png", name="rrr", level=4, gender = "f", online=false, last_time = '2020-7-20 17:00'},
-    {id=56,head="1.png", name="9999", level=2, gender = "m", online=false, last_time = '2020-7-17 12:00'},
-    {id=67,head="1.png", name="9999", level=2, gender = "m", online=false, last_time = '2020-7-17 12:00'},
-    {id=72,head="1.png", name="9999", level=2, gender = "m", online=false, last_time = '2020-7-17 12:00'},
-    {id=85,head="1.png", name="9999", level=2, gender = "m", online=false, last_time = '2020-7-17 12:00'},
-    {id=90,head="1.png", name="9999", level=2, gender = "m", online=false, last_time = '2020-7-17 12:00'},
-    {id=104,head="1.png", name="9999", level=2, gender = "m", online=false, last_time = '2020-7-17 12:00'}
-}
 
 function getFriendData()
-    
     return FriendUI.vars["friends"] or {}
 end
 
@@ -68,6 +47,7 @@ function AddFriend()
 end
 
 function FriendApply()
+    FriendUI:GetApply()
     FriendUI:ShowPopup(3)
 end
 

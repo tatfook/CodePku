@@ -14,6 +14,8 @@
 local FriendUI = commonlib.gettable("Mod.CodePku.GUI.FriendUI")
 
 function getFriendData()
+    echo("----------------getFriendData:")
+    echo(FriendUI.vars["apply"])
     return FriendUI.vars["apply"] or {};
 end
 

@@ -77,18 +77,21 @@ function FriendUI:GetApply()
     local response = request:get('/contacts/new-friends',nil,{sync = true})
     if (response.status == 200 and response.data.code == 200) then
         FriendUI.vars["apply"] = {}
-
+        local aindex = 1
         for index, data in ipairs(response.data.data) do
-            FriendUI.vars["apply"][index] = {
-                id = data.id,
-                friend_id = data.user.id,
-                nickname = data.user.nickname or string.sub(data.user.mobile,1,7),
-                gender = data.user.gender,
-                head = data.user.avatar_url,
-                is_online = true,  -- Todo
-                last_time = data.user.updated_at,  -- Todo
-                remark = data.remark,
-            }
+            if data.status == 0 then
+                FriendUI.vars["apply"][aindex] = {
+                    id = data.id,
+                    friend_id = data.user.id,
+                    nickname = data.user.nickname or string.sub(data.user.mobile,1,7),
+                    gender = data.user.gender,
+                    head = data.user.avatar_url,
+                    is_online = true,  -- Todo
+                    last_time = data.user.updated_at,  -- Todo
+                    remark = data.remark,
+                }
+                aindex = aindex + 1;
+            end
         end
     else
         FriendUI.vars["apply"] = nil;
@@ -105,6 +108,7 @@ function FriendUI:HandleApply(aid, hkind)
 end
 
 function FriendUI:GetFriend()
+    local request = NPL.load("(gl)Mod/CodePkuCommon/api/BaseRequest.lua");
     local response = request:get('/contacts',nil,{sync = true})
     if (response.status == 200 and response.data.code == 200) then
         FriendUI.vars["friends"] = {}
