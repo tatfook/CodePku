@@ -18,15 +18,7 @@
     local select_button_clicked = 0
     local show_flag = 0
     
-    local subjects = {
-        [1] = {name='推荐', title='reco_clicked', index=1, subject_id=3},
-        [2] = {name='语文', title='chinese', index=2, subject_id=1},
-        [3] = {name='数学', title='math', index=3, subject_id=2},
-        [4] = {name='英语', title='english', index=4, subject_id=3},
-        [5] = {name='物理', title='physics', index=5, subject_id=4},
-        [6] = {name='化学', title='chemestry', index=6, subject_id=5},
-        [7] = {name='生物', title='biology', index=7, subject_id=6},
-    }
+    
     local navig = {
         [1] = {name="古诗", title="gushi", index=1},
         [2] = {name="文章", title="wenzhang", index=2},
@@ -42,7 +34,7 @@
     }
 
     function get_full_course()
-        course = TopicEntrencePage.GetCourse(subjects[last_clicked_index].subject_id)
+        course = TopicEntrencePage.GetCourse(TopicEntrencePage.subjects[last_clicked_index].subject_id)
         return course
     end
 
@@ -58,7 +50,7 @@
     end
     
     function GetSubjects()
-        return subjects
+        return TopicEntrencePage.subjects
     end
     
     function GetNavig()
@@ -132,6 +124,8 @@
             TopicEntrencePage.sortMethod = '默认排序'
         elseif name == 'ID_select' then
             TopicEntrencePage.sortMethod = 'ID'
+        else
+            GameLogic.RunCommand("/tip -duration 1500 功能开发中，敬请期待")
         end
         Page:Refresh(0.01)
     end
@@ -161,8 +155,8 @@
     
     function OnClickSubject(name)
         if last_clicked_index ~= name then
-            subjects[name].title = subjects[name].title..'_clicked'
-            subjects[last_clicked_index].title = string.gsub(subjects[last_clicked_index].title, '_clicked', '')
+            TopicEntrencePage.subjects[name].title = TopicEntrencePage.subjects[name].title..'_clicked'
+            TopicEntrencePage.subjects[last_clicked_index].title = string.gsub(TopicEntrencePage.subjects[last_clicked_index].title, '_clicked', '')
             last_clicked_index = name
             topic_course = get_full_course()
             Page:Refresh(0)
@@ -184,17 +178,18 @@
 
 
     function OnClickCourse(name)
-    local l = {}
-    for a in string.gmatch(name, '%d') do
-        table.insert(l, a)
-    end
-    is_open = l[2]
-    if is_open == 1 then
-        world_id = l[1]
-        GameLogic.RunCommand(string.format("/connectCodePku %d", name));
-        Page:CloseWindow()
-    else
-        GameLogic.RunCommand("/tip -duration 1500 该课程暂未开放，敬请期待")
+        local l = {}
+        for a in string.gmatch(name, '%d') do
+            table.insert(l, a)
+        end
+        is_open = l[2]
+        if is_open == 1 then
+            world_id = l[1]
+            GameLogic.RunCommand(string.format("/connectCodePku %d", name));
+            Page:CloseWindow()
+        else
+            GameLogic.RunCommand("/tip -duration 1500 该课程暂未开放，敬请期待")
+        end
     end
 
     function GetDivisible(index)
@@ -213,8 +208,8 @@
     <div style="width: 240px; height: 120px; position: absolute; z-index: 10; margin-left: 1648px; margin-top: 248px;">
         <div style="width: 240px; height: 50px; margin-top: 2px; background: url(codepku/image/textures/fastentrence/topic/default_select.png);" name="default_select" onclick="OnSelectedItem"></div>
         <div style="width: 240px; height: 50px; margin-top: 2px; background: url(codepku/image/textures/fastentrence/topic/ID_select.png);" name="ID_select" onclick="OnSelectedItem"></div>
-        <div style="width: 240px; height: 50px; margin-top: 2px; background: url(codepku/image/textures/fastentrence/topic/hot_select.png);" name="hot_select" onclick="OnSelectedItem"></div>
-        <div style="width: 240px; height: 50px; margin-top: 2px; background: url(codepku/image/textures/fastentrence/topic/pepole_select.png);" name="pepole_select" onclick="OnSelectedItem"></div>
+        <!-- <div style="width: 240px; height: 50px; margin-top: 2px; background: url(codepku/image/textures/fastentrence/topic/hot_select.png);" name="hot_select" onclick="OnSelectedItem"></div> -->
+        <!-- <div style="width: 240px; height: 50px; margin-top: 2px; background: url(codepku/image/textures/fastentrence/topic/people_select.png);" name="people_select" onclick="OnSelectedItem"></div> -->
     </div>
 </pe:if>
 <div style="margin-top:5px;width:1920;height: 1080;background:url(codepku/image/textures/fastentrence/topic_board.png);">
@@ -222,7 +217,9 @@
     <div style="width:200px;height:900px;margin-left: 20px;margin-right: 20px;margin-top:70px;float: left;">
         <pe:repeat DataSource="<%=GetSubjects()%>">
             <pe:repeatitem>
-                <div style="<%=format('background:url(codepku/image/textures/fastentrence/topic/%s.png);width:220;height:100;margin-left:-18;margin-bottom: 30;', Eval('title'))%>" name='<%=Eval("index")%>' onclick='OnClickSubject'></div>
+                <pe:if condition="<%=Eval('show')==true%>">
+                    <div style="<%=format('background:url(codepku/image/textures/fastentrence/topic/%s.png);width:220;height:100;margin-left:-18;margin-bottom: 30;', Eval('title'))%>" name='<%=Eval("index")%>' onclick='OnClickSubject'></div>
+                </pe:if>  
             </pe:repeatitem>
         </pe:repeat>
     </div>
@@ -230,18 +227,18 @@
         <div style="width: 1630px;height: 100px;">
             <!--搜索-->
             <div style="width: 340px; height: 65px; margin-left: 1008px; float: left;">
-                <input name="searchByName" type="text" style="width: 266px; height: 62px; background-color: #ffffff; font-size: 42px; float: left;" value="<%=TopicEntrencePage.searchByName%>"/>
+                <input name="searchByName" type="text" style="width: 266px; height: 62px; background-color: #4BB7FD; font-size: 42px; float: left;" value="<%=TopicEntrencePage.searchByName%>"/>
                 <div style="width: 72px; height: 62px; float: left;" onclick="f_searchByName">
-                    <div style="width: 40px; height: 40px;margin-left: 18px;margin-top: 10px; background:url(codepku/image/textures/fastentrence/topic/search.png);"></div>
+                    <div style="width: 40px; height: 40px;margin-left: 30px;margin-top: 10px; background:url(codepku/image/textures/fastentrence/topic/search.png);"></div>
                 </div>
             </div>
 
             <!--选择框-->
             <div style="width: 240px;height: 500px; margin-left: 40px; float: left;">
                 <div style="width: 245px;height: 60px;">
-                    <input type="text" style="width:175px; height:62px; font-size: 35px;background-color: #ffffff;" name="sort_input" value="<%=TopicEntrencePage.sortMethod%>"/>
+                    <input type="text" style="width:175px; height:62px; font-size: 35px;background-color: #4BB7FD;" name="sort_input" value="<%=TopicEntrencePage.sortMethod%>"/>
                     <div style="width: 70px; height: 62px; float: left;"  onclick="OnIsClickedSelect">
-                        <div style="width: 30px; height: 30px;margin-left: 20px;margin-top: 15px; background:url(codepku/image/textures/fastentrence/topic/sort.png); float: left;"></div>
+                        <div style="width: 30px; height: 30px;margin-left: 30px;margin-top: 15px; background:url(codepku/image/textures/fastentrence/topic/sort.png); float: left;"></div>
                     </div>
                 </div>
             </div>

@@ -11,22 +11,16 @@
 GameLogic = commonlib.gettable("MyCompany.Aries.Game.GameLogic")
 SystemEntrencePage = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.SystemEntrencePage");
 SystemLevelPage = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.SystemLevelPage");
-local MainEntrencePage = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.MainEntrencePage");
-
-
-SystemLevelPage.last_clicked_index = 1
-
-
+MainEntrencePage = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.MainEntrencePage");
+SystemEntranceChoosePage = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.SystemEntranceChoosePage");
 
 
 function ClosePage()
     Page:CloseWindow();
-    
 end
 
 function OnClose()
     ClosePage()
-    SystemEntrencePage.ShowPage()
 end
 
 function GetSubjects()
@@ -97,6 +91,7 @@ function OnClickCourse(course)
         world_id = GetCourseWorldID(course)
         GameLogic.RunCommand(string.format("/connectCodePku %d", world_id));
         Page:CloseWindow()
+        SystemEntranceChoosePage.last_ctrl:CloseWindow()
     else
         GameLogic.RunCommand("/tip -duration 1500 该课程暂未开放，敬请期待")
     end
