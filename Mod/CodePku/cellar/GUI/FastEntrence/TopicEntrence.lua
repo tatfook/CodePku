@@ -16,6 +16,11 @@ function TopicEntrencePage.GetCourse(subject_id)
             l['id'] = c.keepwork_project_id
             l['name'] = c.name
             l['index'] = a % 10
+            if c.is_open then
+                l['is_open'] = 1
+            else
+                l['is_open'] = 0
+            end
             a = a + 1
             table.insert(list, l)
         end
