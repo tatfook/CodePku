@@ -1,5 +1,5 @@
 local InterceptorManager = commonlib.inherit(nil, NPL.export({}));
-local Log = NPL.load("(gl)Mod/CodePku/util/Log.lua");
+-- local Log = NPL.load("(gl)Mod/CodePku/util/Log.lua");
 
 function InterceptorManager:ctor()
     self.handlers = {};

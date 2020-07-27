@@ -9,8 +9,8 @@ Example:
 ]]
 local Axios = commonlib.inherit(nil, NPL.export({}));
 
-NPL.load("(gl)Mod/CodePku/util/Log.lua");
-local Log = commonlib.gettable("Mod.CodePku.Utils.Log");
+-- NPL.load("(gl)Mod/CodePku/util/Log.lua");
+-- local Log = commonlib.gettable("Mod.CodePku.Utils.Log");
 local Table = NPL.load("(gl)Mod/CodePku/util/Table.lua");
 local Promise = NPL.load("(gl)Mod/CodePku/util/axios/util/Promise.lua");
 local InterceptorManager = NPL.load("(gl)Mod/CodePku/util/axios/core/InterceptorManager.lua");
@@ -89,7 +89,7 @@ function Axios.request(self, ...)
         config = interceptor.fulfilled(config);
     end);
 
-    Log.info('### request config ###',config);
+    -- Log.info('### request config ###',config);
 
     local request = nil;
 
@@ -104,7 +104,7 @@ function Axios.request(self, ...)
             config = config
         };
 
-        Log.info('### sync request response ###',request);
+        -- Log.info('### sync request response ###',request);
     else
         request = Promise.new(function(resolve, reject)
             System.os.GetUrl(config, function(status, headers, data)
@@ -115,7 +115,7 @@ function Axios.request(self, ...)
                     config = config
                 };
 
-                Log.info('### async request response ###',response);
+                -- Log.info('### async request response ###',response);
 
                 if status >= 200 and status < 300 then
                     resolve(response);
