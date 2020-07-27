@@ -136,6 +136,31 @@ function FriendUI:GetFriend()
 end
 
 
+function FriendUI:GetBlackList()
+    local request = NPL.load("(gl)Mod/CodePkuCommon/api/BaseRequest.lua");
+    local response = request:get('/contacts',nil,{sync = true})
+    if (response.status == 200 and response.data.code == 200) then
+        FriendUI.vars["friends"] = {}
+
+        for index, data in ipairs(response.data.data) do
+            FriendUI.vars["friends"][index] = {
+                id = data.id,
+                friend_id = data.friend.id,
+                nickname = data.friend.nickname or string.sub(data.friend.mobile,1,7),
+                gender = data.friend.gender,
+                head = data.friend.avatar_url,
+                is_online = true,  -- Todo
+                last_time = data.friend.updated_at,  -- Todo
+                remark = data.remark,
+            }
+        end
+    else
+        FriendUI.vars["friends"] = nil;
+    end
+end
+
+
+
 function FriendUI:DeleteFriend(lid)
     local request = NPL.load("(gl)Mod/CodePkuCommon/api/BaseRequest.lua");
     local response = request:delete('/contacts/delete/'..lid,nil,{sync = true})
