@@ -345,7 +345,15 @@ function CodePku:init()
 	PreventIndulge:Init()
 
 	local Online = commonlib.gettable("Mod.CodePku.Online");
-	Online:Init();
+    Online:Init();
+
+    -- debug fatal error
+    -- local WebSocketClient = NPL.load("(gl)Mod/CodePku/chat/WebSocketClient.lua");
+    -- echo("websocket ============")
+    -- echo(WebSocketClient)
+
+    local CodepkuChatChannel = NPL.load("(gl)Mod/CodePku/chat/CodepkuChatChannel.lua");
+    CodepkuChatChannel.StaticInit();
 end
 
 function CodePku:OnLogin()

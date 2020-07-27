@@ -6,7 +6,7 @@ place: Foshan
 Desc: 
 use the lib:
 ------------------------------------------------------------
-local Config = NPL.load("(gl)Mod/WorldShare/config/Config.lua")
+local Config = NPL.load("(gl)Mod/Codepku/config/Config.lua")
 ------------------------------------------------------------
 ]]
 
@@ -31,6 +31,15 @@ Config.codepkuServer = {
 }
 
 Config.defaultServer = Config.codepkuServer[Config.defaultEnv];
+
+-- socket server config
+Config.codepkuSocketServer = {    
+    RELEASE = "https://game-socket.codepku.com/chat",
+    DEV = "ws://game-socket.dev.codepku.com/chat",    
+    LOCAL = "http://chat.local.codepku.com/chat"
+}
+
+Config.defaultSocketServer = Config.codepkuSocketServer[Config.defaultEnv]
 
 Config.storageList = {
   ONLINE = "https://api.keepwork.com/storage/v0",
