@@ -26,7 +26,7 @@ local request = NPL.export();
 local axios = NPL.load('(gl)Mod/CodePku/util/axios/Axios.lua');
 local Config = NPL.load("(gl)Mod/CodePku/config/Config.lua")
 
-local _request = axios.create({baseUrl = Config.defaultCodepkuServer})
+local _request = axios.create({baseUrl = Config.defaultServer})
 -- 请求拦截器
 _request.interceptors.request:use(function(config)
 
