@@ -28,6 +28,7 @@ function OtherUserInfoPage.GetUserInfo(id)
         OtherUserInfo.name = data.nickname or string.sub(data.mobile,1,7)
         OtherUserInfo.id = data.id
         OtherUserInfo.gender = data.gender
+        echo(OtherUserInfo.gender)
         return true
     else
         return false

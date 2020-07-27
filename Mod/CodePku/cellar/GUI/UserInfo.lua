@@ -20,6 +20,23 @@ function UserInfoPage.OnClickBlock(block_id)
 
 end
 
+--字符串切割
+function split(str, split_char)      
+    local sub_str_tab = {}
+    while true do          
+        local pos = string.find(str, split_char) 
+        if not pos then              
+            table.insert(sub_str_tab,str)
+            break
+        end  
+        local sub_str = string.sub(str, 1, pos - 1)              
+        table.insert(sub_str_tab,sub_str)
+        str = string.sub(str, pos + 1, string.len(str))
+    end      
+ 
+    return sub_str_tab
+end
+
 -- 获取用户信息
 function UserInfoPage.GetUserInfo()
     response = request:get('/users/profile',nil,{sync = true})
@@ -28,6 +45,21 @@ function UserInfoPage.GetUserInfo()
         UserInfo.name = data.nickname or data.mobile
         UserInfo.id = data.id
         UserInfo.gender = data.gender
+        local _, _, y, m, d, _hour, _min, _sec = string.find(data.created_at, "(%d+)-(%d+)-(%d+)%s*(%d+):(%d+):(%d+)");
+        UserInfo.created_at = y..'-'..m..'-'..d
+        TimeData1 = os.time({day=d, month=m, year=y, hour=0, minute=0, second=0})
+        TimeData2 = os.time()
+        UserInfo.day = tonumber(os.date("%d",TimeData2-TimeData1))
+        if data.self_level == nil then
+            UserInfo.self_level = {}
+            UserInfo.self_level.current_exp = 0
+            UserInfo.self_level.current_level = 0
+            UserInfo.self_level.next_exp = 0
+        else
+            UserInfo.self_level = data.self_level
+        end
+        UserInfo.avatar = data.avatar_url
+        echo(UserInfo.avatar)
     end
 end
 

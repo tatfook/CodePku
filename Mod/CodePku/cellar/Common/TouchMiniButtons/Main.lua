@@ -60,14 +60,17 @@ function MainUIButtons.ShowPage()
 	end
 
 	if(show)then
+		echo("222222222222222222222222222222222222")
 		if(not MainUIButtons.hasshown) then
 			MainUIButtons.show_common_ui()
 			MainUIButtons.show_function_ui()
 			MainUIButtons.show_dialog_ui(false)
 
 			MainUIButtons.hasshown = true
+			echo("33333333333333333333")
 		end
 	else
+		echo("4444444444444444444444444444444444")
 		if MainUIButtons.common_window ~= nil then
 			MainUIButtons.common_window:CloseWindow()
 			MainUIButtons.common_window = nil
@@ -90,6 +93,7 @@ distance = 10
 length_limit = 7
 
 function MainUIButtons.show_interact_ui(obj)
+	echo("55555555555555555555")
 	local x, y, z = obj:GetPosition()
 	local px, py, pz = EntityManager.GetPlayer():GetPosition()
 	if(math.abs(x-px) > distance or math.abs(y-py) > distance or math.abs(z-pz) > distance) then

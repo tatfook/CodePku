@@ -28,13 +28,14 @@ end
 NPL.load("(gl)script/apps/Aries.Creator.Game.Desktop.UserInfo.lua");
 UserInfoPage = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.UserInfoPage")
 UserInfoPage.OnInit()
+local RankPage = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.RankPage");
 
 function ClickUserInfo()
     UserInfoPage:ShowPage()
 end
 
 function ClickBag()
-    UserInfoPage:ShowPage(5)
+    RankPage:ShowPage()
 end
 
 
