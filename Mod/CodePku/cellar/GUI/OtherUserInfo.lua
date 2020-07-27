@@ -1,6 +1,6 @@
 local OtherUserInfoPage = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.OtherUserInfoPage")
 local OtherUserInfo = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.OtherUserInfo")
-local request = NPL.load("(gl)Mod/CodePkuCommon/api/BaseRequest.lua");
+local request = NPL.load("(gl)Mod/CodePku/api/BaseRequest.lua");
 local page;
 
 

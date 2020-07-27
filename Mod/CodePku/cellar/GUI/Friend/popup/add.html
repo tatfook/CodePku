@@ -23,7 +23,6 @@ mytable = {
     last_time = FriendUI.vars.search.last_time,
 }
 
-echo(mytable.head)
 
 function isOnline()
     if(mytable.is_online)then
@@ -51,6 +50,8 @@ function ClickChat(fid)
 end
 
 function addFriend(fid)
+    echo("111111111111111111111")
+    echo("fid"..fid)
     FriendUI:Add_Friend(fid)
 end
 

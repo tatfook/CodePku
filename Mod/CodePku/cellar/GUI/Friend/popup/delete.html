@@ -22,6 +22,7 @@ end
 
 function ConfirmDelete(lid)
     FriendUI:DeleteFriend(lid)
+    FriendUI:ShowPage(1)
     Page:CloseWindow();
 end
 

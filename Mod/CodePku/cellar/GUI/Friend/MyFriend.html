@@ -54,8 +54,6 @@ end
 function ClickDelete(lindex)
     data = getFriendData()
     FriendUI.vars["cur"] = data[lindex]
-    echo("------------------------")
-    echo(FriendUI.vars["cur"])
     FriendUI:ShowPopup(4)
 end
 

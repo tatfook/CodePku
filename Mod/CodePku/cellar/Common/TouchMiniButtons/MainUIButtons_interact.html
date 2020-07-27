@@ -11,10 +11,28 @@
 <script refresh="false" type="text/npl" src="MainSceneUIButtons.lua"><![CDATA[
 NPL.load("(gl)script/apps/Aries.Creator.Game.Desktop.OtherUserInfos.lua");
 UserInfoPage = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.OtherUserInfoPage")
+NPL.load("(gl)Mod/CodePku/cellar/GUI/Friend/FriendUI.lua");
+FriendUI = commonlib.gettable("Mod.CodePku.GUI.FriendUI")
 size = 400
-is_friend = false
 name = Page:GetRequestParam("pname")
 pid = Page:GetRequestParam("pid")
+ppid = pid
+
+function CheckFriend()
+    FriendUI:GetFriend()
+    fdatas = FriendUI.vars["friends"] or {}
+    for fi, fdata in ipairs(fdatas) do
+
+        if "_"..fdata.friend_id == "_"..pid then
+            ppid = fdata.id 
+            return true
+        end
+    end
+    return false
+end
+
+is_friend = CheckFriend()
+
 
 function CloseInteract()
     Page:CloseWindow();
@@ -34,12 +52,14 @@ function ClickEmail()
 end
 
 function ClickAddFriend()
-    is_friend = true
-    Page:Refresh(0)
+    FriendUI.vars["search"] = {nickname=name}
+    FriendUI:Add_Friend(pid)
 end
 
 function ClickDelFriend()
-    is_friend = false
+    FriendUI.vars["cur"] = {nickname=name}
+    FriendUI:DeleteFriend(ppid)
+    is_friend = CheckFriend()
     Page:Refresh(0)
 end
 

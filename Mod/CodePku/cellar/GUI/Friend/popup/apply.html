@@ -14,8 +14,6 @@
 local FriendUI = commonlib.gettable("Mod.CodePku.GUI.FriendUI")
 
 function getFriendData()
-    echo("----------------getFriendData:")
-    echo(FriendUI.vars["apply"])
     return FriendUI.vars["apply"] or {};
 end
 
@@ -40,8 +38,8 @@ function ClickRefuse(aid)
     end
 end
 
-function ClickBlacklist(aid)
-    res = FriendUI:HandleApply(aid, 3)
+function ClickBlacklist(fid)
+    res = FriendUI:block(fid)
     if(res) then
         FriendUI:GetApply()
         Page:Refresh(0);
@@ -79,7 +77,7 @@ height:280;width: 920;background-color: #ff00ff50;" DataSource='<%=getFriendData
             
             <pe:div style="position:relative;width:70;height:45;top:45;left:520;background: url(codepku/image/textures/friend/friend_apply/refuse.png);" name='<%=Eval("id")%>' onclick="ClickRefuse"></pe:div>
             <pe:div style="position:relative;width:70;height:45;top:45;left:640;background: url(codepku/image/textures/friend/friend_apply/agree.png);" name='<%=Eval("id")%>' onclick="ClickAgree"></pe:div>
-            <pe:div style="position:relative;width:70;height:45;top:45;left:760;background: url(codepku/image/textures/friend/friend_apply/blacklist.png);" name='<%=Eval("id")%>' onclick="ClickBlacklist"></pe:div>
+            <pe:div style="position:relative;width:70;height:45;top:45;left:760;background: url(codepku/image/textures/friend/friend_apply/blacklist.png);" name='<%=Eval("friend_id")%>' onclick="ClickBlacklist"></pe:div>
                 
         </div>
     </Columns>
