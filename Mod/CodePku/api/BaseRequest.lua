@@ -34,6 +34,8 @@ _request.interceptors.request:use(function(config)
         config.headers['Authorization'] = format("Bearer %s", System.User.codepkuToken);
     end
 
+    config.headers['Accept'] = 'application/json';
+
     return config;
 end,function(error)
     return error;
