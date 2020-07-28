@@ -31,7 +31,12 @@ Config.onlineServer = {
     [Config.env.RELEASE] = {
         host = "steve.codemc.cn",
         port = 9900
-    }
+    },
+    [Config.env.LOCAL] = {
+        host = "gameserver.dev.codepku.com",
+        port = 9900,
+        defaultWorldId = 1
+    },
 };
 
 Config.defaultOnlineServer = Config.onlineServer[Config.defaultEnv];
