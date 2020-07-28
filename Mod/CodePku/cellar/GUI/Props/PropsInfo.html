@@ -11,15 +11,7 @@
     local PropsInfo = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.PropsInfo");
 
 
-    local mytable = PropsInfo.props or {
-        tool = "",
-        num = "999",
-        name = "名字",
-        rest_time = "12天14小时",
-        tool_type = "时装 上衣",
-        scene = "单词爱跑酷",
-        describe = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
-    }
+    local mytable = PropsInfo.props
 
     local open_flag = 0
 
@@ -29,32 +21,28 @@
         return open_flag
     end
 
-    function get_tool()
-        return mytable.tool
-    end
-
     function get_num()
-        return mytable.num
+        return mytable.prop_num
     end
 
     function get_name()
-        return mytable.name
+        return mytable.prop_name
     end
 
     function get_rest_time()
-        return mytable.rest_time
+        return mytable.rest_time or L'永久'
     end
 
     function get_tool_type()
-        return mytable.tool_type
+        return mytable.category_name
     end
 
     function get_scene()
-        return mytable.scene
+        return mytable.scene_name..' '..mytable.se_category_name
     end
 
     function get_describe()
-        return mytable.describe
+        return mytable.prop_desc
     end
 
     function ClosePage()
@@ -79,7 +67,7 @@
     end
 
     function get_img()
-        return mytable.url
+        return mytable.prop_icon or ''
     end
 
     function Undefinde()
@@ -87,11 +75,19 @@
     end
 
     function OnClickCompound()
-        Undefinde()
+        if mytable.can_compose == 1 then
+            Undefinde()
+        else
+            GameLogic.RunCommand("/tip -duration 1500 此道具无法合成")
+        end
     end
 
     function OnClickAbandon()
-        Undefinde()
+        if mytable.can_drop == 1 then
+            Undefinde()
+        else
+            GameLogic.RunCommand("/tip -duration 1500 此道具无法丢弃")
+        end
     end
 
     function OnClickSell()
@@ -99,7 +95,11 @@
     end
 
     function OnClickUse()
-        Undefinde()
+        if mytable.can_use == 1 then
+            Undefinde()
+        else
+            GameLogic.RunCommand("/tip -duration 1500 此道具无法使用")
+        end
     end
 
 
@@ -112,9 +112,10 @@
 
     <div style="margin-left: 1100; margin-top: 30px;width:50;height: 50;background:url(codepku/image/textures/fastentrence/close.png); float: left;" onclick="OnClose"></div>
 
-    <div style="<%=string.format('width: 300px; height: 300px; margin-left: 150px; background:url(%s); float: left;', get_img())%>">
-        <div><%=get_tool()%></div>
-        <div style="width: 100%; height: 40px; margin-left: 180px; margin-top: 250px; line-height: 30px;font-size: 28px;text-align: center;background:url(codepku/image/textures/tool_ui/num_board.png);"><%=get_num()%></div>
+    <div style="width: 300px; height: 300px; margin-left: 150px; background:url(codepku/image/textures/tool_ui/tool.png); float: left;">
+        <div style="<%=format('width: 300px; height: 300px;background:url(%s);', get_img())%>">
+            <div style="width: 100%; height: 40px; margin-left: 180px; margin-top: 250px; padding-top: 3px;line-height: 30px;font-size: 28px;text-align: center;background:url(codepku/image/textures/tool_ui/num_board.png);"><%=get_num()%></div>
+        </div>
     </div>
 
     <div style="width: 500px; height: 300px; float: left; ">

@@ -1,0 +1,96 @@
+<!-- "script/apps/Aries/Creator/Game/Areas/SystemEntrencePage.html" -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+</head>
+<body>
+    <pe:mcml onloadscript="script/apps/Aries/app_main.lua" callbackfunction="MyCompany.Aries.MSGProc">
+<script refresh="false" type="text/npl" src="SystemEntrence.lua"><![CDATA[
+    SystemEntranceChoosePage = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.SystemEntranceChoosePage");
+    SystemLevelPage = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.SystemLevelPage");
+SystemEntrencePage = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.SystemEntrencePage");
+
+function ClosePage()
+    Page:CloseWindow();
+    echo(string.format('PAGE: %s', Page))
+end
+
+function GetSchoolClass()
+    if SystemEntranceChoosePage~=nil then
+        if SystemEntranceChoosePage.school == 'primary' then
+            return L'小学'
+        elseif SystemEntranceChoosePage.school == 'middle' then
+            return L'初中'
+        elseif SystemEntranceChoosePage.school == 'high' then
+            return L'高中'
+        end
+    end
+end
+
+
+function GetGradeDetails(school, page)
+    return SystemEntranceChoosePage.GradeDetails[school][page]
+end
+
+function prev_page()
+    if SystemEntranceChoosePage~=nil then
+        if (SystemEntranceChoosePage.page > 1) then
+            SystemEntranceChoosePage.page = SystemEntranceChoosePage.page - 1
+            Page:Refresh(0)
+        end
+    end
+end
+
+function next_page()
+    if SystemEntranceChoosePage~=nil then
+        if (SystemEntranceChoosePage.page < #SystemEntranceChoosePage.GradeDetails[SystemEntranceChoosePage.school]) then
+            SystemEntranceChoosePage.page = SystemEntranceChoosePage.page + 1
+            Page:Refresh(0)
+        end
+    end
+end
+
+function OnClickGrade(name)
+    local l = {}
+    for a in string.gmatch(name, '%d') do
+        table.insert(l, a)
+    end
+    if l[3] == "0" then
+        GameLogic.RunCommand("/tip -duration 1500 该年级下暂时没有课程，敬请期待")
+        return nil
+    end
+    ClosePage()
+    SystemLevelPage:ShowPage(true,l[1], l[2], 1)
+end
+
+function OnClickBlack()
+
+end
+
+
+]]></script>
+<style type="text/mcss">
+
+</style>
+    <div style='width:1200;height:750;background:url(codepku/image/textures/fastentrence/choose_grade_board.png);margin-top:250px;margin-left:350px'>
+        <div style='width:200;height:100;margin-top:70;margin-left:570;base_font_size:40px;font-size:40px;'><%=GetSchoolClass()%></div>
+        <div style='width:80;height:80;background:url(codepku/image/textures/fastentrence/close_2.png);margin-top:-120;margin-left:1040;' onclick="ClosePage"></div>
+            <div style='width:700;height:500;margin-top: 20;margin-left:140;'>
+                <pe:repeat DataSource="<%=GetGradeDetails(SystemEntranceChoosePage.school, SystemEntranceChoosePage.page)%>">
+                    <pe:repeatitem>
+                        <div style="<%=format('background:url(codepku/image/textures/fastentrence/choose_grade/block_blue.png);position:relative;width:326;height:128;background-color: #ffffff;text-align:center;left: %s;top:%s', ((Eval('index')+1)%2)*400+70, math.floor(((Eval('index')-1)/2))*150)%>" name="<%=format('%d %d %d',Eval('grade_id'), Eval('semester_id'), Eval('open'))%>" onclick='OnClickGrade'><div style="margin-top:40;font-size: 28px;"><%=Eval('name')%></div></div>
+                    </pe:repeatitem>
+                </pe:repeat>
+            </div>
+            <div style='width:800;height:100;margin-left:340;margin-top:-70;'>
+                <div style='width:75;height:75;margin-left: 120;background:url(codepku/image/textures/fastentrence/prev.png);' onclick="prev_page"></div>
+                <div style='base_font_size:40px;font-size:40px;margin-left: 220;margin-top:-55'><%=SystemEntranceChoosePage.page%></div>
+                <div style='width:75;height:75;margin-left: 270;margin-top:-75;background:url(codepku/image/textures/fastentrence/next.png);' onclick="next_page"></div>
+            </div>
+    </div>
+</pe:mcml>
+</body>
+</html>
+

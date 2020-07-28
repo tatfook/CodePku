@@ -94,11 +94,9 @@ PropsInfo = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.PropsInfo")
     end
 
     function sort_backpack()
-        local i = 1
-        local length = #items_table
-        items_table = bubble_sort(items_table)
-        Page:Refresh(0.02)   
-        
+        params = '?sort=1'
+        UserInfo.props = UserInfoPage.GetItemInfo(params)
+        Page:Refresh(0)   
     end
 
 -- ============================================================================ end 背包
@@ -114,7 +112,7 @@ identity = 10
 gender = UserInfo.gender
 vip_id = 20
 choose_index = UserInfoPage.PageIndex or 1
-choose_index5 = 1
+choose_index5 = 1 -- 道具类型id，1-全部 2-道具 3-礼包 4-材料 5-蓝图
 
 user_options_list ={}
 user_options_list[1] = {{index =1,url ='shouye'},{index =2,url ='shuxing'},{index =3,url ='juese'},{index =4,url ='waiguan'},{index =5,url ='beibao'},{index =6,url ='chengjiu'},{index =7,url ='dongtai'}}
@@ -151,6 +149,8 @@ function Choose5(index)
     user_options[choose_index5].url =string.sub(user_options[choose_index5].url ,1,string.len(user_options[choose_index5].url)-1)
     choose_index5 =index
     user_options[choose_index5].url = user_options[choose_index5].url..1
+    -- local params = ''
+    -- UserInfo.props = UserInfoPage.GetItemInfo(params)
     Page:Refresh(0);
 end
 
@@ -165,7 +165,7 @@ function OnClickButton(name,mcmlNode)
 end
 
 function OnClickItem(item)
-    echo(string.format('item: %s, name:%s. category_id: %d', item, item.name, item.category_id))
+    echo(string.format('item: %s, name:%s. category_id: %d', item, item.prop_name, item.prop_id))
     PropsInfo:ShowPage(item)
 end
 
@@ -185,9 +185,10 @@ end
 
 <pe:container alignment="_lt" width="1920" height="1080">
     <div style='<%=format("width:1920;height:1080;background:url(codepku/image/textures/userinfo/user_info_back.png);")%>' >
-        <div style="position:relative;width:160;height:43;margin-left:960;margin-top:16;background:url(codepku/image/textures/userinfo/info_title/user_center.png);"></div>
-        <div style="position:relative;width:45;height:50;margin-left:1815;margin-top:16;background:url(codepku/image/textures/userinfo/info_title/cancel.png);"onclick="ClosePage"></div>
-        <div style="position:relative;width:45;height:50;margin-left:86;margin-top:16;background:url(codepku/image/textures/userinfo/info_title/help.png);"onclick="Undefinde"></div>
+        <div style="position:relative;width:75;height:75;margin-left:75;margin-top:0;"onclick="ClosePage"></div>
+        <div style="position:relative;width:160;height:43;margin-left:960;margin-top:16;background:url(codepku/image/textures/userinfo/info_title/user_center.png);"onclick="ClosePage"></div>
+        <div style="position:relative;width:180;height:45;margin-left:1500;margin-top:20;background: url(codepku/image/textures/userinfo/money_1.png);color: white;font-size: 20px;font-weight: bold;"onclick="ClosePage"><div style="margin-left:50;margin-top:10"><%=UserInfo.money.goldcoin%></div></div>
+        <div style="position:relative;width:180;height:45;margin-left:1700;margin-top:20;background: url(codepku/image/textures/userinfo/money_2.png);color: white;font-size: 20px;font-weight: bold;"onclick="ClosePage"><div style="margin-left:50;margin-top:10"><%=UserInfo.money.wanxuecoin%></div></div>
         <div style = "position:relative;margin-top:100">
             <pe:repeat  DataSource="<%=user_options_list[1]%>">
                 <pe:repeatitem>
@@ -238,11 +239,11 @@ end
                     </pe:repeatitem>
                 </pe:repeat>
             </div>
-                <pe:gridview style="width: 780; height: 868; margin-top: 121; margin-left: 915; text-align: center; float: left;" name='backpack_items' DataSource="<%=show_now_backpack()%>" DefaultNodeHeight = "200" ItemsPerLine="4" AllowPaging="false" RememberScrollPos="true" RememberLastPage="true">
+                <pe:gridview style="width: 780; height: 868; margin-top: 121; margin-left: 915; text-align: center; float: left;" name='backpack_items' DataSource="<%=UserInfo.props%>" DefaultNodeHeight = "200" ItemsPerLine="4" AllowPaging="false" RememberScrollPos="true" RememberLastPage="true">
                     <Columns>
                         <div style='width:150;height:150;background:url(codepku/image/textures/userinfo/item_board.png);float: left;margin-right: 40;'>
-                            <div style="width: 150; height: 150;  background:url(codepku/image/textures/tmp_icon.jpg); " name="<%=local_backpack[Eval('index')]%>" onclick="OnClickItem">
-                                <div style='font-size: 20; margin: 120;'><%=num%></div>
+                            <div style="<%=string.format('width: 150; height: 150;  background:url(%s); ', Eval('prop_icon'))%>" name="<%=UserInfo.props[Eval('index')]%>" onclick="OnClickItem">
+                                <div style='font-size: 30; margin-top: 100;padding-right: 20;color: #fdfdfd;text-align: right;font-weight: bold;'><%=prop_num%></div>
                             </div>
                         </div>
                     </Columns>
