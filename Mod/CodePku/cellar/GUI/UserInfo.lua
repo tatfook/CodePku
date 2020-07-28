@@ -47,9 +47,6 @@ function UserInfoPage.GetUserInfo()
         UserInfo.gender = data.gender
         local _, _, y, m, d, _hour, _min, _sec = string.find(data.created_at, "(%d+)-(%d+)-(%d+)%s*(%d+):(%d+):(%d+)");
         UserInfo.created_at = y..'-'..m..'-'..d
-        TimeData1 = os.time({day=d, month=m, year=y, hour=0, minute=0, second=0})
-        TimeData2 = os.time()
-        UserInfo.day = tonumber(os.date("%d",TimeData2-TimeData1))
         if data.self_level == nil then
             UserInfo.self_level = {}
             UserInfo.self_level.current_exp = 0
@@ -59,6 +56,7 @@ function UserInfoPage.GetUserInfo()
             UserInfo.self_level = data.self_level
         end
         UserInfo.avatar = data.avatar_url
+        UserInfo.day = data.career
         echo(UserInfo.avatar)
     end
 end
