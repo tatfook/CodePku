@@ -4,15 +4,15 @@ local request = NPL.load("(gl)Mod/CodePkuCommon/api/BaseRequest.lua");
 local page;
 
 function UserInfoPage.OnInit()
-	UserInfoPage.OneTimeInit();
-	page = document:GetPageCtrl();
+    UserInfoPage.OneTimeInit();
+    page = document:GetPageCtrl();
 end
 
 function UserInfoPage.OneTimeInit()
-	if(UserInfoPage.is_inited) then
-		return;
-	end
-	UserInfoPage.is_inited = true;
+    if(UserInfoPage.is_inited) then
+        return;
+    end
+    UserInfoPage.is_inited = true;
 end
 
 -- clicked a block
@@ -29,6 +29,43 @@ function UserInfoPage.GetUserInfo()
         UserInfo.id = data.id
         UserInfo.gender = data.gender
     end
+end
+
+-- 获取道具信息
+function UserInfoPage.GetItemInfo()
+    --response = request:get('/some/url')
+    -- 测试数据
+    response = {
+        [1] = {category_id=2, name='道具1', num=42, max_stacked=2, rest_time='1天', tool_type = "稀有道具", scene = "单词爱跑酷",describe='666666666', url='codepku/image/textures/tmp_icon.jpg'},
+        [2] = {category_id=2, name='道具2', num=100, max_stacked=99, rest_time='2天', tool_type = "传说道具", scene = "主场景",describe='哇 传说'},
+        [3] = {category_id=3, name='道具3', num=99, max_stacked=99, rest_time='3天', tool_type = "稀有道具", scene = "竞技区大厅",describe='777777777777'},
+        [4] = {category_id=3, name='道具4', num=66, max_stacked=99, rest_time='4天', tool_type = "时装", scene = "全部",describe='fff'},
+    }
+    
+    data = {}
+    -- 拆分堆叠道具
+    for i, v in ipairs(response) do
+        if v.num ~= v.max_stacked then -- 拆分堆叠数，1表示不拆分
+            stack = math.floor(v.num/ v.max_stacked) + 1
+        else
+            stack = 1
+        end
+        l = commonlib.deepcopy(response[i])
+        s = 1
+        while s < stack do
+            l.num = v.max_stacked
+            table.insert(data, l)
+            s = s + 1
+        end
+        if stack > 1 and v.num % v.max_stacked ~= 0 then
+            v.num = v.num % v.max_stacked
+            table.insert(data, v)
+        elseif stack == 1 then
+            table.insert(data, v)
+        end
+        
+    end
+    return data
 end
 
 function UserInfoPage:ShowPage(PageIndex,bShow)

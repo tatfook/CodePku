@@ -136,6 +136,10 @@ function OnClickGrade(name)
     SystemLevelPage:ShowPage(true,l[1], l[2], 1)
 end
 
+function OnClickBlack()
+
+end
+
 
 ]]></script>
 <style type="text/mcss">
@@ -148,9 +152,15 @@ end
                 <div style='width:100px;height:100px;background:url(codepku/image/textures/fastentrence/return.png);margin-left: 100px;margin-top: 20px;' onclick="OnClose"></div>
                 <div style='float:left;width:100px;height:50px;margin-left:1000;margin-top:-70;background:url(codepku/image/textures/fastentrence/system_name.png)'></div>
             </div>
-            <div style='float: left;width: 450;height: 650;background:url(codepku/image/textures/fastentrence/primary.png);margin-left:100;margin-top:100;' name='primary' onclick="onClickPage"></div>
-            <div style='float: left;width: 450;height: 650;background:url(codepku/image/textures/fastentrence/middle.png);margin-left:100;margin-top:100;' name='middle' onclick="onClickPage"></div>
-            <div style='float: left;width: 450;height:650;background:url(codepku/image/textures/fastentrence/high.png);margin-left:100;margin-top:100;' name='high' onclick="onClickPage"></div>
+            <div style='float: left;width: 450;height: 650;background:url(codepku/image/textures/fastentrence/primary.png);margin-left:100;margin-top:100;' name='primary' onclick="onClickPage">
+                
+            </div>
+            <div style='float: left;width: 450;height: 650;background:url(codepku/image/textures/fastentrence/middle.png);margin-left:100;margin-top:100;' name='middle' onclick="onClickPage">
+                <div style="background-color: #11114455; width: 450;height: 650;margin-top: 0;margin-left:0;" onclick="OnClickBlack"></div>
+            </div>
+            <div style='float: left;width: 450;height:650;background:url(codepku/image/textures/fastentrence/high.png);margin-left:100;margin-top:100;' name='high' onclick="onClickPage">
+                <div style="background-color: #11114455; width: 450;height: 650;margin-top: 0;margin-left:0;" onclick="OnClickBlack"></div>
+            </div>
         </pe:if>
         <pe:if condition='<%=SystemEntrencePage~=nil and SystemEntrencePage.on_choose==true%>'>
             <div>
@@ -158,8 +168,12 @@ end
                 <div style='float:left;width:100px;height:50px;margin-left:1000;margin-top:-70;background:url(codepku/image/textures/fastentrence/system_name.png)'></div>
             </div>
             <div style='float: left;width: 450;height: 650;background:url(codepku/image/textures/fastentrence/primary.png);margin-left:100;margin-top:100;' name='primary'></div>
-            <div style='float: left;width: 450;height: 650;background:url(codepku/image/textures/fastentrence/middle.png);margin-left:100;margin-top:100;' name='middle'></div>
-            <div style='float: left;width: 450;height:650;background:url(codepku/image/textures/fastentrence/high.png);margin-left:100;margin-top:100;' name='high'></div>
+            <div style='float: left;width: 450;height: 650;background:url(codepku/image/textures/fastentrence/middle.png);margin-left:100;margin-top:100;' name='middle'>
+                <div style="background-color: #11114455; width: 450;height: 650;margin-top: 0;margin-left:0;" onclick="OnClickBlack"></div>
+            </div>
+            <div style='float: left;width: 450;height:650;background:url(codepku/image/textures/fastentrence/high.png);margin-left:100;margin-top:100;' name='high'>
+                <div style="background-color: #11114455; width: 450;height: 650;margin-top: 0;margin-left:0;" onclick="OnClickBlack"></div>
+            </div>
             <div style='position: absolute;width:1200;height:750;background:url(codepku/image/textures/fastentrence/choose_grade_board.png);margin-top:-600;margin-left:350px'>
                 <div style='width:200;height:100;margin-top:70;margin-left:570;base_font_size:40px;font-size:40px;'><%=GetSchoolClass()%></div>
                 <div style='width:80;height:80;background:url(codepku/image/textures/fastentrence/close_2.png);margin-top:-120;margin-left:1040;' onclick="OnCloseChoose"></div>
