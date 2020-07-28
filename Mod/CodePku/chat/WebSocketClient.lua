@@ -87,13 +87,14 @@ function WebSocketClient:KeepAlive()
         self.timer:Change(0, self.keepalive_interval);
     end
 end
-function WebSocketClient:HandleClose()
+function WebSocketClient:HandleClose(nid, decoded)
     echo("连接关闭")
     self.state = "CLOSED";
     self:DispatchEvent({type = "OnClose" });
 end
-function WebSocketClient:HandleMsg(msg)
-    echo("收到消息", msg);
+function WebSocketClient:HandleMsg(nid, msg)
+    echo("收到消息:");
+    echo(msg)
     self:DispatchEvent({type = "OnMsg", data = msg });
 end
 

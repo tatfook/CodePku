@@ -32,12 +32,23 @@ local CodepkuConfig = NPL.load("(gl)Mod/CodePku/config/Config.lua")
 local CodepkuChatChannel = NPL.export();
 
 
-CodepkuChatChannel.channels = {
+local channelsMap = {
+    private_chat = 0, -- 私聊
     system = 1, -- 系统通知
     world = 2,  -- 世界
     nearby = 3, -- 附近、本地
     guild = 4,  -- 工会
     school = 5, -- 学校
+}
+local messageActionsMap = {
+    status = 1, --状态
+    message = 2, --消息
+}
+
+local messageTypeMap = {
+    text = 1, -- 文本
+    voice = 2, -- 声音
+    emoticons = 3 --表情
 }
 
 CodepkuChatChannel.worldId_pending = nil;
@@ -156,136 +167,36 @@ function CodepkuChatChannel.HasUserName(usernames_str, name)
 	end
 end
 function CodepkuChatChannel.OnMsg(self, msg)
-	LOG.std("", "debug", "CodepkuChatChannel OnMsg", msg);
+    echo("codepku chat channel receive message")
+    echo(msg)	
     if(not msg or not msg.data)then
         return
     end
-    msg = msg.data;
-    echo('receieve message:', msg)
-    -- todo codepku change
-    -- see: script/apps/GameServer/socketio/packet.lua
-    local eio_pkt_name = msg.eio_pkt_name;
-    local sio_pkt_name = msg.sio_pkt_name;
-    if(eio_pkt_name == "message" and sio_pkt_name =="event")then
-        local body = msg.body or {};
-        local key = body[1] or {};
-        local info = body[2] or {};
-        local payload = info.payload;
-        local meta = info.meta;
-        local action = info.action;
-        local userInfo = info.userInfo;
-
-        if(key == "app/msg" or key == "paracraftGlobal" )then
-            if(payload and userInfo)then
-
-
-                local worldId = payload.worldId;
-                local type = payload.type;
-                local content = payload.content;
-
-                local userId = payload.id;
-                local username = payload.username;
-                local vip = payload.vip;
-                local student = payload.student;
-                local orgAdmin = payload.orgAdmin;
-                local tLevel = payload.tLevel;
-
-                if(not CodepkuChatChannel.IsInWorld())then
-                    return
-                end
-                if(CodepkuChatChannel.worldId ~= worldId)then
-                    return
-                end
-                
-
-                local timestamp = CodepkuChatChannel.GetTimeStamp(meta.timestamp);
-       
-                local ChannelIndex;
-                if(type == 2)then
-                    ChannelIndex = ChatChannel.EnumChannels.KpNearBy;
-                elseif(type == 3)then
-                    ChannelIndex = ChatChannel.EnumChannels.KpBroadCast;
-                end
-                local channelname = ChatChannel.channels[ChannelIndex];
-                local msgdata = { ChannelIndex = ChannelIndex, words = content, channelname = channelname, 
-                vip = vip, student = student, orgAdmin = orgAdmin, tLevel = tLevel, 
-                timestamp = timestamp, kp_from_name = username, kp_from_id = userId, kp_id = CodepkuChatChannel.GetUserId(), is_keepwork = true, }
-                ChatChannel.AppendChat( msgdata)
-
-                
-                if(CodepkuChatChannel.BulletScreenIsOpened() and CodepkuChatChannel.IsInWorld())then
-                    local mcmlStr = CodepkuChatChannel.CreateMcmlStrToTipRoad(msgdata);
-                    TipRoadManager:PushNode(mcmlStr);
-                end
-
-                local profile = KeepWorkItemManager.GetProfile()
-                -- 消耗喇叭，在这里同步数据
-                if(userId == profile.id and ChannelIndex == ChatChannel.EnumChannels.KpBroadCast)then
-                    KeepWorkItemManager.ReLoadItems({10002,10001});
-                end
-            end
-        elseif(key == "broadcast")then
-            -- system broadcast
-            if(info.data and info.data.msg)then
-                local content = info.data.msg.text;
-                content = string.gsub(content, "<p>","");
-                content = string.gsub(content, "</p>","");
-                local username = L"管理员";
-                local ChannelIndex = ChatChannel.EnumChannels.KpSystem;
-                local channelname = ChatChannel.channels[ChannelIndex];
-                local msgdata = { ChannelIndex = ChannelIndex, words = content, channelname = channelname, kp_from_name = username, is_keepwork = true, }
-                ChatChannel.AppendChat( msgdata)
-
-                 if(CodepkuChatChannel.BulletScreenIsOpened() and CodepkuChatChannel.IsInWorld())then
-                    local mcmlStr = CodepkuChatChannel.CreateMcmlStrToTipRoad(msgdata);
-                    TipRoadManager:PushNode(mcmlStr);
-                end
-            end
-        elseif(key == "msg")then
-            -- system broadcast to user
-
-            --[[
-            {
-                  meta={ timestamp="2020-06-11 16:56" },
-                  payload={
-                    all=0,
-                    createdAt="2020-06-11T08:56:11.211Z",
-                    extra={  },
-                    id=969,
-                    msg={ text="<p>666</p>", type=0 },
-                    operator="kevinxft",
-                    organizationId=0,
-                    receivers="zhangleio,zhangleio2",
-                    roleId=0,
-                    sendSms=0,
-                    sender=0,
-                    type=0,
-                    updatedAt="2020-06-11T08:56:11.211Z" 
-                  } 
-                }
-            ]]
-            if(payload and payload.receivers and payload.msg)then
-                local receivers = payload.receivers;
-                local user_info = KeepWorkItemManager.GetProfile();
-                if(not CodepkuChatChannel.HasUserName(receivers, user_info.username))then
-                    return
-                end
-                local timestamp = CodepkuChatChannel.GetTimeStamp(meta.timestamp);
-                local content = payload.msg.text;
-                content = string.gsub(content, "<p>","");
-                content = string.gsub(content, "</p>","");
-                local ChannelIndex = ChatChannel.EnumChannels.KpSystem;
-                local channelname = ChatChannel.channels[ChannelIndex];
-                local msgdata = { ChannelIndex = ChannelIndex, words = content, channelname = channelname, is_keepwork = true, }
-                ChatChannel.AppendChat( msgdata)
-
-                if(CodepkuChatChannel.BulletScreenIsOpened() and CodepkuChatChannel.IsInWorld())then
-                    local mcmlStr = CodepkuChatChannel.CreateMcmlStrToTipRoad(msgdata);
-                    TipRoadManager:PushNode(mcmlStr);
-                end
-            end
+    msg = msg.data; 
+    local action = tonumber(msg.action);
+    if (action == messageActionsMap.action) then 
+        -- 上线通知 下线通知
+    else 
+        local channel = tonumber(msg.channel);   
+        -- system = 1, -- 系统通知
+        -- world = 2,  -- 世界
+        -- nearby = 3, -- 附近、本地
+        -- guild = 4,  -- 工会
+        -- school = 5, -- 学校
+        if (channel == channelsMap.system) then
+            -- todo 系统通知
+        elseif (channel == channelsMap.world) then 
+            -- todo 频道:世界
+        elseif (channel == channelsMap.nearby) then
+            -- todo 频道: 附近
+        elseif (channel == channelsMap.guild) then
+            -- todo 频道:工会
+        elseif (channel == channelsMap.school) then
+            -- todo 频道: 学校
         end
-        
+        elseif (channel == channelsMap.private_chat) then
+            -- 私聊
+        end 
     end
     
 end
@@ -427,60 +338,31 @@ end
 function CodepkuChatChannel.RefreshChatWindow()
     -- todo
 end
--- create a chat message
--- @param ChannelIndex	频道索引
--- @param to			接受者nid
--- @param toname		接受者名字,可为nil
--- @param words			消息内容
--- http://yapi.kp-para.cn/project/60/interface/api/1952
-function CodepkuChatChannel.CreateMessage( ChannelIndex, to, toname, words)
-	local msgdata;
-    local target = CodepkuChatChannel.GetRoom();
-    local worldId = CodepkuChatChannel.worldId;
-    if(not worldId)then
-		LOG.std(nil, "warn", "CodepkuChatChannel", "world id is required");
+
+function CodepkuChatChannel.SendWorldMsg(words)
+    if(not words)then
         return
     end
-    if(ChannelIndex == ChatChannel.EnumChannels.KpNearBy)then
-	    msgdata = { ChannelIndex = ChannelIndex, target = target, worldId = worldId, words = words, type = 2, is_keepwork = true, };
+    local worldMsg = {
+        courseware_id:1, --todo
+        type: messageTypeMap.text,
+        content: words
+    };
 
-    elseif(ChannelIndex == ChatChannel.EnumChannels.KpBroadCast)then
-	    msgdata = { ChannelIndex = ChannelIndex, target = "paracraftGlobal", worldId = worldId, words = words, type = 3, is_keepwork = true, };
-    else
-		LOG.std(nil, "warn", "CodepkuChatChannel", "[%s] unsupported channel index in CodepkuChatChannel.SendMessage", tostring(ChannelIndex));
-    end
-	return msgdata;
+    CodepkuChatChannel.client:Send(worldMsg);   
 end
 
+-- 发给附近
+function CodepkuChatChannel.SendNearByMsg(words)
+    --todo 带上坐标
+end
 
---[[---------------------------------------------------------------------------------------------------
-根据消息类型分别发送至服务器
---]]---------------------------------------------------------------------------------------------------
-function CodepkuChatChannel.SendToServer(msgdata)
-    if(not msgdata)then
-        return
-    end
-    if(type(msgdata) ~= "table")then
-        return
-    end
-    local user_info = KeepWorkItemManager.GetProfile();
+-- 发给工会 暂时不做
+function CodepkuChatChannel.SendGuildMsg(words)
+    --todo
+end
 
-    local kp_msg = {
-        target = msgdata.target,
-        payload = {
-            content = msgdata.words,
-            worldId = msgdata.worldId,
-            type = msgdata.type,
+-- 发给好友
+function CodepkuChatChannel.SendToFriend(friend, words)
 
-            id = user_info.id,
-            username = user_info.username,
-            vip = user_info.vip,
-            student = user_info.student,
-            orgAdmin = user_info.orgAdmin,
-            tLevel = user_info.tLevel,
-        },
-    }
-
-    CodepkuChatChannel.client:Send(kp_msg);
-   
 end
