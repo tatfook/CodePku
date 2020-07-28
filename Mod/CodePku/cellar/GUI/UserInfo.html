@@ -112,12 +112,12 @@ identity = 10
 gender = UserInfo.gender
 vip_id = 20
 choose_index = UserInfoPage.PageIndex or 1
-choose_index5 = 1 -- 道具类型id，1-全部 2-道具 3-礼包 4-材料 5-蓝图
+choose_index5 = 1 -- 道具类型id，1-全部 2-装扮 3-消耗品 4-建造道具 5-其他
 
 user_options_list ={}
 user_options_list[1] = {{index =1,url ='shouye'},{index =2,url ='shuxing'},{index =3,url ='juese'},{index =4,url ='waiguan'},{index =5,url ='beibao'},{index =6,url ='chengjiu'},{index =7,url ='dongtai'}}
 user_options_list[1][choose_index].url = user_options_list[1][choose_index].url ..1
-user_options_list[5] = {{index =1,url ='quanbu1'},{index =2,url ='daoju'},{index =3,url ='libao'},{index =4,url ='cailiao'},{index =5,url ='lantu'}}
+user_options_list[5] = {{index =1,url ='quanbu1'},{index =2,url ='dress'},{index =3,url ='build'},{index =4,url ='consumable'},{index =5,url ='other'}}
 
 
 function ClosePage()
@@ -145,12 +145,17 @@ function Choose(index)
     Page:Refresh(0);
 end
 function Choose5(index)
+    local item_params = nil
     user_options = user_options_list[5]
     user_options[choose_index5].url =string.sub(user_options[choose_index5].url ,1,string.len(user_options[choose_index5].url)-1)
     choose_index5 =index
     user_options[choose_index5].url = user_options[choose_index5].url..1
-    -- local params = ''
-    -- UserInfo.props = UserInfoPage.GetItemInfo(params)
+    if choose_index5 == 1 then
+        item_params = nil
+    else
+        item_params = '?category_name='..user_options[choose_index5].url
+    end
+    UserInfoPage.GetItemInfo(item_params)
     Page:Refresh(0);
 end
 
@@ -242,7 +247,7 @@ end
                 <pe:gridview style="width: 780; height: 868; margin-top: 121; margin-left: 915; text-align: center; float: left;" name='backpack_items' DataSource="<%=UserInfo.props%>" DefaultNodeHeight = "200" ItemsPerLine="4" AllowPaging="false" RememberScrollPos="true" RememberLastPage="true">
                     <Columns>
                         <div style='width:150;height:150;background:url(codepku/image/textures/userinfo/item_board.png);float: left;margin-right: 40;'>
-                            <div style="<%=string.format('width: 150; height: 150;  background:url(%s); ', Eval('prop_icon'))%>" name="<%=UserInfo.props[Eval('index')]%>" onclick="OnClickItem">
+                            <div style="<%=string.format('width: 150; height: 150;  background:url(%s); ', Eval('prop_icon_url'))%>" name="<%=UserInfo.props[Eval('index')]%>" onclick="OnClickItem">
                                 <div style='font-size: 30; margin-top: 100;padding-right: 20;color: #fdfdfd;text-align: right;font-weight: bold;'><%=prop_num%></div>
                             </div>
                         </div>
