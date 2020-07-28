@@ -27,6 +27,13 @@ local SocketIOClient = NPL.load("(gl)script/ide/System/os/network/SocketIO/Socke
 local WorldCommon = commonlib.gettable("MyCompany.Aries.Creator.WorldCommon")
 local KeepWorkItemManager = NPL.load("(gl)script/apps/Aries/Creator/HttpAPI/KeepWorkItemManager.lua");
 local WebSocketClient = NPL.load("(gl)Mod/CodePku/chat/WebSocketClient.lua");
+local request = NPL.load("(gl)Mod/CodePkuCommon/api/BaseRequest.lua");
+local UserInfo = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.UserInfo")
+local OtherUserInfoPage = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.OtherUserInfoPage")
+local OtherUserInfo = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.OtherUserInfo")
+local EntityManager = commonlib.gettable("MyCompany.Aries.Game.EntityManager")
+
+
 
 local CodepkuConfig = NPL.load("(gl)Mod/CodePku/config/Config.lua")
 local CodepkuChatChannel = NPL.export();
@@ -54,6 +61,8 @@ local messageTypeMap = {
 CodepkuChatChannel.worldId_pending = nil;
 CodepkuChatChannel.worldId = nil;
 CodepkuChatChannel.client = nil;
+CodepkuChatChannel.Messages = {}
+CodepkuChatChannel.last_chatted_friend = nil
 
 function CodepkuChatChannel.StaticInit()
     LOG.std("", "info", "CodepkuChatChannel", "StaticInit");
@@ -92,7 +101,8 @@ function CodepkuChatChannel.OnCodepkuLogout_Callback()
     CodepkuChatChannel.LeaveWorld(CodepkuChatChannel.worldId_pending);
 end
 function CodepkuChatChannel.GetUrl()
-    return CodepkuConfig.defaultSocketServer .. string.format("?token=%s", System.User.codepkuToken);
+    local coursewareId = System.Codepku and System.Codepku.Coursewares and System.Codepku.Coursewares.id;
+    return CodepkuConfig.defaultSocketServer .. string.format("?token=%s&world_id=%s", System.User.codepkuToken, tostring(coursewareId));
 end
 function CodepkuChatChannel.GetUserId()
     return System.User.id;  
@@ -172,7 +182,10 @@ function CodepkuChatChannel.OnMsg(self, msg)
     if(not msg or not msg.data)then
         return
     end
-    msg = msg.data; 
+    msg = msg.data;
+    echo(string.format( "RECV:   %s,     %s", msg.from_user_id, UserInfo.id ))
+    local speakerIsMe = if_else(msg.from_user_id == UserInfo.id, 1, 0)
+    local avatar = msg.avatar or 'codepku/image/textures/tmp_icon.jpg'
     local action = tonumber(msg.action);
     if (action == messageActionsMap.action) then 
         -- 上线通知 下线通知
@@ -186,14 +199,20 @@ function CodepkuChatChannel.OnMsg(self, msg)
         if (channel == channelsMap.system) then
             -- todo 系统通知
         elseif (channel == channelsMap.world) then 
+            msg_data = {speakerIsMe=speakerIsMe, dialog=msg.content, avatar=avatar, nickname=msg.nickname, level=msg.level or 1, channel=msg.channel}
+            table.insert( CodepkuChatChannel.Messages, msg_data)
+            echo('-----------------------1')
+            echo(#CodepkuChatChannel.Messages)
             -- todo 频道:世界
         elseif (channel == channelsMap.nearby) then
-            -- todo 频道: 附近
+            msg_data = {speakerIsMe=speakerIsMe, dialog=msg.content, avatar=avatar, nickname=msg.nickname, level=msg.level or 1, channel=msg.channel}
+            table.insert( CodepkuChatChannel.Messages, msg_data)
+            echo('-----------------------1')
+            echo(#CodepkuChatChannel.Messages)
         elseif (channel == channelsMap.guild) then
             -- todo 频道:工会
         elseif (channel == channelsMap.school) then
             -- todo 频道: 学校
-        end
         elseif (channel == channelsMap.private_chat) then
             -- 私聊
         end 
@@ -343,18 +362,47 @@ function CodepkuChatChannel.SendWorldMsg(words)
     if(not words)then
         return
     end
+    echo(string.format( "SEND:   %s", UserInfo.id ))
     local worldMsg = {
-        courseware_id:1, --todo
-        type: messageTypeMap.text,
-        content: words
+
+        from_user_id = UserInfo.id,
+        from_user_nickname = UserInfo.name,
+        from_user_avatar = UserInfo.avatar,
+        channel = channelsMap.world,
+        courseware_id=1, --todo
+        type=messageTypeMap.text,
+        content= words,
+        action=2,
     };
 
-    CodepkuChatChannel.client:Send(worldMsg);   
+    CodepkuChatChannel.client:SendMsg(worldMsg);   
 end
 
 -- 发给附近
 function CodepkuChatChannel.SendNearByMsg(words)
-    --todo 带上坐标
+    if(not words)then
+        return
+    end
+    echo('CodepkuChatChannel.SendNearByMsg')
+    pos_x, pos_y, pos_z = EntityManager.GetPlayer():GetPosition()
+    echo(pos_x)
+    echo(pos_y)
+    echo(pos_z)
+    echo('==============')
+    echo(UserInfo.id)
+    local nearByMsg = {
+        from_user_id = UserInfo.id,
+        from_user_nickname = UserInfo.name,
+        from_user_avatar = UserInfo.avatar,
+        from_user_position = {x=pos_x, y=pos_y, z=pos_z},
+        channel = channelsMap.nearby,
+        courseware_id=1, --todo
+        type=messageTypeMap.text,
+        content= words,
+        action=2,
+    };
+
+    CodepkuChatChannel.client:SendMsg(nearByMsg); 
 end
 
 -- 发给工会 暂时不做
@@ -364,5 +412,27 @@ end
 
 -- 发给好友
 function CodepkuChatChannel.SendToFriend(friend, words)
+    if (not words) then
+        return
+    end
+    local to_user_id = CodepkuChatChannel.last_chatted_friend
+    if to_user_id then
+        OtherUserInfoPage.GetUserInfo(to_user_id)
+        local worldMsg = {
+            to_user_id = to_user_id,
+            to_user_nickname = OtherUserInfo.name,
+            to_user_avatar = OtherUserInfo.avatar,
+            to_user_id = to_user_id,
+            from_user_id = UserInfo.id,
+            from_user_nickname = UserInfo.name,
+            from_user_avatar = UserInfo.avatar,
+            channel = channelsMap.world,
+            courseware_id=1, --todo
+            type=messageTypeMap.text,
+            content= words,
+            action=2,
+        };
 
+        CodepkuChatChannel.client:SendMsg(worldMsg); 
+    end
 end

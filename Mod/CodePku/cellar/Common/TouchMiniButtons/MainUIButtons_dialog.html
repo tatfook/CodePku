@@ -11,6 +11,7 @@
 <script refresh="false" type="text/npl" src="MainSceneUIButtons.lua"><![CDATA[
 MainSceneUIButtons = commonlib.gettable("Mod.CodePku.Common.TouchMiniButtons.MainSceneUIButtons");
 DialogMessages = commonlib.gettable("Mod.CodePku.Common.MainUIButtons.DialogMessages")
+local CodepkuChatChannel = NPL.load("(gl)Mod/CodePku/chat/CodepkuChatChannel.lua");
 
 -- {"全部","世界","本地","公会","校园","系统","好友"}
 Channels = {
@@ -21,6 +22,8 @@ Channels = {
             }
 
 LAST_CLICKED_INDEX = 1
+
+
 
 function OnClose()
     Page:CloseWindow()
@@ -46,17 +49,29 @@ function OnClickEmoji()
 end
 
 function OnClickSend()
-
+    local page = document:GetPageCtrl()
+    local words = page:GetValue("DialogContent")
+    echo(string.format('DialogContent: %s', words))
+    if LAST_CLICKED_INDEX == 2 then -- 世界
+        CodepkuChatChannel.SendWorldMsg(words)
+    elseif LAST_CLICKED_INDEX == 3 then -- 附近
+        CodepkuChatChannel.SendNearByMsg(words)   
+    end
+    Page:Refresh(0.5)
 end
 
-Messages = {
-    [1] = {speakerIsMe=1, dialog='一二三四五六七八九十一二三四五一二三四五六七八九十一二三四五',avatar='codepku/image/textures/tmp_icon.jpg', nickname='54', level=10},
-    [2] = {speakerIsMe=0, dialog='你好哇',avatar='codepku/image/textures/userinfo/wanjiatouxiang.png', nickname='名字最多七个字', level=13},
-    [3] = {speakerIsMe=1, dialog='你好，很高兴认识你',avatar='codepku/image/textures/tmp_icon.jpg', nickname='54', level=10},
-    [4] = {speakerIsMe=0, dialog='啊啊啊啊啊啊啊啊啊啊啊啊',avatar='codepku/image/textures/tmp_icon.jpg', nickname='啊啊啊啊啊啊啊', level=10},
-}
 
 function GetMessages()
+    local Messages = {}
+    if LAST_CLICKED_INDEX == 1 then
+        Messages = CodepkuChatChannel.Messages
+    else
+        for i, v in ipairs(CodepkuChatChannel.Messages) do
+            if v and v.channel == LAST_CLICKED_INDEX then
+                table.insert(Messages, v)
+            end
+        end
+    end
     return Messages
 end
 
@@ -77,10 +92,10 @@ end
         </div>
         <!-- 显示栏 -->
         <div style="width: 960;height:850;">
-            <pe:gridview style="width: 900; height: 800" name='messages' DataSource="<%=GetMessages()%>" DefaultNodeHeight = "120" ItemsPerLine="1" AllowPaging="false" RememberScrollPos="false" RememberLastPage="false">
+            <pe:gridview style="width: 900; height: 800" name='messages' DataSource="<%=GetMessages()%>" DefaultNodeHeight = "120" ItemsPerLine="1" AllowPaging="false" RememberScrollPos="false" RememberLastPage="false" VerticalScrollBarStep="20">
                 <Columns>
                     <pe:if condition="<%=Eval('speakerIsMe')==0%>">
-                        <div style="width: 900;height: 125;margin-top: 30;">
+                        <div style="width: 900;height: 150;margin-top: 30;">
                             <div style="width: 125;height: 125;background: url(codepku/image/textures/chat/icon_8.png);margin-left: 30px;">
                                 <div style="<%=format('width: 110;height:110;margin:6;background: url(%s);', Eval('avatar'))%>"></div>
                                 <div style="background: url(codepku/image/textures/chat/icon_5.png); width: 75;height: 25;position: absolute;margin-top:-25;margin-left: 50;font-size: 18px;color:white;text-align: center;"><%=format("等级%d", Eval("level"))%></div>
@@ -90,7 +105,7 @@ end
                         </div>
                     </pe:if>
                     <pe:if condition="<%=Eval('speakerIsMe')==1%>">
-                        <div style="width: 900;height: 125;margin-top: 30;">
+                        <div style="width: 900;height: 150;margin-top: 30">
                             
                             <div style="width: 500px;height: 30px;font-size: 30px;color: white;font-weight: bold;margin-left: 220px;text-align: right;padding-right: 16px;margin-bottom: 10px;"><%=Eval('nickname')%></div>
                             <div style="background: url(codepku/image/textures/chat/icon_4.png); width: 500px;height: 90px;margin-left: 220px;font-size: 30px;padding-left: 20px;"><%=Eval('dialog')%></div>
@@ -107,7 +122,7 @@ end
         <!-- 发言 -->
         <div style='width: 960;height:130'>
             <div style='width: 600;height:50;margin-top: 40%;background: url(codepku/image/textures/chat/icon_6.png);margin-left: 40px;'>
-                <input type="text" style='width:600;height: 50;background-color: white;font-size: 28px;'/>
+                <input type="text" style='width:600;height: 50;background-color: white;font-size: 28px;' name='DialogContent'/>
             </div>
             <div style='width:50;height:50;background: url(codepku/image/textures/chat/icon_2.png);margin-top: -50;margin-left: 660px;' onclick="OnClickVoice"></div>
             <div style='width:50;height:50;background: url(codepku/image/textures/chat/icon_1.png);margin-top:-50;margin-left: 730px' onclick="OnClickEmoji"></div>
