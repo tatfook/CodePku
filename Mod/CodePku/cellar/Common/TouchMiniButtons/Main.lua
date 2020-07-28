@@ -6,6 +6,8 @@ local Log = NPL.load("(gl)Mod/CodePku/util/Log.lua");
 local WorldCommon = commonlib.gettable("MyCompany.Aries.Creator.WorldCommon")
 local EntityManager = commonlib.gettable("MyCompany.Aries.Game.EntityManager")
 local MainSceneUIButtons = commonlib.gettable("Mod.CodePku.Common.TouchMiniButtons.MainSceneUIButtons");
+local GenAndName = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.GenAndName")
+
 
 local MainUIButtons = NPL.export();
 
@@ -66,6 +68,8 @@ function MainUIButtons.ShowPage()
 			MainUIButtons.show_dialog_ui(false)
 
 			MainUIButtons.hasshown = true
+
+			-- GenAndName:ShowPage()
 		end
 	else
 		if MainUIButtons.common_window ~= nil then
