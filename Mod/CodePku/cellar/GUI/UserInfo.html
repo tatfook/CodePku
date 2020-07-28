@@ -137,7 +137,7 @@ end
                 <div style="position:relative;width:380;text-align:left;margin-left:904;margin-top:365;font-size:30;base-font-size:30;"><%= '等级:'%></div>
                 <!-- <div style="position:relative;width:492;height:24;margin-top:413;margin-left:895;background:url(codepku/image/textures/userinfo/jingyantiao1.png);"></div> -->
                 <!-- <div style='<%=string.format("position:relative;width:%d;height:24;margin-top:413;margin-left:895;background:url(codepku/image/textures/userinfo/jingyantiao1.png);",492*0.5 )%>'></div> -->
-                <div style='<%=string.format("position:relative;width:%d;height:24;margin-top:413;margin-left:895;background:url(codepku/image/textures/userinfo/jingyantiao1.png);",492*(UserInfo.self_level.current_exp/(UserInfo.self_level.current_exp+UserInfo.self_level.next_exp)))%>'></div>
+                <div style='<%=string.format("position:relative;width:%d;height:24;margin-top:413;margin-left:895;background:url(codepku/image/textures/userinfo/jingyantiao1.png);",492*(UserInfo.self_level.current_exp/UserInfo.self_level.next_exp))%>'></div>
                 <div style="position:relative;width:380;text-align:left;margin-left:1324;margin-top:365;font-size:30;base-font-size:30;"><%= UserInfo.self_level.current_level%>级</div>
                 <div style="position:relative;width:668;height:101;text-align:left;margin-left:871;margin-top:347;"onclick="Undefinde"></div>
 
