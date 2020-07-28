@@ -61,7 +61,8 @@ function SubjectPage.GetLevels()
     if response.status == 200 then
 		data = response.data.data		
         for i = 1,#data do
-            if data[i].level_type ~= 11 then
+            if data[i].level_type < 7 then
+                echo(data[i].level_type)
                 SubjectPage.subject_list[data[i].level_type].level = data[i].current_level .. "级"
                 SubjectPage.subject_list[data[i].level_type].progress = data[i].current_exp
                 SubjectPage.subject_list[data[i].level_type].total_exp = data[i].current_exp + data[i].next_exp
@@ -82,5 +83,5 @@ function SubjectPage:ShowPage(bShow)
     NPL.load("(gl)Mod/CodePku/cellar/GUI/Window/AdaptWindow.lua");
     local AdaptWindow = commonlib.gettable("Mod.CodePku.GUI.Window.AdaptWindow")
     AdaptWindow:QuickWindow({url="Mod/CodePku/cellar/GUI/Subject.html", 
-    alignment="_ct", left = -960, top = -540, width = 1920, height = 1080,zorder =20})
+    alignment="_ct", left = -960, top = -540, width = 1920, height = 1080,zorder =21})
 end

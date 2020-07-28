@@ -25,6 +25,8 @@ function EntityMainPlayer:CreateInnerObject(...)
 	userid = System.User.id
 	self:SetPlayerInfo(info)
 
+	local name = self:GetDisplayName()
+
 	if(self:IsShowHeadOnDisplay() and System.ShowHeadOnDisplay) then
 		System.ShowHeadOnDisplay(true, obj, self:GetDisplayName(), MyHeadOnTextColor);	
 	end

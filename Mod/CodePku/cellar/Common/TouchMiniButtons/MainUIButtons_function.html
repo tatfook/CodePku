@@ -28,7 +28,7 @@ end
 NPL.load("(gl)script/apps/Aries.Creator.Game.Desktop.UserInfo.lua");
 UserInfoPage = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.UserInfoPage")
 UserInfoPage.OnInit()
-
+RankPage = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.RankPage");
 function ClickUserInfo()
     UserInfoPage:ShowPage()
 end
@@ -44,7 +44,9 @@ function ClickFriend()
     FriendUI:ShowPage(1)
 end
 
-
+function ClickRank()
+    RankPage:ShowPage()
+end
 ]]></script>
 <style type="text/mcss">
 
@@ -55,7 +57,7 @@ end
         <div style="position:relative;left:90;width:90; height:90; background: url(codepku/image/textures/mainuibuttons/function/user_info.png);" onclick="ClickUserInfo"></div>
         <div style="position:relative;left:180;width:90; height:90; background: url(codepku/image/textures/mainuibuttons/function/bag.png);" onclick="ClickBag"></div>
         <div style="position:relative;left:270;width:90; height:90; background: url(codepku/image/textures/mainuibuttons/function/friends.png);" onclick="ClickFriend"></div>
-        <div style="position:relative;left:360;width:90; height:90; background: url(codepku/image/textures/mainuibuttons/function/rank.png);" onclick="ClickFunctionButton"></div>
+        <div style="position:relative;left:360;width:90; height:90; background: url(codepku/image/textures/mainuibuttons/function/rank.png);" onclick="ClickRank"></div>
         <div style="position:relative;left:450;width:90; height:90; background: url(codepku/image/textures/mainuibuttons/function/school.png);" onclick="ClickFunctionButton"></div>
         <div style="position:relative;left:540;width:90; height:90; background: url(codepku/image/textures/mainuibuttons/function/email.png);" onclick="ClickFunctionButton"></div>
         <div style="position:relative;left:630;width:90; height:90; background: url(codepku/image/textures/mainuibuttons/function/setting.png);" onclick="ClickFunctionButton"></div>

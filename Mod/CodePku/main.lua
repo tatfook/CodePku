@@ -59,7 +59,8 @@ local GenAndNamePage = NPL.load("(gl)Mod/CodePku/cellar/GUI/GenAndName.lua")
 local SubjectPage = NPL.load("(gl)Mod/CodePku/cellar/GUI/Subject.lua")
 local RankPage = NPL.load("(gl)Mod/CodePku/cellar/GUI/RankPage.lua")
 local EditPage = NPL.load("(gl)Mod/CodePku/cellar/GUI/editShare.lua")
-			
+local RankPage = NPL.load("(gl)Mod/CodePku/cellar/GUI/FastEntrence/RankPage.lua")
+
 local DownloadWorld = commonlib.gettable("MyCompany.Aries.Game.MainLogin.DownloadWorld")
 
 local CodePku = commonlib.inherit(commonlib.gettable("Mod.ModBase"),commonlib.gettable("Mod.CodePku"));

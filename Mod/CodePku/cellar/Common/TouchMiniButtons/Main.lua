@@ -68,7 +68,6 @@ function MainUIButtons.ShowPage()
 			MainUIButtons.show_dialog_ui(false)
 
 			MainUIButtons.hasshown = true
-
 			-- GenAndName:ShowPage()
 		end
 	else
