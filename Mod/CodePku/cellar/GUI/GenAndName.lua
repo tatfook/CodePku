@@ -19,15 +19,30 @@ function GenAndName.OnClickBlock(block_id)
 
 end
 
-function GenAndName.SaveRole(name,tgender)
+function GenAndName:getRequest(gender)
+    response = request:get("/users/random-nickname?type=" .. gender,nil,{sync = true})
+    echo(response)
+    if response.status == 200 then
+        data = response.data.data
+        return data.name
+    else
+        return false
+    end
+end
 
+function GenAndName:CreateRole(name,gen)
     data = {        
         nickname = name,        
-        gener=tgender
+        gender=gen
     }
-    response = request:put('/users/profile' ,data,{sync = true});
+    response =  request:put('/users/profile' ,data,{sync = true});
 
-    return response.status==200
+
+    if response.status == 200 then
+        return true
+    else
+        return false
+    end
 end
 
 function GenAndName:ShowPage(bShow)

@@ -55,6 +55,9 @@ local OtherUserInfoPage = NPL.load("(gl)Mod/CodePku/cellar/GUI/OtherUserInfo.lua
 local UserInfoPage = NPL.load("(gl)Mod/CodePku/cellar/GUI/UserInfo.lua")
 local SharePage = NPL.load("(gl)Mod/CodePku/cellar/GUI/Share.lua")
 local GenAndNamePage = NPL.load("(gl)Mod/CodePku/cellar/GUI/GenAndName.lua")
+local SubjectPage = NPL.load("(gl)Mod/CodePku/cellar/GUI/Subject.lua")
+local RankPage = NPL.load("(gl)Mod/CodePku/cellar/GUI/RankPage.lua")
+local EditPage = NPL.load("(gl)Mod/CodePku/cellar/GUI/editShare.lua")
 			
 local DownloadWorld = commonlib.gettable("MyCompany.Aries.Game.MainLogin.DownloadWorld")
 
