@@ -1,0 +1,115 @@
+<!-- "script/apps/Aries/Creator/Game/Areas/EscFramePage.html" 1是男，2是女 -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+</head>
+
+<body>
+    <pe:mcml>
+<script refresh="false" type="text/npl" src="GenAndName.lua"><![CDATA[
+    NPL.load("(gl)script/apps/Aries.Creator.Game.Desktop.GenAndName.lua");
+    local GenAndName = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.GenAndName")
+    gen = 0
+    result = "请输入姓名"
+
+    function randomName()
+        result = GenAndName:getRequest(gen)
+        Page:Refresh(0)
+    end
+
+    function setGen(name)
+        gen = tonumber(name)
+        result = ""
+        Page:Refresh(0)
+    end
+
+function utf8len(input)
+    -- 不管是中文字符还是其他字符,长度都为1
+    local len  = string.len(input)
+    local left = len
+    local cnt  = 0
+    local arr  = {0, 0xc0, 0xe0, 0xf0, 0xf8, 0xfc}
+        while left ~= 0 do
+            local tmp = string.byte(input, -left)
+            local i   = #arr
+            while arr[i] do
+                if tmp >= arr[i] then
+                    left = left - i
+                    break
+                end
+                i = i - 1
+            end
+            cnt = cnt + 1
+        end
+        return cnt
+end
+
+    function submit()
+        result = document:GetPageCtrl():GetValue("result")
+        if (utf8len(result) > 7) then 
+            GameLogic.RunCommand("/tip -duration 1500 名字长度不能大于7")
+        elseif (result == '' or result == '请输入姓名') then
+            GameLogic.RunCommand("/tip -duration 1500 你没写名字")
+        else
+           
+            
+
+            if GenAndName:CreateRole(result,gen) then
+                GameLogic.RunCommand(string.format("/tip -duration 1500 %s",signtip(gen)))
+                Page:CloseWindow();
+            
+            else
+                GameLogic.RunCommand(string.format("/tip -duration 1500 %s","用户名存在"))
+
+            end
+        end
+    end
+
+    function signtip(gen)
+        if (gen == 1) then
+            return "欢迎帅哥玩家： " .. result
+        elseif(gen == 2) then
+            return "欢迎美女玩家： " .. result
+        else
+            return "欢迎人妖玩家： " .. result
+        end
+    end
+
+    
+]]>
+</script>
+<style type="text/mcss">
+</style>   
+    <pe:container alignment="_lt" width="1920" height="1080">
+        <pe:if condition='<%=gen ~= 1%>'>
+            <div style='<%=format("width:523;height:628;margin-left:1120;margin-top:60;background:url(codepku/image/textures/userinfo/GenName/unselectedBoy.png);")%>' name = 1 onclick="setGen">
+            </div>
+        </pe:if>
+        <pe:if condition='<%=gen == 1%>'>
+            <div style='<%=format("width:523;height:628;margin-left:1120;margin-top:60;background:url(codepku/image/textures/userinfo/GenName/selectedBoy.png);")%>' name = 1 onclick="setGen">
+            </div>
+        </pe:if>
+        <pe:if condition='<%=gen ~= 2%>'>
+            <div style='<%=format("width:523;height:628;margin-left:280;margin-top:-628;background:url(codepku/image/textures/userinfo/GenName/unselectedGirl.png);")%>'name = 2 onclick="setGen">
+            </div>
+        </pe:if>
+        <pe:if condition='<%=gen == 2%>'>
+            <div style='<%=format("width:523;height:628;margin-left:280;margin-top:-628;background:url(codepku/image/textures/userinfo/GenName/selectedGirl.png);")%>'name = 2 onclick="setGen">
+            </div>
+        </pe:if>
+        <div style='<%=format("width:117;height:128;margin-left:1205;margin-top:30;background:url(codepku/image/textures/userinfo/GenName/toss.png);")%>' onclick="randomName">
+        </div>
+        <div style="position:relative;width:583px;height:107px;margin-left:598px;text-align:center;margin-top:-128px;font-size:32px;background:url(codepku/image/textures/userinfo/GenName/inputName.png);"></div>
+        <input name="result"
+                type="text"
+                MoveViewWhenAttachWithIME="true"
+                style="position:relative;margin-left: 658px;width: 400; height: 85; text-align:center;margin-top:-118px;font-size:52px;base-font-size:52px;background-color: rgba(255, 243, 227);"
+                value="<%=result%>"/>
+        <div style='<%=format("width:240;height:93;margin-left:839;margin-top:26;background:url(codepku/image/textures/userinfo/GenName/confirm.png);")%>' onclick="submit">
+        </div>
+    </pe:container>
+</body>
+</html>
+

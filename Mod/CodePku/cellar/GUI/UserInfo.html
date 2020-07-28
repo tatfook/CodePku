@@ -13,6 +13,7 @@ NPL.load("(gl)script/apps/Aries.Creator.Game.Desktop.Share.lua");
 UserInfoPage = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.UserInfoPage")
 SharePage = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.SharePage")
 UserInfo = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.UserInfo")
+EditPage = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.EditPage")
 xueshidian = 123456
 fensi = 123456
 dianzan = 123456
@@ -72,6 +73,10 @@ function OnClickButton(name,mcmlNode)
     end
 end
 
+function shurujiyu()
+    EditPage:ShowPage()
+end
+
 function SharePageFunc()
     SharePage:ShowPage()
 end
@@ -116,7 +121,7 @@ end
             </div>
             <div style="position:relative;width:611;height:735;margin-top:300;margin-left:324;font-size:18;base-font-size:40;background:url(codepku/image/textures/userinfo/touxiangbeijing.png)">
                 <div style="position:relative;width:611;height:735;text-align:center;font-size:18;base-font-size:40;background:url(codepku/image/textures/userinfo/wanjiatouxiang.png)"></div>
-                <div style="position:relative;width:50;height:50;margin-left:500;margin-top:550;background:url(codepku/image/textures/userinfo/shuru.png);"onclick="Undefinde"></div>
+                <div style="position:relative;width:50;height:50;margin-left:500;margin-top:550;background:url(codepku/image/textures/userinfo/shuru.png);"onclick="shurujiyu"></div>
                 <div style="position:relative;width:50;height:50;margin-left:500;margin-top:620;background:url(codepku/image/textures/userinfo/fenxiang.png);"onclick="SharePageFunc"></div>
             </div>
             <div style="position:relative;width:739;height:734;margin-left:1030;margin-top:300;background:url(codepku/image/textures/userinfo/jiayuanbeijing.png);">
