@@ -1,0 +1,266 @@
+<!-- "Mod/CodePku/cellar/Gui/FriendUI/MyFriend.html" -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+</head>
+
+<body>
+<pe:mcml>
+<script refresh="false" type="text/npl" src="RankPage.lua">
+<![CDATA[
+
+RankPage = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.RankPage");
+local MainEntrencePage = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.MainEntrencePage");
+local page = document:GetPageCtrl()
+
+RankPage.subjects_navig = {
+    [1] = {title = "语文", name = 'chinese', index = 1},
+    [2] = {title = "数学", name = "math", index = 2},
+    [3] = {title = "外语", name = "english", index = 3}
+}
+RankPage.game_navig = {
+    [1] = {title = "华夏游学", name = "monopoly", index = 1},
+    [2] = {title = "单词酷跑", name = "parkour", index = 2}
+}
+RankPage.top_navig = {
+    [1] = {title = "世界", name = "world", index = 1},
+    [2] = {title = "好友", name = "friend", index = 2},
+    [3] = {title = "校园", name = "school", index = 3}
+}
+
+RankPage.show_subject = 0
+RankPage.show_game = 0
+RankPage.showinfo = {}
+RankPage.left_navig_clicked_index = 0
+RankPage.left_navig_subject_last_clicked = 1
+RankPage.left_navig_game_last_clicked = 0
+RankPage.top_navig_clicked_index = 1
+RankPage.show_top_navig = 0
+RankPage.userinfo, RankPage.myinfo = RankPage.GetRankItem(0, 1, 1)
+
+function ClosePage()
+    Page:CloseWindow()
+end
+
+
+function GetUserinfo()
+    return RankPage.userinfo
+end
+
+function IsClickedLeftNavig(name)
+    if name == "subject" then
+        RankPage.userinfo, RankPage.myinfo = RankPage.GetRankItem(0, 1, RankPage.top_navig_clicked_index)
+        local parentNode = Page("#subject_block")
+        RankPage.left_navig_clicked_index = 0
+        RankPage.left_navig_subject_last_clicked = 1
+        RankPage.left_navig_game_last_clicked = 0
+        if RankPage.show_subject == 0 then
+            RankPage.show_subject = 1
+            Page("#show_subject"):SetAttribute('style', 'width: 45px; height: 19px; margin-left: 210px; margin-top: -60px; background: url(codepku/image/textures/fastentrence/rank/select_up.png);')
+            parentNode:SetAttribute('style', 'width: 293;')
+        else
+            RankPage.show_subject = 0
+            Page('#show_subject'):SetAttribute('style', 'width: 45px; height: 19px; margin-left: 210px; margin-top: -60px; background: url(codepku/image/textures/fastentrence/rank/select_down.png);')
+            parentNode:SetAttribute('style', 'width: 293; display: none')
+        end
+    elseif name == "game" then
+        RankPage.userinfo, RankPage.myinfo = RankPage.GetRankItem(1, 'monopoly', RankPage.top_navig_clicked_index)
+        local parentNode = Page("#game_block")
+        RankPage.left_navig_clicked_index = 1
+        RankPage.left_navig_subject_last_clicked = 0
+        RankPage.left_navig_game_last_clicked = 1
+        if RankPage.show_game == 0 then
+            RankPage.show_game = 1
+            Page("#show_game"):SetAttribute('style', 'width: 45px; height: 19px; margin-left: 210px; margin-top: -60px; background: url(codepku/image/textures/fastentrence/rank/select_up.png);')
+            parentNode:SetAttribute('style', 'width: 293;')
+        else
+            RankPage.show_game = 0
+            Page("#show_game"):SetAttribute('style', 'width: 45px; height: 19px; margin-left: 210px; margin-top: -60px; background: url(codepku/image/textures/fastentrence/rank/select_down.png);')
+            parentNode:SetAttribute('style', 'width: 293; display: none')
+        end
+    end
+    Page:Refresh(0)
+end
+
+function ClickedLeftNavigIndex(name)
+    for k,v in pairs(RankPage.subjects_navig) do
+        if v.name == name then
+            RankPage.userinfo, RankPage.myinfo = RankPage.GetRankItem(0, k, RankPage.top_navig_clicked_index)
+            RankPage.left_navig_clicked_index = 0 
+            RankPage.left_navig_subject_last_clicked = k
+            RankPage.left_navig_game_last_clicked = 0
+        end
+    end
+    for k,v in pairs(RankPage.game_navig) do
+        if v.name == name then
+            RankPage.userinfo, RankPage.myinfo = RankPage.GetRankItem(1, name, RankPage.top_navig_clicked_index)
+            RankPage.left_navig_clicked_index = 1
+            RankPage.left_navig_subject_last_clicked = 0
+            RankPage.left_navig_game_last_clicked = k
+        end
+    end
+    Page:Refresh(0)
+end
+
+function IsClickedTopNavig()
+    if RankPage.show_top_navig == 0 then
+        RankPage.show_top_navig = 1
+    else
+        RankPage.show_top_navig = 0
+    end
+    Page:Refresh(0)
+end
+
+function ClickedTopNavigIndex(name)
+    for k,v in pairs(RankPage.top_navig) do
+        if name == v.name then
+            RankPage.show_top_navig = 0
+            RankPage.top_navig_clicked_index = k
+        end
+    end
+    if RankPage.left_navig_clicked_index == 0 then
+        RankPage.userinfo, RankPage.myinfo = RankPage.GetRankItem(0, RankPage.left_navig_subject_last_clicked, RankPage.top_navig_clicked_index)
+    else
+        RankPage.userinfo, RankPage.myinfo = RankPage.GetRankItem(1, RankPage.game_navig[RankPage.left_navig_game_last_clicked].name, RankPage.top_navig_clicked_index)
+    end
+    Page:Refresh(0)
+end
+
+
+]]>
+</script>
+<style type="text/mcss">
+
+</style>
+<pe:container alignment="_lt" width="1696" height="903" style="margin-left: 112; margin-top: 88; background: url(codepku/image/textures/fastentrence/rank/background.png)">
+    <pe:div style="position: relative; width: 1759; height: 225; margin-left: -32; margin-top: -80; background: url(codepku/image/textures/fastentrence/rank/bg_head.png); "></pe:div>
+    <pe:div style="position: relative; width: 61; height: 69; left: 1560; top: 30; background: url(codepku/image/textures/fastentrence/rank/close.png);" onclick="ClosePage"></pe:div>
+    <!--content-->
+    <pe:div style="position: relative; width: 1457; height: 788; left: 249; top: 115; background: url(codepku/image/textures/fastentrence/rank/bg_detail.png);">
+         <!--滚动吧-->
+         <pe:gridview name="rank_content" style="position: relative; width: 1408; height: 640; left: 25; top: 10;" DataSource='<%=RankPage.userinfo %>' CellPadding="0" ItemsPerLine="1" AllowPaging="false" RememberScrollPos="true" RememberLastPage="true" 
+            pagesize="36" VerticalScrollBarStep="36" VerticalScrollBarOffsetX="8">
+            <Columns>
+                <pe:if condition="<%=Eval('rank') == 1 %>">
+                    <pe:div style="width: 1408; height: 170; background: url(codepku\image\textures\fastentrence\rank\bg_rank1.png);">
+                        <pe:div style="position: relative; width: 119; height: 136; left: 100; background: url(codepku/image/textures/fastentrence/rank/rank1.png)"></pe:div>
+                        <pe:div style="position: relative; width: 400; height: 170; left: 300; font-size: 50; base-font-size: 50; color: #ffffff; text-align: center; line-height: 170;"><%=Eval('name')%></pe:div>
+                        <pe:if condition="<%= RankPage.left_navig_clicked_index == 0%>">
+                            <pe:div style="<%=format('position: relative; width: 89; height: 98; left: 900; top: 30; background: url(codepku/image/textures/fastentrence/rank/logo_%s.png);', RankPage.subjects_navig[RankPage.left_navig_subject_last_clicked].name)%>"></pe:div>
+                        </pe:if>
+                        <pe:if condition="<%= RankPage.left_navig_clicked_index == 1%>">
+                            <pe:div style="<%=format('position: relative; width: 89; height: 98; left: 900; top: 30; background: url(codepku/image/textures/fastentrence/rank/logo_%s.png);', RankPage.game_navig[RankPage.left_navig_game_last_clicked].name)%>"></pe:div>
+                        </pe:if>
+                        <pe:div style="position: relative; width: 220; height: 170; left: 1105; font-size: 50; base-font-size: 50; color: #ffffff; text-align: center; line-height: 170;"><%=Eval('score')%></pe:div>
+                    </pe:div>
+                </pe:if>
+                <pe:if condition="<%=Eval('rank') == 2 or Eval('rank') == 3%>">
+                    <pe:div style="width: 1386; height: 149; margin-left: 11; background: url(codepku\image\textures\fastentrence\rank\bg_rank2-3.png);">
+                        <pe:div style="<%=format('position: relative; width: 119; height: 136; left: 100; background: url(codepku/image/textures/fastentrence/rank/rank%d.png)', Eval('rank'))%>"></pe:div>
+                        <pe:div style="position: relative; width: 400; height: 149; left: 300; font-size: 50; base-font-size: 50; color: #ffffff; text-align: center; line-height: 149;"><%=Eval('name')%></pe:div>
+                        <pe:if condition="<%= RankPage.left_navig_clicked_index == 0%>">
+                            <pe:div style="<%=format('position: relative; width: 89; height: 98; left: 900; top: 20; background: url(codepku/image/textures/fastentrence/rank/logo_%s.png);', RankPage.subjects_navig[RankPage.left_navig_subject_last_clicked].name)%>"></pe:div>
+                        </pe:if>
+                        <pe:if condition="<%= RankPage.left_navig_clicked_index == 1%>">
+                            <pe:div style="<%=format('position: relative; width: 89; height: 98; left: 900; top: 20; background: url(codepku/image/textures/fastentrence/rank/logo_%s.png);', RankPage.game_navig[RankPage.left_navig_game_last_clicked].name)%>"></pe:div>
+                        </pe:if>
+                        <pe:div style="position: relative; width: 220; height: 149; left: 1105; font-size: 50; base-font-size: 50; color: #ffffff; text-align: center; line-height: 149;"><%=Eval('score')%></pe:div>
+                    </pe:div>
+                </pe:if>
+                <pe:if condition="<%=Eval('rank') ~= 1 and Eval('rank') ~= 2 and Eval('rank') ~= 3%>">
+                    <pe:div style="width: 1376; height: 138; margin-left: 16; background: url(codepku\image\textures\fastentrence\rank\bg_rank_basic.png);">
+                        <pe:div style="position: relative; width: 100; height: 120; left: 100; font-size: 50; base-font-size: 50; color: #ffffff; text-align: center; line-height: 138;"><%=Eval('rank')%></pe:div>
+                        <pe:div style="position: relative; width: 400; height: 138; left: 300; font-size: 50; base-font-size: 50; color: #ffffff; text-align: center; line-height: 138;"><%=Eval('name')%></pe:div>
+                        <pe:if condition="<%= RankPage.left_navig_clicked_index == 0%>">
+                            <pe:div style="<%=format('position: relative; width: 89; height: 98; left: 900; top: 15; background: url(codepku/image/textures/fastentrence/rank/logo_%s.png);', RankPage.subjects_navig[RankPage.left_navig_subject_last_clicked].name)%>"></pe:div>
+                        </pe:if>
+                        <pe:if condition="<%= RankPage.left_navig_clicked_index == 1%>">
+                            <pe:div style="<%=format('position: relative; width: 89; height: 98; left: 900; top: 15; background: url(codepku/image/textures/fastentrence/rank/logo_%s.png);', RankPage.game_navig[RankPage.left_navig_game_last_clicked].name)%>"></pe:div>
+                        </pe:if>
+                        <pe:div style="position: relative; width: 220; height: 138; left: 1105; font-size: 50; base-font-size: 50; color: #ffffff; text-align: center; line-height: 138;"><%=Eval('score')%></pe:div>
+                    </pe:div>
+                </pe:if>
+            </Columns>
+            </pe:gridview>
+        <!--个人信息-->
+        <pe:div style="position: relative; width: 1385; height: 163; left: 44; top: 630; background: url(codepku/image/textures/fastentrence/rank/bg_myrank.png);">
+            <div style="position: relative; width: 100; height: 163 ; left: 100; font-size: 50; base-font-size: 50; color: #ffffff; text-align: center; line-height: 163;"><%=RankPage.myinfo[1].rank%></div>
+            <div style="position: relative; width: 400; height: 163 ; left: 300; font-size: 50; base-font-size: 50; color: #ffffff; text-align: center; line-height: 163;"><%=RankPage.myinfo[1].name%></div>
+            <pe:if condition="<%= RankPage.left_navig_clicked_index == 0%>">
+                <pe:div style="<%=format('position: relative; width: 89; height: 98; left: 900; top: 30; background: url(codepku/image/textures/fastentrence/rank/logo_%s.png);', RankPage.subjects_navig[RankPage.left_navig_subject_last_clicked].name)%>"></pe:div>
+            </pe:if>
+            <pe:if condition="<%= RankPage.left_navig_clicked_index == 1%>">
+                <pe:div style="<%=format('position: relative; width: 89; height: 98; left: 900; top: 30; background: url(codepku/image/textures/fastentrence/rank/logo_%s.png);', RankPage.game_navig[RankPage.left_navig_game_last_clicked].name)%>"></pe:div>
+            </pe:if>
+            <div style="position: relative; width: 220; height: 163 ; left: 1105; font-size: 50; base-font-size: 50; color: #ffffff; text-align: center; line-height: 163;"><%=RankPage.myinfo[1].score%></div>
+        </pe:div>
+    </pe:div>
+    <!--左导航栏-->
+    <pe:div style="position: relative; width: 293; height: 700; top: 120;">
+        <pe:if condition="<%=RankPage.left_navig_clicked_index == 0%>">
+            <pe:div style="width: 293; height: 109; background: url(codepku/image/textures/fastentrence/rank/subject_clicked.png); float: left;" name="subject" onclick="IsClickedLeftNavig"></pe:div>
+        </pe:if>
+        <pe:if condition="<%=RankPage.left_navig_clicked_index == 1%>">
+            <pe:div style="width: 293; height: 109; background: url(codepku/image/textures/fastentrence/rank/subject.png); float: left;" name="subject" onclick="IsClickedLeftNavig"></pe:div>
+        </pe:if>
+        <pe:div style="width: 45px; height: 19px; margin-left: -70px; margin-top: 60px; background: url(codepku/image/textures/fastentrence/rank/select_down.png); float: left;" name="show_subject"></pe:div>      
+        <div name='subject_block' style="width: 293; display: none;">
+            <pe:repeat DataSource="<%=RankPage.subjects_navig%>">
+                <pe:repeatitem>
+                    <pe:if condition="<%=Eval('index') == RankPage.left_navig_subject_last_clicked%>">
+                        <pe:div style="<%=format('width: 261; height: 96; margin-left: 32; background: url(codepku/image/textures/fastentrence/rank/%s_clicked.png);', Eval('name'))%>" name="<%=Eval('name')%>" onclick="ClickedLeftNavigIndex"></pe:div>
+                    </pe:if>
+                    <pe:if condition="<%=Eval('index') ~= RankPage.left_navig_subject_last_clicked%>">
+                        <pe:div style="<%=format('width: 249; height: 94; background: url(codepku/image/textures/fastentrence/rank/%s.png);', Eval('name'))%>" name="<%=Eval('name')%>" onclick="ClickedLeftNavigIndex"></pe:div>
+                    </pe:if>
+                </pe:repeatitem>
+            </pe:repeat>
+        </div>
+        <pe:if condition="<%=RankPage.left_navig_clicked_index == 0%>">
+            <pe:div style="width: 293; height: 109; background: url(codepku/image/textures/fastentrence/rank/game.png);" name="game" onclick="IsClickedLeftNavig"></pe:div>
+        </pe:if>
+        <pe:if condition="<%=RankPage.left_navig_clicked_index == 1%>">
+            <pe:div style="width: 293; height: 109; background: url(codepku/image/textures/fastentrence/rank/game_clicked.png);" name="game" onclick="IsClickedLeftNavig"></pe:div>
+        </pe:if>
+        <pe:div style="width: 45px; height: 19px; margin-left: 210px; margin-top: -60px; background: url(codepku/image/textures/fastentrence/rank/select_down.png);" name="show_game"></pe:div>      
+        <div name='game_block' style="width: 293; display: none;">
+            <pe:repeat DataSource="<%=RankPage.game_navig%>">
+                <pe:repeatitem>
+                    <pe:if condition="<%=Eval('index') == RankPage.left_navig_game_last_clicked%>">
+                        <pe:div style="<%=format('width: 261; height: 96; margin-left: 32; background: url(codepku/image/textures/fastentrence/rank/%s_clicked.png);', Eval('name'))%>" name="<%=Eval('name')%>" onclick="ClickedLeftNavigIndex"></pe:div>
+                    </pe:if>
+                    <pe:if condition="<%=Eval('index') ~= RankPage.left_navig_game_last_clicked%>">
+                        <pe:div style="<%=format('width: 249; height: 94; background: url(codepku/image/textures/fastentrence/rank/%s.png);', Eval('name'))%>" name="<%=Eval('name')%>" onclick="ClickedLeftNavigIndex"></pe:div>
+                    </pe:if>
+                </pe:repeatitem>
+            </pe:repeat>
+        </div>
+    </pe:div>
+    <!--上导航栏-->
+    <pe:div style="<%=format('position: relative; width: 224; height: 101; left: 1300; top: 20; background: url(codepku/image/textures/fastentrence/rank/%s_clicked.png);', RankPage.top_navig[RankPage.top_navig_clicked_index].name)%>" name="<%=RankPage.top_navig[RankPage.top_navig_clicked_index].name%>" onclick="IsClickedTopNavig"></pe:div>
+    <pe:if condition="<%=RankPage.show_top_navig == 0%>">
+        <pe:div style="position: relative; width: 45px; height: 19px; left: 1380; top: 95; background: url(codepku/image/textures/fastentrence/rank/select_down.png);"></pe:div>
+    </pe:if>  
+    <pe:if condition="<%=RankPage.show_top_navig == 1%>">
+        <pe:div style="position: relative; width: 45px; height: 19px; left: 1380; top: 95; background: url(codepku/image/textures/fastentrence/rank/select_up.png);"></pe:div>
+    </pe:if>  
+    <pe:if condition="<%=RankPage.show_top_navig == 1%>">
+        <pe:div style="position: relative; width: 216; height: 160; left: 1305; top: 121;">
+            <pe:repeat DataSource="<%=RankPage.top_navig%>">
+                <pe:repeatitem>
+                <pe:if condition="<%=RankPage.top_navig_clicked_index ~= Eval('index')%>">
+                    <pe:div style="<%=format('width: 216; height: 80; background: url(codepku/image/textures/fastentrence/rank/%s.png);', Eval('name'))%>" name="<%=Eval('name')%>" onclick="ClickedTopNavigIndex"></pe:div>
+                </pe:if>
+                </pe:repeatitem>
+            </pe:repeat>
+        </pe:div>
+    </pe:if>
+
+</pe:container>
+</pe:mcml>
+</body>
+
+</html>
