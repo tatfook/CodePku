@@ -1,5 +1,5 @@
 local GenAndName = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.GenAndName")
-local request = NPL.load("(gl)Mod/CodePkuCommon/api/BaseRequest.lua");
+local request = NPL.load("(gl)Mod/CodePku/api/BaseRequest.lua");
 local page;
 
 function GenAndName.OnInit()

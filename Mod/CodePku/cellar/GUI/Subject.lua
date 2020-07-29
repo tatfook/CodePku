@@ -1,5 +1,5 @@
 local SubjectPage = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.SubjectPage")
-local request = NPL.load("(gl)Mod/CodePkuCommon/api/BaseRequest.lua");
+local request = NPL.load("(gl)Mod/CodePku/api/BaseRequest.lua");
 local page;
 
 function SubjectPage.OnInit()
@@ -44,6 +44,7 @@ end
 
 function SubjectPage.GetLevels()
     SubjectPage.OnInitSubject()
+    local request = NPL.load("(gl)Mod/CodePku/api/BaseRequest.lua");
 	response = request:get('/users/levels',nil,{sync = true})
 	local subject_names = {
         [1] = {'chinese','语文'},

@@ -1,15 +1,15 @@
 RankPage = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.RankPage");
 
-local request = NPL.load("(gl)Mod/CodePkuCommon/api/BaseRequest.lua")
+local request = NPL.load("(gl)Mod/CodePku/api/BaseRequest.lua")
 local page;
 
-function create_userinfo()
-    userinfo  = {}
-    for i = 1,100 do
-        table.insert(userinfo, {rank = i, name = i, sorce = 100-i})
-    end
-    return userinfo
-end
+-- function create_userinfo()
+--     userinfo  = {}
+--     for i = 1,100 do
+--         table.insert(userinfo, {rank = i, name = i, sorce = 100-i})
+--     end
+--     return userinfo
+-- end
 
 function RankPage.OnInit()
 	RankPage.OneTimeInit();
@@ -76,3 +76,4 @@ function RankPage:ShowPage(bShow)
     AdaptWindow:QuickWindow({url="Mod/CodePku/cellar/GUI/FastEntrence/RankPage.html", 
     alignment="_ct", left = -960, top = -540, width = 1920, height = 1080,zorder =21})
 end
+

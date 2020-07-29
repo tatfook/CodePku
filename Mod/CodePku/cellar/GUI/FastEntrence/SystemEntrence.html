@@ -9,49 +9,10 @@
     <pe:mcml onloadscript="script/apps/Aries/app_main.lua" callbackfunction="MyCompany.Aries.MSGProc">
 <script refresh="false" type="text/npl" src="SystemEntrence.lua"><![CDATA[
 SystemEntrencePage = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.SystemEntrencePage");
+SystemEntranceChoosePage = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.SystemEntranceChoosePage");
 SystemLevelPage = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.SystemLevelPage");
 local MainEntrencePage = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.MainEntrencePage");
 
-
-local GradeDetails = {}
-GradeDetails['primary'] = {
-    [1]={
-        [1] = {name='一年级(上)', index=1, grade_id=2, semester_id=1},
-        [2] = {name='一年级(下)', index=2, grade_id=2, semester_id=2},
-        [3] = {name='二年级(上)', index=3, grade_id=3, semester_id=1},
-        [4] = {name='二年级(下)', index=4, grade_id=3, semester_id=2},
-        [5] = {name='三年级(上)', index=5, grade_id=4, semester_id=1},
-        [6] = {name='三年级(下)', index=6, grade_id=4, semester_id=2},
-    },
-    [2]={
-        [1] = {name='四年级(上)', index=1, grade_id=5, semester_id=1},
-        [2] = {name='四年级(下)', index=2, grade_id=5, semester_id=2},
-        [3] = {name='五年级(上)', index=3, grade_id=6, semester_id=1},
-        [4] = {name='五年级(下)', index=4, grade_id=6, semester_id=2},
-        [5] = {name='六年级(上)', index=5, grade_id=7, semester_id=1},
-        [6] = {name='六年级(下)', index=6, grade_id=7, semester_id=2},
-    }
-}
-
-GradeDetails['middle'] = {
-    [1]={
-    [1] = {name='初一(上)', index=1, grade_id=8, semester_id=1},
-    [2] = {name='初一(下)', index=2, grade_id=8, semester_id=2},
-    [3] = {name='初二(上)', index=3, grade_id=9, semester_id=1},
-    [4] = {name='初二(下)', index=4, grade_id=9, semester_id=2},
-    [5] = {name='初三(上)', index=5, grade_id=10, semester_id=1},
-    [6] = {name='初三(下)', index=6, grade_id=10, semester_id=2},
-}}
-
-GradeDetails['high'] = {
-    [1]={
-    [1] = {name='高一(上)', index=1, grade_id=11, semester_id=1},
-    [2] = {name='高一(下)', index=2, grade_id=11, semester_id=2},
-    [3] = {name='高二(上)', index=3, grade_id=12, semester_id=1},
-    [4] = {name='高二(下)', index=4, grade_id=12, semester_id=2},
-    [5] = {name='高三(上)', index=5, grade_id=13, semester_id=1},
-    [6] = {name='高三(下)', index=6, grade_id=13, semester_id=2},
-}}
 
 function ClosePage()
     Page:CloseWindow();
@@ -63,33 +24,9 @@ function OnClose()
     MainEntrencePage.ShowPage()
 end
 
-function OnCloseChoose()
-    --SystemEntrencePage.on_choose = false
-    --Page:Refresh(0)
-    ClosePage()
-    MainEntrencePage.ShowPage()
-end
-
-function OnChoose()
-    SystemEntrencePage.on_choose = true
-    Page:Refresh(0)
-end
-
-function TurnToPrimary()
-    OnChoose()
-end
-
-function TurnToMiddle()
-    ClosePage()
-end
-
-function TurnToHigh()
-    ClosePage()
-end
-
 function onClickPage(name)
-    SystemEntrencePage.school = name
-    OnChoose()
+    _page = document:GetPageCtrl()
+    SystemEntranceChoosePage:ShowPage(true, name, 1, _page)
 end
 
 function GetSchoolClass()
@@ -104,36 +41,8 @@ function GetSchoolClass()
     end
 end
 
+function OnClickBlack()
 
-function GetGradeDetails(school, page)
-    return GradeDetails[school][page]
-end
-
-function prev_page()
-    if SystemEntrencePage~=nil then
-        if (SystemEntrencePage.page > 1) then
-            SystemEntrencePage.page = SystemEntrencePage.page - 1
-            Page:Refresh(0)
-        end
-    end
-end
-
-function next_page()
-    if SystemEntrencePage~=nil then
-        if (SystemEntrencePage.page < #GradeDetails[SystemEntrencePage.school]) then
-            SystemEntrencePage.page = SystemEntrencePage.page + 1
-            Page:Refresh(0)
-        end
-    end
-end
-
-function OnClickGrade(name)
-    local l = {}
-    for a in string.gmatch(name, '%d') do
-        table.insert(l, a)
-    end
-    ClosePage()
-    SystemLevelPage:ShowPage(true,l[1], l[2], 1)
 end
 
 
@@ -143,40 +52,19 @@ end
 </style>
 
     <div style="margin-top:5px;width:1920;height: 1080;background:url(codepku/image/textures/fastentrence/system_board.png)">
-        <pe:if condition='<%=SystemEntrencePage==nil or SystemEntrencePage.on_choose~=true%>'>
             <div>
                 <div style='width:100px;height:100px;background:url(codepku/image/textures/fastentrence/return.png);margin-left: 100px;margin-top: 20px;' onclick="OnClose"></div>
-                <div style='float:left;width:100px;height:50px;margin-left:1000;margin-top:-70;background:url(codepku/image/textures/fastentrence/system_name.png)'></div>
+                <div style='float:left;width:140px;height:50px;margin-left:1000;margin-top:-70;background:url(codepku/image/textures/fastentrence/system_name.png)'></div>
             </div>
-            <div style='float: left;width: 450;height: 650;background:url(codepku/image/textures/fastentrence/primary.png);margin-left:100;margin-top:100;' name='primary' onclick="onClickPage"></div>
-            <div style='float: left;width: 450;height: 650;background:url(codepku/image/textures/fastentrence/middle.png);margin-left:100;margin-top:100;' name='middle' onclick="onClickPage"></div>
-            <div style='float: left;width: 450;height:650;background:url(codepku/image/textures/fastentrence/high.png);margin-left:100;margin-top:100;' name='high' onclick="onClickPage"></div>
-        </pe:if>
-        <pe:if condition='<%=SystemEntrencePage~=nil and SystemEntrencePage.on_choose==true%>'>
-            <div>
-                <div style='width:100px;height:100px;background:url(codepku/image/textures/fastentrence/return.png);margin-left: 100px;margin-top: 20px;'></div>
-                <div style='float:left;width:100px;height:50px;margin-left:1000;margin-top:-70;background:url(codepku/image/textures/fastentrence/system_name.png)'></div>
+            <div style='<%=format("float: left;width: 450;height: 650;background:url(codepku/image/textures/fastentrence/primary%s.png);margin-left:100;margin-top:100;", "")%>' name='primary' onclick="onClickPage">
+                
             </div>
-            <div style='float: left;width: 450;height: 650;background:url(codepku/image/textures/fastentrence/primary.png);margin-left:100;margin-top:100;' name='primary'></div>
-            <div style='float: left;width: 450;height: 650;background:url(codepku/image/textures/fastentrence/middle.png);margin-left:100;margin-top:100;' name='middle'></div>
-            <div style='float: left;width: 450;height:650;background:url(codepku/image/textures/fastentrence/high.png);margin-left:100;margin-top:100;' name='high'></div>
-            <div style='position: absolute;width:1200;height:750;background:url(codepku/image/textures/fastentrence/choose_grade_board.png);margin-top:-600;margin-left:350px'>
-                <div style='width:200;height:100;margin-top:70;margin-left:570;base_font_size:40px;font-size:40px;'><%=GetSchoolClass()%></div>
-                <div style='width:80;height:80;background:url(codepku/image/textures/fastentrence/close_2.png);margin-top:-120;margin-left:1040;' onclick="OnCloseChoose"></div>
-                    <div style='width:700;height:500;margin-top: 20;margin-left:140;'>
-                        <pe:repeat DataSource="<%=GetGradeDetails(SystemEntrencePage.school, SystemEntrencePage.page)%>">
-                            <pe:repeatitem>
-                                <div style="<%=format('background:url(codepku/image/textures/fastentrence/choose_grade/block_blue.png);position:relative;width:326;height:128;background-color: #ffffff;text-align:center;left: %s;top:%s', ((Eval('index')+1)%2)*400+70, math.floor(((Eval('index')-1)/2))*150)%>" name="<%=format('%d %d',Eval('grade_id'), Eval('semester_id'))%>" onclick='OnClickGrade' grade_id='<%=Eval("grade_id")%>' semester_id='<%=Eval("semester_id")%>'><div style="margin-top:40;font-size: 28px;"><%=Eval('name')%></div></div>
-                            </pe:repeatitem>
-                        </pe:repeat>
-                    </div>
-                    <div style='width:800;height:100;margin-left:340;margin-top:-70;'>
-                        <div style='width:75;height:75;margin-left: 120;background:url(codepku/image/textures/fastentrence/prev.png);' onclick="prev_page"></div>
-                        <div style='base_font_size:40px;font-size:40px;margin-left: 220;margin-top:-55'><%=SystemEntrencePage.page%></div>
-                        <div style='width:75;height:75;margin-left: 270;margin-top:-75;background:url(codepku/image/textures/fastentrence/next.png);' onclick="next_page"></div>
-                    </div>
+            <div style='float: left;width: 450;height: 650;background:url(codepku/image/textures/fastentrence/middle.png);margin-left:100;margin-top:100;' name='middle' onclick="onClickPage">
+                <div style="background-color: #11114455; width: 450;height: 650;margin-top: 0;margin-left:0;" onclick="OnClickBlack"></div>
             </div>
-        </pe:if>
+            <div style='float: left;width: 450;height:650;background:url(codepku/image/textures/fastentrence/high.png);margin-left:100;margin-top:100;' name='high' onclick="onClickPage">
+                <div style="background-color: #11114455; width: 450;height: 650;margin-top: 0;margin-left:0;" onclick="OnClickBlack"></div>
+            </div>
         
     </div>
 

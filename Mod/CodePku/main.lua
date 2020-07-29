@@ -60,6 +60,9 @@ local SubjectPage = NPL.load("(gl)Mod/CodePku/cellar/GUI/Subject.lua")
 local RankPage = NPL.load("(gl)Mod/CodePku/cellar/GUI/RankPage.lua")
 local EditPage = NPL.load("(gl)Mod/CodePku/cellar/GUI/editShare.lua")
 local RankPage = NPL.load("(gl)Mod/CodePku/cellar/GUI/FastEntrence/RankPage.lua")
+local PropsInfo = NPL.load("(gl)Mod/CodePku/cellar/GUI/Props/PropsInfo.lua")
+local RankPage = NPL.load("(gl)Mod/CodePku/cellar/GUI/FastEntrence/RankPage.lua")
+local Messages = NPL.load("(gl)Mod/CodePku/cellar/common/TouchMiniButtons/Messages.lua")
 
 local DownloadWorld = commonlib.gettable("MyCompany.Aries.Game.MainLogin.DownloadWorld")
 
@@ -350,7 +353,15 @@ function CodePku:init()
 	PreventIndulge:Init()
 
 	local Online = commonlib.gettable("Mod.CodePku.Online");
-	Online:Init();
+    Online:Init();
+
+    -- debug fatal error
+    -- local WebSocketClient = NPL.load("(gl)Mod/CodePku/chat/WebSocketClient.lua");
+    -- echo("websocket ============")
+    -- echo(WebSocketClient)
+
+    local CodepkuChatChannel = NPL.load("(gl)Mod/CodePku/chat/CodepkuChatChannel.lua");
+    CodepkuChatChannel.StaticInit();
 end
 
 function CodePku:OnLogin()
