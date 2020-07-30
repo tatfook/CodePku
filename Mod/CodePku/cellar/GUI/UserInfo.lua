@@ -44,6 +44,7 @@ function UserInfoPage.GetUserInfo()
         data = response.data.data
         UserInfo.name = data.nickname or data.mobile
         UserInfo.id = data.id
+        UserInfo.no = data.no
         UserInfo.gender = data.gender
         local _, _, y, m, d, _hour, _min, _sec = string.find(data.created_at, "(%d+)-(%d+)-(%d+)%s*(%d+):(%d+):(%d+)");
         UserInfo.created_at = y..'-'..m..'-'..d

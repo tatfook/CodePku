@@ -53,13 +53,13 @@ end
         elseif (result == '' or result == '请输入姓名') then
             GameLogic.RunCommand("/tip -duration 1500 你没写名字")
         else
-           
-            
-
             if GenAndName:CreateRole(result,gen) then
                 GameLogic.RunCommand(string.format("/tip -duration 1500 %s",signtip(gen)))
+                commonlib.setfield("System.User.username", result)
+                commonlib.setfield("System.User.nickName", result)  
+                UserConsole = NPL.load('(gl)Mod/CodePku/cellar/UserConsole/Main.lua')
+                UserConsole:CourseEntry()
                 Page:CloseWindow();
-            
             else
                 GameLogic.RunCommand(string.format("/tip -duration 1500 %s","用户名存在"))
 
@@ -82,23 +82,25 @@ end
 </script>
 <style type="text/mcss">
 </style>   
-    <pe:container alignment="_lt" width="1920" height="1080">
+    <pe:container alignment="_lt" width="1920" height="1080" style="width:1920;height:1080;background:url(codepku/image/textures/userinfo/GenName/main.png);">
         <pe:if condition='<%=gen ~= 1%>'>
-            <div style='<%=format("width:523;height:628;margin-left:1120;margin-top:60;background:url(codepku/image/textures/userinfo/GenName/unselectedBoy.png);")%>' name = 1 onclick="setGen">
+            <div style="position: relative;width:523;height:628;margin-left:506;margin-top:272;background:url(codepku/image/textures/userinfo/GenName/unselectedBoy.png);" name = 1 onclick="setGen">
             </div>
         </pe:if>
         <pe:if condition='<%=gen == 1%>'>
-            <div style='<%=format("width:523;height:628;margin-left:1120;margin-top:60;background:url(codepku/image/textures/userinfo/GenName/selectedBoy.png);")%>' name = 1 onclick="setGen">
+            <div style="position: relative;width:533;height:642;margin-left:506;margin-top:272;background:url(codepku/image/textures/userinfo/GenName/selectedBoy.png);" name = 1 onclick="setGen">
             </div>
         </pe:if>
+
         <pe:if condition='<%=gen ~= 2%>'>
-            <div style='<%=format("width:523;height:628;margin-left:280;margin-top:-628;background:url(codepku/image/textures/userinfo/GenName/unselectedGirl.png);")%>'name = 2 onclick="setGen">
+            <div style="position: relative;width:523;height:628;margin-left:1028;margin-top:272;background:url(codepku/image/textures/userinfo/GenName/unselectedGirl.png);" name = 2 onclick="setGen">
             </div>
         </pe:if>
         <pe:if condition='<%=gen == 2%>'>
-            <div style='<%=format("width:523;height:628;margin-left:280;margin-top:-628;background:url(codepku/image/textures/userinfo/GenName/selectedGirl.png);")%>'name = 2 onclick="setGen">
+            <div style="position: relative;width:533;height:642;margin-left:1028;margin-top:272;background:url(codepku/image/textures/userinfo/GenName/selectedGirl.png);" name = 2 onclick="setGen">
             </div>
         </pe:if>
+
         <div style='<%=format("width:117;height:128;margin-left:1205;margin-top:30;background:url(codepku/image/textures/userinfo/GenName/toss.png);")%>' onclick="randomName">
         </div>
         <div style="position:relative;width:583px;height:107px;margin-left:598px;text-align:center;margin-top:-128px;font-size:32px;background:url(codepku/image/textures/userinfo/GenName/inputName.png);"></div>
