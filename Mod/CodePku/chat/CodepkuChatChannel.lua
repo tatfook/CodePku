@@ -34,6 +34,7 @@ local OtherUserInfoPage = commonlib.gettable("MyCompany.Aries.Creator.Game.Deskt
 local OtherUserInfo = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.OtherUserInfo")
 local EntityManager = commonlib.gettable("MyCompany.Aries.Game.EntityManager")
 local MainSceneUIButtons = commonlib.gettable("Mod.CodePku.Common.TouchMiniButtons.MainSceneUIButtons");
+local FriendUI = commonlib.gettable("Mod.CodePku.GUI.FriendUI")
 
 
 
@@ -180,18 +181,21 @@ function CodepkuChatChannel.HasUserName(usernames_str, name)
 	end
 end
 function CodepkuChatChannel.OnMsg(self, msg)
-    echo("codepku chat channel receive message")
-    echo(msg)	
     if(not msg or not msg.data)then
         return
     end
     msg = msg.data;
-    echo(string.format( "RECV:   %s,     %s", msg.from_user_id, UserInfo.id ))
     local speakerIsMe = if_else(msg.from_user_id == UserInfo.id, 1, 0)
     local avatar = msg.from_user_avatar
     local action = tonumber(msg.action);
-    if (action == messageActionsMap.action) then 
+    if (action == messageActionsMap.status) then
         -- 上线通知 下线通知
+        for i ,v in ipairs(FriendUI.vars["friends"]) do
+            if v.friend_id == msg.user_id then
+                status = if_else(msg.status == 'ONLINE', true, false)
+                v.is_online = status
+            end
+        end
     else 
         local channel = tonumber(msg.channel);   
         -- system = 1, -- 系统通知
@@ -204,21 +208,16 @@ function CodepkuChatChannel.OnMsg(self, msg)
         elseif (channel == channelsMap.world) then 
             msg_data = {speakerIsMe=speakerIsMe, dialog=msg.content, avatar=avatar, nickname=msg.from_user_nickname, level=msg.level or 1, channel=msg.channel}
             table.insert( CodepkuChatChannel.Messages, msg_data)
-            echo('-----------------------1')
-            echo(#CodepkuChatChannel.Messages)
             -- todo 频道:世界
         elseif (channel == channelsMap.nearby) then
             msg_data = {speakerIsMe=speakerIsMe, dialog=msg.content, avatar=avatar, nickname=msg.from_user_nickname, level=msg.level or 1, channel=msg.channel}
             table.insert( CodepkuChatChannel.Messages, msg_data)
-            echo('-----------------------1')
-            echo(#CodepkuChatChannel.Messages)
         elseif (channel == channelsMap.guild) then
             -- todo 频道:工会
         elseif (channel == channelsMap.school) then
             -- todo 频道: 学校
         elseif (channel == channelsMap.private_chat) then
             -- 私聊
-            echo(string.format( "CodepkuChatChannel.OnMsg from :  %s  to:  %s", msg.from_user_id, msg.to_user_id))
             msg_data = {speakerIsMe=speakerIsMe, dialog=msg.content, avatar=avatar, nickname=msg.from_user_nickname, level=msg.level or 1, channel=msg.channel, from=msg.from_user_id, to=msg.to_user_id}
             table.insert( CodepkuChatChannel.Messages, msg_data)
         end
@@ -226,6 +225,9 @@ function CodepkuChatChannel.OnMsg(self, msg)
     if MainSceneUIButtons.page then
         MainSceneUIButtons.page:Refresh(0)
     end
+    -- if FriendUI.page then
+    --     FriendUI.page:Refresh(0)
+    -- end
 end
 
 function CodepkuChatChannel.CreateMcmlStrToTipRoad(chatdata)

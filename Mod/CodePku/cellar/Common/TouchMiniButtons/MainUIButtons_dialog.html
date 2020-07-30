@@ -31,16 +31,7 @@ Channels = {
 local sendable = true
 LAST_CLICKED_INDEX = 1
 FRIEND_IN_CHATTING = 1
-friends = commonlib.deepcopy(FriendUI.vars["friends"])
-for i, v in ipairs(friends) do
-    v.index = i
-    if i == 1 then
-        FRIEND_IN_CHATTING = i
-        v.status = '_clicked'
-    else
-        v.status = ''
-    end
-end
+
 
 function OnClose()
     Page:CloseWindow()
@@ -136,6 +127,17 @@ function GetMessages()
 end
 
 function GetFriends()
+    local friends = commonlib.deepcopy(FriendUI.vars["friends"])
+    for i, v in ipairs(friends) do
+        echo(string.format('online ??  %s', v.is_online))
+        v.index = i
+        if i == 1 then
+            FRIEND_IN_CHATTING = i
+            v.status = '_clicked'
+        else
+            v.status = ''
+        end
+    end
     echo(string.format('GetFriends length:  %d', #friends))
     return friends
 end
@@ -199,10 +201,10 @@ end
                                 <div style="float:left;width:125;height:100;margin-top:-60;margin-left:80;font-size: 20;">
                                     <div><%=Eval('nickname')%></div>
                                     <pe:if condition="<%=Eval('is_online')%>">
-                                        <div style='margin:0;color:green'>在线</div>
+                                        <div style='margin:0;color:#00ff9c'>在线</div>
                                     </pe:if>
                                     <pe:if condition="<%=Eval('is_online')==false%>">
-                                        <div style='margin:0;color:gray'>离线</div>
+                                        <div style='margin:0;color:#056097'>离线</div>
                                     </pe:if>
                                 </div>
                             </div>
