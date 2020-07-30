@@ -15,7 +15,12 @@
                 Mod.CodePku.Store:Set("page/StartLearning", page)
 
                 function startLearning()
-                    UserConsole:CourseEntry()
+                    Page:CloseWindow()
+                    if GenAndName.CheckNickName() then
+                        UserConsole:CourseEntry()
+                    else
+                        GenAndName:ShowPage()
+                    end
                 end
 
                 function currentUserName()
