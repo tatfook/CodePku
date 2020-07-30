@@ -32,6 +32,17 @@ local sendable = true
 LAST_CLICKED_INDEX = 1
 FRIEND_IN_CHATTING = 1
 
+friends = commonlib.deepcopy(FriendUI.vars["friends"])
+for i, v in ipairs(friends) do
+    echo(string.format('online ??  %s', v.is_online))
+    v.index = i
+    if i == 1 then
+        FRIEND_IN_CHATTING = i
+        v.status = '_clicked'
+    else
+        v.status = ''
+    end
+end
 
 function OnClose()
     Page:CloseWindow()
@@ -127,17 +138,6 @@ function GetMessages()
 end
 
 function GetFriends()
-    local friends = commonlib.deepcopy(FriendUI.vars["friends"])
-    for i, v in ipairs(friends) do
-        echo(string.format('online ??  %s', v.is_online))
-        v.index = i
-        if i == 1 then
-            FRIEND_IN_CHATTING = i
-            v.status = '_clicked'
-        else
-            v.status = ''
-        end
-    end
     echo(string.format('GetFriends length:  %d', #friends))
     return friends
 end
@@ -191,7 +191,7 @@ end
             <!-- 好友聊天栏 -->
             <pe:if condition="<%=LAST_CLICKED_INDEX==4%>">
                 <div style="width: 200; height: 845;background: url(codepku/image/textures/chat/friend_left.png);">
-                <pe:treeview VerticalScrollBarStep="40" >
+                <pe:treeview VerticalScrollBarStep="40"  VerticalScrollBarPageSize="400" RememberScrollPos="true" RememberLastPage="true" >
                     <pe:repeat DataSource="<%=GetFriends()%>">
                         <pe:repeatitem>
                             <div style="<%=format('width:200;height:100;background: url(codepku/image/textures/chat/friend%s.png);padding: 12;', Eval('status'))%>" name="<%=Eval('index')%>" onclick="OnClickFriend">
