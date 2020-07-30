@@ -36,7 +36,7 @@ function UserConsole:ShowPage()
         DestroyOnClose = true, -- prevent many ViewProfile pages staying in memory
         style = CommonCtrl.WindowFrame.ContainerStyle,
         allowDrag = false,
-        zorder = 0,
+        zorder = -1,
         bShow = bShow,
         directPosition = true,
             align = "_fi",

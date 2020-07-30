@@ -49,7 +49,11 @@ end
 
 
 -- 名称颜色： 队友 (蓝色), 好友 (绿色), 其他角色(白色), NPC(橙色)		
-MyHeadOnTextColor = "255 255 255"			
+MyHeadOnTextColor = "255 255 255"		
+TeamHeadOnTextColor = "0 0 255"
+FriendHeadOnTextColor = "0 128 0" 
+OtherHeadOnTextColor = "255 255 255"	
+RandomHeadOnTextColors = {TeamHeadOnTextColor, FriendHeadOnTextColor, OtherHeadOnTextColor}
 
 
 -- 设置头顶信息
@@ -58,23 +62,18 @@ function EntityPlayerHelper:SetHeadOnDisplay()
     local playerInfo = self:GetPlayerInfo();
     local userinfo = self:GetUserInfo();
     local username = playerInfo.username;
+
     local state = playerInfo.state;
     local isVip = userinfo.isVip;
     Log:Info("username: %s, state: %s, vip: %s", username, state, isVip);
 
-    objColor = RandomHeadOnTextColors[math.random(#RandomHeadOnTextColors)]
-    local color = state == "online" and (self.isMainPlayer and MyHeadOnTextColor or objColor) or MyHeadOnTextColor;
-    local textWidth = _guihelper.GetTextWidth(username, System.DefaultLargeFontString);
-    local vipIconUrl = "Texture/Aries/Creator/keepwork/chat/vip_32bits.png#0 0 18 18";
-    local mcml = string.format([[
-<pe:mcml>
-    <div style="margin-left:-%spx;margin-top:-30px">
-        <pe:if condition="%s"><div style="float:left;width:16px;height:16px;background:url(%s);"></div></pe:if>
-        <div style="float:left; margin-left: 2px; margin-top: -3px; color: %s; font-size: 16px;">%s</div>
-    </div>
-</pe:mcml>
-    ]], (textWidth + 2) / 2 + (isVip and 8 or 0), isVip and "true" or "false", vipIconUrl, color, username);
-    -- player:SetHeadOnDisplay({url=ParaXML.LuaXML_ParseString(mcml)});
+    local color = MyHeadOnTextColor;
+    if self.isMainPlayer then
+        color = RandomHeadOnTextColors[math.random(#RandomHeadOnTextColors)]
+    end
+
+    local obj = player:GetInnerObject();
+	System.ShowHeadOnDisplay(true, obj, username, color);	
 end
 
 
