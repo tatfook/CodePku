@@ -28,10 +28,12 @@ local WorldCommon = commonlib.gettable("MyCompany.Aries.Creator.WorldCommon")
 local KeepWorkItemManager = NPL.load("(gl)script/apps/Aries/Creator/HttpAPI/KeepWorkItemManager.lua");
 local WebSocketClient = NPL.load("(gl)Mod/CodePku/chat/WebSocketClient.lua");
 local request = NPL.load("(gl)Mod/CodePku/api/BaseRequest.lua");
+local UserInfoPage = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.UserInfoPage")
 local UserInfo = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.UserInfo")
 local OtherUserInfoPage = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.OtherUserInfoPage")
 local OtherUserInfo = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.OtherUserInfo")
 local EntityManager = commonlib.gettable("MyCompany.Aries.Game.EntityManager")
+local MainSceneUIButtons = commonlib.gettable("Mod.CodePku.Common.TouchMiniButtons.MainSceneUIButtons");
 
 
 
@@ -79,7 +81,8 @@ function CodepkuChatChannel.OnWorldLoaded()
     -- local id = WorldCommon.GetWorldTag("kpProjectId");
     -- 课件id
     local id = System.Codepku and System.Codepku.Coursewares and System.Codepku.Coursewares.id;
-	LOG.std(nil, "info", "CodepkuChatChannel", "OnWorldLoaded: %s",tostring(id));
+    LOG.std(nil, "info", "CodepkuChatChannel", "OnWorldLoaded: %s",tostring(id));
+    UserInfoPage.GetUserInfo()
     TipRoadManager:Clear(); -- todo ? 
     if (id) then
         id = tonumber(id);
@@ -185,7 +188,7 @@ function CodepkuChatChannel.OnMsg(self, msg)
     msg = msg.data;
     echo(string.format( "RECV:   %s,     %s", msg.from_user_id, UserInfo.id ))
     local speakerIsMe = if_else(msg.from_user_id == UserInfo.id, 1, 0)
-    local avatar = msg.avatar or 'codepku/image/textures/tmp_icon.jpg'
+    local avatar = msg.from_user_avatar
     local action = tonumber(msg.action);
     if (action == messageActionsMap.action) then 
         -- 上线通知 下线通知
@@ -199,13 +202,13 @@ function CodepkuChatChannel.OnMsg(self, msg)
         if (channel == channelsMap.system) then
             -- todo 系统通知
         elseif (channel == channelsMap.world) then 
-            msg_data = {speakerIsMe=speakerIsMe, dialog=msg.content, avatar=avatar, nickname=msg.nickname, level=msg.level or 1, channel=msg.channel}
+            msg_data = {speakerIsMe=speakerIsMe, dialog=msg.content, avatar=avatar, nickname=msg.from_user_nickname, level=msg.level or 1, channel=msg.channel}
             table.insert( CodepkuChatChannel.Messages, msg_data)
             echo('-----------------------1')
             echo(#CodepkuChatChannel.Messages)
             -- todo 频道:世界
         elseif (channel == channelsMap.nearby) then
-            msg_data = {speakerIsMe=speakerIsMe, dialog=msg.content, avatar=avatar, nickname=msg.nickname, level=msg.level or 1, channel=msg.channel}
+            msg_data = {speakerIsMe=speakerIsMe, dialog=msg.content, avatar=avatar, nickname=msg.from_user_nickname, level=msg.level or 1, channel=msg.channel}
             table.insert( CodepkuChatChannel.Messages, msg_data)
             echo('-----------------------1')
             echo(#CodepkuChatChannel.Messages)
@@ -215,10 +218,16 @@ function CodepkuChatChannel.OnMsg(self, msg)
             -- todo 频道: 学校
         elseif (channel == channelsMap.private_chat) then
             -- 私聊
-        end 
+            echo(string.format( "CodepkuChatChannel.OnMsg from :  %s  to:  %s", msg.from_user_id, msg.to_user_id))
+            msg_data = {speakerIsMe=speakerIsMe, dialog=msg.content, avatar=avatar, nickname=msg.from_user_nickname, level=msg.level or 1, channel=msg.channel, from=msg.from_user_id, to=msg.to_user_id}
+            table.insert( CodepkuChatChannel.Messages, msg_data)
+        end
     end
-    
+    if MainSceneUIButtons.page then
+        MainSceneUIButtons.page:Refresh(0)
+    end
 end
+
 function CodepkuChatChannel.CreateMcmlStrToTipRoad(chatdata)
     if(not chatdata)then
         return
@@ -362,7 +371,7 @@ function CodepkuChatChannel.SendWorldMsg(words)
     if(not words)then
         return
     end
-    echo(string.format( "SEND:   %s", UserInfo.id ))
+    echo(string.format( "SEND:   %s", UserInfo.avatar ))
     local worldMsg = {
 
         from_user_id = UserInfo.id,
@@ -415,24 +424,25 @@ function CodepkuChatChannel.SendToFriend(friend, words)
     if (not words) then
         return
     end
-    local to_user_id = CodepkuChatChannel.last_chatted_friend
+    local to_user_id = friend.friend_id
     if to_user_id then
         OtherUserInfoPage.GetUserInfo(to_user_id)
         local worldMsg = {
             to_user_id = to_user_id,
-            to_user_nickname = OtherUserInfo.name,
-            to_user_avatar = OtherUserInfo.avatar,
-            to_user_id = to_user_id,
+            to_user_nickname = friend.name,
+            to_user_avatar = friend.head,
             from_user_id = UserInfo.id,
             from_user_nickname = UserInfo.name,
             from_user_avatar = UserInfo.avatar,
-            channel = channelsMap.world,
+            channel = channelsMap.private_chat,
             courseware_id=1, --todo
             type=messageTypeMap.text,
             content= words,
             action=2,
         };
-
+        echo(string.format( "CodepkuChatChannel.SendToFriend from :  %s  to:  %s", UserInfo.id, to_user_id))
+        msg_data = {speakerIsMe=1, dialog=worldMsg.content, avatar=worldMsg.from_user_avatar, nickname=worldMsg.from_user_nickname, level=worldMsg.level or 1, channel=worldMsg.channel, from=worldMsg.from_user_id, to=worldMsg.to_user_id}
+        table.insert( CodepkuChatChannel.Messages, msg_data)
         CodepkuChatChannel.client:SendMsg(worldMsg); 
     end
 end
