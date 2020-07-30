@@ -4,8 +4,12 @@
 NPL.load("(gl)Mod/CodePku/cellar/GUI/Window/AdaptWindow.lua");
 local AdaptWindow = commonlib.gettable("Mod.CodePku.GUI.Window.AdaptWindow")
 MainSceneUIButtons = commonlib.gettable("Mod.CodePku.Common.TouchMiniButtons.MainSceneUIButtons");
+FriendUI = commonlib.gettable("Mod.CodePku.GUI.FriendUI")
+
 
 function MainSceneUIButtons.show_dialog_ui(bshow)
+    FriendUI:GetFriend()
+
     if(bshow) then
         params = {
             url="Mod/CodePku/cellar/Common/TouchMiniButtons/MainUIButtons_dialog.html", 
