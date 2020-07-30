@@ -191,7 +191,7 @@ end
             <!-- 好友聊天栏 -->
             <pe:if condition="<%=LAST_CLICKED_INDEX==4%>">
                 <div style="width: 200; height: 845;background: url(codepku/image/textures/chat/friend_left.png);">
-                <pe:treeview VerticalScrollBarStep="40" >
+                <pe:treeview VerticalScrollBarStep="40"  VerticalScrollBarPageSize="400" RememberScrollPos="true" RememberLastPage="true" >
                     <pe:repeat DataSource="<%=GetFriends()%>">
                         <pe:repeatitem>
                             <div style="<%=format('width:200;height:100;background: url(codepku/image/textures/chat/friend%s.png);padding: 12;', Eval('status'))%>" name="<%=Eval('index')%>" onclick="OnClickFriend">
