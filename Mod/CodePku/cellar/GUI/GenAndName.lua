@@ -19,6 +19,15 @@ function GenAndName.OnClickBlock(block_id)
 
 end
 
+function GenAndName.CheckNickName()
+    if System.User and System.User.nickName and #System.User.nickName > 0 then
+        return true
+    end
+
+    return false
+end
+
+
 function GenAndName:getRequest(gender)
     response = request:get("/users/random-nickname?type=" .. gender,nil,{sync = true})
     echo(response)
@@ -45,12 +54,14 @@ function GenAndName:CreateRole(name,gen)
     end
 end
 
-function GenAndName:ShowPage(bShow)
-    -- NPL.load("(gl)script/apps/Aries/Creator/Game/Areas/DesktopMenuPage.lua");
-    -- local DesktopMenuPage = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.DesktopMenuPage");
-    GenAndName.bForceHide = bShow == false;
+function GenAndName:ShowPage()
+    -- NPL.load("(gl)Mod/CodePku/cellar/GUI/GenAndName.lua")
+    -- local GenAndName = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.GenAndName")
+    echo("---------------------------- ShowPage")
     NPL.load("(gl)Mod/CodePku/cellar/GUI/Window/AdaptWindow.lua");
     local AdaptWindow = commonlib.gettable("Mod.CodePku.GUI.Window.AdaptWindow")
-    AdaptWindow:QuickWindow({url="Mod/CodePku/cellar/GUI/GenAndName.html", 
-    alignment="_ct", left = -960, top = -540, width = 1920, height = 1080,zorder =20})
+    local ui = AdaptWindow:QuickWindow({url="Mod/CodePku/cellar/GUI/GenAndName.html", 
+    alignment="_ct", left = -960, top = -540, width = 1920, height = 1080,zorder = 20})
+
+    return ui
 end

@@ -5,9 +5,11 @@
     </head>
     <body>
         <pe:mcml>  
-            <script type="text/npl" refresh="false"><![CDATA[                
+            <script type="text/npl" refresh="false"><![CDATA[ 
+                NPL.load("(gl)Mod/CodePku/cellar/GUI/GenAndName.lua")               
                 UserConsole = NPL.load('./Main.lua')
                 CodePkuService = NPL.load("(gl)Mod/CodePku/service/CodePkuService.lua")
+                GenAndName = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.GenAndName")
 
                 local page = document:GetPageCtrl()
                 Mod.CodePku.Store:Set("page/StartLearning", page)
@@ -15,6 +17,7 @@
                 function startLearning()
                     UserConsole:CourseEntry()
                 end
+
                 function currentUserName()
                     local username = CodePkuService:GetAccount()
                     LOG.std(nil, "info", "codepku", username)

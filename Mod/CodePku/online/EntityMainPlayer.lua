@@ -25,10 +25,14 @@ function EntityMainPlayer:CreateInnerObject(...)
 	userid = System.User.id
 	self:SetPlayerInfo(info)
 
-	local name = self:GetDisplayName()
+	local UserInfoPage = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.UserInfoPage")
+	local UserInfo = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.UserInfo")
+	UserInfoPage:GetUserInfo()
+
+	local name = UserInfo.name or self:GetDisplayName()
 
 	if(self:IsShowHeadOnDisplay() and System.ShowHeadOnDisplay) then
-		System.ShowHeadOnDisplay(true, obj, self:GetDisplayName(), MyHeadOnTextColor);	
+		System.ShowHeadOnDisplay(true, obj, name, MyHeadOnTextColor);	
 	end
 	return obj;
 end
