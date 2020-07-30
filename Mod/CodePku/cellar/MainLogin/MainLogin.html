@@ -67,26 +67,7 @@
                     end
 
                     function login()
-                        local agree = page:GetValue("agree")
-                        local account = page:GetValue("account")
-                        local authcode = page:GetValue("get_mobile_code_text")
-
-                        if not account or account == "" then
-                            GameLogic.AddBBS(nil, L"请输入手机号码", 3000, "255 0 0", 21)
-                            return false
-                        end
-
-                        if not authcode or authcode == "" then
-                            GameLogic.AddBBS(nil, L"请输入验证码", 3000, "255 0 0", 21)
-                            return false
-                        end
-
-                        if not agree then
-                            GameLogic.AddBBS(nil, L"请同意用户协议", 3000, "255 0 0", 21)
-                            return false
-                        end
-
-                        MainLogin:LoginAction()
+                        MainLogin:LoginAction(MainLogin.login_method_index)
                     end
 
                     local isClickedGetPhoneCaptcha = false
@@ -156,6 +137,16 @@
                     function show_user_agreement()
                         MainLogin:ShowUserAgreementModal()
                     end
+
+                    function GetMethodIndex()
+                        return MainLogin.login_method_index; -- 1: captcha 2: password
+                    end
+
+                    function OnChangeLoginMethod()
+                        MainLogin.login_method_index = if_else(MainLogin.login_method_index == 2, 1, 2);
+                        page:SetValue("btn_ToggleMethod", if_else(MainLogin.login_method_index == 2, '验证码登录', '密码登录'));
+                        page:Refresh(0.01);
+                    end
                 ]]>
             </script>
             <style type="text/mcss">
@@ -212,8 +203,19 @@
                     helper = {
                         color = '#ffffff',
                         ["font-size"] = 13.2,
+                        ["base-font-size"] = 13.2,
                         ["margin-top"] = 10.8,
                         ["margin-bottom"] = 10.8
+                    },
+                    toggle_button = {
+                        color = "#6dd245",
+                        textcolor = "#6dd245",
+                        ["font-size"] = 13.2,
+                        ["base-font-size"] = 13.2,
+                        border = "none",
+                        background = "#ffffff"
+                        ["margin-right"] = 68,
+                        ["margin-top"] = -1
                     }
                 }
             </style>
@@ -225,29 +227,37 @@
                 <div style="position:relative;padding-top:28px;padding-left:64px;">
                     <div>
                         <input name="account" type="text" class="text_field" EmptyText='<%= L"请输入手机号码" %>' />
-                        <div class="helper">若该手机未注册，我们会自动为您注册</div>
+                        <div class="helper"><pe:if condition='<%=GetMethodIndex() ~=2 %>'>若该手机未注册，我们会自动为您注册</pe:if></div>
                     </div>
-                    <div style="margin-bottom:18px;">
-                        <input type="text" class="text_field" name="verify_code"  EmptyText='<%= L"请输入验证码" %>'/>
-                        <span class="get_code_divider">|</span>
-                        <input
-                            type="button"
-                            class="get_code_button"
-                            DefaultButton="true"
-                            name="get_mobile_code_text"
-                            onclick="get_mobile_code()"
-                            value='<%= L"获取验证码"%>' 
-                        />
-                        <input type="hidden" name="mobile_token"/>
-                    </div>
+                    <pe:if condition='<%=GetMethodIndex() ~=2 %>'>
+                        <div style="margin-bottom:18px;">
+                            <input type="text" class="text_field" name="verify_code"  EmptyText='<%= L"请输入验证码" %>'/>
+                            <span class="get_code_divider">|</span>
+                            <input
+                                type="button"
+                                class="get_code_button"
+                                DefaultButton="true"
+                                name="get_mobile_code_text"
+                                onclick="get_mobile_code()"
+                                value='<%= L"获取验证码"%>'
+                            />
+                            <input type="hidden" name="mobile_token"/>
+                        </div>
+                    </pe:if>
+                    <pe:if condition='<%=GetMethodIndex() == 2 %>'>
+                        <div style="margin-bottom:18px;">
+                            <input name="password" type="password" class="text_field" EmptyText='<%= L"请输入密码" %>' />
+                        </div>
+                    </pe:if>
                     <div>
                         <input type="button" DefaultButton="true" class="login_button" onclick="login()" value='<%= L"登 录"%>' />
-                        <div class="helper" style="margin-left:111px;">
+                        <div class="helper">
                             <input type="checkbox" name="agree" checked="checked" style="margin-right:7px; width:18px;height:18px;" />
                             <div style="float: right" onclick="show_user_agreement()">
                                 <%= L"我已详细阅读并同意" %>
                                 <div style="color:#6dd245;float: right"><%= L"《隐私政策》" %></div>
                             </div>
+                            <input name="btn_ToggleMethod"  align="right" type="button" value='<%= L"密码登录"%>' class="toggle_button" onclick="OnChangeLoginMethod"/>
                         </div>
                     </div>
                 </div>

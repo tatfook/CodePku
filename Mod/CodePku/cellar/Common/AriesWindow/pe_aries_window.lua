@@ -13,12 +13,12 @@ local help_btn_bg = "Texture/Aries/Common/Teen/control/help_32bits.png;0 0 20 20
 local close_btn_bg = "Texture/Aries/Common/Teen/control/close_button2_32bits.png;0 0 30 20";
 local help_disable_btn_bg = "Texture/Aries/Common/Teen/control/help_disable_32bits.png;0 0 20 20";
 
-local mc_window_bg = "codepku/image/textures/modal/common_32bits.png#11 1105 980 380;" -- thin
-local mc_window_bg_866_384 = "codepku/image/textures/modal/bag_box_32bits.png#74 75 1444 640" -- 背包造型背景
-local mc_window_bg_854 = "codepku/image/textures/modal/bag_box_32bits.png#66 2735 854 854" -- 箱子背景
-local center_mc_window_bg = "codepku/image/textures/modal/common_32bits.png#11 53 1000 624;"
+local mc_window_bg = "codepku/image/textures/modal/common_32bits.png#11 1105 980 380"; -- thin
+local mc_window_bg_866_384 = "codepku/image/textures/modal/bag_box_32bits.png#74 75 1444 640"; -- 背包造型背景
+local mc_window_bg_854 = "codepku/image/textures/modal/bag_box_32bits.png#66 2735 854 854"; -- 箱子背景
+local center_mc_window_bg = "codepku/image/textures/modal/setting_v2_32bits.png;383 226 158 116: 53 82 44 30";
 local mc_close_btn_bg = "codepku/image/textures/modal/common_32bits.png#27 906 64 64";
-local mc_line = "codepku/image/textures/modal/bag_box_32bits.png#74 1767 962 2;";
+local mc_line = "codepku/image/textures/modal/bag_box_32bits.png#74 1767 962 2";
 -- local mc_line = "Texture/Aries/Creator/Theme/GameCommonIcon_32bits.png;352 66 1 1";
 
 

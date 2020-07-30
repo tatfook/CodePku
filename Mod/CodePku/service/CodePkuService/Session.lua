@@ -25,6 +25,10 @@ function CodePkuServiceSession:Login(account, verifyCode, mobileToken, callback)
     CodePkuUsersApi:Login(account, verifyCode, mobileToken, callback, callback)
 end
 
+function CodePkuServiceSession:LoginWithPwd(account, password, callback)
+    CodePkuUsersApi:LoginWithPwd(account, password, callback, callback)
+end
+
 function CodePkuServiceSession:LoginWithToken(token, callback)
     CodePkuUsersApi:Profile(token, callback, callback)
 end
@@ -59,7 +63,7 @@ function CodePkuServiceSession:LoginResponse(response, err, callback)
     end
 
     local SetUserinfo = Mod.CodePku.Store:Action("user/SetUserinfo")
-    SetUserinfo(token, userId, mobile, nickname)    
+    SetUserinfo(token, response.data)    
     if type(callback) == "function" then
         callback()
     end
