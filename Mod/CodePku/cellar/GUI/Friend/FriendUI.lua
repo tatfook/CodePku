@@ -59,8 +59,8 @@ function FriendUI:Search(nameorid)
             nickname = response.data.data.nickname or response.data.data.mobile,
             gender = response.data.data.gender,
             head = response.data.data.avatar_url,
-            is_online = true,  -- Todo
-            last_time = response.data.data.updated_at,  -- Todo
+            is_online = response.data.data.is_online or false,
+            last_time = response.data.data.last_login_at, 
         }
     else
         FriendUI.vars["search"] = nil;
@@ -72,7 +72,7 @@ function FriendUI:Add_Friend(fid)
     local request = NPL.load("(gl)Mod/CodePku/api/BaseRequest.lua");
     local response = request:post('/contacts',{friend_id=fid},{sync = true})
     if (response.status == 200 and response.data.code == 200) then
-        GameLogic.AddBBS("CodeGlobals", format(L"已向%s发送了好友申请", string.sub(FriendUI.vars["search"].nickname,1,7)), 3000, "#00FF00");
+        GameLogic.AddBBS("CodeGlobals", format(L"已向%s发送了好友申请", commonlib.utf8.sub(FriendUI.vars["search"].nickname,1,7)), 3000, "#00FF00");
     elseif response.data and response.data.message then
         GameLogic.AddBBS("CodeGlobals", response.data.message, 3000, "#00FF00");
     end
@@ -90,13 +90,13 @@ function FriendUI:GetApply()
                 FriendUI.vars["apply"][aindex] = {
                     index = index,
                     id = data.id,
-                    no = response.data.data.no or "000000",
+                    no = data.no or data.user.no or "000000",
                     friend_id = data.user.id,
-                    nickname = data.user.nickname or string.sub(data.user.mobile,1,7),
+                    nickname = data.user.nickname or commonlib.utf8.sub(data.user.mobile,1,7),
                     gender = data.user.gender,
                     head = data.user.avatar_url,
-                    is_online = true,  -- Todo
-                    last_time = data.user.updated_at,  -- Todo
+                    is_online = data.user.is_online or false,
+                    last_time = data.user.last_login_at, 
                     remark = data.remark,
                 }
                 aindex = aindex + 1;
@@ -126,13 +126,13 @@ function FriendUI:GetFriend()
         for index, data in ipairs(response.data.data) do
             FriendUI.vars["friends"][index] = {
                 id = data.id,
-                no = response.data.data.no or "000000",
+                no = data.no or data.friend.no or "000000",
                 friend_id = data.friend.id,
-                nickname = data.friend.nickname or string.sub(data.friend.mobile,1,7),
+                nickname = data.friend.nickname or commonlib.utf8.sub(data.friend.mobile,1,7),
                 gender = data.friend.gender,
                 head = data.friend.avatar_url,
-                is_online = true,  -- Todo
-                last_time = data.friend.updated_at,  -- Todo
+                is_online = data.friend.is_online or false,
+                last_time = data.friend.last_login_at, 
                 remark = data.remark,
             }
         end
@@ -172,13 +172,13 @@ function FriendUI:GetBlackList()
         for index, data in ipairs(response.data.data) do
             FriendUI.vars["blacklist"][index] = {
                 id = data.id,
-                no = response.data.data.no or "000000",
+                no = data.no or data.friend.no or "000000",
                 friend_id = data.friend.id,
-                nickname = data.friend.nickname or string.sub(data.friend.mobile,1,7),
+                nickname = data.friend.nickname or commonlib.utf8.sub(data.friend.mobile,1,7),
                 gender = data.friend.gender,
                 head = data.friend.avatar_url,
-                is_online = true,  -- Todo
-                last_time = data.friend.updated_at,  -- Todo
+                is_online = data.friend.is_online or false,
+                last_time = data.friend.last_login_at, 
                 remark = data.remark,
             }
         end
@@ -187,6 +187,11 @@ function FriendUI:GetBlackList()
     end
 end
 
+
+function FriendUI:CalOfflineTime()
+    local date=os.date("%Y-%m-%d %H:%M:%S")
+
+end
 
 
 function FriendUI:DeleteFriend(lid)

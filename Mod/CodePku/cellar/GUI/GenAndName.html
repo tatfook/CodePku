@@ -86,15 +86,23 @@ function ClickInput(name)
     Page:SetValue("info_msg", "")
 end
 
-    
+
+-- for later 1.6 show ratio , mobile
+gen_1_pos = "position: relative;width:193;height:232;margin-left:253;margin-top:136;"
+gen_2_pos = "position: relative;width:193;height:232;margin-left:514;margin-top:136;"
+toss_pos = "position: relative;width:193;height:232;margin-left:514;margin-top:136;"
+input_pos1 = "position:relative;width:250;height:50;margin-left:350;text-align:center;margin-top:385;font-size:32px;"
+input_pos2 = "margin-left: 5;width: 240; height: 40; text-align:center;margin-top:5;font-size:30;base-font-size:30;background-color: #ffffff;"
+submit_pos = "position:relative;width:120;height:50;margin-left:620;margin-top:385;"
+
 ]]>
 </script>
 <style type="text/mcss">
-</style>   
 
+</style>   
 <pe:if condition="<%= System.os.IsMobilePlatform() %>">
     <!-- for mobile phone -->
-    <pe:container alignment="_lt" style="width: 960;height: 540;background: none;">
+    <pe:container alignment="_ctt" style="width: 960;height: 540;background: none;">
         <pe:if condition='<%=gen ~= 1%>'>
             <div style="position: relative;width:193;height:232;margin-left:253;margin-top:136;background:url(codepku/image/textures/userinfo/GenName/unselectedBoy.png);" name = 1 onclick="setGen">
             </div>
@@ -120,7 +128,7 @@ end
             <input name="result_1"
                 type="text"
                 MoveViewWhenAttachWithIME="true"
-                style="margin-left: 5;width: 240; height: 40; text-align:center;margin-top:5;font-size:30;base-font-size:30;background-color: rgba(255, 243, 227);"
+                style="margin-left: 5;width: 240; height: 40; text-align:center;margin-top:5;font-size:30;base-font-size:30;background-color: #ffffff"
                 value="<%=result%>"/>
         </div>
         <div style="position:relative;width:120;height:50;margin-left:620;margin-top:385;background:url(codepku/image/textures/userinfo/GenName/confirm.png);" name="1" onclick="submit">
@@ -129,7 +137,7 @@ end
 </pe:if>
 <pe:if condition="<%= not System.os.IsMobilePlatform() %>">
     <!-- for pc -->
-    <pe:container alignment="_lt" style="position:relative;width: 1920;height: 1080;background: none;margin-top: -50;">
+    <pe:container alignment="_ctt" style="position:relative;width: 1920;height: 1080;background: none;margin-top: -50;">
         <pe:if condition='<%=gen ~= 1%>'>
             <div style="position: relative;width:386;height:465;margin-left:506;margin-top:268;background:url(codepku/image/textures/userinfo/GenName/unselectedBoy.png);" name = 1 onclick="setGen">
             </div>

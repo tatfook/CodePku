@@ -37,7 +37,7 @@ function getName()
     if(#mytable.nickname <= 7) then
         return mytable.nickname
     else
-        return string.sub(mytable.nickname,1,7)
+        return commonlib.utf8.sub(mytable.nickname,1,7)
     end
 end
 
@@ -70,7 +70,7 @@ end
     <div style="width: 835; height: 139; margin-top: 250; margin-left: 100; background: url(codepku/image/textures/friend/add_friend/item_bg.png);">
         <div style="position:relative;width:120;height:120; margin-top: 10; margin-left: 30; background: url(codepku/image/textures/friend/item/head.png);"></div>
         <!-- head -->
-        <div style='<%=format("position:relative;width:100;height:100;left: 40;top: 20; background: url(%s);", mytable.head)%>'></div>
+        <div style='<%=format("position:relative;width:100;height:100;left: 40;top: 20; background: url(%s);", mytable.head or "")%>'></div>
 
         <div style="position:relative; left: 190; top: 10; ">
             <div style="height:40; font-size: 40;float: left; color: #ffffff;"><%=getName()%></div>

@@ -77,6 +77,4 @@ function GenAndName:ShowPage()
     }
 
     System.App.Commands.Call("File.MCMLWindowFrame", params);
-    local ui = AdaptWindow:QuickWindow()
-    return ui
 end

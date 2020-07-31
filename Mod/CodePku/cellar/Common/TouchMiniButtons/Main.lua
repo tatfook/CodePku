@@ -104,12 +104,7 @@ function MainUIButtons.show_interact_ui(obj)
 	local username =  obj:GetUserName()
 	local displayname = obj:GetDisplayName()
 	local pname = username or displayname
-	echo("11111111111111111111111111111")
-	echo(username)
-	echo(displayname)
-	echo(pname)
 	pname = commonlib.utf8.sub(pname,1,length_limit)
-	echo(pname)
 
 	info = obj:GetPlayerInfo()
 	pid = info.userinfo.id
