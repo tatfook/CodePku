@@ -31,11 +31,10 @@ function UserStore:Action()
             self.info = user
 
             commonlib.setfield("System.User.codepkuToken", token)
-            commonlib.setfield("System.User.mobile", mobile)
-            commonlib.setfield("System.User.username", nickname or mobile)
-            commonlib.setfield('System.User.id', userId)            
-            commonlib.setfield("System.User.nickName", nickname)  
-            
+            commonlib.setfield("System.User.mobile", user.mobile)
+            commonlib.setfield("System.User.username", user.username or user.mobile)
+            commonlib.setfield('System.User.id', user.id)
+            commonlib.setfield("System.User.nickName", user.nickname)
             commonlib.setfield("System.User.info", user)  
         end,
         SetPlayerController = function(playerController)
@@ -53,7 +52,7 @@ function UserStore:Action()
             commonlib.setfield("System.User.mobile", nil)
             commonlib.setfield("System.User.username", nil)
             commonlib.setfield("System.User.id", nil)            
-            commonlib.setfield("System.User.nickName", nil)            
+            commonlib.setfield("System.User.nickName", nil)
             commonlib.setfield("System.User.info", nil)
         end
     }
