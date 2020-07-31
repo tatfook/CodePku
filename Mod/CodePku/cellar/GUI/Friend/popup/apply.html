@@ -73,7 +73,7 @@ height:280;width: 920;background-color: #ff00ff50;" DataSource='<%=getFriendData
             <pe:if condition="<%=Eval('is_online') == false%>">
                 <div style="position:relative; width:250; height:30; left:170;top:50;font-size: 26;color: #f13709;">离线</div>
             </pe:if>
-            <div style="position:relative; width:250; height:30; left:170;top:80;font-size: 26;color: #FFFFFF;">ID: <%=Eval("friend_id")%></div>
+            <div style="position:relative; width:250; height:30; left:170;top:80;font-size: 26;color: #FFFFFF;">ID: <%=Eval("no")%></div>
             
             <pe:div style="position:relative;width:70;height:45;top:45;left:520;background: url(codepku/image/textures/friend/friend_apply/refuse.png);" name='<%=Eval("id")%>' onclick="ClickRefuse"></pe:div>
             <pe:div style="position:relative;width:70;height:45;top:45;left:640;background: url(codepku/image/textures/friend/friend_apply/agree.png);" name='<%=Eval("id")%>' onclick="ClickAgree"></pe:div>

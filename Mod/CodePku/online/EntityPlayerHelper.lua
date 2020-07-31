@@ -73,6 +73,7 @@ function EntityPlayerHelper:SetHeadOnDisplay()
     end
 
     local obj = player:GetInnerObject();
+    
 	System.ShowHeadOnDisplay(true, obj, username, color);	
 end
 

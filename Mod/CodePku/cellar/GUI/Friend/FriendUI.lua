@@ -55,6 +55,7 @@ function FriendUI:Search(nameorid)
     if (response.status == 200 and response.data.code == 200 and response.data.data) then
         FriendUI.vars["search"] = {
             friend_id = response.data.data.id,
+            no = response.data.data.no or "000000",
             nickname = response.data.data.nickname or response.data.data.mobile,
             gender = response.data.data.gender,
             head = response.data.data.avatar_url,
@@ -89,6 +90,7 @@ function FriendUI:GetApply()
                 FriendUI.vars["apply"][aindex] = {
                     index = index,
                     id = data.id,
+                    no = response.data.data.no or "000000",
                     friend_id = data.user.id,
                     nickname = data.user.nickname or string.sub(data.user.mobile,1,7),
                     gender = data.user.gender,
@@ -124,6 +126,7 @@ function FriendUI:GetFriend()
         for index, data in ipairs(response.data.data) do
             FriendUI.vars["friends"][index] = {
                 id = data.id,
+                no = response.data.data.no or "000000",
                 friend_id = data.friend.id,
                 nickname = data.friend.nickname or string.sub(data.friend.mobile,1,7),
                 gender = data.friend.gender,
@@ -169,6 +172,7 @@ function FriendUI:GetBlackList()
         for index, data in ipairs(response.data.data) do
             FriendUI.vars["blacklist"][index] = {
                 id = data.id,
+                no = response.data.data.no or "000000",
                 friend_id = data.friend.id,
                 nickname = data.friend.nickname or string.sub(data.friend.mobile,1,7),
                 gender = data.friend.gender,
