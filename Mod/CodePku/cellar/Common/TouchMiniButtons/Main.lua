@@ -7,6 +7,7 @@ local WorldCommon = commonlib.gettable("MyCompany.Aries.Creator.WorldCommon")
 local EntityManager = commonlib.gettable("MyCompany.Aries.Game.EntityManager")
 local MainSceneUIButtons = commonlib.gettable("Mod.CodePku.Common.TouchMiniButtons.MainSceneUIButtons");
 local GenAndName = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.GenAndName")
+local UserInfo = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.UserInfo")
 
 
 local MainUIButtons = NPL.export();
@@ -101,13 +102,13 @@ function MainUIButtons.show_interact_ui(obj)
 	end
 
 	
-	local username =  obj:GetUserName()
+	local username =  UserInfo.name
 	local displayname = obj:GetDisplayName()
 	local pname = username or displayname
 	pname = commonlib.utf8.sub(pname,1,length_limit)
 
 	info = obj:GetPlayerInfo()
-	if not info then
+	if not info or not info.userinfo then
 		return
 	end
 	pid = info.userinfo.id
