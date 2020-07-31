@@ -21,32 +21,30 @@ local page = document:GetPageCtrl()
 MainSceneUIButtons.page = page
 
 HistoricalMessages = {
-    [1] = {},
-    [2] = {channel=2}, -- 世界
-    [3] = {channel=3}, -- 附近
-    [4] = {},
+    [1] = {channel=2}, -- 世界
+    [2] = {channel=3}, -- 附近
+    [3] = {},
 
 }
 
 -- {"全部","世界","本地","公会","校园","系统","好友"}
 Channels = {
-    [1]={name="all_clicked",index=0},
-    [2]={name="world",index=1},
-    [3]={name="local",index=2},
-    -- [4]={name="group",index=3},
-    -- [5]={name="school",index=4},
-    -- [6]={name="system",index=5},
-    [4]={name="friends",index=3},
-            }
+    [1]={name="world_clicked",index=1, channel=2},
+    [2]={name="local",index=2, channel=3},
+    [3]={name="friends",index=3, channel=0},
+    ['world']=1,
+    ['local']=2,
+    ['friends']=3,
+}
 
 
 local sendable = true
 LAST_CLICKED_INDEX = 1
 FRIEND_IN_CHATTING = 1
+DEFAULT_AVATAR = 'codepku/image/textures/chat/default_avatar.png'
 
 friends = commonlib.deepcopy(FriendUI.vars["friends"])
 for i, v in ipairs(friends) do
-    echo(string.format('online ??  %s', v.is_online))
     v.index = i
     if i == 1 then
         FRIEND_IN_CHATTING = i
@@ -63,13 +61,29 @@ for i, v in ipairs(friends) do
                 else
                     speakerIsMe = 0
                 end
-                local msg_data = {speakerIsMe=speakerIsMe, dialog=v.content, avatar=v.from_user_avatar, nickname=v.from_user_nickname, level=v.level or 1, channel=v.channel, from=v.from_user_id, to=v.to_user_id}
-                table.insert(friends[FRIEND_IN_CHATTING], 0, msg_data)
+                local msg_data = {speakerIsMe=speakerIsMe, dialog=v.content, avatar=v.from_user_avatar or DEFAULT_AVATAR, nickname=v.from_user_nickname, level=v.level or 1, channel=v.channel, from=v.from_user_id, to=v.to_user_id}
+                table.insert(friends[FRIEND_IN_CHATTING], msg_data)
             end
             
         end
     else
         v.status = ''
+    end
+end
+
+response = request:get(string.format('/chat/channel-message/%d', HistoricalMessages[1].channel),nil,{sync = true})
+if response.data.code == 200 then
+    local data = response.data.data
+    for i, v in ipairs(data) do
+        v = v.raw
+        local speakerIsMe
+        if v.from_user_id == UserInfo.id then
+            speakerIsMe = 1
+        else
+            speakerIsMe = 0
+        end
+        local msg_data = {speakerIsMe=speakerIsMe, dialog=v.content, avatar=v.from_user_avatar or DEFAULT_AVATAR, nickname=v.from_user_nickname, level=v.level or 1, channel=v.channel}
+        table.insert(HistoricalMessages[1], msg_data)
     end
 end
 
@@ -79,7 +93,6 @@ function OnClose()
 end
 
 function OnClickChannel(index)
-    index = index + 1
     if index ~= LAST_CLICKED_INDEX then
         Channels[LAST_CLICKED_INDEX].name = string.gsub(Channels[LAST_CLICKED_INDEX].name, '_clicked', '')
         LAST_CLICKED_INDEX = index
@@ -87,7 +100,6 @@ function OnClickChannel(index)
         if #HistoricalMessages[index] == 0 then
             if HistoricalMessages[index].channel then
                 response = request:get(string.format('/chat/channel-message/%d', HistoricalMessages[index].channel),nil,{sync = true})
-                echo(#response.data.data)
                 if response.data.code == 200 then
                     local data = response.data.data
                     for i, v in ipairs(data) do
@@ -98,8 +110,8 @@ function OnClickChannel(index)
                         else
                             speakerIsMe = 0
                         end
-                        local msg_data = {speakerIsMe=speakerIsMe, dialog=v.content, avatar=v.from_user_avatar or '', nickname=v.from_user_nickname, level=v.level or 1, channel=v.channel}
-                        table.insert(HistoricalMessages[index],0, msg_data)
+                        local msg_data = {speakerIsMe=speakerIsMe, dialog=v.content, avatar=v.from_user_avatar or DEFAULT_AVATAR, nickname=v.from_user_nickname, level=v.level or 1, channel=v.channel}
+                        table.insert(HistoricalMessages[index], msg_data)
                     end
                 end
             end
@@ -126,7 +138,6 @@ function OnClickSend()
         GameLogic.RunCommand("/tip -duration 1500 内容上限30个字")
         return 
     end
-    echo(string.format('SENDABLE:  %s', sendable))
     if not sendable then
         GameLogic.RunCommand("/tip -duration 1500 发言太频繁，请稍后尝试")
         return
@@ -145,19 +156,17 @@ function OnClickSend()
         end
     })
     timer:Change(1000, 1000)
-    echo(string.format('DialogContent: %s', words))
-    if LAST_CLICKED_INDEX == 2 or LAST_CLICKED_INDEX == 1 then -- 全部/世界
+    if LAST_CLICKED_INDEX == 1 then -- 世界
         CodepkuChatChannel.SendWorldMsg(words)
-    elseif LAST_CLICKED_INDEX == 3 then -- 附近
+    elseif LAST_CLICKED_INDEX == 2 then -- 附近
         CodepkuChatChannel.SendNearByMsg(words)  
-    elseif LAST_CLICKED_INDEX ==4 then -- 私聊
+    elseif LAST_CLICKED_INDEX == 3 then -- 私聊
         CodepkuChatChannel.SendToFriend(friends[FRIEND_IN_CHATTING], words)     
     end
     Page:Refresh(0.5)
 end
 
 function OnClickFriend(index)
-    echo(string.format('OnClickFriend FRIEND_IN_CHATTING:  %s  index:  %d', FRIEND_IN_CHATTING, index))
     if FRIEND_IN_CHATTING ~= index then
         friends[FRIEND_IN_CHATTING].status = ''        
         FRIEND_IN_CHATTING = index
@@ -166,21 +175,17 @@ function OnClickFriend(index)
         local response = request:get(string.format('/chat/private-message/%d', friend_id),nil,{sync = true})
         if response.data.code == 200 then
             local data = response.data.data
-            echo(string.format('friend chat log friend_id: %s LENGTH: %s', friend_id, #data))
             for i, v in ipairs(data) do
                 v = v.raw
-                echo(string.format('CONTENT: %s', v.content))
                 local speakerIsMe
                 if v.from_user_id == UserInfo.id then
                     speakerIsMe = 1
                 else
                     speakerIsMe = 0
                 end
-                local msg_data = {speakerIsMe=speakerIsMe, dialog=v.content, avatar=v.from_user_avatar, nickname=v.from_user_nickname, level=v.level or 1, channel=v.channel, from=v.from_user_id, to=v.to_user_id}
-                table.insert(friends[index], 0, msg_data)
+                local msg_data = {speakerIsMe=speakerIsMe, dialog=v.content, avatar=v.from_user_avatar or DEFAULT_AVATAR, nickname=v.from_user_nickname, level=v.level or 1, channel=v.channel, from=v.from_user_id, to=v.to_user_id}
+                table.insert(friends[index], msg_data)
             end
-            echo('friends LENGTH:  ')
-            echo(#friends[index])
         end
         Page:Refresh(0)
     end
@@ -188,20 +193,17 @@ end
 
 function GetMessages()
     local Messages = commonlib.deepcopy(HistoricalMessages[LAST_CLICKED_INDEX])
-    if LAST_CLICKED_INDEX == 4 then
+    if LAST_CLICKED_INDEX == 3 then
         Messages = commonlib.deepcopy(friends[FRIEND_IN_CHATTING])
     end
     for i, v in ipairs(CodepkuChatChannel.Messages) do
-        if LAST_CLICKED_INDEX == 4 then
+        if LAST_CLICKED_INDEX == 3 then
             
-            echo('MESSAGES LENGTH:  ')
-            echo(#Messages)
             local f_id = friends[FRIEND_IN_CHATTING].friend_id
-            echo(string.format('from : %s  to: %s friend_id: %s', v.from, v.to, friends[FRIEND_IN_CHATTING].friend_id))
             if v.from == f_id or v.to == f_id then
                 table.insert(Messages, v)
             end
-        elseif v and (LAST_CLICKED_INDEX== 1 or v.channel == LAST_CLICKED_INDEX) then
+        elseif v and v.channel == Channels[LAST_CLICKED_INDEX].channel then
             table.insert(Messages, v)
         end
     end
@@ -209,7 +211,6 @@ function GetMessages()
 end
 
 function GetFriends()
-    echo(string.format('GetFriends length:  %d', #friends))
     return friends
 end
 
@@ -224,13 +225,13 @@ end
         <div style="width: 960;height: 100;">
             <pe:repeat DataSource="<%=Channels%>">
                 <pe:repeatitem>
-                    <div style="<%=format('width: 100;height:60;position:relative;left:%d;margin:20;background:url(codepku/image/textures/chat/%s.png)', Eval('index')*135, Eval('name'))%>" name="<%=Eval('index')%>" onclick="OnClickChannel"></div>
+                    <div style="<%=format('width: 100;height:60;position:relative;left:%d;margin:20;background:url(codepku/image/textures/chat/%s.png)', (Eval('index')-1)*135, Eval('name'))%>" name="<%=Eval('index')%>" onclick="OnClickChannel"></div>
                 </pe:repeatitem>
             </pe:repeat>
         </div>
         <!-- 显示栏 -->
         <div style="width: 960;height:850;">
-            <pe:if condition="<%=LAST_CLICKED_INDEX~=4%>">
+            <pe:if condition="<%=LAST_CLICKED_INDEX~=3%>">
                 <pe:treeview style="width: 900; height: 800" name='messages' DefaultNodeHeight = "120" ItemsPerLine="1" AllowPaging="false" RememberScrollPos="true" RememberLastPage="false" VerticalScrollBarStep="40">
                     <pe:repeat  DataSource="<%=GetMessages()%>">
                         <pe:repeatitem>                
@@ -260,7 +261,7 @@ end
                 </pe:treeview>
             </pe:if>
             <!-- 好友聊天栏 -->
-            <pe:if condition="<%=LAST_CLICKED_INDEX==4%>">
+            <pe:if condition="<%=LAST_CLICKED_INDEX==3%>">
                 <div style="width: 200; height: 845;background: url(codepku/image/textures/chat/friend_left.png);">
                 <pe:treeview VerticalScrollBarStep="40"  VerticalScrollBarPageSize="400" RememberScrollPos="true" RememberLastPage="true" >
                     <pe:repeat DataSource="<%=GetFriends()%>">

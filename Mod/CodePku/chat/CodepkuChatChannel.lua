@@ -65,7 +65,7 @@ CodepkuChatChannel.worldId_pending = nil;
 CodepkuChatChannel.worldId = nil;
 CodepkuChatChannel.client = nil;
 CodepkuChatChannel.Messages = {}
-CodepkuChatChannel.last_chatted_friend = nil
+CodepkuChatChannel.UserOnlineStatus = {}
 
 function CodepkuChatChannel.StaticInit()
     LOG.std("", "info", "CodepkuChatChannel", "StaticInit");
@@ -194,10 +194,13 @@ function CodepkuChatChannel.OnMsg(self, msg)
     end
     msg = msg.data;
     local speakerIsMe = if_else(msg.from_user_id == UserInfo.id, 1, 0)
-    local avatar = msg.from_user_avatar
+    local avatar = msg.from_user_avatar or 'codepku/image/textures/chat/default_avatar.png'
     local action = tonumber(msg.action);
     if (action == messageActionsMap.status) then
         -- 上线通知 下线通知
+        local status = if_else(msg.status == 'ONLINE', true, false)
+        CodepkuChatChannel.UserOnlineStatus[msg.user_id] = status
+
         for i ,v in ipairs(FriendUI.vars["friends"]) do
             if v.friend_id == msg.user_id then
                 status = if_else(msg.status == 'ONLINE', true, false)
