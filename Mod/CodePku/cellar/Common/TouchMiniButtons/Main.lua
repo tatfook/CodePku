@@ -96,7 +96,7 @@ function MainUIButtons.show_interact_ui(obj)
 	local x, y, z = obj:GetPosition()
 	local px, py, pz = EntityManager.GetPlayer():GetPosition()
 	if(math.abs(x-px) > distance or math.abs(y-py) > distance or math.abs(z-pz) > distance) then
-		GameLogic.AddBBS("CodeGlobals", L"距离玩家过远，走进点再尝试。", 3000, "#ff0000");
+		GameLogic.AddBBS("CodeGlobals", L"距离玩家过远，走近点再尝试。", 3000, "#ff0000");
 		return
 	end
 
