@@ -24,9 +24,10 @@
                 end
 
                 function currentUserName()
-                    local username = CodePkuService:GetAccount()
+                    local userinfo = Mod.CodePku.Store:Get('user/info');
+                    local nickname = userinfo.nickname or userinfo.username or userinfo.mobile;
                     LOG.std(nil, "info", "codepku", username)
-                    return username
+                    return nickname;
                 end
 
                 function logout()
