@@ -11,18 +11,15 @@ function TopicEntrencePage.GetCourse(subject_id)
         courses = d.course_wares
         a = 0
         for ii, c in ipairs(courses) do
-            l = {}
-            l['img'] = c.cover_file.file_url
-            l['id'] = c.keepwork_project_id
-            l['name'] = c.name
-            l['index'] = a % 10
             if c.is_open then
-                l['is_open'] = 1
-            else
-                l['is_open'] = 0
+                l = {}
+                l['img'] = c.cover_file.file_url
+                l['id'] = c.keepwork_project_id
+                l['name'] = c.name
+                l['index'] = a % 10
+                a = a + 1
+                table.insert(list, l)
             end
-            a = a + 1
-            table.insert(list, l)
         end
     end
     if response.data.code == 200 then
