@@ -62,7 +62,7 @@ for i, v in ipairs(friends) do
                     speakerIsMe = 0
                 end
                 local msg_data = {speakerIsMe=speakerIsMe, dialog=v.content, avatar=v.from_user_avatar or DEFAULT_AVATAR, nickname=v.from_user_nickname, level=v.level or 1, channel=v.channel, from=v.from_user_id, to=v.to_user_id}
-                table.insert(friends[FRIEND_IN_CHATTING], msg_data)
+                table.insert(friends[FRIEND_IN_CHATTING], 1, msg_data)
             end
             
         end
@@ -83,7 +83,7 @@ if response.data.code == 200 then
             speakerIsMe = 0
         end
         local msg_data = {speakerIsMe=speakerIsMe, dialog=v.content, avatar=v.from_user_avatar or DEFAULT_AVATAR, nickname=v.from_user_nickname, level=v.level or 1, channel=v.channel}
-        table.insert(HistoricalMessages[1], msg_data)
+        table.insert(HistoricalMessages[1], 1, msg_data)
     end
 end
 
@@ -111,12 +111,12 @@ function OnClickChannel(index)
                             speakerIsMe = 0
                         end
                         local msg_data = {speakerIsMe=speakerIsMe, dialog=v.content, avatar=v.from_user_avatar or DEFAULT_AVATAR, nickname=v.from_user_nickname, level=v.level or 1, channel=v.channel}
-                        table.insert(HistoricalMessages[index], msg_data)
+                        table.insert(HistoricalMessages[index], 1, msg_data)
                     end
                 end
             end
         end
-        Page:Refresh(0)
+        Page:Refresh()
     end
 end
 
@@ -184,10 +184,10 @@ function OnClickFriend(index)
                     speakerIsMe = 0
                 end
                 local msg_data = {speakerIsMe=speakerIsMe, dialog=v.content, avatar=v.from_user_avatar or DEFAULT_AVATAR, nickname=v.from_user_nickname, level=v.level or 1, channel=v.channel, from=v.from_user_id, to=v.to_user_id}
-                table.insert(friends[index], msg_data)
+                table.insert(friends[index], 1, msg_data)
             end
         end
-        Page:Refresh(0)
+        Page:Refresh()
     end
 end
 
