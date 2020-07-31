@@ -35,6 +35,6 @@ function CodePkuService:GetToken()
 end
 
 function CodePkuService:GetAccount()
-    local account = Mod.CodePku.Store:Get('user/username') or System.User.username
+    local account = Mod.CodePku.Store:Get('user/nickname') or System.User.nickname or System.User.mobile;
     return account or ''
 end
