@@ -78,6 +78,14 @@ function CodepkuChatChannel.StaticInit()
     GameLogic.GetFilters():add_filter("OnCodepkuLogout", CodepkuChatChannel.OnCodepkuLogout_Callback)    
 end
 
+function CodepkuChatChannel.SetMessage(message)
+    if #CodepkuChatChannel.Messages > 50 then
+        table.remove(CodepkuChatChannel.Messages,#CodepkuChatChannel.Messages)
+    end
+
+    table.insert( CodepkuChatChannel.Messages, message)
+end
+
 function CodepkuChatChannel.OnWorldLoaded()
     -- local id = WorldCommon.GetWorldTag("kpProjectId");
     -- 课件id
@@ -207,11 +215,13 @@ function CodepkuChatChannel.OnMsg(self, msg)
             -- todo 系统通知
         elseif (channel == channelsMap.world) then 
             msg_data = {speakerIsMe=speakerIsMe, dialog=msg.content, avatar=avatar, nickname=msg.from_user_nickname, level=msg.level or 1, channel=msg.channel}
-            table.insert( CodepkuChatChannel.Messages, msg_data)
+            -- table.insert( CodepkuChatChannel.Messages, msg_data)
+            CodepkuChatChannel.SetMessage(msg_data);
             -- todo 频道:世界
         elseif (channel == channelsMap.nearby) then
             msg_data = {speakerIsMe=speakerIsMe, dialog=msg.content, avatar=avatar, nickname=msg.from_user_nickname, level=msg.level or 1, channel=msg.channel}
-            table.insert( CodepkuChatChannel.Messages, msg_data)
+            -- table.insert( CodepkuChatChannel.Messages, msg_data)
+            CodepkuChatChannel.SetMessage(msg_data);
         elseif (channel == channelsMap.guild) then
             -- todo 频道:工会
         elseif (channel == channelsMap.school) then
@@ -219,7 +229,8 @@ function CodepkuChatChannel.OnMsg(self, msg)
         elseif (channel == channelsMap.private_chat) then
             -- 私聊
             msg_data = {speakerIsMe=speakerIsMe, dialog=msg.content, avatar=avatar, nickname=msg.from_user_nickname, level=msg.level or 1, channel=msg.channel, from=msg.from_user_id, to=msg.to_user_id}
-            table.insert( CodepkuChatChannel.Messages, msg_data)
+            -- table.insert( CodepkuChatChannel.Messages, msg_data)
+            CodepkuChatChannel.SetMessage(msg_data);
         end
     end
     if MainSceneUIButtons.page then
@@ -444,7 +455,8 @@ function CodepkuChatChannel.SendToFriend(friend, words)
         };
         echo(string.format( "CodepkuChatChannel.SendToFriend from :  %s  to:  %s", UserInfo.id, to_user_id))
         msg_data = {speakerIsMe=1, dialog=worldMsg.content, avatar=worldMsg.from_user_avatar, nickname=worldMsg.from_user_nickname, level=worldMsg.level or 1, channel=worldMsg.channel, from=worldMsg.from_user_id, to=worldMsg.to_user_id}
-        table.insert( CodepkuChatChannel.Messages, msg_data)
+        -- table.insert( CodepkuChatChannel.Messages, msg_data)
+        CodepkuChatChannel.SetMessage(msg_data);
         CodepkuChatChannel.client:SendMsg(worldMsg); 
     end
 end

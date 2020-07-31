@@ -83,13 +83,14 @@ function SystemLevelPage.GetLevels(grade_id, semester_id, subject_id)
         for i, d in ipairs(data) do
             courses = d.course_wares
             for ii, c in ipairs(courses) do
-                
-                l = {}
-                l['cover'] = c.cover_file.file_url
-                l['course'] = c
-                l['index'] = a % 10
-                a = a + 1
-                table.insert(list, l)
+                if c.is_open == true then
+                    l = {}
+                    l['cover'] = c.cover_file.file_url
+                    l['course'] = c
+                    l['index'] = a % 10
+                    a = a + 1
+                    table.insert(list, l)
+                end
             end
         end
     SystemLevelPage.total_courses = #list
