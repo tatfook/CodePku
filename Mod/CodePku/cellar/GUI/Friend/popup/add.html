@@ -34,10 +34,10 @@ function isOnline()
 end
 
 function getName()
-    if(#mytable.nickname <= 7) then
-        return mytable.nickname
-    else
+    if mytable.nickname then
         return commonlib.utf8.sub(mytable.nickname,1,7)
+    else
+        return ""
     end
 end
 
