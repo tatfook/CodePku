@@ -68,7 +68,7 @@ function EntityPlayerHelper:SetHeadOnDisplay()
     Log:Info("username: %s, state: %s, vip: %s", username, state, isVip);
 
     local color = MyHeadOnTextColor;
-    if self.isMainPlayer then
+    if not self.isMainPlayer then
         color = RandomHeadOnTextColors[math.random(#RandomHeadOnTextColors)]
     end
 
