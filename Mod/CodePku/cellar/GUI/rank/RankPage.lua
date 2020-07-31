@@ -30,7 +30,7 @@ function RankPage.GetSubjectItem(id, range)
     for i, d in ipairs(data) do
         l = {}
         l['name'] = d.user.nickname
-        l['score'] = d.total_exp
+        l['score'] = d.current_level..'级'
         l['rank'] = i
         table.insert(list, l)
         if d.current_user == 1 then
