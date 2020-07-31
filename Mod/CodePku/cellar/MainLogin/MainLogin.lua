@@ -130,14 +130,17 @@ function MainLogin:LoginAction(methodIndex)
     end
 
     local account = MainLoginPage:GetValue("account")
+    local mobileToken = MainLoginPage:GetValue('mobile_token')
+    local verifyCode = MainLoginPage:GetValue("verify_code")
+    local password = MainLoginPage:GetValue('password')
+    local agree = MainLoginPage:GetValue("agree")
+
     if not account or account == "" then
         GameLogic.AddBBS(nil, L"请输入手机号码", 3000, "255 0 0", 21)
         return false
     end
 
     if (methodIndex ~= 2) then
-        local mobileToken = MainLoginPage:GetValue('mobile_token')
-        local verifyCode = MainLoginPage:GetValue("verify_code")
         if not mobileToken or mobileToken == "" then
             GameLogic.AddBBS(nil, L"请先获取验证码", 3000, "255 0 0", 21)
             return false
@@ -147,14 +150,12 @@ function MainLogin:LoginAction(methodIndex)
             return false
         end
     else
-        local password = MainLoginPage:GetValue('password')
         if not password or password == "" then
             GameLogic.AddBBS(nil, L"请输入密码", 3000, "255 0 0", 21)
             return false
         end
     end
 
-    local agree = MainLoginPage:GetValue("agree")
     if not agree then
         GameLogic.AddBBS(nil, L"请同意用户协议", 3000, "255 0 0", 21)
         return false
@@ -186,10 +187,7 @@ function MainLogin:LoginAction(methodIndex)
         end
     end
 
-    account = MainLoginPage:GetValue("account")
     if (methodIndex ~= 2) then
-        mobileToken = MainLoginPage:GetValue('mobile_token')
-        verifyCode = MainLoginPage:GetValue("verify_code")
         CodePkuServiceSession:Login(
             account,
             verifyCode,
@@ -205,7 +203,7 @@ function MainLogin:LoginAction(methodIndex)
     else
         CodePkuServiceSession:LoginWithPwd(
             account,
-            MainLoginPage:GetValue('password'),
+            password,
             function(response, err)
                 if err == 503 then
                     Mod.CodePku.MsgBox:Close()
