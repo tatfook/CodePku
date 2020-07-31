@@ -102,7 +102,7 @@ function MainUIButtons.show_interact_ui(obj)
 	end
 
 	
-	local username =  UserInfo.name
+	local username =  obj:GetUserName()
 	local displayname = obj:GetDisplayName()
 	local pname = username or displayname
 	pname = commonlib.utf8.sub(pname,1,length_limit)
