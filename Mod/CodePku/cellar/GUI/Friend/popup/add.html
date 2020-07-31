@@ -13,7 +13,6 @@
 <![CDATA[
 local FriendUI = commonlib.gettable("Mod.CodePku.GUI.FriendUI")
 
-online_color = "#00ff22"
 mytable = {
     friend_id = FriendUI.vars.search.friend_id,
     nickname = FriendUI.vars.search.nickname,
@@ -28,8 +27,15 @@ function isOnline()
     if(mytable.is_online)then
         return "在线"
     else
-        online_color = "#f13709"
         return "离线"
+    end
+end
+
+function getNameColor()
+    if(mytable.is_online)then
+        return "#00ff22"
+    else
+        return "#f13709"
     end
 end
 
@@ -74,12 +80,12 @@ end
 
         <div style="position:relative; left: 190; top: 10; ">
             <div style="height:40; font-size: 40;float: left; color: #ffffff;"><%=getName()%></div>
-            <pe:if condition="<%=mytable.gender ~=0%>">
+            <pe:if condition="<%=mytable.gender and mytable.gender ~=0%>">
             <div style='<%=format("width:37; height:37; top: 2; left: 10; float: left; background: url(codepku/image/textures/friend/item/%s.png);", mytable.gender)%>'></div>
             </pe:if>
         </div>
     
-        <div style='<%=format("position:relative;width:200; height:40; left:190;top:80;font-size: 35; font-weight: bold; color: %s;", online_color )%>'><%=isOnline()%></div>
+        <div style='<%=format("position:relative;width:200; height:40; left:190;top:80;font-size: 35; font-weight: bold; color: %s;", getNameColor() )%>'><%=isOnline()%></div>
 
         
         <div style="position:relative;width:65;height:45;top:50;left:500;background: url(codepku/image/textures/friend/my_friend/chat.png);" name='<%=mytable.friend_id%>' onclick="ClickChat"></div>
