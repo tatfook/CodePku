@@ -49,10 +49,33 @@ FriendUI.popparams={
 FriendUI.vars = {}
 
 
-function FriendUI:Search(nameorid)
+function FriendUI:Search(keyword)
     local request = NPL.load("(gl)Mod/CodePku/api/BaseRequest.lua");
-    local response = request:get('/users/search?keyword='..nameorid,nil,{sync = true})
-    if (response.status == 200 and response.data.code == 200 and response.data.data and #response.data.data > 0) then
+    -- local response = request:get('/users/search?keyword='..nameorid,nil,{sync = true})
+    -- echo("search response")
+    --     echo(response.data.data);
+    --     echo(response.data.code);
+    --     echo(#response.data.data);
+    --     echo(response.status == 200);
+    --     echo(response.data.code == 200);
+    --     echo(#response.data.data > 0);
+
+    -- if (response.status == 200 and response.data.code == 200 and response.data.data and #response.data.data > 0) then
+        
+    --     FriendUI.vars["search"] = {
+    --         friend_id = response.data.data.id,
+    --         no = response.data.data.no or "000000",
+    --         nickname = response.data.data.nickname or response.data.data.mobile,
+    --         gender = response.data.data.gender,
+    --         head = response.data.data.avatar_url,
+    --         is_online = response.data.data.is_online or false,
+    --         last_time = response.data.data.last_login_at, 
+    --     }
+    -- else
+    --     FriendUI.vars["search"] = nil;
+    -- end
+
+    request:get('/users/search',{keyword=keyword}):next(function(response)
         FriendUI.vars["search"] = {
             friend_id = response.data.data.id,
             no = response.data.data.no or "000000",
@@ -62,9 +85,12 @@ function FriendUI:Search(nameorid)
             is_online = response.data.data.is_online or false,
             last_time = response.data.data.last_login_at, 
         }
-    else
+
+        FriendUI:ShowPopup(2)
+    end):catch(function(e)
+        GameLogic.AddBBS("CodeGlobals", L"找不到符合要求的用户", 3000, "#00FF00");
         FriendUI.vars["search"] = nil;
-    end
+    end);
 end
 
 

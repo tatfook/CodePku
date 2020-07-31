@@ -67,10 +67,10 @@ function Axios.request(self, ...)
     end
 
     if config.query then
-        options.url = NPL.EncodeURLQuery(options.url, options.query);
+        config.url = NPL.EncodeURLQuery(config.url, config.query);
         config.query = nil;
     elseif config.params then
-        options.url = NPL.EncodeURLQuery(options.url, options.params);
+        config.url = NPL.EncodeURLQuery(config.url, config.params);
         config.params = nil;
     end
 
@@ -90,6 +90,8 @@ function Axios.request(self, ...)
     end);
 
     -- Log.info('### request config ###',config);
+   echo('### request config ###',config);
+   echo(config);
 
     local request = nil;
 
@@ -104,7 +106,9 @@ function Axios.request(self, ...)
             config = config
         };
 
-        -- Log.info('### sync request response ###',request);
+        -- Log.info('### sync request response ###',request);\
+        echo('### sync request response ###',response)
+        echo(response)
     else
         request = Promise.new(function(resolve, reject)
             System.os.GetUrl(config, function(status, headers, data)
@@ -116,6 +120,9 @@ function Axios.request(self, ...)
                 };
 
                 -- Log.info('### async request response ###',response);
+
+                echo('### async request response ###',response)
+                echo(response)
 
                 if status >= 200 and status < 300 then
                     resolve(response);
