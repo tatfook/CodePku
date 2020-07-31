@@ -42,7 +42,7 @@ function UserInfoPage.GetUserInfo()
     response = request:get('/users/profile',nil,{sync = true})
     if response.status == 200 then
         data = response.data.data
-        UserInfo.name = data.nickname or data.mobile
+        UserInfo.name = data.nickname or data.no
         UserInfo.id = data.id
         UserInfo.gender = data.gender
         local _, _, y, m, d, _hour, _min, _sec = string.find(data.created_at, "(%d+)-(%d+)-(%d+)%s*(%d+):(%d+):(%d+)");
