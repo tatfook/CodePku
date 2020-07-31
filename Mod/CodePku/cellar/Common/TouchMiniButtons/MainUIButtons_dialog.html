@@ -284,8 +284,8 @@ end
                     </pe:repeat>
                 </pe:treeview>
             </div>
-                <div style="width:760;height:850;margin-left: 200;margin-top: -850;">
-                    <pe:treeview style="width: 850; height: 800" name='messages' DefaultNodeHeight = "120" ItemsPerLine="1" AllowPaging="false" RememberScrollPos="true" RememberLastPage="true" VerticalScrollBarStep="40">
+                <div style="width:700;height:850;margin-left: 200;margin-top: -850;">
+                    <pe:treeview style="width: 740; height: 800" name='messages' DefaultNodeHeight = "120" ItemsPerLine="1" AllowPaging="false" RememberScrollPos="true" RememberLastPage="true" VerticalScrollBarStep="40">
                         <pe:repeat  DataSource="<%=GetMessages()%>">
                             <pe:repeatitem>                
                                     <pe:if condition="<%=Eval('speakerIsMe')==0%>">
