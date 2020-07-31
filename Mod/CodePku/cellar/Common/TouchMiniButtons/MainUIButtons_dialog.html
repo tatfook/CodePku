@@ -171,20 +171,22 @@ function OnClickFriend(index)
         friends[FRIEND_IN_CHATTING].status = ''        
         FRIEND_IN_CHATTING = index
         friends[index].status = '_clicked'
-        friend_id = friends[FRIEND_IN_CHATTING].friend_id
-        local response = request:get(string.format('/chat/private-message/%d', friend_id),nil,{sync = true})
-        if response.data.code == 200 then
-            local data = response.data.data
-            for i, v in ipairs(data) do
-                v = v.raw
-                local speakerIsMe
-                if v.from_user_id == UserInfo.id then
-                    speakerIsMe = 1
-                else
-                    speakerIsMe = 0
+        if #friends[index] == 0 then
+            friend_id = friends[FRIEND_IN_CHATTING].friend_id
+            local response = request:get(string.format('/chat/private-message/%d', friend_id),nil,{sync = true})
+            if response.data.code == 200 then
+                local data = response.data.data
+                for i, v in ipairs(data) do
+                    v = v.raw
+                    local speakerIsMe
+                    if v.from_user_id == UserInfo.id then
+                        speakerIsMe = 1
+                    else
+                        speakerIsMe = 0
+                    end
+                    local msg_data = {speakerIsMe=speakerIsMe, dialog=v.content, avatar=v.from_user_avatar or DEFAULT_AVATAR, nickname=v.from_user_nickname, level=v.level or 1, channel=v.channel, from=v.from_user_id, to=v.to_user_id}
+                    table.insert(friends[index], 1, msg_data)
                 end
-                local msg_data = {speakerIsMe=speakerIsMe, dialog=v.content, avatar=v.from_user_avatar or DEFAULT_AVATAR, nickname=v.from_user_nickname, level=v.level or 1, channel=v.channel, from=v.from_user_id, to=v.to_user_id}
-                table.insert(friends[index], 1, msg_data)
             end
         end
         Page:Refresh()

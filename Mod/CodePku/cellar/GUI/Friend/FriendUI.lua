@@ -131,7 +131,7 @@ function FriendUI:GetFriend()
                 nickname = data.friend.nickname or commonlib.utf8.sub(data.friend.mobile,1,7),
                 gender = data.friend.gender,
                 head = data.friend.avatar_url,
-                is_online = data.friend.is_online or false,
+                is_online = data.is_online or false,
                 last_time = data.friend.last_login_at, 
                 remark = data.remark,
             }
