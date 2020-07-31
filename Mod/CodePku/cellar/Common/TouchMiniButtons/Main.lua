@@ -107,6 +107,9 @@ function MainUIButtons.show_interact_ui(obj)
 	pname = commonlib.utf8.sub(pname,1,length_limit)
 
 	info = obj:GetPlayerInfo()
+	if not info then
+		return
+	end
 	pid = info.userinfo.id
 	
 	width = 1920

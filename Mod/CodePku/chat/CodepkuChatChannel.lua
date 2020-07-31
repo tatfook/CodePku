@@ -387,7 +387,6 @@ function CodepkuChatChannel.SendWorldMsg(words)
     if(not words)then
         return
     end
-    echo(string.format( "SEND:   %s", UserInfo.avatar ))
     local worldMsg = {
 
         from_user_id = UserInfo.id,
