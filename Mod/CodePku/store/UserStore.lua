@@ -30,7 +30,7 @@ function UserStore:Action()
             self.mobile = user.mobile
             self.info = user
 
-            commonlib.setfield("System.User.codepkuToken", token)
+            commonlib.setfield("System.User.codepkuToken", token or System.User.codepkuToken)
             commonlib.setfield("System.User.mobile", user.mobile)
             commonlib.setfield("System.User.username", user.mobile)
             commonlib.setfield('System.User.id', user.id)
