@@ -217,12 +217,12 @@ function CodepkuChatChannel.OnMsg(self, msg)
         if (channel == channelsMap.system) then
             -- todo 系统通知
         elseif (channel == channelsMap.world) then 
-            msg_data = {speakerIsMe=speakerIsMe, dialog=msg.content, avatar=avatar, nickname=msg.from_user_nickname, level=msg.level or 1, channel=msg.channel}
+            msg_data = {speakerIsMe=speakerIsMe, dialog=msg.content, avatar=avatar, nickname=msg.from_user_nickname, level=msg.from_user_level or 1, channel=msg.channel}
             -- table.insert( CodepkuChatChannel.Messages, msg_data)
             CodepkuChatChannel.SetMessage(msg_data);
             -- todo 频道:世界
         elseif (channel == channelsMap.nearby) then
-            msg_data = {speakerIsMe=speakerIsMe, dialog=msg.content, avatar=avatar, nickname=msg.from_user_nickname, level=msg.level or 1, channel=msg.channel}
+            msg_data = {speakerIsMe=speakerIsMe, dialog=msg.content, avatar=avatar, nickname=msg.from_user_nickname, level=msg.from_user_level or 1, channel=msg.channel}
             -- table.insert( CodepkuChatChannel.Messages, msg_data)
             CodepkuChatChannel.SetMessage(msg_data);
         elseif (channel == channelsMap.guild) then
@@ -231,7 +231,7 @@ function CodepkuChatChannel.OnMsg(self, msg)
             -- todo 频道: 学校
         elseif (channel == channelsMap.private_chat) then
             -- 私聊
-            msg_data = {speakerIsMe=speakerIsMe, dialog=msg.content, avatar=avatar, nickname=msg.from_user_nickname, level=msg.level or 1, channel=msg.channel, from=msg.from_user_id, to=msg.to_user_id}
+            msg_data = {speakerIsMe=speakerIsMe, dialog=msg.content, avatar=avatar, nickname=msg.from_user_nickname, level=msg.from_user_level or 1, channel=msg.channel, from=msg.from_user_id, to=msg.to_user_id}
             -- table.insert( CodepkuChatChannel.Messages, msg_data)
             CodepkuChatChannel.SetMessage(msg_data);
         end
@@ -392,6 +392,7 @@ function CodepkuChatChannel.SendWorldMsg(words)
         from_user_id = UserInfo.id,
         from_user_nickname = UserInfo.name,
         from_user_avatar = UserInfo.avatar,
+        from_user_level = UserInfo.self_level.current_level,
         channel = channelsMap.world,
         courseware_id=1, --todo
         type=messageTypeMap.text,
@@ -407,18 +408,13 @@ function CodepkuChatChannel.SendNearByMsg(words)
     if(not words)then
         return
     end
-    echo('CodepkuChatChannel.SendNearByMsg')
     pos_x, pos_y, pos_z = EntityManager.GetPlayer():GetPosition()
-    echo(pos_x)
-    echo(pos_y)
-    echo(pos_z)
-    echo('==============')
-    echo(UserInfo.id)
     local nearByMsg = {
         from_user_id = UserInfo.id,
         from_user_nickname = UserInfo.name,
         from_user_avatar = UserInfo.avatar,
         from_user_position = {x=pos_x, y=pos_y, z=pos_z},
+        from_user_level = UserInfo.self_level.current_level,
         channel = channelsMap.nearby,
         courseware_id=1, --todo
         type=messageTypeMap.text,
@@ -449,6 +445,7 @@ function CodepkuChatChannel.SendToFriend(friend, words)
             from_user_id = UserInfo.id,
             from_user_nickname = UserInfo.name,
             from_user_avatar = UserInfo.avatar,
+            from_user_level = UserInfo.self_level.current_level,
             channel = channelsMap.private_chat,
             courseware_id=1, --todo
             type=messageTypeMap.text,
