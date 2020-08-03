@@ -6,8 +6,17 @@ local Log = NPL.load("(gl)Mod/CodePku/util/Log.lua");
 local WorldCommon = commonlib.gettable("MyCompany.Aries.Creator.WorldCommon")
 local EntityManager = commonlib.gettable("MyCompany.Aries.Game.EntityManager")
 local MainSceneUIButtons = commonlib.gettable("Mod.CodePku.Common.TouchMiniButtons.MainSceneUIButtons");
+local GenAndName = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.GenAndName")
+local UserInfo = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.UserInfo")
+
 
 local MainUIButtons = NPL.export();
+
+MainUIButtons.hasshown = false
+
+MainUIButtons.common_window = nil
+MainUIButtons.function_window = nil
+MainUIButtons.dialog_window = nil
 
 function MainUIButtons.show_common_ui()
 	local width = 410
@@ -17,7 +26,7 @@ function MainUIButtons.show_common_ui()
 		url="Mod/CodePku/cellar/Common/TouchMiniButtons/MainUIButtons_common.html", 
 		alignment="_lt", left = 0, top = 0, width = width, height = height,
 	}
-	local window = AdaptWindow:QuickWindow(params)
+	MainUIButtons.common_window = AdaptWindow:QuickWindow(params)
 end
 
 
@@ -30,37 +39,53 @@ function MainUIButtons.show_function_ui()
 		alignment="_rb", left = -width, top = -height, width = width, height = height,
 		click_through = true,
 	}
-	local window = AdaptWindow:QuickWindow(params)
+	MainUIButtons.function_window = AdaptWindow:QuickWindow(params)
 end
 
 
 function MainUIButtons.show_dialog_ui(bshow)
-	MainSceneUIButtons.show_dialog_ui(bshow)
+	MainUIButtons.dialog_window = MainSceneUIButtons.show_dialog_ui(bshow)
 end
 
 
 function MainUIButtons.ShowPage()
+	local show = false
 	if System.Codepku and System.Codepku.Coursewares and System.Codepku.Coursewares.category then 
 		local wid = System.Codepku.Coursewares.category
 
 		local worldtable = {3}
 
-		local show = false
 		for _, v in ipairs(worldtable) do
 			if(v == wid) then
 				show = true
 			end
 		end
-		if(show)then
-			-- for temp test, view the effect of mobile phone
-			-- local TouchMiniKeyboard = NPL.load("(gl)Mod/CodePku/cellar/Common/TouchMiniKeyboard/Main.lua");
-			-- TouchMiniKeyboard.CheckShow(true)
+	end
+
+	if(show)then
+		if(not MainUIButtons.hasshown) then
 			MainUIButtons.show_common_ui()
 			MainUIButtons.show_function_ui()
 			MainUIButtons.show_dialog_ui(false)
 
-			-- ParaUI.SetMinimumScreenSize(1920,1080,true);
+			MainUIButtons.hasshown = true
+			-- GenAndName:ShowPage()
 		end
+	else
+		if MainUIButtons.common_window ~= nil then
+			MainUIButtons.common_window:CloseWindow()
+			MainUIButtons.common_window = nil
+		end
+		if MainUIButtons.function_window ~= nil then
+			MainUIButtons.function_window:CloseWindow()
+			MainUIButtons.function_window = nil
+		end
+		if MainUIButtons.dialog_window ~= nil then
+			MainUIButtons.dialog_window:CloseWindow()
+			MainUIButtons.dialog_window = nil
+		end
+
+		MainUIButtons.hasshown = false
 	end
 end
 
@@ -72,15 +97,20 @@ function MainUIButtons.show_interact_ui(obj)
 	local x, y, z = obj:GetPosition()
 	local px, py, pz = EntityManager.GetPlayer():GetPosition()
 	if(math.abs(x-px) > distance or math.abs(y-py) > distance or math.abs(z-pz) > distance) then
-		GameLogic.AddBBS("CodeGlobals", L"距离玩家过远，走进点再尝试。", 3000, "#ff0000");
+		GameLogic.AddBBS("CodeGlobals", L"距离玩家过远，走近点再尝试。", 3000, "#ff0000");
 		return
 	end
 
-	local pname = obj:GetDisplayName()
-
-	pname = string.sub(pname,1,length_limit)
+	
+	local username =  obj:GetUserName()
+	local displayname = obj:GetDisplayName()
+	local pname = username or displayname
+	pname = commonlib.utf8.sub(pname,1,length_limit)
 
 	info = obj:GetPlayerInfo()
+	if not info or not info.userinfo then
+		return
+	end
 	pid = info.userinfo.id
 	
 	width = 1920

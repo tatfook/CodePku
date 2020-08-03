@@ -18,19 +18,24 @@ function UserStore:Action()
             self.token = token
             commonlib.setfield("System.User.codepkuToken", token)
         end,
-        SetUserinfo = function(token, userId, mobile, nickname)
+        SetUserinfo = function(token, user)            
+            if type(user) ~= 'table' then
+                return false;
+            end
             -- username => mobile
-            self.token = token
-            self.userId = userId
-            self.username = mobile
-            self.nickname = nickname
-            self.mobile = mobile
+            self.token = token or System.User.codepkuToken
+            self.userId = user.id
+            self.username = user.mobile
+            self.nickname = user.nickname
+            self.mobile = user.mobile
+            self.info = user
 
-            commonlib.setfield("System.User.codepkuToken", token)
-            commonlib.setfield("System.User.mobile", mobile)
-            commonlib.setfield("System.User.username", mobile)
-            commonlib.setfield('System.User.id', userId)            
-            commonlib.setfield("System.User.nickName", nickname)            
+            commonlib.setfield("System.User.codepkuToken", token or System.User.codepkuToken)
+            commonlib.setfield("System.User.mobile", user.mobile)
+            commonlib.setfield("System.User.username", user.nickname or user.no)
+            commonlib.setfield('System.User.id', user.id)
+            commonlib.setfield("System.User.nickName", user.nickname)            
+            commonlib.setfield("System.User.info", user)  
         end,
         SetPlayerController = function(playerController)
             self.playerController = playerController
@@ -40,13 +45,15 @@ function UserStore:Action()
             self.userId = nil
             self.username = nil
             self.nickname = nil    
-            self.mobile = nil        
+            self.mobile = nil
+            self.info = nil      
 
             commonlib.setfield("System.User.codepkuToken", nil)
             commonlib.setfield("System.User.mobile", nil)
             commonlib.setfield("System.User.username", nil)
             commonlib.setfield("System.User.id", nil)            
-            commonlib.setfield("System.User.nickName", nil)            
+            commonlib.setfield("System.User.nickName", nil)
+            commonlib.setfield("System.User.info", nil)
         end
     }
 end

@@ -1,0 +1,131 @@
+<!-- "Mod/CodePku/cellar/Gui/FriendUI/MyFriend.html" -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+</head>
+
+<body>
+<pe:mcml>
+<script refresh="false" type="text/npl" src="FriendUI.lua">
+<![CDATA[
+local FriendUI = commonlib.gettable("Mod.CodePku.GUI.FriendUI")
+cur_index = 2
+menu = {
+    {index = 1, text = "my_friend"},
+    {index = 2, text = "recent_player"},
+    {index = 3, text = "black_list"}
+}
+
+function ClosePage()
+    Page:CloseWindow();
+end
+
+function getFriendData()
+    return FriendUI.vars["recent"] or {}
+end
+
+function getFriendDataLength()
+    local length = # getFriendData()
+    if(length ~= nil and length ~= 0)then
+        return 1
+    else
+        return 0
+    end
+end
+
+function AddFriend()
+    FriendUI:ShowPopup(1)
+end
+
+function FriendApply()
+    FriendUI:GetApply()
+    FriendUI:ShowPopup(3)
+end
+
+
+function ChangePage(index)
+    FriendUI:ShowPage(index)
+end
+
+
+]]>
+</script>
+<style type="text/mcss">
+
+</style>
+<pe:container alignment="_lt" width="1920" height="1080" style="background: url(codepku/image/textures/friend/main/bg.png)">
+    <div style="position:relative; width: 164;height: 83;left:170;top:20;
+    background: url(codepku/image/textures/friend/main/title.png);">
+    </div>
+    <div style="position:relative; margin-left: 40;width: 100;height: 60;margin-top: 35;
+    background: url(codepku/image/textures/friend/main/return.png);" onclick="ClosePage"></div>
+
+    <div style="position:relative; margin-left: 450;margin-top: 140;width: 225;height: 70;
+    background: url(codepku/image/textures/friend/main/add_friend.png);" onclick="AddFriend"></div>
+    <div style="position:relative; margin-left: 1600;margin-top: 140;width: 225;height: 70;
+    background: url(codepku/image/textures/friend/main/friend_apply.png);" onclick="FriendApply"></div>
+
+    <!-- left bar menu -->
+    <pe:repeat DataSource="<%=menu%>" style="position:relative;top:235">
+        <pe:repeatitem>
+            <pe:if condition='<%=Eval("index") ~= cur_index%>'>
+            <div style='<%=format("width:275; height:107;left: 67;margin-top:30;background: url(codepku/image/textures/friend/menu/%s.png);",
+            Eval("text"))%>' name='<%=Eval("index")%>' onclick="ChangePage"></div>
+            </pe:if>
+            <pe:if condition='<%=Eval("index") == cur_index%>'>
+            <div style='<%=format("width:294; height:107;left: 48;margin-top:30;background: url(codepku/image/textures/friend/menu/%s.png);",
+            Eval("text").."_active")%>'></div>
+            </pe:if>
+        </pe:repeatitem>
+    </pe:repeat>
+
+    <pe:if condition = "<%= getFriendDataLength() == 0 %>">
+        <div style="position: relative; left: 760; top: 380; width: 780px; height: 549px; background: url(codepku/image/textures/friend/recent_player/blank.png);"></div>
+    </pe:if>
+
+    <pe:if condition = "<%= getFriendDataLength() == 1%>">
+
+        <div style="position:relative;margin-top:250;margin-left: 1800;font-size: 30;color:#ffffff"><%=#getFriendData()%>/50</div>
+
+        <pe:gridview name="MyFriend" style="position:relative;margin-top:300;margin-left: 400;
+        height:700;background-color: #ff00ff50;" DataSource='<%=getFriendData() %>' CellPadding="10" ItemsPerLine="1" AllowPaging="false" RememberScrollPos="true" RememberLastPage="true" 
+        VerticalScrollBarStep="36" VerticalScrollBarOffsetX="8">
+            <Columns>
+                <div style="width: 1440;height: 160;">
+                    <div style="position:relative;width:1423;height:140;top:15;left:15;background: url(codepku/image/textures/friend/item/bg.png);"></div>
+                    <div style="position:relative;width:160;height:160;background: url(codepku/image/textures/friend/item/head.png);"></div>
+                    <div style='<%=format("position:relative;width:120;height:120;left: 20;top: 20;background: url(%s);", Eval("head"))%>'></div>
+
+                    <div style="position:relative; left: 200; top: 20; ">
+                        <div style="height:40; font-size: 40;float: left; color: #FFA500;"><%=Eval("nickname")%></div>
+                        <pe:if condition='<%=Eval("gender") ~=0%>'>
+                            <div style='<%=format("width:37; height:37; top: 3; left: 20; float: left; background: url(codepku/image/textures/friend/item/%s.png);", Eval("gender"))%>'></div>
+                        </pe:if>
+                    </div>
+
+                    <div style="position:relative;width:200;height:40;left:200;top:100;font-size: 30;color: #FFA500;">ID: <%=Eval("no")%></div>
+
+                    <pe:if condition="<%=Eval('is_online') == true%>">
+                            <div style="position:relative; width:250; height:30; left:700;top:60;font-size: 40;color: #00ff22;">在线</div>
+                        </pe:if>
+                    <pe:if condition="<%=Eval('is_online') == false%>">
+                        <div style="position:relative; width:250; height:30; left:700;top:60;font-size: 40;color: #f13709;">离线</div>
+                    </pe:if>
+
+                    <div style="position:relative;width:100;height:60;top:50;left:1020;background: url(codepku/image/textures/friend/recent_player/add.png);" onclick="ClickAdd"></div>
+                    <div style="position:relative;width:100;height:60;top:50;left:1160;background: url(codepku/image/textures/friend/recent_player/black.png);" onclick="ClickBlack"></div>
+                    <div style="position:relative;width:100;height:60;top:50;left:1300;background: url(codepku/image/textures/friend/recent_player/chat.png);" onclick="ClickChat"></div>
+                </div>
+            </Columns>
+        </pe:gridview>
+    </pe:if>
+
+
+</pe:container>
+</pe:mcml>
+</body>
+
+</html>

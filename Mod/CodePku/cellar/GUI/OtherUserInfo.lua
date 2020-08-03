@@ -1,6 +1,6 @@
 local OtherUserInfoPage = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.OtherUserInfoPage")
 local OtherUserInfo = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.OtherUserInfo")
-local request = NPL.load("(gl)Mod/CodePkuCommon/api/BaseRequest.lua");
+local request = NPL.load("(gl)Mod/CodePku/api/BaseRequest.lua");
 local page;
 
 
@@ -28,6 +28,7 @@ function OtherUserInfoPage.GetUserInfo(id)
         OtherUserInfo.name = data.nickname or string.sub(data.mobile,1,7)
         OtherUserInfo.id = data.id
         OtherUserInfo.gender = data.gender
+        OtherUserInfo.avatar = data.avatar_url
         return true
     else
         return false

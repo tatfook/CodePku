@@ -36,7 +36,7 @@ function MainLogin:Show()
                     local mobile = response["data"]["mobile"] or ""
                     local SetUserinfo = Mod.CodePku.Store:Action("user/SetUserinfo")
 
-                    SetUserinfo(token, userId, mobile, nickname)
+                    SetUserinfo(token, response.data)
                
                     Mod.CodePku.Utils.SetTimeOut(function()
                         self:EnterUserConsole()
@@ -116,34 +116,48 @@ function MainLogin:Close()
     end
 end
 
-function MainLogin:LoginAction()            
+-- methodIndex: 1-captcha, 2-password
+function MainLogin:LoginAction(methodIndex)
     local MainLoginPage = Mod.CodePku.Store:Get("page/MainLogin")
 
     if not MainLoginPage then
         return false
     end
-    
-    local loginServer = CodePkuService:GetEnv()    
+
+    local loginServer = CodePkuService:GetEnv()
+    if not loginServer then
+        return false
+    end
+
     local account = MainLoginPage:GetValue("account")
-    local verifyCode = MainLoginPage:GetValue("verify_code")  
-    local mobileToken = MainLoginPage:GetValue('mobile_token')  
+    local mobileToken = MainLoginPage:GetValue('mobile_token')
+    local verifyCode = MainLoginPage:GetValue("verify_code")
+    local password = MainLoginPage:GetValue('password')
+    local agree = MainLoginPage:GetValue("agree")
 
     if not account or account == "" then
-        GameLogic.AddBBS(nil, L"账号不能为空", 3000, "255 0 0", 21)
+        GameLogic.AddBBS(nil, L"请输入手机号码", 3000, "255 0 0", 21)
         return false
     end
 
-    if not verifyCode or verifyCode == "" then
-        GameLogic.AddBBS(nil, L"验证码不能为空", 3000, "255 0 0", 21)
-        return false
+    if (methodIndex ~= 2) then
+        if not mobileToken or mobileToken == "" then
+            GameLogic.AddBBS(nil, L"请先获取验证码", 3000, "255 0 0", 21)
+            return false
+        end
+        if not verifyCode or verifyCode == "" then
+            GameLogic.AddBBS(nil, L"请输入验证码", 3000, "255 0 0", 21)
+            return false
+        end
+    else
+        if not password or password == "" then
+            GameLogic.AddBBS(nil, L"请输入密码", 3000, "255 0 0", 21)
+            return false
+        end
     end
 
-    if not mobileToken or mobileToken == "" then
-        GameLogic.AddBBS(nil, L"请先获取验证码", 3000, "255 0 0", 21)
-        return false
-    end
-
-    if not loginServer then
+    if not agree then
+        GameLogic.AddBBS(nil, L"请同意用户协议", 3000, "255 0 0", 21)
         return false
     end
 
@@ -173,19 +187,32 @@ function MainLogin:LoginAction()
         end
     end
 
-    
-    CodePkuServiceSession:Login(
-        account,
-        verifyCode,
-        mobileToken,
-        function(response, err)                        
-            if err == 503 then
-                Mod.CodePku.MsgBox:Close()
-                return false
+    if (methodIndex ~= 2) then
+        CodePkuServiceSession:Login(
+            account,
+            verifyCode,
+            mobileToken,
+            function(response, err)                        
+                if err == 503 then
+                    Mod.CodePku.MsgBox:Close()
+                    return false
+                end
+                CodePkuServiceSession:LoginResponse(response, err, HandleLogined)
             end
-            CodePkuServiceSession:LoginResponse(response, err, HandleLogined)
-        end
-    )
+        )
+    else
+        CodePkuServiceSession:LoginWithPwd(
+            account,
+            password,
+            function(response, err)
+                if err == 503 then
+                    Mod.CodePku.MsgBox:Close()
+                    return false
+                end
+                CodePkuServiceSession:LoginResponse(response, err, HandleLogined)
+            end
+        )
+    end
 end
 
 function MainLogin:EnterUserConsole()

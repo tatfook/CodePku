@@ -13,21 +13,114 @@ NPL.load("(gl)script/apps/Aries.Creator.Game.Desktop.Share.lua");
 UserInfoPage = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.UserInfoPage")
 SharePage = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.SharePage")
 UserInfo = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.UserInfo")
+EditPage = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.EditPage")
+SubjectPage = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.SubjectPage")
+PropsInfo = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.PropsInfo");
+
+
+
+    -- =============================================================================== start 背包
+
+    local nowPage = 1
+    local maxPage = 1
+    local pageSize = 1000
+
+    -- 每个格子记录了该格子的序号和页号，以及该格子所要展示的信息
+    function create_backpack_table()
+        local items_table = UserInfoPage.GetItemInfo()
+        local backpack_table = {}
+        local now_Page = 1
+        local i, j = 1, 1
+        local length = #items_table
+        local item = {}
+        while(i <= length)do
+            if(i > pageSize*now_Page)then
+                now_Page = now_Page + 1
+            end
+            item = items_table[i]
+            if choose_index5 == 1 or item.category_id == choose_index5 then
+                backpack_table[j] = {pageNum = now_Page, grid_id = j, info = item}
+                j = j + 1
+            end
+            i = i + 1
+        end
+        maxPage = now_Page
+        return backpack_table
+    end
+
+    --获取指定页号的背包信息
+    function get_now_backpack(needPage)
+        local mytable = create_backpack_table()
+        local now_backpack_table = {}
+        local m, n = 1, 1
+        local length = #mytable
+        while (m <= length) do
+            if(m > pageSize*(nowPage-1) and m <= pageSize*nowPage)then
+                mytable[m].info.index = n
+                table.insert(now_backpack_table, mytable[m].info)
+                n = n + 1
+            end
+            m = m + 1
+        end
+        return now_backpack_table
+    end
+
+    --显示指定页号的背包信息
+    function show_now_backpack()
+        local_backpack = get_now_backpack(nowPage)
+        return local_backpack
+    end
+
+
+    function prePage()
+        if(nowPage > 1)then
+            nowPage = nowPage -1;
+            Page:Refresh(0.02)
+        end
+    end
+
+    function nextPage()
+        if(nowPage < maxPage)then
+            nowPage = nowPage + 1;
+            Page:Refresh(0.02)
+        end
+    end
+
+
+    function getNowPage()
+        return nowPage
+    end
+
+    function getMaxPage()
+        return maxPage
+    end
+
+    function sort_backpack()
+        params = '?sort=1'
+        UserInfo.props = UserInfoPage.GetItemInfo(params)
+        Page:Refresh(0)   
+    end
+
+-- ============================================================================ end 背包
+
+
+
 xueshidian = 123456
 fensi = 123456
 dianzan = 123456
 name = UserInfo.name
-user_id = '玩学号:'..UserInfo.id
+sid = UserInfo.no or UserInfo.id
+user_id = '玩学号:'..sid
 identity = 10
 gender = UserInfo.gender
 vip_id = 20
 choose_index = UserInfoPage.PageIndex or 1
-choose_index5 = 1
+choose_index5 = 1 -- 道具类型id，1-全部 2-装扮 3-消耗品 4-建造道具 5-其他
 
 user_options_list ={}
 user_options_list[1] = {{index =1,url ='shouye'},{index =2,url ='shuxing'},{index =3,url ='juese'},{index =4,url ='waiguan'},{index =5,url ='beibao'},{index =6,url ='chengjiu'},{index =7,url ='dongtai'}}
 user_options_list[1][choose_index].url = user_options_list[1][choose_index].url ..1
-user_options_list[5] = {{index =1,url ='quanbu1'},{index =2,url ='daoju'},{index =3,url ='libao'},{index =4,url ='cailiao'},{index =5,url ='lantu'}}
+user_options_list[5] = {{index =1,url ='quanbu1'},{index =2,url ='dress'},{index =3,url ='build'},{index =4,url ='consumable'},{index =5,url ='other'}}
 
 
 function ClosePage()
@@ -55,10 +148,17 @@ function Choose(index)
     Page:Refresh(0);
 end
 function Choose5(index)
+    local item_params = nil
     user_options = user_options_list[5]
     user_options[choose_index5].url =string.sub(user_options[choose_index5].url ,1,string.len(user_options[choose_index5].url)-1)
     choose_index5 =index
     user_options[choose_index5].url = user_options[choose_index5].url..1
+    if choose_index5 == 1 then
+        item_params = nil
+    else
+        item_params = '?category_name='..user_options[choose_index5].url
+    end
+    UserInfoPage.GetItemInfo(item_params)
     Page:Refresh(0);
 end
 
@@ -72,6 +172,15 @@ function OnClickButton(name,mcmlNode)
     end
 end
 
+function shurujiyu()
+    EditPage:ShowPage()
+end
+
+function OnClickItem(item)
+    echo(string.format('item: %s, name:%s. category_id: %d', item, item.prop_name, item.prop_id))
+    PropsInfo:ShowPage(item)
+end
+
 function SharePageFunc()
     SharePage:ShowPage()
 end
@@ -80,6 +189,9 @@ function Undefinde()
     GameLogic.RunCommand("/tip -duration 1500 开发中敬请期待")
 end
 
+function ShowSubjectPage()
+    SubjectPage:ShowPage()
+end
 ]]>   
 </script>
 <style type="text/mcss">
@@ -87,14 +199,15 @@ end
 
 <pe:container alignment="_lt" width="1920" height="1080">
     <div style='<%=format("width:1920;height:1080;background:url(codepku/image/textures/userinfo/user_info_back.png);")%>' >
-        <div style="position:relative;width:160;height:43;margin-left:960;margin-top:16;background:url(codepku/image/textures/userinfo/info_title/user_center.png);"></div>
-        <div style="position:relative;width:45;height:50;margin-left:1815;margin-top:16;background:url(codepku/image/textures/userinfo/info_title/cancel.png);"onclick="ClosePage"></div>
-        <div style="position:relative;width:45;height:50;margin-left:86;margin-top:16;background:url(codepku/image/textures/userinfo/info_title/help.png);"onclick="Undefinde"></div>
+        <div style="position:relative;width:75;height:75;margin-left:75;margin-top:0;"onclick="ClosePage"></div>
+        <div style="position:relative;width:160;height:43;margin-left:960;margin-top:16;background:url(codepku/image/textures/userinfo/info_title/user_center.png);"onclick="ClosePage"></div>
+        <div style="position:relative;width:180;height:45;margin-left:1500;margin-top:20;background: url(codepku/image/textures/userinfo/money_1.png);color: white;font-size: 20px;font-weight: bold;"onclick="ClosePage"><div style="margin-left:50;margin-top:10"><%=UserInfo.money.goldcoin%></div></div>
+        <div style="position:relative;width:180;height:45;margin-left:1700;margin-top:20;background: url(codepku/image/textures/userinfo/money_2.png);color: white;font-size: 20px;font-weight: bold;"onclick="ClosePage"><div style="margin-left:50;margin-top:10"><%=UserInfo.money.wanxuecoin%></div></div>
         <div style = "position:relative;margin-top:100">
             <pe:repeat  DataSource="<%=user_options_list[1]%>">
-                    <pe:repeatitem>
-                        <div name='<%= Eval("index")%>' style='<%=format("width:275;height:97;text-align:center;margin-top:20;font-size:18;base-font-size:40;background:url(codepku/image/textures/userinfo/options/%s.png)",Eval("url"))%>' onclick="Choose"></div>
-                    </pe:repeatitem>
+                <pe:repeatitem>
+                    <div name='<%= Eval("index")%>' style='<%=format("width:275;height:97;text-align:center;margin-top:20;font-size:18;base-font-size:40;background:url(codepku/image/textures/userinfo/options/%s.png)",Eval("url"))%>' onclick="Choose"></div>
+                </pe:repeatitem>
             </pe:repeat>
         </div>
         <div style="position:relative;width:275;height:97;margin-top:960;font-size:18;base-font-size:40;background:url(codepku/image/textures/userinfo/options/shezhi.png)"onclick="Undefinde"></div>
@@ -104,19 +217,20 @@ end
                 <div style='<%=format("position:relative;width:41;height:41;margin-left:500;margin-top:20;background:url(codepku/image/textures/userinfo/user_name_info/%s.png);",gender)%>'></div>
                 <div style='<%=format("position:relative;width:41;height:41;margin-left:550;margin-top:20;background:url(codepku/image/textures/userinfo/user_name_info/%s.png);",identity)%>'></div>
                 <div style="position:relative;width:41;height:41;margin-left:500;margin-top:60;background:url(codepku/image/textures/userinfo/user_name_info/fuzhi.png);"></div>
+                <div style='<%=format("position:relative;width:100;height:100;margin-left:40;margin-top:15;background:url(%s);",data.avatar_url or UserInfo.avatar or "")%>'></div>
                 <div style='<%=format("position:relative;width:41;height:41;margin-left:550;margin-top:60;background:url(codepku/image/textures/userinfo/user_name_info/%s.png);",vip_id)%>'></div>
                 <div style="position:relative;width:210;text-align:left;margin-left:154;margin-top:25;font-size:25;base-font-size:25;"><%= name%></div>
                 <div style="position:relative;width:300;text-align:left;margin-left:154;margin-top:75;font-size:25;base-font-size:25;"><%= user_id%></div>
-                <div style="position:relative;width:76;height:61;margin-left:1115;margin-top:20;background:url(codepku/image/textures/userinfo/user_name_info/xueshi.png);"></div>
-                <div style="position:relative;width:61;text-align:center;margin-left:1120;margin-top:75;font-size:18;base-font-size:18;"><%= xueshidian%></div>
-                <div style="position:relative;width:61;height:61;margin-left:1233;margin-top:20;background:url(codepku/image/textures/userinfo/user_name_info/fensi.png);"></div>
-                <div style="position:relative;width:61;text-align:center;margin-left:1233;margin-top:75;font-size:18;base-font-size:18;"><%= fensi%></div>
+                <!-- <div style="position:relative;width:76;height:61;margin-left:1115;margin-top:20;background:url(codepku/image/textures/userinfo/user_name_info/xueshi.png);"></div>
+                <div style="position:relative;width:61;text-align:center;margin-left:1120;margin-top:75;font-size:18;base-font-size:18;"><%= xueshidian%></div> -->
+                <div style="position:relative;width:61;height:61;margin-left:1233;margin-top:20;background:url(codepku/image/textures/userinfo/user_name_info/xueshi.png);"></div>
+                <div style="position:relative;width:61;text-align:center;margin-left:1233;margin-top:75;font-size:18;base-font-size:18;"><%= xueshidian%></div>
                 <div style="position:relative;width:61;height:61;margin-left:1350;margin-top:20;background:url(codepku/image/textures/userinfo/user_name_info/dianzan.png);"></div>
                 <div style="position:relative;width:61;text-align:center;margin-left:1350;margin-top:75;font-size:18;base-font-size:18;"><%= dianzan%></div>
             </div>
-            <div style="position:relative;width:611;height:735;margin-top:300;margin-left:324;font-size:18;base-font-size:40;background:url(codepku/image/textures/userinfo/touxiangbeijing.png)">
+            <div style="position:relative;width:611;height:735;margin-top:300;margin-left:324;font-size:40;base-font-size:40;background:url(codepku/image/textures/userinfo/touxiangbeijing.png)">
                 <div style="position:relative;width:611;height:735;text-align:center;font-size:18;base-font-size:40;background:url(codepku/image/textures/userinfo/wanjiatouxiang.png)"></div>
-                <div style="position:relative;width:50;height:50;margin-left:500;margin-top:550;background:url(codepku/image/textures/userinfo/shuru.png);"onclick="Undefinde"></div>
+                <div style="position:relative;width:50;height:50;margin-left:500;margin-top:550;background:url(codepku/image/textures/userinfo/shuru.png);"onclick="shurujiyu"></div>
                 <div style="position:relative;width:50;height:50;margin-left:500;margin-top:620;background:url(codepku/image/textures/userinfo/fenxiang.png);"onclick="SharePageFunc"></div>
             </div>
             <div style="position:relative;width:739;height:734;margin-left:1030;margin-top:300;background:url(codepku/image/textures/userinfo/jiayuanbeijing.png);">
@@ -128,6 +242,33 @@ end
                 <div style="position:relative;width:380;text-align:left;margin-left:440;margin-top:630;font-size:30;base-font-size:30;"><%= '生涯:xxx'%></div>  
             </div> 
         </pe:if>
+        <pe:if condition='<%=choose_index == 2%>'>
+            <!-- 属性 -->
+            <div style="position:relative;width:1645;height:976;margin-top:70;margin-left:275;background:url(codepku/image/textures/userinfo/shuxingbeijing.png);">
+                <div style="position:relative;margin-left:212;margin-top:85;width:611;height:735;background:url(codepku/image/textures/userinfo/wanjiatouxiang.png)"></div>
+                <div style="position:relative;width:380;text-align:left;margin-left:1004;margin-top:170;font-size:30;base-font-size:30;"><%= name%></div>
+                <div style="position:relative;width:380;text-align:left;margin-left:874;margin-top:260;font-size:30;base-font-size:30;"><%= user_id%></div>
+                <div style="position:relative;width:380;text-align:left;margin-left:904;margin-top:365;font-size:30;base-font-size:30;"><%= '等级:'%></div>
+                <div style='<%=format("position:relative;width:80;height:80;margin-left:874;margin-top:132;background:url(%s);",data.avatar_url or UserInfo.avatar or "")%>'></div>
+                <!-- <div style="position:relative;width:492;height:24;margin-top:413;margin-left:895;background:url(codepku/image/textures/userinfo/jingyantiao1.png);"></div> -->
+                <!-- <div style='<%=string.format("position:relative;width:%d;height:24;margin-top:413;margin-left:895;background:url(codepku/image/textures/userinfo/jingyantiao1.png);",492*0.5 )%>'></div> -->
+                <div style='<%=string.format("position:relative;width:%d;height:24;margin-top:413;margin-left:895;background:url(codepku/image/textures/userinfo/jingyantiao1.png);",492*(UserInfo.self_level.current_exp/UserInfo.self_level.next_exp))%>'></div>
+                <div style="position:relative;width:380;text-align:left;margin-left:1324;margin-top:365;font-size:30;base-font-size:30;"><%= UserInfo.self_level.current_level%>级</div>
+                <div style="position:relative;width:668;height:101;text-align:left;margin-left:871;margin-top:347;"onclick="ShowSubjectPage"></div>
+
+                <div style="position:relative;width:380;text-align:left;margin-left:874;margin-top:508;font-size:30;base-font-size:30;"><%= '魅力:  '%></div>
+                <div style="position:relative;width:380;text-align:left;margin-left:1230;margin-top:508;font-size:30;base-font-size:30;"><%= '成就:'%></div>
+                <div style="position:relative;width:380;text-align:left;margin-left:874;margin-top:603;font-size:30;base-font-size:30;">生涯:<%= UserInfo.day%>天</div>
+                <!-- <div style="position:relative;width:380;text-align:left;margin-left:824;margin-top:623;font-size:30;base-font-size:30;"><%= '生涯:100天'%></div> -->
+                <div style="position:relative;width:380;text-align:left;margin-left:1230;margin-top:603;font-size:30;base-font-size:30;">生日:<%= UserInfo.created_at%></div>
+                <div style="position:relative;width:76;height:61;margin-left:935;margin-top:698;background:url(codepku/image/textures/userinfo/user_name_info/xueshi.png);"></div>
+                <div style="position:relative;width:200;text-align:left;margin-left:1015;margin-top:723;font-size:30;base-font-size:30;"><%= xueshidian%></div>
+                <div style="position:relative;width:61;height:61;margin-left:1295;margin-top:698;background:url(codepku/image/textures/userinfo/user_name_info/dianzan.png);"></div>
+                <div style="position:relative;width:200;text-align:left;margin-left:1375;margin-top:723;font-size:30;base-font-size:30;"><%= dianzan%></div>
+                <div style="position:relative;width:380;text-align:left;margin-left:874;margin-top:830;font-size:30;base-font-size:30;"><%= '家园分:'%></div>
+                <div style="position:relative;width:700;text-align:right;margin-left:824;margin-top:830;font-size:30;base-font-size:30;"><%= '123456'%></div>
+            </div>
+        </pe:if>
         <pe:if condition='<%=choose_index == 5%>'>
             <!-- 背包 -->
             <div style="position:relative;width:1377;height:911;margin-left:300;margin-top:120;background:url(codepku/image/textures/userinfo/beibaobeijing.png);">
@@ -135,11 +276,33 @@ end
             </div>
             <div style = "position:relative;margin-top:100;margin-left:1700;">
                 <pe:repeat  DataSource="<%=user_options_list[5]%>">
-                        <pe:repeatitem>
-                            <div name='<%=Eval("index")%>' style='<%=format("width:145;height:85;text-align:center;margin-top:20;font-size:18;base-font-size:40;background:url(codepku/image/textures/userinfo/options/%s.png)",Eval("url"))%>' onclick="Choose5"></div>
-                        </pe:repeatitem>
+                    <pe:repeatitem>
+                        <div name='<%=Eval("index")%>' style='<%=format("width:145;height:85;text-align:center;margin-top:20;font-size:18;base-font-size:40;background:url(codepku/image/textures/userinfo/options/%s.png)",Eval("url"))%>' onclick="Choose5"></div>
+                    </pe:repeatitem>
                 </pe:repeat>
             </div>
+                <pe:gridview style="width: 780; height: 868; margin-top: 121; margin-left: 915; text-align: center; float: left;" name='backpack_items' DataSource="<%=UserInfo.props%>" DefaultNodeHeight = "200" ItemsPerLine="4" AllowPaging="false" RememberScrollPos="true" RememberLastPage="true">
+                    <Columns>
+                        <div style='width:150;height:150;background:url(codepku/image/textures/userinfo/item_board.png);float: left;margin-right: 40;'>
+                            <div style="<%=string.format('width: 150; height: 150;  background:url(%s); ', Eval('prop_icon_url'))%>" name="<%=UserInfo.props[Eval('index')]%>" onclick="OnClickItem">
+                                <div style='font-size: 30; margin-top: 100;padding-right: 20;color: #fdfdfd;text-align: right;font-weight: bold;'><%=prop_num%></div>
+                            </div>
+                        </div>
+                    </Columns>
+                </pe:gridview>
+                <!-- <pe:repeat DataSource="<%= show_now_backpack() %>">
+                    <div style="width: 150; height: 145; float: left; background:url(codepku/image/textures/tmp_icon.jpg); margin-left: 20px; margin-top: 32px;" name="<%=local_backpack[Eval('index')]%>" onclick="OnClickItem">
+                        <div style='font-size: 20; margin: 120;'><%=num%></div>
+                    </div>
+                </pe:repeat> -->
+            
+            <div style="position:relative; margin-left:0; margin-top: 900px; width: 145px;  text-align: center; float: left;">
+                <!-- <div style = "width:145;height:85; font-size: 40px; line-height: 85px; background-color: #7210ce;" onclick="prePage">上一页</div>
+                <div style = "margin-top: 30; width:145;height:85; font-size: 40px; line-height: 85px; background-color: #7210ce;" onclick="nextPage">下一页</div>
+                        <div style="width: 150px; height: 75px; font-size: 50px; line-height: 75px;"></div>  -->
+                <div style = "width:145; height:85; font-size: 40px; line-height: 85px; background:url(codepku/image/textures/userinfo/options/zhengli.png);" onclick="sort_backpack"></div>
+            </div> 
+                   
             
         </pe:if>
     </div>

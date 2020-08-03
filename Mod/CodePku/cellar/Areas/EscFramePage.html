@@ -8,30 +8,38 @@
 <body>
     <pe:mcml>
 <script refresh="false" type="text/npl" src="EscFramePage.lua"><![CDATA[
-NPL.load("(gl)script/apps/Aries/Creator/Game/World/WorldStacks.lua");
-WorldStacks = commonlib.gettable("MyCompany.Aries.Game.WorldStacks");
 NPL.load("(gl)script/apps/Aries/Creator/Game/Areas/ServerPage.lua");
 local ServerPage = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.ServerPage");
 GameLogic = commonlib.gettable("MyCompany.Aries.Game.GameLogic")
 NPL.load("(gl)script/apps/Aries.Creator.Game.Desktop.EscFramePage.lua");
 EscFramePage = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.EscFramePage");
 EscFramePage.OnInit();
+local UserConsole = NPL.load('(gl)Mod/CodePku/cellar/UserConsole/Main.lua');
+
+local AccountSettingPage = NPL.load("(gl)Mod/CodePku/cellar/Areas/AccountSettingPage.lua");
 
 function ClosePage()
     Page:CloseWindow();
 end
 
 function OnLeave()
-    GameLogic.RunCommand("/menu file.exit");
+    -- GameLogic.RunCommand("/menu file.exit");
+    if (System.Codepku and System.Codepku.Coursewares) then
+        if (System.Codepku.Coursewares.category == 3) then
+            ClosePage();
+        else
+            UserConsole:CourseEntry();
+        end
+    end
 end
-
 
 function OnSettings()
     GameLogic.RunCommand("/menu file.settings");
 end
 
-
-
+function OnAccountSetting()
+    AccountSettingPage:ShowPage(true);
+end
 
 function OnClickButton(name,mcmlNode)
     ClosePage();
@@ -39,6 +47,8 @@ function OnClickButton(name,mcmlNode)
         OnSettings();
     elseif(name=="exitWorld") then
         OnLeave();
+    elseif(name=="accountSetting") then
+        OnAccountSetting();
     end
 end
 
@@ -55,7 +65,7 @@ end
         border = "none",
         ["font-weight"] = "bold",
         ["font-family"] = "Microsoft Yahei",
-        background = "codepku/image/textures/modal/common_32bits.png#11 728 512 104",
+        background = "codepku/image/textures/modal/setting_v2_32bits.png;231 164 20 20: 9 9 9 9",
         ["margin-top"] = 24
     }
 }
@@ -75,14 +85,13 @@ end
     close_height="38"
     style="showline: false;"
 >
-<pe:container alignment="_ctt" style="background:;">
-    <div style="margin-top:5px;">
-        <input type="button" value='<%=L"设置"%>' name= "systemSetting" class="green_button" onclick="OnClickButton"/>
-        <input type="button" value='<%=L"继续学习"%>' name= "continue" class="green_button" onclick="ClosePage"/>
-        <input type="button" value='<%=L"退出世界"%>' name= "exitWorld" class="green_button" onclick="OnClickButton"/>
-    </div>
-    </div>
-</pe:container>
+    <pe:container alignment="_ctt" style="background:;">
+        <div style="margin-top:5px;">
+            <input type="button" value='<%=L"系统设定"%>' name= "systemSetting" class="green_button" onclick="OnClickButton"/>
+            <input type="button" value='<%=L"账号设置"%>' name= "accountSetting" class="green_button" onclick="OnClickButton"/>
+            <input type="button" value='<%=L"返回大厅"%>' name= "exitWorld" class="green_button" onclick="OnClickButton"/>
+        </div>
+    </pe:container>
 </aries:window>
 </pe:mcml>
 </body>

@@ -1,77 +1,48 @@
 --[[
-Title: 联机客户端
+Title: OnlineClient
 Author(s): John Mai
-Date: 2020-07-10 16:23:49
-Desc: 玩学世界联机客户端
-Example:
+Date: 2020/8/2
+Desc: 客户端入口文件
+use the lib:
 ------------------------------------------------------------
-
+NPL.load("Mod/CodePku/online/OnlineClient.lua");
+local OnlineClient = commonlib.gettable("Mod.CodePku.Online.OnlineClient");
 -------------------------------------------------------
 ]]
-
-NPL.load("Mod/GeneralGameServerMod/Core/Client/GeneralGameWorld.lua");
 NPL.load("Mod/GeneralGameServerMod/Core/Common/Connection.lua");
 NPL.load("Mod/GeneralGameServerMod/Core/Common/Log.lua");
 NPL.load("Mod/GeneralGameServerMod/Core/Common/Common.lua");
-NPL.load("Mod/CodePku/online/NetClientHandler.lua");
-NPL.load("Mod/GeneralGameServerMod/Core/Client/EntityMainPlayer.lua");
 NPL.load("Mod/CodePku/online/EntityOtherPlayer.lua");
 NPL.load("Mod/CodePku/online/EntityMainPlayer.lua");
 NPL.load("Mod/GeneralGameServerMod/Core/Client/GeneralGameClient.lua");
 
-local NetClientHandler = commonlib.gettable("Mod.CodePku.Online.NetClientHandler");
+local OnlineClient = commonlib.inherit(commonlib.gettable("Mod.GeneralGameServerMod.Core.Client.GeneralGameClient"), commonlib.gettable("Mod.CodePku.Online.OnlineClient"));
 local EntityMainPlayer = commonlib.gettable("Mod.CodePku.Online.EntityMainPlayer");
 local EntityOtherPlayer = commonlib.gettable("Mod.CodePku.Online.EntityOtherPlayer");
 local Common = commonlib.gettable("Mod.GeneralGameServerMod.Core.Common.Common");
 local Log = commonlib.gettable("Mod.GeneralGameServerMod.Core.Common.Log");
 local Connection = commonlib.gettable("Mod.GeneralGameServerMod.Core.Common.Connection");
 
-NPL.load("(gl)script/apps/Aries/Creator/WorldCommon.lua");
-local WorldCommon = commonlib.gettable("MyCompany.Aries.Creator.WorldCommon")
-
 local Config = NPL.load("(gl)Mod/CodePku/online/Config.lua");
 
-local GeneralGameWorld = commonlib.gettable("Mod.GeneralGameServerMod.Core.Client.GeneralGameWorld");
 local Packets = commonlib.gettable("Mod.GeneralGameServerMod.Core.Common.Packets");
 
-local OnlineClient = commonlib.inherit(commonlib.gettable("Mod.GeneralGameServerMod.Core.Client.GeneralGameClient"), commonlib.gettable("Mod.CodePku.OnlineClient"));
+local moduleName = "Mod.CodePku.Online.OnlineClient";
 
+-- 构造函数
 function OnlineClient:ctor()
-    self.inited = false;
-    self.options = {};
-end
 
-function OnlineClient:Init()
-
-    LOG.std(nil, "info", "CodePku", "OnlineClient init")
-
-    if (self.inited) then return self end;
-
-    -- 禁用服务器 指定为客户端
-    NPL.StartNetServer("127.0.0.1", "0");
-
-    -- 监听世界加载完成事件
-    GameLogic:Connect("WorldLoaded", self, self.OnWorldLoaded, "UniqueConnection");
-
-    -- 禁用点击继续
-    GameLogic.options:SetClickToContinue(false);
-
-    self.inited = true;
-    return self;
-end
-
-function OnlineClient:Exit()
-    GameLogic:Disconnect("WorldLoaded", self, self.OnWorldLoaded, "DisconnectOne");
 end
 
 -- 获取世界类
 function OnlineClient:GetGeneralGameWorldClass()
-    return GeneralGameWorld;
+    return OnlineClient._super.GetGeneralGameWorldClass(self);  -- 不定制
 end
 -- 获取网络处理类
 function OnlineClient:GetNetClientHandlerClass()
-    return NetClientHandler;
+    return OnlineClient._super.GetNetClientHandlerClass(self);  -- 不定制
 end
+
 -- 获取主玩家类
 function OnlineClient:GetEntityMainPlayerClass()
     return EntityMainPlayer;
@@ -79,6 +50,16 @@ end
 -- 获取其它玩家类
 function OnlineClient:GetEntityOtherPlayerClass()
     return EntityOtherPlayer;
+end
+
+-- 获取当前认证用户信息
+function OnlineClient:GetUserInfo()
+    return System.User;
+end
+
+-- 是否是匿名用户 移除匿名功能
+function OnlineClient:IsAnonymousUser()    
+    return false;
 end
 
 function OnlineClient:LoadWorld(options)
@@ -153,42 +134,18 @@ function OnlineClient:LoadWorld(options)
     end
 end
 
--- 世界加载
-function OnlineClient:OnWorldLoaded() 
-    -- 是否需要替换世界
-    if (not self.IsReplaceWorld) then return end
-    self.IsReplaceWorld = false;
-
-    -- 更新当前世界ID
-    local GeneralGameWorldClass = self:GetGeneralGameWorldClass() or GeneralGameWorld;
-    self.world = GeneralGameWorldClass:new():Init(self);
-    GameLogic.ReplaceWorld(self.world);
-
-    -- 登录世界
-    if (self.options.ip and self.options.port) then
-        self.world:Login(self.options);
-    else
-        self:ConnectControlServer(self.options); -- 连接控制器服务, 获取世界服务
-    end
-end
---  正确流程: 登录成功 => 加载打开世界 => 替换世界
-
-
--- 连接控制服务器
-function OnlineClient:ConnectControlServer(options)
-    Log:Debug("ServerIp: %s, ServerPort: %s", Config.defaultOnlineServer.host, Config.defaultOnlineServer.port);
-    self.controlServerConnection = Connection:new():InitByIpPort(Config.defaultOnlineServer.host, Config.defaultOnlineServer.port, self);
-    self.controlServerConnection:SetDefaultNeuronFile("Mod/GeneralGameServerMod/Core/Server/ControlServer.lua");
-    self.controlServerConnection:Connect(5, function(success)
-        if (not success) then
-            return Log:Info("无法连接控制器服务器");
-        end
-
-        self.controlServerConnection:AddPacketToSendQueue(Packets.PacketWorldServer:new():Init({
-            worldId = worldId,
-            parallelWorldName = options.parallelWorldName,
+function OnlineClient:SelectServerAndWorld()
+    if (self:IsShowWorldList()) then
+        self.controlServerConnection:AddPacketToSendQueue(Packets.PacketGeneral:new():Init({
+            action = "ServerWorldList"
         }));
-    end);
+    else
+        
+    end
+    self.controlServerConnection:AddPacketToSendQueue(Packets.PacketWorldServer:new():Init({
+        worldId = worldId,
+        parallelWorldName = self.options.parallelWorldName,
+    }));
 end
 
 -- 发送获取世界服务器
@@ -208,16 +165,22 @@ function OnlineClient:handleWorldServer(packetWorldServer)
     self.controlServerConnection:CloseConnection();
 end
 
--- 获取当前认证用户信息
-function OnlineClient:GetUserInfo()
-    return System.User;
-end
+-- 连接控制服务器
+function OnlineClient:ConnectControlServer(options)
+    Log:Debug("ServerIp: %s, ServerPort: %s", Config.defaultOnlineServer.host, Config.defaultOnlineServer.port);
+    self.controlServerConnection = Connection:new():InitByIpPort(Config.defaultOnlineServer.host, Config.defaultOnlineServer.port, self);
+    self.controlServerConnection:SetDefaultNeuronFile("Mod/GeneralGameServerMod/Core/Server/ControlServer.lua");
+    self.controlServerConnection:Connect(5, function(success)
+        if (not success) then
+            return Log:Info("无法连接控制器服务器");
+        end
 
--- 获取当前系统世界信息
-function OnlineClient:GetWorldInfo()
-    -- return {};
+        self.controlServerConnection:AddPacketToSendQueue(Packets.PacketWorldServer:new():Init({
+            worldId = worldId,
+            parallelWorldName = options.parallelWorldName,
+        }));
+    end);
 end
-
 
 -- 初始化成单列模式
 OnlineClient:InitSingleton();

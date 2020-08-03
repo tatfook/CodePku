@@ -11,84 +11,324 @@
 <script refresh="false" type="text/npl" src="MainSceneUIButtons.lua"><![CDATA[
 MainSceneUIButtons = commonlib.gettable("Mod.CodePku.Common.TouchMiniButtons.MainSceneUIButtons");
 DialogMessages = commonlib.gettable("Mod.CodePku.Common.MainUIButtons.DialogMessages")
-MessageTopics = {"全部","世界","本地","公会","私聊","系统"}
-MessageColors = {"#FFFFFF","#00F5FF","#D3D3D3","#7FFF00","#EEB4B4","#FF0000"}
-DialogMessages[1] = {
-    kind = 3,
-    sender = "会飞的鱼",
-    text = "一二三四五"
-}
-DialogMessages[2] = {
-    kind = 6,
-    sender = "System",
-    text = "一一一一一二二二二二三三三三三四四四四四五五五五五"
-}
-DialogMessages[3] = {
-    kind = 2,
-    sender = "好大的鱼",
-    text = "六七八九十"
-}
-DialogMessages[4] = {
-    kind = 5,
-    sender = "虎纹鲨鱼",
-    text = "二二二二二"
-}
-DialogMessages[5] = {
-    kind = 4,
-    sender = "不飞的鱼",
-    text = "666666"
+UserInfo = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.UserInfo")
+local CodepkuChatChannel = NPL.load("(gl)Mod/CodePku/chat/CodepkuChatChannel.lua");
+
+FriendUI = commonlib.gettable("Mod.CodePku.GUI.FriendUI")
+local request = NPL.load("(gl)Mod/CodePku/api/BaseRequest.lua");
+
+local page = document:GetPageCtrl()
+MainSceneUIButtons.page = page
+
+HistoricalMessages = {
+    [1] = {channel=2}, -- 世界
+    [2] = {channel=3}, -- 附近
+    [3] = {},
+
 }
 
-is_dialog_open = false
-categories = {{index=1, text="全部"},{index=2, text="世界"},{index=3, text="本地"},{index=4, text="公会"},{index=5, text="私聊"}}
+-- {"全部","世界","本地","公会","校园","系统","好友"}
+Channels = {
+    [1]={name="world_clicked",index=1, channel=2},
+    [2]={name="local",index=2, channel=3},
+    [3]={name="friends",index=3, channel=0},
+    ['world']=1,
+    ['local']=2,
+    ['friends']=3,
+}
 
-function GetCategories()
-    return categories;
+
+local sendable = true
+LAST_CLICKED_INDEX = 1
+FRIEND_IN_CHATTING = 1
+DEFAULT_AVATAR = 'codepku/image/textures/chat/default_avatar.png'
+
+friends = commonlib.deepcopy(FriendUI.vars["friends"])
+for i, v in ipairs(friends) do
+    v.index = i
+    if i == 1 then
+        FRIEND_IN_CHATTING = i
+        v.status = '_clicked'
+        local friend_id = friends[FRIEND_IN_CHATTING].friend_id
+        local response = request:get(string.format('/chat/private-message/%d', friend_id),nil,{sync = true})
+        if response.data.code == 200 then
+            local data = response.data.data
+            for i, v in ipairs(data) do
+                v = v.raw
+                local speakerIsMe
+                if v.from_user_id == UserInfo.id then
+                    speakerIsMe = 1
+                else
+                    speakerIsMe = 0
+                end
+                local msg_data = {speakerIsMe=speakerIsMe, dialog=v.content, avatar=v.from_user_avatar or DEFAULT_AVATAR, nickname=v.from_user_nickname, level=v.from_user_level or 1, channel=v.channel, from=v.from_user_id, to=v.to_user_id}
+                table.insert(friends[FRIEND_IN_CHATTING], 1, msg_data)
+            end
+            
+        end
+    else
+        v.status = ''
+    end
 end
 
-
-function GetDialogMessages()
-    return DialogMessages
+response = request:get(string.format('/chat/channel-message/%d', HistoricalMessages[1].channel),nil,{sync = true})
+if response.data.code == 200 then
+    local data = response.data.data
+    for i, v in ipairs(data) do
+        v = v.raw
+        local speakerIsMe
+        if v.from_user_id == UserInfo.id then
+            speakerIsMe = 1
+        else
+            speakerIsMe = 0
+        end
+        local msg_data = {speakerIsMe=speakerIsMe, dialog=v.content, avatar=v.from_user_avatar or DEFAULT_AVATAR, nickname=v.from_user_nickname, level=v.from_user_level or 1, channel=v.channel}
+        table.insert(HistoricalMessages[1], 1, msg_data)
+    end
 end
 
-function ClickClose() 
-    Page:CloseWindow();
+function OnClose()
+    Page:CloseWindow()
     MainSceneUIButtons.show_dialog_ui(false)
 end
+
+function OnClickChannel(index)
+    if index ~= LAST_CLICKED_INDEX then
+        Channels[LAST_CLICKED_INDEX].name = string.gsub(Channels[LAST_CLICKED_INDEX].name, '_clicked', '')
+        LAST_CLICKED_INDEX = index
+        Channels[LAST_CLICKED_INDEX].name = Channels[LAST_CLICKED_INDEX].name..'_clicked'
+        if #HistoricalMessages[index] == 0 then
+            if HistoricalMessages[index].channel then
+                response = request:get(string.format('/chat/channel-message/%d', HistoricalMessages[index].channel),nil,{sync = true})
+                if response.data.code == 200 then
+                    local data = response.data.data
+                    for i, v in ipairs(data) do
+                        v = v.raw
+                        local speakerIsMe
+                        if v.from_user_id == UserInfo.id then
+                            speakerIsMe = 1
+                        else
+                            speakerIsMe = 0
+                        end
+                        local msg_data = {speakerIsMe=speakerIsMe, dialog=v.content, avatar=v.from_user_avatar or DEFAULT_AVATAR, nickname=v.from_user_nickname, level=v.from_user_level or 1, channel=v.channel}
+                        table.insert(HistoricalMessages[index], 1, msg_data)
+                    end
+                end
+            end
+        end
+        Page:Refresh()
+    end
+end
+
+function OnClickVoice()
+
+end
+
+function OnClickEmoji()
+
+end
+
+function OnClickSend()
+    local page = document:GetPageCtrl()
+    local words = page:GetValue("DialogContent")
+    if not words or words == '' then
+        return
+    end
+    if #words > 90 then
+        GameLogic.RunCommand("/tip -duration 1500 内容上限30个字")
+        return 
+    end
+    if not sendable then
+        GameLogic.RunCommand("/tip -duration 1500 发言太频繁，请稍后尝试")
+        return
+    end
+    sendable = false
+    local times = 2
+    local timer = commonlib.Timer:new({
+        callbackFunc = function(timer)
+
+            if times == 0 then
+                sendable = true
+                timer:Change(nil, nil)
+            end
+
+            times = times - 1
+        end
+    })
+    timer:Change(1000, 1000)
+    if LAST_CLICKED_INDEX == 1 then -- 世界
+        CodepkuChatChannel.SendWorldMsg(words)
+    elseif LAST_CLICKED_INDEX == 2 then -- 附近
+        CodepkuChatChannel.SendNearByMsg(words)  
+    elseif LAST_CLICKED_INDEX == 3 then -- 私聊
+        CodepkuChatChannel.SendToFriend(friends[FRIEND_IN_CHATTING], words)     
+    end
+    Page:Refresh(0.5)
+end
+
+function OnClickFriend(index)
+    if FRIEND_IN_CHATTING ~= index then
+        friends[FRIEND_IN_CHATTING].status = ''        
+        FRIEND_IN_CHATTING = index
+        friends[index].status = '_clicked'
+        if #friends[index] == 0 then
+            friend_id = friends[FRIEND_IN_CHATTING].friend_id
+            local response = request:get(string.format('/chat/private-message/%d', friend_id),nil,{sync = true})
+            if response.data.code == 200 then
+                local data = response.data.data
+                for i, v in ipairs(data) do
+                    v = v.raw
+                    local speakerIsMe
+                    if v.from_user_id == UserInfo.id then
+                        speakerIsMe = 1
+                    else
+                        speakerIsMe = 0
+                    end
+                    local msg_data = {speakerIsMe=speakerIsMe, dialog=v.content, avatar=v.from_user_avatar or DEFAULT_AVATAR, nickname=v.from_user_nickname, level=v.from_user_level or 1, channel=v.channel, from=v.from_user_id, to=v.to_user_id}
+                    table.insert(friends[index], 1, msg_data)
+                end
+            end
+        end
+        Page:Refresh()
+    end
+end
+
+function GetMessages()
+    local Messages = commonlib.deepcopy(HistoricalMessages[LAST_CLICKED_INDEX])
+    if LAST_CLICKED_INDEX == 3 then
+        Messages = commonlib.deepcopy(friends[FRIEND_IN_CHATTING])
+    end
+    for i, v in ipairs(CodepkuChatChannel.Messages) do
+        if LAST_CLICKED_INDEX == 3 then
+            
+            local f_id = friends[FRIEND_IN_CHATTING].friend_id
+            if v.from == f_id or v.to == f_id then
+                table.insert(Messages, v)
+            end
+        elseif v and v.channel == Channels[LAST_CLICKED_INDEX].channel then
+            table.insert(Messages, v)
+        end
+    end
+    return Messages
+end
+
+function GetFriends()
+    return friends
+end
+
 
 ]]></script>
 <style type="text/mcss">
 </style>
-<pe:container alignment="_lb" width="400" height="350">
-    <div style="width:400;height:350;background-color: #00000050;">
-
-    <div style="position:relative;font-size: 24;base-font-size:24; height: 40;">
-        <pe:repeat DataSource="<%=GetCategories()%>">
-            <pe:repeatitem>
-                    <div style='<%=format("position:relative; width:55; height:35;line-height:30;text-align:center;left: %s;top:0;background-color: #ffff00;", Eval("index") * 60 - 45)%>'><%=Eval("text")%></div>
-            </pe:repeatitem>
-        </pe:repeat>
-    </div>
-    <div style="position:relative;left:350;width:50; height:50; background: url(codepku/image/textures/mainuibuttons/dialog/close_button.png);" onclick="ClickClose"></div>
-
-    <div style="font-size: 24;base-font-size:24;left:15;top:50">
-        <pe:repeat DataSource="<%=GetDialogMessages()%>">
-            <pe:repeatitem>
-                <pe:if condition='<%=Eval("kind") ~= 6%>'>
-                <div style='<%=format("width:370; line-height:35;word-wrap:break-word;color:%s", MessageColors[Eval("kind")])%>'>
-                <%=format("【%s】%s: %s", MessageTopics[Eval("kind")], Eval("sender"), Eval("text"))%>
+<pe:container alignment="_ct" width="1000" height="1080">
+    
+    <div style="width:960;height:1080;background:url(codepku/image/textures/chat/chat_board.png);">
+        <!-- 频道 -->
+        <div style="width: 960;height: 100;">
+            <pe:repeat DataSource="<%=Channels%>">
+                <pe:repeatitem>
+                    <div style="<%=format('width: 100;height:60;position:relative;left:%d;margin:20;background:url(codepku/image/textures/chat/%s.png)', (Eval('index')-1)*135, Eval('name'))%>" name="<%=Eval('index')%>" onclick="OnClickChannel"></div>
+                </pe:repeatitem>
+            </pe:repeat>
+        </div>
+        <!-- 显示栏 -->
+        <div style="width: 960;height:850;">
+            <pe:if condition="<%=LAST_CLICKED_INDEX~=3%>">
+                <pe:treeview style="width: 900; height: 800" name='messages' DefaultNodeHeight = "120" ItemsPerLine="1" AllowPaging="false" RememberScrollPos="true" RememberLastPage="false" VerticalScrollBarStep="40">
+                    <pe:repeat  DataSource="<%=GetMessages()%>">
+                        <pe:repeatitem>                
+                                <pe:if condition="<%=Eval('speakerIsMe')==0%>">
+                                    <div style="width: 900;height: 150;margin-top: 10;">
+                                        <div style="width: 125;height: 125;background: url(codepku/image/textures/chat/icon_8.png);margin-left: 60px;">
+                                            <div style="<%=format('width: 110;height:110;margin:7;background: url(%s);', Eval('avatar'))%>"></div>
+                                            <div style="background: url(codepku/image/textures/chat/icon_5.png); width: 75;height: 25;position: absolute;margin-top:-25;margin-left: 50;font-size: 18px;color:white;text-align: center;"><%=format("等级%d", Eval("level"))%></div>
+                                        </div>
+                                        <div style="width: 500px;height: 30px;font-size: 30px;color: white;font-weight: bold;margin-left: 220px;margin-top: -130;"><%=Eval('nickname')%></div>
+                                        <div style="background: url(codepku/image/textures/chat/icon_3.png); width: 500px;height: 90px;margin-left: 210px;margin-top: -95px;font-size: 30px;padding-left: 30px;"><%=Eval('dialog')%></div>
+                                    </div>
+                                </pe:if>
+                                <pe:if condition="<%=Eval('speakerIsMe')==1%>">
+                                    <div style="width: 900;height: 150;margin-top: 10">
+                                        
+                                        <div style="width: 500px;height: 30px;font-size: 30px;color: white;font-weight: bold;margin-left: 220px;text-align: right;padding-right: 16px;margin-bottom: 10px;"><%=Eval('nickname')%></div>
+                                        <div style="background: url(codepku/image/textures/chat/icon_4.png); width: 500px;height: 90px;margin-left: 220px;font-size: 30px;padding-left: 20px;"><%=Eval('dialog')%></div>
+                                        <div style="width: 125;height: 125;background: url(codepku/image/textures/chat/icon_8.png);margin-left: 750px;margin-top:-120">
+                                            <div style="<%=format('width: 110;height:110;margin:7;background: url(%s);', Eval('avatar'))%>"></div>
+                                            <div style="background: url(codepku/image/textures/chat/icon_5.png); width: 75;height: 25;position: absolute;margin-top:-25;margin-left: 50;font-size: 18px;color:white;text-align: center;"><%=format("等级%d", Eval("level"))%></div>
+                                        </div>
+                                    </div>
+                                </pe:if>
+                        </pe:repeatitem>
+                    </pe:repeat>
+                </pe:treeview>
+            </pe:if>
+            <!-- 好友聊天栏 -->
+            <pe:if condition="<%=LAST_CLICKED_INDEX==3%>">
+                <div style="width: 200; height: 845;background: url(codepku/image/textures/chat/friend_left.png);">
+                <pe:treeview VerticalScrollBarStep="40"  VerticalScrollBarPageSize="400" RememberScrollPos="true" RememberLastPage="true" >
+                    <pe:repeat DataSource="<%=GetFriends()%>">
+                        <pe:repeatitem>
+                            <div style="<%=format('width:200;height:100;background: url(codepku/image/textures/chat/friend%s.png);padding: 12;', Eval('status'))%>" name="<%=Eval('index')%>" onclick="OnClickFriend">
+                                <div style="width:75;height: 75;background: url(codepku/image/textures/chat/icon_8.png);">
+                                    <div style="<%=format('width:65;height:65;background:url(%s);margin-top:5;margin-left:5', Eval('head'))%>"></div>
+                                </div>
+                                <div style="float:left;width:125;height:100;margin-top:-60;margin-left:80;font-size: 20;">
+                                    <div><%=Eval('nickname')%></div>
+                                    <pe:if condition="<%=Eval('is_online')%>">
+                                        <div style='margin:0;color:#00ff9c'>在线</div>
+                                    </pe:if>
+                                    <pe:if condition="<%=Eval('is_online')==false%>">
+                                        <div style='margin:0;color:#056097'>离线</div>
+                                    </pe:if>
+                                </div>
+                            </div>
+                            
+                        </pe:repeatitem>
+                    </pe:repeat>
+                </pe:treeview>
+            </div>
+                <div style="width:700;height:850;margin-left: 200;margin-top: -850;">
+                    <pe:treeview style="width: 740; height: 800" name='messages' DefaultNodeHeight = "120" ItemsPerLine="1" AllowPaging="false" RememberScrollPos="true" RememberLastPage="true" VerticalScrollBarStep="40">
+                        <pe:repeat  DataSource="<%=GetMessages()%>">
+                            <pe:repeatitem>                
+                                    <pe:if condition="<%=Eval('speakerIsMe')==0%>">
+                                        <div style="width: 750;height: 150;margin-top: 10;">
+                                            <div style="width: 125;height: 125;background: url(codepku/image/textures/chat/icon_8.png);margin-left: 60px;">
+                                                <div style="<%=format('width: 110;height:110;margin:7;background: url(%s);', Eval('avatar'))%>"></div>
+                                                <div style="background: url(codepku/image/textures/chat/icon_5.png); width: 75;height: 25;position: absolute;margin-top:-25;margin-left: 50;font-size: 18px;color:white;text-align: center;"><%=format("等级%d", Eval("level"))%></div>
+                                            </div>
+                                            <div style="width: 500px;height: 30px;font-size: 30px;color: white;font-weight: bold;margin-left: 220px;margin-top: -130;"><%=Eval('nickname')%></div>
+                                            <div style="background: url(codepku/image/textures/chat/icon_3.png); width: 500px;height: 90px;margin-left: 210px;margin-top: -95px;font-size: 30px;padding-left: 30px;"><%=Eval('dialog')%></div>
+                                        </div>
+                                    </pe:if>
+                                    <pe:if condition="<%=Eval('speakerIsMe')==1%>">
+                                        <div style="width: 750;height: 150;margin-top: 10;">
+                                        
+                                            <div style="width: 500px;height: 30px;font-size: 30px;color: white;font-weight: bold;margin-left: 50px;text-align: right;padding-right: 16px;margin-bottom: 10px;"><%=Eval('nickname')%></div>
+                                            <div style="background: url(codepku/image/textures/chat/icon_4.png); width: 500px;height: 90px;margin-left: 50px;font-size: 30px;padding-left: 20px;"><%=Eval('dialog')%></div>
+                                            <div style="width: 125;height: 125;background: url(codepku/image/textures/chat/icon_8.png);margin-left: 580px;margin-top:-120">
+                                                <div style="<%=format('width: 110;height:110;margin:7;background: url(%s);', Eval('avatar'))%>"></div>
+                                                <div style="background: url(codepku/image/textures/chat/icon_5.png); width: 75;height: 25;position: absolute;margin-top:-25;margin-left: 50;font-size: 18px;color:white;text-align: center;"><%=format("等级%d", Eval("level"))%></div>
+                                            </div>
+                                        </div>
+                                    </pe:if>
+                            </pe:repeatitem>
+                        </pe:repeat>
+                    </pe:treeview>
                 </div>
-                </pe:if>
-                <pe:if condition='<%= Eval("kind") == 6 %>'>
-                <div style='<%=format("width:370; line-height:35;word-wrap:break-word;color:%s", MessageColors[Eval("kind")])%>'>
-                    <%=format("【%s】 %s", MessageTopics[Eval("kind")], Eval("text"))%>
-                </div>
-                </pe:if>
-            </pe:repeatitem>
-        </pe:repeat>
+            </pe:if>
+        </div>
+        <!-- 发言 -->
+        <div style='width: 960;height:130'>
+            <div style='width: 600;height:50;margin-top: 40%;background: url(codepku/image/textures/chat/icon_6.png);margin-left: 40px;'>
+                <input type="text" style='width:600;height: 50;background-color: white;font-size: 28px;' name='DialogContent'/>
+            </div>
+            <!-- <div style='width:50;height:50;background: url(codepku/image/textures/chat/icon_2.png);margin-top: -50;margin-left: 660px;' onclick="OnClickVoice"></div> -->
+            <!-- <div style='width:50;height:50;background: url(codepku/image/textures/chat/icon_1.png);margin-top:-50;margin-left: 730px' onclick="OnClickEmoji"></div> -->
+            <div style='width:100;height:50;background: url(codepku/image/textures/chat/icon_7.png);margin-top:-50;margin-left: 700px' onclick="OnClickSend"></div>
+        </div>
     </div>
-    </div>
-
+    <div style="width: 40;height:100;background:url(codepku/image/textures/chat/icon_29.png);margin-left: 960;margin-top: -600;" onclick="OnClose"></div>
 </pe:container>
 </pe:mcml> 
 </body>

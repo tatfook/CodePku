@@ -1,0 +1,51 @@
+<!-- "Mod/CodePku/cellar/Gui/FriendUI/MyFriend.html" -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+</head>
+
+<body>
+<pe:mcml>
+<script refresh="false" type="text/npl" src="FriendUI.lua">
+<![CDATA[
+FriendUI = commonlib.gettable("Mod.CodePku.GUI.FriendUI")
+echo("=================")
+echo(FriendUI.vars["cur"])
+cur = FriendUI.vars["cur"]
+
+function ClosePage()
+    Page:CloseWindow();
+end
+
+function ConfirmDelete(lid)
+    FriendUI:DeleteFriend(lid)
+    FriendUI:ShowPage(1)
+    Page:CloseWindow();
+end
+
+]]>
+</script>
+
+<div style="width:1020;height: 550;margin-left:450;margin-top:265;background: url(codepku/image/textures/friend/main/popup.png)">
+    <div style="position:relative; left:160;top:45;width: 192;height:50;background: url(codepku/image/textures/friend/main/delete_title.png);"></div>
+    <div style="position:relative; margin-left: 900;width: 50;height: 50;margin-top: 40;background: url(codepku/image/textures/friend/main/close.png);" onclick="ClosePage">
+    </div>
+
+    <div style="width: 915px; height: 280px; margin-top: 190px; margin-left: 50px;">
+       <div style="margin-left: 60px; margin-top: 30px; font-size: 50px; color: #2ce0d7;">
+            <span>你确定删除</span>
+            <span><%= cur.nickname %></span>
+            <span>吗？</span>
+        </div>
+        <div style="width: 200px; height: 80px; margin-top: 80px; float: left; margin-left: 150px; background: url(codepku/image/textures/friend/delete_friend/confirm.png);"  name='<%=cur.id%>' onclick="ConfirmDelete"></div>
+        <div style="width: 200px; height: 80px; margin-top: 80px; float: left; margin-left: 200px; background: url(codepku/image/textures/friend/delete_friend/cancel.png);" onclick="ClosePage"></div>
+    </div>
+
+</div>
+</pe:mcml>
+</body>
+
+</html>

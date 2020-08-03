@@ -1,0 +1,69 @@
+<!-- "script/apps/Aries/Creator/Game/Areas/EscFramePage.html" -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+</head>
+<body>
+    <pe:mcml>
+<script refresh="false" type="text/npl" src="Subject.lua"><![CDATA[
+    NPL.load("(gl)script/apps/Aries.Creator.Game.Desktop.Subject.lua");
+    SubjectPage = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.SubjectPage")
+    
+    SubjectPage.OnInit();
+    
+    function ClosePage()
+        Page:CloseWindow();
+    end
+    
+    
+    function OnConfirm()
+        GameLogic.RunCommand("/goto,home")
+    end
+    
+    function OnLeave()
+        Page:CloseWindow();
+    end
+    
+    function OnClose()
+        ClosePage()
+    end
+
+   
+    subject_list = SubjectPage.subject_list
+
+
+]]>   
+</script>
+<style type="text/mcss">
+</style>
+
+<!-- <pe:container alignment="_lt" width="1920" height="1080"> -->
+    <div style='<%=format("width:1920;height:1080;background:url(codepku/image/textures/userinfo/subject-progress/board.png);")%>' >
+        <div style="position:relative;width:68;height:80;margin-left:1750;margin-top:55;background:url(codepku/image/textures/userinfo/info_title/cancel.png);"onclick="ClosePage"></div>
+        <div style = "position:relative;margin-top:100">
+            <pe:repeat  DataSource="<%=subject_list%>">
+                    <pe:repeatitem>
+                        
+                        <div style='<%=format("position:relative;width:804;height:205;margin-left:%d;margin-top:%d;background:url(codepku/image/textures/userinfo/subject-progress/subject.png);",135+850*Eval("col"),165+240*Eval("row"),Eval("name"))%>'></div>
+                        <div name='<%=Eval("index")%>'
+                            style='<%=format("position:relative;width:164;height:170;text-align:center;margin-top:%d;margin-left:%d;font-size:18;base-font-size:40;background:url(codepku/image/textures/userinfo/subject-progress/subject-logo/%s.png);",175+240*Eval("row"),160+865*Eval("col"),Eval("name"))%>' 
+                            ></div>
+                        <div style='<%=format("position:relative;width:%d;height:30;margin-left:%d;margin-top:%d;background:url(codepku/image/textures/userinfo/subject-progress/progressbar.png);",Eval("progress")/(Eval("total_exp") or 1)*552,350+850*Eval("col"),296+240*Eval("row"))%>'></div>
+
+                        <div style='<%=format("font-family:黑体;color:white;font-size:45;position:relative;width:804;height:205;margin-left:%d;margin-top:%d;",370+850*Eval("col"),200+240*Eval("row"))%>'><%=Eval("chname")%></div>
+                        <div style='<%=format("font-family:黑体;color:white;font-size:20;position:relative;width:804;height:205;margin-left:%d;margin-top:%d;",550+850*Eval("col"),225+240*Eval("row"))%>'><%=Eval("level")%></div>
+                        <div style='<%=format("font-family:黑体;color:white;font-size:20;position:relative;width:804;height:205;margin-left:%d;margin-top:%d;",810+850*Eval("col"),300+240*Eval("row"))%>'><%=Eval("progress")%>/<%=Eval("total_exp") or 0 %></div>
+
+                    </pe:repeatitem>
+            </pe:repeat>
+        </div>    
+
+    </div>
+<!-- </pe:container> -->
+<!-- </aries:window> -->
+</pe:mcml>
+</body>
+</html>
+ 
