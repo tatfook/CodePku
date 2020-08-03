@@ -50,22 +50,20 @@ for i, v in ipairs(friends) do
         FRIEND_IN_CHATTING = i
         v.status = '_clicked'
         local friend_id = friends[FRIEND_IN_CHATTING].friend_id
-        local response = request:get(string.format('/chat/private-message/%d', friend_id),nil,{sync = true})
-        if response.data.code == 200 then
+        request:get(string.format('/chat/private-message/%d', friend_id)):next(function(response)
             local data = response.data.data
-            for i, v in ipairs(data) do
-                v = v.raw
+            for i, d in ipairs(data) do
+                d = d.raw
                 local speakerIsMe
-                if v.from_user_id == UserInfo.id then
+                if d.from_user_id == UserInfo.id then
                     speakerIsMe = 1
                 else
                     speakerIsMe = 0
                 end
-                local msg_data = {speakerIsMe=speakerIsMe, dialog=v.content, avatar=v.from_user_avatar or DEFAULT_AVATAR, nickname=v.from_user_nickname, level=v.from_user_level or 1, channel=v.channel, from=v.from_user_id, to=v.to_user_id}
+                local msg_data = {speakerIsMe=speakerIsMe, dialog=d.content, avatar=d.from_user_avatar or DEFAULT_AVATAR, nickname=d.from_user_nickname, level=d.from_user_level or 0, channel=d.channel, from=d.from_user_id, to=d.to_user_id}
                 table.insert(friends[FRIEND_IN_CHATTING], 1, msg_data)
             end
-            
-        end
+        end)
     else
         v.status = ''
     end
@@ -198,6 +196,7 @@ function GetMessages()
     if LAST_CLICKED_INDEX == 3 then
         Messages = commonlib.deepcopy(friends[FRIEND_IN_CHATTING])
     end
+    CodepkuChatChannel.Messages = {}
     for i, v in ipairs(CodepkuChatChannel.Messages) do
         if LAST_CLICKED_INDEX == 3 then
             
