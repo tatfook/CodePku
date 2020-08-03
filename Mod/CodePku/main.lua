@@ -63,6 +63,7 @@ local RankPage = NPL.load("(gl)Mod/CodePku/cellar/GUI/FastEntrence/RankPage.lua"
 local PropsInfo = NPL.load("(gl)Mod/CodePku/cellar/GUI/Props/PropsInfo.lua")
 local RankPage = NPL.load("(gl)Mod/CodePku/cellar/GUI/FastEntrence/RankPage.lua")
 local Messages = NPL.load("(gl)Mod/CodePku/cellar/common/TouchMiniButtons/Messages.lua")
+local MainPopup = NPL.load("(gl)Mod/CodePku/cellar/GUI/MainPopup/MainPopup.lua")
 
 local DownloadWorld = commonlib.gettable("MyCompany.Aries.Game.MainLogin.DownloadWorld")
 

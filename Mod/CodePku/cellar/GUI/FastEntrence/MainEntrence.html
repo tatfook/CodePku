@@ -13,6 +13,8 @@ local SystemEntrencePage = commonlib.gettable("MyCompany.Aries.Creator.Game.Desk
 local TopicEntrencePage = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.TopicEntrencePage");
 local CompeteEntrencePage = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.CompeteEntrencePage");
 
+local MainPopup = commonlib.gettable("Mod.CodePku.GUI.MainPopup")
+
 function ClosePage()
     Page:CloseWindow();
 end
@@ -47,15 +49,7 @@ end
 
 function onClickPage(name)
     ClosePage()
-    if(name=="system") then
-        TurnToSystemEntrence();
-    elseif(name=="topic") then
-        TurnToTopicEntrence();
-    elseif(name=="build") then
-        TurnToBuildEntrence()
-    elseif(name=="compete") then
-        TurnToCompeteEntrence()
-    end
+    MainPopup:ShowPage(name)
 end
 
 
