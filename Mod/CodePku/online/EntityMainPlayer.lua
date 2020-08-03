@@ -25,8 +25,8 @@ function EntityMainPlayer:CreateInnerObject(...)
 	-- userid = System.User.id
 	-- self:SetPlayerInfo(info)
 
-	local UserInfoPage = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.UserInfoPage")
-	local UserInfo = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.UserInfo")
+	local UserInfoPage = commonlib.gettable("Mod.CodePku.UserInfoPage")
+	local UserInfo = commonlib.gettable("Mod.CodePku.UserInfo")
 	UserInfoPage:GetUserInfo()
 
 	local name = UserInfo.name or self:GetDisplayName()

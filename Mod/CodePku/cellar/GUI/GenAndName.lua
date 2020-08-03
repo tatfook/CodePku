@@ -1,4 +1,4 @@
-local GenAndName = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.GenAndName")
+local GenAndName = commonlib.gettable("Mod.CodePku.GenAndName")
 local request = NPL.load("(gl)Mod/CodePku/api/BaseRequest.lua");
 local page;
 
@@ -56,7 +56,7 @@ end
 
 function GenAndName:ShowPage()
     -- NPL.load("(gl)Mod/CodePku/cellar/GUI/GenAndName.lua")
-    -- local GenAndName = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.GenAndName")
+    -- local GenAndName = commonlib.gettable("Mod.CodePku.GenAndName")
 
     params = {
         url = "Mod/CodePku/cellar/GUI/GenAndName.html", 

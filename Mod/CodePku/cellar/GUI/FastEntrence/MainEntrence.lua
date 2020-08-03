@@ -1,6 +1,6 @@
 NPL.load("(gl)Mod/CodePku/cellar/GUI/Window/AdaptWindow.lua");
 local AdaptWindow = commonlib.gettable("Mod.CodePku.GUI.Window.AdaptWindow")
-local MainEntrencePage = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.MainEntrencePage");
+local MainEntrencePage = commonlib.gettable("Mod.CodePku.MainEntrencePage");
 
 function MainEntrencePage:ShowPage(bShow)
     local params = {

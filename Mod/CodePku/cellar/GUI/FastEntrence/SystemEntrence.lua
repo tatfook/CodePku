@@ -1,9 +1,9 @@
 NPL.load("(gl)Mod/CodePku/cellar/GUI/Window/AdaptWindow.lua");
 local AdaptWindow = commonlib.gettable("Mod.CodePku.GUI.Window.AdaptWindow");
-local SystemEntrencePage = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.SystemEntrencePage");
-local SystemLevelPage = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.SystemLevelPage");
+local SystemEntrencePage = commonlib.gettable("Mod.CodePku.SystemEntrencePage");
+local SystemLevelPage = commonlib.gettable("Mod.CodePku.SystemLevelPage");
 local request = NPL.load("(gl)Mod/CodePku/api/BaseRequest.lua");
-local SystemEntranceChoosePage = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.SystemEntranceChoosePage");
+local SystemEntranceChoosePage = commonlib.gettable("Mod.CodePku.SystemEntranceChoosePage");
 
 local page;
 

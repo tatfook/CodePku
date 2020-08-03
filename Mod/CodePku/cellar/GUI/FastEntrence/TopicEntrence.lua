@@ -1,6 +1,6 @@
 NPL.load("(gl)Mod/CodePku/cellar/GUI/Window/AdaptWindow.lua");
 local AdaptWindow = commonlib.gettable("Mod.CodePku.GUI.Window.AdaptWindow");
-local TopicEntrencePage = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.TopicEntrencePage");
+local TopicEntrencePage = commonlib.gettable("Mod.CodePku.TopicEntrencePage");
 local request = NPL.load("(gl)Mod/CodePku/api/BaseRequest.lua");
 
 function TopicEntrencePage.GetCourse(subject_id)

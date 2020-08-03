@@ -1,5 +1,5 @@
-local EditPage = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.EditPage")
-local myWord = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.myWord")
+local EditPage = commonlib.gettable("Mod.CodePku.EditPage")
+local myWord = commonlib.gettable("Mod.CodePku.myWord")
 
 local page;
 

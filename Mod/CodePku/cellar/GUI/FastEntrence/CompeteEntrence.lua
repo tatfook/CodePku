@@ -1,6 +1,6 @@
 NPL.load("(gl)Mod/CodePku/cellar/GUI/Window/AdaptWindow.lua");
 local AdaptWindow = commonlib.gettable("Mod.CodePku.GUI.Window.AdaptWindow");
-local CompeteEntrencePage = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.CompeteEntrencePage");
+local CompeteEntrencePage = commonlib.gettable("Mod.CodePku.CompeteEntrencePage");
 
 function CompeteEntrencePage:ShowPage(bShow)
     local params = {

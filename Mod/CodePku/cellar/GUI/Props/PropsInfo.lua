@@ -1,6 +1,6 @@
 NPL.load("(gl)Mod/CodePku/cellar/GUI/Window/AdaptWindow.lua");
 local AdaptWindow = commonlib.gettable("Mod.CodePku.GUI.Window.AdaptWindow");
-local PropsInfo = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.PropsInfo");
+local PropsInfo = commonlib.gettable("Mod.CodePku.PropsInfo");
 local request = NPL.load("(gl)Mod/CodePku/api/BaseRequest.lua");
 
 -- 获取道具 prop_id 道具id prop_num 道具数量

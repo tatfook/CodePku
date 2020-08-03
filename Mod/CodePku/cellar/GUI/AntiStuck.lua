@@ -1,6 +1,6 @@
 NPL.load("(gl)Mod/CodePku/cellar/GUI/Window/AdaptWindow.lua");
 local AdaptWindow = commonlib.gettable("Mod.CodePku.GUI.Window.AdaptWindow");
-local AntiStuckPage = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.AntiStuckPage");
+local AntiStuckPage = commonlib.gettable("Mod.CodePku.AntiStuckPage");
 
 
 function AntiStuckPage:ShowPage(bShow)
