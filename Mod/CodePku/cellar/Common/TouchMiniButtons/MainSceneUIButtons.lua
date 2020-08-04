@@ -11,7 +11,7 @@ CodepkuChatChannel = NPL.load("(gl)Mod/CodePku/chat/CodepkuChatChannel.lua");
 
 function MainSceneUIButtons.show_dialog_ui(bshow)
     FriendUI:GetFriend()
-
+    MainSceneUIButtons.ScrollToEnd = 'true'
     if(bshow) then
         params = {
             url="Mod/CodePku/cellar/Common/TouchMiniButtons/MainUIButtons_dialog.html", 

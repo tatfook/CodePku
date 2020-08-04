@@ -74,7 +74,7 @@ function OnClickSend()
     if not words or words == '' then
         return
     end
-    if #words > 90 then
+    if commonlib.utf8.len(words) > 30 then
         GameLogic.RunCommand("/tip -duration 1500 内容上限30个字")
         return 
     end
@@ -132,6 +132,10 @@ function GetFriends()
     return friends
 end
 
+function scrollEnd()
+    return MainSceneUIButtons.ScrollToEnd
+end
+
 
 ]]></script>
 <style type="text/mcss">
@@ -150,7 +154,7 @@ end
         <!-- 显示栏 -->
         <div style="width: 960;height:850;">
             <pe:if condition="<%=LAST_CLICKED_INDEX~=3%>">
-                <pe:treeview style="width: 900; height: 800" name='messages' DefaultNodeHeight = "120" ItemsPerLine="1" AllowPaging="false" RememberScrollPos="true" RememberLastPage="false" VerticalScrollBarStep="40">
+                <pe:treeview style="width: 900; height: 800" ScrollToEnd="<%=scrollEnd()%>" name='messages' DefaultNodeHeight = "120" ItemsPerLine="1" AllowPaging="false" RememberScrollPos="true" RememberLastPage="false" VerticalScrollBarStep="40">
                     <pe:repeat  DataSource="<%=GetMessages()%>">
                         <pe:repeatitem>                
                                 <pe:if condition="<%=Eval('speakerIsMe')==0%>">
@@ -204,7 +208,7 @@ end
                 </pe:treeview>
             </div>
                 <div style="width:700;height:850;margin-left: 200;margin-top: -850;">
-                    <pe:treeview style="width: 740; height: 800" name='messages' DefaultNodeHeight = "120" ItemsPerLine="1" AllowPaging="false" RememberScrollPos="true" RememberLastPage="true" VerticalScrollBarStep="40">
+                    <pe:treeview style="width: 740; height: 800" ScrollToEnd="<%=scrollEnd()%>" name='messages' DefaultNodeHeight = "120" ItemsPerLine="1" AllowPaging="false" RememberScrollPos="true" RememberLastPage="true" VerticalScrollBarStep="40">
                         <pe:repeat  DataSource="<%=GetMessages()%>">
                             <pe:repeatitem>                
                                     <pe:if condition="<%=Eval('speakerIsMe')==0%>">

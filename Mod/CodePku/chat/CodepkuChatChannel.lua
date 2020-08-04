@@ -285,7 +285,12 @@ function CodepkuChatChannel.OnMsg(self, msg)
         end
     end
     if MainSceneUIButtons.page then
-        MainSceneUIButtons.page:Refresh(0)
+        if speakerIsMe == 0 then
+            MainSceneUIButtons.ScrollToEnd = "false"
+        else
+            MainSceneUIButtons.ScrollToEnd = "true"
+        end
+        MainSceneUIButtons.page:Refresh()
     end
     -- if FriendUI.page then
     --     FriendUI.page:Refresh(0)
