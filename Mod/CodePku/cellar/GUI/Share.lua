@@ -1,4 +1,4 @@
-local SharePage = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.SharePage")
+local SharePage = commonlib.gettable("Mod.CodePku.SharePage")
 
 local page;
 

@@ -1,4 +1,4 @@
-RankPage = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.RankPage");
+RankPage = commonlib.gettable("Mod.CodePku.RankPage");
 local AdaptWindow = commonlib.gettable("Mod.CodePku.GUI.Window.AdaptWindow")
 
 local request = NPL.load("(gl)Mod/CodePku/api/BaseRequest.lua")

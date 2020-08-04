@@ -2,7 +2,8 @@ NPL.load("(gl)Mod/CodePku/cellar/GUI/Window/AdaptWindow.lua");
 local request = NPL.load("(gl)Mod/CodePku/api/BaseRequest.lua");
 local AdaptWindow = commonlib.gettable("Mod.CodePku.GUI.Window.AdaptWindow")
 
-local FriendUI = commonlib.gettable("Mod.CodePku.GUI.FriendUI")
+-- local FriendUI = NPL.load("(gl)Mod/CodePku/cellar/GUI/Friend/FriendUI.lua")
+local FriendUI = NPL.export()
 
 FriendUI.ui = nil
 FriendUI.popui = nil

@@ -9,8 +9,8 @@
 <body>
 <pe:mcml>
 <script refresh="false" type="text/npl" src="MainSceneUIButtons.lua"><![CDATA[
-local MainEntrencePage = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.MainEntrencePage");
-local AntiStuckPage = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.AntiStuckPage");
+local MainEntrencePage = commonlib.gettable("Mod.CodePku.MainEntrencePage");
+local AntiStuckPage = commonlib.gettable("Mod.CodePku.AntiStuckPage");
 
 function ClickCommonButton()
     GameLogic.AddBBS("CodeGlobals", L"功能开发中", 3000, "#ff0000");
@@ -32,8 +32,8 @@ end
 <pe:container alignment="_lt" width="100%" height="100%">
     <input type="button" style="position:relative;margin-left:0;width:100; height:100; background: url(codepku/image/textures/mainuibuttons/common/quick_entry.png);" onclick="ClickMainEntrence"/>
     <input type="button" style="position:relative;margin-left:100;width:100; height:100; background: url(codepku/image/textures/mainuibuttons/common/anti_jamming.png);" onclick="ClickAntiJamming"/>
-    <input type="button" style="position:relative;margin-left:200;width:100; height:100; background: url(codepku/image/textures/mainuibuttons/common/shop.png);" onclick="ClickCommonButton"/>
-    <input type="button" style="position:relative;margin-left:300;width:100; height:100; background: url(codepku/image/textures/mainuibuttons/common/block_players.png);" onclick="ClickCommonButton"/>
+    <!-- <input type="button" style="position:relative;margin-left:200;width:100; height:100; background: url(codepku/image/textures/mainuibuttons/common/shop.png);" onclick="ClickCommonButton"/> -->
+    <!-- <input type="button" style="position:relative;margin-left:300;width:100; height:100; background: url(codepku/image/textures/mainuibuttons/common/block_players.png);" onclick="ClickCommonButton"/> -->
 </pe:container>
 </pe:mcml> 
 </body>

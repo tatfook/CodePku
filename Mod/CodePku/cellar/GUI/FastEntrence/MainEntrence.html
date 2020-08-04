@@ -8,10 +8,10 @@
 <body>
     <pe:mcml onloadscript="script/apps/Aries/app_main.lua" callbackfunction="MyCompany.Aries.MSGProc">
 <script refresh="false" type="text/npl" src="MainEntrence.lua"><![CDATA[
-MainEntrencePage = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.MainEntrencePage");
-local SystemEntrencePage = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.SystemEntrencePage");
-local TopicEntrencePage = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.TopicEntrencePage");
-local CompeteEntrencePage = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.CompeteEntrencePage");
+MainEntrencePage = commonlib.gettable("Mod.CodePku.MainEntrencePage");
+local SystemEntrencePage = commonlib.gettable("Mod.CodePku.SystemEntrencePage");
+local TopicEntrencePage = commonlib.gettable("Mod.CodePku.TopicEntrencePage");
+local CompeteEntrencePage = commonlib.gettable("Mod.CodePku.CompeteEntrencePage");
 
 function ClosePage()
     Page:CloseWindow();

@@ -1,4 +1,4 @@
-local SubjectPage = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.SubjectPage")
+local SubjectPage = commonlib.gettable("Mod.CodePku.SubjectPage")
 local request = NPL.load("(gl)Mod/CodePku/api/BaseRequest.lua");
 local page;
 
