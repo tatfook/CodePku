@@ -12,7 +12,7 @@
 NPL.load("(gl)script/apps/Aries.Creator.Game.Desktop.OtherUserInfos.lua");
 UserInfoPage = commonlib.gettable("Mod.CodePku.OtherUserInfoPage")
 NPL.load("(gl)Mod/CodePku/cellar/GUI/Friend/FriendUI.lua");
-FriendUI = commonlib.gettable("Mod.CodePku.GUI.FriendUI")
+FriendUI = NPL.load("(gl)Mod/CodePku/cellar/GUI/Friend/FriendUI.lua")
 size = 400
 name = Page:GetRequestParam("pname")
 pid = Page:GetRequestParam("pid")

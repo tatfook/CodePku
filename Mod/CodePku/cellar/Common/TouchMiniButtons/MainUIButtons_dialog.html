@@ -12,20 +12,12 @@
 MainSceneUIButtons = commonlib.gettable("Mod.CodePku.Common.TouchMiniButtons.MainSceneUIButtons");
 DialogMessages = commonlib.gettable("Mod.CodePku.Common.MainUIButtons.DialogMessages")
 UserInfo = commonlib.gettable("Mod.CodePku.UserInfo")
-local CodepkuChatChannel = NPL.load("(gl)Mod/CodePku/chat/CodepkuChatChannel.lua");
-
-FriendUI = commonlib.gettable("Mod.CodePku.GUI.FriendUI")
+CodepkuChatChannel = NPL.load("(gl)Mod/CodePku/chat/CodepkuChatChannel.lua");
+FriendUI = NPL.load("(gl)Mod/CodePku/cellar/GUI/Friend/FriendUI.lua");
 local request = NPL.load("(gl)Mod/CodePku/api/BaseRequest.lua");
 
 local page = document:GetPageCtrl()
 MainSceneUIButtons.page = page
-
-HistoricalMessages = {
-    [1] = {channel=2}, -- 世界
-    [2] = {channel=3}, -- 附近
-    [3] = {},
-
-}
 
 -- {"全部","世界","本地","公会","校园","系统","好友"}
 Channels = {
@@ -49,39 +41,8 @@ for i, v in ipairs(friends) do
     if i == 1 then
         FRIEND_IN_CHATTING = i
         v.status = '_clicked'
-        local friend_id = friends[FRIEND_IN_CHATTING].friend_id
-        request:get(string.format('/chat/private-message/%d', friend_id)):next(function(response)
-            local data = response.data.data
-            for i, d in ipairs(data) do
-                d = d.raw
-                local speakerIsMe
-                if d.from_user_id == UserInfo.id then
-                    speakerIsMe = 1
-                else
-                    speakerIsMe = 0
-                end
-                local msg_data = {speakerIsMe=speakerIsMe, dialog=d.content, avatar=d.from_user_avatar or DEFAULT_AVATAR, nickname=d.from_user_nickname, level=d.from_user_level or 0, channel=d.channel, from=d.from_user_id, to=d.to_user_id}
-                table.insert(friends[FRIEND_IN_CHATTING], 1, msg_data)
-            end
-        end)
     else
         v.status = ''
-    end
-end
-
-response = request:get(string.format('/chat/channel-message/%d', HistoricalMessages[1].channel),nil,{sync = true})
-if response.data.code == 200 then
-    local data = response.data.data
-    for i, v in ipairs(data) do
-        v = v.raw
-        local speakerIsMe
-        if v.from_user_id == UserInfo.id then
-            speakerIsMe = 1
-        else
-            speakerIsMe = 0
-        end
-        local msg_data = {speakerIsMe=speakerIsMe, dialog=v.content, avatar=v.from_user_avatar or DEFAULT_AVATAR, nickname=v.from_user_nickname, level=v.from_user_level or 1, channel=v.channel}
-        table.insert(HistoricalMessages[1], 1, msg_data)
     end
 end
 
@@ -95,25 +56,6 @@ function OnClickChannel(index)
         Channels[LAST_CLICKED_INDEX].name = string.gsub(Channels[LAST_CLICKED_INDEX].name, '_clicked', '')
         LAST_CLICKED_INDEX = index
         Channels[LAST_CLICKED_INDEX].name = Channels[LAST_CLICKED_INDEX].name..'_clicked'
-        if #HistoricalMessages[index] == 0 then
-            if HistoricalMessages[index].channel then
-                response = request:get(string.format('/chat/channel-message/%d', HistoricalMessages[index].channel),nil,{sync = true})
-                if response.data.code == 200 then
-                    local data = response.data.data
-                    for i, v in ipairs(data) do
-                        v = v.raw
-                        local speakerIsMe
-                        if v.from_user_id == UserInfo.id then
-                            speakerIsMe = 1
-                        else
-                            speakerIsMe = 0
-                        end
-                        local msg_data = {speakerIsMe=speakerIsMe, dialog=v.content, avatar=v.from_user_avatar or DEFAULT_AVATAR, nickname=v.from_user_nickname, level=v.from_user_level or 1, channel=v.channel}
-                        table.insert(HistoricalMessages[index], 1, msg_data)
-                    end
-                end
-            end
-        end
         Page:Refresh()
     end
 end
@@ -169,44 +111,19 @@ function OnClickFriend(index)
         friends[FRIEND_IN_CHATTING].status = ''        
         FRIEND_IN_CHATTING = index
         friends[index].status = '_clicked'
-        if #friends[index] == 0 then
-            friend_id = friends[FRIEND_IN_CHATTING].friend_id
-            local response = request:get(string.format('/chat/private-message/%d', friend_id),nil,{sync = true})
-            if response.data.code == 200 then
-                local data = response.data.data
-                for i, v in ipairs(data) do
-                    v = v.raw
-                    local speakerIsMe
-                    if v.from_user_id == UserInfo.id then
-                        speakerIsMe = 1
-                    else
-                        speakerIsMe = 0
-                    end
-                    local msg_data = {speakerIsMe=speakerIsMe, dialog=v.content, avatar=v.from_user_avatar or DEFAULT_AVATAR, nickname=v.from_user_nickname, level=v.from_user_level or 1, channel=v.channel, from=v.from_user_id, to=v.to_user_id}
-                    table.insert(friends[index], 1, msg_data)
-                end
-            end
-        end
         Page:Refresh()
     end
 end
 
 function GetMessages()
-    local Messages = commonlib.deepcopy(HistoricalMessages[LAST_CLICKED_INDEX])
+    local Messages = {}
     if LAST_CLICKED_INDEX == 3 then
-        Messages = commonlib.deepcopy(friends[FRIEND_IN_CHATTING])
-    end
-    CodepkuChatChannel.Messages = {}
-    for i, v in ipairs(CodepkuChatChannel.Messages) do
-        if LAST_CLICKED_INDEX == 3 then
-            
+        if friends and friends ~= {} then
             local f_id = friends[FRIEND_IN_CHATTING].friend_id
-            if v.from == f_id or v.to == f_id then
-                table.insert(Messages, v)
-            end
-        elseif v and v.channel == Channels[LAST_CLICKED_INDEX].channel then
-            table.insert(Messages, v)
+            Messages = CodepkuChatChannel.Messages[Channels[LAST_CLICKED_INDEX].channel][f_id]
         end
+    else
+        Messages = CodepkuChatChannel.Messages[Channels[LAST_CLICKED_INDEX].channel]
     end
     return Messages
 end
