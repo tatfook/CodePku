@@ -17,6 +17,10 @@ function ClickClose()
 end
 
 function ClickOpen() 
+    if (is_open == true) then
+        ClickRank()
+        return
+    end
     is_open = true
     Page:Refresh(0)
 end
@@ -54,14 +58,14 @@ end
 </style>
 <pe:container alignment="_rb" width="720" height="100">
     <pe:if condition='<%= is_open %>'>
-        <div style="position:relative;left:0;width:90; height:90; background: url(codepku/image/textures/mainuibuttons/function/close_button.png);" onclick="ClickClose"></div>
-        <div style="position:relative;left:90;width:90; height:90; background: url(codepku/image/textures/mainuibuttons/function/user_info.png);" onclick="ClickUserInfo"></div>
-        <div style="position:relative;left:180;width:90; height:90; background: url(codepku/image/textures/mainuibuttons/function/bag.png);" onclick="ClickBag"></div>
-        <div style="position:relative;left:270;width:90; height:90; background: url(codepku/image/textures/mainuibuttons/function/friends.png);" onclick="ClickFriend"></div>
-        <div style="position:relative;left:360;width:90; height:90; background: url(codepku/image/textures/mainuibuttons/function/rank.png);" onclick="ClickRank"></div>
-        <div style="position:relative;left:450;width:90; height:90; background: url(codepku/image/textures/mainuibuttons/function/school.png);" onclick="ClickFunctionButton"></div>
-        <div style="position:relative;left:540;width:90; height:90; background: url(codepku/image/textures/mainuibuttons/function/email.png);" onclick="ClickFunctionButton"></div>
-        <div style="position:relative;left:630;width:90; height:90; background: url(codepku/image/textures/mainuibuttons/function/setting.png);" onclick="ClickFunctionButton"></div>
+        <div style="position:relative;left:360;width:90; height:90; background: url(codepku/image/textures/mainuibuttons/function/close_button.png);" onclick="ClickClose"></div>
+        <div style="position:relative;left:450;width:90; height:90; background: url(codepku/image/textures/mainuibuttons/function/user_info.png);" onclick="ClickUserInfo"></div>
+        <!-- <div style="position:relative;left:180;width:90; height:90; background: url(codepku/image/textures/mainuibuttons/function/bag.png);" onclick="ClickBag"></div> -->
+        <div style="position:relative;left:540;width:90; height:90; background: url(codepku/image/textures/mainuibuttons/function/friends.png);" onclick="ClickFriend"></div>
+        <div style="position:relative;left:630;width:90; height:90; background: url(codepku/image/textures/mainuibuttons/function/rank.png);" onclick="ClickRank"></div>
+        <!-- <div style="position:relative;left:450;width:90; height:90; background: url(codepku/image/textures/mainuibuttons/function/school.png);" onclick="ClickFunctionButton"></div> -->
+        <!-- <div style="position:relative;left:540;width:90; height:90; background: url(codepku/image/textures/mainuibuttons/function/email.png);" onclick="ClickFunctionButton"></div> -->
+        <!-- <div style="position:relative;left:630;width:90; height:90; background: url(codepku/image/textures/mainuibuttons/function/setting.png);" onclick="ClickFunctionButton"></div> -->
     </pe:if>
     <pe:if condition='<%= not is_open %>'>
         <div style="position:relative;left:630;width:100; height:100; background: url(codepku/image/textures/mainuibuttons/function/open_button.png);" onclick="ClickOpen"></div>

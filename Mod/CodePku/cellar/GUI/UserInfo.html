@@ -118,7 +118,15 @@ choose_index = UserInfoPage.PageIndex or 1
 choose_index5 = 1 -- 道具类型id，1-全部 2-装扮 3-消耗品 4-建造道具 5-其他
 
 user_options_list ={}
-user_options_list[1] = {{index =1,url ='shouye'},{index =2,url ='shuxing'},{index =3,url ='juese'},{index =4,url ='waiguan'},{index =5,url ='beibao'},{index =6,url ='chengjiu'},{index =7,url ='dongtai'}}
+user_options_list[1] = {
+    {index =1,url ='shouye'},
+    {index =2,url ='shuxing'},
+    --{index =3,url ='juese'},
+    --{index =4,url ='waiguan'},
+    --{index =5,url ='beibao'},
+    --{index =6,url ='chengjiu'},
+    --{index =7,url ='dongtai'},
+}
 user_options_list[1][choose_index].url = user_options_list[1][choose_index].url ..1
 user_options_list[5] = {{index =1,url ='quanbu1'},{index =2,url ='dress'},{index =3,url ='build'},{index =4,url ='consumable'},{index =5,url ='other'}}
 
@@ -201,8 +209,8 @@ end
     <div style='<%=format("width:1920;height:1080;background:url(codepku/image/textures/userinfo/user_info_back.png);")%>' >
         <div style="position:relative;width:75;height:75;margin-left:75;margin-top:0;"onclick="ClosePage"></div>
         <div style="position:relative;width:160;height:43;margin-left:960;margin-top:16;background:url(codepku/image/textures/userinfo/info_title/user_center.png);"onclick="ClosePage"></div>
-        <div style="position:relative;width:180;height:45;margin-left:1500;margin-top:20;background: url(codepku/image/textures/userinfo/money_1.png);color: white;font-size: 20px;font-weight: bold;"onclick="ClosePage"><div style="margin-left:50;margin-top:10"><%=UserInfo.money.goldcoin%></div></div>
-        <div style="position:relative;width:180;height:45;margin-left:1700;margin-top:20;background: url(codepku/image/textures/userinfo/money_2.png);color: white;font-size: 20px;font-weight: bold;"onclick="ClosePage"><div style="margin-left:50;margin-top:10"><%=UserInfo.money.wanxuecoin%></div></div>
+        <div style="position:relative;width:180;height:45;margin-left:1500;margin-top:20;background: url(codepku/image/textures/userinfo/money_1.png);color: white;font-size: 20px;font-weight: bold;"><div style="margin-left:50;margin-top:10"><%=UserInfo.money.goldcoin%></div></div>
+        <div style="position:relative;width:180;height:45;margin-left:1700;margin-top:20;background: url(codepku/image/textures/userinfo/money_2.png);color: white;font-size: 20px;font-weight: bold;"><div style="margin-left:50;margin-top:10"><%=UserInfo.money.wanxuecoin%></div></div>
         <div style = "position:relative;margin-top:100">
             <pe:repeat  DataSource="<%=user_options_list[1]%>">
                 <pe:repeatitem>
@@ -210,7 +218,7 @@ end
                 </pe:repeatitem>
             </pe:repeat>
         </div>
-        <div style="position:relative;width:275;height:97;margin-top:960;font-size:18;base-font-size:40;background:url(codepku/image/textures/userinfo/options/shezhi.png)"onclick="Undefinde"></div>
+        <!-- <div style="position:relative;width:275;height:97;margin-top:960;font-size:18;base-font-size:40;background:url(codepku/image/textures/userinfo/options/shezhi.png)"onclick="Undefinde"></div> -->
         <pe:if condition='<%=choose_index == 1%>'>
             <!-- 首页 -->
             <div style="position:relative;width:1447;height:137;margin-left:324;margin-top:140;background:url(codepku/image/textures/userinfo/user_name_info/name_info.png);">
