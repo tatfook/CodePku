@@ -9,3 +9,4 @@ npl_packages
 *.txt
 Debug
 .DS_Store
+assets/
