@@ -12,13 +12,14 @@
 local MainEntrencePage = commonlib.gettable("Mod.CodePku.MainEntrencePage");
 local AntiStuckPage = commonlib.gettable("Mod.CodePku.AntiStuckPage");
 local SmallMap = commonlib.gettable("Mod.CodePku.GUI.SmallMap")
+local MainPopup = commonlib.gettable("Mod.CodePku.GUI.MainPopup")
 
 function ClickCommonButton()
     GameLogic.AddBBS("CodeGlobals", L"功能开发中", 3000, "#ff0000");
 end
 
 function ClickAntiJamming()
-    AntiStuckPage.ShowPage()
+    MainPopup:ShowPage('AntiJam')
 end
 
 function ClickMainEntrence()
