@@ -11,6 +11,7 @@ local UserStore = commonlib.gettable('Mod.WorldShare.store.User')
 ]]
 
 local UserStore = commonlib.gettable('Mod.CodePku.store.User')
+local Config = NPL.load("(gl)Mod/Codepku/config/Config.lua")
 
 function UserStore:Action()
     return {
@@ -36,6 +37,22 @@ function UserStore:Action()
             commonlib.setfield('System.User.id', user.id)
             commonlib.setfield("System.User.nickName", user.nickname)            
             commonlib.setfield("System.User.info", user)  
+
+            -- if Config.defaultEnv ~= Config.env.DEV then
+                GameLogic.GetFilters():add_filter(
+                    "HandleGlobalKeyByRETURN",
+                    function()
+                        return user.is_employee == 0;
+                    end
+                );
+            
+                GameLogic.GetFilters():add_filter(
+                    "HandleGlobalKeyBySLASH",
+                    function()
+                        return user.is_employee == 0;
+                    end
+                );
+            -- end
         end,
         SetPlayerController = function(playerController)
             self.playerController = playerController
