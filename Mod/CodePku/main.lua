@@ -360,7 +360,21 @@ function CodePku:init()
     -- echo(WebSocketClient)
 
     local CodepkuChatChannel = NPL.load("(gl)Mod/CodePku/chat/CodepkuChatChannel.lua");
-    CodepkuChatChannel.StaticInit();
+	CodepkuChatChannel.StaticInit();
+	
+	GameLogic.GetFilters():add_filter(
+		"HandleGlobalKeyByRETURN",
+		function()
+			return true;
+		end
+	);
+
+	GameLogic.GetFilters():add_filter(
+		"HandleGlobalKeyBySLASH",
+		function()
+			return true;
+		end
+	);
 end
 
 function CodePku:OnLogin()
