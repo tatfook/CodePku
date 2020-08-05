@@ -72,13 +72,12 @@ function MainUIButtons.ShowPage()
 		end
 	end
 
+	MainUIButtons.show_common_ui()
+	MainUIButtons.show_dialog_ui(false)
+	MainUIButtons.show_money_ui()
 	if(show)then
-		if(not MainUIButtons.hasshown) then
-			MainUIButtons.show_common_ui()
-			MainUIButtons.show_function_ui()
-			MainUIButtons.show_dialog_ui(false)
-			MainUIButtons.show_money_ui()
-
+		if(not MainUIButtons.hasshown) then			
+			MainUIButtons.show_function_ui()					
 			MainUIButtons.hasshown = true
 			-- GenAndName:ShowPage()
 		end
