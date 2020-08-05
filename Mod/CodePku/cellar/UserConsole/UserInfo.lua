@@ -34,6 +34,19 @@ local default_avatars = {
     "default"
 }
 
+local DefaultBoyAvatars = {
+    "boy01",
+    "boy02",
+    "boy03",
+    "boy04"
+};
+
+local DefaultGirlAvatars = {
+    "girl01",
+    "girl02",
+    "girl03"
+}
+
 local cur_index = 1
 
 function UserInfo.IsSignedIn()
@@ -254,13 +267,28 @@ local curIndex = 1
 function UserInfo:OnChangeAvatar(btnName)
     local UserConsolePage = Store:Get("page/UserConsole")
 
+    local avatars = default_avatars;
+
+
+
+    if System.User.info.gender == 1 then
+        avatars = DefaultBoyAvatars;
+    elseif System.User.info.gender == 2 then
+        avatars = DefaultGirlAvatars;
+    end
+
+    echo("testtest")
+    echo(System.User)
+    echo(System.User.info.gender)
+    echo(avatars)
+ 
     if not btnName then
         local filename = GameLogic.options:GetMainPlayerAssetName()
         if not GameLogic.IsStarted then
             GameLogic.options:SetMainPlayerAssetName()
             filename = GameLogic.options:GetMainPlayerAssetName()
             if not filename then
-                filename = UserInfo.GetValidAvatarFilename(default_avatars[cur_index])
+                filename = UserInfo.GetValidAvatarFilename(avatars[cur_index])
                 GameLogic.options:SetMainPlayerAssetName(filename)
             end
         end
@@ -276,9 +304,9 @@ function UserInfo:OnChangeAvatar(btnName)
         curIndex = curIndex + 1
     end
 
-    curIndex = ((curIndex - 1) % (#default_avatars)) + 1
+    curIndex = ((curIndex - 1) % (#avatars)) + 1
     
-    local playerName = default_avatars[curIndex]
+    local playerName = avatars[curIndex]
 
     if playerName and UserConsolePage then
         local filename = UserInfo.GetValidAvatarFilename(playerName)

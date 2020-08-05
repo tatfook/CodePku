@@ -65,6 +65,7 @@ local Messages = NPL.load("(gl)Mod/CodePku/cellar/common/TouchMiniButtons/Messag
 local DownloadWorld = commonlib.gettable("MyCompany.Aries.Game.MainLogin.DownloadWorld")
 
 local CodePku = commonlib.inherit(commonlib.gettable("Mod.ModBase"),commonlib.gettable("Mod.CodePku"));
+local Config = NPL.load("(gl)Mod/Codepku/config/Config.lua")
 
 CodePku:Property({"Name", "CodePku", "GetName", "SetName", { auto = true }})
 
@@ -362,19 +363,21 @@ function CodePku:init()
     local CodepkuChatChannel = NPL.load("(gl)Mod/CodePku/chat/CodepkuChatChannel.lua");
 	CodepkuChatChannel.StaticInit();
 	
-	GameLogic.GetFilters():add_filter(
-		"HandleGlobalKeyByRETURN",
-		function()
-			return true;
-		end
-	);
-
-	GameLogic.GetFilters():add_filter(
-		"HandleGlobalKeyBySLASH",
-		function()
-			return true;
-		end
-	);
+	if Config.defaultEnv ~= Config.env.DEV then
+		GameLogic.GetFilters():add_filter(
+			"HandleGlobalKeyByRETURN",
+			function()
+				return true;
+			end
+		);
+	
+		GameLogic.GetFilters():add_filter(
+			"HandleGlobalKeyBySLASH",
+			function()
+				return true;
+			end
+		);
+	end
 
 	GameLogic.GetFilters():add_filter(
 		"DesktopMenuPage.ShowPage",

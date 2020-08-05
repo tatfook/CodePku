@@ -19,7 +19,7 @@ local GameMainLogin = commonlib.gettable("MyCompany.Aries.Game.MainLogin")
 local WorldShare = commonlib.gettable("Mod.CodePku")
 local Encoding = commonlib.gettable("commonlib.Encoding")
 
-local UserInfo = NPL.load("Mod/CodePku/celler/UserConsole/UserInfo.lua")
+local UserInfo = NPL.load("(gl)Mod/CodePku/cellar/UserConsole/UserInfo.lua")
 local CodePkuServiceSession = NPL.load("(gl)Mod/CodePku/service/CodePkuService/Session.lua")
 local CodePkuService = NPL.load("(gl)Mod/CodePku/service/CodePkuService.lua")
 
@@ -28,7 +28,8 @@ local UserConsole = NPL.export()
 function UserConsole:ShowPage()
     local url = "Mod/CodePku/cellar/UserConsole/StartLearning.html"
     -- Mod.CodePku.Utils.ShowWindow(850, 470, url, "StartLearning", nil, nil, nil, false, 10)
-    
+    UserInfo:OnChangeAvatar()
+
     System.App.Commands.Call("File.MCMLWindowFrame", {
         url = url, 
         name = "StartLearning", 
