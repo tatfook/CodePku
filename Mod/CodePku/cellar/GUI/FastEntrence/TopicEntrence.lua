@@ -3,6 +3,8 @@ local AdaptWindow = commonlib.gettable("Mod.CodePku.GUI.Window.AdaptWindow");
 local TopicEntrencePage = commonlib.gettable("Mod.CodePku.TopicEntrencePage");
 local request = NPL.load("(gl)Mod/CodePku/api/BaseRequest.lua");
 
+TopicEntrencePage.nowPage = nil
+
 function TopicEntrencePage.GetCourse(subject_id)
     response = request:get(string.format('/coursewares/entrance/topic?subject=%d', subject_id), nil,{sync = true})
     data = response.data.data
@@ -61,5 +63,11 @@ function TopicEntrencePage:ShowPage(bShow)
         width = 1920,
         height = 1080,
         };
-    local window = AdaptWindow:QuickWindow(params)
+        TopicEntrencePage.nowPage = AdaptWindow:QuickWindow(params)
+end
+
+function TopicEntrencePage:ClosePage()
+    if TopicEntrencePage.nowPage ~= nil then
+        TopicEntrencePage.nowPage:CloseWindow()
+    end
 end

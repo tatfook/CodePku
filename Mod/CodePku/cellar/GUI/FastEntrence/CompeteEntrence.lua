@@ -2,6 +2,8 @@ NPL.load("(gl)Mod/CodePku/cellar/GUI/Window/AdaptWindow.lua");
 local AdaptWindow = commonlib.gettable("Mod.CodePku.GUI.Window.AdaptWindow");
 local CompeteEntrencePage = commonlib.gettable("Mod.CodePku.CompeteEntrencePage");
 
+CompeteEntrencePage.nowPage = nil;
+
 function CompeteEntrencePage:ShowPage(bShow)
     local params = {
         url = "Mod/CodePku/cellar/GUI/FastEntrence/CompeteEntrence.html", 
@@ -19,5 +21,11 @@ function CompeteEntrencePage:ShowPage(bShow)
         width = 1920,
         height = 1080,
         };
-    local window = AdaptWindow:QuickWindow(params)
+        CompeteEntrencePage.nowPage = AdaptWindow:QuickWindow(params)
+end
+
+function CompeteEntrencePage:ClosePage()
+    if CompeteEntrencePage.nowPage ~= nil then
+        CompeteEntrencePage.nowPage:CloseWindow()
+    end
 end

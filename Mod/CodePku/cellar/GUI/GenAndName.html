@@ -65,7 +65,7 @@ end
                 commonlib.setfield("System.User.username", result)
                 commonlib.setfield("System.User.nickName", result)  
                 UserConsole = NPL.load('(gl)Mod/CodePku/cellar/UserConsole/Main.lua')
-                UserConsole:CourseEntry()
+                UserConsole:ShowPage()
                 Page:CloseWindow();
             elseif response.data.message then
                 Page:SetValue("info_msg_1", response.data.message)
