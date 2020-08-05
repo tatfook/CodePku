@@ -375,6 +375,13 @@ function CodePku:init()
 			return true;
 		end
 	);
+
+	GameLogic.GetFilters():add_filter(
+		"DesktopMenuPage.ShowPage",
+		function(bShow)
+			return true;
+		end
+	);
 end
 
 function CodePku:OnLogin()
