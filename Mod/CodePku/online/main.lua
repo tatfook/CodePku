@@ -27,7 +27,7 @@ function Online:Init()
 	local GeneralGameServerMod = commonlib.gettable("Mod.GeneralGameServerMod");      -- 获取GGS模块
 
 	NPL.load("(gl)Mod/CodePku/online/OnlineClient.lua");
-	local OnlineClient = commonlib.gettable("Mod.CodePku.OnlineClient");
+	local OnlineClient = commonlib.gettable("Mod.CodePku.Online.OnlineClient");
 	GeneralGameServerMod:RegisterClientClass("CodePku", OnlineClient);
 
 	self:RegisterCommand();

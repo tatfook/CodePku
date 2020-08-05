@@ -3,6 +3,8 @@ local AdaptWindow = commonlib.gettable("Mod.CodePku.GUI.Window.AdaptWindow");
 local TopicEntrencePage = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.TopicEntrencePage");
 local request = NPL.load("(gl)Mod/CodePku/api/BaseRequest.lua");
 
+TopicEntrencePage.nowPage = nil
+
 function TopicEntrencePage.GetCourse(subject_id)
     response = request:get(string.format('/coursewares/entrance/topic?subject=%d', subject_id), nil,{sync = true})
     data = response.data.data
@@ -11,18 +13,15 @@ function TopicEntrencePage.GetCourse(subject_id)
         courses = d.course_wares
         a = 0
         for ii, c in ipairs(courses) do
-            l = {}
-            l['img'] = c.cover_file.file_url
-            l['id'] = c.keepwork_project_id
-            l['name'] = c.name
-            l['index'] = a % 10
             if c.is_open then
-                l['is_open'] = 1
-            else
-                l['is_open'] = 0
+                l = {}
+                l['img'] = c.cover_file.file_url
+                l['id'] = c.keepwork_project_id
+                l['name'] = c.name
+                l['index'] = a % 10
+                a = a + 1
+                table.insert(list, l)
             end
-            a = a + 1
-            table.insert(list, l)
         end
     end
     if response.data.code == 200 then
@@ -64,5 +63,11 @@ function TopicEntrencePage:ShowPage(bShow)
         width = 1920,
         height = 1080,
         };
-    local window = AdaptWindow:QuickWindow(params)
+        TopicEntrencePage.nowPage = AdaptWindow:QuickWindow(params)
+end
+
+function TopicEntrencePage:ClosePage()
+    if TopicEntrencePage.nowPage ~= nil then
+        TopicEntrencePage.nowPage:CloseWindow()
+    end
 end

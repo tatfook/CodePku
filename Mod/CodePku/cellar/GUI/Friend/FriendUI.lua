@@ -49,21 +49,48 @@ FriendUI.popparams={
 FriendUI.vars = {}
 
 
-function FriendUI:Search(nameorid)
+function FriendUI:Search(keyword)
     local request = NPL.load("(gl)Mod/CodePku/api/BaseRequest.lua");
-    local response = request:get('/users/search?keyword='..nameorid,nil,{sync = true})
-    if (response.status == 200 and response.data.code == 200 and response.data.data) then
+    -- local response = request:get('/users/search?keyword='..nameorid,nil,{sync = true})
+    -- echo("search response")
+    --     echo(response.data.data);
+    --     echo(response.data.code);
+    --     echo(#response.data.data);
+    --     echo(response.status == 200);
+    --     echo(response.data.code == 200);
+    --     echo(#response.data.data > 0);
+
+    -- if (response.status == 200 and response.data.code == 200 and response.data.data and #response.data.data > 0) then
+        
+    --     FriendUI.vars["search"] = {
+    --         friend_id = response.data.data.id,
+    --         no = response.data.data.no or "000000",
+    --         nickname = response.data.data.nickname or response.data.data.mobile,
+    --         gender = response.data.data.gender,
+    --         head = response.data.data.avatar_url,
+    --         is_online = response.data.data.is_online or false,
+    --         last_time = response.data.data.last_login_at, 
+    --     }
+    -- else
+    --     FriendUI.vars["search"] = nil;
+    -- end
+
+    request:get('/users/search',{keyword=keyword}):next(function(response)
         FriendUI.vars["search"] = {
             friend_id = response.data.data.id,
+            no = response.data.data.no or "000000",
             nickname = response.data.data.nickname or response.data.data.mobile,
             gender = response.data.data.gender,
             head = response.data.data.avatar_url,
-            is_online = true,  -- Todo
-            last_time = response.data.data.updated_at,  -- Todo
+            is_online = response.data.data.is_online or false,
+            last_time = response.data.data.last_login_at, 
         }
-    else
+
+        FriendUI:ShowPopup(2)
+    end):catch(function(e)
+        GameLogic.AddBBS("CodeGlobals", L"找不到符合要求的用户", 3000, "#00FF00");
         FriendUI.vars["search"] = nil;
-    end
+    end);
 end
 
 
@@ -71,7 +98,7 @@ function FriendUI:Add_Friend(fid)
     local request = NPL.load("(gl)Mod/CodePku/api/BaseRequest.lua");
     local response = request:post('/contacts',{friend_id=fid},{sync = true})
     if (response.status == 200 and response.data.code == 200) then
-        GameLogic.AddBBS("CodeGlobals", format(L"已向%s发送了好友申请", string.sub(FriendUI.vars["search"].nickname,1,7)), 3000, "#00FF00");
+        GameLogic.AddBBS("CodeGlobals", format(L"已向%s发送了好友申请", commonlib.utf8.sub(FriendUI.vars["search"].nickname,1,7)), 3000, "#00FF00");
     elseif response.data and response.data.message then
         GameLogic.AddBBS("CodeGlobals", response.data.message, 3000, "#00FF00");
     end
@@ -89,12 +116,13 @@ function FriendUI:GetApply()
                 FriendUI.vars["apply"][aindex] = {
                     index = index,
                     id = data.id,
+                    no = data.no or data.user.no or "000000",
                     friend_id = data.user.id,
-                    nickname = data.user.nickname or string.sub(data.user.mobile,1,7),
+                    nickname = data.user.nickname or commonlib.utf8.sub(data.user.mobile,1,7),
                     gender = data.user.gender,
                     head = data.user.avatar_url,
-                    is_online = true,  -- Todo
-                    last_time = data.user.updated_at,  -- Todo
+                    is_online = data.user.is_online or false,
+                    last_time = data.user.last_login_at, 
                     remark = data.remark,
                 }
                 aindex = aindex + 1;
@@ -124,12 +152,13 @@ function FriendUI:GetFriend()
         for index, data in ipairs(response.data.data) do
             FriendUI.vars["friends"][index] = {
                 id = data.id,
+                no = data.no or data.friend.no or "000000",
                 friend_id = data.friend.id,
-                nickname = data.friend.nickname or string.sub(data.friend.mobile,1,7),
+                nickname = data.friend.nickname or commonlib.utf8.sub(data.friend.mobile,1,7),
                 gender = data.friend.gender,
                 head = data.friend.avatar_url,
-                is_online = true,  -- Todo
-                last_time = data.friend.updated_at,  -- Todo
+                is_online = data.is_online or false,
+                last_time = data.friend.last_login_at, 
                 remark = data.remark,
             }
         end
@@ -169,12 +198,13 @@ function FriendUI:GetBlackList()
         for index, data in ipairs(response.data.data) do
             FriendUI.vars["blacklist"][index] = {
                 id = data.id,
+                no = data.no or data.friend.no or "000000",
                 friend_id = data.friend.id,
-                nickname = data.friend.nickname or string.sub(data.friend.mobile,1,7),
+                nickname = data.friend.nickname or commonlib.utf8.sub(data.friend.mobile,1,7),
                 gender = data.friend.gender,
                 head = data.friend.avatar_url,
-                is_online = true,  -- Todo
-                last_time = data.friend.updated_at,  -- Todo
+                is_online = data.friend.is_online or false,
+                last_time = data.friend.last_login_at, 
                 remark = data.remark,
             }
         end
@@ -183,6 +213,11 @@ function FriendUI:GetBlackList()
     end
 end
 
+
+function FriendUI:CalOfflineTime()
+    local date=os.date("%Y-%m-%d %H:%M:%S")
+
+end
 
 
 function FriendUI:DeleteFriend(lid)

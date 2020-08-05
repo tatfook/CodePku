@@ -109,7 +109,8 @@ xueshidian = 123456
 fensi = 123456
 dianzan = 123456
 name = UserInfo.name
-user_id = '玩学号:'..UserInfo.id
+sid = UserInfo.no or UserInfo.id
+user_id = '玩学号:'..sid
 identity = 10
 gender = UserInfo.gender
 vip_id = 20
@@ -216,7 +217,7 @@ end
                 <div style='<%=format("position:relative;width:41;height:41;margin-left:500;margin-top:20;background:url(codepku/image/textures/userinfo/user_name_info/%s.png);",gender)%>'></div>
                 <div style='<%=format("position:relative;width:41;height:41;margin-left:550;margin-top:20;background:url(codepku/image/textures/userinfo/user_name_info/%s.png);",identity)%>'></div>
                 <div style="position:relative;width:41;height:41;margin-left:500;margin-top:60;background:url(codepku/image/textures/userinfo/user_name_info/fuzhi.png);"></div>
-                <div style='<%=format("position:relative;width:100;height:100;margin-left:40;margin-top:15;background:url(%s);",data.avatar_url)%>'></div>
+                <div style='<%=format("position:relative;width:100;height:100;margin-left:40;margin-top:15;background:url(%s);",data.avatar_url or UserInfo.avatar or "")%>'></div>
                 <div style='<%=format("position:relative;width:41;height:41;margin-left:550;margin-top:60;background:url(codepku/image/textures/userinfo/user_name_info/%s.png);",vip_id)%>'></div>
                 <div style="position:relative;width:210;text-align:left;margin-left:154;margin-top:25;font-size:25;base-font-size:25;"><%= name%></div>
                 <div style="position:relative;width:300;text-align:left;margin-left:154;margin-top:75;font-size:25;base-font-size:25;"><%= user_id%></div>
@@ -248,7 +249,7 @@ end
                 <div style="position:relative;width:380;text-align:left;margin-left:1004;margin-top:170;font-size:30;base-font-size:30;"><%= name%></div>
                 <div style="position:relative;width:380;text-align:left;margin-left:874;margin-top:260;font-size:30;base-font-size:30;"><%= user_id%></div>
                 <div style="position:relative;width:380;text-align:left;margin-left:904;margin-top:365;font-size:30;base-font-size:30;"><%= '等级:'%></div>
-                <div style='<%=format("position:relative;width:80;height:80;margin-left:874;margin-top:132;background:url(%s);",data.avatar_url)%>'></div>
+                <div style='<%=format("position:relative;width:80;height:80;margin-left:874;margin-top:132;background:url(%s);",data.avatar_url or UserInfo.avatar or "")%>'></div>
                 <!-- <div style="position:relative;width:492;height:24;margin-top:413;margin-left:895;background:url(codepku/image/textures/userinfo/jingyantiao1.png);"></div> -->
                 <!-- <div style='<%=string.format("position:relative;width:%d;height:24;margin-top:413;margin-left:895;background:url(codepku/image/textures/userinfo/jingyantiao1.png);",492*0.5 )%>'></div> -->
                 <div style='<%=string.format("position:relative;width:%d;height:24;margin-top:413;margin-left:895;background:url(codepku/image/textures/userinfo/jingyantiao1.png);",492*(UserInfo.self_level.current_exp/UserInfo.self_level.next_exp))%>'></div>

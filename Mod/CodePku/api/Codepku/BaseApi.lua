@@ -30,7 +30,7 @@ function CodePkuBaseApi:GetHeaders(headers)
     end
 
     headers.notTokenRequest = nil
-
+    headers["Accept"] = "application/json";
     return headers
 end
 

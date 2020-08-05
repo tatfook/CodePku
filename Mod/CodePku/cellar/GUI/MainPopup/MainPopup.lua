@@ -8,24 +8,27 @@ local MainPopup = commonlib.gettable("Mod.CodePku.GUI.MainPopup")
 MainPopup.popui = nil
 
 MainPopup.TP_Location = nil
+MainPopup.LocationId = nil
 
 MainPopup.params={
     TPpopup = {
         url="Mod/CodePku/cellar/GUI/MainPopup/TPpopup.html",
-        alignment="_ct", left = -960, top = -540, width = 1920, height = 1080,zorder =20
+        alignment="_ct", left = -960, top = -540, width = 1920, height = 1080,zorder =30
     }
 }
 
 
-function MainPopup:ShowPage(toWhere)
+function MainPopup:ShowPage(name, id)
     
     if MainPopup.popui ~= nil then
         MainPopup.popui:CloseWindow()
     end
 
-    MyLocation = tostring(toWhere)
+    Locationid = tonumber(id)
+    MyLocation = tostring(name)
 
     MainPopup.TP_Location = MyLocation
-    MainPopup.popui = AdaptWindow:QuickWindow(MainPopup.params["TPpopup"])
+    MainPopup.LocationId = Locationid
 
+    MainPopup.popui = AdaptWindow:QuickWindow(MainPopup.params["TPpopup"])
 end

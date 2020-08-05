@@ -25,18 +25,13 @@ function ClickFunctionButton()
     GameLogic.AddBBS("CodeGlobals", L"功能开发中", 3000, "#ff0000");
 end
 
+NPL.load("(gl)Mod/CodePku/cellar/GUI/rank/RankPage.lua")
 NPL.load("(gl)script/apps/Aries.Creator.Game.Desktop.UserInfo.lua");
 UserInfoPage = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.UserInfoPage")
-RankPage = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.RankPage");
-
 UserInfoPage.OnInit()
 RankPage = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.RankPage");
 function ClickUserInfo()
     UserInfoPage:ShowPage()
-end
-
-function ClickRankBoard()
-    RankPage:ShowPage()
 end
 
 function ClickBag()
@@ -51,7 +46,7 @@ function ClickFriend()
 end
 
 function ClickRank()
-    RankPage:ShowPage()
+    RankPage:ShowPage(1)
 end
 ]]></script>
 <style type="text/mcss">

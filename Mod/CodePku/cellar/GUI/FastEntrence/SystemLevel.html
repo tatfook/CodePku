@@ -13,6 +13,7 @@ SystemEntrencePage = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.Sy
 SystemLevelPage = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.SystemLevelPage");
 MainEntrencePage = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.MainEntrencePage");
 SystemEntranceChoosePage = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.SystemEntranceChoosePage");
+local MainPopup = commonlib.gettable("Mod.CodePku.GUI.MainPopup");
 
 
 function ClosePage()
@@ -86,15 +87,7 @@ function next_page()
 end
 
 function OnClickCourse(course)
-    clickable = course.is_open
-    if clickable then
-        world_id = GetCourseWorldID(course)
-        GameLogic.RunCommand(string.format("/connectCodePku %d", world_id));
-        Page:CloseWindow()
-        SystemEntranceChoosePage.last_ctrl:CloseWindow()
-    else
-        GameLogic.RunCommand("/tip -duration 1500 该课程暂未开放，敬请期待")
-    end
+    MainPopup:ShowPage("该世界", GetCourseWorldID(course))
 end
 
 ]]></script>

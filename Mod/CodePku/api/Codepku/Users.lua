@@ -32,7 +32,49 @@ function CodePkuUsersApi:Login(mobile, verifyCode, mobileToken, success, error)
         mobile_token = mobileToken
     }
 
+    local AppMarket = ParaEngine.GetAppCommandLineByParam("app_market", nil);
+
+    if AppMarket then
+        params['app_market'] = AppMarket;
+    end
+
     CodePkuBaseApi:Post("/users/login", params, nil, success, error, { 503, 400 })
+end
+
+-- url: /users/authorizations
+-- method: POST
+-- params:
+--[[
+    account	string 必须 用户名
+    password string 必须 密码
+]]
+-- return: object
+function CodePkuUsersApi:LoginWithPwd(mobile, password, success, error)
+    if type(mobile) ~= "string" or type(password) ~= "string" then
+        return false
+    end
+
+    local params = {
+        mobile = mobile,
+        password = password
+    }
+
+    CodePkuBaseApi:Post("/users/authorizations", params, nil, success, error, { 503, 400 })
+end
+
+-- url: /users/set-password
+-- method: PUT
+-- params:
+--[[
+    token string 必须 token
+]]
+-- return: object
+function CodePkuUsersApi:UpdatePassword(token, params, callback)
+    if type(token) ~= "string" and #token == 0 then
+        return false
+    end
+    local headers = { Authorization = format("Bearer %s", token) }
+    CodePkuBaseApi:Put('/users/set-password', params, headers, callback, callback, { 503, 400 })
 end
 
 -- url: /users/profile

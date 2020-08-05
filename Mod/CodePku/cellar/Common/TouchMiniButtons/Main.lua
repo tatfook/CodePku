@@ -7,6 +7,7 @@ local WorldCommon = commonlib.gettable("MyCompany.Aries.Creator.WorldCommon")
 local EntityManager = commonlib.gettable("MyCompany.Aries.Game.EntityManager")
 local MainSceneUIButtons = commonlib.gettable("Mod.CodePku.Common.TouchMiniButtons.MainSceneUIButtons");
 local GenAndName = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.GenAndName")
+local UserInfo = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.UserInfo")
 
 
 local MainUIButtons = NPL.export();
@@ -18,7 +19,7 @@ MainUIButtons.function_window = nil
 MainUIButtons.dialog_window = nil
 
 function MainUIButtons.show_common_ui()
-	local width = 410
+	local width = 510
 	local height = 110
 
 	params = {
@@ -96,15 +97,20 @@ function MainUIButtons.show_interact_ui(obj)
 	local x, y, z = obj:GetPosition()
 	local px, py, pz = EntityManager.GetPlayer():GetPosition()
 	if(math.abs(x-px) > distance or math.abs(y-py) > distance or math.abs(z-pz) > distance) then
-		GameLogic.AddBBS("CodeGlobals", L"距离玩家过远，走进点再尝试。", 3000, "#ff0000");
+		GameLogic.AddBBS("CodeGlobals", L"距离玩家过远，走近点再尝试。", 3000, "#ff0000");
 		return
 	end
 
-	local pname = obj:GetDisplayName()
-
-	pname = string.sub(pname,1,length_limit)
+	
+	local username =  obj:GetUserName()
+	local displayname = obj:GetDisplayName()
+	local pname = username or displayname
+	pname = commonlib.utf8.sub(pname,1,length_limit)
 
 	info = obj:GetPlayerInfo()
+	if not info or not info.userinfo then
+		return
+	end
 	pid = info.userinfo.id
 	
 	width = 1920

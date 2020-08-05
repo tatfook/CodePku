@@ -50,21 +50,13 @@ function ChangePage(index)
     FriendUI:ShowPage(index)
 end
 
-FriendData = {
-    {head="1.png", name="111111111", level=1, gender = "m", online=true, last_time = ''},
-    {head="2.png", name="sdfsdf", level=3, gender = "f", online=true, last_time = ''},
-    {head="1.png", name="222", level=5, gender = "m", online=false, last_time = '2020-7-20 12:00'},
-    {head="2.png", name="rrr", level=4, gender = "f", online=false, last_time = '2020-7-20 17:00'},
-    {head="1.png", name="9999", level=2, gender = "m", online=false, last_time = '2020-7-17 12:00'}
-}
-
 
 ]]>
 </script>
 <style type="text/mcss">
 
 </style>
-<pe:container alignment="_lt" width="1920" height="1080" style="background: url(codepku/image/textures/friend/main/bg.png)">
+<pe:container alignment="_ct" left="-960" top="-540" width="1920" height="1080" style="background: url(codepku/image/textures/friend/main/bg.png)">
     <div style="position:relative; width: 164;height: 83;left:170;top:20;
     background: url(codepku/image/textures/friend/main/title.png);">
     </div>
@@ -114,7 +106,7 @@ FriendData = {
                         </pe:if>
                     </div>
 
-                    <div style="position:relative;width:200;height:40;left:200;top:100;font-size: 30;color: #FFA500;">ID: <%=Eval("friend_id")%></div>
+                    <div style="position:relative;width:200;height:40;left:200;top:100;font-size: 30;color: #FFA500;">ID: <%=Eval("no")%></div>
 
                     <pe:if condition="<%=Eval('is_online') == true%>">
                             <div style="position:relative; width:250; height:30; left:700;top:60;font-size: 40;color: #00ff22;">在线</div>

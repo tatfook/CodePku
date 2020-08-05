@@ -18,6 +18,9 @@ name = Page:GetRequestParam("pname")
 pid = Page:GetRequestParam("pid")
 ppid = pid
 
+echo("2222222222222222222222222")
+echo(name)
+
 function CheckFriend()
     FriendUI:GetFriend()
     fdatas = FriendUI.vars["friends"] or {}

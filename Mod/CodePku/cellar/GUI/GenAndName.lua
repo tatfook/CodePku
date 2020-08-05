@@ -19,6 +19,15 @@ function GenAndName.OnClickBlock(block_id)
 
 end
 
+function GenAndName.CheckNickName()
+    if System.User and System.User.nickName and #System.User.nickName > 0 then
+        return true
+    end
+
+    return false
+end
+
+
 function GenAndName:getRequest(gender)
     response = request:get("/users/random-nickname?type=" .. gender,nil,{sync = true})
     echo(response)
@@ -45,12 +54,27 @@ function GenAndName:CreateRole(name,gen)
     end
 end
 
-function GenAndName:ShowPage(bShow)
-    -- NPL.load("(gl)script/apps/Aries/Creator/Game/Areas/DesktopMenuPage.lua");
-    -- local DesktopMenuPage = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.DesktopMenuPage");
-    GenAndName.bForceHide = bShow == false;
-    NPL.load("(gl)Mod/CodePku/cellar/GUI/Window/AdaptWindow.lua");
-    local AdaptWindow = commonlib.gettable("Mod.CodePku.GUI.Window.AdaptWindow")
-    AdaptWindow:QuickWindow({url="Mod/CodePku/cellar/GUI/GenAndName.html", 
-    alignment="_ct", left = -960, top = -540, width = 1920, height = 1080,zorder =20})
+function GenAndName:ShowPage()
+    -- NPL.load("(gl)Mod/CodePku/cellar/GUI/GenAndName.lua")
+    -- local GenAndName = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.GenAndName")
+
+    params = {
+        url = "Mod/CodePku/cellar/GUI/GenAndName.html", 
+        name = "GenAndName", 
+        isShowTitleBar = false,
+        DestroyOnClose = true, -- prevent many ViewProfile pages staying in memory
+        style = CommonCtrl.WindowFrame.ContainerStyle,
+        allowDrag = false,
+        zorder = 0,
+        bShow = bShow,
+        directPosition = true,
+            align = "_fi",
+            x = 0,
+            y = 0,
+            width = 0,
+            height = 0,
+        cancelShowAnimation = true,
+    }
+
+    System.App.Commands.Call("File.MCMLWindowFrame", params);
 end

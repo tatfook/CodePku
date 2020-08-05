@@ -11,62 +11,35 @@
 <pe:mcml>
 <script refresh="false" type="text/npl" src="MainPopup.lua">
 <![CDATA[
-local MainPopup = commonlib.gettable("Mod.CodePku.GUI.MainPopup")
+local MainPopup = commonlib.gettable("Mod.CodePku.GUI.MainPopup");
 local SystemEntrencePage = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.SystemEntrencePage");
 local TopicEntrencePage = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.TopicEntrencePage");
 local CompeteEntrencePage = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.CompeteEntrencePage");
-
-TP_table = {
-    ["system"] = "体系教学",
-    ["topic"] = "专题教学",
-    ["build"] = "我的家园",
-    ["compete"] = "竞技乐园"
-}
+local GameLogic = commonlib.gettable("MyCompany.Aries.Game.GameLogic");
 
 
-local TP_location = MainPopup.TP_Location
 
-function TurnToSystemEntrence()
-    ClosePage()
-    SystemEntrencePage:ShowPage(true)
-end
+local world_name = MainPopup.TP_Location    
+local world_id = MainPopup.LocationId
 
-function TurnToTopicEntrence()
-    ClosePage()
-    TopicEntrencePage:ShowPage(true)
-end
-
-function TurnToBuildEntrence()
-    print('333')
-end
-
-function TurnToCompeteEntrence()
-    ClosePage()
-    print(CompeteEntrencePage)
-    print(CompeteEntrencePage.ShowPage)
-    CompeteEntrencePage.ShowPage(true)
-end
-
-
-function getTP()
-    return TP_table[TP_location]
+function getName()
+    return world_name
 end
 
 function ClosePage()
     Page:CloseWindow();
 end
 
-function turnToPage()
-    local name = TP_location
-    if(name=="system") then
-        TurnToSystemEntrence();
-    elseif(name=="topic") then
-        TurnToTopicEntrence();
-    elseif(name=="build") then
-        TurnToBuildEntrence()
-    elseif(name=="compete") then
-        TurnToCompeteEntrence()
-    end
+function CloseAllPage()
+    ClosePage()
+    SystemEntrencePage:ClosePage()
+    TopicEntrencePage:ClosePage()
+    CompeteEntrencePage:ClosePage()
+end
+
+function turnToWorld()
+    CloseAllPage()
+    GameLogic.RunCommand(string.format('/connectCodePku %d', tonumber(world_id)));
 end
 
 ]]>
@@ -75,15 +48,15 @@ end
 
     <div style="position: relative; left: 410px; top: 50px; text-align: center; width: 200px; height: 80px; font-size: 40px; line-height: 80px;">传送提示</div>
 
-    <div style="position: relative; width: 500px; height: 80px;top: 170px; left: 260px; line-height: 80px; font-size: 40px;">
+    <div style="position: relative; width: 565px; height: 80px;top: 210px; left: 232px; line-height: 80px; font-size: 50px; font-weight: bolder; color: #30ce30;">
         <span>你确定传送到</span>
-        <span style="color: #ff6600;"><%=getTP()%></span>
+        <span><%=getName()%></span>
         <span>吗？</span>
     </div>
 
     <div style="position: relative; margin-left: 200px; margin-top: 400px; text-align: center; line-height: 80px; width: 200px; height: 80px; background-color: brown; font-size: 40px;" onclick="ClosePage">取消</div>
 
-    <div style="position: relative; margin-left: 620px; margin-top: 400px; text-align: center; line-height: 80px; width: 200px; height: 80px; background-color: brown; font-size: 40px; " onclick="turnToPage">确认</div>
+    <div style="position: relative; margin-left: 620px; margin-top: 400px; text-align: center; line-height: 80px; width: 200px; height: 80px; background-color: brown; font-size: 40px; " onclick="turnToWorld">确认</div>
 </div>
 </pe:mcml>
 </body>

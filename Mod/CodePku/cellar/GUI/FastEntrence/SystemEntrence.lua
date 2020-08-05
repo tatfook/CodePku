@@ -6,6 +6,7 @@ local request = NPL.load("(gl)Mod/CodePku/api/BaseRequest.lua");
 local SystemEntranceChoosePage = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.SystemEntranceChoosePage");
 
 local page;
+SystemLevelPage.nowPage = nil;
 
 SystemEntranceChoosePage.GradeDetails = {}
 SystemEntranceChoosePage.GradeDetails['primary'] = {
@@ -83,13 +84,14 @@ function SystemLevelPage.GetLevels(grade_id, semester_id, subject_id)
         for i, d in ipairs(data) do
             courses = d.course_wares
             for ii, c in ipairs(courses) do
-                
-                l = {}
-                l['cover'] = c.cover_file.file_url
-                l['course'] = c
-                l['index'] = a % 10
-                a = a + 1
-                table.insert(list, l)
+                if c.is_open == true then
+                    l = {}
+                    l['cover'] = c.cover_file.file_url
+                    l['course'] = c
+                    l['index'] = a % 10
+                    a = a + 1
+                    table.insert(list, l)
+                end
             end
         end
     SystemLevelPage.total_courses = #list
@@ -191,5 +193,14 @@ function SystemLevelPage:ShowPage(bShow, grade_id, semester_id, page)
         width = 1920,
         height = 1080,
         };
-    local window = AdaptWindow:QuickWindow(params)
+        SystemLevelPage.nowPage = AdaptWindow:QuickWindow(params)
+end
+
+function SystemEntrencePage:ClosePage()
+    if SystemLevelPage.nowPage ~= nil then
+        SystemLevelPage.nowPage:CloseWindow()
+    end
+    if SystemEntranceChoosePage.last_ctrl ~= nil then
+        SystemEntranceChoosePage.last_ctrl:CloseWindow()
+    end
 end

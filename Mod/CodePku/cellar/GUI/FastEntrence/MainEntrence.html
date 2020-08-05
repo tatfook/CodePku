@@ -49,7 +49,15 @@ end
 
 function onClickPage(name)
     ClosePage()
-    MainPopup:ShowPage(name)
+    if(name=="system") then
+        TurnToSystemEntrence();
+    elseif(name=="topic") then
+        TurnToTopicEntrence();
+    elseif(name=="build") then
+        TurnToBuildEntrence()
+    elseif(name=="compete") then
+        TurnToCompeteEntrence()
+    end
 end
 
 

@@ -15,6 +15,7 @@
     local SystemEntrencePage = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.SystemEntrencePage");
     local CompeteEntrencePage = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.CompeteEntrencePage");
     local MainEntrencePage = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.MainEntrencePage");
+    local MainPopup = commonlib.gettable("Mod.CodePku.GUI.MainPopup");
 
         
     function ClosePage()
@@ -31,13 +32,11 @@
     end
 
     function turnToDanCi()
-        ClosePage()
-        GameLogic.RunCommand("/connectCodePku 12896");
+        MainPopup:ShowPage("该世界", 12896)
     end
 
     function turnToHuaXia()
-        ClosePage()
-        GameLogic.RunCommand("/connectCodePku 13426");
+        MainPopup:ShowPage("该世界", 13426)
     end
     
 ]]></script>

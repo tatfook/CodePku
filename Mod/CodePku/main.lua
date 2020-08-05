@@ -57,13 +57,13 @@ local SharePage = NPL.load("(gl)Mod/CodePku/cellar/GUI/Share.lua")
 local FriendUI = NPL.load("(gl)Mod/CodePku/cellar/GUI/Window/AdaptWindow.lua");
 local GenAndNamePage = NPL.load("(gl)Mod/CodePku/cellar/GUI/GenAndName.lua")
 local SubjectPage = NPL.load("(gl)Mod/CodePku/cellar/GUI/Subject.lua")
-local RankPage = NPL.load("(gl)Mod/CodePku/cellar/GUI/RankPage.lua")
 local EditPage = NPL.load("(gl)Mod/CodePku/cellar/GUI/editShare.lua")
-local RankPage = NPL.load("(gl)Mod/CodePku/cellar/GUI/FastEntrence/RankPage.lua")
 local PropsInfo = NPL.load("(gl)Mod/CodePku/cellar/GUI/Props/PropsInfo.lua")
-local RankPage = NPL.load("(gl)Mod/CodePku/cellar/GUI/FastEntrence/RankPage.lua")
+local RankPage = NPL.load("(gl)Mod/CodePku/cellar/GUI/rank/RankPage.lua")
 local Messages = NPL.load("(gl)Mod/CodePku/cellar/common/TouchMiniButtons/Messages.lua")
 local MainPopup = NPL.load("(gl)Mod/CodePku/cellar/GUI/MainPopup/MainPopup.lua")
+local SmallMap = NPL.load("(gl)Mod/CodePku/cellar/GUI/SmallMap/SmallMap.lua")
+local ToWhere = NPL.load("(gl)Mod/CodePku/cellar/GUI/SmallMap/Popup/ToWhere.lua")
 
 local DownloadWorld = commonlib.gettable("MyCompany.Aries.Game.MainLogin.DownloadWorld")
 

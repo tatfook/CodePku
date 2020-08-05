@@ -54,8 +54,9 @@ end
     <div style="position:relative; left:160;top:45;width: 192;height:50;background: url(codepku/image/textures/friend/main/apply_title.png);"></div>
     <div style="position:relative; margin-left: 900;width: 50;height: 50;margin-top: 40;background: url(codepku/image/textures/friend/main/close.png);" onclick="ClosePage"></div>
     <!--context-->
-    <pe:gridview name="MyFriend" style="position:relative;margin-top:190;margin-left: 50;
-height:280;width: 920;background-color: #ff00ff50;" DataSource='<%=getFriendData() %>' CellPadding="10" ItemsPerLine="1" AllowPaging="false" RememberScrollPos="true" RememberLastPage="true">
+    <pe:gridview name="MyFriend" style="position:relative;margin-top:190;margin-left: 50;height:280;width: 920;background-color: #ff00ff50;" 
+    DataSource='<%=getFriendData() %>' CellPadding="10" ItemsPerLine="1" AllowPaging="false" RememberScrollPos="true" RememberLastPage="true"
+    VerticalScrollBarStep="36" VerticalScrollBarOffsetX="8">
     <Columns>
         <div style="width: 850;height: 130;">
             <pe:div style="position:relative; width:850; height:130; margin-left: 20; background: url(codepku/image/textures/friend/friend_apply/item_bg.png);"></pe:div>
@@ -73,7 +74,7 @@ height:280;width: 920;background-color: #ff00ff50;" DataSource='<%=getFriendData
             <pe:if condition="<%=Eval('is_online') == false%>">
                 <div style="position:relative; width:250; height:30; left:170;top:50;font-size: 26;color: #f13709;">离线</div>
             </pe:if>
-            <div style="position:relative; width:250; height:30; left:170;top:80;font-size: 26;color: #FFFFFF;">ID: <%=Eval("friend_id")%></div>
+            <div style="position:relative; width:250; height:30; left:170;top:80;font-size: 26;color: #FFFFFF;">ID: <%=Eval("no")%></div>
             
             <pe:div style="position:relative;width:70;height:45;top:45;left:520;background: url(codepku/image/textures/friend/friend_apply/refuse.png);" name='<%=Eval("id")%>' onclick="ClickRefuse"></pe:div>
             <pe:div style="position:relative;width:70;height:45;top:45;left:640;background: url(codepku/image/textures/friend/friend_apply/agree.png);" name='<%=Eval("id")%>' onclick="ClickAgree"></pe:div>

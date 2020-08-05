@@ -61,14 +61,6 @@ function EntityOtherPlayer:CreateInnerObject(...)
 	local obj = EntityOtherPlayer._super.CreateInnerObject(self, self:GetMainAssetPath(), true, 0, 1);
 
     objColor = RandomHeadOnTextColors[math.random(#RandomHeadOnTextColors)]
-
-    display_name = self:GetDisplayName()
-    if(#display_name > 7) then
-        display_name = string.sub(display_name,1,length_limit)
-    end
-
-	if(self:IsShowHeadOnDisplay() and System.ShowHeadOnDisplay) then
-		System.ShowHeadOnDisplay(true, obj, display_name, objColor);	
-	end
+    
 	return obj;
 end

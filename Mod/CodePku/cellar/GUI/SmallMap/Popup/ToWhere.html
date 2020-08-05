@@ -1,0 +1,60 @@
+<!-- "Mod/CodePku/cellar/Gui/FriendUI/MyFriend.html" -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+</head>
+
+<body>
+<pe:mcml>
+<script refresh="false" type="text/npl" src="ToWhere.lua">
+<![CDATA[
+
+local ToWhere = commonlib.gettable("Mod.CodePku.GUI.Popup.ToWhere")
+local SmallMap = commonlib.gettable("Mod.CodePku.GUI.SmallMap")
+local GameLogic = commonlib.gettable("MyCompany.Aries.Game.GameLogic")
+
+
+local name = ToWhere.ToWhereName
+local id = ToWhere.ToWhereId
+
+function getName()
+    return name
+end
+
+function ClosePage()
+    Page:CloseWindow();
+end
+
+function CloseAllPage()
+    ClosePage()
+    SmallMap:ClosePage()
+end
+
+function turnTo()
+    CloseAllPage()
+    GameLogic.RunCommand(string.format('/connectCodePku %d', tonumber(id)));
+end
+
+]]>
+</script>
+<div style="width:1020;height: 550;margin-left:450;margin-top:265;background-color: aqua;">
+
+    <div style="position: relative; left: 410px; top: 50px; text-align: center; width: 200px; height: 80px; font-size: 40px; line-height: 80px;">传送提示</div>
+
+    <div style="position: relative; width: 700px; height: 80px;top: 210px; left: 232px; line-height: 80px; font-size: 50px; font-weight: bolder; color: #30ce30;">
+        <span>你确定传送到</span>
+        <span style="color: #dc143c;"><%=getName()%></span>
+        <span>吗？</span>
+    </div> 
+
+    <div style="position: relative; margin-left: 200px; margin-top: 400px; text-align: center; line-height: 80px; width: 200px; height: 80px; background-color: brown; font-size: 40px;" onclick="ClosePage">取消</div>
+
+    <div style="position: relative; margin-left: 620px; margin-top: 400px; text-align: center; line-height: 80px; width: 200px; height: 80px; background-color: brown; font-size: 40px; " onclick="turnTo">确认</div>
+</div>
+</pe:mcml>
+</body>
+
+</html>
