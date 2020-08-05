@@ -13,7 +13,7 @@ SmallMap.home = {
     system = {name = "体系教学", id = 15855},
     building = {name = "我的家园", id = 14293},
     compete = {name = "竞技乐园", id = 14312},
-    main = {name = "入口世界", id = 16160}
+    main = {name = "入口世界", id = 1}
 }
 
 SmallMap.tieiei = "112121"
