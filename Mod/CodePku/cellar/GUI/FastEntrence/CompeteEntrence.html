@@ -15,6 +15,8 @@
     local SystemEntrencePage = commonlib.gettable("Mod.CodePku.SystemEntrencePage");
     local CompeteEntrencePage = commonlib.gettable("Mod.CodePku.CompeteEntrencePage");
     local MainEntrencePage = commonlib.gettable("Mod.CodePku.MainEntrencePage");
+    local MainPopup = commonlib.gettable("Mod.CodePku.GUI.MainPopup");
+
         
     function ClosePage()
         Page:CloseWindow();
@@ -30,13 +32,11 @@
     end
 
     function turnToDanCi()
-        ClosePage()
-        GameLogic.RunCommand("/loadworld 12896");
+        MainPopup:ShowPage("该世界", 12896)
     end
 
     function turnToHuaXia()
-        ClosePage()
-        GameLogic.RunCommand("/loadworld 13426");
+        MainPopup:ShowPage("该世界", 13426)
     end
     
 ]]></script>

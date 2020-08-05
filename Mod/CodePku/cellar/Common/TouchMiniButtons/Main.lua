@@ -19,7 +19,7 @@ MainUIButtons.function_window = nil
 MainUIButtons.dialog_window = nil
 
 function MainUIButtons.show_common_ui()
-	local width = 410
+	local width = 510
 	local height = 110
 
 	params = {

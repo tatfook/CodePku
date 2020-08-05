@@ -11,6 +11,7 @@
 <script refresh="false" type="text/npl" src="MainSceneUIButtons.lua"><![CDATA[
 local MainEntrencePage = commonlib.gettable("Mod.CodePku.MainEntrencePage");
 local AntiStuckPage = commonlib.gettable("Mod.CodePku.AntiStuckPage");
+local SmallMap = commonlib.gettable("Mod.CodePku.GUI.SmallMap")
 
 function ClickCommonButton()
     GameLogic.AddBBS("CodeGlobals", L"功能开发中", 3000, "#ff0000");
@@ -24,6 +25,10 @@ function ClickMainEntrence()
     MainEntrencePage.ShowPage()
 end
 
+function ClickSamllMap()
+    SmallMap:ShowPage("TPpoput")
+end
+
 
 ]]></script>
 <style type="text/mcss">
@@ -32,8 +37,9 @@ end
 <pe:container alignment="_lt" width="100%" height="100%">
     <input type="button" style="position:relative;margin-left:0;width:100; height:100; background: url(codepku/image/textures/mainuibuttons/common/quick_entry.png);" onclick="ClickMainEntrence"/>
     <input type="button" style="position:relative;margin-left:100;width:100; height:100; background: url(codepku/image/textures/mainuibuttons/common/anti_jamming.png);" onclick="ClickAntiJamming"/>
-    <!-- <input type="button" style="position:relative;margin-left:200;width:100; height:100; background: url(codepku/image/textures/mainuibuttons/common/shop.png);" onclick="ClickCommonButton"/> -->
-    <!-- <input type="button" style="position:relative;margin-left:300;width:100; height:100; background: url(codepku/image/textures/mainuibuttons/common/block_players.png);" onclick="ClickCommonButton"/> -->
+
+    <!-- small map ui -->
+    <input type="button" style="position:relative;margin-left:200;width:100; height:100; background: url(codepku/image/textures/smallmap/mapico.png#38 314 108 134);" onclick="ClickSamllMap"/>
 </pe:container>
 </pe:mcml> 
 </body>

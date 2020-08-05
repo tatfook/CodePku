@@ -13,6 +13,7 @@ SystemEntrencePage = commonlib.gettable("Mod.CodePku.SystemEntrencePage");
 SystemLevelPage = commonlib.gettable("Mod.CodePku.SystemLevelPage");
 MainEntrencePage = commonlib.gettable("Mod.CodePku.MainEntrencePage");
 SystemEntranceChoosePage = commonlib.gettable("Mod.CodePku.SystemEntranceChoosePage");
+local MainPopup = commonlib.gettable("Mod.CodePku.GUI.MainPopup");
 
 
 function ClosePage()
@@ -86,10 +87,7 @@ function next_page()
 end
 
 function OnClickCourse(course)
-    world_id = GetCourseWorldID(course)
-    GameLogic.RunCommand(string.format("/connectCodePku %d", world_id));
-    Page:CloseWindow()
-    SystemEntranceChoosePage.last_ctrl:CloseWindow()
+    MainPopup:ShowPage("该世界", GetCourseWorldID(course))
 end
 
 ]]></script>

@@ -10,6 +10,7 @@
 <script refresh="false" type="text/npl" src="TopicEntrence.lua"><![CDATA[
     TopicEntrencePage = commonlib.gettable("Mod.CodePku.TopicEntrencePage");
     MainEntrencePage = commonlib.gettable("Mod.CodePku.MainEntrencePage");
+    local MainPopup = commonlib.gettable("Mod.CodePku.GUI.MainPopup");
 
     
     local page = document:GetPageCtrl()
@@ -178,8 +179,7 @@
 
 
     function OnClickCourse(name)
-        GameLogic.RunCommand(string.format("/connectCodePku %d", name));
-        Page:CloseWindow()
+        MainPopup:ShowPage("该世界", name)
     end
 
     function GetDivisible(index)
