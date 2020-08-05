@@ -87,7 +87,7 @@ end
 
 function OnClickCourse(course)
     world_id = GetCourseWorldID(course)
-    GameLogic.RunCommand(string.format("/connectCodePku %d", world_id));
+    GameLogic.RunCommand(string.format("/loadworld %d", world_id));
     Page:CloseWindow()
     SystemEntranceChoosePage.last_ctrl:CloseWindow()
 end
