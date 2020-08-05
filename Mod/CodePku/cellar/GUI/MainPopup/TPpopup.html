@@ -19,7 +19,7 @@ local GameLogic = commonlib.gettable("MyCompany.Aries.Game.GameLogic");
 
 
 
-local world_name = MainPopup.TP_Location    
+local world_name = MainPopup.TP_Location   
 local world_id = MainPopup.LocationId
 
 function getName()
@@ -44,20 +44,24 @@ end
 
 ]]>
 </script>
-<div style="width:1020;height: 550;margin-left:450;margin-top:265;background-color: aqua;">
+<pe:container alignment="_lt" width="1920" height="1080">
 
-    <div style="position: relative; left: 410px; top: 50px; text-align: center; width: 200px; height: 80px; font-size: 40px; line-height: 80px;">传送提示</div>
+    <div style="position: relative; width: 1158; height: 588; left: 406; top: 219; background:url(codepku/image/textures/commonpopup/main.png#99 275 1158 588);"></div>
 
-    <div style="position: relative; width: 565px; height: 80px;top: 210px; left: 232px; line-height: 80px; font-size: 50px; font-weight: bolder; color: #30ce30;">
-        <span>你确定传送到</span>
-        <span><%=getName()%></span>
-        <span>吗？</span>
+    <div style="position: relative; width: 434; height: 115; left: 768; top: 206; text-align: center; font-family: NotoSansHans-Medium; color: #F46D3D; font-size: 45px; line-height: 115px; background:url(codepku/image/textures/commonpopup/main.png#1265 363 434 115);">
+        传送提示
     </div>
 
-    <div style="position: relative; margin-left: 200px; margin-top: 400px; text-align: center; line-height: 80px; width: 200px; height: 80px; background-color: brown; font-size: 40px;" onclick="ClosePage">取消</div>
+    <div style="position: relative; width: 960; height: 233; left: 505; top: 372; background:url(codepku/image/textures/commonpopup/main.png#1308 569 130 130 : 14 14 14 14);">
+        <span style="position: relative; left: 188; color: #383838; line-height: 233; font-weight: bold; font-size: 36px;">是否离开当前地图，前往<%=getName()%>？</span>
+    </div>
 
-    <div style="position: relative; margin-left: 620px; margin-top: 400px; text-align: center; line-height: 80px; width: 200px; height: 80px; background-color: brown; font-size: 40px; " onclick="turnToWorld">确认</div>
+    <div style="position: relative; width: 240; height: 80; left: 650; top: 668; font-size: 36px; font-weight: bold; font-family: NotoSansHans-Bold; line-height: 80; text-align: center; color: #85272B; background:url(codepku/image/textures/commonpopup/main.png#1308 743 80 80 : 6 6 6 6);" onclick="ClosePage">取消</div>
+
+    <div style="position: relative; width: 240; height: 80; left: 1096; top: 668; font-size: 36px; font-weight: bold; font-family: NotoSansHans-Bold; line-height: 80; text-align: center; color: #0E5516; background:url(codepku/image/textures/commonpopup/main.png#1407 743 80 80 : 6 6 6 6);" onclick="turnToWorld">确认</div>
+
 </div>
+</pe:container>
 </pe:mcml>
 </body>
 

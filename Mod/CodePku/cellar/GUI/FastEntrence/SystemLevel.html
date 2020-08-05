@@ -87,7 +87,7 @@ function next_page()
 end
 
 function OnClickCourse(course)
-    MainPopup:ShowPage("该世界", GetCourseWorldID(course))
+    MainPopup:ShowPage("TPpopup", GetCourseName(course), GetCourseWorldID(course))
 end
 
 ]]></script>
@@ -110,7 +110,9 @@ end
                 <pe:repeatitem>
                     <div style="<%=format('position:absolute;width:290px;height:100;background:url(codepku/image/textures/fastentrence/system_level_1.png);margin-left:%d;margin-top:%d;base-font-size:28px;font-size:28px;text-align: center;', Eval('index')%5*310, GetDivisible(Eval('index'))*300-Eval('index')%5*60)%>"><div style="margin-top:35px"><%= GetCourseName(Eval('course')) %></div></div>
                     <div style="<%=format('position:absolute;width:290px;height:200;background:url(codepku/image/textures/fastentrence/system_level_2.png);margin-left:%d;margin-top:%d;', Eval('index')%5*310, 100+GetDivisible(Eval('index'))*300-Eval('index')%5*60)%>">
-                        <div style="<%=format('width:290px;height:200;background:url(%s);', Eval('cover'))%>" name="<%=Eval('course')%>" onclick="OnClickCourse"></div>
+                        <div style="<%=format('width:290px;height:200;background:url(%s);', Eval('cover'))%>" name="<%=Eval('course')%>" onclick="OnClickCourse">
+                            <%=Eval('course')%>
+                        </div>
                     </div>
                 </pe:repeatitem>
             </pe:repeat>
