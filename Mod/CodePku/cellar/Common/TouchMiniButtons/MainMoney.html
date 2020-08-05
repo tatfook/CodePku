@@ -13,6 +13,8 @@ local MainEntrencePage = commonlib.gettable("MyCompany.Aries.Creator.Game.Deskto
 local AntiStuckPage = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.AntiStuckPage");
 local SmallMap = commonlib.gettable("Mod.CodePku.GUI.SmallMap")
 local MainPopup = commonlib.gettable("Mod.CodePku.GUI.MainPopup")
+UserInfo = commonlib.gettable("Mod.CodePku.UserInfo")
+
 
 function ClickCommonButton()
     GameLogic.AddBBS("CodeGlobals", L"功能开发中", 3000, "#ff0000");
@@ -36,10 +38,10 @@ end
 
 </style>
 <pe:container alignment="_lt" width="611" height="89">
-    <div style="position: relative; width: 196; height: 51; left: 26; top: 21; background: url(codepku/image/textures/main_ui/main.png#680 212 80 80:20 20 20 20);"></div>
+    <div style="position: relative; width: 196; height: 51; color:white;font-size: 30px;text-align: center;line-height: 51;left: 26; top: 21; background: url(codepku/image/textures/main_ui/main.png#680 212 80 80:20 20 20 20);"><%=UserInfo.money.goldcoin%></div>
     <div style="position: relative; width: 73; height: 71; left: 0; top: 13; background: url(codepku/image/textures/common_32bits.png#913 41 73 71);"></div>
 
-    <div style="position: relative; width: 196; height: 51; left:340; top: 21; background: url(codepku/image/textures/main_ui/main.png#680 212 80 80:20 20 20 20);"></div>
+    <div style="position: relative; width: 196; height: 51; color:white;font-size: 30px;text-align: center;line-height: 51;left:340; top: 21; background: url(codepku/image/textures/main_ui/main.png#680 212 80 80:20 20 20 20);"><%=UserInfo.money.wanxuecoin%></div>
     <div style="position: relative; width: 77; height: 78; left: 296; top: 11; background: url(codepku/image/textures/common_32bits.png#913 137 61 77);"></div>
 </pe:container>
 </pe:mcml> 

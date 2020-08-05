@@ -51,7 +51,7 @@ function ClickChat()
     GameLogic.AddBBS("CodeGlobals", L"功能开发中", 3000, "#ff0000");
 end
 
-function ClickEmail()
+function ClickBlackList()
     GameLogic.AddBBS("CodeGlobals", L"功能开发中", 3000, "#ff0000");
 end
 
@@ -81,17 +81,17 @@ end
         </div>
         <pe:if condition='<%= not is_friend%>'>
             <div style="position:absolute; width:124;height:124;left:303;top:9;">
-                <input type="button" style="width:124;height:124;background:url(codepku/image/textures/mainuibuttons/new_interact/del_friend.png);" onclick="ClickAddFriend" />
+                <input type="button" style="width:124;height:124;background:url(codepku/image/textures/mainuibuttons/new_interact/add_friend.png);" onclick="ClickAddFriend" />
             </div>
         </pe:if>
         <pe:if condition='<%=is_friend%>'>
             <div style="position: absolute; width:124;height:124;left:303;top:9;">
-                <input type="button" style="width:124;height:124;background:url(codepku/image/textures/mainuibuttons/new_interact/add_friend.png);" onclick="ClickDelFriend" />
+                <input type="button" style="width:124;height:124;background:url(codepku/image/textures/mainuibuttons/new_interact/del_friend.png);" onclick="ClickDelFriend" />
             </div>
         </pe:if>
        
         <div style="position:relative; width:124;height:124;left:14;top:219;">
-            <input type="button" style="width:124;height:124;background:url(codepku/image/textures/mainuibuttons/new_interact/shielding_friend.png);" onclick="ClickEmail" />
+            <input type="button" style="width:124;height:124;background:url(codepku/image/textures/mainuibuttons/new_interact/shielding_friend.png);" onclick="ClickBlackList" />
         </div>
         <div style="position:relative; width:124;height:124;left:303;top:219;">
             <input type="button" style="width:124;height:124;background:url(codepku/image/textures/mainuibuttons/new_interact/chat.png);" onclick="ClickChat" />
