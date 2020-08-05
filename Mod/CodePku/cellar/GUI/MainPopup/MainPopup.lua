@@ -14,21 +14,31 @@ MainPopup.params={
     TPpopup = {
         url="Mod/CodePku/cellar/GUI/MainPopup/TPpopup.html",
         alignment="_ct", left = -960, top = -540, width = 1920, height = 1080,zorder =30
+    },
+    AntiJam = {
+        url="Mod/CodePku/cellar/GUI/MainPopup/AntiJam.html",
+        alignment="_ct", left = -960, top = -540, width = 1920, height = 1080,zorder =30
     }
 }
 
 
-function MainPopup:ShowPage(name, id)
+function MainPopup:ShowPage(pageName, name, id)
     
     if MainPopup.popui ~= nil then
         MainPopup.popui:CloseWindow()
     end
 
-    Locationid = tonumber(id)
-    MyLocation = tostring(name)
+    if name ~= nil then
+        Locationid = tonumber(id)
+        MainPopup.LocationId = Locationid
+    end
 
-    MainPopup.TP_Location = MyLocation
-    MainPopup.LocationId = Locationid
+    if id ~= nil then
+        MyLocation = tostring(name)
+        MainPopup.TP_Location = MyLocation
+    end
 
-    MainPopup.popui = AdaptWindow:QuickWindow(MainPopup.params["TPpopup"])
+    ToPage = tostring(pageName)
+
+    MainPopup.popui = AdaptWindow:QuickWindow(MainPopup.params[ToPage])
 end
