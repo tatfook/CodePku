@@ -96,7 +96,8 @@ function CodePku:GetDesc()
 end
 
 function CodePku:init()
-	ParaAsset.SetAssetServerUrl("http://cdn.wanxue.codepku.com/update61/assetdownload/update/");
+	ParaAsset.SetAssetServerUrl("http://cdn.wanxue.codepku.com/");
+	-- ParaAsset.SetAssetServerUrl("http://cdnwanxue.local.codepku.com/");
 
 	local manifestUrl = "http://cdnwanxue.codepku.com/assets_manifest_codepku.txt?version=" .. os.time();
 	local _, _, asset = System.os.GetUrl(manifestUrl);

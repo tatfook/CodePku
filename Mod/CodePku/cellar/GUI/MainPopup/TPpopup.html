@@ -12,9 +12,9 @@
 <script refresh="false" type="text/npl" src="MainPopup.lua">
 <![CDATA[
 local MainPopup = commonlib.gettable("Mod.CodePku.GUI.MainPopup");
-local SystemEntrencePage = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.SystemEntrencePage");
-local TopicEntrencePage = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.TopicEntrencePage");
-local CompeteEntrencePage = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.CompeteEntrencePage");
+local SystemEntrencePage = commonlib.gettable("Mod.CodePku.SystemEntrencePage");
+local TopicEntrencePage = commonlib.gettable("Mod.CodePku.TopicEntrencePage");
+local CompeteEntrencePage = commonlib.gettable("Mod.CodePku.CompeteEntrencePage");
 local GameLogic = commonlib.gettable("MyCompany.Aries.Game.GameLogic");
 
 
@@ -26,20 +26,30 @@ function getName()
     return world_name
 end
 
-function ClosePage()
+function closew()
     Page:CloseWindow();
 end
 
 function CloseAllPage()
-    ClosePage()
-    SystemEntrencePage:ClosePage()
-    TopicEntrencePage:ClosePage()
-    CompeteEntrencePage:ClosePage()
+    Page:CloseWindow();
+    if SystemEntrencePage ~= nil then
+        SystemEntrencePage:ClosePage()
+    end
+    if TopicEntrencePage ~= nil then
+        TopicEntrencePage:ClosePage()
+    end
+    if CompeteEntrencePage ~= nil then
+        CompeteEntrencePage:ClosePage()
+    end
+    --
+    
+   
 end
 
 function turnToWorld()
     CloseAllPage()
-    GameLogic.RunCommand(string.format('/connectCodePku %d', tonumber(world_id)));
+    GameLogic.RunCommand(string.format("/loadworld %d", tonumber(world_id)));
+    --GameLogic.RunCommand(string.format('/connectCodePku %d', tonumber(world_id)));
 end
 
 ]]>
@@ -56,7 +66,7 @@ end
         <span style="position: relative; left: 188; color: #383838; line-height: 233; font-weight: bold; font-size: 36px;">是否离开当前地图，前往<%=getName()%>？</span>
     </div>
 
-    <div style="position: relative; width: 240; height: 80; left: 650; top: 668; font-size: 36px; font-weight: bold; font-family: NotoSansHans-Bold; line-height: 80; text-align: center; color: #85272B; background:url(codepku/image/textures/commonpopup/main.png#1308 743 80 80 : 6 6 6 6);" onclick="ClosePage">取消</div>
+    <div style="position: relative; width: 240; height: 80; left: 650; top: 668; font-size: 36px; font-weight: bold; font-family: NotoSansHans-Bold; line-height: 80; text-align: center; color: #85272B; background:url(codepku/image/textures/commonpopup/main.png#1308 743 80 80 : 6 6 6 6);" onclick="closew">取消</div>
 
     <div style="position: relative; width: 240; height: 80; left: 1096; top: 668; font-size: 36px; font-weight: bold; font-family: NotoSansHans-Bold; line-height: 80; text-align: center; color: #0E5516; background:url(codepku/image/textures/commonpopup/main.png#1407 743 80 80 : 6 6 6 6);" onclick="turnToWorld">确认</div>
 
