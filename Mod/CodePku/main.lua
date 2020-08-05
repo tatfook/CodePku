@@ -35,6 +35,8 @@ NPL.load("(gl)script/ide/System/Encoding/guid.lua")
 NPL.load("(gl)script/apps/Aries/Creator/Game/Login/ParaWorldLessons.lua")
 NPL.load("(gl)script/ide/System/Encoding/jwt.lua")
 NPL.load("(gl)Mod/CodePku/online/main.lua");
+NPL.load("(gl)Mod/CodePku/cellar/GUI/GenAndName.lua")
+
 
 local Store = NPL.load("(gl)Mod/CodePku/store/Store.lua")
 local MsgBox = NPL.load("(gl)Mod/CodePku/cellar/Common/MsgBox/MsgBox.lua")
@@ -55,7 +57,6 @@ local OtherUserInfoPage = NPL.load("(gl)Mod/CodePku/cellar/GUI/OtherUserInfo.lua
 local UserInfoPage = NPL.load("(gl)Mod/CodePku/cellar/GUI/UserInfo.lua")
 local SharePage = NPL.load("(gl)Mod/CodePku/cellar/GUI/Share.lua")
 local FriendUI = NPL.load("(gl)Mod/CodePku/cellar/GUI/Window/AdaptWindow.lua");
-local GenAndNamePage = NPL.load("(gl)Mod/CodePku/cellar/GUI/GenAndName.lua")
 local SubjectPage = NPL.load("(gl)Mod/CodePku/cellar/GUI/Subject.lua")
 local EditPage = NPL.load("(gl)Mod/CodePku/cellar/GUI/editShare.lua")
 local PropsInfo = NPL.load("(gl)Mod/CodePku/cellar/GUI/Props/PropsInfo.lua")
@@ -65,6 +66,8 @@ local Messages = NPL.load("(gl)Mod/CodePku/cellar/common/TouchMiniButtons/Messag
 local DownloadWorld = commonlib.gettable("MyCompany.Aries.Game.MainLogin.DownloadWorld")
 
 local CodePku = commonlib.inherit(commonlib.gettable("Mod.ModBase"),commonlib.gettable("Mod.CodePku"));
+local GenAndName = commonlib.gettable("Mod.CodePku.GenAndName")
+
 
 CodePku:Property({"Name", "CodePku", "GetName", "SetName", { auto = true }})
 
@@ -139,8 +142,12 @@ function CodePku:init()
 	-- replace load world page
 	GameLogic.GetFilters():add_filter(
         "InternetLoadWorld.ShowPage",
-        function(bEnable, bShow)
-            UserConsole:ShowPage()
+		function(bEnable, bShow)
+			if GenAndName.CheckNickName() then
+				UserConsole:ShowPage()
+			else
+				GenAndName:ShowPage()
+			end
             return false
         end
 	)
