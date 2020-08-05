@@ -1,0 +1,47 @@
+<!-- "Mod/CodePku/cellar/Common/TouchMiniButtons/MainUIButtons_common.html" -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" >
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+</head>
+
+<body>
+<pe:mcml>
+<script refresh="false" type="text/npl" src="MainSceneUIButtons.lua"><![CDATA[
+local MainEntrencePage = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.MainEntrencePage");
+local AntiStuckPage = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.AntiStuckPage");
+local SmallMap = commonlib.gettable("Mod.CodePku.GUI.SmallMap")
+local MainPopup = commonlib.gettable("Mod.CodePku.GUI.MainPopup")
+
+function ClickCommonButton()
+    GameLogic.AddBBS("CodeGlobals", L"功能开发中", 3000, "#ff0000");
+end
+
+function ClickAntiJamming()
+    MainPopup:ShowPage("AntiJam")
+end
+
+function ClickMainEntrence()
+    MainEntrencePage.ShowPage()
+end
+
+function ClickSamllMap()
+    SmallMap:ShowPage()
+end
+
+
+]]></script>
+<style type="text/mcss">
+
+</style>
+<pe:container alignment="_lt" width="611" height="89">
+    <div style="position: relative; width: 196; height: 51; left: 26; top: 21; background: url(codepku/image/textures/main_ui/main.png#680 212 80 80:20 20 20 20);"></div>
+    <div style="position: relative; width: 73; height: 71; left: 0; top: 13; background: url(codepku/image/textures/common_32bits.png#913 41 73 71);"></div>
+
+    <div style="position: relative; width: 196; height: 51; left:340; top: 21; background: url(codepku/image/textures/main_ui/main.png#680 212 80 80:20 20 20 20);"></div>
+    <div style="position: relative; width: 77; height: 78; left: 296; top: 11; background: url(codepku/image/textures/common_32bits.png#913 137 61 77);"></div>
+</pe:container>
+</pe:mcml> 
+</body>
+</html>

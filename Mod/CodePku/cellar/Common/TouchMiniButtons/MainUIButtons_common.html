@@ -11,17 +11,23 @@
 <script refresh="false" type="text/npl" src="MainSceneUIButtons.lua"><![CDATA[
 local MainEntrencePage = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.MainEntrencePage");
 local AntiStuckPage = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.AntiStuckPage");
+local SmallMap = commonlib.gettable("Mod.CodePku.GUI.SmallMap")
+local MainPopup = commonlib.gettable("Mod.CodePku.GUI.MainPopup")
 
 function ClickCommonButton()
     GameLogic.AddBBS("CodeGlobals", L"功能开发中", 3000, "#ff0000");
 end
 
 function ClickAntiJamming()
-    AntiStuckPage.ShowPage()
+    MainPopup:ShowPage("AntiJam")
 end
 
 function ClickMainEntrence()
     MainEntrencePage.ShowPage()
+end
+
+function ClickSamllMap()
+    SmallMap:ShowPage()
 end
 
 
@@ -29,11 +35,16 @@ end
 <style type="text/mcss">
 
 </style>
-<pe:container alignment="_lt" width="100%" height="100%">
-    <input type="button" style="position:relative;margin-left:0;width:100; height:100; background: url(codepku/image/textures/mainuibuttons/common/quick_entry.png);" onclick="ClickMainEntrence"/>
-    <input type="button" style="position:relative;margin-left:100;width:100; height:100; background: url(codepku/image/textures/mainuibuttons/common/anti_jamming.png);" onclick="ClickAntiJamming"/>
+<pe:container alignment="_lt" width="448" height="178">
+    <div style="position: relative; width: 448; height: 178; background: url(codepku/image/textures/main_ui/main.png#680 212 80 80:20 20 20 20);"></div>
+    <div style="position: relative; width: 88; height: 116; left: 44; top: 30; background: url(codepku/image/textures/main_ui/main.png#41 175 105 120);" onclick="ClickMainEntrence"></div>
+    <div style="position: relative; width: 88; height: 116; left: 174; top: 30; background: url(codepku/image/textures/main_ui/main.png#165 175 90 120);" onclick="ClickAntiJamming"></div>
+    <div style="position: relative; width: 108; height: 134; left: 302; top: 14; background: url(codepku/image/textures/main_ui/main.png#38 314 108 134);" onclick="ClickSamllMap"></div>
+
+    <!-- <input type="button" style="position:relative;margin-left:100;width:100; height:100; background: url(codepku/image/textures/mainuibuttons/common/anti_jamming.png);" onclick="ClickAntiJamming"/>
     <input type="button" style="position:relative;margin-left:200;width:100; height:100; background: url(codepku/image/textures/mainuibuttons/common/shop.png);" onclick="ClickCommonButton"/>
     <input type="button" style="position:relative;margin-left:300;width:100; height:100; background: url(codepku/image/textures/mainuibuttons/common/block_players.png);" onclick="ClickCommonButton"/>
+    <input type="button" style="position:relative;margin-left:400;width:100; height:100; background: url(codepku/image/textures/smallmap/mapico.png#38 314 108 134);" onclick="ClickSamllMap"/> -->
 </pe:container>
 </pe:mcml> 
 </body>
