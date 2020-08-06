@@ -31,38 +31,40 @@
     end
 
    
-    subject_list = SubjectPage.subject_list
+    -- subject_list = SubjectPage.subject_list
 
-
+    function GetSubjectList()
+        return SubjectPage.subject_list;
+    end
 ]]>   
 </script>
 <style type="text/mcss">
 </style>
 
-<!-- <pe:container alignment="_lt" width="1920" height="1080"> -->
-    <div style='<%=format("width:1920;height:1080;background:url(codepku/image/textures/userinfo/subject-progress/board.png);")%>' >
-        <div style="position:relative;width:68;height:80;margin-left:1750;margin-top:55;background:url(codepku/image/textures/userinfo/info_title/cancel.png);"onclick="ClosePage"></div>
-        <div style = "position:relative;margin-top:100">
-            <pe:repeat  DataSource="<%=subject_list%>">
-                    <pe:repeatitem>
-                        
-                        <div style='<%=format("position:relative;width:804;height:205;margin-left:%d;margin-top:%d;background:url(codepku/image/textures/userinfo/subject-progress/subject.png);",135+850*Eval("col"),165+240*Eval("row"),Eval("name"))%>'></div>
-                        <div name='<%=Eval("index")%>'
-                            style='<%=format("position:relative;width:164;height:170;text-align:center;margin-top:%d;margin-left:%d;font-size:18;base-font-size:40;background:url(codepku/image/textures/userinfo/subject-progress/subject-logo/%s.png);",175+240*Eval("row"),160+865*Eval("col"),Eval("name"))%>' 
-                            ></div>
-                        <div style='<%=format("position:relative;width:%d;height:30;margin-left:%d;margin-top:%d;background:url(codepku/image/textures/userinfo/subject-progress/progressbar.png);",Eval("progress")/(Eval("total_exp") or 1)*552,350+850*Eval("col"),296+240*Eval("row"))%>'></div>
-
-                        <div style='<%=format("font-family:黑体;color:white;font-size:45;position:relative;width:804;height:205;margin-left:%d;margin-top:%d;",370+850*Eval("col"),200+240*Eval("row"))%>'><%=Eval("chname")%></div>
-                        <div style='<%=format("font-family:黑体;color:white;font-size:20;position:relative;width:804;height:205;margin-left:%d;margin-top:%d;",550+850*Eval("col"),225+240*Eval("row"))%>'><%=Eval("level")%></div>
-                        <div style='<%=format("font-family:黑体;color:white;font-size:20;position:relative;width:804;height:205;margin-left:%d;margin-top:%d;",810+850*Eval("col"),300+240*Eval("row"))%>'><%=Eval("progress")%>/<%=Eval("total_exp") or 0 %></div>
-
-                    </pe:repeatitem>
+<pe:container alignment="_fi" width="100%" height="100%" style="background-color: #00000045;">
+    <!-- <pe:container alignment="_ct" width="1752" height="962"> -->
+    <div align="center" style='<%=format("margin-top:64px;width:1752;height:962;background:url(codepku/image/textures/background/modal-large.png);")%>' >
+        <div align="center" style="margin-top:45px;font-size:70px;font-family:PuHuiTi-Bold;color:#D85D0B;text-align:center;width:434px;height:115px;line-height:115px;background:url(codepku/image/textures/common_32bits.png#1265 363 434 115)">学科</div>
+        <div align="right" style="position:absolute;top:60px;margin-right:62px;width:68px;height:78px;background:url(codepku/image/textures/common_32bits.png#110 73 68 78);" onclick="ClosePage()"></div>
+        <div style = "position:relative;margin-top:107px;padding-left:4px;font-size:36px;color:#fffff;font-family:Noto Sans S Chinese Regular;font-weight:bold;">
+            <pe:repeat DataSource="<%=GetSubjectList()%>" style="padding-left:38px;">
+                <!-- <pe:repeatitem> -->
+                    <div style="float:left;margin-left:14px;margin-bottom:23px;width:813px;height:178px;margin-left:14px;padding-top:36px;padding-right:46px;background:url(codepku/image/textures/profile_32bits.png#72 1669 813 178)">
+                        <div style='<%=format("float:left;margin-left:43px;width:104px;height:106px;background:url(%s)", Eval("icon"))%>'></div>
+                        <div style="float:left;margin-left:14px;">
+                            <div style="float:left;width:343px;height:61px;line-height:61px;padding-left:14px;background:url(codepku/image/textures/profile_32bits.png#1279 593 343 61)"><%=Eval("chname")%></div>
+                            <div align="right" style="position:relative;margin-top:-49px;"><%=Eval("level")%></div>
+                            <div style="margin-top:12px;width:608px;height:28px;background:url(codepku/image/textures/profile_32bits.png#1276 756 608 28);">
+                                <div style='<%=string.format("width:%d;height:30px;background:url(codepku/image/textures/profile_32bits.png #1271 701 607 30);", (Eval("percent") or 0) * 608)%>'></div>
+                                <div align="right" style="position:relative;margin-top:-32px;margin-right:18px;font-size:24px;color:#1369BE;"><%= Eval('current_exp') %> / <%=  Eval('next_exp') %></div>
+                            </div>
+                        </div>
+                    </div>
             </pe:repeat>
-        </div>    
-
+        </div>
     </div>
 <!-- </pe:container> -->
-<!-- </aries:window> -->
+</pe:container>
 </pe:mcml>
 </body>
 </html>

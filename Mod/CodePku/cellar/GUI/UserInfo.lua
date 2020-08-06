@@ -3,6 +3,17 @@ local UserInfo = commonlib.gettable("Mod.CodePku.UserInfo")
 local request = NPL.load("(gl)Mod/CodePku/api/BaseRequest.lua");
 local page;
 
+UserInfoPage.tab_ds_index = 1;
+UserInfoPage.tab_ds = {
+    {text=L"首页", name="Home"},
+    {text=L"属性", name="Profile"},
+    {text=L"角色", name="Model"},
+    {text=L"外观", name="Skin"},
+    {text=L"背包", name="Backpack"},
+    {text=L"成就", name="Achievement"},
+    {text=L"动态", name="Activity"},
+};
+
 function UserInfoPage.OnInit()
     UserInfoPage.OneTimeInit();
     page = document:GetPageCtrl();
@@ -123,5 +134,7 @@ function UserInfoPage:ShowPage(PageIndex,bShow)
     NPL.load("(gl)Mod/CodePku/cellar/GUI/Window/AdaptWindow.lua");
     local AdaptWindow = commonlib.gettable("Mod.CodePku.GUI.Window.AdaptWindow")
     AdaptWindow:QuickWindow({url="Mod/CodePku/cellar/GUI/UserInfo.html", 
-    alignment="_ct", left = -960, top = -540, width = 1920, height = 1080,zorder =20})
+    alignment="_fi", left = 0, top = 0, width = 0, height = 0,zorder =20
+    -- alignment="_ct", left = -960, top = -540, width = 1920, height = 1080,zorder =20
+})
 end
