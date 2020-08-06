@@ -10,11 +10,42 @@ local AppEntityMainPlayer = commonlib.gettable("Mod.GeneralGameServerMod.App.Cli
 -------------------------------------------------------
 ]]
 NPL.load("Mod/GeneralGameServerMod/Core/Client/EntityMainPlayer.lua");
-NPL.load("Mod/GeneralGameServerMod/App/Client/AppEntityPlayerHelper.lua");
-local EntityPlayerHelper = commonlib.gettable("Mod.GeneralGameServerMod.App.Client.AppEntityPlayerHelper");
+NPL.load("Mod/CodePku/online/EntityPlayerHelper.lua");
+local EntityPlayerHelper = commonlib.gettable("Mod.CodePku.Online.EntityPlayerHelper");
 local EntityMainPlayer = commonlib.inherit(commonlib.gettable("Mod.GeneralGameServerMod.Core.Client.EntityMainPlayer"), commonlib.gettable("Mod.CodePku.Online.EntityMainPlayer"));
 
 local moduleName = "Mod.CodePku.Online.EntityMainPlayer";
+
+
+-- 构造函数
+function EntityMainPlayer:ctor()
+    self.entityPlayerHelper = EntityPlayerHelper:new():Init(self, true);
+end
+
+-- 禁用默认用户名显示
+function EntityMainPlayer:IsShowHeadOnDisplay()
+    return true;
+end
+
+-- 玩家被点击
+function EntityMainPlayer:OnClick()
+end
+
+-- 是否可以被点击
+function EntityMainPlayer:IsCanClick() 
+    return false;
+end
+
+-- 设置玩家信息
+function EntityMainPlayer:SetPlayerInfo(playerInfo)
+    self.entityPlayerHelper:SetPlayerInfo(playerInfo);
+end
+
+-- 设置父类玩家信息
+function EntityMainPlayer:SetSuperPlayerInfo(playerInfo)
+    EntityMainPlayer._super.SetPlayerInfo(self, playerInfo);
+end
+
 
 
 MyHeadOnTextColor = "255 255 255"	

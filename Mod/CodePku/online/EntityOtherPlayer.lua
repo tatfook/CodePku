@@ -19,6 +19,8 @@ local moduleName = "Mod.CodePku.Online.EntityOtherPlayer";
 -- 构造函数
 function EntityOtherPlayer:ctor()
     self.entityPlayerHelper = EntityPlayerHelper:new():Init(self, false);
+
+    self:SetCheckCollision(false);
 end
 
 -- 玩家被点击

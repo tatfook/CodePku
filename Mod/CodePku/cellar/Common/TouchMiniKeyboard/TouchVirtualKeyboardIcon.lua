@@ -30,7 +30,7 @@ TouchVirtualKeyboardIcon:Property("Name", "TouchVirtualKeyboardIcon");
 
 function TouchVirtualKeyboardIcon:ctor()
 	self.alignment = "_lt";
-	self.zorder = 1000;
+	self.zorder = -5;
 	self.transparency = 1;
 	self.color = {normal="#ffffff"}
 	self.text = "";

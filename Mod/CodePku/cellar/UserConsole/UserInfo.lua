@@ -24,15 +24,15 @@ local SessionsData = NPL.load("(gl)Mod/CodePku/database/SessionsData.lua")
 local UserInfo = NPL.export()
 
 local default_avatars = {
-    "boy02",
+    "boy01",
 }
 
 local DefaultBoyAvatars = {
-    "boy02",
+    "boy01",
 };
 
 local DefaultGirlAvatars = {
-    "girl02",
+    "girl01",
 }
 
 local cur_index = 1
