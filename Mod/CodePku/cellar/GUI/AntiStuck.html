@@ -22,11 +22,11 @@ function OnClickButton()
 
     if System.Codepku.Coursewares.course_category == 1 then
         GameLogic.RunCommand("/loadworld 15855")
-    else if System.Codepku.Coursewares.course_category == 2 then
+    elseif System.Codepku.Coursewares.course_category == 2 then
         GameLogic.RunCommand("/loadworld 15857")    
-    else if System.Codepku.Coursewares.course_category == 3 then
+    elseif System.Codepku.Coursewares.course_category == 3 then
         GameLogic.RunCommand("/loadworld " .. tostring(System.Codepku.Coursewares.keepwork_project_id))        
-    else if System.Codepku.Coursewares.course_category ==4 then        
+    elseif System.Codepku.Coursewares.course_category ==4 then        
         GameLogic.RunCommand("/home")
     end
 end
