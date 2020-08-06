@@ -118,7 +118,7 @@ end
 function GetMessages()
     local Messages = {}
     if LAST_CLICKED_INDEX == 3 then
-        if friends and friends ~= {} then
+        if (#friends~= 0) then
             local f_id = friends[FRIEND_IN_CHATTING].friend_id
             Messages = CodepkuChatChannel.Messages[Channels[LAST_CLICKED_INDEX].channel][f_id]
         end
@@ -239,7 +239,7 @@ end
             </pe:if>
         </div>
         <!-- 发言 -->
-        <pe:if condition="<%=LAST_CLICKED_INDEX ~= 3 or #friends ~= 0%>">
+        <pe:if condition="<%=LAST_CLICKED_INDEX~=3 or #friends~=0%>">
             <div style='width: 960;height:130'>
                 <div style='width: 600;height:50;margin-top: 40%;background: url(codepku/image/textures/chat/icon_6.png);margin-left: 40px;'>
                     <input type="text" style='width:600;height: 50;background-color: white;font-size: 28px;' name='DialogContent'/>
