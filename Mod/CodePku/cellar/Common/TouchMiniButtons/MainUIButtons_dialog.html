@@ -21,9 +21,9 @@ MainSceneUIButtons.page = page
 
 -- {"全部","世界","本地","公会","校园","系统","好友"}
 Channels = {
-    [1]={name="world_clicked",index=1, channel=2},
-    [2]={name="local",index=2, channel=3},
-    [3]={name="friends",index=3, channel=0},
+    [1]={name="world",index=1, channel=2,title='世界'},
+    [2]={name="local",index=2, channel=3,title='本地'},
+    [3]={name="friends",index=3, channel=0,title='好友'},
     ['world']=1,
     ['local']=2,
     ['friends']=3,
@@ -40,9 +40,9 @@ for i, v in ipairs(friends) do
     v.index = i
     if i == 1 then
         FRIEND_IN_CHATTING = i
-        v.status = '_clicked'
+        v.status = '449 802 100 100'
     else
-        v.status = ''
+        v.status = '581 801 100 100'
     end
 end
 
@@ -53,9 +53,7 @@ end
 
 function OnClickChannel(index)
     if index ~= LAST_CLICKED_INDEX then
-        Channels[LAST_CLICKED_INDEX].name = string.gsub(Channels[LAST_CLICKED_INDEX].name, '_clicked', '')
         LAST_CLICKED_INDEX = index
-        Channels[LAST_CLICKED_INDEX].name = Channels[LAST_CLICKED_INDEX].name..'_clicked'
         Page:Refresh()
     end
 end
@@ -108,9 +106,9 @@ end
 
 function OnClickFriend(index)
     if FRIEND_IN_CHATTING ~= index then
-        friends[FRIEND_IN_CHATTING].status = ''        
+        friends[FRIEND_IN_CHATTING].status = '581 801 100 100'       
         FRIEND_IN_CHATTING = index
-        friends[index].status = '_clicked'
+        friends[index].status = '449 802 100 100'
         Page:Refresh()
     end
 end
@@ -142,39 +140,44 @@ end
 </style>
 <pe:container alignment="_ct" width="1000" height="1080">
     
-    <div style="width:960;height:1080;background:url(codepku/image/textures/chat/chat_board.png);">
+    <div style="width:960;height:1080;background:url(codepku/image/textures/chat_ui/chat_board.png);">
         <!-- 频道 -->
-        <div style="width: 960;height: 100;">
+        <div style="width: 960;height: 101;">
             <pe:repeat DataSource="<%=Channels%>">
                 <pe:repeatitem>
-                    <div style="<%=format('width: 100;height:60;position:relative;left:%d;margin:20;background:url(codepku/image/textures/chat/%s.png)', (Eval('index')-1)*135, Eval('name'))%>" name="<%=Eval('index')%>" onclick="OnClickChannel"></div>
+                    <pe:if condition="<%=LAST_CLICKED_INDEX == Eval('index')%>">
+                        <div style="<%=format('width: 102;height:60;position:relative;left:%d;margin-top:20;base-font-size:30px;font-size:30px;color: #ffffff; font-family: Noto Sans S Chinese Regular; text-align: center;line-height:60; background:url(codepku/image/textures/chat_ui/chat_32bits.png#589 659 67 67:20 20 20 20)', (Eval('index')-1)*132+28)%>" name="<%=Eval('index')%>" onclick="OnClickChannel"><%=Eval('title')%></div>
+                    </pe:if>
+                    <pe:if condition="<%=LAST_CLICKED_INDEX ~= Eval('index')%>">
+                        <div style="<%=format('width: 102;height:60;position:relative;left:%d;margin-top:20;base-font-size:30px;font-size:30px;color: #ffffff; font-family: Noto Sans S Chinese Regular; text-align: center;line-height:60; background:url(codepku/image/textures/chat_ui/chat_32bits.png#687 660 67 67:20 20 20 20)', (Eval('index')-1)*132+28)%>" name="<%=Eval('index')%>" onclick="OnClickChannel"><%=Eval('title')%></div>
+                    </pe:if>
                 </pe:repeatitem>
             </pe:repeat>
         </div>
         <!-- 显示栏 -->
-        <div style="width: 960;height:850;">
+        <div style="width: 960;height:845;">
             <pe:if condition="<%=LAST_CLICKED_INDEX~=3%>">
-                <pe:treeview style="width: 900; height: 800" ScrollToEnd="<%=scrollEnd()%>" name='messages' DefaultNodeHeight = "120" ItemsPerLine="1" AllowPaging="false" RememberScrollPos="true" RememberLastPage="false" VerticalScrollBarStep="40">
+                <pe:treeview style="width: 950; height: 845" ScrollToEnd="<%=scrollEnd()%>" name='messages' DefaultNodeHeight = "120" ItemsPerLine="1" AllowPaging="false" RememberScrollPos="true" RememberLastPage="false" VerticalScrollBarStep="40">
                     <pe:repeat  DataSource="<%=GetMessages()%>">
                         <pe:repeatitem>                
                                 <pe:if condition="<%=Eval('speakerIsMe')==0%>">
                                     <div style="width: 900;height: 150;margin-top: 10;">
-                                        <div style="width: 125;height: 125;background: url(codepku/image/textures/chat/icon_8.png);margin-left: 60px;">
-                                            <div style="<%=format('width: 110;height:110;margin:7;background: url(%s);', Eval('avatar'))%>"></div>
-                                            <div style="background: url(codepku/image/textures/chat/icon_5.png); width: 75;height: 25;position: absolute;margin-top:-25;margin-left: 50;font-size: 18px;color:white;text-align: center;"><%=format("等级%d", Eval("level"))%></div>
+                                        <div style="width: 122;height: 122;background: url(codepku/image/textures/chat_ui/chat_32bits.png#64 779 123 126:30 30 30 30);margin-left: 61px;">
+                                            <div style="<%=format('width: 111;height:110;margin-left:6; margin-top:5;background: url(%s);', Eval('avatar'))%>"></div>
+                                            <div style="background: url(codepku/image/textures/chat_ui/chat_32bits.png#198 877 72 24); width: 72;height: 24;position: absolute;margin-top:-20;margin-left: 50;font-size: 18px;color:white;text-align: center;"><%=format("等级%d", Eval("level"))%></div>
                                         </div>
                                         <div style="width: 500px;height: 30px;font-size: 30px;color: white;font-weight: bold;margin-left: 220px;margin-top: -130;"><%=Eval('nickname')%></div>
-                                        <div style="background: url(codepku/image/textures/chat/icon_3.png); width: 500px;height: 90px;margin-left: 210px;margin-top: -95px;font-size: 30px;padding-left: 30px;"><%=Eval('dialog')%></div>
+                                        <div style="background: url(codepku/image/textures/chat_ui/chat_32bits.png#799 457 55 86:25 25 25 25); width: 476px;height: 86;margin-left: 205;margin-top: -95px;base-font-size: 26px; font-size: 26px; padding-top:13; padding-left:46; padding-right:35;"><%=Eval('dialog')%></div>
                                     </div>
                                 </pe:if>
                                 <pe:if condition="<%=Eval('speakerIsMe')==1%>">
                                     <div style="width: 900;height: 150;margin-top: 10">
                                         
                                         <div style="width: 500px;height: 30px;font-size: 30px;color: white;font-weight: bold;margin-left: 220px;text-align: right;padding-right: 16px;margin-bottom: 10px;"><%=Eval('nickname')%></div>
-                                        <div style="background: url(codepku/image/textures/chat/icon_4.png); width: 500px;height: 90px;margin-left: 220px;font-size: 30px;padding-left: 20px;"><%=Eval('dialog')%></div>
-                                        <div style="width: 125;height: 125;background: url(codepku/image/textures/chat/icon_8.png);margin-left: 750px;margin-top:-120">
-                                            <div style="<%=format('width: 110;height:110;margin:7;background: url(%s);', Eval('avatar'))%>"></div>
-                                            <div style="background: url(codepku/image/textures/chat/icon_5.png); width: 75;height: 25;position: absolute;margin-top:-25;margin-left: 50;font-size: 18px;color:white;text-align: center;"><%=format("等级%d", Eval("level"))%></div>
+                                        <div style="background: url(codepku/image/textures/chat_ui/chat_32bits.png#887 457 55 86:25 25 25 25); width: 476;height: 86;margin-left: 272;base-font-size: 26px; font-size: 26px; padding-top:13; padding-left:34; padding-right:45;"><%=Eval('dialog')%></div>
+                                        <div style="width: 122;height: 122;background: url(codepku/image/textures/chat_ui/chat_32bits.png#64 779 123 126:30 30 30 30);margin-left: 769;margin-top:-119">
+                                            <div style="<%=format('width: 111;height:110;margin-left:6; margin-top:5;background: url(%s);', Eval('avatar'))%>"></div>
+                                            <div style="background: url(codepku/image/textures/chat_ui/chat_32bits.png#198 877 72 24); width: 72;height: 24;position: absolute;margin-top:-20;margin-left: 50;font-size: 18px;color:white;text-align: center;"><%=format("等级%d", Eval("level"))%></div>
                                         </div>
                                     </div>
                                 </pe:if>
@@ -184,51 +187,50 @@ end
             </pe:if>
             <!-- 好友聊天栏 -->
             <pe:if condition="<%=LAST_CLICKED_INDEX==3%>">
-                <div style="width: 200; height: 845;background: url(codepku/image/textures/chat/friend_left.png);">
+                <div style="width: 228; height: 845;background: url(codepku/image/textures/chat_ui/friend_left.png);">
                 <pe:treeview VerticalScrollBarStep="40"  VerticalScrollBarPageSize="400" RememberScrollPos="true" RememberLastPage="true" >
                     <pe:repeat DataSource="<%=GetFriends()%>">
                         <pe:repeatitem>
-                            <div style="<%=format('width:200;height:100;background: url(codepku/image/textures/chat/friend%s.png);padding: 12;', Eval('status'))%>" name="<%=Eval('index')%>" onclick="OnClickFriend">
-                                <div style="width:75;height: 75;background: url(codepku/image/textures/chat/icon_8.png);">
-                                    <div style="<%=format('width:65;height:65;background:url(%s);margin-top:5;margin-left:5', Eval('head'))%>"></div>
+                            <div style="<%=format('width:228;height:100;background: url(codepku/image/textures/chat_ui/chat_32bits.png#%s); ', Eval('status'))%>" name="<%=Eval('index')%>" onclick="OnClickFriend">
+                                <div style="width:73;height: 73; margin-top: 12; margin-left: 13; float: left; background: url(codepku/image/textures/chat_ui/chat_32bits.png#284 828 74 74:10 10 10 10);">
+                                    <div style="<%=format('width:65;height:65;background:url(%s);margin-top:5;margin-left:4', Eval('head'))%>"></div>
+                                    <div style="width:45; height:14; margin-left: 29; margin-top: -10; background: url(codepku/image/textures/chat_ui/chat_32bits.png#366 886 45 15); base-font-size:11px; font-size:11px; font-family:Noto Sans S Chinese; color:#ffffff; text-align: center; line-height: 14;">123</div>
                                 </div>
-                                <div style="float:left;width:125;height:100;margin-top:-60;margin-left:80;font-size: 20;">
-                                    <div><%=Eval('nickname')%></div>
+                                <div style="float:left;width:125;height:100;margin-top:29;margin-left:4;font-size: 18; font-family:Noto Sans S Chinese Regular;">
+                                    <div style="width:125; height: 17; text-align: center; line-height: 17; color: #ffffff;"><%=Eval('nickname')%></div>
                                     <pe:if condition="<%=Eval('is_online')%>">
-                                        <div style='margin:0;color:#00ff9c'>在线</div>
+                                        <div style='width:125; height: 17; margin-top: 9; text-align: center; line-height: 17;color:#00ff9c'>在线</div>
                                     </pe:if>
                                     <pe:if condition="<%=Eval('is_online')==false%>">
-                                        <div style='margin:0;color:#056097'>离线</div>
+                                        <div style='width:125; height: 17; margin-top: 9; text-align: center; line-height: 17;color:#056097'>离线</div>
                                     </pe:if>
                                 </div>
                             </div>
-                            
                         </pe:repeatitem>
                     </pe:repeat>
                 </pe:treeview>
             </div>
-                <div style="width:700;height:850;margin-left: 200;margin-top: -850;">
-                    <pe:treeview style="width: 740; height: 800" ScrollToEnd="<%=scrollEnd()%>" name='messages' DefaultNodeHeight = "120" ItemsPerLine="1" AllowPaging="false" RememberScrollPos="true" RememberLastPage="true" VerticalScrollBarStep="40">
+                <div style="width:723;height:845;margin-left: 228;margin-top: -845;">
+                    <pe:treeview style="width: 723; height: 845" ScrollToEnd="<%=scrollEnd()%>" name='messages' DefaultNodeHeight = "120" ItemsPerLine="1" AllowPaging="false" RememberScrollPos="true" RememberLastPage="true" VerticalScrollBarStep="40">
                         <pe:repeat  DataSource="<%=GetMessages()%>">
                             <pe:repeatitem>                
                                     <pe:if condition="<%=Eval('speakerIsMe')==0%>">
-                                        <div style="width: 750;height: 150;margin-top: 10;">
-                                            <div style="width: 125;height: 125;background: url(codepku/image/textures/chat/icon_8.png);margin-left: 60px;">
-                                                <div style="<%=format('width: 110;height:110;margin:7;background: url(%s);', Eval('avatar'))%>"></div>
-                                                <div style="background: url(codepku/image/textures/chat/icon_5.png); width: 75;height: 25;position: absolute;margin-top:-25;margin-left: 50;font-size: 18px;color:white;text-align: center;"><%=format("等级%d", Eval("level"))%></div>
+                                        <div style="width: 723;height: 122;margin-top: 30;">
+                                            <div style="width: 122;height: 122;background: url(codepku/image/textures/chat_ui/chat_32bits.png#64 779 123 123);margin-left: 52;">
+                                                <div style="<%=format('width: 111;height:110;margin-left:6; margin-top:5;background: url(%s);', Eval('avatar'))%>"></div>
+                                                <div style="background: url(codepku/image/textures/chat_ui/chat_32bits.png#198 877 72 24); width: 72;height: 24;position: absolute;margin-top:-16;margin-left: 50;font-size: 18px;color:white;text-align: center;"><%=format("等级%d", Eval("level"))%></div>
                                             </div>
-                                            <div style="width: 500px;height: 30px;font-size: 30px;color: white;font-weight: bold;margin-left: 220px;margin-top: -130;"><%=Eval('nickname')%></div>
-                                            <div style="background: url(codepku/image/textures/chat/icon_3.png); width: 500px;height: 90px;margin-left: 210px;margin-top: -95px;font-size: 30px;padding-left: 30px;"><%=Eval('dialog')%></div>
+                                            <div style="width: 166;height: 23;base-font-size: 24;font-size: 24;color: white;font-weight: bold;margin-left: 208;margin-top: -122;"><%=Eval('nickname')%></div>
+                                            <div style="background: url(codepku/image/textures/chat_ui/chat_32bits.png#799 457 55 86:25 25 25 25); width: 476;height: 86;margin-left: 196;margin-top: -86;base-font-size: 26;font-size: 26; padding-top:13; padding-left:46; padding-right:35;"><%=Eval('dialog')%></div>
                                         </div>
                                     </pe:if>
                                     <pe:if condition="<%=Eval('speakerIsMe')==1%>">
-                                        <div style="width: 750;height: 150;margin-top: 10;">
-                                        
-                                            <div style="width: 500px;height: 30px;font-size: 30px;color: white;font-weight: bold;margin-left: 50px;text-align: right;padding-right: 16px;margin-bottom: 10px;"><%=Eval('nickname')%></div>
-                                            <div style="background: url(codepku/image/textures/chat/icon_4.png); width: 500px;height: 90px;margin-left: 50px;font-size: 30px;padding-left: 20px;"><%=Eval('dialog')%></div>
-                                            <div style="width: 125;height: 125;background: url(codepku/image/textures/chat/icon_8.png);margin-left: 580px;margin-top:-120">
-                                                <div style="<%=format('width: 110;height:110;margin:7;background: url(%s);', Eval('avatar'))%>"></div>
-                                                <div style="background: url(codepku/image/textures/chat/icon_5.png); width: 75;height: 25;position: absolute;margin-top:-25;margin-left: 50;font-size: 18px;color:white;text-align: center;"><%=format("等级%d", Eval("level"))%></div>
+                                        <div style="width: 723;height: 122;margin-top: 30;">
+                                            <div style="width: 166;height: 23;base-font-size: 24;font-size: 24;color: white;font-weight: bold;margin-left: 347;text-align: right; line-height: 23;"><%=Eval('nickname')%></div>
+                                            <div style="background: url(codepku/image/textures/chat_ui/chat_32bits.png#887 457 55 86:25 25 25 25); width: 476;height: 86;margin-left: 53; margin-top: 14; base-font-size: 26px; font-size: 26px; padding-left: 34; padding-top: 13; padding-right: 45;"><%=Eval('dialog')%></div>
+                                            <div style="width: 122;height: 122;background: url(codepku/image/textures/chat_ui/chat_32bits.png#64 779 123 123);margin-left: 550;margin-top:-122">
+                                                <div style="<%=format('width: 111;height:110;margin-left:6; margin-top:5;background: url(%s);', Eval('avatar'))%>"></div>
+                                                <div style="background: url(codepku/image/textures/chat_ui/chat_32bits.png#198 877 72 24); width: 72;height: 24;position: absolute;margin-top:-18;margin-left: 50;font-size: 18px;color:white;text-align: center;"><%=format("等级%d", Eval("level"))%></div>
                                             </div>
                                         </div>
                                     </pe:if>
@@ -240,17 +242,15 @@ end
         </div>
         <!-- 发言 -->
         <pe:if condition="<%=LAST_CLICKED_INDEX ~= 3 or #friends ~= 0%>">
-            <div style='width: 960;height:130'>
-                <div style='width: 600;height:50;margin-top: 40%;background: url(codepku/image/textures/chat/icon_6.png);margin-left: 40px;'>
-                    <input type="text" style='width:600;height: 50;background-color: white;font-size: 28px;' name='DialogContent'/>
-                </div>
-                <!-- <div style='width:50;height:50;background: url(codepku/image/textures/chat/icon_2.png);margin-top: -50;margin-left: 660px;' onclick="OnClickVoice"></div> -->
-                <!-- <div style='width:50;height:50;background: url(codepku/image/textures/chat/icon_1.png);margin-top:-50;margin-left: 730px' onclick="OnClickEmoji"></div> -->
-                <div style='width:100;height:50;background: url(codepku/image/textures/chat/icon_7.png);margin-top:-50;margin-left: 700px' onclick="OnClickSend"></div>
+            <div style='width: 960;height:134;'>
+                <input type="text" style='width:608;height: 54;float: left; background-color: #ffffff; background: url(codepku/image/textures/chat_ui/chat_32bits.png#928 663 54 54:10 10 10 10);margin-left: 27;margin-top:38; font-size: 28px;' name='DialogContent'/>
+                <!--<div style='width:54;height:54;float: left; background: url(codepku/image/textures/chat_ui/chat_32bits.png#848 665 54 54);margin-top: 38;margin-left: 15;' onclick="OnClickVoice"></div>-->
+                <!--<div style='width:54;height:54;float: left; background: url(codepku/image/textures/chat_ui/chat_32bits.png#773 666 54 54);margin-top: 38;margin-left: 18' onclick="OnClickEmoji"></div>-->
+                <div style='width:125;height:54;float: left; background: url(codepku/image/textures/chat_ui/chat_32bits.png#928 340 54 54:25 25 25 25);margin-top:38;margin-left: 25; color:#F46D3D; base-font-size:30; font-size:30;font-family:Noto Sans S Chinese Regular; padding-left:32; padding-top:12; ' onclick="OnClickSend">发送</div>
             </div>
         </pe:if>
     </div>
-    <div style="width: 40;height:100;background:url(codepku/image/textures/chat/icon_29.png);margin-left: 960;margin-top: -600;" onclick="OnClose"></div>
+    <div style="width: 44;height:150;background:url(codepku/image/textures/chat_ui/chat_32bits.png#478 636 44 144);margin-left: 960;margin-top: -600;" onclick="OnClose"></div>
 </pe:container>
 </pe:mcml> 
 </body>
