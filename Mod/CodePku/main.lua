@@ -378,6 +378,13 @@ function CodePku:init()
 			return true;
 		end
 	);
+
+	GameLogic.GetFilters():add_filter(
+		"QuickSelectBar.ShowPage",
+		function(bShow)
+			return true;
+		end
+	);
 end
 
 function CodePku:OnLogin()
@@ -385,6 +392,9 @@ end
 -- called when a new world is loaded. 
 
 function CodePku:OnWorldLoad()
+	NPL.load("(gl)script/apps/Aries/Creator/Game/Areas/QuickSelectBar.lua");
+local QuickSelectBar = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.QuickSelectBar");
+QuickSelectBar.ShowPage(true)
 	UserConsole:ClosePage()
 end
 -- called when a world is unloaded. 
