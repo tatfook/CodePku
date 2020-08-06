@@ -35,7 +35,12 @@ end
 
 function turnTo()
     CloseAllPage()
-    GameLogic.RunCommand(string.format('/loadworld %d', tonumber(id)));
+    local _id = tonumber(id)
+    if (_id) == 1 then
+        GameLogic.RunCommand(string.format('/connectCodePku %d', _id));
+    else
+        GameLogic.RunCommand(string.format('/loadworld %d', _id));
+    end
 end
 
 ]]>
