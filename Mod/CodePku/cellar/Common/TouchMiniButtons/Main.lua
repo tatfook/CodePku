@@ -89,14 +89,10 @@ function MainUIButtons.ShowPage()
 		end
 	end
 	local hideMenu = false;
-	if (System.Codepku and System.Codepku.Coursewares) then
-		echo("hide_menu")
-		echo(System.Codepku.Coursewares.hide_menu);
+	if (System.Codepku and System.Codepku.Coursewares) then		
 		hideMenu = System.Codepku.Coursewares.hide_menu;
 	end
-
-	echo("hide_menu2222")
-	echo(hideMenu)
+		
 	if not hideMenu then 
 		MainUIButtons.show_common_ui()
 		MainUIButtons.show_dialog_ui(false)
