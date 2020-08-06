@@ -72,7 +72,7 @@ function MainUIButtons.show_money_ui()
 		url="Mod/CodePku/cellar/Common/TouchMiniButtons/MainMoney.html", 
 		alignment="_lt", left = 1309, top = 0, width = width, height = height,
 	}
-	MainUIButtons.money_window = AdaptWindow:QuickWindow(params)
+	MainUIButtons.money_window = AdaptWindow:QuickWindow(params)	
 end
 
 function MainUIButtons.ShowPage()
