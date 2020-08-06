@@ -32,6 +32,7 @@ end
 NPL.load("(gl)Mod/CodePku/cellar/GUI/rank/RankPage.lua")
 NPL.load("(gl)script/apps/Aries.Creator.Game.Desktop.UserInfo.lua");
 UserInfoPage = commonlib.gettable("Mod.CodePku.UserInfoPage")
+UserInfo = commonlib.gettable("Mod.CodePku.UserInfo")
 UserInfoPage.OnInit()
 RankPage = commonlib.gettable("Mod.CodePku.RankPage");
 function ClickUserInfo()
@@ -56,19 +57,17 @@ end
 <style type="text/mcss">
 
 </style>
-<pe:container alignment="_rb" width="720" height="100">
+<pe:container alignment="_rb" width="541" height="178">
     <pe:if condition='<%= is_open %>'>
-        <div style="position:relative;left:360;width:90; height:90; background: url(codepku/image/textures/mainuibuttons/function/close_button.png);" onclick="ClickClose"></div>
-        <div style="position:relative;left:450;width:90; height:90; background: url(codepku/image/textures/mainuibuttons/function/user_info.png);" onclick="ClickUserInfo"></div>
-        <!-- <div style="position:relative;left:180;width:90; height:90; background: url(codepku/image/textures/mainuibuttons/function/bag.png);" onclick="ClickBag"></div> -->
-        <div style="position:relative;left:540;width:90; height:90; background: url(codepku/image/textures/mainuibuttons/function/friends.png);" onclick="ClickFriend"></div>
-        <div style="position:relative;left:630;width:90; height:90; background: url(codepku/image/textures/mainuibuttons/function/rank.png);" onclick="ClickRank"></div>
-        <!-- <div style="position:relative;left:450;width:90; height:90; background: url(codepku/image/textures/mainuibuttons/function/school.png);" onclick="ClickFunctionButton"></div> -->
-        <!-- <div style="position:relative;left:540;width:90; height:90; background: url(codepku/image/textures/mainuibuttons/function/email.png);" onclick="ClickFunctionButton"></div> -->
-        <!-- <div style="position:relative;left:630;width:90; height:90; background: url(codepku/image/textures/mainuibuttons/function/setting.png);" onclick="ClickFunctionButton"></div> -->
+        <div style="position: relative; width: 82; height: 178; left: 0; background: url(codepku/image/textures/main_ui/main.png#915 14 82 178);" onclick="ClickClose"></div>
+        <div style="position: relative; width: 459; height: 178; left: 82; background: url(codepku/image/textures/main_ui/main.png#680 212 80 80:20 20 20 20); " >
+            <div style="position: relative; width: 103; height: 127; left: 45; top: 27; background: url(codepku/image/textures/main_ui/main.png#148 25 107 131);" onclick="ClickUserInfo"></div>
+            <div style="position: relative; width: 93; height: 134; left: 197; top: 20; background: url(codepku/image/textures/main_ui/main.png#285 18 97 138);" onclick="ClickFriend"></div>
+            <div style="position: relative; width: 80; height: 134; left: 335; top: 20; background: url(codepku/image/textures/main_ui/main.png#416 18 84 138);" onclick="ClickRank"></div>
+        </div>
     </pe:if>
     <pe:if condition='<%= not is_open %>'>
-        <div style="position:relative;left:630;width:100; height:100; background: url(codepku/image/textures/mainuibuttons/function/open_button.png);" onclick="ClickOpen"></div>
+        <div style="position: relative; width: 82; height: 178; left: 455; background: url(codepku/image/textures/main_ui/main.png#915 14 82 178);" onclick="ClickOpen"></div>
     </pe:if>
 </pe:container>
 </pe:mcml> 

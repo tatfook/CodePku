@@ -34,6 +34,21 @@ function OnlineClient:ctor()
 
 end
 
+-- 初始化函数
+function OnlineClient:Init()
+    if (self.inited) then return end
+
+    -- 基类初始化
+    OnlineClient._super.Init(self);
+
+    self.GetAssetsWhiteList().AddAsset("codepku/model/HLS_AN.x");
+    self.GetAssetsWhiteList().AddAsset("codepku/model/LLS_AN.x");
+    self.GetAssetsWhiteList().AddAsset("codepku/model/WLS_AN.x");
+
+
+    self.inited = true;
+end
+
 -- 获取世界类
 function OnlineClient:GetGeneralGameWorldClass()
     return OnlineClient._super.GetGeneralGameWorldClass(self);  -- 不定制

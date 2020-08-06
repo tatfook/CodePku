@@ -17,9 +17,11 @@ MainUIButtons.hasshown = false
 MainUIButtons.common_window = nil
 MainUIButtons.function_window = nil
 MainUIButtons.dialog_window = nil
+MainUIButtons.money_window = nil
+
 
 function MainUIButtons.show_common_ui()
-	local width = 410
+	local width = 448
 	local height = 110
 
 	params = {
@@ -29,10 +31,9 @@ function MainUIButtons.show_common_ui()
 	MainUIButtons.common_window = AdaptWindow:QuickWindow(params)
 end
 
-
 function MainUIButtons.show_function_ui()
-	local width = 720
-	local height = 100
+	local width = 541
+	local height = 178
 
 	params = {
 		url="Mod/CodePku/cellar/Common/TouchMiniButtons/MainUIButtons_function.html", 
@@ -42,11 +43,20 @@ function MainUIButtons.show_function_ui()
 	MainUIButtons.function_window = AdaptWindow:QuickWindow(params)
 end
 
-
 function MainUIButtons.show_dialog_ui(bshow)
 	MainUIButtons.dialog_window = MainSceneUIButtons.show_dialog_ui(bshow)
 end
 
+function MainUIButtons.show_money_ui()
+	local width = 611
+	local height = 89
+
+	params = {
+		url="Mod/CodePku/cellar/Common/TouchMiniButtons/MainMoney.html", 
+		alignment="_lt", left = 1309, top = 0, width = width, height = height,
+	}
+	MainUIButtons.money_window = AdaptWindow:QuickWindow(params)
+end
 
 function MainUIButtons.ShowPage()
 	local show = false
@@ -62,12 +72,12 @@ function MainUIButtons.ShowPage()
 		end
 	end
 
+	MainUIButtons.show_common_ui()
+	MainUIButtons.show_dialog_ui(false)
+	MainUIButtons.show_money_ui()
 	if(show)then
-		if(not MainUIButtons.hasshown) then
-			MainUIButtons.show_common_ui()
-			MainUIButtons.show_function_ui()
-			MainUIButtons.show_dialog_ui(false)
-
+		if(not MainUIButtons.hasshown) then			
+			MainUIButtons.show_function_ui()					
 			MainUIButtons.hasshown = true
 			-- GenAndName:ShowPage()
 		end
@@ -84,7 +94,10 @@ function MainUIButtons.ShowPage()
 			MainUIButtons.dialog_window:CloseWindow()
 			MainUIButtons.dialog_window = nil
 		end
-
+		if MainUIButtons.money_window ~= nil then
+			MainUIButtons.money_window:CloseWindow()
+			MainUIButtons.money_window = nil
+		end
 		MainUIButtons.hasshown = false
 	end
 end

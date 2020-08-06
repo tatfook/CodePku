@@ -51,7 +51,7 @@ function ClickChat()
     GameLogic.AddBBS("CodeGlobals", L"功能开发中", 3000, "#ff0000");
 end
 
-function ClickEmail()
+function ClickBlackList()
     GameLogic.AddBBS("CodeGlobals", L"功能开发中", 3000, "#ff0000");
 end
 
@@ -74,31 +74,31 @@ end
 <pe:container alignment="_lt" width="1920" height="1080">
     <div style = '<%=format("position: relative;width:1920;height:%s;", (1080-hsize)/2)%>' onclick="CloseInteract"></div>
     <div style = '<%=format("position: relative;width:%s;height:%s;top:%s;", (1920-wsize)/2,hsize,(1080-hsize)/2)%>' onclick="CloseInteract"></div>
-    <div style = '<%=format("position: relative;background:url(codepku/image/textures/mainuibuttons/interact/roulette.png);width:%s;height:%s;top:%s;left:%s;", wsize,hsize,(1080-hsize)/2, (1920-wsize)/2)%>'>
+    <div style = '<%=format("position: relative;background:url(codepku/image/textures/mainuibuttons/new_interact/roulette.png);width:%s;height:%s;top:%s;left:%s;", wsize,hsize,(1080-hsize)/2, (1920-wsize)/2)%>'>
         
         <div style="position:relative; width:124;height:124;left:14;top:9;">
-            <input type="button" style="width:124;height:124;background:url(codepku/image/textures/mainuibuttons/interact/see_info.png);" onclick="ClickSeeInfo" />
+            <input type="button" style="width:124;height:124;background:url(codepku/image/textures/mainuibuttons/new_interact/see_info.png);" onclick="ClickSeeInfo" />
         </div>
         <pe:if condition='<%= not is_friend%>'>
             <div style="position:absolute; width:124;height:124;left:303;top:9;">
-                <input type="button" style="width:124;height:124;background:url(codepku/image/textures/mainuibuttons/interact/del_friend.png);" onclick="ClickAddFriend" />
+                <input type="button" style="width:124;height:124;background:url(codepku/image/textures/mainuibuttons/new_interact/add_friend.png);" onclick="ClickAddFriend" />
             </div>
         </pe:if>
         <pe:if condition='<%=is_friend%>'>
             <div style="position: absolute; width:124;height:124;left:303;top:9;">
-                <input type="button" style="width:124;height:124;background:url(codepku/image/textures/mainuibuttons/interact/add_friend.png);" onclick="ClickDelFriend" />
+                <input type="button" style="width:124;height:124;background:url(codepku/image/textures/mainuibuttons/new_interact/del_friend.png);" onclick="ClickDelFriend" />
             </div>
         </pe:if>
        
         <div style="position:relative; width:124;height:124;left:14;top:219;">
-            <input type="button" style="width:124;height:124;background:url(codepku/image/textures/mainuibuttons/interact/shielding_friend.png);" onclick="ClickEmail" />
+            <input type="button" style="width:124;height:124;background:url(codepku/image/textures/mainuibuttons/new_interact/shielding_friend.png);" onclick="ClickBlackList" />
         </div>
         <div style="position:relative; width:124;height:124;left:303;top:219;">
-            <input type="button" style="width:124;height:124;background:url(codepku/image/textures/mainuibuttons/interact/chat.png);" onclick="ClickChat" />
+            <input type="button" style="width:124;height:124;background:url(codepku/image/textures/mainuibuttons/new_interact/chat.png);" onclick="ClickChat" />
         </div>
-        <div style="position:relative; width:176;height:144;left:125;top:103;background:url(codepku/image/textures/mainuibuttons/interact/info.png);">
-            <div style="position:relative; width:80;height:80;left:48;top:10;background:url(codepku/image/textures/mainuibuttons/interact/head_pane.png);"></div>
-            <div style="position:relative; width:74;height:74;left:51;top:13;background:url(codepku/image/textures/mainuibuttons/interact/head.png);"></div>
+        <div style="position:relative; width:176;height:144;left:125;top:103;background:url(codepku/image/textures/mainuibuttons/new_interact/info.png);">
+            <div style="position:relative; width:80;height:80;left:48;top:10;background:url(codepku/image/textures/mainuibuttons/new_interact/head_pane.png);"></div>
+            <div style="position:relative; width:74;height:74;left:51;top:13;background:url(codepku/image/textures/mainuibuttons/new_interact/head.png);"></div>
             <div style="position:relative; width:176;height:68;top:95;font-size: 25px;base-font-size:25px;text-align:center;color: #fff;"><%=name%></div>
         </div>
         

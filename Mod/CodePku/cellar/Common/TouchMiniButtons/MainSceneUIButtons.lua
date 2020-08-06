@@ -22,7 +22,7 @@ function MainSceneUIButtons.show_dialog_ui(bshow)
     else
         params = {
             url="Mod/CodePku/cellar/Common/TouchMiniButtons/MainUIButtons_dialog_close.html", 
-            alignment="_lb", left = 0, top = -100, width = 100, height = 100,
+            alignment="_lb", left = 0, top = -136, width = 100, height = 100,
         }
         local window = AdaptWindow:QuickWindow(params)
         return window
