@@ -271,7 +271,7 @@ function FeatKeyboard:getZoomBtn()
 
         container.enabled = true;
         container.background = "";
-        container.zorder = 10;
+        container.zorder = self.zorder;
 
         container:AttachToRoot();
     else
