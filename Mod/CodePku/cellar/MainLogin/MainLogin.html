@@ -234,7 +234,7 @@
                     </div>
                     <pe:if condition='<%=GetMethodIndex() ~=2 %>'>
                         <div style="margin-bottom:18px;">
-                            <input type="text" class="text_field" name="verify_code"  EmptyText='<%= L"请输入验证码" %>'/>
+                            <input type="text" MoveViewWhenAttachWithIME="true" class="text_field" name="verify_code"  EmptyText='<%= L"请输入验证码" %>'/>
                             <span class="get_code_divider">|</span>
                             <input
                                 type="button"
