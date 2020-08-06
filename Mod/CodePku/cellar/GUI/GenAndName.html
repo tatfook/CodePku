@@ -110,8 +110,8 @@ submit_pos = "position:relative;width:120;height:50;margin-left:620;margin-top:3
 </style>   
 <pe:if condition="<%= System.os.IsMobilePlatform() %>">
     <!-- for mobile phone -->
-    <div style="position: relative;width:574;height:86;margin-left:206;margin-top:47;background: url(codepku/image/textures/bg_32bits.png# 383 71 1148 172);"></div>
-    <pe:container alignment="_ct" style="width: 960;height: 540;margin-left: -480;margin-top: -270;background-color: #11114455;">
+    <pe:container alignment="_ct" style="width: 960;height: 540;margin-left: -480;margin-top: -270;background-color:;">
+        <div style="position: relative;width:574;height:86;margin-left:206;margin-top:47;background: url(codepku/image/textures/bg_32bits.png# 383 71 1148 172);"></div>
         <pe:if condition='<%=gen ~= 1%>'>
             <div style="position: relative;width:193;height:232;margin-left:253;margin-top:136;background:url(codepku/image/textures/bg_32bits.png# 1571 1535 386 465);" name = 1 onclick="setGen">
             </div>
@@ -150,7 +150,7 @@ submit_pos = "position:relative;width:120;height:50;margin-left:620;margin-top:3
 </pe:if>
 <pe:if condition="<%= not System.os.IsMobilePlatform() %>">
     <!-- for pc -->
-    <pe:container alignment="_ct" style="position:relative;width: 1920;height: 1080;margin-left: -960;margin-top: -540;background-color: #11114455">
+    <pe:container alignment="_ct" style="position:relative;width: 1920;height: 1080;margin-left: -960;margin-top: -540;background-color:;">
         <div style="position: relative;width:1148;height:172;margin-left:412;margin-top:93;background: url(codepku/image/textures/bg_32bits.png# 383 71 1148 172);"></div>
         <pe:if condition='<%=gen ~= 1%>'>
             <div style="position: relative;width:386;height:465;margin-left:506;margin-top:268;background:url(codepku/image/textures/bg_32bits.png# 1571 1535 386 465);" name = 1 onclick="setGen">
