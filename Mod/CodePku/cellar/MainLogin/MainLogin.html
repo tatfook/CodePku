@@ -227,7 +227,7 @@
             <div class="modal_title"><%= L"用户登录" %></div>
                 <div style="position:relative;padding-top:28px;padding-left:64px;">
                     <div>
-                        <input name="account" type="text" class="text_field" EmptyText='<%= L"请输入手机号码" %>' />
+                        <input MoveViewWhenAttachWithIME="true" name="account" type="text" class="text_field" EmptyText='<%= L"请输入手机号码" %>' />
                         <div class="helper"><pe:if condition='<%=GetMethodIndex() ~=2 %>'>若该手机未注册，我们会自动为您注册</pe:if></div>
                     </div>
                     <pe:if condition='<%=GetMethodIndex() ~=2 %>'>
@@ -247,7 +247,7 @@
                     </pe:if>
                     <pe:if condition='<%=GetMethodIndex() == 2 %>'>
                         <div style="margin-bottom:18px;">
-                            <input name="password" PasswordChar="*" class="text_field" EmptyText='<%= L"请输入密码" %>' />
+                            <input MoveViewWhenAttachWithIME="true" name="password" PasswordChar="*" class="text_field" EmptyText='<%= L"请输入密码" %>' />
                         </div>
                     </pe:if>
                     <div>
