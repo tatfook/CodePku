@@ -87,7 +87,7 @@ function CodepkuChatChannel.SetMessage(_table, message, index)
         _table = CodepkuChatChannel.Messages[_table]
     end
     if #_table > 50 then
-        table.remove(_table,#_table)
+        table.remove(_table, 1)
     end
     if (index) then
         if (type(_table) == 'table') then
