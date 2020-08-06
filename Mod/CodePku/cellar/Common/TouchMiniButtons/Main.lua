@@ -31,16 +31,33 @@ function MainUIButtons.show_common_ui()
 	MainUIButtons.common_window = AdaptWindow:QuickWindow(params)
 end
 
-function MainUIButtons.show_function_ui()
-	local width = 541
-	local height = 178
+MainUIButtons.openFlag = nil
+function MainUIButtons.show_function_ui(flag)	--flag == true,工具栏展开
 
 	params = {
-		url="Mod/CodePku/cellar/Common/TouchMiniButtons/MainUIButtons_function.html", 
-		alignment="_rb", left = -width, top = -height, width = width, height = height,
-		click_through = true,
+		open = {
+			url="Mod/CodePku/cellar/Common/TouchMiniButtons/MainUIButtons_function.html", 
+			alignment="_rb", left = -541, top = -178, width = 541, height = 178,
+			click_through = true,
+		},
+		close = {
+			url="Mod/CodePku/cellar/Common/TouchMiniButtons/MainUIButtons_function.html", 
+			alignment="_rb", left = -85, top = -178, width = 85, height = 178,
+			click_through = true,
+		}
 	}
-	MainUIButtons.function_window = AdaptWindow:QuickWindow(params)
+
+	if("close" == flag)then
+		MainUIButtons.openFlag = false
+	else
+		MainUIButtons.openFlag = true
+	end
+	
+	if(flag ~= nil)then
+		MainUIButtons.function_window = AdaptWindow:QuickWindow(params[flag])
+	else
+		MainUIButtons.function_window = AdaptWindow:QuickWindow(params["open"])
+	end
 end
 
 function MainUIButtons.show_dialog_ui(bshow)
