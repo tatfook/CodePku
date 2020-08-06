@@ -378,6 +378,13 @@ function CodePku:init()
 			return true;
 		end
 	);
+
+	GameLogic.GetFilters():add_filter(
+		"QuickSelectBar.ShowPage",
+		function(bShow)
+			return true;
+		end
+	);
 end
 
 function CodePku:OnLogin()
