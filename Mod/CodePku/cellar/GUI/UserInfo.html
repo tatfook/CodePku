@@ -10,6 +10,7 @@
 <script refresh="false" type="text/npl" src="UserInfo.lua"><![CDATA[
 -- NPL.load("(gl)script/apps/Aries.Creator.Game.Desktop.UserInfo.lua");
 -- NPL.load("(gl)script/apps/Aries.Creator.Game.Desktop.Share.lua");
+
 UserInfoPage = commonlib.gettable("Mod.CodePku.UserInfoPage")
 SharePage = commonlib.gettable("Mod.CodePku.SharePage")
 UserInfo = commonlib.gettable("Mod.CodePku.UserInfo")
@@ -187,7 +188,19 @@ function OnClickButton(name,mcmlNode)
 end
 
 function shurujiyu()
-    EditPage:ShowPage()
+    -- EditPage:ShowPage()
+    NPL.load("(gl)script/ide/System/Windows/Window.lua");
+	local Window = commonlib.gettable("System.Windows.Window");
+    local window = Window:new();
+    
+    -- NPL.load("(gl)Mod/CodePku/cellar/GUI/Window/AdaptWindow.lua");
+    -- local AdaptWindow = commonlib.gettable("Mod.CodePku.GUI.Window.AdaptWindow")
+	-- AdaptWindow:QuickWindow({
+    window:Show({
+		url="Mod/CodePku/cellar/Common/AriesWindow/pe_modal.html", 
+		alignment="_ct", left = -1158/2, top = -588/2, width = 1158 , height = 588,
+    });
+    window:SetMinimumScreenSize(1920, 1080)
 end
 
 function OnClickItem(item)
@@ -195,8 +208,8 @@ function OnClickItem(item)
     PropsInfo:ShowPage(item)
 end
 
-function SharePageFunc()
-    SharePage:ShowPage()
+function ShowSharePage()
+    SharePage:ShowPage();
 end
 
 function Undefinde()
@@ -204,7 +217,6 @@ function Undefinde()
 end
 
 function ShowSubjectPage()
-    -- SubjectPage.GetLevels();
     SubjectPage:ShowPage();
 end
 
@@ -271,7 +283,6 @@ end
                 </pe:repeatitem>
             </pe:repeat>
         </div>
-        
         <!-- 角色 -->
         <div style='<%=format("position:relative;margin-left:235px;margin-top:298px;width:727px;height:653px;background:url(%s #410 490 750 653);", Eval("ProfilePng")) %>'>
             <!-- 玩仔 -->
@@ -335,8 +346,8 @@ end
                 </div> -->
             </div>
             <div align="center" style="position:relative;margin-top:520px;margin-left:-90px;">
-                <div name="edit" style='<%=format("margin-left:0;margin-top:0;width:99px;height:99px;background:url(%s #793 56 99 99);", Eval("ProfilePng")) %>'></div>
-                <div name="share" style='<%=format("margin-left:0;margin-top:0;width:99px;height:99px;background:url(%s #900 55 99 99);", Eval("ProfilePng")) %>'></div>
+                <div name="edit" style='<%=format("margin-left:0;margin-top:0;width:99px;height:99px;background:url(%s #793 56 99 99);", Eval("ProfilePng")) %>' onclick="shurujiyu"></div>
+                <div name="share" style='<%=format("margin-left:0;margin-top:0;width:99px;height:99px;background:url(%s #900 55 99 99);", Eval("ProfilePng")) %>' onclick="ShowSharePage"></div>
             </div>
             <!-- 家园 -->
             <div align="right" style="margin-right:124px;margin-top:33px;font-family:Noto Sans S Chinese Regular;font-weight:bold;font-size:36px;">
@@ -369,7 +380,7 @@ end
             <div style="position:relative;width:611;height:735;margin-top:300;margin-left:324;font-size:40;base-font-size:40;background:url(codepku/image/textures/userinfo/touxiangbeijing.png)">
                 <div style="position:relative;width:611;height:735;text-align:center;font-size:18;base-font-size:40;background:url(codepku/image/textures/userinfo/wanjiatouxiang.png)"></div>
                 <div style="position:relative;width:50;height:50;margin-left:500;margin-top:550;background:url(codepku/image/textures/userinfo/shuru.png);"onclick="shurujiyu"></div>
-                <div style="position:relative;width:50;height:50;margin-left:500;margin-top:620;background:url(codepku/image/textures/userinfo/fenxiang.png);"onclick="SharePageFunc"></div>
+                <div style="position:relative;width:50;height:50;margin-left:500;margin-top:620;background:url(codepku/image/textures/userinfo/fenxiang.png);"onclick="ShowSharePage"></div>
             </div>
             <div style="position:relative;width:739;height:734;margin-left:1030;margin-top:300;background:url(codepku/image/textures/userinfo/jiayuanbeijing.png);">
                 <div style="position:relative;width:670;height:410;margin-left:36;margin-top:30;background:url(codepku/image/textures/userinfo/jiayuan.png);"></div>
@@ -449,28 +460,6 @@ end
                     <div align="right" style="float:right;margin-right:160px;"><%=  123456 %></div>
                 </div>
             </div>
-
-            <!-- <div style="position:relative;width:1645;height:976;margin-top:70;margin-left:275;background:url(codepku/image/textures/userinfo/shuxingbeijing.png);">
-                <div style="position:relative;margin-left:212;margin-top:85;width:611;height:735;background:url(codepku/image/textures/userinfo/wanjiatouxiang.png)"></div>
-                <div style="position:relative;width:380;text-align:left;margin-left:1004;margin-top:170;font-size:30;base-font-size:30;"><%= name%></div>
-                <div style="position:relative;width:380;text-align:left;margin-left:874;margin-top:260;font-size:30;base-font-size:30;"><%= user_id%></div>
-                <div style="position:relative;width:380;text-align:left;margin-left:904;margin-top:365;font-size:30;base-font-size:30;"><%= '等级:'%></div>
-                <div style='<%=format("position:relative;width:80;height:80;margin-left:874;margin-top:132;background:url(%s);",data.avatar_url or UserInfo.avatar or "")%>'></div>
-                <div style='<%=string.format("position:relative;width:%d;height:24;margin-top:413;margin-left:895;background:url(codepku/image/textures/userinfo/jingyantiao1.png);",492*(UserInfo.self_level.current_exp/UserInfo.self_level.next_exp))%>'></div>
-                <div style="position:relative;width:380;text-align:left;margin-left:1324;margin-top:365;font-size:30;base-font-size:30;"><%= UserInfo.self_level.current_level%>级</div>
-                <div style="position:relative;width:668;height:101;text-align:left;margin-left:871;margin-top:347;"onclick="ShowSubjectPage"></div>
-
-                <div style="position:relative;width:380;text-align:left;margin-left:874;margin-top:508;font-size:30;base-font-size:30;"><%= '魅力:  '%></div>
-                <div style="position:relative;width:380;text-align:left;margin-left:1230;margin-top:508;font-size:30;base-font-size:30;"><%= '成就:'%></div>
-                <div style="position:relative;width:380;text-align:left;margin-left:874;margin-top:603;font-size:30;base-font-size:30;">生涯:<%= UserInfo.day%>天</div>
-                <div style="position:relative;width:380;text-align:left;margin-left:1230;margin-top:603;font-size:30;base-font-size:30;">生日:<%= UserInfo.created_at%></div>
-                <div style="position:relative;width:76;height:61;margin-left:935;margin-top:698;background:url(codepku/image/textures/userinfo/user_name_info/xueshi.png);"></div>
-                <div style="position:relative;width:200;text-align:left;margin-left:1015;margin-top:723;font-size:30;base-font-size:30;"><%= xueshidian%></div>
-                <div style="position:relative;width:61;height:61;margin-left:1295;margin-top:698;background:url(codepku/image/textures/userinfo/user_name_info/dianzan.png);"></div>
-                <div style="position:relative;width:200;text-align:left;margin-left:1375;margin-top:723;font-size:30;base-font-size:30;"><%= dianzan%></div>
-                <div style="position:relative;width:380;text-align:left;margin-left:874;margin-top:830;font-size:30;base-font-size:30;"><%= '家园分:'%></div>
-                <div style="position:relative;width:700;text-align:right;margin-left:824;margin-top:830;font-size:30;base-font-size:30;"><%= '123456'%></div>
-            </div> -->
         </pe:if>
         <pe:if condition='<%=GetTabDSIndex() == 5%>'>
             <!-- 背包 -->

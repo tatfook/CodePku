@@ -90,6 +90,5 @@ function SubjectPage:InitWindow()
     NPL.load("(gl)Mod/CodePku/cellar/GUI/Window/AdaptWindow.lua");
     local AdaptWindow = commonlib.gettable("Mod.CodePku.GUI.Window.AdaptWindow")
     AdaptWindow:QuickWindow({url="Mod/CodePku/cellar/GUI/Subject.html", 
-    alignment="_fi", left = 0, top = 0, width = 0, height = 0,zorder = 21, background = '#000111'})
-    -- alignment="_ct", left = -1752 / 2, top = -962 / 2, width = 1920, height = 1080,zorder = 21})
+    alignment="_fi", left = 0, top = 0, width = 0, height = 0,zorder = 21});
 end
