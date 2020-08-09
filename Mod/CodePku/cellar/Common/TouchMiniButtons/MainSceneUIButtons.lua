@@ -11,15 +11,15 @@ CodepkuChatChannel = NPL.load("(gl)Mod/CodePku/chat/CodepkuChatChannel.lua");
 MainSceneUIButtons.params={
     world_page = {
         url="Mod/CodePku/cellar/Common/TouchMiniButtons/dialog/world.html",
-        alignment="_lt", left = 0, top = 0, width = 1000, height = 1080,zorder =20
+        alignment="_lt", left = 0, top = 0, width = 1004, height = 1080,zorder =20
     },
     local_page = {
         url="Mod/CodePku/cellar/Common/TouchMiniButtons/dialog/local.html",
-        alignment="_lt", left = 0, top = 0, width = 1000, height = 1080,zorder =20
+        alignment="_lt", left = 0, top = 0, width = 1004, height = 1080,zorder =20
     },
     friend_page = {
         url="Mod/CodePku/cellar/Common/TouchMiniButtons/dialog/friend.html",
-        alignment="_lt", left = -0, top = 0, width = 1000, height = 1080,zorder =20
+        alignment="_lt", left = -0, top = 0, width = 1004, height = 1080,zorder =20
     },
 }
 
