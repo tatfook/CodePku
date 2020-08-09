@@ -14,18 +14,17 @@
 local FriendUI = NPL.load("(gl)Mod/CodePku/cellar/GUI/Friend/FriendUI.lua")
 cur_index = 3
 menu = {
-    {index = 1, text = "my_friend"},
-    {index = 2, text = "recent_player"},
-    {index = 3, text = "black_list"},
+    [1] = {index = 1, text = "my_friend", name = "我的好友"},
+    [2] = {index = 2, text = "recent_player", name = "最近游玩"},
+    [3] = {index = 3, text = "black_list", name = "黑名单"}
 }
 
 function ClosePage()
     Page:CloseWindow();
 end
 
-
 function getBlackListData()
-    return FriendUI.vars["blacklist"] or {}
+    return  FriendUI.vars["blacklist"] or {}
 end
 
 
@@ -56,49 +55,91 @@ end
 <style type="text/mcss">
 
 </style>
-<pe:container alignment="_ct" left="-960" top="-540" width="1920" height="1080" style="background: url(codepku/image/textures/friend/main/bg.png)">
-    <div style="position:relative; width: 164;height: 83;left:170;top:20;
-    background: url(codepku/image/textures/friend/main/title.png);">
-    </div>
-    <div style="position:relative; margin-left: 40;width: 100;height: 60;margin-top: 35;
-    background: url(codepku/image/textures/friend/main/return.png);" onclick="ClosePage"></div>
+<pe:container alignment="_lt" width="1920" height="1080" style="background: url(codepku/image/textures/friend/main.png#23 445 1190 901);">
 
-    <div style="position:relative; margin-left: 450;margin-top: 140;width: 225;height: 70;
-    background: url(codepku/image/textures/friend/main/add_friend.png);" onclick="AddFriend"></div>
-    <div style="position:relative; margin-left: 1600;margin-top: 140;width: 225;height: 70;
-    background: url(codepku/image/textures/friend/main/friend_apply.png);" onclick="FriendApply"></div>
+    <div style="position: relative; width: 230; height: 1080; background: url(codepku/image/textures/common_32bits.png#1801 742 81 81:9 9 9 9);"></div>
+
+    <div style="position: relative; width: 1690; left: 230; height: 1080; background: url(codepku/image/textures/friend/main.png#23 445 1190 901); "></div>
+
+
+    <div style="position: relative; width: 66; height: 76; left: 1800; top: 6; background: url(codepku/image/textures/common_32bits.png#110 73 68 78);" onclick="ClosePage"></div>
+
+    <div style="position: relative; width: 223; height: 127; left: 0; top: 0; background: url(codepku/image/textures/common_32bits.png#251 49 208 127);" onclick="ClosePage"></div>
+
+    <!-- <div style="position: relative; width: 417; height: 86; left: 144; top: 0; line-height: 86; background: url(codepku/image/textures/common_32bits.png#475 63 429 86:0 0 0 0);"></div>
+
+    <div style="position: relative; width: 270; height: 66; left: 224; top: 9; font-size: 70; color: #D85D0B; font-family: Alibaba-PuHuiTi-B; ">个人中心</div> -->
+
+    <div style="position: relative; width: 417; height: 100;  left: 144; top: 0; font-size: 70; color: #D85D0B; font-family: Alibaba-PuHuiTi-B; padding-left: 70; padding-top: 9; padding-right: 50; padding-bottom: 11; background: url(codepku/image/textures/common_32bits.png#475 63 429 86);">
+        个人中心
+    </div>
+
+    <div style="position: relative; width: 1550; height: 874; left: 325; top: 131; background: url(codepku/image/textures/friend/backboard.png);"></div>
+
+    <input type="button" style="position: relative; width: 202; height: 82; left: 1396; top: 153; padding-left: 30; padding-top: 23; padding-right: 30; padding-bottom: 24;  color: #A75608; font-size: 36; font-family: NotoSansHans-Regular; background: url(codepku/image/textures/common_32bits.png#213 185 80 80:13 13 13 13);" onclick="AddFriend"  value="添加好友"/>
+
+    <input type="button" style="position: relative; width: 202; height: 82; left: 1615; top: 153; padding-left: 30; padding-top: 23; padding-right: 30; padding-bottom: 24;  color: #A75608; font-size: 36; font-family: NotoSansHans-Regular; background: url(codepku/image/textures/common_32bits.png#213 185 80 80:13 13 13 13);" onclick="FriendApply"  value="好友申请"/>
 
     <!-- left bar menu -->
-    <pe:repeat DataSource="<%=menu%>" style="position:relative;top:235">
-        <pe:repeatitem>
-            <pe:if condition='<%=Eval("index") ~= cur_index%>'>
-            <div style='<%=format("width:275; height:107;left: 67;margin-top:30;background: url(codepku/image/textures/friend/menu/%s.png);",
-            Eval("text"))%>' name='<%=Eval("index")%>' onclick="ChangePage"></div>
-            </pe:if>
-            <pe:if condition='<%=Eval("index") == cur_index%>'>
-            <div style='<%=format("width:294; height:107;left: 48;margin-top:30;background: url(codepku/image/textures/friend/menu/%s.png);",
-            Eval("text").."_active")%>'></div>
-            </pe:if>
-        </pe:repeatitem>
-    </pe:repeat>
-
+    <div style="position:relative; width: 288; height: 315; top: 120;">
+        <pe:repeat DataSource="<%=menu%>" >
+            <pe:repeatitem>
+                <pe:if condition='<%=Eval("index") ~= cur_index%>'>
+                    <input type="button" style="width: 244; height: 94; margin-left: 0; margin-top: 10; font-family: NotoSansHans-Medium; font-size: 45; color: #FFFFFF; text-align: center; background: url(codepku/image/textures/common_32bits.png#1294 66 134 94);" onclick="ChangePage" name='<%=Eval("index")%>' value="<%=Eval('name')%>" />
+                <!-- <div style='<%=format("width:275; height:107;left: 67;margin-top:30;background: url(codepku/image/textures/friend/menu/%s.png);",
+                Eval("text"))%>' name='<%=Eval("index")%>' onclick="ChangePage"></div> -->
+                </pe:if>
+                <pe:if condition='<%=Eval("index") == cur_index%>'>
+                    <input type="button" style="width: 261; height: 96; margin-left: 27; margin-top: 10; font-family: NotoSansHans-Medium; font-size: 45; color: #F8DE8D; padding-left: 49px; padding-top: 19px; padding-right: 35; padding-bottom: 34; background: url(codepku/image/textures/common_32bits.png#1648 196 261 96);" value="<%=Eval('name')%>" />
+                <!-- <div style='<%=format("width:294; height:107;left: 48;margin-top:30;background: url(codepku/image/textures/friend/menu/%s.png);",
+                Eval("text").."_active")%>'></div> -->
+                </pe:if>
+            </pe:repeatitem>
+        </pe:repeat>
+    </div>
+    
     
 
     <pe:if condition = "<%= #getBlackListData() == 0 %>">
-
-        <div style="position: relative; left: 760; top: 380; width: 754px; height: 561px; background: url(codepku/image/textures/friend/blacklist/blank.png);"></div>
-
+        <div style="position: relative; left: 760; top: 380; width: 780px; height: 549px; background: url(codepku/image/textures/friend/recent_player/blank.png);"></div>
     </pe:if>
 
     <pe:if condition = "<%= #getBlackListData() >= 1%>">
 
-        <div style="position:relative;margin-top:250;margin-left: 1800;font-size: 30;color:#ffffff"><%=#getBlackListData()%>/50</div>
+        <div style="position: relative; width: 130; height: 27; left: 374; top: 206; font-size: 36; font-family: Alibaba-PuHuiTi-R;"><span style="color: #FF3942;"><%=#getBlackListData()%></span><span style="color: #254D9E;">/50</span></div>
 
-        <pe:gridview name="MyFriend" style="position:relative;margin-top:300;margin-left: 400;
-        height:700;background-color: #ff00ff50;" DataSource='<%=getBlackListData() %>' CellPadding="10" ItemsPerLine="1" AllowPaging="false" RememberScrollPos="true" RememberLastPage="true" 
+        <pe:gridview name="MyFriend" style="position:relative; left: 339; top: 246; width: 1544;
+        height:723;background-color: #ff00ff50;" DataSource='<%=getBlackListData() %>' CellPadding="6" ItemsPerLine="1" AllowPaging="false" RememberScrollPos="true" RememberLastPage="true" 
         VerticalScrollBarStep="36" VerticalScrollBarOffsetX="8">
             <Columns>
-                <div style="width: 1440;height: 160;">
+                <div style="width: 1512; height: 171; margin-top: 9;  background: url(codepku/image/textures/friend/main.png#23 216 1512 171);">
+                    <div style="position: relative; width: 130; height: 130; left: 43; top: 23; background: url(codepku/image/textures/common_32bits.png#1308 569 130 130);"></div>
+                    <div style='<%=format("position:relative;width:130;height:130; left: 43; top: 23; background: url(%s);", Eval("head"))%>'></div>
+        
+                    <div style="position: relative; width: 250; height: 34; left:191; top: 43; color: #FFFFFF; font-family: NotoSansHans-Medium; font-size: 36;"><%=Eval("nickname")%>
+                        <pe:if condition='<%=Eval("gender") == 1 %>'>
+                            <div style='width:38; height:41; top: 2; left: 14; float: left;  background: url(codepku/image/textures/friend/main.png#399 97 34 34);'></div>
+                        </pe:if>
+                        <pe:if condition='<%=Eval("gender") == 2 %>'>
+                            <div style='width:38; height:41; top: 2; left: 14; float: left; background: url(codepku/image/textures/friend/main.png#351 91 26 40);'></div>
+                        </pe:if>
+                    </div>
+        
+                    <div style="position: relative; width: 250; height: 27; left: 193; top: 108; color: #FFFFFF; font-family: NotoSansHans-Medium; font-size: 36;">ID: <%=Eval("no")%></div>
+                    <pe:if condition="<%=Eval('is_online') == true%>">
+                        <div style="position: relative; width: 72px; height: 34px; left: 692; top: 68; font-family: NotoSansHans-Medium; font-size: 36; color: #00FF9C;">在线</div>
+                    </pe:if>
+                    <pe:if condition="<%=Eval('is_online') == false%>">
+                        <div style="position: relative; width: 72px; height: 34; left: 692; top: 68; font-family: NotoSansHans-Medium; font-size: 36; color: #0F1F6F;">离线</div>
+                    </pe:if>
+        
+                    <input type="button" style="position: relative; width: 200; height: 80; left: 1271; top: 44; font-size: 36; color: #FEFEFE; font-family: NotoSansHans-Medium; padding-left: 65; padding-top: 22; padding-right: 65; padding-bottom: 23; background: url(codepku/image/textures/common_32bits.png#438 182 87 87:15 15 15 15);" value="移除" name='<%=Eval("friend_id")%>' onclick="ClickUnBlack" />
+                </div>
+
+                
+
+
+                <!-- <div style="width: 1440;height: 160;">
                     <div style="position:relative;width:1423;height:140;top:15;left:15;background: url(codepku/image/textures/friend/item/bg.png);"></div>
                     <div style="position:relative;width:160;height:160;background: url(codepku/image/textures/friend/item/head.png);"></div>
                     <div style='<%=format("position:relative;width:120;height:120;left: 20;top: 20;background: url(%s);", Eval("head"))%>'></div>
@@ -120,7 +161,7 @@ end
                     </pe:if>
 
                     <div style="position:relative;width:100;height:60;top:50;left:1200;background: url(codepku/image/textures/friend/blacklist/remove.png);" name='<%=Eval("friend_id")%>' onclick="ClickUnBlack"></div>
-                </div>
+                </div> -->
             </Columns>
         </pe:gridview>
     </pe:if>

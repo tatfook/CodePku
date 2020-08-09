@@ -12,6 +12,7 @@
 <script refresh="false" type="text/npl" src="FriendUI.lua">
 <![CDATA[
 local FriendUI = NPL.load("(gl)Mod/CodePku/cellar/GUI/Friend/FriendUI.lua")
+MainSceneUIButtons = commonlib.gettable("Mod.CodePku.Common.TouchMiniButtons.MainSceneUIButtons");
 
 mytable = {
     friend_id = FriendUI.vars.search.friend_id,
@@ -24,11 +25,7 @@ mytable = {
 
 
 function isOnline()
-    if(mytable.is_online)then
-        return "在线"
-    else
-        return "离线"
-    end
+    return mytable.is_online
 end
 
 function getNameColor()
@@ -51,23 +48,65 @@ function ClosePage()
     Page:CloseWindow();
 end
 
-function ClickChat(fid)
-    echo("Todo add_friend")
+function ClickChat()
+    ClosePage()
+    MainSceneUIButtons.show_dialog_ui(true)
 end
 
 function addFriend(fid)
-    echo("addFriend fid"..fid)
+
     FriendUI:Add_Friend(fid)
 end
 
 function report(fid)
-    echo("Todo report")
+    FriendUI:ShowPopup(5)
 end
 
 ]]>
 </script>
 
-<div style="width:1020;height: 550;margin-left:450;margin-top:265;background: url(codepku/image/textures/friend/main/popup.png)">
+<pe:container alignment="_lt" width="1920" height="1080">
+
+    <div style="position: relative; width: 1158; height: 588; left: 406; top: 219; background:url(codepku/image/textures/common_32bits.png#99 275 1158 588);"></div>
+
+    <div style="position: relative; width: 410; height: 89; left: 780; top: 219; text-align: center; font-family: NotoSansHans-Medium; color: #F46D3D; font-size: 45px; line-height: 89; background:url(codepku/image/textures/common_32bits.png#1277 377 410 87);">
+        添加好友
+    </div>
+
+    <div style="position: relative; width: 66; height: 76; left: 1463; top: 227; background: url(codepku/image/textures/common_32bits.png#110 73 68 78);" onclick="ClosePage"></div>
+
+
+    <div style="position: relative; width: 1100; height: 200; left: 435; top: 430;  background: url(codepku/image/textures/common_32bits.png#1404 292 40 40:10 10 10 10);">
+    
+        <div style="position: relative; width: 130; height: 130; left: 27; top: 35; background: url(codepku/image/textures/common_32bits.png#1308 569 130 130);"></div>
+        <div style='<%=format("position:relative;width:130;height:130; left: 27; top: 35; background: url(%s);", mytable.head or "")%>'></div>
+
+        <div style="position: relative; width: 280; height: 34; left:175; top: 55; color: #FFFFFF; font-family: NotoSansHans-Medium; font-size: 36;"><%=getName()%>
+            <pe:if condition='<%=mytable.gender == 1 %>'>
+                <div style='width:34; height:41; top: 2; left: 14; float: left;  background: url(codepku/image/textures/friend/main.png#399 97 34 34);'></div>
+            </pe:if>
+            <pe:if condition='<%=mytable.gender == 2 %>'>
+                <div style='width:34; height:41; top: 2; left: 14; float: left; background: url(codepku/image/textures/friend/main.png#351 91 26 40);'></div>
+            </pe:if>
+        </div>
+
+        <pe:if condition="<%=isOnline() == true%>">
+            <div style="position: relative; width: 72px; height: 34px; left: 175; top: 116; font-family: NotoSansHans-Medium; font-size: 36; color: #00FF9C;">在线</div>
+        </pe:if>
+        <pe:if condition="<%=isOnline() == false%>">
+            <div style="position: relative; width: 72px; height: 34; left: 175; top: 116; font-family: NotoSansHans-Medium; font-size: 36; color: #0F1F6F;">离线</div>
+        </pe:if>
+    </div>
+
+
+    <!-- <input type="button" style="position: relative; width: 150; height: 80; left: 970; top: 501; font-size: 36; font-family: NotoSansHans-Medium; font-weight: bold; color: #FFFFFF; padding-left: 40; padding-top: 23; padding-right: 39; padding-bottom: 22; background: url(codepku/image/textures/common_32bits.png#1404 740 86 86: 9 9 9 9);" value="聊天" name='<%=mytable.friend_id%>' onclick="ClickChat" /> -->
+    <input type="button" style="position: relative; width: 150; height: 80; left: 1162; top: 501; font-size: 36; font-family: NotoSansHans-Medium; font-weight: bold; color: #FFFFFF; padding-left: 40; padding-top: 23; padding-right: 39; padding-bottom: 22; background: url(codepku/image/textures/common_32bits.png#1700 740 86 86: 9 9 9 9);" value="添加" name='<%=mytable.friend_id%>' onclick="addFriend" />
+    <input type="button" style="position: relative; width: 150; height: 80; left: 1354; top: 501; font-size: 36; font-family: NotoSansHans-Medium; font-weight: bold; color: #FFFFFF; padding-left: 40; padding-top: 23; padding-right: 39; padding-bottom: 22; background: url(codepku/image/textures/common_32bits.png#1305 740 86 86: 9 9 9 9);" value="举报" name='<%=mytable.friend_id%>' onclick="report" />
+
+    
+</pe:container>
+
+<!-- <div style="width:1020;height: 550;margin-left:450;margin-top:265;background: url(codepku/image/textures/friend/main/popup.png)">
     <div style="position:relative; left:160;top:45;width: 192;height:50;background: url(codepku/image/textures/friend/main/add_title.png);"></div>
     <div style="position:relative; margin-left: 900;width: 50;height: 50;margin-top: 40;
     background: url(codepku/image/textures/friend/main/close.png);" onclick="ClosePage">
@@ -75,7 +114,7 @@ end
 
     <div style="width: 835; height: 139; margin-top: 250; margin-left: 100; background: url(codepku/image/textures/friend/add_friend/item_bg.png);">
         <div style="position:relative;width:120;height:120; margin-top: 10; margin-left: 30; background: url(codepku/image/textures/friend/item/head.png);"></div>
-        <!-- head -->
+      
         <div style='<%=format("position:relative;width:100;height:100;left: 40;top: 20; background: url(%s);", mytable.head or "")%>'></div>
 
         <div style="position:relative; left: 190; top: 10; ">
@@ -94,7 +133,7 @@ end
         <div style="position:relative;width:65;height:45;top:50;left:740;background: url(codepku/image/textures/friend/add_friend/report.png);" name='<%=mytable.friend_id%>' onclick="report"></div>
     </div>
 
-</div>
+</div> -->
 </pe:mcml>
 </body>
 
