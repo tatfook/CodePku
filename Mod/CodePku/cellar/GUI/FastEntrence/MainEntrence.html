@@ -68,15 +68,22 @@ end
 
 </style>
     <pe:container alignment="_lt" width="1920" height="1080">
-        <div style="width:1920;height: 1080;background:url(codepku/image/textures/fastentrence/main.png);">
-            <div style='width:350;height:120px;margin-left:800;background:url(codepku/image/textures/fastentrence/fast_entrence_pic.png);'>
-                <div style='width:300;height:70px;margin-left:20;margin-top:20;background:url(codepku/image/textures/fastentrence/fast_entrence_text.png);'></div>
+        <div style="width:1920;height: 1080;background:url(codepku/image/textures/fastentrence_ui/bg.png);">
+            <div style='position: relative; width:208; height:127; background:url(codepku/image/textures/common_32bits.png#251 49 208 127);' onclick="OnClose"></div>
+            <div style="position: relative; width: 417; height: 86; margin-left: 144; base-font-size:70px; font-size:70px; color: #D85D0B; font-family:Alibaba PuHuiTi; padding-left: 79; padding-top: 8; font-weight: bolder; background:url(codepku/image/textures/common_32bits.png#475 63 429 86);">快速入口</div>
+            
+            <div style='position: relative; width: 606;height: 786;background:url(codepku/image/textures/fastentrence_ui/system.png);left:86;top: 191;' name='system' onclick="onClickPage">
+                <div style="width: 500; height: 118; margin-left: 53; margin-top: 615; font-size:55px; font-family:Noto Sans S Chinese Regular; text-align: center; line-height: 118; color: #FFFFFF; background: url(codepku/image/textures/fastentrence_ui/fastentrence_32bits.png#308 463 90 60:20 20 20 20);">体系专区</div>
             </div>
-            <div style='width:120px;height:120px;margin-left:1800;margin-top:-120;background:url(codepku/image/textures/fastentrence/close.png);' onclick="OnClose"></div>
-            <div style='float: left;width: 588;height: 744;background:url(codepku/image/textures/fastentrence/system.png);margin:50;' name='system' onclick="onClickPage"></div>
-            <div style='float: left;width: 588;height: 744;background:url(codepku/image/textures/fastentrence/topic.png);margin:50;' name='topic' onclick="onClickPage"></div>
-            <div style='float: left;width: 500;height: 374;background:url(codepku/image/textures/fastentrence/build.png);margin-top:50;' name='build' onclick="onClickPage"></div>
-            <div style='float: left;width: 500;height: 374;background:url(codepku/image/textures/fastentrence/compete.png);margin-top:-420;margin-left:1375px' name='compete' onclick="onClickPage"></div>
+            <div style='position: relative; width: 606;height: 786;background:url(codepku/image/textures/fastentrence_ui/topic.png); left:661; top: 191;' name='topic' onclick="onClickPage">
+                <div style="width: 500; height: 118; margin-left: 53; margin-top: 615; font-size:55px; font-family:Noto Sans S Chinese Regular; text-align: center; line-height: 118; color: #FFFFFF; background: url(codepku/image/textures/fastentrence_ui/fastentrence_32bits.png#308 463 90 60:20 20 20 20);">专题专区</div>
+            </div>
+            <div style='position: relative; width: 606;height: 436;background:url(codepku/image/textures/fastentrence_ui/build.png); left:1237;top:191;' name='build' onclick="onClickPage">
+                <div style="width: 500; height: 90; margin-left: 53; margin-top: 293; font-size:55px; font-family:Noto Sans S Chinese Regular; text-align: center; line-height: 90; color: #FFFFFF; background: url(codepku/image/textures/fastentrence_ui/fastentrence_32bits.png#308 463 90 60:20 20 20 20);">我的家园</div>
+            </div>
+            <div style='position: relative; width: 606;height: 436;background:url(codepku/image/textures/fastentrence_ui/compete.png);left:1237;top:541' name='compete' onclick="onClickPage">
+                <div style="width: 500; height: 90; margin-left: 53; margin-top: 293; font-size:55px; font-family:Noto Sans S Chinese Regular; text-align: center; line-height: 90; color: #FFFFFF; background: url(codepku/image/textures/fastentrence_ui/fastentrence_32bits.png#308 463 90 60:20 20 20 20);">竞技乐园</div>
+            </div>
         </div>
     </pe:container>
 </pe:mcml>
