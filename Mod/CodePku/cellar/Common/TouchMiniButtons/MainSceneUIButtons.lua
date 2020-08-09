@@ -8,21 +8,41 @@ FriendUI = NPL.load("(gl)Mod/CodePku/cellar/GUI/Friend/FriendUI.lua");
 CodepkuChatChannel = NPL.load("(gl)Mod/CodePku/chat/CodepkuChatChannel.lua");
 
 
+MainSceneUIButtons.params={
+    world_page = {
+        url="Mod/CodePku/cellar/Common/TouchMiniButtons/dialog/world.html",
+        alignment="_lt", left = 0, top = 0, width = 1000, height = 1080,zorder =20
+    },
+    local_page = {
+        url="Mod/CodePku/cellar/Common/TouchMiniButtons/dialog/local.html",
+        alignment="_lt", left = 0, top = 0, width = 1000, height = 1080,zorder =20
+    },
+    friend_page = {
+        url="Mod/CodePku/cellar/Common/TouchMiniButtons/dialog/friend.html",
+        alignment="_lt", left = -0, top = 0, width = 1000, height = 1080,zorder =20
+    },
+}
 
-function MainSceneUIButtons.show_dialog_ui(bshow)
+
+function MainSceneUIButtons.show_dialog_ui(bshow, PopIndex)
     FriendUI:GetFriend()
     MainSceneUIButtons.ScrollToEnd = 'true'
     if(bshow) then
-        params = {
-            url="Mod/CodePku/cellar/Common/TouchMiniButtons/MainUIButtons_dialog.html", 
-            alignment="global_lt", left = 0, top = 0, width = 1000, height = 1080, zorder=30,
-        }
-        local window = AdaptWindow:QuickWindow(params)
+        PopIndex = tonumber(PopIndex)
+        print("---------------------------------"..PopIndex)
+        local window = nil
+        if PopIndex == 1 then
+            window = AdaptWindow:QuickWindow(MainSceneUIButtons.params["world_page"])
+        elseif PopIndex == 2 then
+            window = AdaptWindow:QuickWindow(MainSceneUIButtons.params["local_page"])
+        elseif PopIndex == 3 then
+            window = AdaptWindow:QuickWindow(MainSceneUIButtons.params["friend_page"])
+        end
         return window
     else
         params = {
             url="Mod/CodePku/cellar/Common/TouchMiniButtons/MainUIButtons_dialog_close.html", 
-            alignment="_lb", left = 0, top = -136, width = 100, height = 100,
+            alignment="_lb", left = 0, top = -136, width = 139, height = 136,
         }
         local window = AdaptWindow:QuickWindow(params)
         return window

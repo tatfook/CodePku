@@ -44,7 +44,7 @@ function MainUIButtons.show_function_ui()
 end
 
 function MainUIButtons.show_dialog_ui(bshow)
-	MainUIButtons.dialog_window = MainSceneUIButtons.show_dialog_ui(bshow)
+	MainUIButtons.dialog_window = MainSceneUIButtons.show_dialog_ui(bshow, 0)
 end
 
 function MainUIButtons.show_money_ui()
