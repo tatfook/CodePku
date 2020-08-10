@@ -66,6 +66,10 @@ local DownloadWorld = commonlib.gettable("MyCompany.Aries.Game.MainLogin.Downloa
 
 local CodePku = commonlib.inherit(commonlib.gettable("Mod.ModBase"),commonlib.gettable("Mod.CodePku"));
 
+NPL.load("(gl)Mod/CodePku/cellar/Common/AriesWindow/pe_aries_window2.lua");
+local pe_aries_window2 = commonlib.gettable("Mod.CodePku.Common.AriesWindow.pe_aries_window2");
+pe_aries_window2:RegisterAs("pe:aries_window2");
+
 CodePku:Property({"Name", "CodePku", "GetName", "SetName", { auto = true }})
 
 -- register mod global variable
@@ -214,6 +218,8 @@ function CodePku:init()
 				codepku_pe_aries_window.create_center(rootName, mcmlNode, bindingContext, _parent, left, top, right, bottom, myLayout, css);
 			elseif (mode == "thin" or mode == "mc") then
 				codepku_pe_aries_window.create_thin_mc(rootName, mcmlNode, bindingContext, _parent, left, top, right, bottom, myLayout, css);
+			elseif (mode == "modal") then
+				codepku_pe_aries_window.create_modal(rootName, mcmlNode, bindingContext, _parent, left, top, right, bottom, myLayout, css);
 			end
 			return true;
 		end

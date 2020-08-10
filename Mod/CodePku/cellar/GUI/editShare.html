@@ -40,7 +40,16 @@ end
 ]]>   
 
 </script>
-<pe:container alignment="_ct" width="1023" height="549">
+
+<pe:aries_window2 alignment="_ct" style="font-size:50;font-weight:bold;color:#ffffff;font-family:Noto Sans S Chinese Regular;" title="发表心情">
+    <input align="center" type="text" name="mood" autofocus="true" value='abc' style="margin-top:34px;font-size:36px;padding:30px;width:960px;height:233px;background:url(codepku/image/textures/common_32bits.png#1404 292 40 40:17 17 17 17)"/>
+    <div align="center" style="margin-top:64px;">
+        <input type="button" name="Cancel" value='<%=L"取消" %>' onclick="OnClose" style="width:246px;height:86px;background:url(codepku/image/textures/common_32bits.png#1305 740 86 86:14 14 14 14);"/>
+        <input type="button" name="OK" value='<%=L"提交" %>' onclick="" style="width:246px;height:86px;background:url(codepku/image/textures/common_32bits.png#1404 740 86 86:14 14 14 14);margin-left:200px;"/>
+    </div>
+</pe:aries_window2>
+
+<!-- <pe:container alignment="_ct" width="1023" height="549">
     <div style="width:1023;height:549;background:url(codepku/image/textures/userinfo/edit/board.png);" >
         <div onclick="ClosePage" style="position:relative;margin-top:384.5;margin-left:210;width:178;height:66;background:url(codepku/image/textures/userinfo/edit/cancel.png);"></div>
         <div onclick="submit" style="position:relative;margin-top:384.5;margin-left:610;width:178;height:66;background:url(codepku/image/textures/userinfo/edit/submit.png);"></div>
@@ -50,7 +59,7 @@ end
             style="position:relative;margin-left:112px;width:808;height:125;text-align:center;margin-top:178px;font-size:52px;base-font-size:52px;background-color: rgb(11, 42, 219)"
             value= "ab"/>
     </div>
-</pe:container>
+</pe:container> -->
 
 </pe:mcml>
 </body>
