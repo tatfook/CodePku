@@ -1,32 +1,32 @@
-local EditPage = commonlib.gettable("Mod.CodePku.EditPage")
+local EditSharePage = commonlib.gettable("Mod.CodePku.EditSharePage")
 local myWord = commonlib.gettable("Mod.CodePku.myWord")
 
 local page;
 
-function EditPage.OnInit()
-	EditPage.OneTimeInit();
+function EditSharePage.OnInit()
+	EditSharePage.OneTimeInit();
 	page = document:GetPageCtrl();
 end
 
-function EditPage.OneTimeInit()
-	if(EditPage.is_inited) then
+function EditSharePage.OneTimeInit()
+	if(EditSharePage.is_inited) then
 		return;
 	end
-	EditPage.is_inited = true;
+	EditSharePage.is_inited = true;
 end
 
 -- clicked a block
-function EditPage.OnClickBlock(block_id)
+function EditSharePage.OnClickBlock(block_id)
 end
 
-function EditPage.GetWord()
+function EditSharePage.GetWord()
     myWord.jiyu = "小鸟伏特加整这高"
 end
 
-function EditPage:ShowPage(bShow)
-    EditPage.GetWord();
-
-    -- EditPage.bForceHide = bShow == false;
+function EditSharePage:ShowPage(bShow)
+    echo("@@@@@@")
+    EditSharePage.GetWord();
+    -- EditSharePage.bForceHide = bShow == false;
     -- NPL.load("(gl)Mod/CodePku/cellar/GUI/Window/AdaptWindow.lua");
     -- local AdaptWindow = commonlib.gettable("Mod.CodePku.GUI.Window.AdaptWindow")
     -- AdaptWindow:QuickWindow({url = "Mod/CodePku/cellar/GUI/editShare.html", 
@@ -36,7 +36,7 @@ function EditPage:ShowPage(bShow)
 	local Window = commonlib.gettable("System.Windows.Window");
     local window = Window:new();
     window:Show({
-		url="Mod/CodePku/cellar/GUI/editShare.html", 
+		url="Mod/CodePku/cellar/GUI/Profile/EditShare.html", 
 		alignment="_ct", left = -1158/2, top = -588/2, width = 1158 , height = 588, zorder = 30
     });
     window:SetMinimumScreenSize(1920, 1080);

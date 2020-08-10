@@ -10,16 +10,20 @@
 <script refresh="false" type="text/npl" src="UserInfo.lua"><![CDATA[
 -- NPL.load("(gl)script/apps/Aries.Creator.Game.Desktop.UserInfo.lua");
 -- NPL.load("(gl)script/apps/Aries.Creator.Game.Desktop.Share.lua");
+NPL.load("(gl)Mod/CodePku/cellar/GUI/Profile/EditShare.lua");
 
 UserInfoPage = commonlib.gettable("Mod.CodePku.UserInfoPage")
 SharePage = commonlib.gettable("Mod.CodePku.SharePage")
 UserInfo = commonlib.gettable("Mod.CodePku.UserInfo")
-EditPage = commonlib.gettable("Mod.CodePku.EditPage")
+OtherUserInfo = commonlib.gettable("Mod.CodePku.OtherUserInfo")
+EditSharePage = commonlib.gettable("Mod.CodePku.EditSharePage")
 SubjectPage = commonlib.gettable("Mod.CodePku.SubjectPage")
 PropsInfo = commonlib.gettable("Mod.CodePku.PropsInfo");
 
 CommonPng = "codepku/image/textures/common_32bits.png";
 ProfilePng = "codepku/image/textures/profile_32bits.png";
+
+-- todo: userinfo vs otheruserinfo
 
     -- =============================================================================== start 背包
 
@@ -110,7 +114,7 @@ ProfilePng = "codepku/image/textures/profile_32bits.png";
 xueshidian = 123456
 fensi = 123456
 dianzan = 123456
-local uuuname = UserInfo.name
+local name = UserInfo.name
 sid = UserInfo.no or UserInfo.id
 identity = 10
 gender = UserInfo.gender
@@ -119,17 +123,17 @@ choose_index = UserInfoPage.PageIndex or 1
 choose_index5 = 1 -- 道具类型id，1-全部 2-装扮 3-消耗品 4-建造道具 5-其他
 
 user_options_list ={}
-user_options_list[1] = {
-    {index =1,url ='shouye'},
-    {index =2,url ='shuxing'},
-    --{index =3,url ='juese'},
-    --{index =4,url ='waiguan'},
-    --{index =5,url ='beibao'},
-    --{index =6,url ='chengjiu'},
-    --{index =7,url ='dongtai'},
-}
-user_options_list[1][choose_index].url = user_options_list[1][choose_index].url ..1
-user_options_list[5] = {{index =1,url ='quanbu1'},{index =2,url ='dress'},{index =3,url ='build'},{index =4,url ='consumable'},{index =5,url ='other'}}
+-- user_options_list[1] = {
+--     {index =1,url ='shouye'},
+--     {index =2,url ='shuxing'},
+--     --{index =3,url ='juese'},
+--     --{index =4,url ='waiguan'},
+--     --{index =5,url ='beibao'},
+--     --{index =6,url ='chengjiu'},
+--     --{index =7,url ='dongtai'},
+-- }
+-- user_options_list[1][choose_index].url = user_options_list[1][choose_index].url ..1
+user_options_list5 = {{index =1,url ='quanbu1'},{index =2,url ='dress'},{index =3,url ='build'},{index =4,url ='consumable'},{index =5,url ='other'}}
 
 
 function ClosePage()
@@ -160,7 +164,7 @@ end
 
 function Choose5(index)
     local item_params = nil
-    user_options = user_options_list[5]
+    user_options = user_options_list5
     user_options[choose_index5].url =string.sub(user_options[choose_index5].url ,1,string.len(user_options[choose_index5].url)-1)
     choose_index5 =index
     user_options[choose_index5].url = user_options[choose_index5].url..1
@@ -184,7 +188,7 @@ function OnClickButton(name,mcmlNode)
 end
 
 function shurujiyu()
-    EditPage:ShowPage()
+    EditSharePage:ShowPage();
     -- NPL.load("(gl)script/ide/System/Windows/Window.lua");
 	-- local Window = commonlib.gettable("System.Windows.Window");
     -- local window = Window:new();
@@ -319,18 +323,6 @@ end
                     </div>
                 </div>
             </div>
-            <!-- 角色 -->
-            <div style='<%=format("display:none;position:relative;margin-left:235px;margin-top:198px;width:727px;height:653px;background:url(%s #410 490 750 653);", Eval("ProfilePng")) %>'>
-                <!-- 玩仔 -->
-                <div style='<%=format("margin-left:230px;margin-top:-100px;width:345px;height:600px;background:url(%s #66 531 345 600);", Eval("ProfilePng")) %>'>
-                </div>
-                <!-- <pe:mc_player /> 暂不支持mcml2, 待paracraft老师开发后替换，先显示玩仔 -->
-                <!-- <div style="width:100px;height:150px;" >
-                    <div style="position:relative;margin-left:-90px;margin-top:-115px;width:130px;height:120px;" >
-                        <pe:mc_player name="MyPlayer" miniscenegraphname="AvatarMyselfTabCharacter" style="width:320px;height:320px;" IsInteractive="false" IsActiveRendering="true"/>
-                    </div>
-                </div> -->
-            </div>
             <div align="center" style="position:relative;margin-top:520px;margin-left:-90px;">
                 <div name="edit" style='<%=format("margin-left:0;margin-top:0;width:99px;height:99px;background:url(%s #793 56 99 99);", Eval("ProfilePng")) %>' onclick="shurujiyu"></div>
                 <div name="share" style='<%=format("margin-left:0;margin-top:0;width:99px;height:99px;background:url(%s #900 55 99 99);", Eval("ProfilePng")) %>' onclick="ShowSharePage"></div>
@@ -380,25 +372,13 @@ end
         </pe:if>
         <pe:if condition='<%=GetTabDSIndex() == 2%>'>
             <!-- 属性 -->
-            <!-- 角色 -->
-            <div style='<%=format("display:none;position:relative;margin-left:235px;margin-top:298px;width:727px;height:653px;background:url(%s #410 490 750 653);", Eval("ProfilePng")) %>'>
-                <!-- 玩仔 -->
-                <div style='<%=format("margin-left:230px;margin-top:-100px;width:345px;height:600px;background:url(%s #66 531 345 600);", Eval("ProfilePng")) %>'>
-                </div>
-                <!-- <pe:mc_player /> 暂不支持mcml2, 待paracraft老师开发后替换，先显示玩仔 -->
-                <!-- <div style="width:100px;height:150px;" >
-                    <div style="position:relative;margin-left:-90px;margin-top:-115px;width:130px;height:120px;" >
-                        <pe:mc_player name="MyPlayer" miniscenegraphname="AvatarMyselfTabCharacter" style="width:320px;height:320px;" IsInteractive="false" IsActiveRendering="true"/>
-                    </div>
-                </div> -->
-            </div>
             <div align="right" style="position:relative;padding-left:48px;padding-top:44px;line-height:90px;color:#ffffff;font-size:30px;font-family:PuHuiTi-Bold;margin-top:42px;margin-right:114px;width:789px;height:818px;background:url(codepku/image/textures/background/detail.png)">
                 <div style='<%=format("padding-left:40px;width:471px;height:102px;background:url(%s #911 1196 471 102);", Eval("ProfilePng")) %>'>
                     <div style="float:left;margin-top:16px;">
                         <div style='<%=format("position:relative;width:66px;height:67px;background:url(%s #1788 560 86 87);", Eval("ProfilePng")) %>'></div>
                         <div style='<%=format("position:relative;width:66px;height:67px;background:url(%s #1677 556 94 94);", Eval("ProfilePng")) %>'></div>
                     </div>
-                    <div style="float:left;margin-left:115px;line-height:132px;"><%= UserInfo.name %></div>
+                    <div style="float:left;margin-left:115px;line-height:132px;" onclick=""><%= UserInfo.name %></div>
                 </div>
                 <div style='<%=format("padding-left:40px;width:694px;height:90px;background:url(%s #906 1532 694 90);", Eval("ProfilePng")) %>'>
                     <div align="left" style="float:left;">玩学号：</div>
@@ -454,7 +434,7 @@ end
                 <div style="position:relative;margin-left:52;margin-top:40;width:611;height:735;text-align:center;font-size:40;base-font-size:40;background:url(codepku/image/textures/userinfo/wanjiatouxiang.png)"></div>
             </div>
             <div style = "position:relative;margin-top:100;margin-left:1700;">
-                <pe:repeat  DataSource="<%=user_options_list[5]%>">
+                <pe:repeat  DataSource="<%=user_options_list5%>">
                     <pe:repeatitem>
                         <div name='<%=Eval("index")%>' style='<%=format("width:145;height:85;text-align:center;margin-top:20;font-size:18;base-font-size:40;background:url(codepku/image/textures/userinfo/options/%s.png)",Eval("url"))%>' onclick="Choose5"></div>
                     </pe:repeatitem>

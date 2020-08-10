@@ -8,27 +8,17 @@
 <body>
     <pe:mcml>
 <script refresh="false" type="text/npl" src="UserInfo.lua"><![CDATA[
-NPL.load("(gl)script/apps/Aries.Creator.Game.Desktop.editShare.lua");
-EditPage = commonlib.gettable("Mod.CodePku.EditPage")
-local myWord = commonlib.gettable("Mod.CodePku.myWord")
+NPL.load("(gl)Mod/CodePku/cellar/GUI/Profile/EditShare.lua");
+EditSharePage = commonlib.gettable("Mod.CodePku.EditSharePage")
 
-EditPage.OnInit();
+EditSharePage.OnInit();
 
-function ClosePage()
+function OnClose()
     Page:CloseWindow();
 end
-
 
 function OnConfirm()
     GameLogic.RunCommand("/goto,home")
-end
-
-function OnLeave()
-    Page:CloseWindow();
-end
-
-function OnClose()
-    ClosePage()
 end
 
 function submit()
