@@ -29,13 +29,17 @@ function MainPopup:ShowPage(pageName, name, id)
     end
 
     if name ~= nil then
-        Locationid = tonumber(id)
-        MainPopup.LocationId = Locationid
+        MyLocation = tostring(name)
+        MainPopup.TP_Location = MyLocation
+    else
+        MainPopup.TP_Location = nil
     end
 
     if id ~= nil then
-        MyLocation = tostring(name)
-        MainPopup.TP_Location = MyLocation
+        Locationid = tonumber(id)
+        MainPopup.LocationId = Locationid
+    else
+        MainPopup.LocationId = nil
     end
 
     ToPage = tostring(pageName)

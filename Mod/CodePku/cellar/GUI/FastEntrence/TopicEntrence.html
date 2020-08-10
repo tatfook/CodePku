@@ -14,10 +14,12 @@
 
     
     local page = document:GetPageCtrl()
-    local last_clicked_index = 1
+    last_clicked_index = 1
     local page_num = 1
-    local select_button_clicked = 0
+    local page_size = 6
+    select_button_clicked = 0
     local show_flag = 0
+    classify_index = 1
     
     
     local navig = {
@@ -27,11 +29,17 @@
         [4] = {name="名言", title="mingyan", index=4},
         [5] = {name="其他", title="qita", index=5},
     }
-    local select_method = {
+   select_method = {
+        [1] = {title='默认排序', name='default_select', index=1},
+        [2] = {title='热度', name='hot_select', index=2},
+        [3] = {title='ID', name='ID_select', index=3},
         ['默认排序'] = 'default_select',
         ['ID'] = 'ID_select',
         ['热度'] = 'hot_select',
         ['人数'] = 'pepole_select'
+    }
+    classification = {
+        {name = 'total', title = '全部', index = 1},
     }
 
     function get_full_course()
@@ -58,10 +66,6 @@
         return navig
     end
     
-    function SelectIsClicked()
-        return select_button_clicked
-    end
-    
     function GetPageNum()
         return page_num
     end
@@ -69,12 +73,11 @@
     function get_searchByName_table()
         search_course = {}
         local i = 1
-        --searchByName = page:GetValue("searchByName")
         for k, v in pairs(topic_course) do
             result = string.find(v.name, TopicEntrencePage.searchByName)
             if(result) then
                 search_course[i] = v;
-                search_course[i].index = (i-1) % 10
+                search_course[i].index = (i-1) % page_size
                 i = i+1
             end
         end
@@ -95,18 +98,17 @@
     end
     
     function sort_course(course, sort_method)
-        local sort_course = commonlib.deepcopy(course)
+        local sort_course = {}
         if sort_method == 'default_select' then
             sort_course = course
         elseif sort_method == 'ID_select' then
+            sort_course = commonlib.deepcopy(course)
             table.sort(sort_course, function(a, b)
                 return a.id > b.id
             end)
         end
-        local i = 0
-        for k, v in pairs(sort_course) do
-            v.index = i%10
-            i = i + 1
+        for i = 1,#sort_course do
+            sort_course[i].index = (i-1)%page_size
         end
         return sort_course
     end
@@ -117,7 +119,7 @@
         else
             select_button_clicked = 1
         end
-        Page:Refresh(0.01)
+        Page:Refresh()
     end
     
     function OnSelectedItem(name)
@@ -129,7 +131,7 @@
         else
             GameLogic.RunCommand("/tip -duration 1500 功能开发中，敬请期待")
         end
-        Page:Refresh(0.01)
+        Page:Refresh()
     end
     
     function GetConditionalCourse()
@@ -144,8 +146,8 @@
     
     function get_topic_course(conditional_course)
         page_course = {}
-        num = (page_num - 1)*10
-        for i = 1, 10 do
+        num = (page_num - 1)*page_size
+        for i = 1, page_size do
             if num + i <= #conditional_course then
                 page_course[i] = conditional_course[num+i]
             else
@@ -157,8 +159,6 @@
     
     function OnClickSubject(name)
         if last_clicked_index ~= name then
-            TopicEntrencePage.subjects[name].title = TopicEntrencePage.subjects[name].title..'_clicked'
-            TopicEntrencePage.subjects[last_clicked_index].title = string.gsub(TopicEntrencePage.subjects[last_clicked_index].title, '_clicked', '')
             last_clicked_index = name
             topic_course = get_full_course()
             Page:Refresh(0)
@@ -169,91 +169,124 @@
         if name == 'page_left' and page_num > 1 then
             page_num = page_num - 1
             Page:Refresh(0)
-        elseif name == 'page_right' and #topic_course > page_num*10 then
+        elseif name == 'page_right' and #topic_course > page_num*page_size then
             page_num = page_num + 1
             Page:Refresh(0)
         end
     end
     
-    function OnClickNavig(name)
+    function ClickClassify(index)
+        classify_index = index
+        Page:Refresh(0)
     end
 
 
 
     function OnClickCourse(name, value)
-        MainPopup:ShowPage("TPpopup", "该世界", name)
-
+        MainPopup:ShowPage("TPpopup", "专题区", 15855)
     end
 
     function GetDivisible(index)
-        if index % 5 == 0 then
-            return index / 5
+        pos = {}
+        if index % 2 == 0 then
+            pos['left'] = 127
         else
-            return index/5
+            pos['left'] = 904
         end
+        if index / 2 < 1 then
+            pos['top'] = 12
+        elseif index / 2 < 2 then
+            pos['top'] = 204
+        else
+            pos['top'] = 396
+        end
+        return pos
     end
 
 
 ]]></script>
 <style type="text/mcss">
 </style>
-<pe:if condition='<%=SelectIsClicked() == 1 %>' >
-    <div style="width: 240px; height: 120px; position: absolute; z-index: 10; margin-left: 1648px; margin-top: 248px;">
-        <div style="width: 240px; height: 50px; margin-top: 2px; background: url(codepku/image/textures/fastentrence/topic/default_select.png);" name="default_select" onclick="OnSelectedItem"></div>
-        <div style="width: 240px; height: 50px; margin-top: 2px; background: url(codepku/image/textures/fastentrence/topic/ID_select.png);" name="ID_select" onclick="OnSelectedItem"></div>
-        <!-- <div style="width: 240px; height: 50px; margin-top: 2px; background: url(codepku/image/textures/fastentrence/topic/hot_select.png);" name="hot_select" onclick="OnSelectedItem"></div> -->
-        <!-- <div style="width: 240px; height: 50px; margin-top: 2px; background: url(codepku/image/textures/fastentrence/topic/people_select.png);" name="people_select" onclick="OnSelectedItem"></div> -->
-    </div>
-</pe:if>
-<div style="margin-top:5px;width:1920;height: 1080;background:url(codepku/image/textures/fastentrence/topic_board.png);">
-    <div style='width:100px;height:100px;background:url(codepku/image/textures/fastentrence/return.png);margin-left: 100px;margin-top: 20px;' onclick="OnClose"></div>
-    <div style="width:200px;height:900px;margin-left: 20px;margin-right: 20px;margin-top:70px;float: left;">
-        <pe:repeat DataSource="<%=GetSubjects()%>">
+<pe:container alignment="_lt" width="1920" height="1080">
+<div style="width:1920;height: 1080;background:url(codepku/image/textures/fastentrence_ui/bg.png);">
+    <div style="position: relative; width:230; height:1080; background-color: #94E3FE;">
+        <pe:repeat DataSource="<%=GetSubjects()%>" style=" margin-top: 143;">
             <pe:repeatitem>
-                <pe:if condition="<%=Eval('show')==true%>">
-                    <div style="<%=format('background:url(codepku/image/textures/fastentrence/topic/%s.png);width:220;height:100;margin-left:-18;margin-bottom: 30;', Eval('title'))%>" name='<%=Eval("index")%>' onclick='OnClickSubject'></div>
-                </pe:if>  
+                <pe:if condition="<%=Eval('show')==true and last_clicked_index == Eval('index')%>">
+                    <div style="width:261; height:96; margin-left:25; base-font-size:45px; font-size:45px; font-family:Noto Sans S Chinese Regular; padding-left: 94;padding-top: 17; color: #F8DE8D; background:url(codepku/image/textures/common_32bits.png#1648 196 261 96:30 30 30 30);" name='<%=Eval("index")%>' onclick='OnClickSubject'><%=Eval('name')%></div>
+                </pe:if>
+                <pe:if condition="<%=Eval('show')==true and last_clicked_index ~= Eval('index')%>">
+                    <div style="width:244; height:94; base-font-size:45px; font-size:45px; font-family:Noto Sans S Chinese Regular; padding-left: 72;padding-top: 20; color: #FFFFFF; background:url(codepku/image/textures/common_32bits.png#1294 66 134 94:30 30 30 30);" name='<%=Eval("index")%>' onclick='OnClickSubject'><%=Eval('name')%></div>
+                </pe:if>
             </pe:repeatitem>
         </pe:repeat>
     </div>
-    <div style="width:1650px;height:770px;margin-left: 20px;margin-top:50px;float: left;">
-        <div style="width: 1630px;height: 100px;">
-            <!--搜索-->
-            <div style="width: 340px; height: 65px; margin-left: 1008px; float: left;">
-                <input name="searchByName" placeholder="输入关键字或课程ID" type="text" style="width: 266px; height: 62px; background-color: #4BB7FD; font-size: 42px; float: left;" value="<%=TopicEntrencePage.searchByName%>"/>
-                <div style="width: 72px; height: 62px; float: left;" onclick="f_searchByName">
-                    <div style="width: 40px; height: 40px;margin-left: 30px;margin-top: 10px; background:url(codepku/image/textures/fastentrence/topic/search.png);"></div>
-                </div>
-            </div>
-
-            <!--选择框-->
-            <div style="width: 240px;height: 500px; margin-left: 40px; float: left;">
-                <div style="width: 245px;height: 60px;">
-                    <input type="text" style="width:175px; height:62px; font-size: 35px;background-color: #4BB7FD;" name="sort_input" value="<%=TopicEntrencePage.sortMethod%>"/>
-                    <div style="width: 70px; height: 62px; float: left;"  onclick="OnIsClickedSelect">
-                        <div style="width: 30px; height: 30px;margin-left: 30px;margin-top: 15px; background:url(codepku/image/textures/fastentrence/topic/sort.png); float: left;"></div>
-                    </div>
-                </div>
+    <div style="position: relative; width:1690;height:1080;margin-left: 230;">
+        <!--搜索-->
+        <div style="position: relative; width: 300; height: 74; left: 1080; top: 111;">
+            <input name="searchByName" type="text" style="width: 226; height: 74; background-color: #FFFFFF; font-size: 32;color: #CCCCCC;font-family:Noto Sans S Chinese; float: left;" value="<%=TopicEntrencePage.searchByName%>"/>
+            <div style="width: 74; height: 74; float: left; background: url(codepku/image/textures/fastentrence_ui/fastentrence_32bits.png#457 359 74 74);" onclick="f_searchByName">
+                <div style="width: 38; height: 56;margin-left: 18; margin-top: 11; background:url(codepku/image/textures/fastentrence_ui/fastentrence_32bits.png#917 217 42 60);" onclick="f_searchByName"></div>
             </div>
         </div>
-        <div style="width: 1630px;height: 675px;">
-            <pe:repeat DataSource="<%=get_topic_course(GetConditionalCourse())%>">
+
+        <!--选择框-->
+        <div style="position: relative; width: 256;height: 74; left: 1406; top: 111;">
+            <div style="width:182; height:74; font-size: 32px; background: url(codepku/image/textures/fastentrence_ui/fastentrence_32bits.png#551 359 74 74:10 10 10 10); color: #0C59E0; font-family:Noto Sans S Chinese; line-height: 74; text-align: center; float: left;" name="sort_input" ><%=TopicEntrencePage.sortMethod%></div>
+            <div style="width: 74; height: 74; float: left; background: url(codepku/image/textures/fastentrence_ui/fastentrence_32bits.png#457 359 74 74);"  onclick="OnIsClickedSelect">
+                <div style="width: 31; height: 22;margin-left: 21;margin-top: 29; background:url(codepku/image/textures/fastentrence_ui/fastentrence_32bits.png#148 387 31 22); float: left;" onclick="OnIsClickedSelect"></div>
+            </div>
+        </div>
+
+        <!--上导航栏-->
+        <div style="position: relative; width: 1690; height: 72; top: 227; padding-left: 146;">
+            <pe:repeat DataSource="<%=classification%>">
                 <pe:repeatitem>
-                    <div style="<%=format('position:absolute; z-index: 5; width:290px;height:100;background:url(codepku/image/textures/fastentrence/system_level_1.png);margin-left:%d;margin-top:%d;base-font-size:28px;font-size:28px;text-align: center;', Eval('index')%5*310+20, 20+GetDivisible(Eval('index'))*300-Eval('index')%5*60)%>"><div style="margin-top:35px"><%= Eval('name') %></div></div>
-                    <div style="<%=format('position:absolute; z-index: 5; width:290px;height:200;background:url(codepku/image/textures/fastentrence/system_level_2.png);margin-left:%d;margin-top:%d;', Eval('index')%5*310+20, 120+GetDivisible(Eval('index'))*300-Eval('index')%5*60)%>">
-                        <div style="<%=format('width:290px;height:200;background:url(%s);', Eval('img'))%>" name="<%=Eval('id')%>" te="111" value = "123123" onclick="OnClickCourse"></div>
-                    </div>
+                    <pe:if condition="<%= classify_index == Eval('index')%>">
+                        <div style="<%=format('position: relative; width: 140; height: 72; left: %d; font-size:45px; font-family:Noto Sans S Chinese Regular; color: #FFFFFF; text-align: center; line-height: 72; background: url(codepku/image/textures/fastentrence_ui/fastentrence_32bits.png#359 359 79 79:10 10 10 10);', (Eval('index')-1)*217)%>" name="<%=Eval('index')%>" onclick="ClickClassify"><%=Eval('title')%></div>
+                    </pe:if>
+                    <pe:if condition="<%= classify_index ~= Eval('index')%>">
+                        <div style="<%=format('position: relative; width: 140; height: 72; left: %d; font-size:45px; font-family:Noto Sans S Chinese Regular; color: #FFFFFF; text-align: center; line-height: 72; background: url(codepku/image/textures/fastentrence_ui/fastentrence_32bits.png#259 359 79 79:10 10 10 10);', (Eval('index')-1)*217)%>" name="<%=Eval('index')%>" onclick="ClickClassify"><%=Eval('title')%></div>
+                    </pe:if>
                 </pe:repeatitem>
             </pe:repeat>
         </div>
+
+        <!--content-->
+        <div style="position: relative; width: 1690; height: 630; top: 322;">
+            <pe:repeat DataSource="<%=get_topic_course(GetConditionalCourse())%>">
+                <pe:repeatitem>
+                    <div style="<%=format('position:absolute; z-index: 5; width:650;height:198;background:url(codepku/image/textures/fastentrence_ui/fastentrence_32bits.png#18 558 650 198);margin-left:%d;margin-top:%d; padding:8;',GetDivisible(Eval('index'))['left'], GetDivisible(Eval('index'))['top'])%>">
+                        <div style="<%=format('width:268;height:178; margin-left: 2; float: left; background:url(%s);', Eval('img'))%>"></div>
+                        <div style="width:225; margin-left: 26;float: left;">
+                            <div style="width: 225; height: 37; margin-top: 60; font-size:38px; font-family:Noto Sans S Chinese Regular; color: #ffffff; line-height: 37;"><%= Eval('name') %></div>
+                            <div style="width: 225; height: 21; margin-top: 17; font-size:28px; font-family:Noto Sans S Chinese Regular; color: #ffffff; line-height: 21;">ID:<%= Eval('id') %></div>
+                        </div>
+                        <div style="width: 96; height: 96;float: left; margin-top: 48; background:url(codepku/image/textures/fastentrence_ui/fastentrence_32bits.png#689 210 96 96);" onclick="OnClickCourse"></div>
+                    </div>    
+                </pe:repeatitem>
+            </pe:repeat>
+        </div>
+        
         <!--翻页-->
-        <div style="width: 1630px; height: 50px;margin-left: 740px;margin-top:70; float: left;">
-            <div style="width: 50px;margin-top:-2; height: 50px;float: left; background: url(codepku/image/textures/fastentrence/topic/page_left.png);" name="page_left" onclick="ChangeTopicPage"></div>
-            <div style="width: 50px;height: 50px;font-size: 40px;color: #ffffff;float: left; text-align: center; line-height: 40px;"><%=GetPageNum()%></div>
-            <div style="width: 50px; height: 50px;float: left; background: url(codepku/image/textures/fastentrence/topic/page_right.png);" name="page_right" onclick="ChangeTopicPage"></div>
+        <div style="position: relative; width: 169; height: 41; left: 760; top:993;">
+            <div style="width: 28; height: 40; float: left; background: url(codepku/image/textures/fastentrence_ui/fastentrence_32bits.png#207 378 28 41); transform:rotate(180deg); transform-origin: 14 20;" name="page_left" onclick="ChangeTopicPage"></div>
+            <div style="width: 113; height: 33;font-size: 45px;color: #ffffff;float: left; text-align: center; line-height: 33;"><%=GetPageNum()%></div>
+            <div style="width: 28; height: 40;float: left; background: url(codepku/image/textures/fastentrence_ui/fastentrence_32bits.png#207 378 28 41);" name="page_right" onclick="ChangeTopicPage"></div>
         </div>
     </div>
+    <div style='position: relative; width:208; height:127; background:url(codepku/image/textures/common_32bits.png#251 49 208 127);' onclick="OnClose"></div>
+    <div style="position: relative; width: 417; height: 86; margin-left: 144; base-font-size:70px; font-size:70px; color: #D85D0B; font-family:Alibaba PuHuiTi; padding-left: 105; padding-top: 8; font-weight: bolder; background:url(codepku/image/textures/common_32bits.png#475 63 429 86);">专题课</div>
+    <!--下拉选择框-->
+    <pe:if condition='<%=select_button_clicked == 1 %>' >
+        <div style="position: relative; width: 256; height: 222; position: absolute; z-index: 10; left: 1636; margin-top: 185;">
+            <pe:repeat DataSource="<%=select_method%>">
+                <div style="width: 256; height: 74; font-size:32px; font-family:Noto Sans S Chinese Regular; color: #FFFFFF; text-align: center; line-height: 74; background: url(codepku/image/textures/fastentrence_ui/fastentrence_32bits.png#37 362 74 74:10 10 10 10);" name="<%=Eval('name')%>" onclick="OnSelectedItem"><%=Eval('title')%></div>
+            </pe:repeat>
+        </div>
+    </pe:if>
 </div>
+</pe:container>
 </pe:mcml>
 </body>
 </html>
