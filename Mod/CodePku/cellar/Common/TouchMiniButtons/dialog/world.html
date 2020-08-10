@@ -32,6 +32,7 @@ Channels = {
 
 local sendable = true
 DEFAULT_AVATAR = 'codepku/image/textures/chat/default_avatar.png'
+frindNow = MainSceneUIButtons.FriendId
 
 friends = commonlib.deepcopy(FriendUI.vars["friends"])
 for i, v in ipairs(friends) do
@@ -50,10 +51,9 @@ function OnClose()
 end
 
 function OnClickChannel(index)
-    print("---------------------------------------------"..index)
     if index ~= 1 then
         Page:CloseWindow()
-        MainSceneUIButtons.show_dialog_ui(true, index)
+        MainSceneUIButtons.show_dialog_ui(true, index, frindNow)
     end
 end
 

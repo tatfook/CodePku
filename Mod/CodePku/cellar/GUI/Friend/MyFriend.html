@@ -68,9 +68,9 @@ function ClickDelete(lindex)
     FriendUI:ShowPopup(4)
 end
 
-function ClickChat()
+function ClickChat(fid)
     ClosePage()
-    MainSceneUIButtons.show_dialog_ui(true)
+    MainSceneUIButtons.show_dialog_ui(true, 3, fid)
 end
 
 ]]>

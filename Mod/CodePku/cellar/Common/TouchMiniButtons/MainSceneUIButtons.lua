@@ -24,12 +24,20 @@ MainSceneUIButtons.params={
 }
 
 
-function MainSceneUIButtons.show_dialog_ui(bshow, PopIndex)
+MainSceneUIButtons.FriendId = nil
+
+function MainSceneUIButtons.show_dialog_ui(bshow, PopIndex, friendid)
     FriendUI:GetFriend()
+
     MainSceneUIButtons.ScrollToEnd = 'true'
+
+    if friendid ~= nil then
+        FriendID = tonumber(friendid)
+        MainSceneUIButtons.FriendId = FriendID
+    end
+
     if(bshow) then
         PopIndex = tonumber(PopIndex)
-        print("---------------------------------"..PopIndex)
         local window = nil
         if PopIndex == 1 then
             window = AdaptWindow:QuickWindow(MainSceneUIButtons.params["world_page"])
