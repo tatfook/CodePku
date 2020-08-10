@@ -382,7 +382,7 @@ function CodePku:init()
 	GameLogic.GetFilters():add_filter(
 		"QuickSelectBar.ShowPage",
 		function(bShow)
-			return true;
+			return not (System.Codepku.Coursewares and (System.Codepku.Coursewares.category == 1 or System.Codepku.Coursewares.category == 2));
 		end
 	);
 end
