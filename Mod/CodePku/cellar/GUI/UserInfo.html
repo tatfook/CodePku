@@ -111,9 +111,6 @@ xueshidian = 123456
 fensi = 123456
 dianzan = 123456
 local uuuname = UserInfo.name
-echo("@ 113: ")
-echo(UserInfo.name)
-echo(uuuname)
 sid = UserInfo.no or UserInfo.id
 identity = 10
 gender = UserInfo.gender
@@ -136,7 +133,6 @@ user_options_list[5] = {{index =1,url ='quanbu1'},{index =2,url ='dress'},{index
 
 
 function ClosePage()
-echo('@click~~~')
     Page:CloseWindow();
 end
 
@@ -188,19 +184,16 @@ function OnClickButton(name,mcmlNode)
 end
 
 function shurujiyu()
-    -- EditPage:ShowPage()
-    NPL.load("(gl)script/ide/System/Windows/Window.lua");
-	local Window = commonlib.gettable("System.Windows.Window");
-    local window = Window:new();
+    EditPage:ShowPage()
+    -- NPL.load("(gl)script/ide/System/Windows/Window.lua");
+	-- local Window = commonlib.gettable("System.Windows.Window");
+    -- local window = Window:new();
     
-    -- NPL.load("(gl)Mod/CodePku/cellar/GUI/Window/AdaptWindow.lua");
-    -- local AdaptWindow = commonlib.gettable("Mod.CodePku.GUI.Window.AdaptWindow")
-	-- AdaptWindow:QuickWindow({
-    window:Show({
-		url="Mod/CodePku/cellar/Common/AriesWindow/pe_modal.html", 
-		alignment="_ct", left = -1158/2, top = -588/2, width = 1158 , height = 588,
-    });
-    window:SetMinimumScreenSize(1920, 1080)
+    -- window:Show({
+	-- 	url="Mod/CodePku/cellar/Common/AriesWindow/pe_aries_window2.html", 
+	-- 	alignment="_ct", left = -1158/2, top = -588/2, width = 1158 , height = 588,
+    -- });
+    -- window:SetMinimumScreenSize(1920, 1080);
 end
 
 function OnClickItem(item)
@@ -226,9 +219,6 @@ end
 
 function GetTabDSIndex()
     local index = UserInfoPage.tab_ds_index;
-    echo("@@@got index")
-    echo(index)
-    echo(UserInfo)
     if (index) then
         return index;
     end
@@ -248,10 +238,6 @@ end
 </script>
 <style type="text/mcss">
 </style>
-   <!-- <pe:custom src="Mod/CodePku/cellar/Common/AriesWindow/pe_modal.lua" classns="Mod.CodePku.Common.AriesWindow.ModalControl" title="个人中心">
-        SEE ME
-        <div style='<%=format("position:relative;width:86px;height:87px;margin-top:35px;margin-left:60px;background:url(%s);", UserInfo.avatar or (Eval("ProfilePng").."#1794 560 86 87")) %>'></div>
-    </pe:custom> -->
 <pe:container alignment="_lt" width="1920" height="1080">
     <div style='<%=format("width:1920;height:1080;background:url(codepku/image/textures/background/main.png);font-family:Noto Sans S Chinese Regular;")%>' >
         <div height="100%" style="position:absolute;top:0;left:0;bottom:0;width:230px;background-color:#94E3FE"></div>
