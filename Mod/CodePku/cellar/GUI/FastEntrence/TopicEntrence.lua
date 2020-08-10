@@ -6,13 +6,7 @@ local request = NPL.load("(gl)Mod/CodePku/api/BaseRequest.lua");
 TopicEntrencePage.nowPage = nil
 
 function TopicEntrencePage.GetCourse(subject_id)
-    if subject_id == 2 then
-        courses = {}
-        for i = 1, 10 do
-            table.insert(courses, {img = '', id = i, name = i, index = (i-1)%6})
-        end
-        return courses
-    end
+
     response = request:get(string.format('/coursewares/entrance/topic?subject=%d', subject_id), nil,{sync = true})
     data = response.data.data
     list = {}

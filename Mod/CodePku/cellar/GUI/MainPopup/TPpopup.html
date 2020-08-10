@@ -15,8 +15,8 @@ local MainPopup = commonlib.gettable("Mod.CodePku.GUI.MainPopup");
 local SystemEntrencePage = commonlib.gettable("Mod.CodePku.SystemEntrencePage");
 local TopicEntrencePage = commonlib.gettable("Mod.CodePku.TopicEntrencePage");
 local CompeteEntrencePage = commonlib.gettable("Mod.CodePku.CompeteEntrencePage");
+local MainEntrencePage = commonlib.gettable("Mod.CodePku.MainEntrencePage")
 local GameLogic = commonlib.gettable("MyCompany.Aries.Game.GameLogic");
-
 
 
 local world_name = MainPopup.TP_Location   
@@ -32,7 +32,7 @@ end
 
 function CloseAllPage()
     Page:CloseWindow();
-    if SystemEntrencePage ~= nil then
+    if SystemEntrencePage~= nil then
         SystemEntrencePage:ClosePage()
     end
     if TopicEntrencePage ~= nil then
@@ -41,9 +41,9 @@ function CloseAllPage()
     if CompeteEntrencePage ~= nil then
         CompeteEntrencePage:ClosePage()
     end
-    --
-    
-   
+    if MainEntrencePage ~= nil then
+        MainEntrencePage:ClosePage()
+    end
 end
 
 function turnToWorld()
