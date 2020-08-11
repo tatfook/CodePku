@@ -96,6 +96,7 @@ function OnClickCourse(course)
 end
 
 function onSelected(course)
+    echo('hehehehehehee################')
     select = course
     Page:Refresh(0)
 end
@@ -108,8 +109,8 @@ end
         <div style="position: relative; width:230; height:1080; background-color: #94E3FE;"></div>
         <div>
             <div style='width:208px;height:127px;background: url(codepku/image/textures/commonpopup/main.png#251 49 208 127);' onclick="OnClose"></div>
-            <div style='position:fixed;left:146px;top:-127px;width:429px;height:86px;background: url(codepku/image/textures/commonpopup/main.png#475 63 429 86);'></div>
-            <div style='position:fixed;left:258px;top:-66px;width:140px;height:50px;margin-top:-127;background:url(codepku/image/textures/fastentrence_ui/system_name.png)'></div>
+            <div style='position:fixed;left:142px;top:-127px;width:429px;height:86px;background: url(codepku/image/textures/commonpopup/main.png#475 63 429 86);'></div>
+            <div style='position:fixed;left:258px;width:208px;top:-127px;top:-200px; font-size:50px; color: #D85D0B; font-family:Alibaba PuHuiTi;'>教学区</div>
         </div>
         <!-- <div style='width:100px;height:100px;background:url(codepku/image/textures/fastentrence/return.png);margin-left: 100px;margin-top: 20px;' onclick="OnClose"></div> -->
         <div style="width:200;height:900;">
@@ -118,14 +119,14 @@ end
 
                     <pe:if condition='<%=Eval("show")==true and Eval("index")~=1%>'>
                         <pe:if condition='<%=Eval("loc")==Eval("index")%>'>
-                            <div style="<%=format('background: url(codepku/image/textures/common_32bits.png#1648 196 261 96);width:261;height:96;margin-left:50px;position：relative')%>" name='<%=Eval("index")%>' onclick='OnClickSubject'>
+                            <div style="<%=format('top:-200px;background: url(codepku/image/textures/common_32bits.png#1648 196 261 96);width:261;height:96;margin-left:50px;position：relative')%>" name='<%=Eval("index")%>' onclick='OnClickSubject'>
                                 <div style="color:#fff;font-size:30px;font-weight:bold;width:261;height:96;line-height: 96;text-align: center;">
                                     <%=Eval('name')%>
                                 </div>
                             </div>
                         </pe:if>
                         <pe:if condition='<%=Eval("loc")~=Eval("index")%>'>
-                            <div style="<%=format('background: url(codepku/image/textures/common_32bits.png#1294 66 134 94);width:261;height:94;position：relative')%>" name='<%=Eval("index")%>' onclick='OnClickSubject'>
+                            <div style="<%=format('top:-200px;background: url(codepku/image/textures/common_32bits.png#1294 66 134 94);width:261;height:94;position：relative')%>" name='<%=Eval("index")%>' onclick='OnClickSubject'>
                                 <div style="color:#fff;font-size:30px;font-weight:bold;width:261;height:9946;line-height: 94;text-align: center;">
                                     <%=Eval('name')%>
                                 </div>
@@ -138,10 +139,10 @@ end
         <div style="width:1500;height:600;margin-left: 310px;margin-top:-800px;position: relative;">
             <pe:repeat DataSource="<%=SystemLevelPage.courses%>">
                 <pe:repeatitem>
-                    <div style="<%=format('position: absolute;width:340px;height:80;background:url(codepku/image/textures/fastentrence_ui/main.png#28 45 340 80);margin-left:%d;margin-top:%d;base-font-size:28px;font-size:28px;text-align: center;', 80+Eval('index')%4*380, math.floor(Eval('index')/4)*350-100)%>">
+                    <div style="<%=format('position: absolute;width:340px;height:80;background:url(codepku/image/textures/fastentrence_ui/main.png#28 45 340 80);margin-left:%d;margin-top:%d;base-font-size:28px;font-size:28px;text-align: center;', 80+Eval('index')%4*380, math.floor(Eval('index')/4)*350-300)%>">
                         <div style="margin-top:20px;color:white;font-weight:bold;"><%= GetCourseName(Eval('course')) %></div>
                     </div>
-                    <div style="<%=format('position:absolute;width:340px;height:202;background:url(codepku/image/textures/fastentrence_ui/system_level_2.png);margin-left:%d;margin-top:%d;', 80+Eval('index')%4*380, 80+math.floor(Eval('index')/4)*350-100)%>">
+                    <div style="<%=format('position:absolute;width:340px;height:202;background:url(codepku/image/textures/fastentrence_ui/system_level_2.png);margin-left:%d;margin-top:%d;', 80+Eval('index')%4*380, 80+math.floor(Eval('index')/4)*350-300)%>">
                         <div style="<%=format('width:340;height:202;background:url(%s);', Eval('cover'))%>" name="<%=Eval('course')%>" onclick="OnClickCourse">
                             <%=Eval('course')%>
                         </div>
