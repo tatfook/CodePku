@@ -35,7 +35,7 @@ function SubjectPage.OnInitSubject()
             col = tcol,
             level = '0级',
             progress = 0,
-            total_exp = nil,
+            total_exp = 30,
             name = const_subject[i][1],
             chname = const_subject[i][2],
         })                            
@@ -60,13 +60,13 @@ function SubjectPage.GetLevels()
     }
 
     if response.status == 200 then
-		data = response.data.data		
+        data = response.data.data	
         for i = 1,#data do
             if data[i].level_type < 7 then
                 echo(data[i].level_type)
                 SubjectPage.subject_list[data[i].level_type].level = data[i].current_level .. "级"
                 SubjectPage.subject_list[data[i].level_type].progress = data[i].current_exp
-                SubjectPage.subject_list[data[i].level_type].total_exp = data[i].current_exp + data[i].next_exp
+                SubjectPage.subject_list[data[i].level_type].total_exp = data[i].next_exp
 
             end                                       
         end

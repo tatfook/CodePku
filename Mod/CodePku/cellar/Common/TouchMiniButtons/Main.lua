@@ -18,29 +18,60 @@ MainUIButtons.common_window = nil
 MainUIButtons.function_window = nil
 MainUIButtons.dialog_window = nil
 MainUIButtons.money_window = nil
+MainUIButtons.open_function = nil
+MainUIButtons.open_common = nil
 
 
-function MainUIButtons.show_common_ui()
-	local width = 448
-	local height = 110
+function MainUIButtons.show_common_ui(flag)
+	local open_width = 664
+	local open_height = 178
+	local close_width = 82
+	local close_height = 178
 
 	params = {
-		url="Mod/CodePku/cellar/Common/TouchMiniButtons/MainUIButtons_common.html", 
-		alignment="_lt", left = 0, top = 0, width = width, height = height,
+		open = {
+			url="Mod/CodePku/cellar/Common/TouchMiniButtons/MainUIButtons_common.html", 
+			alignment="_lt", left = 0, top = 0, width = open_width, height = open_height, click_through = true,
+		},
+		close = {
+			url="Mod/CodePku/cellar/Common/TouchMiniButtons/MainUIButtons_common.html", 
+			alignment="_lt", left = 0, top = 0, width = close_width, height = close_height, click_through = true,
+		}
 	}
-	MainUIButtons.common_window = AdaptWindow:QuickWindow(params)
+	if("close" == flag)then
+		MainUIButtons.open_common = false
+	else
+		MainUIButtons.open_common = true
+	end
+	MainUIButtons.common_window = AdaptWindow:QuickWindow(params[flag])
 end
 
-function MainUIButtons.show_function_ui()
-	local width = 541
-	local height = 178
+function MainUIButtons.show_function_ui(flag)	--flag == true,工具栏展开
 
 	params = {
-		url="Mod/CodePku/cellar/Common/TouchMiniButtons/MainUIButtons_function.html", 
-		alignment="_rb", left = -width, top = -height, width = width, height = height,
-		click_through = true,
+		open = {
+			url="Mod/CodePku/cellar/Common/TouchMiniButtons/MainUIButtons_function.html", 
+			alignment="_rb", left = -541, top = -178, width = 541, height = 178,
+			click_through = true,
+		},
+		close = {
+			url="Mod/CodePku/cellar/Common/TouchMiniButtons/MainUIButtons_function.html", 
+			alignment="_rb", left = -85, top = -178, width = 85, height = 178,
+			click_through = true,
+		}
 	}
-	MainUIButtons.function_window = AdaptWindow:QuickWindow(params)
+
+	if("close" == flag)then
+		MainUIButtons.open_function = false
+	else
+		MainUIButtons.open_function = true
+	end
+	
+	if(flag ~= nil)then
+		MainUIButtons.function_window = AdaptWindow:QuickWindow(params[flag])
+	else
+		MainUIButtons.function_window = AdaptWindow:QuickWindow(params["open"])
+	end
 end
 
 function MainUIButtons.show_dialog_ui(bshow)
@@ -72,7 +103,7 @@ function MainUIButtons.ShowPage()
 		end
 	end
 
-	MainUIButtons.show_common_ui()
+	MainUIButtons.show_common_ui("open")
 	MainUIButtons.show_dialog_ui(false)
 	MainUIButtons.show_money_ui()
 	if(show)then
