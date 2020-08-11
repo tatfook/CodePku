@@ -43,7 +43,12 @@ function MainUIButtons.show_common_ui(flag)
 	else
 		MainUIButtons.open_common = true
 	end
-	MainUIButtons.common_window = AdaptWindow:QuickWindow(params[flag])
+	if(flag ~= nil)then
+		MainUIButtons.common_window = AdaptWindow:QuickWindow(params['close'])
+	else
+		MainUIButtons.function_window = AdaptWindow:QuickWindow(params["open"])
+	end
+	
 end
 
 function MainUIButtons.show_function_ui(flag)	--flag == true,工具栏展开
@@ -117,9 +122,9 @@ function MainUIButtons.ShowPage()
 		MainUIButtons.show_money_ui()
 	end
 
-	MainUIButtons.show_common_ui("open")
-	MainUIButtons.show_dialog_ui(false)
-	MainUIButtons.show_money_ui()
+	--MainUIButtons.show_common_ui()
+	--MainUIButtons.show_dialog_ui(false)
+	--MainUIButtons.show_money_ui()
 	if(show)then
 		if(not MainUIButtons.hasshown) then			
 			MainUIButtons.show_function_ui()					
