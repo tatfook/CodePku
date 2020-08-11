@@ -1,16 +1,24 @@
-local UserInfoPage = commonlib.gettable("Mod.CodePku.UserInfoPage")
-local UserInfo = commonlib.gettable("Mod.CodePku.UserInfo")
-local OtherUserInfo = commonlib.gettable("Mod.CodePku.OtherUserInfo")
 local request = NPL.load("(gl)Mod/CodePku/api/BaseRequest.lua");
 local page;
+local UserInfoPage = NPL.export();
 
 UserInfoPage.tab_ds_index = 1;
-UserInfoPage.tab_ds = {
+UserInfoPage.tab_ds_name = "Home";
+
+-- tabs - 自己
+UserInfoPage.tab_ds_self = {
     {text=L"首页", name="Home"},
     {text=L"属性", name="Profile"},
     {text=L"角色", name="Model"},
     {text=L"外观", name="Skin"},
     {text=L"背包", name="Backpack"},
+    {text=L"成就", name="Achievement"},
+    {text=L"动态", name="Activity"},
+};
+
+-- tabs - 他人
+UserInfoPage.tab_ds_other = {
+    {text=L"首页", name="Home"},
     {text=L"成就", name="Achievement"},
     {text=L"动态", name="Activity"},
 };
@@ -50,7 +58,7 @@ function split(str, split_char)
 end
 
 -- 获取用户信息 async
-function UserInfoPage.GetUserInfo_(id, show)
+function UserInfoPage.GetUserInfo(id, show)
     local path = '/users/profile';
     if (id and id ~= "") then
         path = path.."/"..id;
@@ -58,39 +66,30 @@ function UserInfoPage.GetUserInfo_(id, show)
     request:get(path):next(function(response)
         if (response.status == 200) then
             local data = response.data.data;
-            if (id and id ~="") then -- other user's info
-                OtherUserInfo.name = data.nickname or string.sub(data.mobile,1,7)
-                OtherUserInfo.id = data.id
-                OtherUserInfo.gender = data.gender
-                OtherUserInfo.avatar = data.avatar_url
-            else -- current user's info
-                UserInfo.name = data.nickname or data.no
-                UserInfo.id = data.id
-                UserInfo.no = data.no
-                UserInfo.gender = data.gender
-                local _, _, y, m, d, _hour, _min, _sec = string.find(data.created_at, "(%d+)-(%d+)-(%d+)%s*(%d+):(%d+):(%d+)");
-                UserInfo.created_at = y..'-'..m..'-'..d
-                if data.self_level == nil then
-                    UserInfo.self_level = {}
-                    UserInfo.self_level.current_exp = 0
-                    UserInfo.self_level.current_level = 0
-                    UserInfo.self_level.next_exp = 0
-                else
-                    UserInfo.self_level = data.self_level
-                end
-                UserInfo.avatar = data.avatar_url
-                UserInfo.day = data.career
-                echo(UserInfo.avatar)
-
-                wallets = data.user_wallets
-                echo(string.format( "wallets: %s,  length:  %d", wallets, #wallets))
-                UserInfo.money = {goldcoin=0, wanxuecoin=0}
-                for i, v in ipairs(wallets) do 
-                    if v.currency_id == 1 then
-                        UserInfo.money.goldcoin = v.amount
-                    elseif v.currency_id == 2 then
-                        UserInfo.money.wanxuecoin = v.amount
-                    end
+            UserInfoPage.name = data.nickname or data.no
+            UserInfoPage.id = data.id
+            UserInfoPage.no = data.no
+            UserInfoPage.gender = data.gender
+            UserInfoPage.avatar = data.avatar_url
+            local _, _, y, m, d, _hour, _min, _sec = string.find(data.created_at, "(%d+)-(%d+)-(%d+)%s*(%d+):(%d+):(%d+)");
+            UserInfoPage.created_at = y..'-'..m..'-'..d
+            if data.self_level == nil then
+                UserInfoPage.self_level = {}
+                UserInfoPage.self_level.current_exp = 0
+                UserInfoPage.self_level.current_level = 0
+                UserInfoPage.self_level.next_exp = 0
+            else
+                UserInfoPage.self_level = data.self_level
+            end
+            UserInfoPage.day = data.career
+            wallets = data.user_wallets or {}
+            echo(string.format( "wallets: %s,  length:  %d", wallets, #wallets))
+            UserInfoPage.money = {goldcoin=0, wanxuecoin=0}
+            for i, v in ipairs(wallets) do
+                if v.currency_id == 1 then
+                    UserInfoPage.money.goldcoin = v.amount
+                elseif v.currency_id == 2 then
+                    UserInfoPage.money.wanxuecoin = v.amount
                 end
             end
             if (show and show ~= "") then
@@ -107,55 +106,6 @@ function UserInfoPage.GetUserInfo_(id, show)
     end);
 end
 
-function UserInfoPage.GetUserInfo(id)
-    local path = '/users/profile';
-    echo('@112  ')
-    echo(id)
-    if (type(id) == "string" or type(id) == "number") then
-        path = path.."/"..id;
-    end
-    response = request:get(path,nil,{sync = true})
-    if response.status == 200 then
-        data = response.data.data
-        if (id and id ~= "") then
-            OtherUserInfo.name = data.nickname or string.sub(data.mobile,1,7)
-            OtherUserInfo.id = data.id
-            OtherUserInfo.gender = data.gender
-            OtherUserInfo.avatar = data.avatar_url
-        else
-            UserInfo.name = data.nickname or data.no
-            UserInfo.id = data.id
-            UserInfo.no = data.no
-            UserInfo.gender = data.gender
-            local _, _, y, m, d, _hour, _min, _sec = string.find(data.created_at, "(%d+)-(%d+)-(%d+)%s*(%d+):(%d+):(%d+)");
-            UserInfo.created_at = y..'-'..m..'-'..d
-            if data.self_level == nil then
-                UserInfo.self_level = {}
-                UserInfo.self_level.current_exp = 0
-                UserInfo.self_level.current_level = 0
-                UserInfo.self_level.next_exp = 0
-            else
-                UserInfo.self_level = data.self_level
-            end
-            UserInfo.avatar = data.avatar_url
-            UserInfo.day = data.career
-            echo(UserInfo.avatar)
-
-            wallets = data.user_wallets
-            echo(string.format( "wallets: %s,  length:  %d", wallets, #wallets))
-            UserInfo.money = {goldcoin=0, wanxuecoin=0}
-            for i, v in ipairs(wallets) do 
-                if v.currency_id == 1 then
-                    UserInfo.money.goldcoin = v.amount
-                elseif v.currency_id == 2 then
-                    UserInfo.money.wanxuecoin = v.amount
-                end
-            end
-        end
-    end
-end
-
-
 -- 获取道具信息
 function UserInfoPage.GetItemInfo(params)
     params = params or ''
@@ -166,7 +116,7 @@ function UserInfoPage.GetItemInfo(params)
             -- echo(string.format( "user_prop_id: %d  data : %s, category: %d", v.user_prop_id, v.prop_name, v.prop_id))
             v.index = i
         end
-        UserInfo.props = r_data
+        UserInfoPage.props = r_data
         return r_data
     end
     
@@ -197,27 +147,23 @@ function UserInfoPage.GetItemInfo(params)
 end
 
 function UserInfoPage:ShowPage(PageIndex, bShow, id)
-    echo("@183: ")
-    echo(id)
-    echo(type(id))
-    NPL.load("(gl)script/apps/Aries/Creator/Game/Areas/DesktopMenuPage.lua");
-    local DesktopMenuPage = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.DesktopMenuPage");
+    if (id and id ~= "") then
+        UserInfoPage.isSelf = false;
+        UserInfoPage.tab_ds_name = UserInfoPage.tab_ds_other[PageIndex or 1].name;
+    else
+        UserInfoPage.isSelf = true;
+        UserInfoPage.tab_ds_name = UserInfoPage.tab_ds_self[PageIndex or 1].name;
+    end
     UserInfoPage.bForceHide = bShow == false;
-    UserInfoPage.PageIndex = PageIndex
-    UserInfoPage.GetUserInfo(id);
+    UserInfoPage.tab_ds_index = PageIndex or 1;
+    UserInfoPage.GetUserInfo(id, true);
     UserInfoPage.GetItemInfo();
-    UserInfoPage:InitWindow(PageIndex, bShow)
 end
 
-function UserInfoPage:InitWindow(PageIndex, bShow)
-    -- UserInfoPage.GetUserInfo()
-    -- UserInfoPage.GetItemInfo()
-    -- UserInfoPage.bForceHide = bShow == false;
-    -- UserInfoPage.PageIndex = PageIndex
+function UserInfoPage:InitWindow()
     NPL.load("(gl)Mod/CodePku/cellar/GUI/Window/AdaptWindow.lua");
     local AdaptWindow = commonlib.gettable("Mod.CodePku.GUI.Window.AdaptWindow")
     AdaptWindow:QuickWindow({url="Mod/CodePku/cellar/GUI/UserInfo.html", 
     alignment="_fi", left = 0, top = 0, width = 0, height = 0,zorder =20
-    -- alignment="_ct", left = -960, top = -540, width = 1920, height = 1080,zorder =20
 })
 end

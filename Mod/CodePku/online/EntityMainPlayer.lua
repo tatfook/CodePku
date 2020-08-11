@@ -25,11 +25,7 @@ function EntityMainPlayer:CreateInnerObject(...)
 	-- userid = System.User.id
 	-- self:SetPlayerInfo(info)
 
-	local UserInfoPage = commonlib.gettable("Mod.CodePku.UserInfoPage")
-	local UserInfo = commonlib.gettable("Mod.CodePku.UserInfo")
-	UserInfoPage:GetUserInfo()
-
-	local name = UserInfo.name or self:GetDisplayName()
+	local name = System.User and System.User.nickName or self:GetDisplayName()
 
 	if(self:IsShowHeadOnDisplay() and System.ShowHeadOnDisplay) then
 		System.ShowHeadOnDisplay(true, obj, name, MyHeadOnTextColor);	

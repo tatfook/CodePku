@@ -8,14 +8,10 @@
 <body>
     <pe:mcml>
 <script refresh="false" type="text/npl" src="UserInfo.lua"><![CDATA[
--- NPL.load("(gl)script/apps/Aries.Creator.Game.Desktop.UserInfo.lua");
--- NPL.load("(gl)script/apps/Aries.Creator.Game.Desktop.Share.lua");
-NPL.load("(gl)Mod/CodePku/cellar/GUI/Profile/EditShare.lua");
+UserInfoPage = NPL.load("(gl)Mod/CodePku/cellar/GUI/UserInfo.lua");
 
-UserInfoPage = commonlib.gettable("Mod.CodePku.UserInfoPage")
+NPL.load("(gl)Mod/CodePku/cellar/GUI/Profile/EditShare.lua");
 SharePage = commonlib.gettable("Mod.CodePku.SharePage")
-UserInfo = commonlib.gettable("Mod.CodePku.UserInfo")
-OtherUserInfo = commonlib.gettable("Mod.CodePku.OtherUserInfo")
 EditSharePage = commonlib.gettable("Mod.CodePku.EditSharePage")
 SubjectPage = commonlib.gettable("Mod.CodePku.SubjectPage")
 PropsInfo = commonlib.gettable("Mod.CodePku.PropsInfo");
@@ -23,7 +19,7 @@ PropsInfo = commonlib.gettable("Mod.CodePku.PropsInfo");
 CommonPng = "codepku/image/textures/common_32bits.png";
 ProfilePng = "codepku/image/textures/profile_32bits.png";
 
--- todo: userinfo vs otheruserinfo
+
 
     -- =============================================================================== start 背包
 
@@ -103,7 +99,7 @@ ProfilePng = "codepku/image/textures/profile_32bits.png";
 
     function sort_backpack()
         params = '?sort=1'
-        UserInfo.props = UserInfoPage.GetItemInfo(params)
+        UserInfoPage.props = UserInfoPage.GetItemInfo(params)
         Page:Refresh(0)   
     end
 
@@ -114,25 +110,13 @@ ProfilePng = "codepku/image/textures/profile_32bits.png";
 xueshidian = 123456
 fensi = 123456
 dianzan = 123456
-local name = UserInfo.name
-sid = UserInfo.no or UserInfo.id
+local name = UserInfoPage.name
+sid = UserInfoPage.no or UserInfoPage.id
 identity = 10
-gender = UserInfo.gender
+gender = UserInfoPage.gender
 vip_id = 20
-choose_index = UserInfoPage.PageIndex or 1
 choose_index5 = 1 -- 道具类型id，1-全部 2-装扮 3-消耗品 4-建造道具 5-其他
 
-user_options_list ={}
--- user_options_list[1] = {
---     {index =1,url ='shouye'},
---     {index =2,url ='shuxing'},
---     --{index =3,url ='juese'},
---     --{index =4,url ='waiguan'},
---     --{index =5,url ='beibao'},
---     --{index =6,url ='chengjiu'},
---     --{index =7,url ='dongtai'},
--- }
--- user_options_list[1][choose_index].url = user_options_list[1][choose_index].url ..1
 user_options_list5 = {{index =1,url ='quanbu1'},{index =2,url ='dress'},{index =3,url ='build'},{index =4,url ='consumable'},{index =5,url ='other'}}
 
 
@@ -154,11 +138,13 @@ function OnClose()
 end
 
 function Choose(index)
-    -- user_options = user_options_list[1]
-    -- user_options[choose_index].url =string.sub(user_options[choose_index].url ,1,string.len(user_options[choose_index].url)-1)
-    -- choose_index =index
-    -- user_options[choose_index].url = user_options[choose_index].url..1
     UserInfoPage.tab_ds_index = tonumber(index);
+    UserInfoPage.tab_ds_name = name;
+    if (UserInfoPage.isSelf) then
+        UserInfoPage.tab_ds_name = UserInfoPage.tab_ds_self[index].name;
+    else
+        UserInfoPage.tab_ds_name = UserInfoPage.tab_ds_other[index].name;
+    end
     Page:Refresh(0.01);
 end
 
@@ -218,7 +204,11 @@ function ShowSubjectPage()
 end
 
 function GetTabButtons()
-    return UserInfoPage.tab_ds;
+    if (UserInfoPage.isSelf) then
+        return UserInfoPage.tab_ds_self;
+    else
+        return UserInfoPage.tab_ds_other;
+    end
 end
 
 function GetTabDSIndex()
@@ -228,15 +218,26 @@ function GetTabDSIndex()
     end
 end
 
+function GetTabDSName()
+    local name = UserInfoPage.tab_ds_name;
+    if (name) then
+        return name;
+    end
+end
+
 function GetName()
-    local name = UserInfo.name;
+    local name = UserInfoPage.name;
     return name;
 end
 
+function GetMoney(type)
+    local money = UserInfoPage.money and UserInfoPage.money[type];
+    return money;
+end
 
--- NPL.load("(gl)script/ide/System/test/test_Windows.lua");
--- local test_Windows = commonlib.gettable("System.Core.Test.test_Windows");
--- test_Windows:DestroyWindows()
+function GetIdentity()
+    return UserInfoPage.isSelf;
+end
 
 ]]>   
 </script>
@@ -250,12 +251,12 @@ end
             <div style="position:absolute;left:132px;top:0;width:441px;height:102px;background:url(codepku/image/textures/common_32bits.png#463 63 441 100);padding-top:4px;font-family:PuHuiTi-Bold;font-size:70px;color:#d85d0b;">个人中心</div>
             <div align="right" style="position:absolute;top:0;font-size:28px;color:#ffffff;">
                 <div style="float:right;margin-right:87px;">
-                    <div style="float:left;width:194px;height:44px;background:url(codepku/image/textures/profile_32bits.png#1032 78 194 44);margin-top:18px;padding-top:8px;"><%=UserInfo.money.goldcoin%></div>
+                    <div style="float:left;width:194px;height:44px;background:url(codepku/image/textures/profile_32bits.png#1032 78 194 44);margin-top:18px;padding-top:8px;"><%=GetMoney('goldcoin')%></div>
                     <div style="float:left;width:73px;height:71px;background:url(codepku/image/textures/common_32bits.png#913 41 73 71);margin-top:5px;margin-left:-219px;"></div>
                     <!-- <div style="float:left;width:63px;height:60px;background:url(codepku/image/textures/profile_32bits.png#1264 70 63 60);margin-top:10px;margin-left:-219px;"></div> -->
                 </div>
                 <div style="float:right;margin-right:105px;">
-                    <div style="float:left;width:194px;height:44px;background:url(codepku/image/textures/profile_32bits.png#1032 78 194 44);margin-top:18px;padding-top:8px;"><%=UserInfo.money.wanxuecoin%></div>
+                    <div style="float:left;width:194px;height:44px;background:url(codepku/image/textures/profile_32bits.png#1032 78 194 44);margin-top:18px;padding-top:8px;"><%=GetMoney('wanxuecoin')%></div>
                     <div style="float:left;width:67px;height:78px;background:url(codepku/image/textures/common_32bits.png#913 136 77 78);margin-top:4px;margin-left:-225px;"></div>
                     <!-- <div style="float:left;width:61px;height:65px;background:url(codepku/image/textures/profile_32bits.png#1356 70 61 65);margin-top:7px;margin-left:-225px;"></div> -->
                 </div>
@@ -290,15 +291,15 @@ end
         </div>
         <!-- <div style="position:relative;width:275;height:97;margin-top:960;font-size:18;base-font-size:40;background:url(codepku/image/textures/userinfo/options/shezhi.png)"onclick="Undefinde"></div> -->
         <!-- 首页 -->
-        <pe:if condition='<%=GetTabDSIndex() == 1%>'>
+        <pe:if condition='<%=GetTabDSName() == "Home"%>'>
             <!-- 昵称、ID、性别、点赞数 -->
             <div style='<%=format("margin-left:407px;width:1393px;height:100px;font-size:24px;background:url(%s #1823 1196 102 102:13 13 13 13);font-weight:bold;", Eval("ProfilePng")) %>'>
                 <!-- <div style='<%=format("margin-left:407px;width:1393px;height:100px;font-size:24px;background:url(%s #1742 844 54 54:26 26 26 26);font-weight:bold;", Eval("ProfilePng")) %>'> -->
                 <div style='<%=format("float:left;margin-left:-41px;margin-top:-27px;width:482px;height:156px;font-size:30px;color:#B35D0A;background:url(%s #1233 951 482 156);", Eval("ProfilePng")) %>'>
-                    <div style='<%=format("position:relative;width:86px;height:87px;margin-top:35px;margin-left:60px;background:url(%s);", UserInfo.avatar or (Eval("ProfilePng").."#1794 560 86 87")) %>'></div>
+                    <div style='<%=format("position:relative;width:86px;height:87px;margin-top:35px;margin-left:60px;background:url(%s);", UserInfoPage.avatar or (Eval("ProfilePng").."#1794 560 86 87")) %>'></div>
                     <div style='<%=format("position:relative;width:93px;height:94px;margin-top:30px;margin-left:55px;background:url(%s #1677 556 93 94);", Eval("ProfilePng")) %>'></div>
                     <div style="position:relative;margin-top:40px;margin-left:162px;">
-                        <%= UserInfo.name %>
+                        <%= UserInfoPage.name %>
                         <!-- 性别 -->
                         <pe:if condition='<%=gender == 1%>'>
                             <div name="gender" style='<%=format("float:left;width:25px;height:25px;margin-left:22px;margin-top:6px;background:url(%s #568 99 25 25);", Eval("ProfilePng")) %>'></div>
@@ -347,7 +348,7 @@ end
                 <div style='<%=format("position:relative;width:41;height:41;margin-left:500;margin-top:20;background:url(codepku/image/textures/userinfo/user_name_info/%s.png);",gender)%>'></div>
                 <div style='<%=format("position:relative;width:41;height:41;margin-left:550;margin-top:20;background:url(codepku/image/textures/userinfo/user_name_info/%s.png);",identity)%>'></div>
                 <div style="position:relative;width:41;height:41;margin-left:500;margin-top:60;background:url(codepku/image/textures/userinfo/user_name_info/fuzhi.png);"></div>
-                <div style='<%=format("position:relative;width:100;height:100;margin-left:40;margin-top:15;background:url(%s);",data.avatar_url or UserInfo.avatar or "")%>'></div>
+                <div style='<%=format("position:relative;width:100;height:100;margin-left:40;margin-top:15;background:url(%s);",data.avatar_url or UserInfoPage.avatar or "")%>'></div>
                 <div style='<%=format("position:relative;width:41;height:41;margin-left:550;margin-top:60;background:url(codepku/image/textures/userinfo/user_name_info/%s.png);",vip_id)%>'></div>
                 <div style="position:relative;width:210;text-align:left;margin-left:154;margin-top:25;font-size:25;base-font-size:25;"><%= GetName() %></div>
                 <div style="position:relative;width:300;text-align:left;margin-left:154;margin-top:75;font-size:25;base-font-size:25;"><%= user_id%></div>
@@ -370,7 +371,7 @@ end
                 <div style="position:relative;width:380;text-align:left;margin-left:440;margin-top:630;font-size:30;base-font-size:30;"><%= '生涯:xxx'%></div>  
             </div> -->
         </pe:if>
-        <pe:if condition='<%=GetTabDSIndex() == 2%>'>
+        <pe:if condition='<%=GetTabDSName() == "Profile"%>'>
             <!-- 属性 -->
             <div align="right" style="position:relative;padding-left:48px;padding-top:44px;line-height:90px;color:#ffffff;font-size:30px;font-family:PuHuiTi-Bold;margin-top:42px;margin-right:114px;width:789px;height:818px;background:url(codepku/image/textures/background/detail.png)">
                 <div style='<%=format("padding-left:40px;width:471px;height:102px;background:url(%s #911 1196 471 102);", Eval("ProfilePng")) %>'>
@@ -378,7 +379,7 @@ end
                         <div style='<%=format("position:relative;width:66px;height:67px;background:url(%s #1788 560 86 87);", Eval("ProfilePng")) %>'></div>
                         <div style='<%=format("position:relative;width:66px;height:67px;background:url(%s #1677 556 94 94);", Eval("ProfilePng")) %>'></div>
                     </div>
-                    <div style="float:left;margin-left:115px;line-height:132px;" onclick=""><%= UserInfo.name %></div>
+                    <div style="float:left;margin-left:115px;line-height:132px;" onclick=""><%= UserInfoPage.name %></div>
                 </div>
                 <div style='<%=format("padding-left:40px;width:694px;height:90px;background:url(%s #906 1532 694 90);", Eval("ProfilePng")) %>'>
                     <div align="left" style="float:left;">玩学号：</div>
@@ -386,10 +387,10 @@ end
                 </div>
                 <div style='<%=format("padding-left:40px;padding-top:18px;line-height:48px;width:694px;height:129px;background:url(%s #902 1327 694 129);", Eval("ProfilePng")) %>' onclick="ShowSubjectPage">
                     <div>
-                        <div style="float:left;">等级：<%= UserInfo.self_level.current_level %>级</div>
+                        <div style="float:left;">等级：<%= UserInfoPage.self_level.current_level %>级</div>
                         <div style='<%=format("float:left;margin-left:28px;width:49px;height:49px;background:url(%s #1048 152 50 50);", Eval("CommonPng")) %>'></div>
                         <div style='<%=format("float:right;margin-top:12px;width:615px;height:22px;background:url(%s #1276 756 608 28);", Eval("ProfilePng")) %>'>
-                            <div style='<%=string.format("width:%d;height:22;background:url(codepku/image/textures/profile_32bits.png #1271 701 607 30);", 615*(UserInfo.self_level.current_exp/UserInfo.self_level.next_exp))%>'></div>
+                            <div style='<%=string.format("width:%d;height:22;background:url(codepku/image/textures/profile_32bits.png #1271 701 607 30);", 615*(UserInfoPage.self_level.current_exp/UserInfoPage.self_level.next_exp))%>'></div>
                         </div>
                     </div>
                 </div>
@@ -404,11 +405,11 @@ end
                     </div>
                     <div style='<%=format("float:left;padding-left:40px;width:348px;height:90px;background:url(%s #1415 1208 348 90);", Eval("ProfilePng")) %>'>
                         <div style="float:left;">生涯：</div>
-                        <div style="float:right;"><%=  UserInfo.day %>天</div>
+                        <div style="float:right;"><%=  UserInfoPage.day %>天</div>
                     </div>
                     <div style='<%=format("float:left;padding-left:40px;width:348px;height:90px;background:url(%s #1415 1208 348 90);", Eval("ProfilePng")) %>'>
                         <div style="float:left;">生日：</div>
-                        <div style="float:right;"><%= UserInfo.birthday or UserInfo.created_at %></div>
+                        <div style="float:right;"><%= UserInfoPage.birthday or UserInfoPage.created_at %></div>
                     </div>
                 </div>
                 <div style='<%=format("line-height:42px;padding-top:26px;width:694px;height:129px;background:url(%s #902 1327 694 129);", Eval("ProfilePng")) %>'>
@@ -428,7 +429,7 @@ end
                 </div>
             </div>
         </pe:if>
-        <pe:if condition='<%=GetTabDSIndex() == 5%>'>
+        <pe:if condition='<%=GetTabDSName() == "Backpack"%>'>
             <!-- 背包 -->
             <div style="position:relative;width:1377;height:911;margin-left:300;margin-top:120;background:url(codepku/image/textures/userinfo/beibaobeijing.png);">
                 <div style="position:relative;margin-left:52;margin-top:40;width:611;height:735;text-align:center;font-size:40;base-font-size:40;background:url(codepku/image/textures/userinfo/wanjiatouxiang.png)"></div>
@@ -440,10 +441,10 @@ end
                     </pe:repeatitem>
                 </pe:repeat>
             </div>
-                <pe:gridview style="width: 780; height: 868; margin-top: 121; margin-left: 915; text-align: center; float: left;" name='backpack_items' DataSource="<%=UserInfo.props%>" DefaultNodeHeight = "200" ItemsPerLine="4" AllowPaging="false" RememberScrollPos="true" RememberLastPage="true">
+                <pe:gridview style="width: 780; height: 868; margin-top: 121; margin-left: 915; text-align: center; float: left;" name='backpack_items' DataSource="<%=UserInfoPage.props%>" DefaultNodeHeight = "200" ItemsPerLine="4" AllowPaging="false" RememberScrollPos="true" RememberLastPage="true">
                     <Columns>
                         <div style='width:150;height:150;background:url(codepku/image/textures/userinfo/item_board.png);float: left;margin-right: 40;'>
-                            <div style="<%=string.format('width: 150; height: 150;  background:url(%s); ', Eval('prop_icon_url'))%>" name="<%=UserInfo.props[Eval('index')]%>" onclick="OnClickItem">
+                            <div style="<%=string.format('width: 150; height: 150;  background:url(%s); ', Eval('prop_icon_url'))%>" name="<%=UserInfoPage.props[Eval('index')]%>" onclick="OnClickItem">
                                 <div style='font-size: 30; margin-top: 100;padding-right: 20;color: #fdfdfd;text-align: right;font-weight: bold;'><%=prop_num%></div>
                             </div>
                         </div>

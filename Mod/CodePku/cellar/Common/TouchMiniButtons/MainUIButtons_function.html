@@ -9,6 +9,13 @@
 <body>
 <pe:mcml>
 <script refresh="false" type="text/npl" src="MainSceneUIButtons.lua"><![CDATA[
+    
+NPL.load("(gl)Mod/CodePku/cellar/GUI/rank/RankPage.lua")
+local UserInfoPage = NPL.load("(gl)Mod/CodePku/cellar/GUI/UserInfo.lua");
+UserInfoPage.OnInit()
+RankPage = commonlib.gettable("Mod.CodePku.RankPage");
+FriendUI = NPL.load("(gl)Mod/CodePku/cellar/GUI/Friend/FriendUI.lua");
+
 is_open = true
 
 function ClickClose() 
@@ -29,11 +36,6 @@ function ClickFunctionButton()
     GameLogic.AddBBS("CodeGlobals", L"功能开发中", 3000, "#ff0000");
 end
 
-NPL.load("(gl)Mod/CodePku/cellar/GUI/rank/RankPage.lua")
-NPL.load("(gl)script/apps/Aries.Creator.Game.Desktop.UserInfo.lua");
-UserInfoPage = commonlib.gettable("Mod.CodePku.UserInfoPage")
-UserInfoPage.OnInit()
-RankPage = commonlib.gettable("Mod.CodePku.RankPage");
 function ClickUserInfo()
     UserInfoPage:ShowPage()
 end
@@ -41,8 +43,6 @@ end
 function ClickBag()
     UserInfoPage:ShowPage(5)
 end
-
-FriendUI = NPL.load("(gl)Mod/CodePku/cellar/GUI/Friend/FriendUI.lua");
 
 
 function ClickFriend()
