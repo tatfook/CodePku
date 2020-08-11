@@ -35,19 +35,23 @@ end
 ]]>   
 </script>
 
-
-
-<pe:container alignment="_lt" width="1920" height="1080">
-    <div style="width:1920;height:1080;background:url(codepku/image/textures/userinfo/share/back.png);" >
-        <p style="position:relative;margin-top:180;margin-left:220;width:400;height:563;font-size:18;base-font-size:40;color: white;font-family:Microsoft Yahei;">心情寄语。。。。。。。。。。。。。。。</p>
-        <div style="position:relative;margin-top:200;margin-left:700;width:611;height:735;font-size:18;base-font-size:40;background:url(codepku/image/textures/userinfo/wanjiatouxiang.png);"></div>
-        <p style="position:relative;margin-top:863;margin-left:760;width:300;text-align:center;font-size:18;base-font-size:40;color: white;font-family:Microsoft Yahei;"><%= UserInfo.name%></p>
-        <p style="position:relative;margin-top:800;margin-left:1390;width:400;height:563;font-size:18;base-font-size:40;color: white;font-family:Microsoft Yahei;">分享到</p>
-        <div style="position:relative;margin-top:100;margin-left:1600;width:203;height:203;font-size:18;background:url(codepku/image/textures/userinfo/share/qrcode.png);"></div>
-        <div onclick="ClosePage" style="position:relative;margin-top:810;margin-left:1760;width:45;height:50;font-size:18;background:url(codepku/image/textures/userinfo/share/exit.png);"></div>
-        <div style="position:relative;margin-top:863;margin-left:1520;width:79;height:63;font-size:18;background:url(codepku/image/textures/userinfo/share/wechat.png);"></div>
-        <div style="position:relative;margin-top:863;margin-left:1620;width:65;height:68;font-size:18;background:url(codepku/image/textures/userinfo/share/QQlogo.png);"></div>
-
+<pe:container alignment="_lt" width="1920" height="1080" style="background:url(codepku/image/textures/background/main.png);font-family:Noto Sans S Chinese Regular;font-size:36px;color:#ffffff">
+    <div align="right" style="position:relative;top:7px;margin-right:53px;width:68px;height:78px;background:url(codepku/image/textures/common_32bits.png#110 73 68 78);" onclick="ClosePage()"></div>
+    <div style="position:relative;margin-top:180px;margin-left:336px;width:473px;height:255px;padding:18px;background:url(codepku/image/textures/profile_32bits.png#1275 451 219 125:24 24 165 68);">
+        心情寄语。。。。。。。。。。。。。。。
+    </div>
+    <div align="center" valign="bottom" style="margin-bottom: 114px;width:727px;height:653px;background:url(codepku/image/textures/profile_32bits.png#410 490 750 653);">
+        <!-- 玩仔 -->
+        <div style="margin-left:230px;margin-top:-100px;width:345px;height:600px;background:url(codepku/image/textures/profile_32bits.png#66 531 345 600);">
+        </div>
+    </div>
+    <div align="right" style="position:absolute;top:140px;margin-right:74px;width:200px;height:200px;background:url(codepku/image/textures/profile_32bits.png#1736 951 200 200);"></div>
+    <div valign="bottom" width="100%" style="height:113px;line-height:113px;background-color:#00000050;">
+        <div align="center" valign="center">
+            分享到：
+            <div style="float:left;margin-left:27px;margin-top:30px;width:60px;height:60px;background:url(codepku/image/textures/profile_32bits.png#330 410 60 60);" name="wechat"></div>
+            <div style="float:left;margin-left:27px;margin-top:30px;width:60px;height:60px;background:url(codepku/image/textures/profile_32bits.png#423 410 60 60);" name="qq"></div>
+        </div>
     </div>
 </pe:container>
 
