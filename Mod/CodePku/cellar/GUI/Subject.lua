@@ -44,6 +44,8 @@ function SubjectPage.OnInitSubject()
             percent = 0,
             current_exp = 0,
             next_exp = 0,
+            progress = 0,
+            total_exp = 30,
             name = const_subject[i][1],
             chname = const_subject[i][2],
             icon = const_subject[i][3]
@@ -53,6 +55,18 @@ end
 
 function SubjectPage.GetLevels()
     SubjectPage.OnInitSubject();
+    local subject_names = {
+        [1] = {'chinese','语文'},
+        [2] = {'math','数学'},
+        [3] = {'english','英语'},
+        [4] = {'physics','物理'},
+        [5] = {'chemistry','化学'},
+        [6] = {'biology','生物'},
+        [7] = {'politics','政治'},
+        [8] = {'history','历史'},
+        [9] = {'geography ','地理'},
+        [10] = {'programming','编程'},
+    }
     request:get('/users/levels'):next(function(response)
         if (response.status == 200) then
             local data = response.data.data;
@@ -66,7 +80,7 @@ function SubjectPage.GetLevels()
                     SubjectPage.subject_list[data[i].level_type].next_exp = data[i].next_exp; -- means total
                 end                                       
             end
-            SubjectPage:InitWindow();
+            SubjectPage:InitWindow();                                           
         end
     end):catch(function(e)
         echo("ERROR: catched at SubjectPage.GetLevels")

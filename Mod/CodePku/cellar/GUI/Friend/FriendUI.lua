@@ -2,7 +2,7 @@ NPL.load("(gl)Mod/CodePku/cellar/GUI/Window/AdaptWindow.lua");
 local request = NPL.load("(gl)Mod/CodePku/api/BaseRequest.lua");
 local AdaptWindow = commonlib.gettable("Mod.CodePku.GUI.Window.AdaptWindow")
 
--- local FriendUI = NPL.load("(gl)Mod/CodePku/cellar/GUI/Friend/FriendUI.lua")
+--local FriendUI = NPL.load("(gl)Mod/CodePku/cellar/GUI/Friend/FriendUI.lua")
 local FriendUI = NPL.export()
 
 FriendUI.ui = nil
@@ -43,6 +43,10 @@ FriendUI.popparams={
     },
     delete = {
         url="Mod/CodePku/cellar/GUI/Friend/popup/delete.html",
+        alignment="_ct", left = -960, top = -540, width = 1920, height = 1080,zorder =30
+    },
+    report = {
+        url="Mod/CodePku/cellar/GUI/Friend/popup/report.html",
         alignment="_ct", left = -960, top = -540, width = 1920, height = 1080,zorder =30
     }
 }
@@ -162,7 +166,6 @@ function FriendUI:GetFriend()
 end
 
 
-
 function FriendUI:block(lid)
     local request = NPL.load("(gl)Mod/CodePku/api/BaseRequest.lua");
     local response = request:get('/contacts/block/'..lid,nil,{sync = true})
@@ -261,5 +264,8 @@ function FriendUI:ShowPopup(PopIndex)
         FriendUI.popui = AdaptWindow:QuickWindow(FriendUI.popparams["apply"])
     elseif  PopIndex == 4 then
         FriendUI.popui = AdaptWindow:QuickWindow(FriendUI.popparams["delete"])
+    elseif  PopIndex == 5 then
+        FriendUI.popui = AdaptWindow:QuickWindow(FriendUI.popparams["report"])
     end
+    
 end

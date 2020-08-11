@@ -115,21 +115,19 @@ function CodepkuChatChannel.OnWorldLoaded()
                 end
             end)
         elseif (index == 'private_chat') then
+            if CodepkuChatChannel.Messages[value] == nil then
+                CodepkuChatChannel.Messages[value] = {}
+            end
             for _, f in ipairs(FriendUI.vars["friends"]) do
                 local friend_id = f.friend_id
                 request:get(string.format('/chat/private-message/%d', friend_id)):next(function(response)
                     local data = response.data.data
-                    
-                    if CodepkuChatChannel.Messages[value] == nil then
-                        CodepkuChatChannel.Messages[value] = {}
-                    end
                     CodepkuChatChannel.Messages[value][friend_id] = {}
                     for i, v in ipairs(data) do
                         v = v.raw
                         local speakerIsMe = if_else(v.from_user_id == System.User.id, 1, 0)
                         local msg_data = {speakerIsMe=speakerIsMe, dialog=v.content, avatar=v.from_user_avatar or DEFAULT_AVATAR, nickname=v.from_user_nickname, level=v.from_user_level or 1, channel=v.channel, from=v.from_user_id, to=v.to_user_id}
                         CodepkuChatChannel.SetMessage(CodepkuChatChannel.Messages[value][friend_id], msg_data, 1)
-                        
                     end
                 end)
             end
@@ -276,6 +274,9 @@ function CodepkuChatChannel.OnMsg(self, msg)
             -- 私聊
             msg_data = {speakerIsMe=speakerIsMe, dialog=msg.content, avatar=avatar, nickname=msg.from_user_nickname, level=msg.from_user_level or 1, channel=msg.channel, from=msg.from_user_id, to=msg.to_user_id}
             -- table.insert( CodepkuChatChannel.Messages, msg_data)
+            if CodepkuChatChannel.Messages[channel][msg.from_user_id] == nil then
+                CodepkuChatChannel.Messages[channel][msg.from_user_id] = {}
+            end
             CodepkuChatChannel.SetMessage(CodepkuChatChannel.Messages[channel][msg.from_user_id], msg_data);
         end
     end

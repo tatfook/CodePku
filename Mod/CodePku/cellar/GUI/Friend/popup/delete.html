@@ -12,7 +12,6 @@
 <script refresh="false" type="text/npl" src="FriendUI.lua">
 <![CDATA[
 FriendUI = NPL.load("(gl)Mod/CodePku/cellar/GUI/Friend/FriendUI.lua")
-echo("=================")
 echo(FriendUI.vars["cur"])
 cur = FriendUI.vars["cur"]
 
@@ -29,7 +28,29 @@ end
 ]]>
 </script>
 
-<div style="width:1020;height: 550;margin-left:450;margin-top:265;background: url(codepku/image/textures/friend/main/popup.png)">
+<pe:container alignment="_lt" width="1920" height="1080">
+
+    <div style="position: relative; width: 1158; height: 588; left: 406; top: 219; background:url(codepku/image/textures/common_32bits.png#99 275 1158 588);"></div>
+
+    <div style="position: relative; width: 410; height: 89; left: 780; top: 219; text-align: center; font-family: NotoSansHans-Medium; color: #F46D3D; font-size: 45px; line-height: 89; background:url(codepku/image/textures/common_32bits.png#1277 377 410 87);">
+        删除好友
+    </div>
+
+    <div style="position: relative; width: 66; height: 76; left: 1463; top: 227; background: url(codepku/image/textures/common_32bits.png#110 73 68 78);" onclick="ClosePage"></div>
+    
+    <div style="position: relative; width: 960; height: 233; left: 505; top: 372; padding-left: 32; padding-top: 29; font-size: 36; font-family: NotoSansHans-Medium; color: #FFFFFF; background: url(codepku/image/textures/common_32bits.png#1404 292 40 40:10 10 10 10);">
+        你确定删除<%= cur.nickname %>吗？
+    </div>
+    
+    <input type="button" style="position: relative; width: 240; height: 80; left: 642; top: 669; font-size: 36px; font-weight: bold; font-family: NotoSansHans-Bold; line-height: 80; text-align: center; color: #85272B;  background:url(codepku/image/textures/common_32bits.png#1305 740 86 86:9 9 9 9);" value="删除" name='<%=cur.id%>' onclick="ConfirmDelete" />
+    <input type="button" style="position: relative; width: 240; height: 80; left: 1088; top: 669; font-size: 36px; font-weight: bold; font-family: NotoSansHans-Bold; line-height: 80; text-align: center; color: #0E5516;  background:url(codepku/image/textures/common_32bits.png#1404 740 86 86:9 9 9 9);" value="取消" onclick="ClosePage" />
+
+</div>
+</pe:container>
+
+
+
+<!-- <div style="width:1020;height: 550;margin-left:450;margin-top:265;background: url(codepku/image/textures/friend/main/popup.png)">
     <div style="position:relative; left:160;top:45;width: 192;height:50;background: url(codepku/image/textures/friend/main/delete_title.png);"></div>
     <div style="position:relative; margin-left: 900;width: 50;height: 50;margin-top: 40;background: url(codepku/image/textures/friend/main/close.png);" onclick="ClosePage">
     </div>
@@ -44,7 +65,7 @@ end
         <div style="width: 200px; height: 80px; margin-top: 80px; float: left; margin-left: 200px; background: url(codepku/image/textures/friend/delete_friend/cancel.png);" onclick="ClosePage"></div>
     </div>
 
-</div>
+</div> -->
 </pe:mcml>
 </body>
 

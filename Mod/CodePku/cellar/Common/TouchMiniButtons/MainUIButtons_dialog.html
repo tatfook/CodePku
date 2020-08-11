@@ -35,6 +35,16 @@ FRIEND_IN_CHATTING = 1
 DEFAULT_AVATAR = 'codepku/image/textures/chat/default_avatar.png'
 
 friends = commonlib.deepcopy(FriendUI.vars["friends"])
+
+table.sort(friends, function(a, b)
+    local sort_online = tostring(a.is_online) == tostring(b.is_online)
+    if sort_online then
+        return a.nickname > b.nickname
+    else
+        return tostring(a.is_online) > tostring(b.is_online)
+    end
+end)
+
 for i, v in ipairs(friends) do
     v.index = i
     if i == 1 then
@@ -119,7 +129,13 @@ function GetMessages()
     if LAST_CLICKED_INDEX == 3 then
         if (#friends~= 0) then
             local f_id = friends[FRIEND_IN_CHATTING].friend_id
-            Messages = CodepkuChatChannel.Messages[Channels[LAST_CLICKED_INDEX].channel][f_id]
+            echo(CodepkuChatChannel.Messages[Channels[LAST_CLICKED_INDEX].channel])
+            local f_channel = CodepkuChatChannel.Messages[Channels[LAST_CLICKED_INDEX].channel]
+            if f_channel then
+                Messages = f_channel[f_id]
+            else
+                Messages = {}
+            end
         end
     else
         Messages = CodepkuChatChannel.Messages[Channels[LAST_CLICKED_INDEX].channel]
@@ -153,7 +169,7 @@ end
         <!-- 显示栏 -->
         <div style="width: 960;height:850;">
             <pe:if condition="<%=LAST_CLICKED_INDEX~=3%>">
-                <pe:treeview style="width: 900; height: 800" ScrollToEnd="<%=scrollEnd()%>" name='messages' DefaultNodeHeight = "120" ItemsPerLine="1" AllowPaging="false" RememberScrollPos="true" RememberLastPage="false" VerticalScrollBarStep="40">
+                <pe:treeview style="width: 900; height: 800" ScrollToEnd="<%=scrollEnd()%>" name='messages' DefaultNodeHeight = "120" ItemsPerLine="1" AllowPaging="false" RememberScrollPos="true" RememberLastPage="false" VerticalScrollBarStep="400">
                     <pe:repeat  DataSource="<%=GetMessages()%>">
                         <pe:repeatitem>                
                                 <pe:if condition="<%=Eval('speakerIsMe')==0%>">
@@ -184,7 +200,7 @@ end
             <!-- 好友聊天栏 -->
             <pe:if condition="<%=LAST_CLICKED_INDEX==3%>">
                 <div style="width: 200; height: 845;background: url(codepku/image/textures/chat/friend_left.png);">
-                <pe:treeview VerticalScrollBarStep="40"  VerticalScrollBarPageSize="400" RememberScrollPos="true" RememberLastPage="true" >
+                <pe:treeview style="width: 200; height: 800" VerticalScrollBarStep="100" RememberScrollPos="true" RememberLastPage="true" >
                     <pe:repeat DataSource="<%=GetFriends()%>">
                         <pe:repeatitem>
                             <div style="<%=format('width:200;height:100;background: url(codepku/image/textures/chat/friend%s.png);padding: 12;', Eval('status'))%>" name="<%=Eval('index')%>" onclick="OnClickFriend">
@@ -207,7 +223,7 @@ end
                 </pe:treeview>
             </div>
                 <div style="width:700;height:850;margin-left: 200;margin-top: -850;">
-                    <pe:treeview style="width: 740; height: 800" ScrollToEnd="<%=scrollEnd()%>" name='messages' DefaultNodeHeight = "120" ItemsPerLine="1" AllowPaging="false" RememberScrollPos="true" RememberLastPage="true" VerticalScrollBarStep="40">
+                    <pe:treeview style="width: 740; height: 800" ScrollToEnd="<%=scrollEnd()%>" name='messages' DefaultNodeHeight = "120" ItemsPerLine="1" AllowPaging="false" RememberScrollPos="true" RememberLastPage="true" VerticalScrollBarStep="400">
                         <pe:repeat  DataSource="<%=GetMessages()%>">
                             <pe:repeatitem>                
                                     <pe:if condition="<%=Eval('speakerIsMe')==0%>">

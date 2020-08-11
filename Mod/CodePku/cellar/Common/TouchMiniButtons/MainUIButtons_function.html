@@ -10,7 +10,8 @@
 <pe:mcml>
 <script refresh="false" type="text/npl" src="MainSceneUIButtons.lua"><![CDATA[
 local MainUIButtons = NPL.load("(gl)Mod/CodePku/cellar/Common/TouchMiniButtons/Main.lua");
-is_open = MainUIButtons.openFlag
+
+is_open = MainUIButtons.open_function
 
 NPL.load("(gl)Mod/CodePku/cellar/GUI/rank/RankPage.lua")
 local UserInfoPage = NPL.load("(gl)Mod/CodePku/cellar/GUI/UserInfo.lua");
