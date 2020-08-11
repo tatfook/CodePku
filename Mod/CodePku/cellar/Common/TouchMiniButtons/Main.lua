@@ -7,8 +7,6 @@ local WorldCommon = commonlib.gettable("MyCompany.Aries.Creator.WorldCommon")
 local EntityManager = commonlib.gettable("MyCompany.Aries.Game.EntityManager")
 local MainSceneUIButtons = commonlib.gettable("Mod.CodePku.Common.TouchMiniButtons.MainSceneUIButtons");
 local GenAndName = commonlib.gettable("Mod.CodePku.GenAndName")
-local UserInfo = commonlib.gettable("Mod.CodePku.UserInfo")
-
 
 local MainUIButtons = NPL.export();
 
