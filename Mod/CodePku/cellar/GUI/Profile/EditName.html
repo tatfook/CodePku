@@ -13,6 +13,8 @@ EditSharePage = commonlib.gettable("Mod.CodePku.EditSharePage")
 
 EditSharePage.OnInit();
 
+local page = document:GetPageCtrl()
+
 function OnClose()
     Page:CloseWindow();
 end
@@ -21,29 +23,25 @@ function OnConfirm()
     GameLogic.RunCommand("/goto,home")
 end
 
-function submit()
-    newWord = document:GetPageCtrl():GetValue("input")
-    myWord.jiyu = newWord
-    GameLogic.RunCommand(string.format("/tip -duration 1500 %s",newWord))
-    Page:CloseWindow();
+function OnSubmit()
+   Page:CloseWindow();
 end
 ]]>   
 
 </script>
 
-<pe:aries_window2 alignment="_ct" style="font-size:50px;font-weight:bold;color:#ffffff;font-family:Noto Sans S Chinese Regular;" title="发表心情">
+<pe:aries_window2 alignment="_ct" style="font-size:50px;font-weight:bold;color:#ffffff;font-family:Noto Sans S Chinese Regular;" title="修改名字">
     <!-- todo: textarea style/css doesn't work -->
     <textarea
-        rows="10"
         align="center"
-        EmptyText="心情寄语"
+        EmptyText=""
         lineWrap="true"
         AlwaysShowCurLineBackground="false"
-        style="color:#ffffff;margin-top:34px;font-size:36px;padding:30px;width:960px;height:233px;background:url(codepku/image/textures/common_32bits.png#1404 292 40 40:17 17 17 17)"
+        style="color:#ffffff;margin-top:34px;font-size:36px;padding:30px;width:960px;height:233px;background:url(codepku/image/textures/common_32bits.png#1315 292 40 40:19 19 19 19)"
     ></textarea>
     <div align="center" style="margin-top:64px;font-size:36px;">
         <input type="button" name="Cancel" value='<%=L"取消" %>' onclick="OnClose" style="color:#85272B;width:246px;height:86px;background:url(codepku/image/textures/common_32bits.png#1305 740 86 86:14 14 14 14);"/>
-        <input type="button" name="OK" value='<%=L"提交" %>' onclick="" style="color:#0E5516;width:246px;height:86px;background:url(codepku/image/textures/common_32bits.png#1404 740 86 86:14 14 14 14);margin-left:200px;"/>
+        <input type="button" name="OK" value='<%=L"提交" %>' onclick="OnSubmit" style="color:#0E5516;width:246px;height:86px;background:url(codepku/image/textures/common_32bits.png#1404 740 86 86:14 14 14 14);margin-left:200px;"/>
     </div>
 </pe:aries_window2>
 
