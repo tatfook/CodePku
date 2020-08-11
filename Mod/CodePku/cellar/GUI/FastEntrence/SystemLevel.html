@@ -112,11 +112,9 @@ end
             <div style='position:fixed;left:142px;top:-127px;width:429px;height:86px;background: url(codepku/image/textures/commonpopup/main.png#475 63 429 86);'></div>
             <div style='position:fixed;left:258px;width:208px;top:-127px;top:-200px; font-size:50px; color: #D85D0B; font-family:Alibaba PuHuiTi;'>教学区</div>
         </div>
-        <!-- <div style='width:100px;height:100px;background:url(codepku/image/textures/fastentrence/return.png);margin-left: 100px;margin-top: 20px;' onclick="OnClose"></div> -->
-        <div style="width:200;height:900;">
+        <div style="width:200;height:900;position: relative;">
             <pe:repeat DataSource="<%=GetSubjects()%>">
                 <pe:repeatitem>
-
                     <pe:if condition='<%=Eval("show")==true and Eval("index")~=1%>'>
                         <pe:if condition='<%=Eval("loc")==Eval("index")%>'>
                             <div style="<%=format('top:-200px;background: url(codepku/image/textures/common_32bits.png#1648 196 261 96);width:261;height:96;margin-left:50px;position：relative')%>" name='<%=Eval("index")%>' onclick='OnClickSubject'>
@@ -136,7 +134,7 @@ end
                 </pe:repeatitem>
             </pe:repeat>
         </div>
-        <div style="width:1500;height:600;margin-left: 310px;margin-top:-800px;position: relative;">
+        <div style="width:1500;height:600;margin-top:100px;margin-left: 310px;position: relative;">
             <pe:repeat DataSource="<%=SystemLevelPage.courses%>">
                 <pe:repeatitem>
                     <div style="<%=format('position: absolute;width:340px;height:80;background:url(codepku/image/textures/fastentrence_ui/main.png#28 45 340 80);margin-left:%d;margin-top:%d;base-font-size:28px;font-size:28px;text-align: center;', 80+Eval('index')%4*380, math.floor(Eval('index')/4)*350-300)%>">
@@ -155,7 +153,7 @@ end
                 </pe:repeatitem>
             </pe:repeat>
         </div>
-        <div style='width:800;height:100;margin-left:600;margin-top:-200;'></div>
+        <div style='position: fixed;width:800;height:100;margin-left:600;margin-top:600px;'></div>
             <div style='transform:rotate(180deg); transform-origin: 14 20;color:#fff;position:relative;top:-180;width:28;height:41;margin-left:900;background:url(codepku/image/textures/fastentrence_ui/main.png#207 378 28 41);' onclick="prev_page"></div>
             <div style='color:#fff;font-weight:bold;position:relative;top:-180;base_font_size:40px;font-size:40px;margin-left: 980;'><%=SystemLevelPage.page%></div>
             <div style='color:#fff;position:relative;top:-180;width:28;height:41;margin-left: 1050;background:url(codepku/image/textures/fastentrence_ui/main.png#207 378 28 41);' onclick="next_page"></div>
