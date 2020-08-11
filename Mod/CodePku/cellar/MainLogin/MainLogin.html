@@ -222,16 +222,19 @@
             <!-- <pe:container alignment="_ctt" ClickThrough="true" style="position:relative;width:370px;height:75px;margin-top:42px;background:;">
                 <div style='<%="width:370px;height:75px;background:url(codepku/image/textures/login/mainlogin_32bits.png# 1071 233 616 125);"%>'></div>
             </pe:container> -->
+            <pe:container alignment="_ctt" ClickThrough="true" style="position:relative;width:574;height:86;margin-top:71px;background:;">
+                <div style='<%="width:574;height:86;background:url(codepku/image/textures/bg_32bits.png# 383 71 1148 172);"%>'></div>
+            </pe:container>
             <pe:container alignment="_ct" ClickThrough="true" style="position:relative;margin-top:-140px;margin-left:-284px;width:568px;height:368px;background:url(codepku/image/textures/login/mainlogin_32bits.png# 20 71 944 614);">
-                <div class="modal_title"><%= L"用户登录" %></div>
+            <div class="modal_title"><%= L"用户登录" %></div>
                 <div style="position:relative;padding-top:28px;padding-left:64px;">
                     <div>
-                        <input name="account" type="text" class="text_field" EmptyText='<%= L"请输入手机号码" %>' />
+                        <input MoveViewWhenAttachWithIME="true" name="account" type="text" class="text_field" EmptyText='<%= L"请输入手机号码" %>' />
                         <div class="helper"><pe:if condition='<%=GetMethodIndex() ~=2 %>'>若该手机未注册，我们会自动为您注册</pe:if></div>
                     </div>
                     <pe:if condition='<%=GetMethodIndex() ~=2 %>'>
                         <div style="margin-bottom:18px;">
-                            <input type="text" class="text_field" name="verify_code"  EmptyText='<%= L"请输入验证码" %>'/>
+                            <input type="text" MoveViewWhenAttachWithIME="true" class="text_field" name="verify_code"  EmptyText='<%= L"请输入验证码" %>'/>
                             <span class="get_code_divider">|</span>
                             <input
                                 type="button"
@@ -246,7 +249,7 @@
                     </pe:if>
                     <pe:if condition='<%=GetMethodIndex() == 2 %>'>
                         <div style="margin-bottom:18px;">
-                            <input name="password" PasswordChar="*" class="text_field" EmptyText='<%= L"请输入密码" %>' />
+                            <input MoveViewWhenAttachWithIME="true" name="password" PasswordChar="*" class="text_field" EmptyText='<%= L"请输入密码" %>' />
                         </div>
                     </pe:if>
                     <div>

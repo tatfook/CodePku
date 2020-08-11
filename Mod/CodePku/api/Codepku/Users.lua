@@ -32,6 +32,12 @@ function CodePkuUsersApi:Login(mobile, verifyCode, mobileToken, success, error)
         mobile_token = mobileToken
     }
 
+    local AppMarket = ParaEngine.GetAppCommandLineByParam("app_market", nil);
+
+    if AppMarket then
+        params['app_market'] = AppMarket;
+    end
+
     CodePkuBaseApi:Post("/users/login", params, nil, success, error, { 503, 400 })
 end
 

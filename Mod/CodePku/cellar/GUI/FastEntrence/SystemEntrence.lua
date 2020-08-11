@@ -6,6 +6,7 @@ local request = NPL.load("(gl)Mod/CodePku/api/BaseRequest.lua");
 local SystemEntranceChoosePage = commonlib.gettable("Mod.CodePku.SystemEntranceChoosePage");
 
 local page;
+SystemLevelPage.nowPage = nil;
 
 SystemEntranceChoosePage.GradeDetails = {}
 SystemEntranceChoosePage.GradeDetails['primary'] = {
@@ -192,5 +193,14 @@ function SystemLevelPage:ShowPage(bShow, grade_id, semester_id, page)
         width = 1920,
         height = 1080,
         };
-    local window = AdaptWindow:QuickWindow(params)
+        SystemLevelPage.nowPage = AdaptWindow:QuickWindow(params)
+end
+
+function SystemEntrencePage:ClosePage()
+    if SystemLevelPage.nowPage ~= nil then
+        SystemLevelPage.nowPage:CloseWindow()
+    end
+    if SystemEntranceChoosePage.last_ctrl ~= nil then
+        SystemEntranceChoosePage.last_ctrl:CloseWindow()
+    end
 end

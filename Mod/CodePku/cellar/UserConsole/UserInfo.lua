@@ -25,13 +25,14 @@ local UserInfo = NPL.export()
 
 local default_avatars = {
     "boy01",
+}
+
+local DefaultBoyAvatars = {
+    "boy01",
+};
+
+local DefaultGirlAvatars = {
     "girl01",
-    "boy02",
-    "girl02",
-    "boy03",
-    "girl03",
-    "boy04",
-    "default"
 }
 
 local cur_index = 1
@@ -254,42 +255,61 @@ local curIndex = 1
 function UserInfo:OnChangeAvatar(btnName)
     local UserConsolePage = Store:Get("page/UserConsole")
 
-    if not btnName then
-        local filename = GameLogic.options:GetMainPlayerAssetName()
-        if not GameLogic.IsStarted then
-            GameLogic.options:SetMainPlayerAssetName()
-            filename = GameLogic.options:GetMainPlayerAssetName()
-            if not filename then
-                filename = UserInfo.GetValidAvatarFilename(default_avatars[cur_index])
-                GameLogic.options:SetMainPlayerAssetName(filename)
-            end
-        end
-        if filename and UserConsolePage then
-            UserConsolePage:CallMethod("MyPlayer", "SetAssetFile", filename)
-        end
-        return
-    end
+    local avatars = default_avatars;
 
-    if (btnName == "pre") then
-        curIndex = curIndex - 1
-    else
-        curIndex = curIndex + 1
+    if System.User.info.gender == 1 then
+        avatars = DefaultBoyAvatars;
+    elseif System.User.info.gender == 2 then
+        avatars = DefaultGirlAvatars;
     end
-
-    curIndex = ((curIndex - 1) % (#default_avatars)) + 1
     
-    local playerName = default_avatars[curIndex]
-
-    if playerName and UserConsolePage then
-        local filename = UserInfo.GetValidAvatarFilename(playerName)
-        if (filename) then
-            if (GameLogic.RunCommand) then
-                GameLogic.RunCommand("/avatar " .. playerName)
-            end
-            GameLogic.options:SetMainPlayerAssetName(filename)
-            UserConsolePage:CallMethod("MyPlayer", "SetAssetFile", playerName)
-        end
+    if System.User.info.special_type == 1 then
+        GameLogic.options:SetMainPlayerAssetName('codepku/model/LLS_AN.x')
+    elseif System.User.info.special_type == 2 then
+        GameLogic.options:SetMainPlayerAssetName('codepku/model/HLS_AN.x')
+    elseif System.User.info.special_type == 3 then
+        GameLogic.options:SetMainPlayerAssetName('codepku/model/WLS_AN.x')
+    else
+        filename = UserInfo.GetValidAvatarFilename(avatars[1])
+        GameLogic.options:SetMainPlayerAssetName(filename)
     end
+ 
+    -- if not btnName then
+    --     local filename = GameLogic.options:GetMainPlayerAssetName()
+    --     if not GameLogic.IsStarted then
+    --         GameLogic.options:SetMainPlayerAssetName()
+    --         filename = GameLogic.options:GetMainPlayerAssetName()
+    --         if not filename then
+    --             filename = UserInfo.GetValidAvatarFilename(avatars[cur_index])
+    --             GameLogic.options:SetMainPlayerAssetName(filename)
+    --         end
+    --     end
+    --     if filename and UserConsolePage then
+    --         UserConsolePage:CallMethod("MyPlayer", "SetAssetFile", filename)
+    --     end
+    --     return
+    -- end
+
+    -- if (btnName == "pre") then
+    --     curIndex = curIndex - 1
+    -- else
+    --     curIndex = curIndex + 1
+    -- end
+
+    -- curIndex = ((curIndex - 1) % (#avatars)) + 1
+    
+    -- local playerName = avatars[curIndex]
+
+    -- if playerName and UserConsolePage then
+    --     local filename = UserInfo.GetValidAvatarFilename(playerName)
+    --     if (filename) then
+    --         if (GameLogic.RunCommand) then
+    --             GameLogic.RunCommand("/avatar " .. playerName)
+    --         end
+    --         GameLogic.options:SetMainPlayerAssetName(filename)
+    --         UserConsolePage:CallMethod("MyPlayer", "SetAssetFile", playerName)
+    --     end
+    -- end
 end
 
 function UserInfo.LookPlayerInform()

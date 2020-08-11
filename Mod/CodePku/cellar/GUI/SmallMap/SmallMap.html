@@ -1,0 +1,50 @@
+<!-- "script/apps/Aries/Creator/Game/Areas/EscFramePage.html" -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+</head>
+<body>
+    <pe:mcml onloadscript="script/apps/Aries/app_main.lua" callbackfunction="MyCompany.Aries.MSGProc">
+<script refresh="false" type="text/npl" src="SmallMap.lua">
+<![CDATA[
+
+local ToWhere = commonlib.gettable("Mod.CodePku.GUI.Popup.ToWhere")
+local SmallMap = commonlib.gettable("Mod.CodePku.GUI.SmallMap")
+
+function OnClose()
+    Page:CloseWindow();
+end
+
+function ClickTo(name)
+    local toWhereName = SmallMap.home[name].name
+    local toWhereId = SmallMap.home[name].id
+    ToWhere:ShowPage(toWhereName, toWhereId)
+end
+
+
+
+]]></script>
+<style type="text/mcss">
+
+</style>
+    <pe:container alignment="_lt" width="1920" height="1080">
+
+        <div style="position: relative; width: 1690px; height: 900px; left: 115; top: 88; background:url(codepku/image/textures/smallmap/backborad.png);"></div>
+        <div style="position: relative; width: 1645px; height: 814px; left: 128; top: 170; background:url(codepku/image/textures/smallmap/main.png);"></div>
+        <div style="position: relative; width: 1752px; height: 137px; left: 84px; top: 57px; background:url(codepku/image/textures/smallmap/top.png);" ></div>
+        <div style="position: relative; width: 408px; height: 245px; left: 138px; top: 141px; background:url(codepku/image/textures/smallmap/ball.png);" name="topic"  onclick="ClickTo"></div>
+        <div style="position: relative; width: 368px; height: 234px; left: 1353px; top: 152px; background:url(codepku/image/textures/smallmap/nest.png);" name="compete" onclick="ClickTo"></div>
+        <div style="position: relative; width: 393px; height: 272px; left: 115px; top: 431px; background:url(codepku/image/textures/smallmap/library.png);" name="system" onclick="ClickTo"></div>
+        <div style="position: relative; width: 447; height: 302; left: 723; top: 638; background:url(codepku/image/textures/smallmap/door.png);" name="main" onclick="ClickTo"></div>
+        <div style="position: relative; width: 332; height: 255; left: 1425; top: 524; background:url(codepku/image/textures/smallmap/building.png);" name="building" onclick="ClickTo"></div>
+
+
+        <div style='position: relative; width: 58px; height: 67px; left: 1728px; top: 92px; background:url(codepku/image/textures/smallmap/close.png);' onclick="OnClose"></div>
+
+    </pe:container>
+</pe:mcml>
+</body>
+</html>
+

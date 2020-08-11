@@ -9,9 +9,10 @@
 <body>
     <pe:mcml>
 <script refresh="false" type="text/npl" src="GenAndName.lua"><![CDATA[
-    NPL.load("(gl)script/apps/Aries.Creator.Game.Desktop.GenAndName.lua");
     local GenAndName = commonlib.gettable("Mod.CodePku.GenAndName")
-    info_msg = ""
+    info_msg_1 = ""
+    info_msg_2 = ""
+
     gen = 0
     result_1 = "请输入姓名"
     result_2 = "请输入姓名"
@@ -50,22 +51,28 @@ end
         result = document:GetPageCtrl():GetValue("result_"..nid)
         if (utf8len(result) > 7) then 
             GameLogic.RunCommand("/tip -duration 1500 名字长度不能大于7")
-            Page:SetValue("info_msg", "名字长度不能大于7")
+            Page:SetValue("info_msg_1", "名字长度不能大于7")
+            Page:SetValue("info_msg_2", "名字长度不能大于7")
         elseif (result == '' or result == '请输入姓名') then
             GameLogic.RunCommand("/tip -duration 1500 你没写名字")
-            Page:SetValue("info_msg", "你没写名字")
+            Page:SetValue("info_msg_1", "你没写名字")
+            Page:SetValue("info_msg_2", "你没写名字")
         else
-            if GenAndName:CreateRole(result,gen) then
+            response = GenAndName:CreateRole(result,gen)
+            if response.status == 200 and response.data.code == 200 then
                 GameLogic.RunCommand(string.format("/tip -duration 1500 %s",signtip(gen)))
 
                 commonlib.setfield("System.User.username", result)
                 commonlib.setfield("System.User.nickName", result)  
                 UserConsole = NPL.load('(gl)Mod/CodePku/cellar/UserConsole/Main.lua')
-                UserConsole:CourseEntry()
+                UserConsole:ShowPage()
                 Page:CloseWindow();
+            elseif response.data.message then
+                Page:SetValue("info_msg_1", response.data.message)
+                Page:SetValue("info_msg_2", response.data.message)
             else
-                GameLogic.RunCommand(string.format("/tip -duration 1500 %s","用户名存在"))
-                Page:SetValue("info_msg", "用户名存在")
+                Page:SetValue("info_msg_1", "用户名存在")
+                Page:SetValue("info_msg_2", "用户名存在")
             end
         end
     end
@@ -83,7 +90,8 @@ end
 
 function ClickInput(name)
     result = document:GetPageCtrl():GetValue(name)
-    Page:SetValue("info_msg", "")
+    Page:SetValue("info_msg_1", "")
+    Page:SetValue("info_msg_2", "")
 end
 
 
@@ -102,22 +110,23 @@ submit_pos = "position:relative;width:120;height:50;margin-left:620;margin-top:3
 </style>   
 <pe:if condition="<%= System.os.IsMobilePlatform() %>">
     <!-- for mobile phone -->
-    <pe:container alignment="_ctt" style="width: 960;height: 540;background: none;">
+    <pe:container alignment="_ct" style="width: 960;height: 540;margin-left: -480;margin-top: -270;background-color:;">
+        <div style="position: relative;width:574;height:86;margin-left:206;margin-top:47;background: url(codepku/image/textures/bg_32bits.png# 383 71 1148 172);"></div>
         <pe:if condition='<%=gen ~= 1%>'>
-            <div style="position: relative;width:193;height:232;margin-left:253;margin-top:136;background:url(codepku/image/textures/userinfo/GenName/unselectedBoy.png);" name = 1 onclick="setGen">
+            <div style="position: relative;width:193;height:232;margin-left:253;margin-top:136;background:url(codepku/image/textures/bg_32bits.png# 70 1530 379 454);" name = 1 onclick="setGen">
             </div>
         </pe:if>
         <pe:if condition='<%=gen == 1%>'>
-            <div style="position: relative;width:193;height:232;margin-left:253;margin-top:136;background:url(codepku/image/textures/userinfo/GenName/selectedBoy.png);" name = 1 onclick="setGen">
+            <div style="position: relative;width:193;height:232;margin-left:253;margin-top:136;background:url(codepku/image/textures/bg_32bits.png# 1073 1530 379 454);" name = 1 onclick="setGen">
             </div>
         </pe:if>
 
         <pe:if condition='<%=gen ~= 2%>'>
-            <div style="position: relative;width:193;height:232;margin-left:514;margin-top:136;background:url(codepku/image/textures/userinfo/GenName/unselectedGirl.png);" name = 2 onclick="setGen">
+            <div style="position: relative;width:193;height:232;margin-left:514;margin-top:136;background:url(codepku/image/textures/bg_32bits.png# 593 1530 379 454);" name = 2 onclick="setGen">
             </div>
         </pe:if>
         <pe:if condition='<%=gen == 2%>'>
-            <div style="position: relative;width:193;height:232;margin-left:514;margin-top:136;background:url(codepku/image/textures/userinfo/GenName/selectedGirl.png);" name = 2 onclick="setGen">
+            <div style="position: relative;width:193;height:232;margin-left:514;margin-top:136;background:url(codepku/image/textures/bg_32bits.png# 1604 1530 379 454);" name = 2 onclick="setGen">
             </div>
         </pe:if>
 
@@ -134,25 +143,30 @@ submit_pos = "position:relative;width:120;height:50;margin-left:620;margin-top:3
         <div style="position:relative;width:120;height:50;margin-left:620;margin-top:385;background:url(codepku/image/textures/userinfo/GenName/confirm.png);" name="1" onclick="submit">
         </div>
     </pe:container>
+
+    <pe:container alignment="_ct" ClickThrough="true" style="position:relative;width: 300;height: 30;margin-left: -150;margin-top: 170;background: none;">
+        <pe:label name="info_msg_1" value="<%=info_msg_1%>" style="font-size: 20; text-align:center;base-font-size:20;width:300;height:25;font-weight:bold;white-space:nowrap;color:#ff0000"></pe:label>
+    </pe:container>
 </pe:if>
 <pe:if condition="<%= not System.os.IsMobilePlatform() %>">
     <!-- for pc -->
-    <pe:container alignment="_ctt" style="position:relative;width: 1920;height: 1080;background: none;margin-top: -50;">
+    <pe:container alignment="_ct" style="position:relative;width: 1920;height: 1080;margin-left: -960;margin-top: -540;background-color:;">
+        <div style="position: relative;width:1148;height:172;margin-left:412;margin-top:93;background: url(codepku/image/textures/bg_32bits.png# 383 71 1148 172);"></div>
         <pe:if condition='<%=gen ~= 1%>'>
-            <div style="position: relative;width:386;height:465;margin-left:506;margin-top:268;background:url(codepku/image/textures/userinfo/GenName/unselectedBoy.png);" name = 1 onclick="setGen">
+            <div style="position: relative;width:386;height:465;margin-left:506;margin-top:268;background:url(codepku/image/textures/bg_32bits.png# 70 1530 379 454);" name = 1 onclick="setGen">
             </div>
         </pe:if>
         <pe:if condition='<%=gen == 1%>'>
-            <div style="position: relative;width:386;height:465;margin-left:506;margin-top:268;background:url(codepku/image/textures/userinfo/GenName/selectedBoy.png);" name = 1 onclick="setGen">
+            <div style="position: relative;width:386;height:465;margin-left:506;margin-top:268;background:url(codepku/image/textures/bg_32bits.png# 1073 1530 379 454);" name = 1 onclick="setGen">
             </div>
         </pe:if>
 
         <pe:if condition='<%=gen ~= 2%>'>
-            <div style="position: relative;width:386;height:465;margin-left:1028;margin-top:268;background:url(codepku/image/textures/userinfo/GenName/unselectedGirl.png);" name = 2 onclick="setGen">
+            <div style="position: relative;width:386;height:465;margin-left:1028;margin-top:268;background:url(codepku/image/textures/bg_32bits.png# 593 1530 379 454);" name = 2 onclick="setGen">
             </div>
         </pe:if>
         <pe:if condition='<%=gen == 2%>'>
-            <div style="position: relative;width:386;height:465;margin-left:1028;margin-top:268;background:url(codepku/image/textures/userinfo/GenName/selectedGirl.png);" name = 2 onclick="setGen">
+            <div style="position: relative;width:386;height:465;margin-left:1028;margin-top:268;background:url(codepku/image/textures/bg_32bits.png# 1604 1530 379 454);" name = 2 onclick="setGen">
             </div>
         </pe:if>
 
@@ -171,8 +185,8 @@ submit_pos = "position:relative;width:120;height:50;margin-left:620;margin-top:3
         </div>
     </pe:container>
 
-    <pe:container alignment="_lt" ClickThrough="true" style="position:relative;width: 1920;height: 1080;background: none;">
-        <pe:label name="info_msg" value="<%=info_msg%>" style="position: relative;font-size: 30; text-align:center;base-font-size:30;width:400;height:50;margin-left:760;margin-top: 820;white-space:nowrap;color:#ff0000"></pe:label>
+    <pe:container alignment="_ct" ClickThrough="true" style="position:relative;width: 600;height: 50;margin-left: -300;margin-top: 330;background: none;">
+        <pe:label name="info_msg_2" value="<%=info_msg_2%>" style="font-size: 30; text-align:center;base-font-size:30;width:600;height:50;font-weight:bold;white-space:nowrap;color:#ff0000"></pe:label>
     </pe:container>
 </pe:if>
 

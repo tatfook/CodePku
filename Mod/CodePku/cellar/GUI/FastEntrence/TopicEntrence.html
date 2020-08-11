@@ -10,6 +10,7 @@
 <script refresh="false" type="text/npl" src="TopicEntrence.lua"><![CDATA[
     TopicEntrencePage = commonlib.gettable("Mod.CodePku.TopicEntrencePage");
     MainEntrencePage = commonlib.gettable("Mod.CodePku.MainEntrencePage");
+    local MainPopup = commonlib.gettable("Mod.CodePku.GUI.MainPopup");
 
     
     local page = document:GetPageCtrl()
@@ -70,7 +71,8 @@
         local i = 1
         --searchByName = page:GetValue("searchByName")
         for k, v in pairs(topic_course) do
-            if(v.name == TopicEntrencePage.searchByName) then
+            result = string.find(v.name, TopicEntrencePage.searchByName)
+            if(result) then
                 search_course[i] = v;
                 search_course[i].index = (i-1) % 10
                 i = i+1
@@ -177,9 +179,10 @@
     end
 
 
-    function OnClickCourse(name)
-        GameLogic.RunCommand(string.format("/connectCodePku %d", name));
-        Page:CloseWindow()
+
+    function OnClickCourse(name, value)
+        MainPopup:ShowPage("TPpopup", "该世界", name)
+
     end
 
     function GetDivisible(index)
@@ -217,7 +220,7 @@
         <div style="width: 1630px;height: 100px;">
             <!--搜索-->
             <div style="width: 340px; height: 65px; margin-left: 1008px; float: left;">
-                <input name="searchByName" type="text" style="width: 266px; height: 62px; background-color: #4BB7FD; font-size: 42px; float: left;" value="<%=TopicEntrencePage.searchByName%>"/>
+                <input name="searchByName" placeholder="输入关键字或课程ID" type="text" style="width: 266px; height: 62px; background-color: #4BB7FD; font-size: 42px; float: left;" value="<%=TopicEntrencePage.searchByName%>"/>
                 <div style="width: 72px; height: 62px; float: left;" onclick="f_searchByName">
                     <div style="width: 40px; height: 40px;margin-left: 30px;margin-top: 10px; background:url(codepku/image/textures/fastentrence/topic/search.png);"></div>
                 </div>
@@ -238,14 +241,14 @@
                 <pe:repeatitem>
                     <div style="<%=format('position:absolute; z-index: 5; width:290px;height:100;background:url(codepku/image/textures/fastentrence/system_level_1.png);margin-left:%d;margin-top:%d;base-font-size:28px;font-size:28px;text-align: center;', Eval('index')%5*310+20, 20+GetDivisible(Eval('index'))*300-Eval('index')%5*60)%>"><div style="margin-top:35px"><%= Eval('name') %></div></div>
                     <div style="<%=format('position:absolute; z-index: 5; width:290px;height:200;background:url(codepku/image/textures/fastentrence/system_level_2.png);margin-left:%d;margin-top:%d;', Eval('index')%5*310+20, 120+GetDivisible(Eval('index'))*300-Eval('index')%5*60)%>">
-                        <div style="<%=format('width:290px;height:200;background:url(%s);', Eval('img'))%>" name="<%=Eval('id')%>" onclick="OnClickCourse"></div>
+                        <div style="<%=format('width:290px;height:200;background:url(%s);', Eval('img'))%>" name="<%=Eval('id')%>" te="111" value = "123123" onclick="OnClickCourse"></div>
                     </div>
                 </pe:repeatitem>
             </pe:repeat>
         </div>
         <!--翻页-->
-        <div style="width: 1630px; height: 50px;margin-left: 740px; float: left;">
-            <div style="width: 50px; height: 50px;float: left; background: url(codepku/image/textures/fastentrence/topic/page_left.png);" name="page_left" onclick="ChangeTopicPage"></div>
+        <div style="width: 1630px; height: 50px;margin-left: 740px;margin-top:70; float: left;">
+            <div style="width: 50px;margin-top:-2; height: 50px;float: left; background: url(codepku/image/textures/fastentrence/topic/page_left.png);" name="page_left" onclick="ChangeTopicPage"></div>
             <div style="width: 50px;height: 50px;font-size: 40px;color: #ffffff;float: left; text-align: center; line-height: 40px;"><%=GetPageNum()%></div>
             <div style="width: 50px; height: 50px;float: left; background: url(codepku/image/textures/fastentrence/topic/page_right.png);" name="page_right" onclick="ChangeTopicPage"></div>
         </div>

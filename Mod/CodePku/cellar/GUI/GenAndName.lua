@@ -46,12 +46,7 @@ function GenAndName:CreateRole(name,gen)
     }
     response =  request:put('/users/profile' ,data,{sync = true});
 
-
-    if response.status == 200 then
-        return true
-    else
-        return false
-    end
+    return response
 end
 
 function GenAndName:ShowPage()

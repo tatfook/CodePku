@@ -34,7 +34,7 @@ Config.defaultServer = Config.codepkuServer[Config.defaultEnv];
 
 -- socket server config
 Config.codepkuSocketServer = {    
-    RELEASE = "wss://game-socket.codepku.com/chat",
+    RELEASE = "ws://game-socket.codepku.com/chat",
     DEV = "ws://game-socket.dev.codepku.com/chat",    
     LOCAL = "ws://chat.local.codepku.com/chat"
 }

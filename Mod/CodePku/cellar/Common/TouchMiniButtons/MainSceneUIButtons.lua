@@ -11,18 +11,18 @@ CodepkuChatChannel = NPL.load("(gl)Mod/CodePku/chat/CodepkuChatChannel.lua");
 
 function MainSceneUIButtons.show_dialog_ui(bshow)
     FriendUI:GetFriend()
-
+    MainSceneUIButtons.ScrollToEnd = 'true'
     if(bshow) then
         params = {
             url="Mod/CodePku/cellar/Common/TouchMiniButtons/MainUIButtons_dialog.html", 
-            alignment="lt", left = 0, top = 0, width = 1000, height = 1080, zorder=30,
+            alignment="global_lt", left = 0, top = 0, width = 1000, height = 1080, zorder=30,
         }
         local window = AdaptWindow:QuickWindow(params)
         return window
     else
         params = {
             url="Mod/CodePku/cellar/Common/TouchMiniButtons/MainUIButtons_dialog_close.html", 
-            alignment="_lb", left = 0, top = -100, width = 100, height = 100,
+            alignment="_lb", left = 0, top = -136, width = 100, height = 100,
         }
         local window = AdaptWindow:QuickWindow(params)
         return window

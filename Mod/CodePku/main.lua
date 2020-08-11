@@ -35,6 +35,8 @@ NPL.load("(gl)script/ide/System/Encoding/guid.lua")
 NPL.load("(gl)script/apps/Aries/Creator/Game/Login/ParaWorldLessons.lua")
 NPL.load("(gl)script/ide/System/Encoding/jwt.lua")
 NPL.load("(gl)Mod/CodePku/online/main.lua");
+NPL.load("(gl)Mod/CodePku/cellar/GUI/GenAndName.lua")
+
 
 local Store = NPL.load("(gl)Mod/CodePku/store/Store.lua")
 local MsgBox = NPL.load("(gl)Mod/CodePku/cellar/Common/MsgBox/MsgBox.lua")
@@ -55,16 +57,20 @@ local OtherUserInfoPage = NPL.load("(gl)Mod/CodePku/cellar/GUI/OtherUserInfo.lua
 local UserInfoPage = NPL.load("(gl)Mod/CodePku/cellar/GUI/UserInfo.lua")
 local SharePage = NPL.load("(gl)Mod/CodePku/cellar/GUI/Share.lua")
 local FriendUI = NPL.load("(gl)Mod/CodePku/cellar/GUI/Window/AdaptWindow.lua");
-local GenAndNamePage = NPL.load("(gl)Mod/CodePku/cellar/GUI/GenAndName.lua")
 local SubjectPage = NPL.load("(gl)Mod/CodePku/cellar/GUI/Subject.lua")
 local EditPage = NPL.load("(gl)Mod/CodePku/cellar/GUI/editShare.lua")
 local PropsInfo = NPL.load("(gl)Mod/CodePku/cellar/GUI/Props/PropsInfo.lua")
 local RankPage = NPL.load("(gl)Mod/CodePku/cellar/GUI/rank/RankPage.lua")
 local Messages = NPL.load("(gl)Mod/CodePku/cellar/common/TouchMiniButtons/Messages.lua")
+local MainPopup = NPL.load("(gl)Mod/CodePku/cellar/GUI/MainPopup/MainPopup.lua")
+local SmallMap = NPL.load("(gl)Mod/CodePku/cellar/GUI/SmallMap/SmallMap.lua")
+local ToWhere = NPL.load("(gl)Mod/CodePku/cellar/GUI/SmallMap/Popup/ToWhere.lua")
 
 local DownloadWorld = commonlib.gettable("MyCompany.Aries.Game.MainLogin.DownloadWorld")
 
 local CodePku = commonlib.inherit(commonlib.gettable("Mod.ModBase"),commonlib.gettable("Mod.CodePku"));
+local GenAndName = commonlib.gettable("Mod.CodePku.GenAndName")
+
 
 NPL.load("(gl)Mod/CodePku/cellar/Common/AriesWindow/pe_aries_window2.lua");
 local pe_aries_window2 = commonlib.gettable("Mod.CodePku.Common.AriesWindow.pe_aries_window2");
@@ -94,7 +100,8 @@ function CodePku:GetDesc()
 end
 
 function CodePku:init()
-	ParaAsset.SetAssetServerUrl("http://cdn.wanxue.codepku.com/update61/assetdownload/update/");
+	ParaAsset.SetAssetServerUrl("http://cdn.wanxue.codepku.com/");
+	-- ParaAsset.SetAssetServerUrl("http://cdnwanxue.local.codepku.com/");
 
 	local manifestUrl = "http://cdnwanxue.codepku.com/assets_manifest_codepku.txt?version=" .. os.time();
 	local _, _, asset = System.os.GetUrl(manifestUrl);
@@ -143,8 +150,12 @@ function CodePku:init()
 	-- replace load world page
 	GameLogic.GetFilters():add_filter(
         "InternetLoadWorld.ShowPage",
-        function(bEnable, bShow)
-            UserConsole:ShowPage()
+		function(bEnable, bShow)
+			if GenAndName.CheckNickName() then
+				UserConsole:ShowPage()
+			else
+				GenAndName:ShowPage()
+			end
             return false
         end
 	)
@@ -365,7 +376,21 @@ function CodePku:init()
     -- echo(WebSocketClient)
 
     local CodepkuChatChannel = NPL.load("(gl)Mod/CodePku/chat/CodepkuChatChannel.lua");
-    CodepkuChatChannel.StaticInit();
+	CodepkuChatChannel.StaticInit();
+
+	GameLogic.GetFilters():add_filter(
+		"DesktopMenuPage.ShowPage",
+		function(bShow)
+			return true;
+		end
+	);
+
+	GameLogic.GetFilters():add_filter(
+		"QuickSelectBar.ShowPage",
+		function(bShow)
+			return true;
+		end
+	);
 end
 
 function CodePku:OnLogin()

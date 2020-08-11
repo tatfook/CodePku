@@ -74,7 +74,7 @@ function OnClickSend()
     if not words or words == '' then
         return
     end
-    if #words > 90 then
+    if commonlib.utf8.len(words) > 30 then
         GameLogic.RunCommand("/tip -duration 1500 内容上限30个字")
         return 
     end
@@ -118,7 +118,7 @@ end
 function GetMessages()
     local Messages = {}
     if LAST_CLICKED_INDEX == 3 then
-        if friends and friends ~= {} then
+        if (#friends~= 0) then
             local f_id = friends[FRIEND_IN_CHATTING].friend_id
             Messages = CodepkuChatChannel.Messages[Channels[LAST_CLICKED_INDEX].channel][f_id]
         end
@@ -130,6 +130,10 @@ end
 
 function GetFriends()
     return friends
+end
+
+function scrollEnd()
+    return MainSceneUIButtons.ScrollToEnd
 end
 
 
@@ -150,7 +154,7 @@ end
         <!-- 显示栏 -->
         <div style="width: 960;height:850;">
             <pe:if condition="<%=LAST_CLICKED_INDEX~=3%>">
-                <pe:treeview style="width: 900; height: 800" name='messages' DefaultNodeHeight = "120" ItemsPerLine="1" AllowPaging="false" RememberScrollPos="true" RememberLastPage="false" VerticalScrollBarStep="40">
+                <pe:treeview style="width: 900; height: 800" ScrollToEnd="<%=scrollEnd()%>" name='messages' DefaultNodeHeight = "120" ItemsPerLine="1" AllowPaging="false" RememberScrollPos="true" RememberLastPage="false" VerticalScrollBarStep="40">
                     <pe:repeat  DataSource="<%=GetMessages()%>">
                         <pe:repeatitem>                
                                 <pe:if condition="<%=Eval('speakerIsMe')==0%>">
@@ -204,7 +208,7 @@ end
                 </pe:treeview>
             </div>
                 <div style="width:700;height:850;margin-left: 200;margin-top: -850;">
-                    <pe:treeview style="width: 740; height: 800" name='messages' DefaultNodeHeight = "120" ItemsPerLine="1" AllowPaging="false" RememberScrollPos="true" RememberLastPage="true" VerticalScrollBarStep="40">
+                    <pe:treeview style="width: 740; height: 800" ScrollToEnd="<%=scrollEnd()%>" name='messages' DefaultNodeHeight = "120" ItemsPerLine="1" AllowPaging="false" RememberScrollPos="true" RememberLastPage="true" VerticalScrollBarStep="40">
                         <pe:repeat  DataSource="<%=GetMessages()%>">
                             <pe:repeatitem>                
                                     <pe:if condition="<%=Eval('speakerIsMe')==0%>">
@@ -235,14 +239,16 @@ end
             </pe:if>
         </div>
         <!-- 发言 -->
-        <div style='width: 960;height:130'>
-            <div style='width: 600;height:50;margin-top: 40%;background: url(codepku/image/textures/chat/icon_6.png);margin-left: 40px;'>
-                <input type="text" style='width:600;height: 50;background-color: white;font-size: 28px;' name='DialogContent'/>
+        <pe:if condition="<%=LAST_CLICKED_INDEX~=3 or #friends~=0%>">
+            <div style='width: 960;height:130'>
+                <div style='width: 600;height:50;margin-top: 40%;background: url(codepku/image/textures/chat/icon_6.png);margin-left: 40px;'>
+                    <input type="text" style='width:600;height: 50;background-color: white;font-size: 28px;' name='DialogContent'/>
+                </div>
+                <!-- <div style='width:50;height:50;background: url(codepku/image/textures/chat/icon_2.png);margin-top: -50;margin-left: 660px;' onclick="OnClickVoice"></div> -->
+                <!-- <div style='width:50;height:50;background: url(codepku/image/textures/chat/icon_1.png);margin-top:-50;margin-left: 730px' onclick="OnClickEmoji"></div> -->
+                <div style='width:100;height:50;background: url(codepku/image/textures/chat/icon_7.png);margin-top:-50;margin-left: 700px' onclick="OnClickSend"></div>
             </div>
-            <!-- <div style='width:50;height:50;background: url(codepku/image/textures/chat/icon_2.png);margin-top: -50;margin-left: 660px;' onclick="OnClickVoice"></div> -->
-            <!-- <div style='width:50;height:50;background: url(codepku/image/textures/chat/icon_1.png);margin-top:-50;margin-left: 730px' onclick="OnClickEmoji"></div> -->
-            <div style='width:100;height:50;background: url(codepku/image/textures/chat/icon_7.png);margin-top:-50;margin-left: 700px' onclick="OnClickSend"></div>
-        </div>
+        </pe:if>
     </div>
     <div style="width: 40;height:100;background:url(codepku/image/textures/chat/icon_29.png);margin-left: 960;margin-top: -600;" onclick="OnClose"></div>
 </pe:container>

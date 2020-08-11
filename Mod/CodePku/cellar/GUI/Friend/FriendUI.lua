@@ -53,13 +53,6 @@ FriendUI.vars = {}
 function FriendUI:Search(keyword)
     local request = NPL.load("(gl)Mod/CodePku/api/BaseRequest.lua");
     -- local response = request:get('/users/search?keyword='..nameorid,nil,{sync = true})
-    -- echo("search response")
-    --     echo(response.data.data);
-    --     echo(response.data.code);
-    --     echo(#response.data.data);
-    --     echo(response.status == 200);
-    --     echo(response.data.code == 200);
-    --     echo(#response.data.data > 0);
 
     -- if (response.status == 200 and response.data.code == 200 and response.data.data and #response.data.data > 0) then
         
