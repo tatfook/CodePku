@@ -2,6 +2,8 @@ NPL.load("(gl)Mod/CodePku/cellar/GUI/Window/AdaptWindow.lua");
 local AdaptWindow = commonlib.gettable("Mod.CodePku.GUI.Window.AdaptWindow")
 local MainEntrencePage = commonlib.gettable("Mod.CodePku.MainEntrencePage");
 
+MainEntrencePage.nowPage = nil
+
 function MainEntrencePage:ShowPage(bShow)
     local params = {
         url = "Mod/CodePku/cellar/GUI/FastEntrence/MainEntrence.html", 
@@ -17,5 +19,11 @@ function MainEntrencePage:ShowPage(bShow)
         width = 1920,
         height = 1080,
         };
-    local window = AdaptWindow:QuickWindow(params)
+        MainEntrencePage.nowPage = AdaptWindow:QuickWindow(params)
+end
+
+function MainEntrencePage:ClosePage()
+    if MainEntrencePage.nowPage ~= nil then
+        MainEntrencePage.nowPage:CloseWindow()
+    end
 end

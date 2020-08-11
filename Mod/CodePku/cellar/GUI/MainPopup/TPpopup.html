@@ -15,8 +15,8 @@ local MainPopup = commonlib.gettable("Mod.CodePku.GUI.MainPopup");
 local SystemEntrencePage = commonlib.gettable("Mod.CodePku.SystemEntrencePage");
 local TopicEntrencePage = commonlib.gettable("Mod.CodePku.TopicEntrencePage");
 local CompeteEntrencePage = commonlib.gettable("Mod.CodePku.CompeteEntrencePage");
+local MainEntrencePage = commonlib.gettable("Mod.CodePku.MainEntrencePage")
 local GameLogic = commonlib.gettable("MyCompany.Aries.Game.GameLogic");
-
 
 
 local world_name = MainPopup.TP_Location   
@@ -32,7 +32,7 @@ end
 
 function CloseAllPage()
     Page:CloseWindow();
-    if SystemEntrencePage ~= nil then
+    if SystemEntrencePage~= nil then
         SystemEntrencePage:ClosePage()
     end
     if TopicEntrencePage ~= nil then
@@ -41,9 +41,9 @@ function CloseAllPage()
     if CompeteEntrencePage ~= nil then
         CompeteEntrencePage:ClosePage()
     end
-    --
-    
-   
+    if MainEntrencePage ~= nil then
+        MainEntrencePage:ClosePage()
+    end
 end
 
 function turnToWorld()
@@ -66,9 +66,9 @@ end
         <span style="position: relative; left: 188; color: #383838; line-height: 233; font-weight: bold; font-size: 36px;">是否离开当前地图，前往<%=getName()%>？</span>
     </div>
 
-    <div style="position: relative; width: 240; height: 80; left: 650; top: 668; font-size: 36px; font-weight: bold; font-family: NotoSansHans-Bold; line-height: 80; text-align: center; color: #85272B; background:url(codepku/image/textures/commonpopup/main.png#1308 743 80 80 : 6 6 6 6);" onclick="closew">取消</div>
+    <div style="position: relative; width: 240; height: 80; left: 650; top: 668; font-size: 36px; font-weight: bold; font-family: NotoSansHans-Bold; line-height: 80; text-align: center; color: #85272B; background:url(codepku/image/textures/commonpopup/main.png#1305 740 86 86 : 9 9 9 9);" onclick="closew">取消</div>
 
-    <div style="position: relative; width: 240; height: 80; left: 1096; top: 668; font-size: 36px; font-weight: bold; font-family: NotoSansHans-Bold; line-height: 80; text-align: center; color: #0E5516; background:url(codepku/image/textures/commonpopup/main.png#1407 743 80 80 : 6 6 6 6);" onclick="turnToWorld">确认</div>
+    <div style="position: relative; width: 240; height: 80; left: 1096; top: 668; font-size: 36px; font-weight: bold; font-family: NotoSansHans-Bold; line-height: 80; text-align: center; color: #0E5516; background:url(codepku/image/textures/commonpopup/main.png#1404 740 86 86 : 9 9 9 9);" onclick="turnToWorld">确认</div>
 
 </div>
 </pe:container>
