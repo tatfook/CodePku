@@ -120,7 +120,8 @@ end
             <pe:treeview style="width: 950; height: 845" ScrollToEnd="<%=scrollEnd()%>" name='messages' DefaultNodeHeight = "120" ItemsPerLine="1" AllowPaging="false" RememberScrollPos="true" RememberLastPage="false" VerticalScrollBarStep="40">
                 <pe:repeat  DataSource="<%=GetMessages()%>">
                     <pe:repeatitem>                
-                        <div style="width: 900;height: 46px;margin-top: 16px;font-family: Noto Sans S Chinese Regular;base-font-size: 26px; font-size: 26px;line-height: 46px;">
+                        <!-- <div style="width: 900;height: 46px;margin-top: 16px;font-family: Noto Sans S Chinese Regular;base-font-size: 26px; font-size: 26px;line-height: 46px;"> -->
+                        <div style="<%=format('width: 900;height: %spx;margin-top: 16px;font-family: Noto Sans S Chinese Regular;base-font-size: 26px; font-size: 26px;line-height: 46px;',Eval('heightPx'))%>">
                             <pe:if condition="<%= Eval('msgType') == 'sys'%>">
                                 <div style="width: 92px; height: 46px;margin-left: 62px;margin-top: 0px;background:url(codepku/image/textures/chat_ui/chat_32bits.png#713 834 92 46);color: #BD233F;text-align: center;">系统</div>
                                 <div style="margin-left: 165px;margin-top: -46px;color: #BD233F;"><%=Eval('msgContent')%></div>

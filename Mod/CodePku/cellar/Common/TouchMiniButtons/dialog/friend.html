@@ -98,7 +98,7 @@ end
 function GetMessages()
     local Messages = {}
     if next(friends) ~= nil then
-        local LAST_CLICKED_INDEX = Channels.friends
+        local LAST_CLICKED_INDEX = Channels.friend
         local f_id = friends[FRIEND_IN_CHATTING].friend_id
         local f_channel = CodepkuChatChannel.Messages[Channels[LAST_CLICKED_INDEX].channel]
         if (f_channel) then
