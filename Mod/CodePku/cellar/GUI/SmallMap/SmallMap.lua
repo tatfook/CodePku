@@ -13,7 +13,7 @@ SmallMap.home = {
     topic = {name = "专题区", id = 15855},
     building = {name = "家园区", id = 14293},
     compete = {name = "竞技区", id = 14312},
-    main = {name = "玩学大厅-入口", id = 1}
+    main = {name = "玩学大厅-大门", id = 1}
 }
 
 SmallMap.tieiei = "112121"
