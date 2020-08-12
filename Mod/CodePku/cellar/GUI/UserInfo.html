@@ -236,6 +236,11 @@ function GetIdentity()
     return UserInfoPage.isSelf;
 end
 
+function OnClickHome()
+    GameLogic.RunCommand('/loadworld 14293');
+    ClosePage();
+end
+
 ]]>   
 </script>
 <style type="text/mcss">
@@ -285,9 +290,10 @@ end
                     <pe:mc_player name="MyPlayer" miniscenegraphname="AvatarMyselfTabCharacter" style="width:320px;height:320px;" IsInteractive="false" IsActiveRendering="true"/>
                 </div>
             </div> -->
-            <div style='<%=format("position:absolute;margin-left:48px;top:-148px;padding:18px;font-size:36px;color:#ffffff;width:490px;height:180px;background:url(%s #1275 451 219 125:204 24 13 68);", Eval("ProfilePng")) %>'>
+            <!-- hide for now -->
+            <!-- <div style='<%=format("position:absolute;margin-left:48px;top:-148px;padding:18px;font-size:36px;color:#ffffff;width:490px;height:180px;background:url(%s #1275 451 219 125:204 24 13 68);", Eval("ProfilePng")) %>'>
                 心情寄语
-            </div>
+            </div> -->
         </div>
         <!-- <div style="position:relative;width:275;height:97;margin-top:960;font-size:18;base-font-size:40;background:url(codepku/image/textures/userinfo/options/shezhi.png)"onclick="Undefinde"></div> -->
         <!-- 首页 -->
@@ -310,8 +316,10 @@ end
                     </div>
                     <div style="position:relative;margin-top:84px;margin-left:162px">ID: <%= sid %></div>
                 </div>
-                <div style='<%=format("float:left;width:53px;height:54px;margin-top:23px;margin-left:23px;background:url(%s #448 82 53 54);", Eval("ProfilePng")) %>'></div>
-                <div style='<%=format("float:left;width:54px;height:54px;margin-top:23px;margin-left:23px;background:url(%s #384 82 54 54);", Eval("ProfilePng")) %>'></div>
+                
+                <!-- hide for now cert./vip-->
+                <!-- <div style='<%=format("float:left;width:53px;height:54px;margin-top:23px;margin-left:23px;background:url(%s #448 82 53 54);", Eval("ProfilePng")) %>'></div>
+                <div style='<%=format("float:left;width:54px;height:54px;margin-top:23px;margin-left:23px;background:url(%s #384 82 54 54);", Eval("ProfilePng")) %>'></div> -->
                 <div align="right" style="position:relative;margin-top:-129px;margin-right:120px;color:#16439F;">
                     <div style="float:left;text-align:center;width:120px;" onclick="Undefinde">
                         <div align="center" style='<%=format("width:48px;height:35px;margin-top:17px;background:url(%s #247 88 54 41);", Eval("ProfilePng")) %>'></div>
@@ -331,16 +339,16 @@ end
             </div> -->
             <!-- 家园 -->
             <div align="right" style="margin-right:124px;margin-top:33px;font-family:Noto Sans S Chinese Regular;font-weight:bold;font-size:36px;">
-                <div style="width:794px;height:479px;background:url(codepku/image/textures/profile/home_32bits.png#0 0 794 479);"></div>
+                <div style="width:794px;height:479px;background:url(codepku/image/textures/profile/home_32bits.png#0 0 794 479);" onclick="OnClickHome()"></div>
                 <!-- <div style='<%=format("width:794px;height:479px;background:url(%s #79 1169 794 479);", Eval("ProfilePng")) %>'></div> -->
                 <div style='<%=format("margin-top:89px;margin-left:8px;width:778px;height:183px;background:url(%s #1675 846 50 50: 14 14 14 14);", Eval("ProfilePng"))%>'>
-                    <div style='<%=format("margin-top:-83px;margin-left:-9px;color:#B35D0A;padding-left:44px;line-height:92px;width:381px;height:92px;background:url(%s #1264 824 381 92);", Eval("ProfilePng"))%>'>我的家园名称</div>
+                    <div style='<%=format("margin-top:-83px;margin-left:-9px;color:#B35D0A;padding-left:44px;line-height:92px;width:381px;height:92px;background:url(%s #1264 824 381 92);", Eval("ProfilePng"))%>'>我的家园</div>
                     <div style="color:#2C618F;padding-left:103px;">
-                        <div style="float:left;margin-top:25px;" width="50%"><div style="float:left;width:8px;height:33px;background-color:#2C618F;margin-right:9px;margin-top:2px;"></div>学校：xxx</div>
-                        <div style="float:left;margin-top:25px;" width="50%"><div style="float:left;width:8px;height:33px;background-color:#2C618F;margin-right:9px;margin-top:2px;"></div>称号：xxx</div>
+                        <div style="float:left;margin-top:25px;" width="50%"><div style="float:left;width:8px;height:33px;background-color:#2C618F;margin-right:9px;margin-top:2px;"></div>学校：暂无</div>
+                        <div style="float:left;margin-top:25px;" width="50%"><div style="float:left;width:8px;height:33px;background-color:#2C618F;margin-right:9px;margin-top:2px;"></div>称号：暂无</div>
                         <br/>
-                        <div style="float:left;margin-top:35px;" width="50%"><div style="float:left;width:8px;height:33px;background-color:#2C618F;margin-right:9px;margin-top:2px;"></div>荣耀：xxx</div>
-                        <div style="float:left;margin-top:35px;" width="50%"><div style="float:left;width:8px;height:33px;background-color:#2C618F;margin-right:9px;margin-top:2px;"></div>生涯：xxx</div>
+                        <div style="float:left;margin-top:35px;" width="50%"><div style="float:left;width:8px;height:33px;background-color:#2C618F;margin-right:9px;margin-top:2px;"></div>荣耀：暂无</div>
+                        <div style="float:left;margin-top:35px;" width="50%"><div style="float:left;width:8px;height:33px;background-color:#2C618F;margin-right:9px;margin-top:2px;"></div>生涯：<%=  UserInfoPage.day %>天</div>
                     </div>
                 </div>
             </div>
