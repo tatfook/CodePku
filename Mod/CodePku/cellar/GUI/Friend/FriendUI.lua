@@ -160,6 +160,16 @@ function FriendUI:GetFriend()
                 remark = data.remark,
             }
         end
+
+        table.sort(FriendUI.vars["friends"], function(a, b)
+            local sort_online = tostring(a.is_online) == tostring(b.is_online)
+            if sort_online then
+                return a.nickname > b.nickname
+            else
+                return tostring(a.is_online) > tostring(b.is_online)
+            end
+        end)
+
     else
         FriendUI.vars["friends"] = nil;
     end
@@ -213,7 +223,6 @@ end
 
 function FriendUI:CalOfflineTime()
     local date=os.date("%Y-%m-%d %H:%M:%S")
-
 end
 
 
