@@ -61,6 +61,10 @@ local messageTypeMap = {
     voice = 2, -- 声音
     emoticons = 3 --表情
 }
+local itemMap = {
+    total_exp = '总经验', -- 总经验
+    subject_exp = '学科经验', -- 学科经验
+}
 
 CodepkuChatChannel.worldId_pending = nil;
 CodepkuChatChannel.worldId = nil;
@@ -77,6 +81,7 @@ function CodepkuChatChannel.StaticInit()
     GameLogic.GetFilters():remove_filter("OnCodepkuLogout", CodepkuChatChannel.OnCodepkuLogout_Callback);
     GameLogic.GetFilters():add_filter("OnCodepkuLogin", CodepkuChatChannel.OnCodepkuLogin_Callback);
     GameLogic.GetFilters():add_filter("OnCodepkuLogout", CodepkuChatChannel.OnCodepkuLogout_Callback)    
+    GameLogic.GetFilters():add_filter("codepkuAwardUser", CodepkuChatChannel.OnCodepkuUserAward)
 end
 
 function CodepkuChatChannel.SetMessage(_table, message, index)
@@ -99,6 +104,37 @@ function CodepkuChatChannel.SetMessage(_table, message, index)
     end
 end
 
+function CodepkuChatChannel.OnCodepkuUserAward(data)
+    -- echo('xxxxxxxaaaaaaaaaxxxxxxxaaaaaaaaaxxxxxxx')
+    -- echo(data)
+    -- msg1 = {msgContent='系统消息',msgType='sys'}
+
+    props = data['props']
+    data_array = {}
+    if (props) then
+        for _i=1,#props do
+            if (props[_i]['prop_num'] == 0) then
+                table.insert(data_array,{msgType='get',itemType=1,dataLen=165+commonlib.utf8.len(props[_i]['prop_name'])*26,itemName=props[_i]['prop_name'],itemNum=props[_i]['prop_num']})
+            end
+        end 
+    end
+
+    total_exp = data['total_exp']
+    table.insert(data_array,{msgType='get',itemType=2,dataLen=165+commonlib.utf8.len(itemMap['total_exp'])*26,itemName=itemMap['total_exp'],itemNum=total_exp})
+    subject_exp = data['subject_exp']
+    table.insert(data_array,{msgType='get',itemType=2,dataLen=165+commonlib.utf8.len(itemMap['subject_exp'])*26,itemName=itemMap['subject_exp'],itemNum=subject_exp})
+
+    for _i=1,#data_array do 
+        CodepkuChatChannel.SetMessage(channelsMap.system, data_array[_i], 1)
+    end
+    -- for _i=1,10 do
+    --     CodepkuChatChannel.SetMessage(channelsMap.system, msg1, 1)
+    --     for _i=1,#data_array do 
+    --         CodepkuChatChannel.SetMessage(channelsMap.system, data_array[_i], 1)
+    --     end
+    -- end
+end
+
 function CodepkuChatChannel.OnWorldLoaded()
     -- local id = WorldCommon.GetWorldTag("kpProjectId");
     -- 课件id
@@ -107,7 +143,8 @@ function CodepkuChatChannel.OnWorldLoaded()
     UserInfoPage.GetUserInfo() -- init user info
     FriendUI:GetFriend()
     for index, value in pairs(channelsMap) do -- init historical messages
-        if (index ~= 'private_chat') then
+        if (index == 'system') then
+        elseif (index ~= 'private_chat') then
             request:get(string.format('/chat/channel-message/%d', value)):next(function(response)
                 local data = response.data.data
                 for i, v in ipairs(data) do
