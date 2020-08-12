@@ -41,15 +41,6 @@ if FriendUI.vars["friends"] ~= nil then
     friends = commonlib.deepcopy(FriendUI.vars["friends"])
 end
 
-table.sort(friends, function(a, b)
-    local sort_online = tostring(a.is_online) == tostring(b.is_online)
-    if sort_online then
-        return a.nickname > b.nickname
-    else
-        return tostring(a.is_online) > tostring(b.is_online)
-    end
-end)
-
 for i, v in ipairs(friends) do
     v.index = i
     if i == FRIEND_IN_CHATTING then
