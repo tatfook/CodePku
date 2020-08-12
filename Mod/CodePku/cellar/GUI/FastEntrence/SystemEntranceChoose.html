@@ -20,11 +20,11 @@ end
 function GetSchoolClass()
     if SystemEntranceChoosePage~=nil then
         if SystemEntranceChoosePage.school == 'primary' then
-            return L'小学'
+            return L'小学课程'
         elseif SystemEntranceChoosePage.school == 'middle' then
-            return L'初中'
+            return L'初中课程'
         elseif SystemEntranceChoosePage.school == 'high' then
-            return L'高中'
+            return L'高中课程'
         end
     end
 end
@@ -74,20 +74,25 @@ end
 <style type="text/mcss">
 
 </style>
-    <div style='width:1200;height:750;background:url(codepku/image/textures/fastentrence/choose_grade_board.png);margin-top:250px;margin-left:350px'>
-        <div style='width:200;height:100;margin-top:70;margin-left:570;base_font_size:40px;font-size:40px;'><%=GetSchoolClass()%></div>
-        <div style='width:80;height:80;background:url(codepku/image/textures/fastentrence/close_2.png);margin-top:-120;margin-left:1040;' onclick="ClosePage"></div>
+    <div style='width:1158;height:588;background: url(codepku/image/textures/commonpopup/main.png#99 275 1158 588);margin-top:250px;margin-left:350px'>
+        <div style='text-align:center;width:410;line-height:87;height:87;margin-left:374;base_font_size:40px;font-size:40px;background: url(codepku/image/textures/commonpopup/main.png#1277 377 410 87)'><%=GetSchoolClass()%></div>
+        <div style='width:68;height:78;margin-top:-83px;background: url(codepku/image/textures/commonpopup/main.png#110 73 68 78);margin-left:1040;' onclick="ClosePage"></div>
             <div style='width:700;height:500;margin-top: 20;margin-left:140;'>
                 <pe:repeat DataSource="<%=GetGradeDetails(SystemEntranceChoosePage.school, SystemEntranceChoosePage.page)%>">
                     <pe:repeatitem>
-                        <div style="<%=format('background:url(codepku/image/textures/fastentrence/choose_grade/block_blue.png);position:relative;width:326;height:128;background-color: #ffffff;text-align:center;left: %s;top:%s', ((Eval('index')+1)%2)*400+70, math.floor(((Eval('index')-1)/2))*150)%>" name="<%=format('%d %d %d',Eval('grade_id'), Eval('semester_id'), Eval('open'))%>" onclick='OnClickGrade'><div style="margin-top:40;font-size: 28px;"><%=Eval('name')%></div></div>
+                        <pe:if condition='<%=Eval("open")~=0%>'>
+                            <div style="<%=format('color:white;font-weight:bold;background:url(codepku/image/textures/fastentrence_ui/main.png#164 438 110 110:30 30 30 30);position:relative;width:326;height:110;background-color: #ffffff;text-align:center;left: %s;top:%s', ((Eval('index')+1)%2)*400+70, math.floor(((Eval('index')-1)/2))*140)%>" name="<%=format('%d %d %d',Eval('grade_id'), Eval('semester_id'), Eval('open'))%>" onclick='OnClickGrade'><div style="margin-top:40;font-size: 28px;"><%=Eval('name')%></div></div>
+                        </pe:if>
+                        <pe:if condition='<%=Eval("open")==0%>'>
+                            <div style="<%=format('color:white;font-weight:bold;font-weight:bold;background:url(codepku/image/textures/fastentrence_ui/main.png#28 438 110 110:30 30 30 30);position:relative;width:326;height:110;background-color: #ffffff;text-align:center;left: %s;top:%s', ((Eval('index')+1)%2)*400+70, math.floor(((Eval('index')-1)/2))*140)%>" name="<%=format('%d %d %d',Eval('grade_id'), Eval('semester_id'), Eval('open'))%>" onclick='OnClickGrade'><div style="margin-top:40;font-size: 28px;"><%=Eval('name')%></div></div>
+                        </pe:if>
                     </pe:repeatitem>
                 </pe:repeat>
             </div>
-            <div style='width:800;height:100;margin-left:340;margin-top:-70;'>
-                <div style='width:75;height:75;margin-left: 120;background:url(codepku/image/textures/fastentrence/prev.png);' onclick="prev_page"></div>
-                <div style='base_font_size:40px;font-size:40px;margin-left: 220;margin-top:-55'><%=SystemEntranceChoosePage.page%></div>
-                <div style='width:75;height:75;margin-left: 270;margin-top:-75;background:url(codepku/image/textures/fastentrence/next.png);' onclick="next_page"></div>
+            <div style='position:relative;width:800;height:60;margin-left:340;margin-top:-70;'>
+                <div style='transform:rotate(180deg); transform-origin: 14 20;position:relative;top:-10;width:28;height:41;margin-left: 175;background:url(codepku/image/textures/fastentrence_ui/main.png#207 378 28 41);' onclick="prev_page"></div>
+                <div style='position:relative;top:-10;base_font_size:40px;font-size:40px;margin-left: 225;color:white;font-weight: bold;'><%=SystemEntranceChoosePage.page%></div>
+                <div style='position:relative;top:-10;width:28;height:41;margin-left: 270;background:url(codepku/image/textures/fastentrence_ui/main.png#207 378 28 41);' onclick="next_page"></div>
             </div>
     </div>
 </pe:mcml>

@@ -1,0 +1,51 @@
+<!-- "script/apps/Aries/Creator/Game/Areas/EscFramePage.html" -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+</head>
+<body>
+    <pe:mcml>
+<script refresh="false" type="text/npl" src="UserInfo.lua"><![CDATA[
+NPL.load("(gl)Mod/CodePku/cellar/GUI/Profile/EditShare.lua");
+EditSharePage = commonlib.gettable("Mod.CodePku.EditSharePage")
+
+EditSharePage.OnInit();
+
+local page = document:GetPageCtrl()
+
+function OnClose()
+    Page:CloseWindow();
+end
+
+function OnConfirm()
+    GameLogic.RunCommand("/goto,home")
+end
+
+function OnSubmit()
+   Page:CloseWindow();
+end
+]]>   
+
+</script>
+
+<pe:aries_window2 alignment="_ct" style="font-size:50px;font-weight:bold;color:#ffffff;font-family:Noto Sans S Chinese Regular;" title="修改名字">
+    <!-- todo: textarea style/css doesn't work -->
+    <textarea
+        align="center"
+        EmptyText=""
+        lineWrap="true"
+        AlwaysShowCurLineBackground="false"
+        style="color:#ffffff;margin-top:34px;font-size:36px;padding:30px;width:960px;height:233px;background:url(codepku/image/textures/common_32bits.png#1315 292 40 40:19 19 19 19)"
+    ></textarea>
+    <div align="center" style="margin-top:64px;font-size:36px;">
+        <input type="button" name="Cancel" value='<%=L"取消" %>' onclick="OnClose" style="color:#85272B;width:246px;height:86px;background:url(codepku/image/textures/common_32bits.png#1305 740 86 86:14 14 14 14);"/>
+        <input type="button" name="OK" value='<%=L"提交" %>' onclick="OnSubmit" style="color:#0E5516;width:246px;height:86px;background:url(codepku/image/textures/common_32bits.png#1404 740 86 86:14 14 14 14);margin-left:200px;"/>
+    </div>
+</pe:aries_window2>
+
+</pe:mcml>
+</body>
+</html>
+ 

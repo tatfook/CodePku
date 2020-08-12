@@ -1,0 +1,182 @@
+<!-- "Mod/CodePku/cellar/Gui/FriendUI/MyFriend.html" -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+</head>
+
+<body>
+<pe:mcml>
+<script refresh="false" type="text/npl" src="FriendUI.lua">
+<![CDATA[
+local FriendUI = NPL.load("(gl)Mod/CodePku/cellar/GUI/Friend/FriendUI.lua")
+
+mytable = {
+    friend_id = FriendUI.vars.search.friend_id,
+    nickname = FriendUI.vars.search.nickname,
+    gender = FriendUI.vars.search.gender,
+    head = FriendUI.vars.search.head,
+    is_online = FriendUI.vars.search.is_online,
+    last_time = FriendUI.vars.search.last_time,
+}
+
+--reportedPlyer1 = commonlib.deepcopy(FriendUI.vars["search"])
+
+reportedPlyer = FriendUI.vars["search"]
+
+function getGender()
+    if reportedPlyer.gender == 1 then
+        return "男"
+    elseif reportedPlyer.gender == 2 then
+        return "女"
+    end
+end
+
+function isOnline()
+    return mytable.is_online
+end
+
+function getNameColor()
+    if(mytable.is_online)then
+        return "#00ff22"
+    else
+        return "#f13709"
+    end
+end
+
+function getName()
+    if mytable.nickname then
+        return commonlib.utf8.sub(mytable.nickname,1,7)
+    else
+        return ""
+    end
+end
+
+function ClosePage()
+    Page:CloseWindow();
+end
+
+function ClickChat(fid)
+    echo("Todo add_friend")
+end
+
+function addFriend(fid)
+    echo("addFriend fid"..fid)
+    FriendUI:Add_Friend(fid)
+end
+
+function report(fid)
+    echo("Todo report")    
+end
+
+local first_flag = 0
+local second_flag = 0
+local third_flag = 0
+
+function clickFirst(name)
+    if name == "first_one" then
+        first_flag = 1
+    elseif name == "first_two" then
+        first_flag = 2
+    elseif name == "first_three" then
+        first_flag = 3
+    end 
+    Page:Refresh(0)
+end
+
+function clickSecond(name)
+    if name == "second_one" then
+        second_flag = 1
+    elseif name == "second_two" then
+        second_flag = 2
+    end
+    Page:Refresh(0)
+end
+
+function clickThird(name)
+    if name == "third_one" then
+        third_flag = 1
+    elseif name == "third_two" then
+        third_flag = 2
+    end
+    Page:Refresh(0)
+end
+
+function getFirstFlag()
+    return first_flag
+end
+
+function getSecondFlag()
+    return second_flag
+end
+
+function getThirdFlag()
+    return third_flag
+end
+
+function clickReport()
+    value = Page:GetNodeByID("first")
+end
+
+]]>
+</script>
+
+<pe:container alignment="_lt" width="1920" height="1080">
+
+    <div style="position: relative; width: 1190; height: 901; left: 365; top: 94; background:url(codepku/image/textures/friend/main.png#23 445 1190 901);"></div>
+
+    <div style="position: relative; width: 410; height: 88; left: 755; top: 94; text-align: center; font-family: NotoSansHans-Medium; color: #F46D3D; font-size: 45px; line-height: 89; background:url(codepku/image/textures/common_32bits.png#1277 377 410 87);">
+        举报
+    </div>
+
+    <div style="position: relative; width: 64; height: 74; left: 1436; top: 100; background: url(codepku/image/textures/common_32bits.png#110 73 68 78);" onclick="ClosePage"></div>
+
+
+    <div style="position: relative; width: 900; height: 180; left: 510; top: 221; background: url(codepku/image/textures/friend/main.png#715 95 40 40 : 10 10 10 10);"></div>
+
+    <div style="position: relative; width: 159; height: 151; left: 687; top: 235; background: url(codepku/image/textures/friend/main.png#1298 40 159 151 : 15 15 15 15); "></div>
+    <div style="position: relative; width: 159; height: 151; left: 687; top: 235; background: url(codepku/image/textures/friend/main.png#1484 39 159 151); "></div>
+
+    <div style="position: relative; width: 350; height: 37; left: 905; top: 266;">
+        <span style="font-size: 38px; font-family: SourceHanSansSC-Bold; color: #FDFDFD;"><%=reportedPlyer.nickname%></span>
+        <span style="margin-left: 50px; font-size: 38px; font-family: SourceHanSansSC-Bold; color: #FDFDFD;"><%=getGender()%></span>
+        <span style="margin-left: 50px; font-size: 38px; font-family: SourceHanSansSC-Bold; color: #FDFDFD;">等级<%=reportedPlyer.level%></span>
+    </div>
+
+    <div style="position: relative; width: 160; height: 22; left: 906; top: 335; font-size: 28; font-family: SourceHanSansSC-Medium; color: #FEFDFC;">ID:<%=reportedPlyer.no%></div>
+
+    <div style="position: relative; width: 276; height: 70; left: 510; top: 432;text-align: center; line-height: 70; font-size: 36; color: #FDFDFD; background: url(codepku/image/textures/friend/main.png#715 95 40 40 : 10 10 10 10);">违反法律法规</div>
+
+    <input type="radio" name="first" value="1" onclick="clickFirst" width="30" height="30" style="position: relative; left: 517; top: 522;" UncheckedBG="codepku/image/textures/friend/main.png#651 100 30 30" CheckedBG="codepku/image/textures/friend/main.png#788 100 30 30" />
+    <input type="radio" name="first" value="2" onclick="clickFirst" width="30" height="30" style="position: relative; left: 766; top: 522; " UncheckedBG="codepku/image/textures/friend/main.png#651 100 30 30" CheckedBG="codepku/image/textures/friend/main.png#788 100 30 30"/>
+    <input type="radio" name="first" value="3" onclick="clickFirst" width="30" height="30" style="position: relative; left: 1015; top: 522;" UncheckedBG="codepku/image/textures/friend/main.png#651 100 30 30" CheckedBG="codepku/image/textures/friend/main.png#788 100 30 30"/>
+    <div style="position: relative; width: 135; height: 31; left: 568; top: 520; font-size: 32; color: #FDFDFD; font-family: SourceHanSansSC-Medium;" >色情低俗</div>
+    <div style="position: relative; width: 135; height: 31; left: 816; top: 520; font-size: 32; color: #FDFDFD; font-family: SourceHanSansSC-Medium;" >赌博诈骗</div>
+    <div style="position: relative; width: 135; height: 31; left: 1066; top: 520; font-size: 32; color: #FDFDFD; font-family: SourceHanSansSC-Medium;" >违法违规</div>
+
+    <div style="position: relative; width: 276; height: 70; left: 510; top: 585;text-align: center; line-height: 70; font-size: 36; color: #FDFDFD; background: url(codepku/image/textures/friend/main.png#715 95 40 40 : 10 10 10 10);">侵犯个人权益</div>
+
+    <input type="radio" name="second" value="1" onclick="clickSecond" width="30" height="30" style="position: relative; left: 517; top: 676;" UncheckedBG="codepku/image/textures/friend/main.png#651 100 30 30" CheckedBG="codepku/image/textures/friend/main.png#788 100 30 30"/>
+    <input type="radio" name="second" value="2" onclick="clickSecond" width="30" height="30" style="position: relative; left: 766; top: 676;" UncheckedBG="codepku/image/textures/friend/main.png#651 100 30 30" CheckedBG="codepku/image/textures/friend/main.png#788 100 30 30"/>
+    <div style="position: relative; width: 135; height: 31; left: 568; top: 673; font-size: 32; color: #FDFDFD; font-family: SourceHanSansSC-Medium;" >人身攻击</div>
+    <div style="position: relative; width: 135; height: 31; left: 817; top: 674; font-size: 32; color: #FDFDFD; font-family: SourceHanSansSC-Medium;" >侵犯隐私</div>
+
+    <div style="position: relative; width: 276; height: 70; left: 510; top: 738;text-align: center; line-height: 70; font-size: 36; color: #FDFDFD; background: url(codepku/image/textures/friend/main.png#715 95 40 40 : 10 10 10 10);">有害社区环境</div>
+
+    <input type="radio" name="third" value="1" onclick="clickThird" width="30" height="30" style="position: relative; left: 516; top: 829;" UncheckedBG="codepku/image/textures/friend/main.png#651 100 30 30" CheckedBG="codepku/image/textures/friend/main.png#788 100 30 30"/>
+    <input type="radio" name="third" value="2" onclick="clickThird" width="30" height="30" style="position: relative; left: 766; top: 829;" UncheckedBG="codepku/image/textures/friend/main.png#651 100 30 30" CheckedBG="codepku/image/textures/friend/main.png#788 100 30 30"/>
+    <div style="position: relative; width: 135; height: 31; left: 567; top: 826; font-size: 32; color: #FDFDFD; font-family: SourceHanSansSC-Medium;" >发布公告</div>
+    <div style="position: relative; width: 135; height: 31; left: 817; top: 827; font-size: 32; color: #FDFDFD; font-family: SourceHanSansSC-Medium;" >其他</div> -->
+
+
+    <input type="button" style="position: relative; width: 240; height: 80; left: 840; top: 893.4; text-align: center; line-height: 86; font-size: 36; color: #0E5516; font-weight: bold; font-family: NotoSansHans-Bold; background: url(codepku/image/textures/common_32bits.png#1404 740 86 86 : 9 9 9 9 );" value="提交" onclick="clickReport"/>
+    <input type="button" style="position: relative; width: 240; height: 80; left: 1222.8; top: 898.4; font-size: 36; text-align: center; line-height: 86; color: #686695; font-weight: bold; font-family: NotoSansHans-Bold; background: url(codepku/image/textures/friend/main.png#522 72 87 87 : 9 9 9 9 );" value="返回" onclick="ClosePage"/>
+
+</pe:container>
+
+</pe:mcml>
+</body>
+
+</html>

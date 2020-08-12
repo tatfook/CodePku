@@ -28,10 +28,7 @@ local WorldCommon = commonlib.gettable("MyCompany.Aries.Creator.WorldCommon")
 local KeepWorkItemManager = NPL.load("(gl)script/apps/Aries/Creator/HttpAPI/KeepWorkItemManager.lua");
 local WebSocketClient = NPL.load("(gl)Mod/CodePku/chat/WebSocketClient.lua");
 local request = NPL.load("(gl)Mod/CodePku/api/BaseRequest.lua");
-local UserInfoPage = commonlib.gettable("Mod.CodePku.UserInfoPage")
-local UserInfo = commonlib.gettable("Mod.CodePku.UserInfo")
-local OtherUserInfoPage = commonlib.gettable("Mod.CodePku.OtherUserInfoPage")
-local OtherUserInfo = commonlib.gettable("Mod.CodePku.OtherUserInfo")
+local UserInfoPage = NPL.load("(gl)Mod/CodePku/cellar/GUI/UserInfo.lua");
 local EntityManager = commonlib.gettable("MyCompany.Aries.Game.EntityManager")
 local MainSceneUIButtons = commonlib.gettable("Mod.CodePku.Common.TouchMiniButtons.MainSceneUIButtons");
 --local FriendUI = NPL.load("(gl)Mod/CodePku/cellar/GUI/Friend/FriendUI.lua")iendUI.lua")
@@ -104,7 +101,7 @@ function CodepkuChatChannel.OnWorldLoaded()
     -- 课件id
     local id = System.Codepku and System.Codepku.Coursewares and System.Codepku.Coursewares.id;
     LOG.std(nil, "info", "CodepkuChatChannel", "OnWorldLoaded: %s",tostring(id));
-    UserInfoPage.GetUserInfo() -- init user info
+    -- UserInfoPage.GetUserInfo() -- init user info
     FriendUI:GetFriend()
     for index, value in pairs(channelsMap) do -- init historical messages
         if (index ~= 'private_chat') then
@@ -112,29 +109,25 @@ function CodepkuChatChannel.OnWorldLoaded()
                 local data = response.data.data
                 for i, v in ipairs(data) do
                     v = v.raw
-                    local speakerIsMe = if_else(v.from_user_id == UserInfo.id, 1, 0)
+                    local speakerIsMe = if_else(v.from_user_id == System.User.id, 1, 0)
                     local msg_data = {speakerIsMe=speakerIsMe, dialog=v.content, avatar=v.from_user_avatar or DEFAULT_AVATAR, nickname=v.from_user_nickname, level=v.from_user_level or 1, channel=v.channel}
                     CodepkuChatChannel.SetMessage(value, msg_data, 1)
                 end
             end)
         elseif (index == 'private_chat') then
+            if CodepkuChatChannel.Messages[value] == nil then
+                CodepkuChatChannel.Messages[value] = {}
+            end
             for _, f in ipairs(FriendUI.vars["friends"]) do
                 local friend_id = f.friend_id
-                
                 request:get(string.format('/chat/private-message/%d', friend_id)):next(function(response)
                     local data = response.data.data
-                    
-                    if CodepkuChatChannel.Messages[value] == nil then
-                        CodepkuChatChannel.Messages[value] = {}
-                    end
                     CodepkuChatChannel.Messages[value][friend_id] = {}
                     for i, v in ipairs(data) do
                         v = v.raw
-                        local speakerIsMe = if_else(v.from_user_id == UserInfo.id, 1, 0)
+                        local speakerIsMe = if_else(v.from_user_id == System.User.id, 1, 0)
                         local msg_data = {speakerIsMe=speakerIsMe, dialog=v.content, avatar=v.from_user_avatar or DEFAULT_AVATAR, nickname=v.from_user_nickname, level=v.from_user_level or 1, channel=v.channel, from=v.from_user_id, to=v.to_user_id}
-                        
                         CodepkuChatChannel.SetMessage(CodepkuChatChannel.Messages[value][friend_id], msg_data, 1)
-                        
                     end
                 end)
             end
@@ -241,7 +234,7 @@ function CodepkuChatChannel.OnMsg(self, msg)
         return
     end
     msg = msg.data;
-    local speakerIsMe = if_else(msg.from_user_id == UserInfo.id, 1, 0)
+    local speakerIsMe = if_else(msg.from_user_id == System.User.id, 1, 0)
     local avatar = msg.from_user_avatar or 'codepku/image/textures/chat/default_avatar.png'
     local action = tonumber(msg.action);
     if (action == messageActionsMap.status) then
@@ -281,6 +274,9 @@ function CodepkuChatChannel.OnMsg(self, msg)
             -- 私聊
             msg_data = {speakerIsMe=speakerIsMe, dialog=msg.content, avatar=avatar, nickname=msg.from_user_nickname, level=msg.from_user_level or 1, channel=msg.channel, from=msg.from_user_id, to=msg.to_user_id}
             -- table.insert( CodepkuChatChannel.Messages, msg_data)
+            if CodepkuChatChannel.Messages[channel][msg.from_user_id] == nil then
+                CodepkuChatChannel.Messages[channel][msg.from_user_id] = {}
+            end
             CodepkuChatChannel.SetMessage(CodepkuChatChannel.Messages[channel][msg.from_user_id], msg_data);
         end
     end
@@ -442,10 +438,10 @@ function CodepkuChatChannel.SendWorldMsg(words)
     end
     local worldMsg = {
 
-        from_user_id = UserInfo.id,
-        from_user_nickname = UserInfo.name,
-        from_user_avatar = UserInfo.avatar,
-        from_user_level = UserInfo.self_level.current_level,
+        from_user_id = System.User.id,
+        from_user_nickname = System.User.name,
+        from_user_avatar = System.User.info and System.User.info.avatar_url,
+        from_user_level = System.User.info and System.User.info.self_level and System.User.info.self_level.current_level or 1,
         channel = channelsMap.world,
         courseware_id=1, --todo
         type=messageTypeMap.text,
@@ -463,11 +459,12 @@ function CodepkuChatChannel.SendNearByMsg(words)
     end
     pos_x, pos_y, pos_z = EntityManager.GetPlayer():GetPosition()
     local nearByMsg = {
-        from_user_id = UserInfo.id,
-        from_user_nickname = UserInfo.name,
-        from_user_avatar = UserInfo.avatar,
+
+        from_user_id = System.User.id,
+        from_user_nickname = System.User.name,
+        from_user_avatar = System.User.info and System.User.info.avatar_url,
+        from_user_level = System.User.info and System.User.info.self_level and System.User.info.self_level.current_level or 1,
         from_user_position = {x=pos_x, y=pos_y, z=pos_z},
-        from_user_level = UserInfo.self_level.current_level,
         channel = channelsMap.nearby,
         courseware_id=1, --todo
         type=messageTypeMap.text,
@@ -490,22 +487,21 @@ function CodepkuChatChannel.SendToFriend(friend, words)
     end
     local to_user_id = friend.friend_id
     if to_user_id then
-        OtherUserInfoPage.GetUserInfo(to_user_id)
         local worldMsg = {
             to_user_id = to_user_id,
             to_user_nickname = friend.name,
             to_user_avatar = friend.head,
-            from_user_id = UserInfo.id,
-            from_user_nickname = UserInfo.name,
-            from_user_avatar = UserInfo.avatar,
-            from_user_level = UserInfo.self_level.current_level,
+            from_user_id = System.User.id,
+            from_user_nickname = System.User.name,
+            from_user_avatar = System.User.info and System.User.info.avatar_url,
+            from_user_level = System.User.info and System.User.info.self_level and System.User.info.self_level.current_level or 1,
             channel = channelsMap.private_chat,
             courseware_id=1, --todo
             type=messageTypeMap.text,
             content= words,
             action=2,
         };
-        msg_data = {speakerIsMe=1, dialog=worldMsg.content, avatar=worldMsg.from_user_avatar, nickname=worldMsg.from_user_nickname, level=worldMsg.level or 1, channel=worldMsg.channel, from=worldMsg.from_user_id, to=worldMsg.to_user_id}
+        msg_data = {speakerIsMe=1, dialog=worldMsg.content, avatar=worldMsg.from_user_avatar, nickname=worldMsg.from_user_nickname, level=worldMsg.from_user_level, channel=worldMsg.channel, from=worldMsg.from_user_id, to=worldMsg.to_user_id}
         -- table.insert( CodepkuChatChannel.Messages, msg_data)
         CodepkuChatChannel.SetMessage(CodepkuChatChannel.Messages[worldMsg.channel][to_user_id], msg_data);
         

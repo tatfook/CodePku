@@ -53,12 +53,9 @@ local MainEntrencePage = NPL.load("(gl)Mod/CodePku/cellar/GUI/FastEntrence/MainE
 local SystemEntrence = NPL.load("(gl)Mod/CodePku/cellar/GUI/FastEntrence/SystemEntrence.lua")
 local CompeteEntrence = NPL.load("(gl)Mod/CodePku/cellar/GUI/FastEntrence/CompeteEntrence.lua")
 local TopicEntrence = NPL.load("(gl)Mod/CodePku/cellar/GUI/FastEntrence/TopicEntrence.lua")
-local OtherUserInfoPage = NPL.load("(gl)Mod/CodePku/cellar/GUI/OtherUserInfo.lua")
-local UserInfoPage = NPL.load("(gl)Mod/CodePku/cellar/GUI/UserInfo.lua")
 local SharePage = NPL.load("(gl)Mod/CodePku/cellar/GUI/Share.lua")
 local FriendUI = NPL.load("(gl)Mod/CodePku/cellar/GUI/Window/AdaptWindow.lua");
 local SubjectPage = NPL.load("(gl)Mod/CodePku/cellar/GUI/Subject.lua")
-local EditPage = NPL.load("(gl)Mod/CodePku/cellar/GUI/editShare.lua")
 local PropsInfo = NPL.load("(gl)Mod/CodePku/cellar/GUI/Props/PropsInfo.lua")
 local RankPage = NPL.load("(gl)Mod/CodePku/cellar/GUI/rank/RankPage.lua")
 local Messages = NPL.load("(gl)Mod/CodePku/cellar/common/TouchMiniButtons/Messages.lua")
@@ -71,6 +68,10 @@ local DownloadWorld = commonlib.gettable("MyCompany.Aries.Game.MainLogin.Downloa
 local CodePku = commonlib.inherit(commonlib.gettable("Mod.ModBase"),commonlib.gettable("Mod.CodePku"));
 local GenAndName = commonlib.gettable("Mod.CodePku.GenAndName")
 
+
+NPL.load("(gl)Mod/CodePku/cellar/Common/AriesWindow/pe_aries_window2.lua");
+local pe_aries_window2 = commonlib.gettable("Mod.CodePku.Common.AriesWindow.pe_aries_window2");
+pe_aries_window2:RegisterAs("pe:aries_window2");
 
 CodePku:Property({"Name", "CodePku", "GetName", "SetName", { auto = true }})
 
@@ -225,6 +226,8 @@ function CodePku:init()
 				codepku_pe_aries_window.create_center(rootName, mcmlNode, bindingContext, _parent, left, top, right, bottom, myLayout, css);
 			elseif (mode == "thin" or mode == "mc") then
 				codepku_pe_aries_window.create_thin_mc(rootName, mcmlNode, bindingContext, _parent, left, top, right, bottom, myLayout, css);
+			elseif (mode == "modal") then
+				codepku_pe_aries_window.create_modal(rootName, mcmlNode, bindingContext, _parent, left, top, right, bottom, myLayout, css);
 			end
 			return true;
 		end
