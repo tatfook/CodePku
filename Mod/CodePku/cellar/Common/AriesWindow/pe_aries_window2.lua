@@ -76,8 +76,6 @@ function pe_aries_window2:OnAfterChildLayout(layout, left, top, right, bottom)
 end
 
 function pe_aries_window2:initHeader(parentElem, css)
-    echo('@ 75')
-    echo(css)
     --title
     local title_height = self:GetAttributeWithCode("TitleHeight", self.TitleHeight, true);
     local title_width = self:GetAttributeWithCode("TitleWidth", self.TitleWidth, true);
