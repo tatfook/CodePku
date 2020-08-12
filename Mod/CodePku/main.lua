@@ -388,6 +388,55 @@ function CodePku:init()
 			return not (System.Codepku.Coursewares and (System.Codepku.Coursewares.category == 1 or System.Codepku.Coursewares.category == 2));
 		end
 	);
+
+	GameLogic.GetFilters():add_filter(
+		"HandlePlayerKeyEventByB",
+		function(bShow)
+			return not (System.Codepku.Coursewares and (System.Codepku.Coursewares.category == 1 or System.Codepku.Coursewares.category == 2));
+		end
+	);
+
+	GameLogic.GetFilters():add_filter(
+		"HandlePlayerKeyEventByE",
+		function(bShow)
+			return not (System.Codepku.Coursewares and (System.Codepku.Coursewares.category == 1 or System.Codepku.Coursewares.category == 2));
+		end
+	);
+
+	GameLogic.GetFilters():add_filter(
+		"HandleGlobalKeyByF1",
+		function()
+			return true;
+		end
+	);
+
+	GameLogic.GetFilters():add_filter(
+		"HandleGlobalKeyByF4",
+		function()
+			return true;
+		end
+	);
+
+	GameLogic.GetFilters():add_filter(
+		"HandlePlayerKeyEventByF5",
+		function()
+			return true;
+		end
+	);
+
+	GameLogic.GetFilters():add_filter(
+		"HandleGlobalKeyByF9",
+		function()
+			return true;
+		end
+	);
+
+	GameLogic.GetFilters():add_filter(
+		"HandleGlobalKeyByF12",
+		function()
+			return true;
+		end
+	);
 end
 
 function CodePku:OnLogin()
