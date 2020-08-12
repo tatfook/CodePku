@@ -20,8 +20,8 @@ RankPage.left_navig = {
     {title = '游戏', name = 'game', index = 2}
 }
 RankPage.game_navig = {
-    [1] = {title = "华夏游学", name = "monopoly", index = 1},
-    [2] = {title = "单词酷跑", name = "parkour", index = 2}
+    [1] = {title = "单词酷跑", name = "parkour", index = 1},
+    [2] = {title = "华夏游学", name = "monopoly", index = 2},
 }
 RankPage.top_navig = {
     [1] = {title = "世 界", name = "world", index = 1},
@@ -36,7 +36,7 @@ RankPage.left_navig_last_clicked = 1
 RankPage.show_left_navig = 1
 RankPage.top_navig_clicked_index = 1
 RankPage.show_top_navig = 0
-RankPage.userinfo, RankPage.myinfo = RankPage.GetGameItem('monopoly', 1)
+RankPage.userinfo, RankPage.myinfo = RankPage.GetGameItem('parkour', 1)
 
 function ClosePage()
     Page:CloseWindow()
@@ -94,9 +94,9 @@ end
 
 function GetPosition()
     if RankPage.left_navig_last_clicked == 1 then
-        return '1130 278 130 120'
-    elseif RankPage.left_navig_last_clicked == 2 then
         return '1293 273 130 120'
+    elseif RankPage.left_navig_last_clicked == 2 then
+        return '1130 278 130 120'
     end
 end
 
@@ -123,7 +123,7 @@ end
     <div style="position: relative; width: 100; height: 42; left: 831; top: 207; base-font-size:44px; font-size:44px; font-family:Noto Sans S Chinese Regular; color: #ffffff;">名称</div>
     <div style="position: relative; width: 100; height: 41; left: 1474; top: 207; base-font-size:44px; font-size:44px; font-family:Noto Sans S Chinese Regular; color: #ffffff;">积分</div>
     <!--滚动吧-->
-    <pe:gridview name="rank_content" style="position: relative; width: 1380; height: 600; left: 382; top: 255;" DataSource='<%=RankPage.userinfo %>' CellPadding="0" ItemsPerLine="1" AllowPaging="false" RememberScrollPos="true" RememberLastPage="true" 
+    <pe:gridview name="rank_content" style="position: relative; width: 1450; height: 600; left: 382; top: 255;" DataSource='<%=RankPage.userinfo %>' CellPadding="0" ItemsPerLine="1" AllowPaging="false" RememberScrollPos="true" RememberLastPage="true" 
         pagesize="36" VerticalScrollBarStep="36" VerticalScrollBarOffsetX="8">
         <Columns>
             <pe:if condition="<%=Eval('rank') == 1 %>">
