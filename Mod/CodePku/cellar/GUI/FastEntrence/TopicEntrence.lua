@@ -6,7 +6,6 @@ local request = NPL.load("(gl)Mod/CodePku/api/BaseRequest.lua");
 TopicEntrencePage.nowPage = nil
 
 function TopicEntrencePage.GetCourse(subject_id)
-
     response = request:get(string.format('/coursewares/entrance/topic?subject=%d', subject_id), nil,{sync = true})
     data = response.data.data
     list = {}

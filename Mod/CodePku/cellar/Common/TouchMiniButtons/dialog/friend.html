@@ -35,6 +35,16 @@ FRIEND_IN_CHATTING = MainSceneUIButtons.FriendId or 1
 DEFAULT_AVATAR = 'codepku/image/textures/chat/default_avatar.png'
 
 friends = commonlib.deepcopy(FriendUI.vars["friends"])
+
+table.sort(friends, function(a, b)
+    local sort_online = tostring(a.is_online) == tostring(b.is_online)
+    if sort_online then
+        return a.nickname > b.nickname
+    else
+        return tostring(a.is_online) > tostring(b.is_online)
+    end
+end)
+
 for i, v in ipairs(friends) do
     v.index = i
     if i == FRIEND_IN_CHATTING then
@@ -108,8 +118,14 @@ end
 function GetMessages()
     local Messages = {}
     if friends and friends ~= {} then
+        local LAST_CLICKED_INDEX = Channels.friends
         local f_id = friends[FRIEND_IN_CHATTING].friend_id
-        Messages = CodepkuChatChannel.Messages[Channels[3].channel][f_id]
+        local f_channel = CodepkuChatChannel.Messages[Channels[LAST_CLICKED_INDEX].channel]
+        if (f_channel) then
+            Messages = f_channel[f_id]
+        else
+            Messages = {}
+        end
     end
     return Messages
 end
@@ -144,7 +160,7 @@ end
         </div>
 
         <div style="width: 228; height: 845;background: url(codepku/image/textures/chat_ui/friend_left.png);">
-        <pe:treeview VerticalScrollBarStep="40"  VerticalScrollBarPageSize="400" RememberScrollPos="true" RememberLastPage="true" >
+        <pe:treeview style="width: 228; height: 845" VerticalScrollBarStep="100" RememberScrollPos="true" RememberLastPage="true">
             <pe:repeat DataSource="<%=GetFriends()%>">
                 <pe:repeatitem>
                     <div style="<%=format('width:228;height:100;background: url(codepku/image/textures/chat_ui/chat_32bits.png#%s); ', Eval('status'))%>" name="<%=Eval('index')%>" onclick="OnClickFriend">
