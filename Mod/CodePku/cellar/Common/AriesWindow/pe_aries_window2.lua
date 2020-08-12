@@ -9,7 +9,7 @@ NPL.load("(gl)Mod/CodePku/cellar/Common/AriesWindow/pe_aries_window2.lua");
 local pe_aries_window2 = commonlib.gettable("Mod.CodePku.Common.AriesWindow.pe_aries_window2");
 pe_aries_window2:RegisterAs("pe:aries_window2");
 
-e.g.: <pe:aries_window2 alignment="_ct" title="yourtitle"><div>Hello</div></pe:aries_window2>
+e.g.: <pe:aries_window2 alignment="_ct" title="yourtitle" style="width:...;height:...px;background:..."><div>Hello</div></pe:aries_window2>
 ------------------------------------------------------------
 ]]
 
@@ -79,13 +79,14 @@ function pe_aries_window2:initHeader(parentElem, css)
     --title
     local title_height = self:GetAttributeWithCode("TitleHeight", self.TitleHeight, true);
     local title_width = self:GetAttributeWithCode("TitleWidth", self.TitleWidth, true);
+    local modal_width = css.width or self.Width;
 
     self.titleBg = Rectangle:new():init(parentElem);
     self.titleBg:SetBackground(self.TitleBackground);
-    self.titleBg:setGeometry((self.Width - title_width)/2, -13, title_width, title_height);
+    self.titleBg:setGeometry((modal_width - title_width)/2, -13, title_width, title_height);
     self.title = Label:new():init(parentElem);
     self.title:SetText(tostring(self:GetAttributeWithCode("title", nil, true) or ""));
-    self.title:setGeometry((self.Width - title_width)/2, -13, title_width, title_height);
+    self.title:setGeometry((modal_width - title_width)/2, -13, title_width, title_height);
     self.title["Color"] = '#F46D3D';
     self.title:SetFont("Noto Sans S Chinese Regular;45;bold");
 
@@ -93,7 +94,7 @@ function pe_aries_window2:initHeader(parentElem, css)
     self.closeBtn = Button:new():init(parentElem);
     local close_btn_width = self:GetAttributeWithCode("CloseBtnWidth", self.CloseBtnWidth, true);
     local close_btn_height = self:GetAttributeWithCode("CloseBtnHeight", self.CloseBtnHeight, true);
-    self.closeBtn:setGeometry(self.Width - close_btn_width - 33, 5, close_btn_width, close_btn_height);
+    self.closeBtn:setGeometry(modal_width - close_btn_width - 33, 5, close_btn_width, close_btn_height);
     self.closeBtn:SetBackground(self.CloseBtnBackground);
     self.closeBtn:Connect("clicked", function (event)
         local page = self:GetPageCtrl();

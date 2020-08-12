@@ -1,0 +1,52 @@
+<!-- "script/apps/Aries/Creator/Game/Areas/EscFramePage.html" -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+</head>
+<body>
+    <pe:mcml>
+<script refresh="false" type="text/npl" src="UserInfo.lua"><![CDATA[
+Feedback = NPL.load("(gl)Mod/CodePku/cellar/GUI/Feedback/Feedback.lua");
+local FeedbackDefault = Feedback:GetWord();
+
+function ClosePage()
+    Page:CloseWindow();
+end
+
+
+function OnClose()
+    ClosePage()
+end
+
+]]>
+
+</script>
+
+<pe:aries_window2 alignment="_ct" style="font-size:50px;font-weight:bold;color:#ffffff;font-family:Noto Sans S Chinese Regular;" title="反馈">
+    <!-- todo: textarea style/css doesn't work -->
+    <!-- <textarea
+        rows="10"
+        align="center"
+        EmptyText="反馈"
+        value="<%=FeedbackDefault%>"
+        lineWrap="true"
+        AlwaysShowCurLineBackground="false"
+        style="color:#ffffff;margin-top:34px;font-size:36px;padding:30px;width:960px;height:233px;background:url(codepku/image/textures/common_32bits.png#1404 292 40 40:17 17 17 17)"
+    ></textarea> -->
+    <div style="font-size:36px;font-weight:bold;color:#383838;width:960px;height:266px;background-color: #ffffff;margin-left: 99px;margin-top: 30px;">
+        <div style="font-family: Noto Sans S Chinese Regular;padding-top:17px;text-align: center;">如需进一步帮助，请通过以下方式联系我们。<br/></div>
+        <div style="font-family: Noto Sans S Chinese Regular;padding-top:21px;margin-left: 263px;">官方QQ群：963791354<br/></div>
+        <div style="font-family: Noto Sans S Chinese Regular;padding-top:21px;margin-left: 263px;">客服QQ：1026677033<br/></div>
+        <div style="font-family: Noto Sans S Chinese Regular;padding-top:21px;margin-left: 263px;">客户微信：T15337115704<br/></div>
+    </div>
+    <div align="center" style="margin-top:37px;font-size:36px;">        
+        <input type="button" name="OK" value='<%=L"确定" %>' onclick="OnClose" style="color:#0E5516;width:246px;height:86px;background:url(codepku/image/textures/common_32bits.png#1404 740 86 86:14 14 14 14);"/>
+    </div>
+</pe:aries_window2>
+
+</pe:mcml>
+</body>
+</html>
+ 

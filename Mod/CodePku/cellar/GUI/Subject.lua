@@ -43,9 +43,9 @@ function SubjectPage.OnInitSubject()
             level = '0级',
             percent = 0,
             current_exp = 0,
-            next_exp = 0,
+            next_exp = 30,
             progress = 0,
-            total_exp = 30,
+            total_exp = 0,
             name = const_subject[i][1],
             chname = const_subject[i][2],
             icon = const_subject[i][3]
