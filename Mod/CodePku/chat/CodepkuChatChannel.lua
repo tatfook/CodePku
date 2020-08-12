@@ -543,6 +543,11 @@ function CodepkuChatChannel.SendToFriend(friend, words)
         };
         msg_data = {speakerIsMe=1, dialog=worldMsg.content, avatar=worldMsg.from_user_avatar, nickname=worldMsg.from_user_nickname, level=worldMsg.from_user_level, channel=worldMsg.channel, from=worldMsg.from_user_id, to=worldMsg.to_user_id}
         -- table.insert( CodepkuChatChannel.Messages, msg_data)
+        
+        if (not CodepkuChatChannel.Messages[worldMsg.channel][to_user_id]) then            
+            CodepkuChatChannel.Messages[worldMsg.channel][to_user_id] = {};
+        end;
+
         CodepkuChatChannel.SetMessage(CodepkuChatChannel.Messages[worldMsg.channel][to_user_id], msg_data);
         
         CodepkuChatChannel.client:SendMsg(worldMsg);
