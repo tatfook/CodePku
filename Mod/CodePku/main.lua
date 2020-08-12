@@ -432,6 +432,13 @@ function CodePku:init()
 	);
 
 	GameLogic.GetFilters():add_filter(
+		"HandleGlobalKeyByF11",
+		function()
+			return true;
+		end
+	);
+
+	GameLogic.GetFilters():add_filter(
 		"HandleGlobalKeyByF12",
 		function()
 			return true;
