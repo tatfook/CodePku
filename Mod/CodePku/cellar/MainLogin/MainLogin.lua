@@ -16,9 +16,18 @@ local CodePkuServiceSession = NPL.load("(gl)Mod/CodePku/service/CodePkuService/S
 local CodePkuService = NPL.load("(gl)Mod/CodePku/service/CodePkuService.lua")
 local SessionsData = NPL.load("(gl)Mod/CodePku/database/SessionsData.lua")
 
+
+
+NPL.load("(gl)Mod/CodePku/cellar/GUI/Window/AdaptWindow.lua");
+local AdaptWindow = commonlib.gettable("Mod.CodePku.GUI.Window.AdaptWindow");
+
 local MainLogin = NPL.export()
 
-function MainLogin:Show()     
+MainLogin.MainLoginPage = nil
+MainLogin.LoginBGPage = nil
+MainLogin.isPassword = nil
+
+function MainLogin:Show(index)     
     self:CloseLoadingPage()
     local PWDInfo = CodePkuServiceSession:LoadSigninInfo()
     echo(PWDInfo)
@@ -66,22 +75,48 @@ function MainLogin:Show()
             end
         )         
     else                
-        Mod.CodePku.Utils.ShowWindow({
-            url = "Mod/CodePku/cellar/MainLogin/MainLogin.html", 
-            name = "MainLogin", 
-            isShowTitleBar = false,
-            DestroyOnClose = true, -- prevent many ViewProfile pages staying in memory
-            style = CommonCtrl.WindowFrame.ContainerStyle,
-            zorder = -1,
-            allowDrag = false,
-            directPosition = true,
-                align = "_fi",
-                x = 0,
-                y = 0,
-                width = 0,
-                height = 0,
-            cancelShowAnimation = true,
-        })
+        if index ~= nil then
+            IsPassword = tonumber(index)
+        else
+            IsPassword = 1
+        end
+
+        local params = {
+            [1] = {url = "Mod/CodePku/cellar/MainLogin/MainLogin.html", 
+                    name = "MainLogin", 
+                    isShowTitleBar = false,
+                    DestroyOnClose = true,
+                    allowDrag = false,
+                    enable_esc_key = true,
+                    -- bShow = bShow,
+                    click_through = false, 
+                    zorder = 20,
+                    directPosition = true,
+                    alignment = "_ct",
+                    x = -1920/2,
+                    y = -1080/2,
+                    width = 1920,
+                    height = 1080},
+
+            [2] = {url = "Mod/CodePku/cellar/MainLogin/MainLoginPassword.html", 
+                    name = "MainLoginPassword", 
+                    isShowTitleBar = false,
+                    DestroyOnClose = true,
+                    allowDrag = false,
+                    enable_esc_key = true,
+                    -- bShow = bShow,
+                    click_through = false, 
+                    zorder = 20,
+                    directPosition = true,
+                    alignment = "_ct",
+                    x = -1920/2,
+                    y = -1080/2,
+                    width = 1920,
+                    height = 1080,}
+            };
+
+            MainLogin.MainLoginPage = AdaptWindow:QuickWindow(params[IsPassword])
+
     
         local MainLoginPage = Mod.CodePku.Store:Get('page/MainLogin')
         
@@ -118,7 +153,7 @@ end
 
 -- methodIndex: 1-captcha, 2-password
 function MainLogin:LoginAction(methodIndex)
-    local MainLoginPage = Mod.CodePku.Store:Get("page/MainLogin")
+    local MainLoginPage = Mod.CodePku.Store:Get('page/MainLogin')
 
     if not MainLoginPage then
         return false
@@ -130,10 +165,17 @@ function MainLogin:LoginAction(methodIndex)
     end
 
     local account = MainLoginPage:GetValue("account")
-    local mobileToken = MainLoginPage:GetValue('mobile_token')
+    
+
+    local tokenNode = MainLoginPage:GetNode("mobile_token");
+    local mobileToken = tokenNode:GetAttributeWithCode("value")
+
     local verifyCode = MainLoginPage:GetValue("verify_code")
     local password = MainLoginPage:GetValue('password')
-    local agree = MainLoginPage:GetValue("agree")
+
+    local agree = MainLoginPage:GetNode("agree");
+    local agree_ctrl = agree:GetControl();
+    local agree_val = agree_ctrl:isChecked();
 
     if not account or account == "" then
         GameLogic.AddBBS(nil, L"请输入手机号码", 3000, "255 0 0", 21)
@@ -156,7 +198,7 @@ function MainLogin:LoginAction(methodIndex)
         end
     end
 
-    if not agree then
+    if not agree_val then
         GameLogic.AddBBS(nil, L"请同意用户协议", 3000, "255 0 0", 21)
         return false
     end
@@ -386,28 +428,48 @@ function MainLogin:getMobileCode()
 end
 
 function MainLogin:ShowLoginBackgroundPage()
-    local url = "Mod/CodePku/cellar/MainLogin/LoginBackgroundPage.html"
-    System.App.Commands.Call("File.MCMLWindowFrame", {
-        url = url, 
+
+    local params = {
+        url = "Mod/CodePku/cellar/MainLogin/LoginBackgroundPage.html",
         name = "LoginBGPage", 
-        isShowTitleBar = false,
-        DestroyOnClose = true, -- prevent many ViewProfile pages staying in memory
-        style = CommonCtrl.WindowFrame.ContainerStyle,
+        DestroyOnClose = true,
         allowDrag = false,
-        zorder = -2,
-        bShow = bShow,
+        enable_esc_key = true,
+        -- bShow = bShow,
+        click_through = false, 
+        zorder = -10,
         directPosition = true,
-            align = "_fi",
-            x = 0,
-            y = 0,
-            width = 0,
-            height = 0,
-        cancelShowAnimation = true,
-    });	
+        alignment = "_ct",
+        x = -1920/2,
+        y = -1080/2,
+        width = 1920,
+        height = 1080,
+        };
+        MainLogin.LoginBGPage = AdaptWindow:QuickWindow(params)
+
 end
 
 function MainLogin:ShowUserAgreementModal()	
-    Mod.CodePku.Utils.ShowWindow(568, 368, "Mod/CodePku/cellar/UserAgreement/UserAgreement.html", "UserAgreement")
+
+    local params = {
+        url = "Mod/CodePku/cellar/UserAgreement/UserAgreement.html",
+        name = "UserAgreement", 
+        DestroyOnClose = true,
+        allowDrag = false,
+        enable_esc_key = true,
+        -- bShow = bShow,
+        click_through = false, 
+        zorder = 30,
+        directPosition = true,
+        alignment = "_ct",
+        x = -1920/2,
+        y = -1080/2,
+        width = 1920,
+        height = 1080,
+        };
+        AdaptWindow:QuickWindow(params)
+
+    -- Mod.CodePku.Utils.ShowWindow(568, 368, "Mod/CodePku/cellar/UserAgreement/UserAgreement.html", "UserAgreement")
 end
 
 function MainLogin:ShowLoadingPage()

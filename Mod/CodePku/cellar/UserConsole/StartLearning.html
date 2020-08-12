@@ -1,11 +1,13 @@
+<!-- "script/apps/Aries/Creator/Game/Areas/EscFramePage.html" -->
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" >
-    <head>
-    <title>2020.05.27</title>
-    </head>
-    <body>
-        <pe:mcml>  
-            <script type="text/npl" refresh="false"><![CDATA[ 
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+</head>
+<body>
+    <pe:mcml>
+    <script type="text/npl" refresh="false"><![CDATA[
                 UserConsole = NPL.load('./Main.lua')
                 CodePkuService = NPL.load("(gl)Mod/CodePku/service/CodePkuService.lua")
 
@@ -30,35 +32,60 @@
                 function logout()
                     UserConsole:Logout()
                 end
+
+                function ClickCommunity()
+                    ParaGlobal.ShellExecute("open", L"http://kids.wanxueshijie.com/", "", "", 1)
+                end
             ]]></script>
             <style type="text/mcss">
-                {
-                    logout = {
-                        width = 76.8,
-                        height = 42,
-                        background = "codepku/image/textures/login/mainlogin_32bits.png# 30 1889 129 71)",
-                        ["margin-top"] = 37.8,
-                        ["margin-right"] = 51
-                    },
-                    start = {
-                        ["font-weight"] = "bold",
-                        ["font-family"] = "Microsoft Yahei",
-                        width = 372,
-                        height = 42.6,
-                        background = "codepku/image/textures/login/mainlogin_32bits.png# 1000 1649 620 72)",
-                        ["background-color"] = '#ffffff',
-                    },
-                    click_window = {
-                        ["position"] = "relative",
-                        width = 301,
-                        height = 44,
-                        background = "codepku/image/textures/bg_32bits.png# 454 284 602 88)",
-                        ["margin-left"] = -150,
-                        ["margin-top"] = -21.3,
-                    },
-                }
+                
             </style>
-            <pe:container alignment="_fi" ClickThrough="true" style="position: relative;background:;">
+
+
+
+
+            <pe:container alignment="_lt" width="1920" height="1080">
+
+                <div onclick="startLearning()" width="100%" height="100%" style="position: relative; left: 0; top: 0;"></div>
+
+                <div style="position: relative; width: 384; height: 161; left: 768; top: 60; background:url(codepku/image/textures/login/main.png#1170 54 384 161)"></div>
+
+                <div style="position: relative; width: 757; height: 88; left: 582; top: 290; line-height: 88; text-align: center; font-size: 38; font-family: Source Han Sans SC; font-weight: bold; color: #FFFFFF; background:url(codepku/image/textures/login/main.png#873 270 96 88:20 20 20 20)">
+                    <%= currentUserName().."，欢迎进入玩学世界" %> 
+                </div>
+
+                <div style="position: relative; width: 602; height: 88; left: 659; top: 474; background:url(codepku/image/textures/login/main.png#56 270 602 88);"></div>
+
+                <!-- <pe:container alignment="_rt" ClickThrough="true" style="position:relative;background:;">
+                    <input type="button" name="logout" value='' class="logout" onclick="logout()" style="margin: 2px 2px 0 0" />
+                </pe:container>
+                
+                <pe:container alignment="_rt" ClickThrough="true" style="position:relative;background:;">
+                    <div name="community" class="community" style="margin: 2px 2px 0 0" onclick="ClickCommunity"></div>
+                </pe:container> -->
+
+                <div style="position: relative; width: 76; height: 119; left: 1790; top: 38; background:url(codepku/image/textures/login/main.png#1392 255 76 119);" onclick="logout"></div>
+                <div style="position: relative; width: 79; height: 119; left: 1787; top: 180; background:url(codepku/image/textures/login/main.png#1256 255 79 119);" onclick="ClickCommunity"></div>
+
+                <!-- <pe:if condition="<%= System.os.IsMobilePlatform() %>">
+                        <pe:container alignment="_ctt" ClickThrough="true" style="position:relative;width:372px;margin-top:247.2px;height:42.6px;background:codepku/image/textures/login/mainlogin_32bits.png# 1000 1649 620 72);">
+                            <!-1- <input type="button" DefaultButton="true" onclick="startLearning()" class="start" value='' /> -1->
+                        </pe:container>
+                </pe:if>
+                <pe:if condition="<%= not System.os.IsMobilePlatform() %>">
+                    <pe:container alignment="_ct" ClickThrough="true" class="click_window">
+                        <!-1- <input type="button" DefaultButton="true" onclick="startLearning()" class="start" value='' /> -1->
+                    </pe:container>
+                </pe:if> -->
+
+
+            </pe:container>
+
+
+            
+
+
+            <!-- <pe:container alignment="_fi" ClickThrough="true" style="position: relative;background:;">
                 <div style="background:'';" onclick="startLearning()" width="100%" height="100%"></div>
             </pe:container>
             <pe:container alignment="_ctt" ClickThrough="true" style="position:relative;width:574;height:86;margin-top:71px;background:;">
@@ -75,14 +102,14 @@
             </pe:container>
             <pe:if condition="<%= System.os.IsMobilePlatform() %>">
                 <pe:container alignment="_ctt" ClickThrough="true" style="position:relative;width:372px;margin-top:247.2px;height:42.6px;background:codepku/image/textures/login/mainlogin_32bits.png# 1000 1649 620 72);">
-                <!-- <input type="button" DefaultButton="true" onclick="startLearning()" class="start" value='' /> -->
+                
                 </pe:container>
             </pe:if>
             <pe:if condition="<%= not System.os.IsMobilePlatform() %>">
                 <pe:container alignment="_ct" ClickThrough="true" class="click_window">
-                <!-- <input type="button" DefaultButton="true" onclick="startLearning()" class="start" value='' /> -->
+
                 </pe:container>
-            </pe:if>
+            </pe:if> -->
         </pe:mcml>
     </body>
 </html>
