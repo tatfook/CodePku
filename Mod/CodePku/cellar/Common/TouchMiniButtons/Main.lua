@@ -21,7 +21,7 @@ MainUIButtons.open_common = nil
 
 
 function MainUIButtons.show_common_ui(flag)
-	local open_width = 799
+	local open_width = 780
 	local open_height = 178
 	local close_width = 82
 	local close_height = 178
