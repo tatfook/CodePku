@@ -81,7 +81,7 @@ end
 
 function next_page()
     if SystemLevelPage~=nil then
-        if (SystemLevelPage.page < SystemLevelPage.total_courses%SystemLevelPage.maxItemPerPage) then
+        if (SystemLevelPage.page < math.ceil(SystemLevelPage.total_courses/SystemLevelPage.maxItemPerPage)) then
         SystemLevelPage.page = SystemLevelPage.page + 1
             SystemLevelPage.courses = SystemLevelPage.GetLevels(SystemLevelPage.grade_id,SystemLevelPage.semester_id,SystemLevelPage.subjects[SystemLevelPage.last_clicked_index].subject_id)
             Page:Refresh(0)
@@ -107,12 +107,10 @@ end
 
     <div style="width:1920;height: 1080;background:url(codepku/image/textures/commonpopup/backboard.png)">
         <div style="position: relative; width:230; height:1080; background-color: #94E3FE;"></div>
-        <div style='float:left;width:208px;height:127px;background: url(codepku/image/textures/commonpopup/main.png#251 49 208 127);' onclick="OnClose"></div>
-
-        <div style='position: relative;left:144px;top:-127px;width:417px;height:86px;background: url(codepku/image/textures/commonpopup/main.png#475 63 429 86);'></div>
-        <div style='position: relative;width:417px;text-align: center; left:144px;top:-127px;height:86px;line-height:86px;font-size:50px;color: #D85D0B; font-family:Alibaba PuHuiTi;'>教学区</div>
-
-        <div style="width:200;height:900;position: relative;margin-top: 17px;">
+        <div style='position: relative;width:208px;height:127px;background: url(codepku/image/textures/commonpopup/main.png#251 49 208 127);' onclick="OnClose"></div>
+        <div style="position: relative; width: 417; height: 86; margin-left: 144; base-font-size:70px; font-size:70px; color: #D85D0B; font-family:PuHuiTi-Bold; padding-left: 95; padding-top: 8; background:url(codepku/image/textures/common_32bits.png#475 63 429 86);">教学区</div>
+        
+        <div style="width:200;height:900;position: relative;margin-top: 144px;">
             <pe:repeat DataSource="<%=GetSubjects()%>">
                 <pe:repeatitem>
                     <pe:if condition='<%=Eval("show")==true and Eval("index")~=1%>'>
@@ -152,10 +150,16 @@ end
             </pe:repeatitem>
         </pe:repeat>
 
+        <!--翻页-->
+        <div style="position: relative; width: 169; height: 41; left: 1003; top:964;">
+            <div style="width: 28; height: 40; float: left; background: url(codepku/image/textures/fastentrence_ui/fastentrence_32bits.png#207 378 28 41); transform:rotate(180deg); transform-origin: 14 20;" name="page_left" onclick="prev_page"></div>
+            <div style="width: 113; height: 33;font-size: 45px;color: #ffffff;float: left; text-align: center; line-height: 33;"><%=SystemLevelPage.page%></div>
+            <div style="width: 28; height: 40;float: left; background: url(codepku/image/textures/fastentrence_ui/fastentrence_32bits.png#207 378 28 41);" name="page_right" onclick="next_page"></div>
+        </div>
 
-        <div style='position:absolute;left: 1003px;top:964px;transform:rotate(180deg); transform-origin: 14 20;width:28;height:41;background:url(codepku/image/textures/fastentrence_ui/main.png#207 378 28 41);' onclick="prev_page"></div>
+        <!-- <div style='position:absolute;left: 1003px;top:964px;transform:rotate(180deg); transform-origin: 14 20;width:28;height:41;background:url(codepku/image/textures/fastentrence_ui/main.png#207 378 28 41);' onclick="prev_page"></div>
         <div style='position:absolute;left: 1079px;top:966px;color:white;font-family:NotoSansHans-Bold;font-weight:bold;base_font_size:45px;font-size:45px;'><%=SystemLevelPage.page%></div>
-        <div style='position:absolute;left: 1143px;top:964px;width:28;height:41;background:url(codepku/image/textures/fastentrence_ui/main.png#207 378 28 41);' onclick="next_page"></div>
+        <div style='position:absolute;left: 1143px;top:964px;width:28;height:41;background:url(codepku/image/textures/fastentrence_ui/main.png#207 378 28 41);' onclick="next_page"></div> -->
 
     </div>
 
