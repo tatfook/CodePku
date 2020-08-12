@@ -244,7 +244,9 @@ function CodepkuChatChannel.OnMsg(self, msg)
         -- 上线通知 下线通知
         local status = if_else(msg.status == 'ONLINE', true, false)
         CodepkuChatChannel.UserOnlineStatus[msg.user_id] = status
-
+        if (not FriendUI.vars["friends"]) then
+            FriendUI:GetFriend()
+        end
         for i ,v in ipairs(FriendUI.vars["friends"]) do
             if v.friend_id == msg.user_id then
                 status = if_else(msg.status == 'ONLINE', true, false)
