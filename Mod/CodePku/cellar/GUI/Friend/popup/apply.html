@@ -88,17 +88,17 @@ end
             <div style="position: relative; width: 250; height: 27; left: 177; top: 91; color: #FFFFFF; font-family: PuHuiTi-Bold; font-size: 36;">ID: <%=Eval("no")%></div>
 
             <pe:if condition="<%=Eval('is_online') == true%>">
-                <div style="position: relative; width: 72px; height: 34px; left: 176; top: 133; font-family: PuHuiTi-Bold; font-size: 36; color: #00FF9C;">在线</div>
+                <div style="position: relative; height: 34px; left: 176; top: 133; font-family: PuHuiTi-Bold; font-size: 36; color: #00FF9C;">在线</div>
             </pe:if>
             <pe:if condition="<%=Eval('is_online') == false%>">
-                <div style="position: relative; width: 72px; height: 34; left: 176; top: 133; font-family: PuHuiTi-Bold; font-size: 36; color: #0F1F6F;">离线</div>
+                <div style="position: relative; height: 34; left: 176; top: 133; font-family: PuHuiTi-Bold; font-size: 36; color: #0F1F6F;">离线</div>
             </pe:if>
 
-            <input type="button" style="position: relative; width: 150; height: 80; left: 535; top: 71; font-size: 36; font-weight: bold; color: #FEFEFE; padding-left: 40; padding-top: 23; padding-right: 39; padding-bottom: 22; background: url(codepku/image/textures/common_32bits.png#1305 740 86 86:9 9 9 9);" name='<%=Eval("id")%>' onclick="ClickDelete" />
+            <input type="button" style="position: relative; width: 150; height: 80; left: 535; top: 71; font-size: 36; font-weight: bold; color: #FEFEFE; padding-left: 40; padding-top: 23; padding-right: 39; padding-bottom: 22; background: url(codepku/image/textures/common_32bits.png#1305 740 86 86:9 9 9 9);" name='<%=Eval("id")%>' onclick="ClickRefuse" />
             <div style="position: relative; width: 30; height: 30; left: 593; top: 98; background: url(codepku/image/textures/common_32bits.png#1497 292 30 30);"></div>
             <input type="button" style="position: relative; width: 150; height: 80; left: 727; top: 71; font-size: 36; font-weight: bold; color: #FEFEFE; padding-left: 40; padding-top: 23; padding-right: 39; padding-bottom: 22; background: url(codepku/image/textures/common_32bits.png#1404 740 86 86:9 9 9 9);" name='<%=Eval("id")%>' onclick="ClickAgree" />
             <div style="position: relative; width: 39; height: 28; left: 783; top: 98; background: url(codepku/image/textures/common_32bits.png#1567 292 39 28);"></div>
-            <input type="button" style="position: relative; width: 150; height: 80; left: 919; top: 71; font-size: 36; font-family: NotoSansHans-Bold; font-weight: bold; color: #FEFEFE; padding-left: 40; padding-top: 23; padding-right: 39; padding-bottom: 22; background: url(codepku/image/textures/common_32bits.png#1601 740 86 86:9 9 9 9);" value="举报" name='<%=Eval("id")%>' onclick="ClickBlacklist" />
+            <input type="button" style="position: relative; width: 150; height: 80; left: 919; top: 71; font-size: 36; font-family: NotoSansHans-Bold; font-weight: bold; color: #FEFEFE; padding-left: 40; padding-top: 23; padding-right: 39; padding-bottom: 22; background: url(codepku/image/textures/common_32bits.png#1601 740 86 86:9 9 9 9);" value="拉黑" name='<%=Eval("id")%>' onclick="ClickBlacklist" />
 
 
 

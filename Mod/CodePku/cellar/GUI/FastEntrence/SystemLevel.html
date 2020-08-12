@@ -118,14 +118,14 @@ end
                     <pe:if condition='<%=Eval("show")==true and Eval("index")~=1%>'>
                         <pe:if condition='<%=Eval("loc")==Eval("index")%>'>
                             <div style="<%=format('background: url(codepku/image/textures/common_32bits.png#1648 196 261 96);width:261;height:96;margin-left:24px;float:left;')%>" name='<%=Eval("index")%>' onclick='OnClickSubject'>
-                                <div style="font-family:PuHuiTi-Bold;color:#F8DE8D;base_font_size:45px;font-size:45px;font-weight:bold;width:261;height:80px;line-height: 80px;;text-align: center;">
+                                <div style="font-family:NotoSansHans-Medium;color:#F8DE8D;base_font_size:45px;font-size:45px;font-weight:bold;width:261;height:80px;line-height: 80px;;text-align: center;">
                                     <%=Eval('name')%>
                                 </div>
                             </div>
                         </pe:if>
                         <pe:if condition='<%=Eval("loc")~=Eval("index")%>'>
                             <div style="<%=format('background: url(codepku/image/textures/common_32bits.png#1294 66 134 94);width:261;height:94;float:left;')%>" name='<%=Eval("index")%>' onclick='OnClickSubject'>
-                                <div style="font-family:PuHuiTi-Bold;color:#fff;base_font_size:45px;font-size:45px;font-family:PuHuiTi-Bold;font-weight:Medium;width:244px;height:94px;line-height: 94;text-align: center;">
+                                <div style="font-family:NotoSansHans-Medium;color:#fff;base_font_size:45px;font-size:45px;font-family:NotoSansHans-Medium;font-weight:Medium;width:244px;height:94px;line-height: 94;text-align: center;">
                                     <%=Eval('name')%>
                                 </div>
                             </div>
@@ -137,7 +137,7 @@ end
         <pe:repeat DataSource="<%=SystemLevelPage.courses%>">
             <pe:repeatitem>
                 <div style="<%=format('position: absolute;width:340px;height:80;background:url(codepku/image/textures/fastentrence_ui/main.png#28 45 340 80);left:%d;top:%d;', 338+Eval('index')%4*381, 231+math.floor(Eval('index')/4)*371)%>">
-                    <div style="font-family:PuHuiTi-Bold;text-align: center;margin-top:20px;base_font_size:38px;font-size:38px;color:white;font-weight:bold;"><%= GetCourseName(Eval('course')) %></div>
+                    <div style="font-family:PuHuiTi-Bold; text-align: center;margin-top:20px;base_font_size:38px;font-size:38px;color:white;font-weight:bold;"><%= GetCourseName(Eval('course')) %></div>
                 </div>
                 <div style="<%=format('position:absolute;width:340px;height:202;background:url(codepku/image/textures/fastentrence_ui/system_level_2.png);left:%d;top:%d;', 338+Eval('index')%4*381, 311+math.floor(Eval('index')/4)*371)%>">
                     <div style="<%=format('width:340;height:202;background:url(%s);', Eval('cover'))%>" name="<%=Eval('course')%>" onclick="OnClickCourse">
