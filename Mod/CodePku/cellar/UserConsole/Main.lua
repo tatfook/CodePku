@@ -15,6 +15,7 @@ local RemoteWorld = commonlib.gettable("MyCompany.Aries.Creator.Game.Login.Remot
 local DownloadWorld = commonlib.gettable("MyCompany.Aries.Game.MainLogin.DownloadWorld")
 local SaveWorldHandler = commonlib.gettable("MyCompany.Aries.Game.SaveWorldHandler")
 local GameMainLogin = commonlib.gettable("MyCompany.Aries.Game.MainLogin")
+local AdaptWindow = commonlib.gettable("Mod.CodePku.GUI.Window.AdaptWindow")
 
 local WorldShare = commonlib.gettable("Mod.CodePku")
 local Encoding = commonlib.gettable("commonlib.Encoding")
@@ -23,33 +24,56 @@ local UserInfo = NPL.load("(gl)Mod/CodePku/cellar/UserConsole/UserInfo.lua")
 local CodePkuServiceSession = NPL.load("(gl)Mod/CodePku/service/CodePkuService/Session.lua")
 local CodePkuService = NPL.load("(gl)Mod/CodePku/service/CodePkuService.lua")
 NPL.load("(gl)Mod/CodePku/cellar/GUI/GenAndName.lua")  
+local MainLogin = NPL.load("(gl)Mod/CodePku/cellar/MainLogin/MainLogin.lua")
 
 local UserConsole = NPL.export()
 
 function UserConsole:ShowPage()
-    local url = "Mod/CodePku/cellar/UserConsole/StartLearning.html"
-    -- Mod.CodePku.Utils.ShowWindow(850, 470, url, "StartLearning", nil, nil, nil, false, 10)
-    UserInfo:OnChangeAvatar()
+    -- local url = "Mod/CodePku/cellar/UserConsole/StartLearning.html"
+    -- -- Mod.CodePku.Utils.ShowWindow(850, 470, url, "StartLearning", nil, nil, nil, false, 10)
+    -- UserInfo:OnChangeAvatar()
     
-    params = {
-        url = url, 
+    -- params = {
+    --     url = url, 
+    --     name = "StartLearning", 
+    --     isShowTitleBar = false,
+    --     DestroyOnClose = true, -- prevent many ViewProfile pages staying in memory
+    --     style = CommonCtrl.WindowFrame.ContainerStyle,
+    --     allowDrag = false,
+    --     zorder = -1,
+    --     bShow = bShow,
+    --     directPosition = true,
+    --         align = "_fi",
+    --         x = 0,
+    --         y = 0,
+    --         width = 0,
+    --         height = 0,
+    --     cancelShowAnimation = true,
+    -- }
+
+    UserInfo:OnChangeAvatar()
+
+    local params = {
+        url = "Mod/CodePku/cellar/UserConsole/StartLearning.html", 
         name = "StartLearning", 
         isShowTitleBar = false,
-        DestroyOnClose = true, -- prevent many ViewProfile pages staying in memory
-        style = CommonCtrl.WindowFrame.ContainerStyle,
+        DestroyOnClose = true,
         allowDrag = false,
-        zorder = -1,
-        bShow = bShow,
+        enable_esc_key = true,
+        -- bShow = bShow,
+        click_through = false, 
+        zorder = 20,
         directPosition = true,
-            align = "_fi",
-            x = 0,
-            y = 0,
-            width = 0,
-            height = 0,
-        cancelShowAnimation = true,
-    }
+        alignment = "_ct",
+        x = -1920/2,
+        y = -1080/2,
+        width = 1920,
+        height = 1080,
+        };
+        AdaptWindow:QuickWindow(params)
 
-    System.App.Commands.Call("File.MCMLWindowFrame", params);	
+
+    -- System.App.Commands.Call("File.MCMLWindowFrame", params);
 end
 
 function UserConsole:ClosePage()
@@ -58,6 +82,12 @@ function UserConsole:ClosePage()
     if UserConsolePage then        
         UserConsolePage:CloseWindow()
     end
+
+    if MainLogin then
+        MainLogin.LoginBGPage:CloseWindow()
+    end
+
+
 end
 
 function UserConsole:CourseEntry()    
