@@ -34,12 +34,7 @@ local sendable = true
 FRIEND_IN_CHATTING = MainSceneUIButtons.FriendId or 1
 DEFAULT_AVATAR = 'codepku/image/textures/chat/default_avatar.png'
 
-FriendUI:GetFriend()
-
-friends = {}
-if FriendUI.vars["friends"] ~= nil then
-    friends = commonlib.deepcopy(FriendUI.vars["friends"])
-end
+friends = commonlib.deepcopy(FriendUI.vars["friends"])
 
 table.sort(friends, function(a, b)
     local sort_online = tostring(a.is_online) == tostring(b.is_online)
@@ -122,7 +117,7 @@ end
 
 function GetMessages()
     local Messages = {}
-    if friends ~= nil and friends ~= {} and #friends ~= 0 then
+    if friends and friends ~= {} then
         local LAST_CLICKED_INDEX = Channels.friends
         local f_id = friends[FRIEND_IN_CHATTING].friend_id
         local f_channel = CodepkuChatChannel.Messages[Channels[LAST_CLICKED_INDEX].channel]

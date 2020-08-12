@@ -9,8 +9,8 @@ SmallMap.page = nil
 
 
 SmallMap.home = {
-    system = {name = "教学区", id = 15855},
-    topic = {name = "专题区", id = 15857},
+    system = {name = "教学区", id = 15857},
+    topic = {name = "专题区", id = 15855},
     building = {name = "家园区", id = 14293},
     compete = {name = "竞技区", id = 14312},
     main = {name = "玩学大厅-大门", id = 1}
