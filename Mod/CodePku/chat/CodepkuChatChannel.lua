@@ -241,7 +241,9 @@ function CodepkuChatChannel.OnMsg(self, msg)
         -- 上线通知 下线通知
         local status = if_else(msg.status == 'ONLINE', true, false)
         CodepkuChatChannel.UserOnlineStatus[msg.user_id] = status
-
+        if (not FriendUI.vars["friends"]) then
+            FriendUI:GetFriend()
+        end
         for i ,v in ipairs(FriendUI.vars["friends"]) do
             if v.friend_id == msg.user_id then
                 status = if_else(msg.status == 'ONLINE', true, false)
@@ -438,8 +440,8 @@ function CodepkuChatChannel.SendWorldMsg(words)
     end
     local worldMsg = {
 
+        from_user_nickname = System.User.info and System.User.info.nickname,
         from_user_id = System.User.id,
-        from_user_nickname = System.User.name,
         from_user_avatar = System.User.info and System.User.info.avatar_url,
         from_user_level = System.User.info and System.User.info.self_level and System.User.info.self_level.current_level or 1,
         channel = channelsMap.world,
@@ -459,7 +461,7 @@ function CodepkuChatChannel.SendNearByMsg(words)
     end
     pos_x, pos_y, pos_z = EntityManager.GetPlayer():GetPosition()
     local nearByMsg = {
-
+        from_user_nickname = System.User.info and System.User.info.nickname,
         from_user_id = System.User.id,
         from_user_nickname = System.User.name,
         from_user_avatar = System.User.info and System.User.info.avatar_url,
@@ -491,8 +493,8 @@ function CodepkuChatChannel.SendToFriend(friend, words)
             to_user_id = to_user_id,
             to_user_nickname = friend.name,
             to_user_avatar = friend.head,
+            from_user_nickname = System.User.info and System.User.info.nickname,
             from_user_id = System.User.id,
-            from_user_nickname = System.User.name,
             from_user_avatar = System.User.info and System.User.info.avatar_url,
             from_user_level = System.User.info and System.User.info.self_level and System.User.info.self_level.current_level or 1,
             channel = channelsMap.private_chat,

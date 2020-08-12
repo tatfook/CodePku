@@ -1,62 +1,47 @@
-<html>
-    <body>
-        <pe:mcml>
-            <script type="text/npl" refresh="false">
-                <![CDATA[
+<!-- "script/apps/Aries/Creator/Game/Login/LoginBackgroundPage.html" -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" >
+<head>
+<title>2020.05.27</title>
+</head>
+<body> 
+<pe:mcml>
+<script type="text/npl" refresh="false"><![CDATA[
                     page = document:GetPageCtrl()
-                    local MainLoginPage = Mod.CodePku.Store:Get('page/MainLogin')
+                    MainLoginPage = Mod.CodePku.Store:Get('page/MainLogin')
 
                     function set_agree()
-                        MainLoginPage:SetValue("agree", true)
+                        local agree = MainLoginPage:GetNode("agree");
+                        local agree_ctrl = agree:GetControl();
+                        agree_ctrl:setChecked(true)
                         page:CloseWindow()
                     end
+
                     function set_disagree()
-                        MainLoginPage:SetValue("agree", false)
+                        local agree = MainLoginPage:GetNode("agree");
+                        local agree_ctrl = agree:GetControl();
+                        agree_ctrl:setChecked(false)
                         page:CloseWindow()
                     end
                 ]]>
             </script>
             <style type="text/mcss">
-                {
-                    modal_title = {
-                        ["font-size"] = 30,
-                        ["base-font-size"] = 30,
-                        ["font-weight"] = 'bold',
-                        ["font-family"] = "Microsoft YaHei",
-                        color = "#262014",
-                        textcolor = "#262014",
-                        ["margin-top"] = 12,
-                        ["text-align"] = "center"
-                    },
-                    user_agreement = {
-                        width = 504.6,
-                        height = 195,
-                        ["base-font-size"] = 18,
-                        ["font-size"] = 18,
-                        color = "#ffffff",
-                        ["font-family"] = "Microsoft Yahei",
-                        ["margin-top"] = 28.8,
-                        ["margin-left"] = 28.8,
-                        background = ''
-                    },
-                    agree_button = {
-                        ["margin-left"] = 94.8,
-                        width = 144,
-                        height = 37.3,
-                        background = "codepku/image/textures/login/mainlogin_32bits.png# 234 1889 263 63",
-                    },
-                    disagree_button = {
-                        width = 144,
-                        height = 37.3,
-                        background = "codepku/image/textures/login/mainlogin_32bits.png# 560 1889 263 63",
-                    }
-                }
+                
             </style>
-                <div style="width:568px;height:368px;background:url(codepku/image/textures/login/mainlogin_32bits.png# 20 71 944 614);">
-                    <div class="modal_title"><%= L"用户协议及隐私政策" %></div>
-                    <pe:treeview name="user_agreement" class="user_agreement" VerticalScrollBarOffsetX="10" VerticalScrollBarStep=“20”>
-                        <div style="color: #ffffff;">
-                            <div style="height: 14px;width: 24px;"></div>
+
+        <pe:container alignment="_lt" width="1920" height="1080" >
+
+            <div style="position: relative; width: 944; height: 614; left: 492; top: 234.1; background:url(codepku/image/textures/login/login_backboard.png)">
+
+                <div style="position: relative; width: 500; height: 86; left: 222; line-height: 86; font-size: 45; font-weight: bold; font-family: PuHuiTi-Bold; color: #F46D3D; text-align: center; background:url(codepku/image/textures/login/main.png#535 411 434 86);">用户协议及隐私政策</div>
+
+                <div style="position:relative; left: 31; top: 102; width: 874; height:381; line-height: 40; font-size: 24; background:url(codepku/image/textures/login/main.png#1011 271 88 88:10 10 10 10); ">
+
+                    <pe:treeview style="position: relative; width: 874; height: 381; padding-left: 42; padding-top: 43; padding-right: 55; font-size: 24; " 
+                        VerticalScrollBarOffsetX="10" name='user_agreement' padding="6" DefaultNodeHeight = "120" ItemsPerLine="1" AllowPaging="false" RememberScrollPos="true" RememberLastPage="false" VerticalScrollBarStep="400">
+
+                        <div style="color: #ffffff; font-size: 24; font-family: Noto Sans S Chinese Regular;">
+                            <!-- <div style="height: 14px;width: 24px;"></div> -->
                             1.前言<br />
                             1.1 欢迎使用深圳市编玩边学教育科技有限公司应用（以下简称“编玩边学”），在此特别提醒您（用户）在注册成为编玩边学用户之前，请认真阅读本协议，确保您充分理解本协议中各条款。请您审慎阅读并选择接受或不接受本协议。当用户点选“【我已经阅读并同意《用户信息服务协议》】”，即表示用户>同意并承诺遵守本协议。<br />
                             <br />
@@ -86,15 +71,18 @@
                             4.4.3因不可抗力导致的信息泄露；<br />
                             4.4.4其他非因编玩边学原因导致的个人信息的泄露。<br />
                             本协议最终解释权归深圳市编玩边学教育科技有限公司所有<br />
-                            <div style="height: 36px;width: 36px;"></div>
+                            <!-- <div style="height: 36px; width: 36px;"></div> -->
                         </div>
-                    </pe:treeview>
-                    
-                    <pe:container alignment="_lt" style="margin-top:16px;margin-left:90px;background:;" ClickThrough="true">
-                            <input type="button" DefaultButton="true" class="disagree_button" onclick="set_disagree()" value='' />       
-                            <input type="button" DefaultButton="true" class="agree_button" onclick="set_agree()" value='' />
-                    </pe:container>
+                    </pe:treeview> 
+
                 </div>
+
+                <input type="button" style="position: relative; width: 240; height: 80; left: 125; top: 502; font-size: 36; color: #86272c; font-family: PuHuiTi-Bold; font-weight: bold; background:url(codepku/image/textures/login/main.png#1293 414 86 86:9 9 9 9);" onclick="set_disagree" value="不同意" />
+                <input type="button" style="position: relative; width: 240; height: 80; left: 571; top: 502; font-size: 36; color: #0E5516; font-family: PuHuiTi-Bold; font-weight: bold; background:url(codepku/image/textures/login/main.png#1415 414 86 86:9 9 9 9);" onclick="set_agree" value="同意" />
+                
+            </div>
+        </pe:container>                  
+                
         </pe:mcml>
     </body>
 </html>

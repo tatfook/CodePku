@@ -1,5 +1,6 @@
 local GenAndName = commonlib.gettable("Mod.CodePku.GenAndName")
 local request = NPL.load("(gl)Mod/CodePku/api/BaseRequest.lua");
+local AdaptWindow = commonlib.gettable("Mod.CodePku.GUI.Window.AdaptWindow");
 local page;
 
 function GenAndName.OnInit()
@@ -53,23 +54,23 @@ function GenAndName:ShowPage()
     -- NPL.load("(gl)Mod/CodePku/cellar/GUI/GenAndName.lua")
     -- local GenAndName = commonlib.gettable("Mod.CodePku.GenAndName")
 
-    params = {
+
+    local params = {
         url = "Mod/CodePku/cellar/GUI/GenAndName.html", 
         name = "GenAndName", 
         isShowTitleBar = false,
-        DestroyOnClose = true, -- prevent many ViewProfile pages staying in memory
-        style = CommonCtrl.WindowFrame.ContainerStyle,
+        DestroyOnClose = true,
         allowDrag = false,
-        zorder = 0,
-        bShow = bShow,
+        enable_esc_key = true,
+        -- bShow = bShow,
+        click_through = false, 
+        zorder = 20,
         directPosition = true,
-            align = "_fi",
-            x = 0,
-            y = 0,
-            width = 0,
-            height = 0,
-        cancelShowAnimation = true,
-    }
-
-    System.App.Commands.Call("File.MCMLWindowFrame", params);
+        alignment = "_ct",
+        x = -1920/2,
+        y = -1080/2,
+        width = 1920,
+        height = 1080,
+        };
+        AdaptWindow:QuickWindow(params)
 end
