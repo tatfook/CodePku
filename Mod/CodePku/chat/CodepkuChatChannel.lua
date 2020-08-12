@@ -442,7 +442,7 @@ function CodepkuChatChannel.SendWorldMsg(words)
     local worldMsg = {
 
         from_user_id = UserInfo.id,
-        from_user_nickname = UserInfo.name,
+        from_user_nickname = System.User.info and System.User.info.nickname,
         from_user_avatar = UserInfo.avatar,
         from_user_level = UserInfo.self_level.current_level,
         channel = channelsMap.world,
@@ -463,7 +463,7 @@ function CodepkuChatChannel.SendNearByMsg(words)
     pos_x, pos_y, pos_z = EntityManager.GetPlayer():GetPosition()
     local nearByMsg = {
         from_user_id = UserInfo.id,
-        from_user_nickname = UserInfo.name,
+        from_user_nickname = System.User.info and System.User.info.nickname,
         from_user_avatar = UserInfo.avatar,
         from_user_position = {x=pos_x, y=pos_y, z=pos_z},
         from_user_level = UserInfo.self_level.current_level,
@@ -495,7 +495,7 @@ function CodepkuChatChannel.SendToFriend(friend, words)
             to_user_nickname = friend.name,
             to_user_avatar = friend.head,
             from_user_id = UserInfo.id,
-            from_user_nickname = UserInfo.name,
+            from_user_nickname = System.User.info and System.User.info.nickname,
             from_user_avatar = UserInfo.avatar,
             from_user_level = UserInfo.self_level.current_level,
             channel = channelsMap.private_chat,
