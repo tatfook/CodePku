@@ -131,7 +131,7 @@ end
                     <pe:div style="position: relative; width: 108; height: 108; left: 91; top: 21; background: url(codepku/image/textures/rank/rank_32bits.png#1546 472 108 108)"></pe:div>
                     <pe:div style="position: relative; width: 336; height: 47; left: 337; top: 48; font-size: 49; base-font-size: 49; color: #ffffff; font-family: Noto Sans S Chinese Regular; text-align: center; line-height: 47;"><%=Eval('name')%></pe:div>
                     <pe:div style="<%=format('position: relative; width: 130; height: 120; left: 870; top: 11.5; background: url(codepku/image/textures/rank/rank_32bits.png#%s);', GetPosition())%>"></pe:div>
-                    <pe:div style="position: relative; width: 133; height: 39; left: 1071; top: 50; font-size: 49; base-font-size: 49; color: #ffffff; font-family: Noto Sans S Chinese Regular; text-align: center; line-height: 39;"><%=Eval('score')%></pe:div>
+                    <pe:div style="position: relative; width: 170; height: 39; left: 1051; top: 50; font-size: 49; base-font-size: 49; color: #ffffff; font-family: Noto Sans S Chinese Regular; text-align: center; line-height: 39;"><%=Eval('score')%></pe:div>
                 </pe:div>
             </pe:if>
             <pe:if condition="<%=Eval('rank') == 2%>">
@@ -139,7 +139,7 @@ end
                     <pe:div style="<%=format('position: relative; width: 100; height: 101; left: 95; top: 24; background: url(codepku/image/textures/rank/rank_32bits.png#1683 479 100 101)', Eval('rank'))%>"></pe:div>
                     <pe:div style="position: relative; width: 336; height: 46; left: 337; top: 48; font-size: 49; base-font-size: 49; color: #ffffff; font-family: Noto Sans S Chinese Regular; text-align: center; line-height: 46;"><%=Eval('name')%></pe:div>
                     <pe:div style="<%=format('position: relative; width: 130; height: 120; left: 870; top: 11.5; background: url(codepku/image/textures/rank/rank_32bits.png#%s);', GetPosition())%>"></pe:div>
-                    <pe:div style="position: relative; width: 133; height: 39; left: 1071; top: 50; font-size: 49; base-font-size: 49; color: #ffffff; font-family: Noto Sans S Chinese Regular; text-align: center; line-height: 39;"><%=Eval('score')%></pe:div>
+                    <pe:div style="position: relative; width: 170; height: 39; left: 1051; top: 50; font-size: 49; base-font-size: 49; color: #ffffff; font-family: Noto Sans S Chinese Regular; text-align: center; line-height: 39;"><%=Eval('score')%></pe:div>
                 </pe:div>
             </pe:if>
             <pe:if condition="<%=Eval('rank') == 3%>">
@@ -147,7 +147,7 @@ end
                     <pe:div style="<%=format('position: relative; width: 96; height: 95; left: 98; top: 27; background: url(codepku/image/textures/rank/rank_32bits.png#1815 485 96 95)', Eval('rank'))%>"></pe:div>
                     <pe:div style="position: relative; width: 336; height: 46; left: 337; top: 48; font-size: 49; base-font-size: 49; color: #ffffff; font-family: Noto Sans S Chinese Regular; text-align: center; line-height: 46;"><%=Eval('name')%></pe:div>
                     <pe:div style="<%=format('position: relative; width: 130; height: 120; left: 870; top: 11.5; background: url(codepku/image/textures/rank/rank_32bits.png#%s);', GetPosition())%>"></pe:div>
-                    <pe:div style="position: relative; width: 133; height: 39; left: 1071; top: 50; font-size: 49; base-font-size: 49; color: #ffffff; font-family: Noto Sans S Chinese Regular; text-align: center; line-height: 39;"><%=Eval('score')%></pe:div>
+                    <pe:div style="position: relative; width: 170; height: 39; left: 1051; top: 50; font-size: 49; base-font-size: 49; color: #ffffff; font-family: Noto Sans S Chinese Regular; text-align: center; line-height: 39;"><%=Eval('score')%></pe:div>
                 </pe:div>
             </pe:if>
             <pe:if condition="<%=Eval('rank') ~= 1 and Eval('rank') ~= 2 and Eval('rank') ~= 3%>">
@@ -155,7 +155,7 @@ end
                     <pe:div style="position: relative; width: 150; height: 50; left: 68; top: 44; font-size: 49; base-font-size: 49; color: #FFA800; text-align: center; border:4px solid #a76002;"><%=Eval('rank')%></pe:div>
                     <pe:div style="position: relative; width: 336; height: 47; left: 338; top: 37; font-size: 49; base-font-size: 49; color: #ffffff; font-family: Noto Sans S Chinese Regular; text-align: center; line-height: 47;"><%=Eval('name')%></pe:div>
                     <pe:div style="<%=format('position: relative; width: 130; height: 120; left: 870; top: 6; background: url(codepku/image/textures/rank/rank_32bits.png#%s);', GetPosition())%>"></pe:div>
-                    <pe:div style="position: relative; width: 133; height: 39; left: 1072; top: 44; font-size: 49; base-font-size: 49; color: #ffffff; font-family: Noto Sans S Chinese Regular; text-align: center; line-height: 39;"><%=Eval('score')%></pe:div>
+                    <pe:div style="position: relative; width: 170; height: 39; left: 1052; top: 44; font-size: 49; base-font-size: 49; color: #ffffff; font-family: Noto Sans S Chinese Regular; text-align: center; line-height: 39;"><%=Eval('score')%></pe:div>
                 </pe:div>
             </pe:if>
         </Columns>
@@ -165,7 +165,7 @@ end
         <div style="position: relative; width: 150; height: 51; left: 75; top: 56; font-size: 49; base-font-size: 49; color: #FFA800; text-align: center; border:4px solid #a76002;"><%=RankPage.myinfo[1].rank%></div>
         <div style="position: relative; width: 336; height: 47 ; left: 342; top: 54; font-size: 49; base-font-size: 49; color: #ffffff; font-family: Noto Sans S Chinese Regular; text-align: center;"><%=RankPage.myinfo[1].name%></div>
         <pe:div style="<%=format('position: relative; width: 130; height: 120; left: 875; top: 22; background: url(codepku/image/textures/rank/rank_32bits.png#%s);', GetPosition())%>"></pe:div>
-        <div style="position: relative; width: 133; height: 39 ; left: 1076; top: 56; font-size: 49; base-font-size: 49;font-family: Noto Sans S Chinese Regular; color: #ffffff; text-align: center; line-height: 39;"><%=RankPage.myinfo[1].score%></div>
+        <div style="position: relative; width: 170; height: 39 ; left: 1056; top: 56; font-size: 49; base-font-size: 49;font-family: Noto Sans S Chinese Regular; color: #ffffff; text-align: center; line-height: 39;"><%=RankPage.myinfo[1].score%></div>
     </pe:div>
 
     <!--左导航栏-->
