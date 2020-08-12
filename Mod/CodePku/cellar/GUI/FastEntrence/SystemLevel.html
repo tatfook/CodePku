@@ -81,7 +81,7 @@ end
 
 function next_page()
     if SystemLevelPage~=nil then
-        if (SystemLevelPage.page < SystemLevelPage.total_courses%10) then
+        if (SystemLevelPage.page < SystemLevelPage.total_courses%SystemLevelPage.maxItemPerPage) then
         SystemLevelPage.page = SystemLevelPage.page + 1
             SystemLevelPage.courses = SystemLevelPage.GetLevels(SystemLevelPage.grade_id,SystemLevelPage.semester_id,SystemLevelPage.subjects[SystemLevelPage.last_clicked_index].subject_id)
             Page:Refresh(0)
