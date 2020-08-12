@@ -13,6 +13,8 @@
 <![CDATA[
 local FriendUI = NPL.load("(gl)Mod/CodePku/cellar/GUI/Friend/FriendUI.lua")
 MainSceneUIButtons = commonlib.gettable("Mod.CodePku.Common.TouchMiniButtons.MainSceneUIButtons");
+Channels = MainSceneUIButtons.Channels
+
 cur_index = 1
 menu = {
     [1] = {index = 1, text = "my_friend", name = "我的好友"},
@@ -70,7 +72,7 @@ end
 
 function ClickChat(fid)
     ClosePage()
-    MainSceneUIButtons.show_dialog_ui(true, 3, fid)
+    MainSceneUIButtons.show_dialog_ui(true, Channels['friend'], fid)
 end
 
 ]]>

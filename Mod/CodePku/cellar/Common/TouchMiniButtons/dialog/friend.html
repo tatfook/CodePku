@@ -15,20 +15,10 @@ UserInfo = commonlib.gettable("Mod.CodePku.UserInfo")
 CodepkuChatChannel = NPL.load("(gl)Mod/CodePku/chat/CodepkuChatChannel.lua");
 FriendUI = NPL.load("(gl)Mod/CodePku/cellar/GUI/Friend/FriendUI.lua");
 local request = NPL.load("(gl)Mod/CodePku/api/BaseRequest.lua");
+Channels = MainSceneUIButtons.Channels
 
 local page = document:GetPageCtrl()
 MainSceneUIButtons.page = page
-
--- {"全部","世界","本地","公会","校园","系统","好友"}
-Channels = {
-    [1]={name="world",index=1, channel=2,title='世界'},
-    [2]={name="local",index=2, channel=3,title='本地'},
-    [3]={name="friends",index=3, channel=0,title='好友'},
-    ['world']=1,
-    ['local']=2,
-    ['friends']=3,
-}
-
 
 local sendable = true
 FRIEND_IN_CHATTING = MainSceneUIButtons.FriendId or 1
@@ -56,7 +46,7 @@ function OnClose()
 end
 
 function OnClickChannel(index)
-    if index ~= 3 then
+    if index ~= Channels['friend'] then
         Page:CloseWindow()
         MainSceneUIButtons.show_dialog_ui(true, index, FRIEND_IN_CHATTING)
     end
@@ -113,8 +103,8 @@ end
 
 function GetMessages()
     local Messages = {}
-    if friends ~= nil and friends ~= {} and #friends ~= 0 then
-        local LAST_CLICKED_INDEX = Channels.friends
+    if next(friends) ~= nil then
+        local LAST_CLICKED_INDEX = Channels.friend
         local f_id = friends[FRIEND_IN_CHATTING].friend_id
         local f_channel = CodepkuChatChannel.Messages[Channels[LAST_CLICKED_INDEX].channel]
         if (f_channel) then
@@ -122,6 +112,7 @@ function GetMessages()
         else
             Messages = {}
         end
+        
     end
     return Messages
 end
@@ -145,10 +136,10 @@ end
         <div style="width: 960;height: 101;">
             <pe:repeat DataSource="<%=Channels%>">
                 <pe:repeatitem>
-                    <pe:if condition="<%=Eval('index') == 3%>">
+                    <pe:if condition="<%=Eval('index') == Channels['friend']%>">
                         <div style="<%=format('width: 102;height:60;position:relative;left:%d;margin-top:20;base-font-size:30px;font-size:30px;color: #ffffff; font-family: Noto Sans S Chinese Regular; text-align: center;line-height:60; background:url(codepku/image/textures/chat_ui/chat_32bits.png#589 659 67 67:20 20 20 20)', (Eval('index')-1)*132+28)%>" name="<%=Eval('index')%>" onclick="OnClickChannel"><%=Eval('title')%></div>
                     </pe:if>
-                    <pe:if condition="<%=Eval('index') ~= 3%>">
+                    <pe:if condition="<%=Eval('index') ~= Channels['friend']%>">
                         <div style="<%=format('width: 102;height:60;position:relative;left:%d;margin-top:20;base-font-size:30px;font-size:30px;color: #ffffff; font-family: Noto Sans S Chinese Regular; text-align: center;line-height:60; background:url(codepku/image/textures/chat_ui/chat_32bits.png#687 660 67 67:20 20 20 20)', (Eval('index')-1)*132+28)%>" name="<%=Eval('index')%>" onclick="OnClickChannel"><%=Eval('title')%></div>
                     </pe:if>
                 </pe:repeatitem>
@@ -208,7 +199,7 @@ end
         </div>
 
         <!-- 发言 -->
-        <pe:if condition="<%=LAST_CLICKED_INDEX ~= 3 or #friends ~= 0%>">
+        <pe:if condition="<%= #friends ~= 0%>">
             <div style='width: 960;height:134;'>
                 <input type="text" style='width:608;height: 54;float: left; background-color: #ffffff; background: url(codepku/image/textures/chat_ui/chat_32bits.png#928 663 54 54:10 10 10 10);margin-left: 27;margin-top:38; font-size: 28px;' name='DialogContent'/>
                 <!--<div style='width:54;height:54;float: left; background: url(codepku/image/textures/chat_ui/chat_32bits.png#848 665 54 54);margin-top: 38;margin-left: 15;' onclick="OnClickVoice"></div>-->
