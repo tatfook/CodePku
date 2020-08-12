@@ -7,8 +7,6 @@ local WorldCommon = commonlib.gettable("MyCompany.Aries.Creator.WorldCommon")
 local EntityManager = commonlib.gettable("MyCompany.Aries.Game.EntityManager")
 local MainSceneUIButtons = commonlib.gettable("Mod.CodePku.Common.TouchMiniButtons.MainSceneUIButtons");
 local GenAndName = commonlib.gettable("Mod.CodePku.GenAndName")
-local UserInfo = commonlib.gettable("Mod.CodePku.UserInfo")
-
 
 local MainUIButtons = NPL.export();
 
@@ -46,7 +44,7 @@ function MainUIButtons.show_common_ui(flag)
 	if(flag ~= nil)then
 		MainUIButtons.common_window = AdaptWindow:QuickWindow(params['close'])
 	else
-		MainUIButtons.function_window = AdaptWindow:QuickWindow(params["open"])
+		MainUIButtons.common_window = AdaptWindow:QuickWindow(params["open"])
 	end
 	
 end
@@ -95,60 +93,35 @@ function MainUIButtons.show_money_ui()
 end
 
 function MainUIButtons.ShowPage()
-	local show = false
-	if System.Codepku and System.Codepku.Coursewares and System.Codepku.Coursewares.category then 
-		local wid = System.Codepku.Coursewares.category
-
-		local worldtable = {3}
-
-		for _, v in ipairs(worldtable) do
-			if(v == wid) then
-				show = true
-			end
-		end
+	if MainUIButtons.common_window ~= nil then
+		MainUIButtons.common_window:CloseWindow()
+		MainUIButtons.common_window = nil
 	end
+	if MainUIButtons.function_window ~= nil then
+		MainUIButtons.function_window:CloseWindow()
+		MainUIButtons.function_window = nil
+	end
+	if MainUIButtons.dialog_window ~= nil then
+		MainUIButtons.dialog_window:CloseWindow()
+		MainUIButtons.dialog_window = nil
+	end
+	if MainUIButtons.money_window ~= nil then
+		MainUIButtons.money_window:CloseWindow()
+		MainUIButtons.money_window = nil
+	end
+
 	local hideMenu = false;
-	if (System.Codepku and System.Codepku.Coursewares) then
-		echo("hide_menu")
-		echo(System.Codepku.Coursewares.hide_menu);
+	if (System.Codepku and System.Codepku.Coursewares) then		
 		hideMenu = System.Codepku.Coursewares.hide_menu;
 	end
-
-	echo("hide_menu2222")
-	echo(hideMenu)
+		
 	if not hideMenu then 
 		MainUIButtons.show_common_ui()
 		MainUIButtons.show_dialog_ui(false)
-		MainUIButtons.show_money_ui()
-	end
-
-	--MainUIButtons.show_common_ui()
-	--MainUIButtons.show_dialog_ui(false)
-	--MainUIButtons.show_money_ui()
-	if(show)then
-		if(not MainUIButtons.hasshown) then			
-			MainUIButtons.show_function_ui()					
-			MainUIButtons.hasshown = true
-			-- GenAndName:ShowPage()
-		end
+		MainUIButtons.show_money_ui()		
+		MainUIButtons.show_function_ui()
 	else
-		if MainUIButtons.common_window ~= nil then
-			MainUIButtons.common_window:CloseWindow()
-			MainUIButtons.common_window = nil
-		end
-		if MainUIButtons.function_window ~= nil then
-			MainUIButtons.function_window:CloseWindow()
-			MainUIButtons.function_window = nil
-		end
-		if MainUIButtons.dialog_window ~= nil then
-			MainUIButtons.dialog_window:CloseWindow()
-			MainUIButtons.dialog_window = nil
-		end
-		if MainUIButtons.money_window ~= nil then
-			MainUIButtons.money_window:CloseWindow()
-			MainUIButtons.money_window = nil
-		end
-		MainUIButtons.hasshown = false
+		MainUIButtons.show_common_ui()
 	end
 end
 

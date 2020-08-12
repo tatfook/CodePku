@@ -9,8 +9,7 @@
 <body>
 <pe:mcml>
 <script refresh="false" type="text/npl" src="MainSceneUIButtons.lua"><![CDATA[
-NPL.load("(gl)script/apps/Aries.Creator.Game.Desktop.OtherUserInfos.lua");
-UserInfoPage = commonlib.gettable("Mod.CodePku.OtherUserInfoPage")
+local UserInfoPage = NPL.load("(gl)Mod/CodePku/cellar/GUI/UserInfo.lua");
 NPL.load("(gl)Mod/CodePku/cellar/GUI/Friend/FriendUI.lua");
 FriendUI = NPL.load("(gl)Mod/CodePku/cellar/GUI/Friend/FriendUI.lua")
 wsize = 434
@@ -18,9 +17,6 @@ hsize = 364
 name = Page:GetRequestParam("pname")
 pid = Page:GetRequestParam("pid")
 ppid = pid
-
-echo("2222222222222222222222222")
-echo(name)
 
 function CheckFriend()
     FriendUI:GetFriend()
@@ -43,7 +39,7 @@ function CloseInteract()
 end
 
 function ClickSeeInfo()
-    UserInfoPage:ShowPage(pid)
+    UserInfoPage:ShowPage(1, false, pid)
     Page:CloseWindow();
 end
 
