@@ -501,7 +501,6 @@ function CodepkuChatChannel.SendNearByMsg(words)
     local nearByMsg = {
         from_user_nickname = System.User.info and System.User.info.nickname,
         from_user_id = System.User.id,
-        from_user_nickname = System.User.name,
         from_user_avatar = System.User.info and System.User.info.avatar_url,
         from_user_level = System.User.info and System.User.info.self_level and System.User.info.self_level.current_level or 1,
         from_user_position = {x=pos_x, y=pos_y, z=pos_z},
