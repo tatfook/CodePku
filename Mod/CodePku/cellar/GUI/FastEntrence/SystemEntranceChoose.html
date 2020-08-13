@@ -80,11 +80,14 @@ end
             <div style='width:652; height:368;margin-left:253; margin-top: 60;'>
                 <pe:repeat DataSource="<%=GetGradeDetails(SystemEntranceChoosePage.school, SystemEntranceChoosePage.page)%>">
                     <pe:repeatitem>
-                        <pe:if condition="<%= Eval('index') == 1 and SystemEntranceChoosePage.page == 1%>">
-                            <div style="<%=format('font-family:Alibaba PuHuiTi;color:white;font-weight:bold;base_font_size:42px;font-size:42px;background:url(codepku/image/textures/fastentrence_ui/main.png#164 438 110 110:30 30 30 30);position:relative;width:260;height:92; line-height: 92; text-align:center;left: %s;top:%s', ((Eval('index')-1)%2)*392, math.floor(((Eval('index')-1)/2))*138)%>" name="<%=format('%d %d %d',Eval('grade_id'), Eval('semester_id'), Eval('open'))%>" onclick='OnClickGrade'><%=Eval('name')%></div>
-                        </pe:if>
-                        <pe:if condition="<%= Eval('index') ~= 1 or SystemEntranceChoosePage.page ~= 1%>">
+                        <!-- <pe:if condition="<%= Eval('index') == 1 and SystemEntranceChoosePage.page == 1%>"> -->
+                            <!-- <div style="<%=format('font-family:Alibaba PuHuiTi;color:white;font-weight:bold;base_font_size:42px;font-size:42px;background:url(codepku/image/textures/fastentrence_ui/main.png#164 438 110 110:30 30 30 30);position:relative;width:260;height:92; line-height: 92; text-align:center;left: %s;top:%s', ((Eval('index')-1)%2)*392, math.floor(((Eval('index')-1)/2))*138)%>" name="<%=format('%d %d %d',Eval('grade_id'), Eval('semester_id'), Eval('open'))%>" onclick='OnClickGrade'><%=Eval('name')%></div> -->
+                        <!-- </pe:if>
+                        <pe:if condition="<%= Eval('index') ~= 1 or SystemEntranceChoosePage.page ~= 1%>"> -->
                             <div style="<%=format('font-family:Alibaba PuHuiTi;color:white;font-weight:bold;base_font_size:42px;font-size:42px;background:url(codepku/image/textures/fastentrence_ui/main.png#28 438 110 110:30 30 30 30);position:relative;width:260;height:92; line-height: 92;text-align:center;left: %s;top:%s', ((Eval('index')-1)%2)*392, math.floor(((Eval('index')-1)/2))*138)%>" name="<%=format('%d %d %d',Eval('grade_id'), Eval('semester_id'), Eval('open'))%>" onclick='OnClickGrade'><%=Eval('name')%></div>
+                        <!-- </pe:if> -->
+                        <pe:if condition="<%= Eval('open') == 0 %>">
+                            <div style="<%=format('background:url(codepku/image/textures/fastentrence_ui/fastentrence_32bits.png#34 774 260 92:30 30 30 30);position:relative;width:240;height:72; left: %s;top:%s', ((Eval('index')-1)%2)*392+10, math.floor(((Eval('index')-1)/2))*138+10)%>" name="<%=format('%d %d %d',Eval('grade_id'), Eval('semester_id'), Eval('open'))%>" onclick='OnClickGrade'></div>
                         </pe:if>
                     </pe:repeatitem>
                 </pe:repeat>
