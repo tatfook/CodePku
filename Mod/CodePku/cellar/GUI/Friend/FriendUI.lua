@@ -207,19 +207,23 @@ function FriendUI:GetBlackList()
     local response = request:get('/contacts/blocks',nil,{sync = true})
     if (response.status == 200 and response.data.code == 200) then
         FriendUI.vars["blacklist"] = {}
-
+        local bindex = 1
+        echo(response.data.data)
         for index, data in ipairs(response.data.data) do
-            FriendUI.vars["blacklist"][index] = {
-                id = data.id,
-                no = data.no or data.friend.no or "000000",
-                friend_id = data.friend.id,
-                nickname = data.friend.nickname or commonlib.utf8.sub(data.friend.mobile,1,7),
-                gender = data.friend.gender,
-                head = data.friend.avatar_url,
-                is_online = data.friend.is_online or false,
-                last_time = data.friend.last_login_at, 
-                remark = data.remark,
-            }
+            if data.friend ~= nil then
+                FriendUI.vars["blacklist"][bindex] = {
+                    id = data.id,
+                    no = data.no or data.friend.no or "000000",
+                    friend_id = data.friend.id,
+                    nickname = data.friend.nickname or commonlib.utf8.sub(data.friend.mobile,1,7),
+                    gender = data.friend.gender,
+                    head = data.friend.avatar_url,
+                    is_online = data.friend.is_online or false,
+                    last_time = data.friend.last_login_at, 
+                    remark = data.remark,
+                }
+                bindex = bindex + 1
+            end 
         end
     else
         FriendUI.vars["blacklist"] = nil;

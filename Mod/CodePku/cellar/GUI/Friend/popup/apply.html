@@ -43,8 +43,8 @@ function ClickRefuse(aid)
     end
 end
 
-function ClickBlacklist(fid)
-    res = FriendUI:block(fid)
+function ClickBlacklist(aid)
+    res = FriendUI:HandleApply(aid, 3)
     if(res) then
         FriendUI:GetApply()
         Page:Refresh(0);
@@ -81,7 +81,7 @@ end
                     <div style='width:38; height:41; top: 2; left: 14; float: left;  background: url(codepku/image/textures/friend/main.png#399 97 34 34);'></div>
                 </pe:if>
                 <pe:if condition='<%=Eval("gender") == 2 %>'>
-                    <div style='width:38; height:41; top: 2; left: 14; float: left;  background: url(codepku/image/textures/friend/main.png#399 97 34 34);'></div>
+                    <div style='width:38; height:41; top: 2; left: 14; float: left;  background: url(codepku/image/textures/friend/main.png#351 91 26 40);'></div>
                 </pe:if>
             </div>
             

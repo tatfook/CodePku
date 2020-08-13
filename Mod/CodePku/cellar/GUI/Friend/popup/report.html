@@ -117,7 +117,8 @@ function getThirdFlag()
 end
 
 function clickReport()
-    value = Page:GetNodeByID("first")
+    GameLogic.RunCommand(string.format("/tip -duration 1500 %s", L"举报成功"))
+    Page:CloseWindow()
 end
 
 ]]>
@@ -140,39 +141,39 @@ end
     <div style="position: relative; width: 159; height: 151; left: 687; top: 235; background: url(codepku/image/textures/friend/main.png#1484 39 159 151); "></div>
 
     <div style="position: relative; width: 350; height: 37; left: 905; top: 266;">
-        <span style="font-size: 38px; font-family: SourceHanSansSC-Bold; color: #FDFDFD;"><%=reportedPlyer.nickname%></span>
-        <span style="margin-left: 50px; font-size: 38px; font-family: SourceHanSansSC-Bold; color: #FDFDFD;"><%=getGender()%></span>
-        <span style="margin-left: 50px; font-size: 38px; font-family: SourceHanSansSC-Bold; color: #FDFDFD;">等级<%=reportedPlyer.level%></span>
+        <span style="font-size: 38px; font-family: PuHuiTi-Bold; color: #FDFDFD;"><%=reportedPlyer.nickname%></span>
+        <!-- <span style="margin-left: 50px; font-size: 38px; font-family: PuHuiTi-Bold; color: #FDFDFD;"><%=getGender()%></span> -->
+        <!-- <span style="margin-left: 50px; font-size: 38px; font-family: PuHuiTi-Bold; color: #FDFDFD;">等级<%=reportedPlyer.level%></span> -->
     </div>
 
-    <div style="position: relative; width: 160; height: 22; left: 906; top: 335; font-size: 28; font-family: SourceHanSansSC-Medium; color: #FEFDFC;">ID:<%=reportedPlyer.no%></div>
+    <div style="position: relative; height: 22; left: 906; top: 335; font-size: 28; font-family: Noto Sans S Chinese Regular; color: #FEFDFC;">ID:<%=reportedPlyer.no%></div>
 
-    <div style="position: relative; width: 276; height: 70; left: 510; top: 432;text-align: center; line-height: 70; font-size: 36; color: #FDFDFD; background: url(codepku/image/textures/friend/main.png#715 95 40 40 : 10 10 10 10);">违反法律法规</div>
+    <div style="position: relative; width: 276; height: 70; left: 510; top: 432;text-align: center; font-family: PuHuiTi-Bold; line-height: 70; font-size: 36; color: #FDFDFD; background: url(codepku/image/textures/friend/main.png#715 95 40 40 : 10 10 10 10);">违反法律法规</div>
 
-    <input type="radio" name="first" value="1" onclick="clickFirst" width="30" height="30" style="position: relative; left: 517; top: 522;" UncheckedBG="codepku/image/textures/friend/main.png#651 100 30 30" CheckedBG="codepku/image/textures/friend/main.png#788 100 30 30" />
+    <input type="radio" name="first" value="1" checked="checked" onclick="clickFirst" width="30" height="30" style="position: relative; left: 517; top: 522;" UncheckedBG="codepku/image/textures/friend/main.png#651 100 30 30" CheckedBG="codepku/image/textures/friend/main.png#788 100 30 30" />
     <input type="radio" name="first" value="2" onclick="clickFirst" width="30" height="30" style="position: relative; left: 766; top: 522; " UncheckedBG="codepku/image/textures/friend/main.png#651 100 30 30" CheckedBG="codepku/image/textures/friend/main.png#788 100 30 30"/>
     <input type="radio" name="first" value="3" onclick="clickFirst" width="30" height="30" style="position: relative; left: 1015; top: 522;" UncheckedBG="codepku/image/textures/friend/main.png#651 100 30 30" CheckedBG="codepku/image/textures/friend/main.png#788 100 30 30"/>
-    <div style="position: relative; width: 135; height: 31; left: 568; top: 520; font-size: 32; color: #FDFDFD; font-family: SourceHanSansSC-Medium;" >色情低俗</div>
-    <div style="position: relative; width: 135; height: 31; left: 816; top: 520; font-size: 32; color: #FDFDFD; font-family: SourceHanSansSC-Medium;" >赌博诈骗</div>
-    <div style="position: relative; width: 135; height: 31; left: 1066; top: 520; font-size: 32; color: #FDFDFD; font-family: SourceHanSansSC-Medium;" >违法违规</div>
+    <div style="position: relative; width: 135; height: 31; left: 568; top: 520; font-size: 32; color: #FDFDFD; font-family: Noto Sans S Chinese Regular;" >色情低俗</div>
+    <div style="position: relative; width: 135; height: 31; left: 816; top: 520; font-size: 32; color: #FDFDFD; font-family: Noto Sans S Chinese Regular;" >赌博诈骗</div>
+    <div style="position: relative; width: 135; height: 31; left: 1066; top: 520; font-size: 32; color: #FDFDFD; font-family: Noto Sans S Chinese Regular;" >违法违规</div>
 
-    <div style="position: relative; width: 276; height: 70; left: 510; top: 585;text-align: center; line-height: 70; font-size: 36; color: #FDFDFD; background: url(codepku/image/textures/friend/main.png#715 95 40 40 : 10 10 10 10);">侵犯个人权益</div>
+    <div style="position: relative; width: 276; height: 70; left: 510; top: 585;text-align: center; line-height: 70; font-family: PuHuiTi-Bold; font-size: 36; color: #FDFDFD; background: url(codepku/image/textures/friend/main.png#715 95 40 40 : 10 10 10 10);">侵犯个人权益</div>
 
-    <input type="radio" name="second" value="1" onclick="clickSecond" width="30" height="30" style="position: relative; left: 517; top: 676;" UncheckedBG="codepku/image/textures/friend/main.png#651 100 30 30" CheckedBG="codepku/image/textures/friend/main.png#788 100 30 30"/>
+    <input type="radio" name="second" value="1" checked="checked" onclick="clickSecond" width="30" height="30" style="position: relative; left: 517; top: 676;" UncheckedBG="codepku/image/textures/friend/main.png#651 100 30 30" CheckedBG="codepku/image/textures/friend/main.png#788 100 30 30"/>
     <input type="radio" name="second" value="2" onclick="clickSecond" width="30" height="30" style="position: relative; left: 766; top: 676;" UncheckedBG="codepku/image/textures/friend/main.png#651 100 30 30" CheckedBG="codepku/image/textures/friend/main.png#788 100 30 30"/>
-    <div style="position: relative; width: 135; height: 31; left: 568; top: 673; font-size: 32; color: #FDFDFD; font-family: SourceHanSansSC-Medium;" >人身攻击</div>
-    <div style="position: relative; width: 135; height: 31; left: 817; top: 674; font-size: 32; color: #FDFDFD; font-family: SourceHanSansSC-Medium;" >侵犯隐私</div>
+    <div style="position: relative; width: 135; height: 31; left: 568; top: 673; font-size: 32; color: #FDFDFD; font-family: Noto Sans S Chinese Regular;" >人身攻击</div>
+    <div style="position: relative; width: 135; height: 31; left: 817; top: 674; font-size: 32; color: #FDFDFD; font-family: Noto Sans S Chinese Regular;" >侵犯隐私</div>
 
-    <div style="position: relative; width: 276; height: 70; left: 510; top: 738;text-align: center; line-height: 70; font-size: 36; color: #FDFDFD; background: url(codepku/image/textures/friend/main.png#715 95 40 40 : 10 10 10 10);">有害社区环境</div>
+    <div style="position: relative; width: 276; height: 70; left: 510; top: 738;text-align: center; line-height: 70; font-size: 36; color: #FDFDFD; font-family: PuHuiTi-Bold; background: url(codepku/image/textures/friend/main.png#715 95 40 40 : 10 10 10 10);">有害社区环境</div>
 
-    <input type="radio" name="third" value="1" onclick="clickThird" width="30" height="30" style="position: relative; left: 516; top: 829;" UncheckedBG="codepku/image/textures/friend/main.png#651 100 30 30" CheckedBG="codepku/image/textures/friend/main.png#788 100 30 30"/>
+    <input type="radio" name="third" value="1" checked="checked" onclick="clickThird" width="30" height="30" style="position: relative; left: 516; top: 829;" UncheckedBG="codepku/image/textures/friend/main.png#651 100 30 30" CheckedBG="codepku/image/textures/friend/main.png#788 100 30 30"/>
     <input type="radio" name="third" value="2" onclick="clickThird" width="30" height="30" style="position: relative; left: 766; top: 829;" UncheckedBG="codepku/image/textures/friend/main.png#651 100 30 30" CheckedBG="codepku/image/textures/friend/main.png#788 100 30 30"/>
-    <div style="position: relative; width: 135; height: 31; left: 567; top: 826; font-size: 32; color: #FDFDFD; font-family: SourceHanSansSC-Medium;" >发布公告</div>
-    <div style="position: relative; width: 135; height: 31; left: 817; top: 827; font-size: 32; color: #FDFDFD; font-family: SourceHanSansSC-Medium;" >其他</div> -->
+    <div style="position: relative; width: 135; height: 31; left: 567; top: 826; font-size: 32; color: #FDFDFD; font-family: Noto Sans S Chinese Regular;" >发布公告</div>
+    <div style="position: relative; width: 135; height: 31; left: 817; top: 827; font-size: 32; color: #FDFDFD; font-family: Noto Sans S Chinese Regular;" >其他</div> -->
 
 
     <input type="button" style="position: relative; width: 240; height: 80; left: 840; top: 893.4; text-align: center; line-height: 86; font-size: 36; color: #0E5516; font-weight: bold; font-family: NotoSansHans-Bold; background: url(codepku/image/textures/common_32bits.png#1404 740 86 86 : 9 9 9 9 );" value="提交" onclick="clickReport"/>
-    <input type="button" style="position: relative; width: 240; height: 80; left: 1222.8; top: 898.4; font-size: 36; text-align: center; line-height: 86; color: #686695; font-weight: bold; font-family: NotoSansHans-Bold; background: url(codepku/image/textures/friend/main.png#522 72 87 87 : 9 9 9 9 );" value="返回" onclick="ClosePage"/>
+    <!-- <input type="button" style="position: relative; width: 240; height: 80; left: 1222.8; top: 898.4; font-size: 36; text-align: center; line-height: 86; color: #686695; font-weight: bold; font-family: NotoSansHans-Bold; background: url(codepku/image/textures/friend/main.png#522 72 87 87 : 9 9 9 9 );" value="返回" onclick="ClosePage"/> -->
 
 </pe:container>
 
