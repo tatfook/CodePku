@@ -392,60 +392,39 @@ function CodePku:init()
 	);
 
 	GameLogic.GetFilters():add_filter(
-		"HandlePlayerKeyEventByB",
-		function(bShow)
-			return not (System.Codepku.Coursewares and (System.Codepku.Coursewares.category == 1 or System.Codepku.Coursewares.category == 2));
-		end
-	);
+		"KeyPressEvent",
+		function(callbackVal, event)
+			if event.keyname == "DIK_F5" then
+				event:accept();
+			elseif event.keyname == "DIK_B" then
+				if not (System.Codepku.Coursewares and (System.Codepku.Coursewares.category == 1 or System.Codepku.Coursewares.category == 2)) then
+					event:accept();
+				end
+			elseif event.keyname == "DIK_E" then
+				if not (System.Codepku.Coursewares and (System.Codepku.Coursewares.category == 1 or System.Codepku.Coursewares.category == 2)) then
+					event:accept();
+				end
+			elseif event.keyname == "DIK_F1" then
+				event:accept();
+			elseif event.keyname == "DIK_F4" then
+				event:accept();
+			elseif event.keyname == "DIK_F5" then
+				event:accept();
+			elseif event.keyname == "DIK_F9" then
+				event:accept();
+			elseif event.keyname == "DIK_F11" then
+				event:accept();
+			elseif event.keyname == "DIK_F12" then
+				event:accept();
+			elseif event.keyname == "DIK_DELETE" or event.keyname == "DIK_BACKSPACE" or event.keyname == "DIK_DECIMAL" then
+				event:accept();
+			elseif event.keyname == "DIK_F12" then
+				event:accept();
+			end
 
-	GameLogic.GetFilters():add_filter(
-		"HandlePlayerKeyEventByE",
-		function(bShow)
-			return not (System.Codepku.Coursewares and (System.Codepku.Coursewares.category == 1 or System.Codepku.Coursewares.category == 2));
-		end
-	);
-
-	GameLogic.GetFilters():add_filter(
-		"HandleGlobalKeyByF1",
-		function()
 			return true;
 		end
-	);
-
-	GameLogic.GetFilters():add_filter(
-		"HandleGlobalKeyByF4",
-		function()
-			return true;
-		end
-	);
-
-	GameLogic.GetFilters():add_filter(
-		"HandlePlayerKeyEventByF5",
-		function()
-			return true;
-		end
-	);
-
-	GameLogic.GetFilters():add_filter(
-		"HandleGlobalKeyByF9",
-		function()
-			return true;
-		end
-	);
-
-	GameLogic.GetFilters():add_filter(
-		"HandleGlobalKeyByF11",
-		function()
-			return true;
-		end
-	);
-
-	GameLogic.GetFilters():add_filter(
-		"HandleGlobalKeyByF12",
-		function()
-			return true;
-		end
-	);
+	)
 end
 
 function CodePku:OnLogin()
