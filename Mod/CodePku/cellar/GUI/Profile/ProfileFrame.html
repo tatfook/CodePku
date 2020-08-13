@@ -1,0 +1,94 @@
+<!-- "script/apps/Aries/Creator/Game/Areas/EscFramePage.html" -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>个人中心</title>
+</head>
+<body>
+    <pe:mcml>
+<script refresh="false" type="text/npl" src="UserInfo.lua"><![CDATA[
+UserInfoPage = NPL.load("(gl)Mod/CodePku/cellar/GUI/UserInfo.lua");
+
+NPL.load("(gl)Mod/CodePku/cellar/GUI/Profile/EditName.lua");
+local EditNamePage = commonlib.gettable("Mod.CodePku.EditNamePage")
+local SubjectPage = commonlib.gettable("Mod.CodePku.SubjectPage")
+
+CommonPng = "codepku/image/textures/common_32bits.png";
+ProfilePng = "codepku/image/textures/profile_32bits.png";
+
+xueshidian = 0
+fensi = 0
+dianzan = 0
+
+function ShowEditName()
+    EditNamePage:ShowPage();
+end
+
+function ShowSubjectPage()
+echo("@@@31")
+    SubjectPage:ShowPage();
+end
+]]>   
+</script>
+<style type="text/mcss">
+</style>
+    <!-- 属性 -->
+    <div align="right" style="padding-left:48px;padding-top:44px;line-height:90px;color:#ffffff;font-size:30px;font-family:PuHuiTi-Bold;margin-top:42px;margin-right:114px;width:789px;height:818px;background:url(codepku/image/textures/background/detail.png)">
+        <div style='<%=format("padding-left:40px;width:471px;height:102px;background:url(%s#911 1196 471 102);", Eval("ProfilePng")) %>'>
+        <!-- <div style='<%=format("padding-left:40px;width:471px;height:102px;background:url(%s#911 1196 471 102);", Eval("ProfilePng")) %>' onclick="ShowEditName"> -->
+            <div style="float:left;margin-top:16px;">
+                <div style='<%=format("position:relative;width:66px;height:67px;background:url(%s#1788 560 86 87);", Eval("ProfilePng")) %>'></div>
+                <div style='<%=format("position:relative;width:66px;height:67px;background:url(%s#1677 556 94 94);", Eval("ProfilePng")) %>'></div>
+            </div>
+            <div style="float:left;margin-left:115px;line-height:132px;"><%= UserInfoPage.name %></div>
+        </div>
+        <div style='<%=format("padding-left:40px;width:694px;height:90px;background:url(%s#906 1532 694 90);", Eval("ProfilePng")) %>'>
+            <div align="left" style="float:left;">玩学号：</div>
+            <div align="right" style="float:right;margin-right:160px;"><%= UserInfoPage.no or UserInfoPage.id %></div>
+        </div>
+        <div style='<%=format("padding-left:40px;padding-top:18px;line-height:48px;width:694px;height:129px;background:url(%s#902 1327 694 129);", Eval("ProfilePng")) %>' onclick="ShowSubjectPage">
+            <div style="float:left;">等级：<%= UserInfoPage.self_level.current_level %>级</div>
+            <div style='<%=format("float:left;margin-left:28px;width:49px;height:49px;background:url(%s#1048 152 50 50);", Eval("CommonPng")) %>'></div>
+            <div style='<%=format("float:right;margin-top:12px;width:615px;height:22px;background:url(%s#1276 756 608 28);", Eval("ProfilePng")) %>'>
+                <div style='<%=string.format("width:%d;height:22;background:url(codepku/image/textures/profile_32bits.png#1271 701 607 30);", 615*(UserInfoPage.self_level.current_exp/UserInfoPage.self_level.next_exp))%>'></div>
+            </div>
+        </div>
+        <div>
+            <div style='<%=format("float:left;padding-left:40px;width:348px;height:90px;background:url(%s#1415 1208 348 90);", Eval("ProfilePng")) %>'>
+                <div style="float:left;">魅力：</div>
+                <div style="float:right;"><%= 0 %></div>
+            </div>
+            <div style='<%=format("float:left;padding-left:40px;width:348px;height:90px;background:url(%s#1415 1208 348 90);", Eval("ProfilePng")) %>'>
+                <div style="float:left;">成就：</div>
+                <div style="float:right;"><%= 0 %></div>
+            </div>
+            <div style='<%=format("float:left;padding-left:40px;width:348px;height:90px;background:url(%s#1415 1208 348 90);", Eval("ProfilePng")) %>'>
+                <div style="float:left;">生涯：</div>
+                <div style="float:right;"><%=  UserInfoPage.day %>天</div>
+            </div>
+            <div style='<%=format("float:left;padding-left:40px;width:348px;height:90px;background:url(%s#1415 1208 348 90);", Eval("ProfilePng")) %>'>
+                <div style="float:left;">生日：</div>
+                <div style="float:right;"><%= UserInfoPage.birthday or UserInfoPage.created_at %></div>
+            </div>
+        </div>
+        <div style='<%=format("line-height:42px;padding-top:26px;width:694px;height:129px;background:url(%s#902 1327 694 129);", Eval("ProfilePng")) %>'>
+            <div style="float:left;text-align:center;" width="50%">
+                <div align="center" style='<%=format("width:54px;height:41px;background:url(%s#308 88 54 41);", Eval("ProfilePng")) %>'></div>
+                <div><%= xueshidian %></div>
+            </div>
+            <div style="float:left;text-align:center;" width="50%">
+                <div align="center" style='<%=format("width:43px;height:43px;background:url(%s#197 86 43 43);", Eval("ProfilePng")) %>'></div>
+                <div><%= dianzan %></div>
+            </div>
+            <div style="width:3px;height:62px;background-color:#ffffff;position:relative;margin-top:-78px;margin-left:347px;"></div>
+        </div>
+        <div style='<%=format("padding-left:40px;width:694px;height:90px;background:url(%s#906 1532 694 90);", Eval("ProfilePng")) %>'>
+            <div style="float:left;">家园分：</div>
+            <div align="right" style="float:right;margin-right:160px;"><%=  0 %></div>
+        </div>
+    </div>
+</pe:mcml>
+</body>
+</html>
+ 
