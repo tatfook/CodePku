@@ -132,15 +132,14 @@ end
                 </pe:repeatitem>
             </pe:repeat>
         </div>
-        <pe:repeat DataSource="<%=SystemLevelPage.courses%>">
+        
+        <pe:repeat DataSource="<%=SystemLevelPage.courses%>" >
             <pe:repeatitem>
                 <div style="<%=format('position: absolute;width:340px;height:80;background:url(codepku/image/textures/fastentrence_ui/main.png#28 45 340 80);left:%d;top:%d;', 338+Eval('index')%4*381, 231+math.floor(Eval('index')/4)*371)%>">
-                    <div style="font-family:PuHuiTi-Bold;text-align: center;margin-top:20px;base_font_size:38px;font-size:38px;color:white;font-weight:bold;"><%= GetCourseName(Eval('course')) %></div>
+                    <div style="width:340px;height:80;font-family:PuHuiTi-Bold;text-align: center; line-height: 80; base_font_size:32px;font-size:32px;color:white;font-weight:bold;"><%= GetCourseName(Eval('course')) %></div>
                 </div>
                 <div style="<%=format('position:absolute;width:340px;height:202;background:url(codepku/image/textures/fastentrence_ui/system_level_2.png);left:%d;top:%d;', 338+Eval('index')%4*381, 311+math.floor(Eval('index')/4)*371)%>">
-                    <div style="<%=format('width:340;height:202;background:url(%s);', Eval('cover'))%>" name="<%=Eval('course')%>" onclick="OnClickCourse">
-               
-                    </div>
+                    <div style="<%=format('width:340;height:202;background:url(%s);', Eval('cover'))%>" name="<%=Eval('course')%>" onclick="OnClickCourse"></div>
                     <pe:if condition='<%=Eval("select")==Eval("course")%>'>
                         <div style="<%=format('background: url(codepku/image/textures/fastentrence_ui/main.png#667 356 346 288);width:346;height:288;top:-286px;left:-2px;position：relative')%>" name='<%=Eval("index")%>' onclick='OnClickSubject'>
 
@@ -156,10 +155,6 @@ end
             <div style="width: 113; height: 33;font-size: 45px;color: #ffffff;float: left; text-align: center; line-height: 33;"><%=SystemLevelPage.page%></div>
             <div style="width: 28; height: 40;float: left; background: url(codepku/image/textures/fastentrence_ui/fastentrence_32bits.png#207 378 28 41);" name="page_right" onclick="next_page"></div>
         </div>
-
-        <!-- <div style='position:absolute;left: 1003px;top:964px;transform:rotate(180deg); transform-origin: 14 20;width:28;height:41;background:url(codepku/image/textures/fastentrence_ui/main.png#207 378 28 41);' onclick="prev_page"></div>
-        <div style='position:absolute;left: 1079px;top:966px;color:white;font-family:NotoSansHans-Bold;font-weight:bold;base_font_size:45px;font-size:45px;'><%=SystemLevelPage.page%></div>
-        <div style='position:absolute;left: 1143px;top:964px;width:28;height:41;background:url(codepku/image/textures/fastentrence_ui/main.png#207 378 28 41);' onclick="next_page"></div> -->
 
     </div>
 

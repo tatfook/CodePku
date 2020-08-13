@@ -201,7 +201,7 @@ function FriendUI:GetBlackList()
     local response = request:get('/contacts/blocks',nil,{sync = true})
     if (response.status == 200 and response.data.code == 200) then
         FriendUI.vars["blacklist"] = {}
-
+        echo(response.data.data)
         for index, data in ipairs(response.data.data) do
             FriendUI.vars["blacklist"][index] = {
                 id = data.id,

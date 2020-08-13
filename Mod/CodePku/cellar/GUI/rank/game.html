@@ -20,8 +20,8 @@ RankPage.left_navig = {
     {title = '游戏', name = 'game', index = 2}
 }
 RankPage.game_navig = {
-    [1] = {title = "单词酷跑", name = "parkour", index = 1},
-    [2] = {title = "华夏游学", name = "monopoly", index = 2},
+    [1] = {title = "单词爱跑酷", name = "parkour", index = 1},
+    [2] = {title = "华夏游学记", name = "monopoly", index = 2},
 }
 RankPage.top_navig = {
     [1] = {title = "世 界", name = "world", index = 1},
@@ -119,9 +119,9 @@ end
     <div style="position: relative; width: 62; height: 70; left: 1691; top: 116; background: url(codepku/image/textures/common_32bits.png#110 73 68 78);" name="close" onclick="ClosePage" ></div>
     
     <!--content-->
-    <div style="position: relative; width: 100; height: 41; left: 488; top: 207; base-font-size:44px; font-size:44px; font-family:Noto Sans S Chinese Regular; color: #ffffff;">排行</div>
-    <div style="position: relative; width: 100; height: 42; left: 831; top: 207; base-font-size:44px; font-size:44px; font-family:Noto Sans S Chinese Regular; color: #ffffff;">名称</div>
-    <div style="position: relative; width: 100; height: 41; left: 1474; top: 207; base-font-size:44px; font-size:44px; font-family:Noto Sans S Chinese Regular; color: #ffffff;">积分</div>
+    <div style="position: relative; width: 100; height: 41; left: 488; top: 200; base-font-size:44px; font-size:44px; font-family:Noto Sans S Chinese Regular; color: #ffffff;">排行</div>
+    <div style="position: relative; width: 100; height: 42; left: 831; top: 200; base-font-size:44px; font-size:44px; font-family:Noto Sans S Chinese Regular; color: #ffffff;">名称</div>
+    <div style="position: relative; width: 100; height: 41; left: 1474; top: 200; base-font-size:44px; font-size:44px; font-family:Noto Sans S Chinese Regular; color: #ffffff;">积分</div>
     <!--滚动吧-->
     <pe:gridview name="rank_content" style="position: relative; width: 1450; height: 600; left: 382; top: 255;" DataSource='<%=RankPage.userinfo %>' CellPadding="0" ItemsPerLine="1" AllowPaging="false" RememberScrollPos="true" RememberLastPage="true" 
         pagesize="36" VerticalScrollBarStep="36" VerticalScrollBarOffsetX="8">
@@ -184,12 +184,12 @@ end
                 <pe:repeatitem>
                     <pe:if condition="<%=Eval('index') == RankPage.left_navig_last_clicked%>">
                         <div style="width: 261; height: 96; margin-left: 32; background: url(codepku/image/textures/common_32bits.png#1648 196 261 96:30 30 30 30);" name="<%=Eval('name')%>" onclick="ClickedLeftNavigIndex">
-                        <div style="width:200; height:42; margin-left:30; margin-top: 20; base-font-size:45px; font-size:45px; font-family:Noto Sans S Chinese Regular;font-weight:bolder; font-weight:500; color:#F8DE8D; text-align: center;"><%=Eval('title')%></div>
+                        <div style="width:200; height:42; margin-left:30; margin-top: 20; base-font-size:35px; font-size:35px; font-family:Noto Sans S Chinese Regular;font-weight:bolder; font-weight:500; color:#F8DE8D; text-align: center;"><%=Eval('title')%></div>
                         </div>
                     </pe:if>
                     <pe:if condition="<%=Eval('index') ~= RankPage.left_navig_last_clicked%>">
                         <div style="width: 249; height: 94; background: url(codepku/image/textures/common_32bits.png#1294 66 134 94:30 30 30 30);" name="<%=Eval('name')%>" value="<%=Eval('title')%>" onclick="ClickedLeftNavigIndex">
-                            <div style="width:200; height:42; margin-left:30; margin-top: 22; base-font-size:45px; font-size:45px; font-family:Noto Sans S Chinese Regular;font-weight:bolder; font-weight:500; color:#ffffff; text-align: center;"><%=Eval('title')%></div>
+                            <div style="width:200; height:42; margin-left:30; margin-top: 22; base-font-size:35px; font-size:35px; font-family:Noto Sans S Chinese Regular;font-weight:bolder; font-weight:500; color:#ffffff; text-align: center;"><%=Eval('title')%></div>
                         </div>
                     </pe:if>
                 </pe:repeatitem>
