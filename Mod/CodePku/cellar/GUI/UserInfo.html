@@ -228,11 +228,6 @@ function GetName()
     return name;
 end
 
-function GetMoney(type)
-    local money = UserInfoPage.money and UserInfoPage.money[type];
-    return money;
-end
-
 function GetIdentity()
     return UserInfoPage.isSelf;
 end
@@ -257,16 +252,7 @@ end
             <input type="button" name="close" onclick="ClosePage" style="float:left;width:208px;height:127px;background:url(codepku/image/textures/common_32bits.png#251 49 208 127);"/>
             <div style="position:absolute;left:132px;top:0;width:441px;height:102px;background:url(codepku/image/textures/common_32bits.png#463 63 441 100);padding-top:4px;font-family:PuHuiTi-Bold;font-size:70px;color:#d85d0b;">个人中心</div>
             <pe:if condition="<%=GetIdentity()%>">
-                <div align="right" style="position:absolute;top:0;font-size:28px;color:#ffffff;font-weight:bold;">
-                    <div style="float:right;margin-right:58px;">
-                        <div style="float:left;width:196px;height:50px;background:url(codepku/image/textures/profile_32bits.png#1032 75 200 54);margin-top:16px;padding-top:8px;"><%=GetMoney('goldcoin')%></div>
-                        <div style="float:left;width:67px;height:65px;background:url(codepku/image/textures/common_32bits.png#913 41 73 71);margin-top:9px;margin-left:-219px;"></div>
-                    </div>
-                    <div style="float:right;margin-right:100px;">
-                        <div style="float:left;width:196px;height:50px;background:url(codepku/image/textures/profile_32bits.png#1032 75 200 54);margin-top:16px;padding-top:8px;"><%=GetMoney('wanxuecoin')%></div>
-                        <div style="float:left;width:71px;height:71px;background:url(codepku/image/textures/common_32bits.png#913 136 77 78);margin-top:6px;margin-left:-225px;"></div>
-                    </div>
-                </div>
+                <iframe name="money" src="Money.html" style="position:absolute;top:0;"></iframe>
             </pe:if>
         </div>
         <div style="font-size:45px;font-weight:bold;font-family:Noto Sans S Chinese Regular;text-align:center;position:relative;">
@@ -358,7 +344,8 @@ end
         <pe:if condition='<%=GetTabDSName() == "Profile"%>'>
             <!-- 属性 -->
             <div align="right" style="position:relative;padding-left:48px;padding-top:44px;line-height:90px;color:#ffffff;font-size:30px;font-family:PuHuiTi-Bold;margin-top:42px;margin-right:114px;width:789px;height:818px;background:url(codepku/image/textures/background/detail.png)">
-                <div style='<%=format("padding-left:40px;width:471px;height:102px;background:url(%s#911 1196 471 102);", Eval("ProfilePng")) %>' onclick="ShowEditName">
+                <div style='<%=format("padding-left:40px;width:471px;height:102px;background:url(%s #911 1196 471 102);", Eval("ProfilePng")) %>'>
+                <!-- <div style='<%=format("padding-left:40px;width:471px;height:102px;background:url(%s #911 1196 471 102);", Eval("ProfilePng")) %>' onclick="ShowEditName"> -->
                     <div style="float:left;margin-top:16px;">
                         <div style='<%=format("position:relative;width:66px;height:67px;background:url(%s#1788 560 86 87);", Eval("ProfilePng")) %>'></div>
                         <div style='<%=format("position:relative;width:66px;height:67px;background:url(%s#1677 556 94 94);", Eval("ProfilePng")) %>'></div>
