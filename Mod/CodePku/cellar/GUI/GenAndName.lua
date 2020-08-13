@@ -47,6 +47,8 @@ function GenAndName:CreateRole(name,gen)
     }
     response =  request:put('/users/profile' ,data,{sync = true});
 
+    commonlib.setfield("System.User.info.gender", gen) 
+    commonlib.setfield("System.User.info.nickname", name)    
     return response
 end
 
