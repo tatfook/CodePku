@@ -34,6 +34,9 @@ NPL.load("(gl)script/apps/Aries/Creator/Game/Network/NetworkMain.lua")
 NPL.load("(gl)script/ide/System/Encoding/guid.lua")
 NPL.load("(gl)script/apps/Aries/Creator/Game/Login/ParaWorldLessons.lua")
 NPL.load("(gl)script/ide/System/Encoding/jwt.lua")
+
+-- codepku
+NPL.load("(gl)Mod/CodePku/cellar/GUI/Window/AdaptWindow.lua");
 NPL.load("(gl)Mod/CodePku/online/main.lua");
 NPL.load("(gl)Mod/CodePku/cellar/GUI/GenAndName.lua")
 
@@ -54,7 +57,6 @@ local SystemEntrence = NPL.load("(gl)Mod/CodePku/cellar/GUI/FastEntrence/SystemE
 local CompeteEntrence = NPL.load("(gl)Mod/CodePku/cellar/GUI/FastEntrence/CompeteEntrence.lua")
 local TopicEntrence = NPL.load("(gl)Mod/CodePku/cellar/GUI/FastEntrence/TopicEntrence.lua")
 local SharePage = NPL.load("(gl)Mod/CodePku/cellar/GUI/Share.lua")
-local FriendUI = NPL.load("(gl)Mod/CodePku/cellar/GUI/Window/AdaptWindow.lua");
 local SubjectPage = NPL.load("(gl)Mod/CodePku/cellar/GUI/Subject.lua")
 local PropsInfo = NPL.load("(gl)Mod/CodePku/cellar/GUI/Props/PropsInfo.lua")
 local RankPage = NPL.load("(gl)Mod/CodePku/cellar/GUI/rank/RankPage.lua")

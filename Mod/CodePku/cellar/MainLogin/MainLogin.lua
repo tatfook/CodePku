@@ -16,9 +16,6 @@ local CodePkuServiceSession = NPL.load("(gl)Mod/CodePku/service/CodePkuService/S
 local CodePkuService = NPL.load("(gl)Mod/CodePku/service/CodePkuService.lua")
 local SessionsData = NPL.load("(gl)Mod/CodePku/database/SessionsData.lua")
 
-
-
-NPL.load("(gl)Mod/CodePku/cellar/GUI/Window/AdaptWindow.lua");
 local AdaptWindow = commonlib.gettable("Mod.CodePku.GUI.Window.AdaptWindow");
 
 local MainLogin = NPL.export()

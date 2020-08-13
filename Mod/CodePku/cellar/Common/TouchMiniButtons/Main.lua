@@ -1,6 +1,5 @@
 NPL.load("./MainSceneUIButtons.lua");
 NPL.load("(gl)script/apps/Aries/Creator/WorldCommon.lua");
-NPL.load("(gl)Mod/CodePku/cellar/GUI/Window/AdaptWindow.lua");
 local AdaptWindow = commonlib.gettable("Mod.CodePku.GUI.Window.AdaptWindow")
 local Log = NPL.load("(gl)Mod/CodePku/util/Log.lua");
 local WorldCommon = commonlib.gettable("MyCompany.Aries.Creator.WorldCommon")
