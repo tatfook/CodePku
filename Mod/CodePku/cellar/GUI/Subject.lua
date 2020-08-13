@@ -40,7 +40,7 @@ function SubjectPage.OnInitSubject()
             index = i,
             -- row = trow,
             -- col = tcol,
-            level = '0级',
+            level = '1级',
             percent = 0,
             current_exp = 0,
             next_exp = 30,
@@ -70,10 +70,8 @@ function SubjectPage.GetLevels()
     request:get('/users/levels'):next(function(response)
         if (response.status == 200) then
             local data = response.data.data;
-            echo(data)
             for i = 1, #data do
                 if data[i].level_type < 7 then
-                    echo(data[i].level_type)
                     SubjectPage.subject_list[data[i].level_type].level = data[i].current_level .. "级";
                     SubjectPage.subject_list[data[i].level_type].percent = data[i].current_exp / data[i].next_exp;
                     SubjectPage.subject_list[data[i].level_type].current_exp = data[i].current_exp;
