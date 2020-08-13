@@ -101,7 +101,6 @@ end
 
 function SubjectPage:InitWindow()
     SubjectPage.bForceHide = bShow == false;
-    NPL.load("(gl)Mod/CodePku/cellar/GUI/Window/AdaptWindow.lua");
     local AdaptWindow = commonlib.gettable("Mod.CodePku.GUI.Window.AdaptWindow")
     AdaptWindow:QuickWindow({url="Mod/CodePku/cellar/GUI/Subject.html", 
     alignment="_fi", left = 0, top = 0, width = 0, height = 0,zorder = 21});

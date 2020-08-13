@@ -1,4 +1,3 @@
-NPL.load("(gl)Mod/CodePku/cellar/GUI/Window/AdaptWindow.lua");
 local AdaptWindow = commonlib.gettable("Mod.CodePku.GUI.Window.AdaptWindow");
 local PropsInfo = commonlib.gettable("Mod.CodePku.PropsInfo");
 local request = NPL.load("(gl)Mod/CodePku/api/BaseRequest.lua");

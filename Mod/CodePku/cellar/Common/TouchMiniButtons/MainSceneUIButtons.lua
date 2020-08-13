@@ -1,7 +1,6 @@
 -- 主界面按钮
 --author: Min da
 --date: 2020-05-29 10:19:30
-NPL.load("(gl)Mod/CodePku/cellar/GUI/Window/AdaptWindow.lua");
 local AdaptWindow = commonlib.gettable("Mod.CodePku.GUI.Window.AdaptWindow")
 MainSceneUIButtons = commonlib.gettable("Mod.CodePku.Common.TouchMiniButtons.MainSceneUIButtons");
 FriendUI = NPL.load("(gl)Mod/CodePku/cellar/GUI/Friend/FriendUI.lua");
