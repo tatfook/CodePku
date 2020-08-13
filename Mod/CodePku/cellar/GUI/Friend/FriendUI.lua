@@ -53,6 +53,12 @@ FriendUI.popparams={
 
 FriendUI.vars = {}
 
+FriendUI.menu = {
+    {index = 1, text = "my_friend", name = "我的好友"},
+    -- {index = 2, text = "recent_player", name = "最近游玩"},
+    {index = 3, text = "black_list", name = "黑名单"}
+}
+
 
 function FriendUI:Search(keyword)
     local request = NPL.load("(gl)Mod/CodePku/api/BaseRequest.lua");

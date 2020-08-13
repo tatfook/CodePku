@@ -14,11 +14,8 @@
 local FriendUI = NPL.load("(gl)Mod/CodePku/cellar/GUI/Friend/FriendUI.lua")
 MainSceneUIButtons = commonlib.gettable("Mod.CodePku.Common.TouchMiniButtons.MainSceneUIButtons");
 cur_index = 1
-menu = {
-    [1] = {index = 1, text = "my_friend", name = "我的好友"},
-    [2] = {index = 2, text = "recent_player", name = "最近游玩"},
-    [3] = {index = 3, text = "black_list", name = "黑名单"}
-}
+
+menu = FriendUI.menu
 
 function ClosePage()
     Page:CloseWindow();
