@@ -82,9 +82,9 @@ end
 
 <pe:container alignment="_lt" width="1920" height="1080"  style="background: url(codepku/image/textures/background/main.png);">
     <div style="position: relative; width: 230; height: 1080; background: url(codepku/image/textures/common_32bits.png#1801 742 81 81:9 9 9 9);"></div>
-    <div style="position: relative; width: 223; height: 127; left: 0; top: 0; background: url(codepku/image/textures/common_32bits.png#251 49 208 127);" onclick="ClosePage"></div>
+    <div style="position: relative; width: 208; height: 127; left: 0; top: 0; background: url(codepku/image/textures/common_32bits.png#251 49 208 127);" onclick="ClosePage"></div>
 
-    <div style="position: relative; width: 417; height: 86;  left: 144; top: 0; font-size: 70; color: #D85D0B; font-family: PuHuiTi-Bold; padding-left: 141; padding-top: 8; padding-right: 50; padding-bottom: 11; background: url(codepku/image/textures/common_32bits.png#475 63 429 86);">
+    <div style="position: relative; width: 417; height: 86;  left: 144; top: 0; font-size: 70; color: #D85D0B; font-family: PuHuiTi-Bold; padding-left: 143; padding-top: 8; padding-right: 50; padding-bottom: 11; background: url(codepku/image/textures/common_32bits.png#475 63 429 86);">
         好友
     </div>
 
@@ -119,7 +119,7 @@ end
         </pe:repeat>
     </div>
 
-    <div style="position: relative; width: 130; height: 27; left: 374; top: 206; font-size: 36; font-family: Alibaba-PuHuiTi-R;"><span style="color: #FF3942;"><%=#getFriendData()%></span><span style="color: #254D9E;">/50</span></div>
+    <div style="position: relative; width: 130; height: 27; left: 374; top: 206; font-size: 36; font-family: PuHuiTi-Bold;"><span style="color: #FF3942;"><%=#getFriendData()%></span><span style="color: #254D9E;">/50</span></div>
 
     <pe:gridview name="MyFriend" style="position:relative; left: 339; top: 246; width: 1544;
     height:723;background-color: #ff00ff50;" DataSource='<%=getFriendData() %>' CellPadding="6" ItemsPerLine="1" AllowPaging="false" RememberScrollPos="true" RememberLastPage="true" 
