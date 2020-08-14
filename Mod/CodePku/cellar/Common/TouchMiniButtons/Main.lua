@@ -110,17 +110,21 @@ function MainUIButtons.ShowPage()
 	end
 
 	local hideMenu = false;
+	local hideAllMenu = false;
 	if (System.Codepku and System.Codepku.Coursewares) then		
 		hideMenu = System.Codepku.Coursewares.hide_menu;
+		hideAllMenu = System.Codepku.Coursewares.hide_all_menu;
 	end
 		
-	if not hideMenu then 
-		MainUIButtons.show_common_ui()
-		MainUIButtons.show_dialog_ui(false)
-		MainUIButtons.show_money_ui()		
-		MainUIButtons.show_function_ui()
-	else
-		MainUIButtons.show_common_ui()
+	if not hideAllMenu then
+		if not hideMenu then 
+			MainUIButtons.show_common_ui()
+			MainUIButtons.show_dialog_ui(false)
+			MainUIButtons.show_money_ui()		
+			MainUIButtons.show_function_ui()
+		else
+			MainUIButtons.show_common_ui()
+		end
 	end
 end
 
