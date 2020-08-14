@@ -45,6 +45,10 @@ function OnlineClient:Init()
     self.GetAssetsWhiteList().AddAsset("codepku/model/LLS_AN.x");
     self.GetAssetsWhiteList().AddAsset("codepku/model/WLS_AN.x");
 
+    self.GetAssetsWhiteList().AddAsset("codepku/model/HAO/hao.fbx");
+    self.GetAssetsWhiteList().AddAsset("codepku/model/LI/lilaoshi.fbx");
+    self.GetAssetsWhiteList().AddAsset("codepku/model/WANG/WANG.fbx");
+
 
     self.inited = true;
 end
