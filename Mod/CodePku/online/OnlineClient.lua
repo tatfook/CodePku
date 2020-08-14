@@ -49,6 +49,17 @@ function OnlineClient:Init()
     self.GetAssetsWhiteList().AddAsset("codepku/model/LI/lilaoshi.fbx");
     self.GetAssetsWhiteList().AddAsset("codepku/model/WANG/WANG.fbx");
 
+    self.GetAssetsWhiteList().RemoveAsset("character/CC/02human/paperman/boy02.x");
+    self.GetAssetsWhiteList().RemoveAsset("character/CC/02human/paperman/boy03.x");
+    self.GetAssetsWhiteList().RemoveAsset("character/CC/02human/paperman/boy04.x");
+    self.GetAssetsWhiteList().RemoveAsset("character/CC/02human/paperman/boy05.x");
+    self.GetAssetsWhiteList().RemoveAsset("character/CC/02human/paperman/boy06.x");
+    self.GetAssetsWhiteList().RemoveAsset("character/CC/02human/paperman/boy07.x");
+    self.GetAssetsWhiteList().RemoveAsset("character/CC/02human/paperman/girl02.x");
+    self.GetAssetsWhiteList().RemoveAsset("character/CC/02human/paperman/girl03.x");
+    self.GetAssetsWhiteList().RemoveAsset("character/CC/02human/paperman/girl04.x");
+    self.GetAssetsWhiteList().RemoveAsset("character/CC/02human/paperman/girl05.x");
+    self.GetAssetsWhiteList().RemoveAsset("character/v3/Elf/Female/ElfFemale.xml");
 
     self.inited = true;
 end
