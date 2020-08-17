@@ -7,6 +7,9 @@ local EntityManager = commonlib.gettable("MyCompany.Aries.Game.EntityManager")
 local MainSceneUIButtons = commonlib.gettable("Mod.CodePku.Common.TouchMiniButtons.MainSceneUIButtons");
 local GenAndName = commonlib.gettable("Mod.CodePku.GenAndName")
 
+NPL.load("(gl)script/apps/Aries/Creator/Game/GUI/TouchController.lua");
+local TouchController = commonlib.gettable("MyCompany.Aries.Game.GUI.TouchController");
+
 local MainUIButtons = NPL.export();
 
 MainUIButtons.hasshown = false
@@ -15,6 +18,7 @@ MainUIButtons.common_window = nil
 MainUIButtons.function_window = nil
 MainUIButtons.dialog_window = nil
 MainUIButtons.money_window = nil
+MainUIButtons.action_window = nil
 MainUIButtons.open_function = nil
 MainUIButtons.open_common = nil
 
@@ -53,7 +57,7 @@ function MainUIButtons.show_function_ui(flag)	--flag == true,工具栏展开
 	params = {
 		open = {
 			url="Mod/CodePku/cellar/Common/TouchMiniButtons/MainUIButtons_function.html", 
-			alignment="_rb", left = -541, top = -178, width = 541, height = 178,
+			alignment="_rb", zorder=11, left = -541, top = -178, width = 541, height = 178,
 			click_through = true,
 		},
 		close = {
@@ -91,7 +95,44 @@ function MainUIButtons.show_money_ui()
 	MainUIButtons.money_window = AdaptWindow:QuickWindow(params)	
 end
 
-function MainUIButtons.ShowPage()
+function MainUIButtons.show_action_ui(left, right, bottom)
+
+	if left ~= nil then
+		MainUIButtons.show_action_left()
+	end
+
+	if right ~= nil then
+		MainUIButtons.show_action_right()
+	end
+
+	if bottom ~= nil then
+		MainUIButtons.show_action_bottom()
+	end
+	
+end
+
+function MainUIButtons.show_action_left()
+	params = { url="Mod/CodePku/cellar/Common/TouchMiniButtons/MainAction/MainActionLeft.html", 
+			alignment="_lt", left = 101, top = 534, width = 350, height = 350
+		}
+		MainUIButtons.action_window_left = AdaptWindow:QuickWindow(params)
+end
+
+function MainUIButtons.show_action_right()
+	params = { url="Mod/CodePku/cellar/Common/TouchMiniButtons/MainAction/MainActionRight.html", 
+			alignment="_lt", left = 1758, top = 471, width = 130, height = 300
+		}
+		MainUIButtons.action_window_right = AdaptWindow:QuickWindow(params)
+end
+
+function MainUIButtons.show_action_bottom()
+	params = { url="Mod/CodePku/cellar/Common/TouchMiniButtons/MainAction/MainActionBottom.html", 
+			alignment="_lt", zorder = 10, left = 1510, top = 755, width = 300, height = 305
+		}
+		MainUIButtons.action_window_bottom = AdaptWindow:QuickWindow(params)
+end
+
+function MainUIButtons.JudgeNil()
 	if MainUIButtons.common_window ~= nil then
 		MainUIButtons.common_window:CloseWindow()
 		MainUIButtons.common_window = nil
@@ -108,6 +149,24 @@ function MainUIButtons.ShowPage()
 		MainUIButtons.money_window:CloseWindow()
 		MainUIButtons.money_window = nil
 	end
+	if MainUIButtons.action_window_left ~= nil then
+		MainUIButtons.action_window_left:CloseWindow()
+		MainUIButtons.action_window_left = nil
+	end
+	if MainUIButtons.action_window_right ~= nil then
+		MainUIButtons.action_window_right:CloseWindow()
+		MainUIButtons.action_window_right = nil
+	end
+	if MainUIButtons.action_window_bottom ~= nil then
+		MainUIButtons.action_window_bottom:CloseWindow()
+		MainUIButtons.action_window_bottom = nil
+	end		
+end
+
+
+function MainUIButtons.ShowPage()
+	
+	MainUIButtons.JudgeNil()
 
 	local hideMenu = false;
 	if (System.Codepku and System.Codepku.Coursewares) then		
@@ -119,6 +178,17 @@ function MainUIButtons.ShowPage()
 		MainUIButtons.show_dialog_ui(false)
 		MainUIButtons.show_money_ui()		
 		MainUIButtons.show_function_ui()
+		if System.os.IsMobilePlatform() then
+			MainUIButtons.show_action_ui(1, 2, 3)
+		end
+		MainUIButtons.show_action_ui(1, 2, 3)
+
+		-- TouchController.ShowPage(true);
+		-- TouchController.SwitchTouchMouseMode(true);
+		-- -- check touch key pressed
+		-- TouchController.IsKeyPressed(DIK_SCANCODE.DIK_LSHIFT);
+
+
 	else
 		MainUIButtons.show_common_ui()
 	end
