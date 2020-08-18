@@ -91,63 +91,35 @@ function UserConsole:ClosePage()
 end
 
 function UserConsole:CourseEntry()    
-    CodePkuServiceSession:CourseEntryWorld(function (response, err)         
-        if (err == 401) then
-            GameLogic.AddBBS(nil, L"请先登录", 3000, "255 0 0", 21)
-            -- todo 看下怎么回到登录页面
-            return false
-        end   
-        if (err ~= 200) then
-            GameLogic.AddBBS(nil, L"获取入口世界失败", 3000, "255 0 0", 21)
-            return false
-        end
+    --判断是否是华为审核版
+    -- echo("Mod.CodePku.BasicConfig:")
+    -- echo(Mod.CodePku.BasicConfig)
+    local huaweiApprovalStatus = Mod.CodePku.BasicConfig.huawei_approval_status == 'on'  
+    local isHuawei = ParaEngine.GetAppCommandLineByParam("app_market", "") == 'huawei';
+    
+    if isHuawei and huaweiApprovalStatus then 
+        self:HandleWorldId(Mod.CodePku.BasicConfig.huawei_entry_world_id)
+    else    
+        CodePkuServiceSession:CourseEntryWorld(function (response, err)         
+            if (err == 401) then
+                GameLogic.AddBBS(nil, L"请先登录", 3000, "255 0 0", 21)
+                -- todo 看下怎么回到登录页面
+                return false
+            end   
+            if (err ~= 200) then
+                GameLogic.AddBBS(nil, L"获取入口世界失败", 3000, "255 0 0", 21)
+                return false
+            end
 
-        local GeneralGameServerMod = commonlib.gettable("Mod.GeneralGameServerMod");
-        local GeneralGameClientClass = GeneralGameServerMod:GetClientClass("CodePku");
-        commonlib.setfield("System.Codepku.Coursewares", response.data);
-        GeneralGameClientClass:LoadWorld({
-            worldId = response.data.keepwork_project_id,
-            url = response.data.world
-        });
-        -- local url = response and response.data and response.data.world
-        -- echo(url)
-        -- local world = RemoteWorld.LoadFromHref(url, "self")
-
-        -- local function LoadWorld(world, refreshMode)
-        --     if world then
-        --         if refreshMode == 'never' then
-        --             if not LocalService:IsFileExistInZip(world:GetLocalFileName(), ":worldconfig.txt") then
-        --                 refreshMode = 'force'
-        --             end
-        --         end
-
-        --         local url = world:GetLocalFileName()               
-        --         DownloadWorld.ShowPage(url)
-        --         echo("loadworld")
-        --         echo(world)
-        --         local mytimer = commonlib.Timer:new(
-        --             {
-        --                 callbackFunc = function(timer)
-        --                     InternetLoadWorld.LoadWorld(
-        --                         world,
-        --                         nil,
-        --                         refreshMode or "auto",
-        --                         function(bSucceed, localWorldPath)
-        --                             echo({localWorldPath = localWorldPath})
-        --                             DownloadWorld.Close()
-        --                         end
-        --                     )
-        --                 end
-        --             }
-        --         );
-        --         -- prevent recursive calls.
-        --         mytimer:Change(1,nil);
-        --     else
-        --         _guihelper.MessageBox(L"无效的世界文件");
-        --     end
-        -- end
-        -- LoadWorld(world, 'auto')
-    end) 
+            local GeneralGameServerMod = commonlib.gettable("Mod.GeneralGameServerMod");
+            local GeneralGameClientClass = GeneralGameServerMod:GetClientClass("CodePku");
+            commonlib.setfield("System.Codepku.Coursewares", response.data);
+            GeneralGameClientClass:LoadWorld({
+                worldId = response.data.keepwork_project_id,
+                url = response.data.world
+            });           
+        end) 
+    end
 end
 
 function UserConsole:Logout()
