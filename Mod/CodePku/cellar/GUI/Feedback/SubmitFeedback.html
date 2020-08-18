@@ -36,6 +36,7 @@ end
 function ChooseType(name)
     Feedback.button_lighting_lock = name
     SetIndex(name)
+    Feedback.content = page:GetValue("userfeedback")
     Page:Refresh(0)
 end
 
@@ -78,55 +79,55 @@ end
 
     <div style="position: relative; width: 175; height: 30; left: 558; top: 407;color: #FFFFFF; ；padding-left: 42; line-height: 30;  base-font-size: 32; font-size: 32; font-family:Noto Sans S Chinese Regular; font-weight:bolder;" name="suggest"  onclick="ChooseType">优化建议</div>
     <pe:if condition="<%=Feedback.button_lighting_lock ~= 'suggest'%>">
-        <pe:div style="position: relative; width: 30; height: 30; left: 558; top: 407; background: url(codepku/image/textures/friend/main.png#651 100 30 30);"></pe:div>
+        <pe:div style="position: relative; width: 30; height: 30; left: 558; top: 407; background: url(codepku/image/textures/friend/main.png#651 100 30 30);" name="suggest" onclick="ChooseType"></pe:div>
     </pe:if>  
     <pe:if condition="<%=Feedback.button_lighting_lock == 'suggest'%>">
-        <pe:div style="position: relative; width: 30; height: 30; left: 558; top: 407; background: url(codepku/image/textures/friend/main.png#788 100 30 30);"></pe:div>
+        <pe:div style="position: relative; width: 30; height: 30; left: 558; top: 407; background: url(codepku/image/textures/friend/main.png#788 100 30 30);" name="suggest" onclick="ChooseType"></pe:div>
     </pe:if> 
 
     <div style="position: relative; width: 210; height: 30; left: 808; top: 407;color: #FFFFFF; ；padding-left: 42; line-height: 30;  base-font-size: 32; font-size: 32; font-family:Noto Sans S Chinese Regular; font-weight:bolder;" name="homeland" onclick="ChooseType">家园区问题</div>
     <pe:if condition="<%=Feedback.button_lighting_lock ~= 'homeland'%>">
-        <pe:div style="position: relative; width: 30; height: 30; left: 808; top: 407; background: url(codepku/image/textures/friend/main.png#651 100 30 30);"></pe:div>
+        <pe:div style="position: relative; width: 30; height: 30; left: 808; top: 407; background: url(codepku/image/textures/friend/main.png#651 100 30 30);" name="homeland" onclick="ChooseType"></pe:div>
     </pe:if>  
     <pe:if condition="<%=Feedback.button_lighting_lock == 'homeland'%>">
-        <pe:div style="position: relative; width: 30; height: 30; left: 808; top: 407; background: url(codepku/image/textures/friend/main.png#788 100 30 30);"></pe:div>
+        <pe:div style="position: relative; width: 30; height: 30; left: 808; top: 407; background: url(codepku/image/textures/friend/main.png#788 100 30 30);" name="homeland" onclick="ChooseType"></pe:div>
     </pe:if>
 
     <div style="position: relative; width: 318; height: 30; left: 1057; top: 407;color: #FFFFFF; ；padding-left: 42; line-height: 30;  base-font-size: 32; font-size: 32; font-family:Noto Sans S Chinese Regular; font-weight:bolder;" name="entrance" onclick="ChooseType">玩学世界-入口问题</div>
     <pe:if condition="<%=Feedback.button_lighting_lock ~= 'entrance'%>">
-        <pe:div style="position: relative; width: 30; height: 30; left: 1057; top: 407; background: url(codepku/image/textures/friend/main.png#651 100 30 30);"></pe:div>
+        <pe:div style="position: relative; width: 30; height: 30; left: 1057; top: 407; background: url(codepku/image/textures/friend/main.png#651 100 30 30);" name="entrance" onclick="ChooseType"></pe:div>
     </pe:if>  
     <pe:if condition="<%=Feedback.button_lighting_lock == 'entrance'%>">
-        <pe:div style="position: relative; width: 30; height: 30; left: 1057; top: 407; background: url(codepku/image/textures/friend/main.png#788 100 30 30);"></pe:div>
+        <pe:div style="position: relative; width: 30; height: 30; left: 1057; top: 407; background: url(codepku/image/textures/friend/main.png#788 100 30 30);" name="entrance" onclick="ChooseType"></pe:div>
     </pe:if>
 
     <div style="position: relative; width: 210; height: 30; left: 558; top: 486;color: #FFFFFF; ；padding-left: 43; line-height: 30;  base-font-size: 32; font-size: 32; font-family:Noto Sans S Chinese Regular; font-weight:bolder;" name="athletics" onclick="ChooseType">竞技区问题</div>
     <pe:if condition="<%=Feedback.button_lighting_lock ~= 'athletics'%>">
-        <pe:div style="position: relative; width: 30; height: 30; left: 558; top: 486; background: url(codepku/image/textures/friend/main.png#651 100 30 30);"></pe:div>
+        <pe:div style="position: relative; width: 30; height: 30; left: 558; top: 486; background: url(codepku/image/textures/friend/main.png#651 100 30 30);" name="athletics" onclick="ChooseType"></pe:div>
     </pe:if>  
     <pe:if condition="<%=Feedback.button_lighting_lock == 'athletics'%>">
-        <pe:div style="position: relative; width: 30; height: 30; left: 558; top: 486; background: url(codepku/image/textures/friend/main.png#788 100 30 30);"></pe:div>
+        <pe:div style="position: relative; width: 30; height: 30; left: 558; top: 486; background: url(codepku/image/textures/friend/main.png#788 100 30 30);" name="athletics" onclick="ChooseType"></pe:div>
     </pe:if>
 
     <div style="position: relative; width: 210; height: 30; left: 808; top: 486;color: #FFFFFF; ；padding-left: 41; line-height: 30;  base-font-size: 32; font-size: 32; font-family:Noto Sans S Chinese Regular; font-weight:bolder;" name="topic" onclick="ChooseType">专题区问题</div>
     <pe:if condition="<%=Feedback.button_lighting_lock ~= 'topic'%>">
-        <pe:div style="position: relative; width: 30; height: 30; left: 808; top: 486; background: url(codepku/image/textures/friend/main.png#651 100 30 30);"></pe:div>
+        <pe:div style="position: relative; width: 30; height: 30; left: 808; top: 486; background: url(codepku/image/textures/friend/main.png#651 100 30 30);" name="topic" onclick="ChooseType"></pe:div>
     </pe:if>  
     <pe:if condition="<%=Feedback.button_lighting_lock == 'topic'%>">
-        <pe:div style="position: relative; width: 30; height: 30; left: 808; top: 486; background: url(codepku/image/textures/friend/main.png#788 100 30 30);"></pe:div>
+        <pe:div style="position: relative; width: 30; height: 30; left: 808; top: 486; background: url(codepku/image/textures/friend/main.png#788 100 30 30);" name="topic" onclick="ChooseType"></pe:div>
     </pe:if>
 
     <div style="position: relative; width: 210; height: 30; left: 1057; top: 486;color: #FFFFFF; ；padding-left: 43; line-height: 30;  base-font-size: 32; font-size: 32; font-family:Noto Sans S Chinese Regular; font-weight:bolder;" name="architecture" onclick="ChooseType">教学区问题</div>
     <pe:if condition="<%=Feedback.button_lighting_lock ~= 'architecture'%>">
-        <pe:div style="position: relative; width: 30; height: 30; left: 1057; top: 486; background: url(codepku/image/textures/friend/main.png#651 100 30 30);"></pe:div>
+        <pe:div style="position: relative; width: 30; height: 30; left: 1057; top: 486; background: url(codepku/image/textures/friend/main.png#651 100 30 30);" name="architecture" onclick="ChooseType"></pe:div>
     </pe:if>  
     <pe:if condition="<%=Feedback.button_lighting_lock == 'architecture'%>">
-        <pe:div style="position: relative; width: 30; height: 30; left: 1057; top: 486; background: url(codepku/image/textures/friend/main.png#788 100 30 30);"></pe:div>
+        <pe:div style="position: relative; width: 30; height: 30; left: 1057; top: 486; background: url(codepku/image/textures/friend/main.png#788 100 30 30);" name="architecture" onclick="ChooseType"></pe:div>
     </pe:if>
 
     <!-- 输入框 -->
     <div style="position: relative; width: 805; height: 90; left: 558; top: 580; font-size: 24; font-family:Noto Sans S Chinese Regular; color: #000000; padding-left: 12;padding-top: 29;background: url(codepku/image/textures/common_32bits.png#1308 569 130 130:14 14 14 14);">
-        <input type="text"  style="position: relative; width: 780; height: 24; background-color: none;"  name="userfeedback" EmptyText='<%= L"请输入反馈的内容，如需我们主动联系，请留下联系方式" %>' />
+        <input type="text"  style="position: relative; width: 780; height: 24; background-color: none;"  name="userfeedback" EmptyText='<%= L"请输入反馈的内容，如需我们主动联系，请留下联系方式" %>' value="<%=Feedback.content %>"/>
     </div>
 
 
