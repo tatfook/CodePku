@@ -7,44 +7,155 @@
 </head>
 <body>
     <pe:mcml>
-<script refresh="false" type="text/npl" src="UserInfo.lua"><![CDATA[
-Feedback = NPL.load("(gl)Mod/CodePku/cellar/GUI/Feedback/Feedback.lua");
-local FeedbackDefault = Feedback:GetWord();
+<script refresh="false" type="text/npl" src="Feedback.lua"><![CDATA[
+Feedback = NPL.load("(gl)Mod/CodePku/cellar/GUI/Feedback/Feedback.lua")
+local page = document:GetPageCtrl()
+
+Feedback.top_navig = {
+    [1] = {title = "优化建议", name = "suggest", index = 1},
+    [2] = {title = "家园区问题", name = "homeland", index = 2},
+    [3] = {title = "玩学世界-入口问题", name = "entrance", index = 3},
+    [4] = {title = "竞技区问题", name = "athletics", index = 4},
+    [5] = {title = "专题区问题", name = "topic", index = 5},
+    [6] = {title = "教学区问题", name = "architecture", index = 6},
+}
+
+Feedback.clicked_index = 1
+Feedback.content = ''
+Feedback.button_lighting_lock = "suggest"
+
+
+function SetIndex(name)
+    for k,v in pairs(Feedback.top_navig) do
+        if name == v.name then
+            Feedback.clicked_index = k
+        end
+    end
+end
+
+function ChooseType(name)
+    Feedback.button_lighting_lock = name
+    SetIndex(name)
+    Page:Refresh(0)
+end
 
 function ClosePage()
     Page:CloseWindow();
 end
 
-
-function OnClose()
-    ClosePage()
+function SubmitFeedback()
+    Feedback.content = page:GetValue("userfeedback")
+    echo("===========================1234567890123456789==========================")
+    echo(Feedback.content)
+    params = {
+        content = Feedback.content,
+        category = Feedback.clicked_index
+    }
+    echo(params)
+    result = Feedback:submit(params)
+    if not result then
+        Page:Refresh(0)
+    else
+        ClosePage()
+    end
 end
 
 ]]>
 
 </script>
 
-<pe:aries_window2 alignment="_ct" style="font-size:50px;font-weight:bold;color:#ffffff;font-family:Noto Sans S Chinese Regular;" title="反馈">
-    <!-- todo: textarea style/css doesn't work -->
-    <!-- <textarea
-        rows="10"
-        align="center"
-        EmptyText="反馈"
-        value="<%=FeedbackDefault%>"
-        lineWrap="true"
-        AlwaysShowCurLineBackground="false"
-        style="color:#ffffff;margin-top:34px;font-size:36px;padding:30px;width:960px;height:233px;background:url(codepku/image/textures/common_32bits.png#1404 292 40 40:17 17 17 17)"
-    ></textarea> -->
-    <div style="font-size:36px;font-weight:bold;color:#383838;width:960px;height:266px;background-color: #ffffff;margin-left: 99px;margin-top: 30px;">
-        <div style="font-family: Noto Sans S Chinese Regular;padding-top:17px;text-align: center;">如需进一步帮助，请通过以下方式联系我们。<br/></div>
-        <div style="font-family: Noto Sans S Chinese Regular;padding-top:21px;margin-left: 263px;">官方QQ群：963791354<br/></div>
-        <div style="font-family: Noto Sans S Chinese Regular;padding-top:21px;margin-left: 263px;">客服QQ：1026677033<br/></div>
-        <div style="font-family: Noto Sans S Chinese Regular;padding-top:21px;margin-left: 263px;">客户微信：T15337115704<br/></div>
+
+
+<pe:container alignment="_lt" width="1920" height="1080">
+    <!-- 背景图 -->
+    <div style="position: relative; width: 885; height: 670;left: 507; top: 205; background:url(codepku/image/textures/feedback/feedbackbackground.png);"></div>
+    <!-- 标题 -->
+    <div style="position: relative; width: 316; height: 68;left: 792; top: 205; text-align: center;color: #ff9000; font-family: Noto Sans S Chinese Regular;font-weight: bold; font-size: 36px;line-height: 68; background:url(codepku/image/textures/feedback/feedback.png#30 354 410 88);">反馈</div>
+    <!-- 取消按钮 -->
+    <div style="position: relative; width: 50; height: 58; left:1316; top: 208; background: url(codepku/image/textures/common_32bits.png#110 73 68 78);" onclick="ClosePage"></div>
+    <div style="position: relative; width: 450; height: 35;left: 559; top: 332; font-family:Noto Sans S Chinese Regular;font-weight: bolder;color: #FFFFFF; font-size: 36px;">请选择反馈内容的类型：</div>
+
+
+    <div style="position: relative; width: 175; height: 30; left: 558; top: 407;color: #FFFFFF; ；padding-left: 42; line-height: 30;  base-font-size: 32; font-size: 32; font-family:Noto Sans S Chinese Regular; font-weight:bolder;" name="suggest"  onclick="ChooseType">优化建议</div>
+    <pe:if condition="<%=Feedback.button_lighting_lock ~= 'suggest'%>">
+        <pe:div style="position: relative; width: 30; height: 30; left: 558; top: 407; background: url(codepku/image/textures/friend/main.png#651 100 30 30);"></pe:div>
+    </pe:if>  
+    <pe:if condition="<%=Feedback.button_lighting_lock == 'suggest'%>">
+        <pe:div style="position: relative; width: 30; height: 30; left: 558; top: 407; background: url(codepku/image/textures/friend/main.png#788 100 30 30);"></pe:div>
+    </pe:if> 
+
+    <div style="position: relative; width: 210; height: 30; left: 808; top: 407;color: #FFFFFF; ；padding-left: 42; line-height: 30;  base-font-size: 32; font-size: 32; font-family:Noto Sans S Chinese Regular; font-weight:bolder;" name="homeland" onclick="ChooseType">家园区问题</div>
+    <pe:if condition="<%=Feedback.button_lighting_lock ~= 'homeland'%>">
+        <pe:div style="position: relative; width: 30; height: 30; left: 808; top: 407; background: url(codepku/image/textures/friend/main.png#651 100 30 30);"></pe:div>
+    </pe:if>  
+    <pe:if condition="<%=Feedback.button_lighting_lock == 'homeland'%>">
+        <pe:div style="position: relative; width: 30; height: 30; left: 808; top: 407; background: url(codepku/image/textures/friend/main.png#788 100 30 30);"></pe:div>
+    </pe:if>
+
+    <div style="position: relative; width: 318; height: 30; left: 1057; top: 407;color: #FFFFFF; ；padding-left: 42; line-height: 30;  base-font-size: 32; font-size: 32; font-family:Noto Sans S Chinese Regular; font-weight:bolder;" name="entrance" onclick="ChooseType">玩学世界-入口问题</div>
+    <pe:if condition="<%=Feedback.button_lighting_lock ~= 'entrance'%>">
+        <pe:div style="position: relative; width: 30; height: 30; left: 1057; top: 407; background: url(codepku/image/textures/friend/main.png#651 100 30 30);"></pe:div>
+    </pe:if>  
+    <pe:if condition="<%=Feedback.button_lighting_lock == 'entrance'%>">
+        <pe:div style="position: relative; width: 30; height: 30; left: 1057; top: 407; background: url(codepku/image/textures/friend/main.png#788 100 30 30);"></pe:div>
+    </pe:if>
+
+    <div style="position: relative; width: 210; height: 30; left: 558; top: 486;color: #FFFFFF; ；padding-left: 43; line-height: 30;  base-font-size: 32; font-size: 32; font-family:Noto Sans S Chinese Regular; font-weight:bolder;" name="athletics" onclick="ChooseType">竞技区问题</div>
+    <pe:if condition="<%=Feedback.button_lighting_lock ~= 'athletics'%>">
+        <pe:div style="position: relative; width: 30; height: 30; left: 558; top: 486; background: url(codepku/image/textures/friend/main.png#651 100 30 30);"></pe:div>
+    </pe:if>  
+    <pe:if condition="<%=Feedback.button_lighting_lock == 'athletics'%>">
+        <pe:div style="position: relative; width: 30; height: 30; left: 558; top: 486; background: url(codepku/image/textures/friend/main.png#788 100 30 30);"></pe:div>
+    </pe:if>
+
+    <div style="position: relative; width: 210; height: 30; left: 808; top: 486;color: #FFFFFF; ；padding-left: 41; line-height: 30;  base-font-size: 32; font-size: 32; font-family:Noto Sans S Chinese Regular; font-weight:bolder;" name="topic" onclick="ChooseType">专题区问题</div>
+    <pe:if condition="<%=Feedback.button_lighting_lock ~= 'topic'%>">
+        <pe:div style="position: relative; width: 30; height: 30; left: 808; top: 486; background: url(codepku/image/textures/friend/main.png#651 100 30 30);"></pe:div>
+    </pe:if>  
+    <pe:if condition="<%=Feedback.button_lighting_lock == 'topic'%>">
+        <pe:div style="position: relative; width: 30; height: 30; left: 808; top: 486; background: url(codepku/image/textures/friend/main.png#788 100 30 30);"></pe:div>
+    </pe:if>
+
+    <div style="position: relative; width: 210; height: 30; left: 1057; top: 486;color: #FFFFFF; ；padding-left: 43; line-height: 30;  base-font-size: 32; font-size: 32; font-family:Noto Sans S Chinese Regular; font-weight:bolder;" name="architecture" onclick="ChooseType">教学区问题</div>
+    <pe:if condition="<%=Feedback.button_lighting_lock ~= 'architecture'%>">
+        <pe:div style="position: relative; width: 30; height: 30; left: 1057; top: 486; background: url(codepku/image/textures/friend/main.png#651 100 30 30);"></pe:div>
+    </pe:if>  
+    <pe:if condition="<%=Feedback.button_lighting_lock == 'architecture'%>">
+        <pe:div style="position: relative; width: 30; height: 30; left: 1057; top: 486; background: url(codepku/image/textures/friend/main.png#788 100 30 30);"></pe:div>
+    </pe:if>
+
+    <!-- 输入框 -->
+    <div style="position: relative; width: 805; height: 90; left: 558; top: 580; font-size: 24; font-family:Noto Sans S Chinese Regular; color: #000000; padding-left: 12;padding-top: 29;background: url(codepku/image/textures/common_32bits.png#1308 569 130 130:14 14 14 14);">
+        <input type="text"  style="position: relative; width: 780; height: 24; background-color: none;"  name="userfeedback" EmptyText='<%= L"请输入反馈的内容，如需我们主动联系，请留下联系方式" %>' />
     </div>
-    <div align="center" style="margin-top:37px;font-size:36px;">        
-        <input type="button" name="OK" value='<%=L"确定" %>' onclick="OnClose" style="color:#0E5516;width:246px;height:86px;background:url(codepku/image/textures/common_32bits.png#1404 740 86 86:14 14 14 14);"/>
-    </div>
-</pe:aries_window2>
+
+
+
+    <!-- 提交按钮 -->      
+    <input type="button" name="OK" value='<%=L"提交" %>' onclick="SubmitFeedback" style="position: relative; width: 177.1; height: 58.7; left: 863; top: 792;color:#0d5314;font-size: 28; font-family:Noto Sans S Chinese Regular; background:url(codepku/image/textures/common_32bits.png#1404 740 86 86:14 14 14 14);"/>
+
+    
+
+    <!-- 导航栏下拉 -->
+    <!-- <div style="position: relative; width: 279; left:885; top: 380;">
+        <div name='top_navig_select' style="width: 279; display: none;">
+        <pe:repeat DataSource="<%=Feedback.top_navig%>">
+            <pe:repeatitem>
+            <pe:if condition="<%=Feedback.top_navig_clicked_index ~= Eval('index')%>">
+                <pe:div style="width: 279; height: 59; text-align: center;padding-top: 17; base-font-size:26; font-size:26; font-family:Noto Sans S Chinese Regular;font-weight:bolder;; color: #ffffff;  background: url(codepku/image/textures/feedback/feedback.png#220 71 80 80:10 10 10 10);" name="<%=Eval('name')%>" onclick="ClickedTopNavigIndex"><%=Eval('title')%></pe:div>
+            </pe:if>
+            <pe:if condition="<%=Feedback.top_navig_clicked_index == Eval('index')%>">
+                <pe:div style="width: 279; height: 59; text-align: center;padding-top: 17; base-font-size:26; font-size:26; font-family:Noto Sans S Chinese Regular;font-weight:bolder;; color: #ffffff;  background: url(codepku/image/textures/feedback/feedback.png#128 71 80 80:10 10 10 10);" name="<%=Eval('name')%>" onclick="ClickedTopNavigIndex"><%=Eval('title')%></pe:div>
+            </pe:if>
+            </pe:repeatitem>
+        </pe:repeat>
+        </div>
+    </div> -->
+
+
+</pe:container>
+
+
 
 </pe:mcml>
 </body>
