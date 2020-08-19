@@ -21,6 +21,7 @@ MainUIButtons.money_window = nil
 MainUIButtons.action_window = nil
 MainUIButtons.open_function = nil
 MainUIButtons.open_common = nil
+MainUIButtons.task_window = nil
 
 
 function MainUIButtons.show_common_ui(flag)
@@ -132,6 +133,13 @@ function MainUIButtons.show_action_bottom()
 		MainUIButtons.action_window_bottom = AdaptWindow:QuickWindow(params)
 end
 
+function MainUIButtons.show_task_ui()
+	params = { url="Mod/CodePku/cellar/Common/TouchMiniButtons/MainUIButtons_task.html", 
+			alignment="_lt", zorder = 10, left = 1820, top = 300, width = 100, height = 100
+		}
+		MainUIButtons.task_window = AdaptWindow:QuickWindow(params)
+end
+
 function MainUIButtons.JudgeNil()
 	if MainUIButtons.common_window ~= nil then
 		MainUIButtons.common_window:CloseWindow()
@@ -160,7 +168,11 @@ function MainUIButtons.JudgeNil()
 	if MainUIButtons.action_window_bottom ~= nil then
 		MainUIButtons.action_window_bottom:CloseWindow()
 		MainUIButtons.action_window_bottom = nil
-	end		
+	end	
+	if MainUIButtons.task_window ~= nil then
+		MainUIButtons.task_window:CloseWindow()
+		MainUIButtons.task_window = nil
+	end	
 end
 
 
@@ -178,16 +190,10 @@ function MainUIButtons.ShowPage()
 		MainUIButtons.show_dialog_ui(false)
 		MainUIButtons.show_money_ui()		
 		MainUIButtons.show_function_ui()
+		MainUIButtons.show_task_ui()
 		if System.os.IsMobilePlatform() then
 			MainUIButtons.show_action_ui(1, 2, 3)
 		end
-		MainUIButtons.show_action_ui(1, 2, 3)
-
-		-- TouchController.ShowPage(true);
-		-- TouchController.SwitchTouchMouseMode(true);
-		-- -- check touch key pressed
-		-- TouchController.IsKeyPressed(DIK_SCANCODE.DIK_LSHIFT);
-
 
 	else
 		MainUIButtons.show_common_ui()

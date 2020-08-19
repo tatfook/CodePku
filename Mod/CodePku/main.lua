@@ -64,7 +64,7 @@ local Messages = NPL.load("(gl)Mod/CodePku/cellar/common/TouchMiniButtons/Messag
 local MainPopup = NPL.load("(gl)Mod/CodePku/cellar/GUI/MainPopup/MainPopup.lua")
 local SmallMap = NPL.load("(gl)Mod/CodePku/cellar/GUI/SmallMap/SmallMap.lua")
 local ToWhere = NPL.load("(gl)Mod/CodePku/cellar/GUI/SmallMap/Popup/ToWhere.lua")
-local TouchMain = NPL.load("(gl)Mod/CodePku/cellar/Common/TouchMiniOpera/TouchMain.lua")
+local TaskSystem = NPL.load("(gl)Mod/CodePku/cellar/Common/TouchMiniButtons/TaskSystem/TaskSystem.lua")
 
 local DownloadWorld = commonlib.gettable("MyCompany.Aries.Game.MainLogin.DownloadWorld")
 
