@@ -182,8 +182,8 @@
 
 
 
-    function OnClickCourse(name, value)
-        MainPopup:ShowPage("TPpopup", "专题区", 15855)
+    function OnClickCourse(name)
+        MainPopup:ShowPage("TPpopup", name.name, name.id)
     end
 
     function GetDivisible(index)
@@ -203,6 +203,10 @@
         return pos
     end
 
+    function SetTPInfo(name, id)
+        info = {name = name, id = id }
+        return info
+    end
 
 ]]></script>
 <style type="text/mcss">
@@ -225,7 +229,7 @@
         <!--搜索-->
         <div style="position: relative; width: 300; height: 74; left: 1080; top: 111;">
             <div style="width: 226; height: 74; background: url(codepku/image/textures/fastentrence_ui/fastentrence_32bits.png#551 359 74 74:10 10 10 10); float: left;">
-                <input name="searchByName" type="text" EmptyText='<%= L"搜索" %>' style="width: 200; height: 74; margin-left: 26; background-color: #FFFFFF; font-size: 32; color: #CCCCCC;font-family:Noto Sans S Chinese;" value="<%=TopicEntrencePage.searchByName%>"/>
+                <input name="searchByName" type="text" EmptyText='<%= L"搜索" %>' style="width: 200; height: 74; margin-left: 26; background-color: #FFFFFF; font-size: 32; color: #CCCCCC;font-family: Noto Sans S Chinese Regular;" value="<%=TopicEntrencePage.searchByName%>"/>
             </div>
             <div style="width: 74; height: 74; float: left; background: url(codepku/image/textures/fastentrence_ui/fastentrence_32bits.png#457 359 74 74);" onclick="f_searchByName">
                 <div style="width: 38; height: 56;margin-left: 18; margin-top: 11; background:url(codepku/image/textures/fastentrence_ui/fastentrence_32bits.png#917 217 42 60);" onclick="f_searchByName"></div>
@@ -234,7 +238,7 @@
 
         <!--选择框-->
         <div style="position: relative; width: 256;height: 74; left: 1406; top: 111;">
-            <div style="width:182; height:74; font-size: 32px; background: url(codepku/image/textures/fastentrence_ui/fastentrence_32bits.png#551 359 74 74:10 10 10 10); color: #0C59E0; font-family:Noto Sans S Chinese; line-height: 74; text-align: center; float: left;" name="sort_input" ><%=TopicEntrencePage.sortMethod%></div>
+            <div style="width:182; height:74; font-size: 32px; background: url(codepku/image/textures/fastentrence_ui/fastentrence_32bits.png#551 359 74 74:10 10 10 10); color: #0C59E0; font-family: Noto Sans S Chinese Regular; line-height: 74; text-align: center; float: left;" name="sort_input" ><%=TopicEntrencePage.sortMethod%></div>
             <div style="width: 74; height: 74; float: left; background: url(codepku/image/textures/fastentrence_ui/fastentrence_32bits.png#457 359 74 74);"  onclick="OnIsClickedSelect">
                 <div style="width: 31; height: 22;margin-left: 21;margin-top: 29; background:url(codepku/image/textures/fastentrence_ui/fastentrence_32bits.png#148 387 31 22); float: left;" onclick="OnIsClickedSelect"></div>
             </div>
@@ -264,7 +268,7 @@
                             <div style="width: 225; height: 37; margin-top: 60; font-size:38px; font-family:Noto Sans S Chinese Regular; color: #ffffff; line-height: 37;"><%= Eval('name') %></div>
                             <div style="width: 225; height: 21; margin-top: 17; font-size:28px; font-family:Noto Sans S Chinese Regular; color: #ffffff; line-height: 21;">ID:<%= Eval('id') %></div>
                         </div>
-                        <div style="width: 96; height: 96;float: left; margin-top: 48; background:url(codepku/image/textures/fastentrence_ui/fastentrence_32bits.png#689 210 96 96);" onclick="OnClickCourse"></div>
+                        <div style="width: 96; height: 96;float: left; margin-top: 48; background:url(codepku/image/textures/fastentrence_ui/fastentrence_32bits.png#689 210 96 96);" name ="<%= SetTPInfo(Eval('name'), Eval('id')) %>" onclick="OnClickCourse"></div>
                     </div>    
                 </pe:repeatitem>
             </pe:repeat>
@@ -278,7 +282,7 @@
         </div>
     </div>
     <div style='position: relative; width:208; height:127; background:url(codepku/image/textures/common_32bits.png#251 49 208 127);' onclick="OnClose"></div>
-    <div style="position: relative; width: 417; height: 86; margin-left: 144; base-font-size:70px; font-size:70px; color: #D85D0B; font-family:Alibaba PuHuiTi; padding-left: 105; padding-top: 8; font-weight: bolder; background:url(codepku/image/textures/common_32bits.png#475 63 429 86);">专题区</div>
+    <div style="position: relative; width: 417; height: 86; margin-left: 144; base-font-size:70px; font-size:70px; color: #D85D0B; font-family:PuHuiTi-Bold; padding-left: 95; padding-top: 8; background:url(codepku/image/textures/common_32bits.png#475 63 429 86);">专题区</div>
     <!--下拉选择框-->
     <pe:if condition='<%=select_button_clicked == 1 %>' >
         <div style="position: relative; width: 256; height: 222; position: absolute; z-index: 10; left: 1636; margin-top: 185;">

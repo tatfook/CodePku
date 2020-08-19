@@ -40,12 +40,12 @@ function SubjectPage.OnInitSubject()
             index = i,
             -- row = trow,
             -- col = tcol,
-            level = '0级',
+            level = '1级',
             percent = 0,
             current_exp = 0,
-            next_exp = 0,
+            next_exp = 30,
             progress = 0,
-            total_exp = 30,
+            total_exp = 0,
             name = const_subject[i][1],
             chname = const_subject[i][2],
             icon = const_subject[i][3]
@@ -70,10 +70,8 @@ function SubjectPage.GetLevels()
     request:get('/users/levels'):next(function(response)
         if (response.status == 200) then
             local data = response.data.data;
-            echo(data)
             for i = 1, #data do
                 if data[i].level_type < 7 then
-                    echo(data[i].level_type)
                     SubjectPage.subject_list[data[i].level_type].level = data[i].current_level .. "级";
                     SubjectPage.subject_list[data[i].level_type].percent = data[i].current_exp / data[i].next_exp;
                     SubjectPage.subject_list[data[i].level_type].current_exp = data[i].current_exp;
@@ -101,7 +99,6 @@ end
 
 function SubjectPage:InitWindow()
     SubjectPage.bForceHide = bShow == false;
-    NPL.load("(gl)Mod/CodePku/cellar/GUI/Window/AdaptWindow.lua");
     local AdaptWindow = commonlib.gettable("Mod.CodePku.GUI.Window.AdaptWindow")
     AdaptWindow:QuickWindow({url="Mod/CodePku/cellar/GUI/Subject.html", 
     alignment="_fi", left = 0, top = 0, width = 0, height = 0,zorder = 21});

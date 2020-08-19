@@ -8,52 +8,15 @@
 
 <body>
 <pe:mcml>
-<script refresh="false" type="text/npl" src="MainSceneUIButtons.lua"><![CDATA[
-local MainEntrencePage = commonlib.gettable("Mod.CodePku.MainEntrencePage");
-local AntiStuckPage = commonlib.gettable("Mod.CodePku.AntiStuckPage");
-local SmallMap = commonlib.gettable("Mod.CodePku.GUI.SmallMap")
-local MainPopup = commonlib.gettable("Mod.CodePku.GUI.MainPopup")
 
-function ClickCommonButton()
-    GameLogic.AddBBS("CodeGlobals", L"功能开发中", 3000, "#ff0000");
-end
-
-function ClickAntiJamming()
-    MainPopup:ShowPage("AntiJam")
-end
-
-function ClickMainEntrence()
-    MainEntrencePage.ShowPage()
-end
-
-function ClickSamllMap()
-    SmallMap:ShowPage()
-end
-
-function GetMoney()
-    local info = Mod.CodePku.Store:Get('user/info');
-    local wallets = info.user_wallets or {};
-    local money = {goldcoin=0, wanxuecoin=0};
-    for i, v in ipairs(wallets) do
-        if v.currency_id == 1 then
-            money.goldcoin = v.amount;
-        elseif v.currency_id == 2 then
-            money.wanxuecoin = v.amount;
-        end
-    end
-    return money;
-end
-
-]]></script>
-<style type="text/mcss">
-
-</style>
 <pe:container alignment="_lt" width="611" height="89">
-    <div style="position: relative; width: 197; height: 52; color:white;font-size: 30px;text-align: center;line-height: 51;left: 25; top: 20; background: url(codepku/image/textures/common_32bits.png#1025 49 196 51);" name="goldcoin"><%=GetMoney().goldcoin%></div>
+    <!-- <div style="position: relative; width: 197; height: 52; color:white;font-size: 30px;text-align: center;line-height: 51;left: 25; top: 20; background: url(codepku/image/textures/common_32bits.png#1025 49 196 51);" name="goldcoin"><%=GetMoney().goldcoin%></div>
     <div style="position: relative; width: 73; height: 71; left: 0; top: 13; background: url(codepku/image/textures/common_32bits.png#913 41 73 71);"></div>
 
     <div style="position: relative; width: 197; height: 52; color:white;font-size: 30px;text-align: center;line-height: 51;left:340; top: 20; background: url(codepku/image/textures/common_32bits.png#1025 49 196 51);" name="wanxuecoin"><%=GetMoney().wanxuecoin%></div>
-    <div style="position: relative; width: 77; height: 78; left: 296; top: 11; background: url(codepku/image/textures/common_32bits.png#913 136 77 78);"></div>
+    <div style="position: relative; width: 77; height: 78; left: 296; top: 11; background: url(codepku/image/textures/common_32bits.png#913 136 77 78);"></div> -->
+
+    <iframe name="money" src="Mod/CodePku/cellar/GUI/Money.html" style="position:absolute;top:0;"></iframe>
 </pe:container>
 </pe:mcml> 
 </body>

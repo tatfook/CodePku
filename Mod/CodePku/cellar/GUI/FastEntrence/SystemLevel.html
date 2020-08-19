@@ -81,7 +81,7 @@ end
 
 function next_page()
     if SystemLevelPage~=nil then
-        if (SystemLevelPage.page < SystemLevelPage.total_courses%10) then
+        if (SystemLevelPage.page < math.ceil(SystemLevelPage.total_courses/SystemLevelPage.maxItemPerPage)) then
         SystemLevelPage.page = SystemLevelPage.page + 1
             SystemLevelPage.courses = SystemLevelPage.GetLevels(SystemLevelPage.grade_id,SystemLevelPage.semester_id,SystemLevelPage.subjects[SystemLevelPage.last_clicked_index].subject_id)
             Page:Refresh(0)
@@ -91,7 +91,7 @@ end
 
 function OnClickCourse(course)
 
-    MainPopup:ShowPage("TPpopup", "教学区", 15857)
+    MainPopup:ShowPage("TPpopup", GetCourseName(course), GetCourseWorldID(course))
 
 end
 
@@ -107,25 +107,23 @@ end
 
     <div style="width:1920;height: 1080;background:url(codepku/image/textures/commonpopup/backboard.png)">
         <div style="position: relative; width:230; height:1080; background-color: #94E3FE;"></div>
-        <div>
-            <div style='width:208px;height:127px;background: url(codepku/image/textures/commonpopup/main.png#251 49 208 127);' onclick="OnClose"></div>
-            <div style='position:fixed;left:142px;top:-127px;width:429px;height:86px;background: url(codepku/image/textures/commonpopup/main.png#475 63 429 86);'></div>
-            <div style='position:fixed;left:258px;width:208px;top:-127px;top:-200px; font-size:50px; color: #D85D0B; font-family:Alibaba PuHuiTi;'>教学区</div>
-        </div>
-        <div style="width:200;height:900;position: relative;">
+        <div style='position: relative;width:208px;height:127px;background: url(codepku/image/textures/commonpopup/main.png#251 49 208 127);' onclick="OnClose"></div>
+        <div style="position: relative; width: 417; height: 86; margin-left: 144; base-font-size:70px; font-size:70px; color: #D85D0B; font-family:PuHuiTi-Bold; padding-left: 95; padding-top: 8; background:url(codepku/image/textures/common_32bits.png#475 63 429 86);">教学区</div>
+        
+        <div style="width:200;height:900;position: relative;margin-top: 144px;">
             <pe:repeat DataSource="<%=GetSubjects()%>">
                 <pe:repeatitem>
                     <pe:if condition='<%=Eval("show")==true and Eval("index")~=1%>'>
                         <pe:if condition='<%=Eval("loc")==Eval("index")%>'>
-                            <div style="<%=format('top:-200px;background: url(codepku/image/textures/common_32bits.png#1648 196 261 96);width:261;height:96;margin-left:50px;position：relative')%>" name='<%=Eval("index")%>' onclick='OnClickSubject'>
-                                <div style="color:#fff;font-size:30px;font-weight:bold;width:261;height:96;line-height: 96;text-align: center;">
+                            <div style="<%=format('background: url(codepku/image/textures/common_32bits.png#1648 196 261 96);width:261;height:96;margin-left:24px;float:left;')%>" name='<%=Eval("index")%>' onclick='OnClickSubject'>
+                                <div style="font-family:NotoSansHans-Medium;color:#F8DE8D;base_font_size:45px;font-size:45px;font-weight:bold;width:261;height:80px;line-height: 80px;;text-align: center;">
                                     <%=Eval('name')%>
                                 </div>
                             </div>
                         </pe:if>
                         <pe:if condition='<%=Eval("loc")~=Eval("index")%>'>
-                            <div style="<%=format('top:-200px;background: url(codepku/image/textures/common_32bits.png#1294 66 134 94);width:261;height:94;position：relative')%>" name='<%=Eval("index")%>' onclick='OnClickSubject'>
-                                <div style="color:#fff;font-size:30px;font-weight:bold;width:261;height:9946;line-height: 94;text-align: center;">
+                            <div style="<%=format('background: url(codepku/image/textures/common_32bits.png#1294 66 134 94);width:261;height:94;float:left;')%>" name='<%=Eval("index")%>' onclick='OnClickSubject'>
+                                <div style="font-family:NotoSansHans-Medium;color:#fff;base_font_size:45px;font-size:45px;font-family:NotoSansHans-Medium;font-weight:Medium;width:244px;height:94px;line-height: 94;text-align: center;">
                                     <%=Eval('name')%>
                                 </div>
                             </div>
@@ -134,30 +132,30 @@ end
                 </pe:repeatitem>
             </pe:repeat>
         </div>
-        <div style="width:1500;height:600;margin-top:100px;margin-left: 310px;position: relative;">
-            <pe:repeat DataSource="<%=SystemLevelPage.courses%>">
-                <pe:repeatitem>
-                    <div style="<%=format('position: absolute;width:340px;height:80;background:url(codepku/image/textures/fastentrence_ui/main.png#28 45 340 80);margin-left:%d;margin-top:%d;base-font-size:28px;font-size:28px;text-align: center;', 80+Eval('index')%4*380, math.floor(Eval('index')/4)*350-300)%>">
-                        <div style="margin-top:20px;color:white;font-weight:bold;"><%= GetCourseName(Eval('course')) %></div>
-                    </div>
-                    <div style="<%=format('position:absolute;width:340px;height:202;background:url(codepku/image/textures/fastentrence_ui/system_level_2.png);margin-left:%d;margin-top:%d;', 80+Eval('index')%4*380, 80+math.floor(Eval('index')/4)*350-300)%>">
-                        <div style="<%=format('width:340;height:202;background:url(%s);', Eval('cover'))%>" name="<%=Eval('course')%>" onclick="OnClickCourse">
-                            <%=Eval('course')%>
-                        </div>
-                        <pe:if condition='<%=Eval("select")==Eval("course")%>'>
-                            <div style="<%=format('background: url(codepku/image/textures/fastentrence_ui/main.png#667 356 346 288);width:346;height:288;top:-286px;left:-2px;position：relative')%>" name='<%=Eval("index")%>' onclick='OnClickSubject'>
+        
+        <pe:repeat DataSource="<%=SystemLevelPage.courses%>" >
+            <pe:repeatitem>
+                <div style="<%=format('position: absolute;width:340px;height:80;background:url(codepku/image/textures/fastentrence_ui/main.png#28 45 340 80);left:%d;top:%d;', 338+Eval('index')%4*381, 231+math.floor(Eval('index')/4)*371)%>">
+                    <div style="width:340px;height:80;font-family:PuHuiTi-Bold;text-align: center; line-height: 80; base_font_size:32px;font-size:32px;color:white;font-weight:bold;"><%= GetCourseName(Eval('course')) %></div>
+                </div>
+                <div style="<%=format('position:absolute;width:340px;height:202;background:url(codepku/image/textures/fastentrence_ui/system_level_2.png);left:%d;top:%d;', 338+Eval('index')%4*381, 311+math.floor(Eval('index')/4)*371)%>">
+                    <div style="<%=format('width:340;height:202;background:url(%s);', Eval('cover'))%>" name="<%=Eval('course')%>" onclick="OnClickCourse"></div>
+                    <pe:if condition='<%=Eval("select")==Eval("course")%>'>
+                        <div style="<%=format('background: url(codepku/image/textures/fastentrence_ui/main.png#667 356 346 288);width:346;height:288;top:-286px;left:-2px;position：relative')%>" name='<%=Eval("index")%>' onclick='OnClickSubject'>
 
-                            </div>
-                        </pe:if>
-                    </div>
-                </pe:repeatitem>
-            </pe:repeat>
+                        </div>
+                    </pe:if>
+                </div>
+            </pe:repeatitem>
+        </pe:repeat>
+
+        <!--翻页-->
+        <div style="position: relative; width: 169; height: 41; left: 1003; top:964;">
+            <div style="width: 28; height: 40; float: left; background: url(codepku/image/textures/fastentrence_ui/fastentrence_32bits.png#207 378 28 41); transform:rotate(180deg); transform-origin: 14 20;" name="page_left" onclick="prev_page"></div>
+            <div style="width: 113; height: 33;font-size: 45px;color: #ffffff;float: left; text-align: center; line-height: 33;"><%=SystemLevelPage.page%></div>
+            <div style="width: 28; height: 40;float: left; background: url(codepku/image/textures/fastentrence_ui/fastentrence_32bits.png#207 378 28 41);" name="page_right" onclick="next_page"></div>
         </div>
-        <div style='position: fixed;width:800;height:100;margin-left:600;margin-top:600px;'></div>
-            <div style='transform:rotate(180deg); transform-origin: 14 20;color:#fff;position:relative;top:-180;width:28;height:41;margin-left:900;background:url(codepku/image/textures/fastentrence_ui/main.png#207 378 28 41);' onclick="prev_page"></div>
-            <div style='color:#fff;font-weight:bold;position:relative;top:-180;base_font_size:40px;font-size:40px;margin-left: 980;'><%=SystemLevelPage.page%></div>
-            <div style='color:#fff;position:relative;top:-180;width:28;height:41;margin-left: 1050;background:url(codepku/image/textures/fastentrence_ui/main.png#207 378 28 41);' onclick="next_page"></div>
-        </div>
+
     </div>
 
 </pe:mcml>

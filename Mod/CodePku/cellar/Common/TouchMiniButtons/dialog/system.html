@@ -1,0 +1,149 @@
+<!-- "Mod/CodePku/cellar/Common/TouchMiniButtons/MainUIButtons_dialog.html" -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" >
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+</head>
+
+<body>
+<pe:mcml>
+<script refresh="false" type="text/npl" src="MainSceneUIButtons.lua"><![CDATA[
+MainSceneUIButtons = commonlib.gettable("Mod.CodePku.Common.TouchMiniButtons.MainSceneUIButtons");
+DialogMessages = commonlib.gettable("Mod.CodePku.Common.MainUIButtons.DialogMessages")
+CodepkuChatChannel = NPL.load("(gl)Mod/CodePku/chat/CodepkuChatChannel.lua");
+FriendUI = NPL.load("(gl)Mod/CodePku/cellar/GUI/Friend/FriendUI.lua");
+local request = NPL.load("(gl)Mod/CodePku/api/BaseRequest.lua");
+Channels = MainSceneUIButtons.Channels
+
+local page = document:GetPageCtrl()
+MainSceneUIButtons.page = page
+
+
+local sendable = true
+DEFAULT_AVATAR = 'codepku/image/textures/chat/default_avatar.png'
+frindNow = MainSceneUIButtons.FriendId
+
+friends = commonlib.deepcopy(FriendUI.vars["friends"])
+for i, v in ipairs(friends) do
+    v.index = i
+    if i == 1 then
+        FRIEND_IN_CHATTING = i
+        v.status = '449 802 100 100'
+    else
+        v.status = '581 801 100 100'
+    end
+end
+
+function OnClose()
+    Page:CloseWindow()
+    MainSceneUIButtons.show_dialog_ui(false, 0)
+end
+
+function OnClickChannel(index)
+    if index ~= Channels['system'] then
+        Page:CloseWindow()
+        MainSceneUIButtons.show_dialog_ui(true, index, frindNow)
+    end
+end
+
+function OnClickVoice()
+
+end
+
+function OnClickEmoji()
+
+end
+
+function OnClickSend()
+    local page = document:GetPageCtrl()
+    local words = page:GetValue("DialogContent")
+    if not words or words == '' then
+        return
+    end
+    if commonlib.utf8.len(words) > 30 then
+        GameLogic.RunCommand("/tip -duration 1500 内容上限30个字")
+        return 
+    end
+    if not sendable then
+        GameLogic.RunCommand("/tip -duration 1500 发言太频繁，请稍后尝试")
+        return
+    end
+    sendable = false
+    local times = 2
+    local timer = commonlib.Timer:new({
+        callbackFunc = function(timer)
+
+            if times == 0 then
+                sendable = true
+                timer:Change(nil, nil)
+            end
+
+            times = times - 1
+        end
+    })
+    timer:Change(1000, 1000)
+    CodepkuChatChannel.SendSystemMsg(words)
+    Page:Refresh()
+end
+
+function GetMessages()
+    return CodepkuChatChannel.Messages[Channels[Channels['system']].channel]
+end
+
+function scrollEnd()
+    return MainSceneUIButtons.ScrollToEnd
+end
+
+
+]]></script>
+<style type="text/mcss">
+</style>
+<pe:container alignment="_ct" width="1004" height="1080">
+    <div style="width:960;height:1080;background:url(codepku/image/textures/chat_ui/chat_board.png);">
+        <!-- 频道 -->
+        <div style="width: 960;height: 101;">
+            <pe:repeat DataSource="<%=Channels%>">
+                <pe:repeatitem>
+                    <pe:if condition="<%= Eval('index') == Channels['system']%>">
+                        <div style="<%=format('width: 102;height:60;position:relative;left:%d;margin-top:20;base-font-size:30px;font-size:30px;color: #ffffff; font-family: Noto Sans S Chinese Regular; text-align: center;line-height:60; background:url(codepku/image/textures/chat_ui/chat_32bits.png#589 659 67 67:20 20 20 20)', (Eval('index')-1)*132+28)%>" name="<%=Eval('index')%>" onclick="OnClickChannel"><%=Eval('title')%></div>
+                    </pe:if>
+                    <pe:if condition="<%=Eval('index') ~= Channels['system']%>">
+                        <div style="<%=format('width: 102;height:60;position:relative;left:%d;margin-top:20;base-font-size:30px;font-size:30px;color: #ffffff; font-family: Noto Sans S Chinese Regular; text-align: center;line-height:60; background:url(codepku/image/textures/chat_ui/chat_32bits.png#687 660 67 67:20 20 20 20)', (Eval('index')-1)*132+28)%>" name="<%=Eval('index')%>" onclick="OnClickChannel"><%=Eval('title')%></div>
+                    </pe:if>
+                </pe:repeatitem>
+            </pe:repeat>
+        </div>
+        <!-- 显示栏 -->
+        <div style="width: 960;height:845;">
+            <pe:treeview style="width: 950; height: 845" ScrollToEnd="<%=scrollEnd()%>" name='messages' DefaultNodeHeight = "120" ItemsPerLine="1" AllowPaging="false" RememberScrollPos="true" RememberLastPage="false" VerticalScrollBarStep="40">
+                <pe:repeat  DataSource="<%=GetMessages()%>">
+                    <pe:repeatitem>                
+                        <!-- <div style="width: 900;height: 46px;margin-top: 16px;font-family: Noto Sans S Chinese Regular;base-font-size: 26px; font-size: 26px;line-height: 46px;"> -->
+                        <div style="<%=format('width: 900;height: %spx;margin-top: 16px;font-family: Noto Sans S Chinese Regular;base-font-size: 26px; font-size: 26px;line-height: 46px;',Eval('heightPx'))%>">
+                            <pe:if condition="<%= Eval('msgType') == 'sys'%>">
+                                <div style="width: 92px; height: 46px;margin-left: 62px;margin-top: 0px;background:url(codepku/image/textures/chat_ui/chat_32bits.png#713 834 92 46);color: #BD233F;text-align: center;">系统</div>
+                                <div style="margin-left: 165px;margin-top: -46px;color: #BD233F;"><%=Eval('msgContent')%></div>
+                            </pe:if>
+                            <pe:if condition="<%= Eval('msgType') == 'get'%>">
+                                <div style="width: 92px; height: 46px;margin-left: 62px;margin-top: 0px;background:url(codepku/image/textures/chat_ui/chat_32bits.png#713 834 92 46);color: #FFFFFF;text-align: center;">获得</div>
+                                <pe:if condition="<%= Eval('itemType') == 1%>"> 
+                                    <div style="margin-left: 165px;margin-top: -46px;color: #FCE36D"><%=Eval('itemName')%></div>
+                                </pe:if>
+                                <pe:if condition="<%= Eval('itemType') == 2%>"> 
+                                    <div style="margin-left: 165px;margin-top: -46px;color: #E98EF5;"><%=Eval('itemName')%></div>
+                                </pe:if>
+                                <div style="<%=format('margin-left:%spx;margin-top: -46px;color: #FFFFFF',Eval('dataLen'))%>">X<%=Eval('itemNum')%></div>
+                            </pe:if>
+                        </div>
+                    </pe:repeatitem>
+                </pe:repeat>
+            </pe:treeview>
+        </div>
+
+    </div>
+    <div style="width: 44;height:150;background:url(codepku/image/textures/chat_ui/chat_32bits.png#478 636 44 144);margin-left: 960;margin-top: -600;" onclick="OnClose"></div>
+</pe:container>
+</pe:mcml> 
+</body>
+</html>

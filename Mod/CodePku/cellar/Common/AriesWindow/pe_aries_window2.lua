@@ -9,7 +9,7 @@ NPL.load("(gl)Mod/CodePku/cellar/Common/AriesWindow/pe_aries_window2.lua");
 local pe_aries_window2 = commonlib.gettable("Mod.CodePku.Common.AriesWindow.pe_aries_window2");
 pe_aries_window2:RegisterAs("pe:aries_window2");
 
-e.g.: <pe:aries_window2 alignment="_ct" title="yourtitle"><div>Hello</div></pe:aries_window2>
+e.g.: <pe:aries_window2 alignment="_ct" title="yourtitle" style="width:...;height:...px;background:..."><div>Hello</div></pe:aries_window2>
 ------------------------------------------------------------
 ]]
 
@@ -40,7 +40,7 @@ pe_aries_window2:Property({"TitleHeight", 115, auto=true});
 pe_aries_window2:Property({"TitleBackground", "codepku/image/textures/common_32bits.png#1265 363 434 115", auto=true});
 
 function pe_aries_window2:ctor()
-    self.closeButton = nil;
+    self.closeBtn = nil;
     self.title = nil;
 end
 
@@ -58,11 +58,14 @@ end
 
 
 function pe_aries_window2:OnLoadComponentBeforeChild(parentElem, parentLayout, css)
-    css:Merge(mcml:GetStyleItem(self.class_name));
-    css.width = css.width or self.Width;
-    css.height = css.height or self.Height;
-    css["background"] = self:GetAttributeWithCode("Background", nil, true) or css["background"] or self.Background;
-    self:initHeader(parentElem, css);
+    local _this = self.control;
+    if (_this) then
+        css:Merge(mcml:GetStyleItem(self.class_name));
+        css.width = css.width or self.Width;
+        css.height = css.height or self.Height;
+        css["background"] = self:GetAttributeWithCode("Background", nil, true) or css["background"] or self.Background;
+        self:initHeader(parentElem, css);
+    end
     pe_aries_window2._super.OnLoadComponentBeforeChild(self, parentElem, parentLayout, css);
 end
 
@@ -76,29 +79,33 @@ function pe_aries_window2:OnAfterChildLayout(layout, left, top, right, bottom)
 end
 
 function pe_aries_window2:initHeader(parentElem, css)
+    local modal_width = css.width or self.Width;
     --title
-    local title_height = self:GetAttributeWithCode("TitleHeight", self.TitleHeight, true);
-    local title_width = self:GetAttributeWithCode("TitleWidth", self.TitleWidth, true);
-
-    self.titleBg = Rectangle:new():init(parentElem);
-    self.titleBg:SetBackground(self.TitleBackground);
-    self.titleBg:setGeometry((self.Width - title_width)/2, -13, title_width, title_height);
-    self.title = Label:new():init(parentElem);
-    self.title:SetText(tostring(self:GetAttributeWithCode("title", nil, true) or ""));
-    self.title:setGeometry((self.Width - title_width)/2, -13, title_width, title_height);
-    self.title["Color"] = '#F46D3D';
-    self.title:SetFont("Noto Sans S Chinese Regular;45;bold");
+    if (self.title == nil) then
+        local title_height = self:GetAttributeWithCode("TitleHeight", self.TitleHeight, true);
+        local title_width = self:GetAttributeWithCode("TitleWidth", self.TitleWidth, true);
+        self.titleBg = Rectangle:new():init(parentElem);
+        self.titleBg:SetBackground(self.TitleBackground);
+        self.titleBg:setGeometry((modal_width - title_width)/2, -13, title_width, title_height);
+        self.title = Label:new():init(parentElem);
+        self.title:SetText(tostring(self:GetAttributeWithCode("title", nil, true) or ""));
+        self.title:setGeometry((modal_width - title_width)/2, -13, title_width, title_height);
+        self.title["Color"] = '#F46D3D';
+        self.title:SetFont("Noto Sans S Chinese Regular;45;bold");
+    end
 
     -- close button
-    self.closeBtn = Button:new():init(parentElem);
-    local close_btn_width = self:GetAttributeWithCode("CloseBtnWidth", self.CloseBtnWidth, true);
-    local close_btn_height = self:GetAttributeWithCode("CloseBtnHeight", self.CloseBtnHeight, true);
-    self.closeBtn:setGeometry(self.Width - close_btn_width - 33, 5, close_btn_width, close_btn_height);
-    self.closeBtn:SetBackground(self.CloseBtnBackground);
-    self.closeBtn:Connect("clicked", function (event)
-        local page = self:GetPageCtrl();
-        page:CloseWindow();
-    end);
+    if (self.closeBtn == nil) then
+        self.closeBtn = Button:new():init(parentElem);
+        local close_btn_width = self:GetAttributeWithCode("CloseBtnWidth", self.CloseBtnWidth, true);
+        local close_btn_height = self:GetAttributeWithCode("CloseBtnHeight", self.CloseBtnHeight, true);
+        self.closeBtn:setGeometry(modal_width - close_btn_width - 33, 5, close_btn_width, close_btn_height);
+        self.closeBtn:SetBackground(self.CloseBtnBackground);
+        self.closeBtn:Connect("clicked", function (event)
+            local page = self:GetPageCtrl();
+            page:CloseWindow();
+        end);
+    end
 end
 
 function pe_aries_window2:OnBeforeChildLayout(layout)

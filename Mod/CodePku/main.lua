@@ -34,6 +34,9 @@ NPL.load("(gl)script/apps/Aries/Creator/Game/Network/NetworkMain.lua")
 NPL.load("(gl)script/ide/System/Encoding/guid.lua")
 NPL.load("(gl)script/apps/Aries/Creator/Game/Login/ParaWorldLessons.lua")
 NPL.load("(gl)script/ide/System/Encoding/jwt.lua")
+
+-- codepku
+NPL.load("(gl)Mod/CodePku/cellar/GUI/Window/AdaptWindow.lua");
 NPL.load("(gl)Mod/CodePku/online/main.lua");
 NPL.load("(gl)Mod/CodePku/cellar/GUI/GenAndName.lua")
 
@@ -54,7 +57,6 @@ local SystemEntrence = NPL.load("(gl)Mod/CodePku/cellar/GUI/FastEntrence/SystemE
 local CompeteEntrence = NPL.load("(gl)Mod/CodePku/cellar/GUI/FastEntrence/CompeteEntrence.lua")
 local TopicEntrence = NPL.load("(gl)Mod/CodePku/cellar/GUI/FastEntrence/TopicEntrence.lua")
 local SharePage = NPL.load("(gl)Mod/CodePku/cellar/GUI/Share.lua")
-local FriendUI = NPL.load("(gl)Mod/CodePku/cellar/GUI/Window/AdaptWindow.lua");
 local SubjectPage = NPL.load("(gl)Mod/CodePku/cellar/GUI/Subject.lua")
 local PropsInfo = NPL.load("(gl)Mod/CodePku/cellar/GUI/Props/PropsInfo.lua")
 local RankPage = NPL.load("(gl)Mod/CodePku/cellar/GUI/rank/RankPage.lua")
@@ -79,6 +81,7 @@ CodePku:Property({"Name", "CodePku", "GetName", "SetName", { auto = true }})
 CodePku.Store = Store
 CodePku.MsgBox = MsgBox
 CodePku.Utils = Utils
+CodePku.BasicConfig = {}
 
 function CodePku:ctor()
 	
@@ -115,6 +118,8 @@ function CodePku:init()
 	local asset_manager = ParaEngine.GetAttributeObject():GetChild("AssetManager");
 	local asset_manifest = asset_manager:GetChild("CAssetManifest");
 	asset_manifest:SetField("LoadManifestFile", redistFolder.."assets_manifest_codepku.txt");
+
+	self:BasicConfig();
 
 	GameLogic.GetFilters():add_filter(
 			"ShowLoginModePage",
@@ -385,9 +390,44 @@ function CodePku:init()
 	GameLogic.GetFilters():add_filter(
 		"QuickSelectBar.ShowPage",
 		function(bShow)
-			return true;
+			return not (System.Codepku.Coursewares and (System.Codepku.Coursewares.category == 1 or System.Codepku.Coursewares.category == 2 or System.Codepku.Coursewares.category == 7));
 		end
 	);
+
+	GameLogic.GetFilters():add_filter(
+		"KeyPressEvent",
+		function(callbackVal, event)
+			if event.keyname == "DIK_F5" then
+				event:accept();
+			elseif event.keyname == "DIK_B" then
+				if not (System.Codepku.Coursewares and (System.Codepku.Coursewares.category == 1 or System.Codepku.Coursewares.category == 2)) then
+					event:accept();
+				end
+			elseif event.keyname == "DIK_E" then
+				if not (System.Codepku.Coursewares and (System.Codepku.Coursewares.category == 1 or System.Codepku.Coursewares.category == 2)) then
+					event:accept();
+				end
+			elseif event.keyname == "DIK_F1" then
+				event:accept();
+			elseif event.keyname == "DIK_F4" then
+				event:accept();
+			elseif event.keyname == "DIK_F5" then
+				event:accept();
+			elseif event.keyname == "DIK_F9" then
+				event:accept();
+			elseif event.keyname == "DIK_F11" then
+				event:accept();
+			elseif event.keyname == "DIK_F12" then
+				event:accept();
+			elseif event.keyname == "DIK_DELETE" or event.keyname == "DIK_BACKSPACE" or event.keyname == "DIK_DECIMAL" then
+				event:accept();
+			elseif event.keyname == "DIK_F12" then
+				event:accept();
+			end
+
+			return true;
+		end
+	)
 end
 
 function CodePku:OnLogin()
@@ -410,5 +450,14 @@ function CodePku:OnInitDesktop()
 	log("CodePku:OnInitDesktop")
 	-- UserConsole:ShowPage()
 	-- return true
+end
+
+function CodePku:BasicConfig()
+	local request = NPL.load("(gl)Mod/CodePku/api/BaseRequest.lua");
+	request:get('/config/basic',{}):next(function(response)		
+		CodePku.BasicConfig = response.data.data; 		
+    end):catch(function(e)
+        
+    end);
 end
 

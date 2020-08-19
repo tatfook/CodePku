@@ -1,4 +1,3 @@
-NPL.load("(gl)Mod/CodePku/cellar/GUI/Window/AdaptWindow.lua");
 local request = NPL.load("(gl)Mod/CodePku/api/BaseRequest.lua");
 local AdaptWindow = commonlib.gettable("Mod.CodePku.GUI.Window.AdaptWindow")
 
@@ -52,6 +51,12 @@ FriendUI.popparams={
 }
 
 FriendUI.vars = {}
+
+FriendUI.menu = {
+    {index = 1, text = "my_friend", name = "我的好友"},
+    -- {index = 2, text = "recent_player", name = "最近游玩"},
+    {index = 3, text = "black_list", name = "黑名单"}
+}
 
 
 function FriendUI:Search(keyword)
@@ -160,6 +165,16 @@ function FriendUI:GetFriend()
                 remark = data.remark,
             }
         end
+
+        table.sort(FriendUI.vars["friends"], function(a, b)
+            local sort_online = tostring(a.is_online) == tostring(b.is_online)
+            if sort_online then
+                return a.nickname > b.nickname
+            else
+                return tostring(a.is_online) > tostring(b.is_online)
+            end
+        end)
+
     else
         FriendUI.vars["friends"] = nil;
     end
@@ -191,19 +206,22 @@ function FriendUI:GetBlackList()
     local response = request:get('/contacts/blocks',nil,{sync = true})
     if (response.status == 200 and response.data.code == 200) then
         FriendUI.vars["blacklist"] = {}
-
+        local bindex = 1
         for index, data in ipairs(response.data.data) do
-            FriendUI.vars["blacklist"][index] = {
-                id = data.id,
-                no = data.no or data.friend.no or "000000",
-                friend_id = data.friend.id,
-                nickname = data.friend.nickname or commonlib.utf8.sub(data.friend.mobile,1,7),
-                gender = data.friend.gender,
-                head = data.friend.avatar_url,
-                is_online = data.friend.is_online or false,
-                last_time = data.friend.last_login_at, 
-                remark = data.remark,
-            }
+            if data.friend ~= nil then
+                FriendUI.vars["blacklist"][bindex] = {
+                    id = data.id,
+                    no = data.no or data.friend.no or "000000",
+                    friend_id = data.friend.id,
+                    nickname = data.friend.nickname or commonlib.utf8.sub(data.friend.mobile,1,7),
+                    gender = data.friend.gender,
+                    head = data.friend.avatar_url,
+                    is_online = data.friend.is_online or false,
+                    last_time = data.friend.last_login_at, 
+                    remark = data.remark,
+                }
+                bindex = bindex + 1
+            end 
         end
     else
         FriendUI.vars["blacklist"] = nil;
@@ -213,7 +231,6 @@ end
 
 function FriendUI:CalOfflineTime()
     local date=os.date("%Y-%m-%d %H:%M:%S")
-
 end
 
 

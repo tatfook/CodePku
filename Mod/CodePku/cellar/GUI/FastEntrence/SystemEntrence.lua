@@ -1,4 +1,3 @@
-NPL.load("(gl)Mod/CodePku/cellar/GUI/Window/AdaptWindow.lua");
 local AdaptWindow = commonlib.gettable("Mod.CodePku.GUI.Window.AdaptWindow");
 local SystemEntrencePage = commonlib.gettable("Mod.CodePku.SystemEntrencePage");
 local SystemLevelPage = commonlib.gettable("Mod.CodePku.SystemLevelPage");
@@ -7,6 +6,7 @@ local SystemEntranceChoosePage = commonlib.gettable("Mod.CodePku.SystemEntranceC
 
 local page;
 SystemLevelPage.nowPage = nil;
+SystemLevelPage.maxItemPerPage = 8;
 
 SystemEntranceChoosePage.GradeDetails = {}
 SystemEntranceChoosePage.GradeDetails['primary'] = {
@@ -88,14 +88,14 @@ function SystemLevelPage.GetLevels(grade_id, semester_id, subject_id)
                     l = {}
                     l['cover'] = c.cover_file.file_url
                     l['course'] = c
-                    l['index'] = a % 10
+                    l['index'] = a % SystemLevelPage.maxItemPerPage
                     a = a + 1
                     table.insert(list, l)
                 end
             end
         end
     SystemLevelPage.total_courses = #list
-    return slice(list, (page-1)*10+1, page*10)
+    return slice(list, (page-1)*SystemLevelPage.maxItemPerPage+1, page*SystemLevelPage.maxItemPerPage)
     end
 end
 

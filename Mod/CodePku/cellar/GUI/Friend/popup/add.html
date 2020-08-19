@@ -54,7 +54,6 @@ function ClickChat()
 end
 
 function addFriend(fid)
-
     FriendUI:Add_Friend(fid)
 end
 
@@ -69,7 +68,7 @@ end
 
     <div style="position: relative; width: 1158; height: 588; left: 406; top: 219; background:url(codepku/image/textures/common_32bits.png#99 275 1158 588);"></div>
 
-    <div style="position: relative; width: 410; height: 89; left: 780; top: 219; text-align: center; font-family: NotoSansHans-Medium; color: #F46D3D; font-size: 45px; line-height: 89; background:url(codepku/image/textures/common_32bits.png#1277 377 410 87);">
+    <div style="position: relative; width: 410; height: 89; left: 780; top: 219; text-align: center; font-family: PuHuiTi-Bold; color: #F46D3D; font-size: 45px; line-height: 89; background:url(codepku/image/textures/common_32bits.png#1277 377 410 87);">
         添加好友
     </div>
 
@@ -81,7 +80,7 @@ end
         <div style="position: relative; width: 130; height: 130; left: 27; top: 35; background: url(codepku/image/textures/common_32bits.png#1308 569 130 130);"></div>
         <div style='<%=format("position:relative;width:130;height:130; left: 27; top: 35; background: url(%s);", mytable.head or "")%>'></div>
 
-        <div style="position: relative; width: 280; height: 34; left:175; top: 55; color: #FFFFFF; font-family: NotoSansHans-Medium; font-size: 36;"><%=getName()%>
+        <div style="position: relative; width: 280; height: 34; left:175; top: 55; color: #FFFFFF; font-family: PuHuiTi-Bold; font-size: 36;"><%=getName()%>
             <pe:if condition='<%=mytable.gender == 1 %>'>
                 <div style='width:34; height:41; top: 2; left: 14; float: left;  background: url(codepku/image/textures/friend/main.png#399 97 34 34);'></div>
             </pe:if>
@@ -91,17 +90,17 @@ end
         </div>
 
         <pe:if condition="<%=isOnline() == true%>">
-            <div style="position: relative; width: 72px; height: 34px; left: 175; top: 116; font-family: NotoSansHans-Medium; font-size: 36; color: #00FF9C;">在线</div>
+            <div style="position: relative; height: 34px; left: 175; top: 116; font-family: PuHuiTi-Bold; font-size: 36; color: #00FF9C;">在线</div>
         </pe:if>
         <pe:if condition="<%=isOnline() == false%>">
-            <div style="position: relative; width: 72px; height: 34; left: 175; top: 116; font-family: NotoSansHans-Medium; font-size: 36; color: #0F1F6F;">离线</div>
+            <div style="position: relative; height: 34; left: 175; top: 116; font-family: PuHuiTi-Bold; font-size: 36; color: #0F1F6F;">离线</div>
         </pe:if>
     </div>
 
 
-    <!-- <input type="button" style="position: relative; width: 150; height: 80; left: 970; top: 501; font-size: 36; font-family: NotoSansHans-Medium; font-weight: bold; color: #FFFFFF; padding-left: 40; padding-top: 23; padding-right: 39; padding-bottom: 22; background: url(codepku/image/textures/common_32bits.png#1404 740 86 86: 9 9 9 9);" value="聊天" name='<%=mytable.friend_id%>' onclick="ClickChat" /> -->
-    <input type="button" style="position: relative; width: 150; height: 80; left: 1162; top: 501; font-size: 36; font-family: NotoSansHans-Medium; font-weight: bold; color: #FFFFFF; padding-left: 40; padding-top: 23; padding-right: 39; padding-bottom: 22; background: url(codepku/image/textures/common_32bits.png#1700 740 86 86: 9 9 9 9);" value="添加" name='<%=mytable.friend_id%>' onclick="addFriend" />
-    <input type="button" style="position: relative; width: 150; height: 80; left: 1354; top: 501; font-size: 36; font-family: NotoSansHans-Medium; font-weight: bold; color: #FFFFFF; padding-left: 40; padding-top: 23; padding-right: 39; padding-bottom: 22; background: url(codepku/image/textures/common_32bits.png#1305 740 86 86: 9 9 9 9);" value="举报" name='<%=mytable.friend_id%>' onclick="report" />
+    <!-- <input type="button" style="position: relative; width: 150; height: 80; left: 970; top: 501; font-size: 36; font-family: PuHuiTi-Bold; font-weight: bold; color: #FFFFFF; padding-left: 40; padding-top: 23; padding-right: 39; padding-bottom: 22; background: url(codepku/image/textures/common_32bits.png#1404 740 86 86: 9 9 9 9);" value="聊天" name='<%=mytable.friend_id%>' onclick="ClickChat" /> -->
+    <input type="button" style="position: relative; width: 150; height: 80; left: 1162; top: 501; font-size: 36; font-family: PuHuiTi-Bold; font-weight: bold; color: #FFFFFF; padding-left: 40; padding-top: 23; padding-right: 39; padding-bottom: 22; background: url(codepku/image/textures/common_32bits.png#1700 740 86 86: 9 9 9 9);" value="添加" name='<%=mytable.friend_id%>' onclick="addFriend" />
+    <input type="button" style="position: relative; width: 150; height: 80; left: 1354; top: 501; font-size: 36; font-family: PuHuiTi-Bold; font-weight: bold; color: #FFFFFF; padding-left: 40; padding-top: 23; padding-right: 39; padding-bottom: 22; background: url(codepku/image/textures/common_32bits.png#1305 740 86 86: 9 9 9 9);" value="举报" name='<%=mytable.friend_id%>' onclick="report" />
 
     
 </pe:container>

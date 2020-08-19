@@ -43,8 +43,8 @@ function ClickRefuse(aid)
     end
 end
 
-function ClickBlacklist(fid)
-    res = FriendUI:block(fid)
+function ClickBlacklist(aid)
+    res = FriendUI:HandleApply(aid, 3)
     if(res) then
         FriendUI:GetApply()
         Page:Refresh(0);
@@ -58,7 +58,7 @@ end
 
     <div style="position: relative; width: 1158; height: 588; left: 406; top: 219; background:url(codepku/image/textures/common_32bits.png#99 275 1158 588);"></div>
 
-    <div style="position: relative; width: 410; height: 89; left: 780; top: 219; text-align: center; font-family: NotoSansHans-Medium; color: #F46D3D; font-size: 45px; line-height: 89; background:url(codepku/image/textures/common_32bits.png#1277 377 410 87);">
+    <div style="position: relative; width: 410; height: 89; left: 780; top: 219; text-align: center; font-family: PuHuiTi-Bold; color: #F46D3D; font-size: 45px; line-height: 89; background:url(codepku/image/textures/common_32bits.png#1277 377 410 87);">
         好友申请
     </div>
 
@@ -76,29 +76,29 @@ end
             <div style="position: relative; width: 130; height: 130; left: 27; top: 35; background: url(codepku/image/textures/common_32bits.png#1308 569 130 130);"></div>
             <div style='<%=format("position:relative; width:130; height:130; left: 27; top: 35; background: url(%s);", Eval("head"))%>'></div>
 
-            <div style="position: relative; width: 280; height: 34; left:175; top: 41; color: #FFFFFF; font-family: NotoSansHans-Medium; font-size: 36;"><%=Eval("nickname")%>
+            <div style="position: relative; width: 280; height: 34; left:175; top: 41; color: #FFFFFF; font-family: PuHuiTi-Bold; font-size: 36;"><%=Eval("nickname")%>
                 <pe:if condition='<%=Eval("gender") == 1 %>'>
                     <div style='width:38; height:41; top: 2; left: 14; float: left;  background: url(codepku/image/textures/friend/main.png#399 97 34 34);'></div>
                 </pe:if>
                 <pe:if condition='<%=Eval("gender") == 2 %>'>
-                    <div style='width:38; height:41; top: 2; left: 14; float: left;  background: url(codepku/image/textures/friend/main.png#399 97 34 34);'></div>
+                    <div style='width:38; height:41; top: 2; left: 14; float: left;  background: url(codepku/image/textures/friend/main.png#351 91 26 40);'></div>
                 </pe:if>
             </div>
             
-            <div style="position: relative; width: 250; height: 27; left: 177; top: 91; color: #FFFFFF; font-family: NotoSansHans-Medium; font-size: 36;">ID: <%=Eval("no")%></div>
+            <div style="position: relative; width: 250; height: 27; left: 177; top: 91; color: #FFFFFF; font-family: PuHuiTi-Bold; font-size: 36;">ID: <%=Eval("no")%></div>
 
             <pe:if condition="<%=Eval('is_online') == true%>">
-                <div style="position: relative; width: 72px; height: 34px; left: 176; top: 133; font-family: NotoSansHans-Medium; font-size: 36; color: #00FF9C;">在线</div>
+                <div style="position: relative; height: 34px; left: 176; top: 133; font-family: PuHuiTi-Bold; font-size: 36; color: #00FF9C;">在线</div>
             </pe:if>
             <pe:if condition="<%=Eval('is_online') == false%>">
-                <div style="position: relative; width: 72px; height: 34; left: 176; top: 133; font-family: NotoSansHans-Medium; font-size: 36; color: #0F1F6F;">离线</div>
+                <div style="position: relative; height: 34; left: 176; top: 133; font-family: PuHuiTi-Bold; font-size: 36; color: #0F1F6F;">离线</div>
             </pe:if>
 
-            <input type="button" style="position: relative; width: 150; height: 80; left: 535; top: 71; font-size: 36; font-weight: bold; color: #FEFEFE; padding-left: 40; padding-top: 23; padding-right: 39; padding-bottom: 22; background: url(codepku/image/textures/common_32bits.png#1305 740 86 86:9 9 9 9);" name='<%=Eval("id")%>' onclick="ClickDelete" />
+            <input type="button" style="position: relative; width: 150; height: 80; left: 535; top: 71; font-size: 36; font-weight: bold; color: #FEFEFE; padding-left: 40; padding-top: 23; padding-right: 39; padding-bottom: 22; background: url(codepku/image/textures/common_32bits.png#1305 740 86 86:9 9 9 9);" name='<%=Eval("id")%>' onclick="ClickRefuse" />
             <div style="position: relative; width: 30; height: 30; left: 593; top: 98; background: url(codepku/image/textures/common_32bits.png#1497 292 30 30);"></div>
             <input type="button" style="position: relative; width: 150; height: 80; left: 727; top: 71; font-size: 36; font-weight: bold; color: #FEFEFE; padding-left: 40; padding-top: 23; padding-right: 39; padding-bottom: 22; background: url(codepku/image/textures/common_32bits.png#1404 740 86 86:9 9 9 9);" name='<%=Eval("id")%>' onclick="ClickAgree" />
             <div style="position: relative; width: 39; height: 28; left: 783; top: 98; background: url(codepku/image/textures/common_32bits.png#1567 292 39 28);"></div>
-            <input type="button" style="position: relative; width: 150; height: 80; left: 919; top: 71; font-size: 36; font-family: NotoSansHans-Bold; font-weight: bold; color: #FEFEFE; padding-left: 40; padding-top: 23; padding-right: 39; padding-bottom: 22; background: url(codepku/image/textures/common_32bits.png#1601 740 86 86:9 9 9 9);" value="举报" name='<%=Eval("id")%>' onclick="ClickBlacklist" />
+            <input type="button" style="position: relative; width: 150; height: 80; left: 919; top: 71; font-size: 36; font-family: NotoSansHans-Bold; font-weight: bold; color: #FEFEFE; padding-left: 40; padding-top: 23; padding-right: 39; padding-bottom: 22; font-family: PuHuiTi-Bold; background: url(codepku/image/textures/common_32bits.png#1601 740 86 86:9 9 9 9);" value="拉黑" name='<%=Eval("id")%>' onclick="ClickBlacklist" />
 
 
 

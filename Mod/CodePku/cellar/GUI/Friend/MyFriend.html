@@ -13,12 +13,11 @@
 <![CDATA[
 local FriendUI = NPL.load("(gl)Mod/CodePku/cellar/GUI/Friend/FriendUI.lua")
 MainSceneUIButtons = commonlib.gettable("Mod.CodePku.Common.TouchMiniButtons.MainSceneUIButtons");
+Channels = MainSceneUIButtons.Channels
+
 cur_index = 1
-menu = {
-    [1] = {index = 1, text = "my_friend", name = "我的好友"},
-    [2] = {index = 2, text = "recent_player", name = "最近游玩"},
-    [3] = {index = 3, text = "black_list", name = "黑名单"}
-}
+
+menu = FriendUI.menu
 
 function ClosePage()
     Page:CloseWindow();
@@ -70,34 +69,30 @@ end
 
 function ClickChat(fid)
     ClosePage()
-    MainSceneUIButtons.show_dialog_ui(true, 3, fid)
+    MainSceneUIButtons.show_dialog_ui(true, Channels['friend'], fid)
 end
+
+
 
 ]]>
 </script>
 <style type="text/mcss">
 
 </style>
-<pe:container alignment="_lt" width="1920" height="1080" style="background: url(codepku/image/textures/friend/main.png#23 445 1190 901);">
 
+<pe:container alignment="_lt" width="1920" height="1080"  style="background: url(codepku/image/textures/background/main.png);">
     <div style="position: relative; width: 230; height: 1080; background: url(codepku/image/textures/common_32bits.png#1801 742 81 81:9 9 9 9);"></div>
+    <div style="position: relative; width: 208; height: 127; left: 0; top: 0; background: url(codepku/image/textures/common_32bits.png#251 49 208 127);" onclick="ClosePage"></div>
 
-    <div style="position: relative; width: 1690; left: 230; height: 1080; background: url(codepku/image/textures/friend/main.png#23 445 1190 901); "></div>
-
-
-    <!-- <div style="position: relative; width: 66; height: 76; left: 1800; top: 6; background: url(codepku/image/textures/common_32bits.png#110 73 68 78);" onclick="ClosePage"></div> -->
-
-    <div style="position: relative; width: 223; height: 127; left: 0; top: 0; background: url(codepku/image/textures/common_32bits.png#251 49 208 127);" onclick="ClosePage"></div>
-
-    <div style="position: relative; width: 417; height: 100;  left: 144; top: 0; font-size: 70; color: #D85D0B; font-family: Alibaba-PuHuiTi-B; padding-left: 70; padding-top: 9; padding-right: 50; padding-bottom: 11; background: url(codepku/image/textures/common_32bits.png#475 63 429 86);">
-        个人中心
+    <div style="position: relative; width: 417; height: 86;  left: 144; top: 0; font-size: 70; color: #D85D0B; font-family: PuHuiTi-Bold; padding-left: 143; padding-top: 8; padding-right: 50; padding-bottom: 11; background: url(codepku/image/textures/common_32bits.png#475 63 429 86);">
+        好友
     </div>
 
     <div style="position: relative; width: 1550; height: 874; left: 325; top: 131; background: url(codepku/image/textures/friend/backboard.png);"></div>
 
-    <input type="button" style="position: relative; width: 202; height: 82; left: 1396; top: 153; padding-left: 30; padding-top: 23; padding-right: 30; padding-bottom: 24;  color: #A75608; font-size: 36; font-family: NotoSansHans-Regular; background: url(codepku/image/textures/common_32bits.png#213 185 80 80:13 13 13 13);" onclick="AddFriend"  value="添加好友"/>
+    <input type="button" style="position: relative; width: 202; height: 82; left: 1396; top: 153; padding-left: 30; padding-top: 23; padding-right: 30; padding-bottom: 24;  color: #A75608; font-size: 36; font-family: Noto Sans S Chinese Regular; background: url(codepku/image/textures/common_32bits.png#213 185 80 80:13 13 13 13);" onclick="AddFriend"  value="添加好友"/>
 
-    <input type="button" style="position: relative; width: 202; height: 82; left: 1615; top: 153; padding-left: 30; padding-top: 23; padding-right: 30; padding-bottom: 24;  color: #A75608; font-size: 36; font-family: NotoSansHans-Regular; background: url(codepku/image/textures/common_32bits.png#213 185 80 80:13 13 13 13);" onclick="FriendApply"  value="好友申请"/>
+    <input type="button" style="position: relative; width: 202; height: 82; left: 1615; top: 153; padding-left: 30; padding-top: 23; padding-right: 30; padding-bottom: 24;  color: #A75608; font-size: 36; font-family: Noto Sans S Chinese Regular; background: url(codepku/image/textures/common_32bits.png#213 185 80 80:13 13 13 13);" onclick="FriendApply"  value="好友申请"/>
     
 
     <pe:if condition = "<%=hasFriendData() == 1%>">
@@ -111,12 +106,12 @@ end
         <pe:repeat DataSource="<%=menu%>" >
             <pe:repeatitem>
                 <pe:if condition='<%=Eval("index") ~= cur_index%>'>
-                    <input type="button" style="width: 244; height: 94; margin-left: 0; margin-top: 10; font-family: NotoSansHans-Medium; font-size: 45; color: #FFFFFF; text-align: center; background: url(codepku/image/textures/common_32bits.png#1294 66 134 94);" onclick="ChangePage" name='<%=Eval("index")%>' value="<%=Eval('name')%>" />
+                    <input type="button" style="width: 244; height: 94; margin-left: 0; margin-top: 10; font-family: PuHuiTi-Bold; font-size: 45; color: #FFFFFF; text-align: center; background: url(codepku/image/textures/common_32bits.png#1294 66 134 94);" onclick="ChangePage" name='<%=Eval("index")%>' value="<%=Eval('name')%>" />
                 <!-- <div style='<%=format("width:275; height:107;left: 67;margin-top:30;background: url(codepku/image/textures/friend/menu/%s.png);",
                 Eval("text"))%>' name='<%=Eval("index")%>' onclick="ChangePage"></div> -->
                 </pe:if>
                 <pe:if condition='<%=Eval("index") == cur_index%>'>
-                    <input type="button" style="width: 261; height: 96; margin-left: 27; margin-top: 10; font-family: NotoSansHans-Medium; font-size: 45; color: #F8DE8D; padding-left: 49px; padding-top: 19px; padding-right: 35; padding-bottom: 34; background: url(codepku/image/textures/common_32bits.png#1648 196 261 96);" value="<%=Eval('name')%>" />
+                    <input type="button" style="width: 261; height: 96; margin-left: 27; margin-top: 10; font-family: PuHuiTi-Bold; font-size: 45; color: #F8DE8D; padding-left: 49px; padding-top: 19px; padding-right: 35; padding-bottom: 34; background: url(codepku/image/textures/common_32bits.png#1648 196 261 96);" value="<%=Eval('name')%>" />
                 <!-- <div style='<%=format("width:294; height:107;left: 48;margin-top:30;background: url(codepku/image/textures/friend/menu/%s.png);",
                 Eval("text").."_active")%>'></div> -->
                 </pe:if>
@@ -124,7 +119,7 @@ end
         </pe:repeat>
     </div>
 
-    <div style="position: relative; width: 130; height: 27; left: 374; top: 206; font-size: 36; font-family: Alibaba-PuHuiTi-R;"><span style="color: #FF3942;"><%=#getFriendData()%></span><span style="color: #254D9E;">/50</span></div>
+    <div style="position: relative; width: 130; height: 27; left: 374; top: 206; font-size: 36; font-family: PuHuiTi-Bold;"><span style="color: #FF3942;"><%=#getFriendData()%></span><span style="color: #254D9E;">/50</span></div>
 
     <pe:gridview name="MyFriend" style="position:relative; left: 339; top: 246; width: 1544;
     height:723;background-color: #ff00ff50;" DataSource='<%=getFriendData() %>' CellPadding="6" ItemsPerLine="1" AllowPaging="false" RememberScrollPos="true" RememberLastPage="true" 
@@ -135,7 +130,7 @@ end
             <div style="position: relative; width: 130; height: 130; left: 43; top: 23; background: url(codepku/image/textures/common_32bits.png#1308 569 130 130);"></div>
             <div style='<%=format("position:relative;width:130;height:130; left: 43; top: 23; background: url(%s);", Eval("head"))%>'></div>
 
-            <div style="position: relative; width: 280; height: 34; left:191; top: 43; color: #FFFFFF; font-family: NotoSansHans-Medium; font-size: 36;"><%=Eval("nickname")%>
+            <div style="position: relative; width: 280; height: 34; left:191; top: 43; color: #FFFFFF; font-family: PuHuiTi-Bold; font-size: 36;"><%=Eval("nickname")%>
                 <pe:if condition='<%=Eval("gender") == 1 %>'>
                     <div style='width:36; height:41; top: 2; left: 14; float: left;  background: url(codepku/image/textures/friend/main.png#399 97 34 34);'></div>
                 </pe:if>
@@ -144,44 +139,18 @@ end
                 </pe:if>
             </div>
 
-            <div style="position: relative; width: 250; height: 27; left: 193; top: 108; color: #FFFFFF; font-family: NotoSansHans-Medium; font-size: 36;">ID: <%=Eval("no")%></div>
+            <div style="position: relative; width: 250; height: 27; left: 193; top: 108; color: #FFFFFF; font-family: PuHuiTi-Bold; font-size: 36;">ID: <%=Eval("no")%></div>
             <pe:if condition="<%=Eval('is_online') == true%>">
-                <div style="position: relative; width: 72px; height: 34px; left: 692; top: 68; font-family: NotoSansHans-Medium; font-size: 36; color: #00FF9C;">在线</div>
+                <div style="position: relative; height: 34px; left: 692; top: 68; font-family: PuHuiTi-Bold; font-size: 36; color: #00FF9C;">在线</div>
             </pe:if>
             <pe:if condition="<%=Eval('is_online') == false%>">
-                <div style="position: relative; width: 72px; height: 34; left: 692; top: 68; font-family: NotoSansHans-Medium; font-size: 36; color: #0F1F6F;">离线</div>
+                <div style="position: relative; height: 34; left: 692; top: 68; font-family: PuHuiTi-Bold; font-size: 36; color: #0F1F6F;">离线</div>
             </pe:if>
 
-            <input type="button" style="position: relative; width: 200; height: 80; left: 1017; top: 50; font-size: 36; font-family: NotoSansHans-Medium; color: #FEFEFE; padding-left: 65; padding-top: 22; padding-right: 65; padding-bottom: 23; background: url(codepku/image/textures/common_32bits.png#1305 740 86 86:9 9 9 9);" value="删除" name='<%=Eval("index")%>' onclick="ClickDelete" />
+            <input type="button" style="position: relative; width: 200; height: 80; left: 1017; top: 50; font-size: 36; font-family: PuHuiTi-Bold; color: #FEFEFE; padding-left: 65; padding-top: 22; padding-right: 65; padding-bottom: 23; background: url(codepku/image/textures/common_32bits.png#1305 740 86 86:9 9 9 9);" value="删除" name='<%=Eval("index")%>' onclick="ClickDelete" />
 
-            <input type="button" style="position: relative; width: 200; height: 80; left: 1271; top: 49; font-size: 36; font-family: NotoSansHans-Medium; color: #FEFEFE; padding-left: 65; padding-top: 22; padding-right: 65; padding-bottom: 23; background: url(codepku/image/textures/common_32bits.png#1404 740 86 86:9 9 9 9);" value="聊天" name='<%=Eval("index")%>' onclick="ClickChat" />
+            <input type="button" style="position: relative; width: 200; height: 80; left: 1271; top: 49; font-size: 36; font-family: PuHuiTi-Bold; color: #FEFEFE; padding-left: 65; padding-top: 22; padding-right: 65; padding-bottom: 23; background: url(codepku/image/textures/common_32bits.png#1404 740 86 86:9 9 9 9);" value="聊天" name='<%=Eval("index")%>' onclick="ClickChat" />
         </div>
-
-        
-    <!-- <div style="width: 1440;height: 160;">
-        <div style="position:relative;width:1423;height:140;top:15;left:15;background: url(codepku/image/textures/friend/item/bg.png);"></div>
-        <div style="position:relative;width:160;height:160;background: url(codepku/image/textures/friend/item/head.png);"></div>
-        <div style='<%=format("position:relative;width:120;height:120;left: 20;top: 20;background: url(%s);", Eval("head"))%>'></div>
-
-        <div style="position:relative; left: 200; top: 20; ">
-            <div style="height:40; font-size: 40;float: left; color: #FFA500;"><%=Eval("nickname")%></div>
-            <pe:if condition='<%=Eval("gender") ~=0%>'>
-                <div style='<%=format("width:37; height:37; top: 3; left: 20; float: left; background: url(codepku/image/textures/friend/item/%s.png);", Eval("gender"))%>'></div>
-            </pe:if>
-        </div>
-
-        <div style="position:relative;width:200;height:40;left:200;top:100;font-size: 30;color: #FFA500;">ID: <%=Eval("no")%></div>
-
-        <pe:if condition="<%=Eval('is_online') == true%>">
-                <div style="position:relative; width:250; height:30; left:700;top:60;font-size: 40;color: #00ff22;">在线</div>
-            </pe:if>
-        <pe:if condition="<%=Eval('is_online') == false%>">
-            <div style="position:relative; width:250; height:30; left:700;top:60;font-size: 40;color: #f13709;">离线</div>
-        </pe:if>
-
-        <div style="position:relative;width:100;height:60;top:50;left:1120;background: url(codepku/image/textures/friend/my_friend/delete.png);" name='<%=Eval("index")%>' onclick="ClickDelete"></div>
-        <div style="position:relative;width:100;height:60;top:50;left:1260;background: url(codepku/image/textures/friend/my_friend/chat.png);" name='<%=Eval("index")%>' onclick="ClickChat"></div>
-    </div> -->
     </Columns>
     </pe:gridview>
 

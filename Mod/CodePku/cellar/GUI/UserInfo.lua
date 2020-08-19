@@ -161,7 +161,6 @@ function UserInfoPage:ShowPage(PageIndex, bShow, id)
 end
 
 function UserInfoPage:InitWindow()
-    NPL.load("(gl)Mod/CodePku/cellar/GUI/Window/AdaptWindow.lua");
     local AdaptWindow = commonlib.gettable("Mod.CodePku.GUI.Window.AdaptWindow")
     AdaptWindow:QuickWindow({url="Mod/CodePku/cellar/GUI/UserInfo.html", 
     alignment="_fi", left = 0, top = 0, width = 0, height = 0,zorder =20
