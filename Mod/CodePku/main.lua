@@ -400,20 +400,21 @@ function CodePku:init()
 		end
 	)
 	GameLogic.GetFilters():add_filter(
-		"CustomCodeBlockEditor",
+		"CodeBlockEditorOpened",
 		function (CodeBlockWindow, entity) 
 			local subjectId = System.Codepku and System.Codepku.Coursewares and System.Codepku.Coursewares.course_subject_id;
 			if (subjectId and tonumber(subjectId) == 10) then
-				CodeBlockWindow.OpenBlocklyEditor();		
+				-- CodeBlockWindow.OpenBlocklyEditor();		
 			end
 		end
 	)
 
 	GameLogic.GetFilters():add_filter(
 		"CustomCodeBlockClicked",
-		function (default, mouse_button, entity)
+		function (default, entityCode, mouse_button, entity)
 			local subjectId = System.Codepku and System.Codepku.Coursewares and System.Codepku.Coursewares.course_subject_id;
-			if (subjectId and tonumber(subjectId) == 10 and mouse_button == "right") then	
+			if (subjectId and tonumber(subjectId) == 10 and mouse_button == "right") then
+				entityCode:OpenEditor("entity", entity);	
 				return true;
 			end
 
