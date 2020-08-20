@@ -64,6 +64,7 @@ CodepkuChatChannel.worldId = nil;
 CodepkuChatChannel.client = nil;
 CodepkuChatChannel.Messages = {}
 CodepkuChatChannel.UserOnlineStatus = {}
+MainSceneUIButtons.page = {}
 
 function CodepkuChatChannel.StaticInit()
     LOG.std("", "info", "CodepkuChatChannel", "StaticInit");
@@ -275,6 +276,7 @@ function CodepkuChatChannel.OnMsg(self, msg)
     local speakerIsMe = if_else(msg.from_user_id == System.User.id, 1, 0)
     local avatar = msg.from_user_avatar or 'codepku/image/textures/chat/default_avatar.png'
     local action = tonumber(msg.action);
+    local channel = tonumber(msg.channel);  
     if (action == messageActionsMap.status) then
         -- 上线通知 下线通知
         local status = if_else(msg.status == 'ONLINE', true, false)
@@ -289,7 +291,7 @@ function CodepkuChatChannel.OnMsg(self, msg)
             end
         end
     else 
-        local channel = tonumber(msg.channel);   
+        -- private_chat = 0 -- 私聊好友
         -- system = 1, -- 系统通知
         -- world = 2,  -- 世界
         -- nearby = 3, -- 附近、本地
@@ -322,11 +324,24 @@ function CodepkuChatChannel.OnMsg(self, msg)
     end
     if MainSceneUIButtons.page then
         if speakerIsMe == 0 then
-            MainSceneUIButtons.ScrollToEnd = "false"
+            MainSceneUIButtons.ScrollToEnd = "true"
         else
             MainSceneUIButtons.ScrollToEnd = "true"
         end
-        MainSceneUIButtons.page:Refresh()
+        -- 获取用户输入的文本
+        if (MainSceneUIButtons.page and MainSceneUIButtons.page[channel]) then
+            MainSceneUIButtons.words = MainSceneUIButtons.page[channel]:GetValue("DialogContent")
+        end
+        -- MainSceneUIButtons.words = 
+        ---[[ 从聊天发送点击事件获取是否需要清空输入框
+        if MainSceneUIButtons.words_refresh then
+            MainSceneUIButtons.words = ""
+            MainSceneUIButtons.words_refresh = false
+        end
+        --]]
+        if MainSceneUIButtons.page[channel] then
+            MainSceneUIButtons.page[channel]:Refresh()
+        end
     end
     -- if FriendUI.page then
     --     FriendUI.page:Refresh(0)

@@ -61,6 +61,7 @@ function MainSceneUIButtons.show_dialog_ui(bshow, PopIndex, friendid)
 
     if(bshow) then
         PopIndex = tonumber(PopIndex)
+        MainSceneUIButtons.words = ""
         local window = nil
         if PopIndex == MainSceneUIButtons.Channels['world'] then
             window = AdaptWindow:QuickWindow(MainSceneUIButtons.params["world_page"])

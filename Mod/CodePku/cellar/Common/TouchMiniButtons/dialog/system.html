@@ -17,7 +17,7 @@ local request = NPL.load("(gl)Mod/CodePku/api/BaseRequest.lua");
 Channels = MainSceneUIButtons.Channels
 
 local page = document:GetPageCtrl()
-MainSceneUIButtons.page = page
+MainSceneUIButtons.page[1] = page
 
 
 local sendable = true
@@ -45,46 +45,6 @@ function OnClickChannel(index)
         Page:CloseWindow()
         MainSceneUIButtons.show_dialog_ui(true, index, frindNow)
     end
-end
-
-function OnClickVoice()
-
-end
-
-function OnClickEmoji()
-
-end
-
-function OnClickSend()
-    local page = document:GetPageCtrl()
-    local words = page:GetValue("DialogContent")
-    if not words or words == '' then
-        return
-    end
-    if commonlib.utf8.len(words) > 30 then
-        GameLogic.RunCommand("/tip -duration 1500 内容上限30个字")
-        return 
-    end
-    if not sendable then
-        GameLogic.RunCommand("/tip -duration 1500 发言太频繁，请稍后尝试")
-        return
-    end
-    sendable = false
-    local times = 2
-    local timer = commonlib.Timer:new({
-        callbackFunc = function(timer)
-
-            if times == 0 then
-                sendable = true
-                timer:Change(nil, nil)
-            end
-
-            times = times - 1
-        end
-    })
-    timer:Change(1000, 1000)
-    CodepkuChatChannel.SendSystemMsg(words)
-    Page:Refresh()
 end
 
 function GetMessages()

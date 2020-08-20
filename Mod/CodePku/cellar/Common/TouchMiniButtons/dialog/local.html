@@ -17,7 +17,7 @@ local request = NPL.load("(gl)Mod/CodePku/api/BaseRequest.lua");
 Channels = MainSceneUIButtons.Channels
 
 local page = document:GetPageCtrl()
-MainSceneUIButtons.page = page
+MainSceneUIButtons.page[3] = page
 
 local sendable = true
 DEFAULT_AVATAR = 'codepku/image/textures/chat/default_avatar.png'
@@ -85,6 +85,7 @@ function OnClickSend()
     timer:Change(1000, 1000)
     CodepkuChatChannel.SendNearByMsg(words) 
     Page:Refresh()
+    MainSceneUIButtons.words_refresh = true
 end
 
 function GetMessages()
@@ -93,6 +94,12 @@ end
 
 function scrollEnd()
     return MainSceneUIButtons.ScrollToEnd
+end
+
+function PageRefresh()
+    local page = document:GetPageCtrl()
+    MainSceneUIButtons.words = page:GetValue("DialogContent")
+    MainSceneUIButtons.words_refresh = false
 end
 
 
@@ -146,7 +153,7 @@ end
         <!-- 发言 -->
         <div style='width: 960;height:134;'>
             <div style="width:608px;height:54px;float:left;background-color:#ffffff; background: url(codepku/image/textures/chat_ui/chat_32bits.png#928 663 54 54:10 10 10 10);margin-left:27px;margin-top:38px;padding-left:15px;padding-right:15px;">
-                <input valign="center" type="text" width="100%" style='height:48px;font-size: 26px;color:#424141;background:#ffffff00' name='DialogContent'/>
+                <input valign="center" type="text" width="100%" style='height:48px;font-size: 26px;color:#424141;background:#ffffff00' name='DialogContent' onchange="PageRefresh" value="<%=MainSceneUIButtons.words%>"/>
             </div>
             <!--<div style='width:54;height:54;float: left; background: url(codepku/image/textures/chat_ui/chat_32bits.png#848 665 54 54);margin-top: 38;margin-left: 15;' onclick="OnClickVoice"></div>-->
             <!--<div style='width:54;height:54;float: left; background: url(codepku/image/textures/chat_ui/chat_32bits.png#773 666 54 54);margin-top: 38;margin-left: 18' onclick="OnClickEmoji"></div>-->
