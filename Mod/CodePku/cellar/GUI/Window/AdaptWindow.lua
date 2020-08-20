@@ -81,6 +81,17 @@ function AdaptWindow:QuickWindow(params)
     return window
 end
 
+function AdaptWindow:Show2(params)
+	local window = AdaptWindow:new();
+	window:Show(params);
+	window:SetMinimumScreenSize(1920,1080);
+
+	local FocusPolicy = commonlib.gettable("System.Core.Namespace.FocusPolicy");
+	window:setFocusPolicy(FocusPolicy.NoFocus);
+
+	return window
+end
+
 
 -- for quick load
 -- NPL.load("(gl)Mod/CodePku/cellar/GUI/Window/AdaptWindow.lua");

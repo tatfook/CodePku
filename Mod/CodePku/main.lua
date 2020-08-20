@@ -474,19 +474,13 @@ end
 -- called when a new world is loaded.
 
 function CodePku:OnWorldLoad()
-	local AdaptWindow = commonlib.gettable("Mod.CodePku.GUI.Window.AdaptWindow")
+	NPL.load("(gl)Mod/CodePku/cellar/Common/TouchMiniKeyboard/TouchDirectionKeyboard.lua");
+	local TouchDirectionKeyboard = commonlib.gettable("Mod.CodePku.Cellar.Common.TouchMiniKeyboard.TouchDirectionKeyboard");
+	TouchDirectionKeyboard.Show(true);
 
-	local keyboard =
-		AdaptWindow:QuickWindow(
-		{
-			url = "Mod/CodePku/cellar/Common/TouchMiniKeyboard/TouchDirectionKeyboard.html",
-			alignment = "_lt",
-			left = 101,
-			top = 534,
-			width = 350,
-			height = 350
-		}
-	)
+--	NPL.load("(gl)script/apps/Aries/Creator/Game/GUI/TouchController.lua");
+--	local TouchController = commonlib.gettable("MyCompany.Aries.Game.GUI.TouchController");
+--	TouchController.ShowPage(true);
 
 	UserConsole:ClosePage()
 end
