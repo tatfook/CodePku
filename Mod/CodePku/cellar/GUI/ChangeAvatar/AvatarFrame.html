@@ -1,0 +1,120 @@
+<!-- "script/apps/Aries/Creator/Game/Areas/RankPage.html" -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+</head>
+
+<body>
+<pe:mcml>
+<script refresh="false" type="text/npl" src="ChangeAvatar.lua"><![CDATA[
+    ChangeAvatarPage = commonlib.gettable("Mod.CodePku.GUI.ChangeAvatarPage")
+
+    select_navig = {
+        {text=L"全部", name="total"},
+    }
+    ProfilePng = "codepku/image/textures/avatar_ui/avatar_32bits.png"
+    navig = ChangeAvatarPage.navig
+    navig_clicked = ChangeAvatarPage.navig_index
+    select_clicked  = 1
+    --avatar
+    info_table = ChangeAvatarPage.avatar_frame
+    avatar_now = ChangeAvatarPage.now_avatar_frame
+    avatar_choose = ChangeAvatarPage.now_avatar_frame
+
+    function ClosePage()
+        Page:CloseWindow()
+    end 
+
+    function ClickNavig(index)
+        if index ~=  navig_clicked then
+            ChangeAvatarPage:ShowPage(index)
+        end
+    end
+
+    function ChangeAvatar(index)
+        avatar_choose = index
+        Page:Refresh(0)
+    end
+
+    function UseAvatar(index)
+        info_table[avatar_now].state = 0
+        info_table[index].state = 1
+        avatar_now = index
+        Page:Refresh(0)
+    end
+]]>
+</script>
+<style type="text/mcss">
+</style>
+<pe:container alignment="_lt" width="1566" height="962" style="margin-left: 152; margin-top: 71; background: url(codepku/image/textures/avatar_ui/bg.png);">
+    <!--title-->
+    <div style="width: 1566; height: 87; margin-top: 27;">
+        <div style="position: relative; width: 190; height: 87; left: 672; text-align: center; line-height: 87; font-family: PuHuiTi-Bold; font-size:48; color: #F46D3D;">更换头像</div>
+        <div style="position: relative; width: 64; height: 74; left: 1373; top: 7; background: url(codepku/image/textures/common_32bits.png#110 73 68 78);" onclick="ClosePage"></div>
+    </div>
+    <!--左导航栏-->
+    <div style="position: relative; width: 230;height: 817; margin-left: 31; font-size:36px; font-family:PuHuiTi-Bold; color: #ffffff; padding-top: 20; ">
+        <pe:repeat DataSource="<%=navig%>">
+            <pe:repeatitem>
+                <pe:if condition="<%=Eval('index') == navig_clicked%>">
+                    <input onclick="ClickNavig" type="button" name='<%= Eval("index")%>' value='<%=Eval("text")%>' style="<%=format('width:200;height:99;margin-left:15;margin-top: 16; background:url(%s#32 31 90 99:20 20 20 20);', Eval('ProfilePng'))%>" />
+                </pe:if>
+                <pe:if condition="<%=Eval('index') ~= navig_clicked%>">
+                    <input onclick="ClickNavig" type="button" name='<%= Eval("index")%>' value='<%=Eval("text")%>' style="<%=format('width:200;height:99;margin-left:15;margin-top: 16; background:url(%s#32 146 90 99:20 20 20 20);', Eval('ProfilePng'))%>" />
+                </pe:if>
+            </pe:repeatitem>
+        </pe:repeat>
+    </div>
+    <div style="position: relative; width: 182; height: 53; left: 949; top:14; text-align: center; line-height: 53; font-family: PuHuiTi-Bold; font-size:33; color: #0C59E0;">
+        <div style="<%=format('width: 129; height: 53; float: left; background: url(%s#636 374 132 53:10 10 10 10);',Eval('ProfilePng'))%>"><%=select_navig[select_clicked].text%></div>
+        <div style="<%=format('width: 53; height: 53; float: left; background: url(%s#636 301 53 53:10 10 10 10);',Eval('ProfilePng'))%>">
+            <div style="<%=format('width: 23; height: 14; margin-left: 15; margin-top: 20;  background: url(%s#637 266 23 14);',Eval('ProfilePng'))%>"></div>
+        </div>
+    </div>
+    <pe:gridview name="avatar" style="position: relative; width: 933; height: 817; left: 261; top:90;"
+        DataSource='<%=info_table %>' CellPadding="6" ItemsPerLine="4" AllowPaging="false" RememberScrollPos="true" RememberLastPage="true"
+        VerticalScrollBarStep="36" VerticalScrollBarOffsetX="8">
+        <Columns>
+            <div style="width: 181; height: 181; margin-left: 32; margin-top: 13;">
+                <div onclick="ChangeAvatar" name="<%=Eval('index')%>" style="<%=format('position: relative; width: 171; height: 171; left: 5; top: 5; background: url(%s#1846 64 181 181);',Eval('ProfilePng'))%>"></div>
+                <div onclick="ChangeAvatar" name="<%=Eval('index')%>" style="<%=format('position: relative; width: 181; height: 181; background: url(%s);',Eval('img'))%>"></div>
+                <pe:if condition="<%= avatar_choose == Eval('index')%>">
+                    <div style="<%=format('position: relative; width: 181; height: 181; background: url(%s#557 69 174 176);',Eval('ProfilePng'))%>"></div>
+                </pe:if>
+                <pe:if condition="<%= Eval('is_open') == false %>">
+                    <div onclick="ChangeAvatar" name="<%=Eval('index')%>"  style="<%=format('position: relative; width: 181; height: 181; background: url(%s#36 455 171 171:10 10 10 10);',Eval('ProfilePng'))%>"></div>
+                    <div onclick="ChangeAvatar" name="<%=Eval('index')%>"  style="<%=format('position: relative; width: 45; height: 58; left: 66; top: 54; background: url(%s#237 512 45 58);',Eval('ProfilePng'))%>"></div>
+                </pe:if>
+                <pe:if condition="<%= Eval('is_new') == true %>">
+                    <div style="<%=format('position: relative; width: 23; height: 23; left: 163; top: -5; background: url(%s#788 271 23 23:5 5 5 5);',Eval('ProfilePng'))%>"></div>
+                </pe:if>
+                <pe:if condition="<%= Eval('state') == 1 %>">
+                    <div onclick="ChangeAvatar" name="<%=Eval('index')%>" style="position: relative; width: 181; height: 181;  text-align:center; line-height:181; font-size:28; color: #4EFF00; font-family:PuHuiTi-Bold;">使用中</div>
+                </pe:if>
+            </div>
+        </Columns>
+    </pe:gridview>
+    <!--show-->
+    <div style="position: relative; width: 307; height: 817; left: 1194;">
+        <div style="<%=format('position: relative; width: 213; height: 213; left: 47; top: 70; background: url(%s);',info_table[Eval('avatar_choose')].img)%>">
+            <div style="<%=format('position: relative; width: 203; height: 203; left: 5; top: 5; background: url(%s#1846 64 181 181);',Eval('ProfilePng'))%>"></div>
+        </div>
+        <div style="position: relative; width:307; height:35; top: 305; text-align:center; line-height:35; color:#ffffff; font-size:36px; font-family:PuHuiTi-Bold;"><%=info_table[avatar_now].name%></div>
+        <div style="position: relative; width:307; height:35; top: 460; text-align:center; line-height:35; color:#054BD9; font-size:36px; font-family:PuHuiTi-Bold;">使用期限：永久</div>
+        <pe:if condition="<%= info_table[avatar_choose].is_open == false %>">
+            <div style="position: relative; width:307; height:35; top: 662; text-align:center; line-height:35; font-size:36px; font-family:PuHuiTi-Bold;">头像解锁条件</div>
+        </pe:if>
+        <pe:if condition="<%= info_table[avatar_choose].is_open == true and info_table[avatar_choose].state == 0 %>">
+            <div onclick="UseAvatar" name="<%=avatar_choose%>" style="position: relative; width:240; height:80; left: 33; top: 662; background: url(codepku/image/textures/common_32bits.png#552 182 86 86:15 15 15 15); text-align:center; line-height:80; font-size:36px; font-family:PuHuiTi-Bold;">使用</div>
+        </pe:if>
+        <pe:if condition="<%= info_table[avatar_choose].is_open == true and info_table[avatar_choose].state == 1 %>">
+            <div style="position: relative; width:307; height:35; top: 662; text-align:center; line-height:35; font-size:36px; font-family:PuHuiTi-Bold;">使用中</div>
+        </pe:if>
+    </div>
+</pe:container>
+</pe:mcml>
+</body>
+
+</html>

@@ -64,6 +64,11 @@ function OnClickHome()
     ClosePage();
 end
 
+local ChangeAvatarPage = commonlib.gettable("Mod.CodePku.GUI.ChangeAvatarPage")
+function ChangeAvatar()
+    ChangeAvatarPage:ShowPage(1)
+end
+
 ]]>   
 </script>
 <style type="text/mcss">
@@ -73,7 +78,7 @@ end
         <!-- <div style='<%=format("margin-left:407px;width:1393px;height:100px;font-size:24px;background:url(%s#1823 1196 102 102:13 13 13 13);font-weight:bold;", Eval("ProfilePng")) %>'> -->
         <div style='<%=format("float:left;margin-left:-41px;margin-top:-27px;width:482px;height:156px;font-size:30px;font-family:Noto Sans S Chinese Regular;font-weight:bold;color:#B35D0A;background:url(%s#1233 951 482 156);", Eval("ProfilePng")) %>'>
             <div style='<%=format("position:relative;width:86px;height:87px;margin-top:35px;margin-left:60px;background:url(%s);", UserInfoPage.avatar or (Eval("ProfilePng").."#1794 560 86 87")) %>'></div>
-            <div style='<%=format("position:relative;width:93px;height:94px;margin-top:30px;margin-left:55px;background:url(%s#1677 556 93 94);", Eval("ProfilePng")) %>'></div>
+            <div onclick="ChangeAvatar()" style='<%=format("position:relative;width:93px;height:94px;margin-top:30px;margin-left:55px;background:url(%s#1677 556 93 94);", Eval("ProfilePng")) %>'></div>
             <div style="position:relative;margin-top:40px;margin-left:162px;">
                 <%= UserInfoPage.name %>
                 <!-- 性别 -->
