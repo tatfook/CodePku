@@ -1,0 +1,112 @@
+<!-- "script/apps/Aries/Creator/Game/Areas/RankPage.html" -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+</head>
+
+<body>
+<pe:mcml>
+<script refresh="false" type="text/npl" src="SignInPage.lua"><![CDATA[
+    SignInPage = commonlib.gettable("Mod.CodePku.GUI.SignInPage")
+
+    date = os.date('%x')
+    day = 11
+    --day = tonumber(string.sub(date, -5, -4))
+    SignInPage.supplement_card = 3
+    SignInPage.signin_total_day = 0
+
+    function createData()
+        data = {}
+        for i = 1,28 do
+            if i < 7 then
+                table.insert(data, {date = i, state = 0, index = i})
+            elseif i < day then
+                SignInPage.signin_total_day = SignInPage.signin_total_day + 1
+                table.insert(data, {date = i, state = 1, index = i})
+            elseif i == day then
+                table.insert(data, {date = i, state = 0, index = i})
+            else 
+                table.insert(data, {date = i, state = 0, index = i})
+            end
+        end
+        return data
+    end
+
+    SignInPage.signin_data = createData()
+
+
+    function ClosePage()
+        Page:CloseWindow()
+    end 
+
+    function ClickSignIn(name)
+        name = tonumber(name)
+        if name == day then
+            SignInPage.signin_total_day = SignInPage.signin_total_day + 1
+            SignInPage.signin_data[name].state = 1
+        elseif SignInPage.supplement_card > 0 and name < day and SignInPage.signin_data[name].state == 0 then
+            GameLogic.AddBBS(nil, L"补签成功", 3000, "255 0 0", 21);
+            SignInPage.signin_total_day = SignInPage.signin_total_day + 1
+            SignInPage.signin_data[name].state = 1
+            SignInPage.supplement_card = SignInPage.supplement_card -1
+        elseif SignInPage.supplement_card <= 0 then
+            GameLogic.AddBBS(nil, L"补签卡不足", 3000, "255 0 0", 21);
+        end
+        Page:Refresh(0)
+    end
+
+]]>
+</script>
+<style type="text/mcss">
+</style>
+<pe:container alignment="_lt" width="1690" height="900" style="margin-left: 115; margin-top: 90; background: url(codepku/image/textures/signin/background.png)">
+    <!--title-->
+    <div style="position: relative; width: 410; height: 87; left: 640; background: url(codepku/image/textures/common_32bits.png#1277 377 410 87); text-align: center; line-height: 87; font-family: PuHuiTi-Bold; font-size:70px; color: #F46D3D;">每日签到</div>
+    <pe:div style="position: relative; width: 49; height: 56; left: 1584; top: 15; background: url(codepku/image/textures/common_32bits.png#110 73 68 78);" onclick="ClosePage"></pe:div>
+    
+    <div style="position: relative; width: 1690; height: 186; top: 85; background: url(codepku/image/textures/signin/banner.png); font-size: 28; font-family: Noto Sans S Chinese Regular; ont-weight:bold;">
+        <div style="position: relative; width: 240; height: 50; left: 27; top: 71; padding-left: 29; line-height: 50; color: #FFFFFF; background: url(codepku/image/textures/signin/signin_32bits.png#408 39 40 40:10 10 10 10);">本月已签到<%=SignInPage.signin_total_day%>天</div>
+        <div style="position: relative; width: 240; height: 50; left: 27; top: 136; padding-left: 14; line-height: 50; color: #FFFFFF; background: url(codepku/image/textures/signin/signin_32bits.png#359 39 40 40:10 10 10 10);">剩余补签次数<%=SignInPage.supplement_card%>张</div>
+        <div style="position: relative; width: 151; height: 160; left: 1513; top: 14; background: url(codepku/image/textures/signin/signin_32bits.png#185 19 151 160);">
+            <div style="color: #686695; width:143; height:49; margin-left:4; margin-top:107; background: url(codepku/image/textures/signin/signin_32bits.png#79 198 41 40:15 15 15 15); text-align: center; line-height:49;">领取</div>
+        </div>
+    </div>
+    <pe:repeat DataSource='<%=SignInPage.signin_data%>'>
+        <pe:repeatitem>
+            <pe:if condition="<%= day ~= Eval('index')%>">
+                <div style="<%=format('position: relative; width: 151; height: 160; left: %d; top: %d; background: url(codepku/image/textures/signin/signin_32bits.png#185 19 151 160);', (Eval('index')-1)%10*166+24, math.floor((Eval('index')-1)/10)*187+319)%>">
+                    <pe:if condition="<%= state == 0 and Eval('index') &lt; day %>">
+                        <div onclick="ClickSignIn" name="<%=Eval('index')%>" style="color: #238E2D; width:143; height:49; margin-left:4; margin-top:107; background: url(codepku/image/textures/signin/signin_32bits.png#181 198 41 40:15 15 15 15); font-family: Noto Sans S Chinese Regular; font-size:28px; text-align: center; line-height:49;">补签</div>
+                    </pe:if>
+                    <pe:if condition="<%= state == 1%>">
+                        <div style="color: #FFFFFF;position: relative; width:143; height:49; margin-left:4; margin-top:107; background: url(codepku/image/textures/signin/signin_32bits.png#129 198 41 40:15 15 15 15); font-family: Noto Sans S Chinese Regular; font-size:28px; text-align:center; line-height:49;"><%='第'..Eval('index')..'天'%></div>
+                        <div style="position: relative; width: 143; height: 156; margin-left: 4; background: url(codepku/image/textures/signin/signin_32bits.png#30 198 41 40:10 10 10 10);"></div>
+                        <div style="position: relative; width: 67; height: 57; left: 38; top: 50; background: url(codepku/image/textures/signin/signin_32bits.png#375 104 67 57);"></div>
+                    </pe:if>
+                    <pe:if condition="<%= state == 0 and Eval('index') &gt; day%>">
+                        <div style="color: #FFFFFF; width:143; height:49; margin-left:4; margin-top:107; background: url(codepku/image/textures/signin/signin_32bits.png#129 198 41 40:15 15 15 15); font-family: Noto Sans S Chinese Regular; font-size:28px; text-align:center; line-height:49;"><%='第'..Eval('index')..'天'%></div>
+                    </pe:if>
+                </div>
+            </pe:if>
+            <pe:if condition="<%= day == Eval('index')%>">
+                <div style="<%=format('position: relative; width: 151; height: 160; left: %d; top: %d; background: url(codepku/image/textures/signin/signin_32bits.png#26 19 151 160);', (Eval('index')-1)%10*166+24, math.floor((Eval('index')-1)/10)*187+319)%>">
+                    <pe:if condition="<%= state == 0%>">
+                        <div onclick="ClickSignIn" name="<%=Eval('index')%>" style="color: #B35D0A; width:143; height:49; margin-left:4; margin-top:107; background: url(codepku/image/textures/signin/signin_32bits.png#230 198 41 40:15 15 15 15); font-family: Noto Sans S Chinese Regular; font-size:28px; text-align: center; line-height:49;">领取</div>
+                    </pe:if>
+                    <pe:if condition="<%= state == 1%>">
+                        <div style="color: #B35D0A; position: relative; width:143; height:49; margin-left:4; margin-top:107; background: url(codepku/image/textures/signin/signin_32bits.png#230 198 41 40:15 15 15 15); font-family: Noto Sans S Chinese Regular; font-size:28px; text-align: center; line-height:49;"><%='第'..Eval('index')..'天'%></div>
+                        <div style="position: relative; width: 143; height: 156; margin-left: 4; background: url(codepku/image/textures/signin/signin_32bits.png#30 198 41 40:10 10 10 10);"></div>
+                        <div style="position: relative; width: 67; height: 57; left: 38; top: 50; background: url(codepku/image/textures/signin/signin_32bits.png#375 104 67 57);"></div>
+                    </pe:if>
+                </div>
+            </pe:if>
+        </pe:repeatitem>
+    </pe:repeat >
+
+</pe:container>
+</pe:mcml>
+</body>
+
+</html>

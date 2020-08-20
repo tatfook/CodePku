@@ -15,6 +15,7 @@ MainUIButtons.common_window = nil
 MainUIButtons.function_window = nil
 MainUIButtons.dialog_window = nil
 MainUIButtons.money_window = nil
+MainUIButtons.signin_window = nil
 MainUIButtons.open_function = nil
 MainUIButtons.open_common = nil
 
@@ -91,6 +92,17 @@ function MainUIButtons.show_money_ui()
 	MainUIButtons.money_window = AdaptWindow:QuickWindow(params)	
 end
 
+function MainUIButtons.show_signin_ui()
+	local width = 100
+	local height = 100
+
+	params = {
+		url="Mod/CodePku/cellar/Common/TouchMiniButtons/MainUIButtons_signin.html", 
+		alignment="_rt", left = -width, top = 500, width = width, height = height,
+	}
+	MainUIButtons.signin_window = AdaptWindow:QuickWindow(params)	
+end
+
 function MainUIButtons.ShowPage()
 	if MainUIButtons.common_window ~= nil then
 		MainUIButtons.common_window:CloseWindow()
@@ -108,6 +120,10 @@ function MainUIButtons.ShowPage()
 		MainUIButtons.money_window:CloseWindow()
 		MainUIButtons.money_window = nil
 	end
+	if MainUIButtons.signin_window ~= nil then
+		MainUIButtons.signin_window:CloseWindow()
+		MainUIButtons.signin_window = nil
+	end
 
 	local hideMenu = false;
 	if (System.Codepku and System.Codepku.Coursewares) then		
@@ -119,6 +135,7 @@ function MainUIButtons.ShowPage()
 		MainUIButtons.show_dialog_ui(false)
 		MainUIButtons.show_money_ui()		
 		MainUIButtons.show_function_ui()
+		MainUIButtons.show_signin_ui()
 	else
 		MainUIButtons.show_common_ui()
 	end
