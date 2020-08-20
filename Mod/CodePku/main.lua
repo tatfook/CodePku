@@ -413,7 +413,7 @@ function CodePku:init()
 		"CustomCodeBlockClicked",
 		function (default, mouse_button, entity)
 			local subjectId = System.Codepku and System.Codepku.Coursewares and System.Codepku.Coursewares.course_subject_id;
-			if (subjectId and tonumber(subjectId) == 10 and mouse_button=="right") then	
+			if (subjectId and tonumber(subjectId) == 10 and mouse_button == "right") then	
 				return true;
 			end
 

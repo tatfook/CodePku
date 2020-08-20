@@ -1,11 +1,8 @@
 NPL.load("./MainSceneUIButtons.lua");
 NPL.load("(gl)script/apps/Aries/Creator/WorldCommon.lua");
 local AdaptWindow = commonlib.gettable("Mod.CodePku.GUI.Window.AdaptWindow")
-local Log = NPL.load("(gl)Mod/CodePku/util/Log.lua");
-local WorldCommon = commonlib.gettable("MyCompany.Aries.Creator.WorldCommon")
 local EntityManager = commonlib.gettable("MyCompany.Aries.Game.EntityManager")
 local MainSceneUIButtons = commonlib.gettable("Mod.CodePku.Common.TouchMiniButtons.MainSceneUIButtons");
-local GenAndName = commonlib.gettable("Mod.CodePku.GenAndName")
 
 local MainUIButtons = NPL.export();
 
@@ -25,7 +22,7 @@ function MainUIButtons.show_common_ui(flag)
 	local close_width = 82
 	local close_height = 178
 
-	params = {
+	local params = {
 		open = {
 			url="Mod/CodePku/cellar/Common/TouchMiniButtons/MainUIButtons_common.html", 
 			alignment="_lt", left = 0, top = 0, width = open_width, height = open_height, click_through = true,
@@ -50,7 +47,7 @@ end
 
 function MainUIButtons.show_function_ui(flag)	--flag == true,工具栏展开
 
-	params = {
+	local params = {
 		open = {
 			url="Mod/CodePku/cellar/Common/TouchMiniButtons/MainUIButtons_function.html", 
 			alignment="_rb", left = -541, top = -178, width = 541, height = 178,
@@ -84,7 +81,7 @@ function MainUIButtons.show_money_ui()
 	local width = 746
 	local height = 89
 
-	params = {
+	local params = {
 		url="Mod/CodePku/cellar/Common/TouchMiniButtons/MainMoney.html", 
 		alignment="_lt", left = 1309, top = 0, width = width, height = height,
 	}
@@ -129,8 +126,8 @@ function MainUIButtons.ShowPage()
 end
 
 
-distance = 10
-length_limit = 7
+local distance = 10
+local length_limit = 7
 
 function MainUIButtons.show_interact_ui(obj)
 	local x, y, z = obj:GetPosition()
@@ -146,16 +143,16 @@ function MainUIButtons.show_interact_ui(obj)
 	local pname = username or displayname
 	pname = commonlib.utf8.sub(pname,1,length_limit)
 
-	info = obj:GetPlayerInfo()
+	local info = obj:GetPlayerInfo()
 	if not info or not info.userinfo then
 		return
 	end
-	pid = info.userinfo.id
+	local pid = info.userinfo.id
 	
-	width = 1920
-	height = 1080
+	local width = 1920
+	local height = 1080
 
-	params = {
+	local params = {
 		url = format("Mod/CodePku/cellar/Common/TouchMiniButtons/MainUIButtons_interact.html?pname=%s&pid=%s", pname, pid),
 		alignment="_lt", left = 0, top = 0, width = width, height = height,
 		click_through = false,
