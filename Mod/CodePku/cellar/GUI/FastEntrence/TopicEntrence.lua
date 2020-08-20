@@ -38,6 +38,10 @@ function TopicEntrencePage:ShowPage(bShow)
         [4] = {name='物理', title='physics', index=4, subject_id=4, show=true},
         [5] = {name='化学', title='chemestry', index=5, subject_id=5, show=true},
         [6] = {name='生物', title='biology', index=6, subject_id=6, show=true},
+        [7] = {name='政治', title='politics', index=7, subject_id=7, show=true},
+        [8] = {name='历史', title='history', index=8, subject_id=8, show=true},
+        [9] = {name='地理', title='geography', index=9, subject_id=9, show=true},
+        [10] = {name='编程', title='programming', index=10, subject_id=10, show=true},
     }
     for i, v in ipairs(TopicEntrencePage.subjects) do
         course = TopicEntrencePage.GetCourse(v.subject_id)
