@@ -81,6 +81,7 @@ CodePku:Property({"Name", "CodePku", "GetName", "SetName", { auto = true }})
 CodePku.Store = Store
 CodePku.MsgBox = MsgBox
 CodePku.Utils = Utils
+CodePku.BasicConfig = {}
 
 function CodePku:ctor()
 	
@@ -117,6 +118,8 @@ function CodePku:init()
 	local asset_manager = ParaEngine.GetAttributeObject():GetChild("AssetManager");
 	local asset_manifest = asset_manager:GetChild("CAssetManifest");
 	asset_manifest:SetField("LoadManifestFile", redistFolder.."assets_manifest_codepku.txt");
+
+	self:BasicConfig();
 
 	GameLogic.GetFilters():add_filter(
 			"ShowLoginModePage",
@@ -448,5 +451,14 @@ function CodePku:OnInitDesktop()
 	log("CodePku:OnInitDesktop")
 	-- UserConsole:ShowPage()
 	-- return true
+end
+
+function CodePku:BasicConfig()
+	local request = NPL.load("(gl)Mod/CodePku/api/BaseRequest.lua");
+	request:get('/config/basic',{}):next(function(response)		
+		CodePku.BasicConfig = response.data.data; 		
+    end):catch(function(e)
+        
+    end);
 end
 
