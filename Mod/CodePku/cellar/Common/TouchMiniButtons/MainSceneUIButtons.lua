@@ -40,9 +40,13 @@ MainSceneUIButtons.params={
         url="Mod/CodePku/cellar/Common/TouchMiniButtons/dialog/friend.html",
         alignment="_lt", left = -0, top = 0, width = 1004, height = 1080,zorder =20
     },
-        system_page = {
+    system_page = {
         url="Mod/CodePku/cellar/Common/TouchMiniButtons/dialog/system.html",
         alignment="_lt", left = 0, top = 0, width = 1004, height = 1080,zorder =20
+    },
+    sendmsg_page = {
+        url="Mod/CodePku/cellar/Common/TouchMiniButtons/dialog/sendmsg.html",
+        alignment="_lt", left = 0, top = 946, width = 1004, height = 150,zorder =21
     },
 }
 
@@ -71,6 +75,11 @@ function MainSceneUIButtons.show_dialog_ui(bshow, PopIndex, friendid)
             window = AdaptWindow:QuickWindow(MainSceneUIButtons.params["friend_page"])
         elseif PopIndex == MainSceneUIButtons.Channels['system'] then
             window = AdaptWindow:QuickWindow(MainSceneUIButtons.params["system_page"])
+        end
+        if not MainSceneUIButtons.SendMsgWindow then
+            if PopIndex ~= MainSceneUIButtons.Channels['system'] then
+                MainSceneUIButtons.SendMsgWindow = AdaptWindow:QuickWindow(MainSceneUIButtons.params["sendmsg_page"])
+            end
         end
         return window
     else

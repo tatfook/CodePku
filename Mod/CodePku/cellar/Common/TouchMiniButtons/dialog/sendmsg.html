@@ -1,0 +1,97 @@
+<!-- "Mod/CodePku/cellar/Common/TouchMiniButtons/dialog/sendmsg.html" -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>msg</title>
+    </head>
+    <body>
+        <pe:mcml>
+            <script refresh="false" type="text/npl" src="MainSceneUIButtons.lua">
+                <![CDATA[
+                    FriendUI = NPL.load("(gl)Mod/CodePku/cellar/GUI/Friend/FriendUI.lua");
+                    local sendable = true
+                    MainSceneUIButtons = commonlib.gettable("Mod.CodePku.Common.TouchMiniButtons.MainSceneUIButtons");
+                    CodepkuChatChannel = NPL.load("(gl)Mod/CodePku/chat/CodepkuChatChannel.lua");
+                    FRIEND_IN_CHATTING = MainSceneUIButtons.FriendId or 1
+                    MainSceneUIButtons.words = ""
+                    local channelsMap = {
+                        guild = 0,  -- 工会
+                        system = 1, -- 系统通知
+                        world = 2,  -- 世界
+                        nearby = 3, -- 附近、本地
+                        private_chat = 4, -- 私聊
+                    }
+                    FriendUI:GetFriend()
+
+                    friends = {}
+                    if FriendUI.vars["friends"] ~= nil then
+                        friends = commonlib.deepcopy(FriendUI.vars["friends"])
+                    end
+
+                    for i, v in ipairs(friends) do
+                        v.index = i
+                        if i == FRIEND_IN_CHATTING then
+                            v.status = '449 802 100 100'
+                        else
+                            v.status = '581 801 100 100'
+                        end
+                    end
+
+                    function OnClickSend()
+                        local page = document:GetPageCtrl()
+                        local words = page:GetValue("DialogContent")
+                        if not words or words == '' then
+                            return
+                        end
+                        if commonlib.utf8.len(words) > 30 then
+                            GameLogic.RunCommand("/tip -duration 1500 内容上限30个字")
+                            return 
+                        end
+                        if not sendable then
+                            GameLogic.RunCommand("/tip -duration 1500 发言太频繁，请稍后尝试")
+                            return
+                        end
+                        sendable = false
+                        local times = 2
+                        local timer = commonlib.Timer:new({
+                            callbackFunc = function(timer)
+                    
+                                if times == 0 then
+                                    sendable = true
+                                    timer:Change(nil, nil)
+                                end
+                    
+                                times = times - 1
+                            end
+                        })
+                        timer:Change(1000, 1000)
+                        -- 根据用户来源选择发送的频道
+                        local channel = tonumber(MainSceneUIButtons.page_index);
+                        if channel == channelsMap.world then
+                            -- 世界频道
+                            CodepkuChatChannel.SendWorldMsg(words)
+                        elseif channel == channelsMap.nearby then
+                            -- 本地频道
+                            CodepkuChatChannel.SendNearByMsg(words)
+                        elseif channel == channelsMap.private_chat then
+                            -- 好友频道
+                            echo("==========================================准备给好友发消息========================================")
+                            CodepkuChatChannel.SendToFriend(friends[FRIEND_IN_CHATTING],words)
+                        end
+                        page:Refresh(0)
+                        MainSceneUIButtons.page:Refresh(0)
+                    end
+                ]]>
+            </script>
+            <pe:if condition="<%= #friends ~= 0%>">
+                <div style='width: 960;height:134;'>
+                    <div style="width:608px;height:54px;float:left;background-color:#ffffff; background: url(codepku/image/textures/chat_ui/chat_32bits.png#928 663 54 54:10 10 10 10);margin-left:27px;margin-top:38px;padding-left:15px;padding-right:15px;">
+                        <input valign="center" type="text" width="100%" style='height:48px;font-size: 26px;color:#424141;background:#ffffff00' name='DialogContent'  value="<%=MainSceneUIButtons.words%>"/>
+                    </div>
+                    <div style='width:125px;height:54px;float:left;background:url(codepku/image/textures/chat_ui/chat_32bits.png#928 340 54 54:25 25 25 25);margin-top:38px;margin-left:25px; color:#F46D3D; base-font-size:30px;font-size:30px;padding-left:32;line-height:54px;' onclick="OnClickSend">发送</div>
+                </div>
+            </pe:if>
+        </pe:mcml>
+    </body>
+</html>

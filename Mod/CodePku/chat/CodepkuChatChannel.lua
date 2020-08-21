@@ -64,7 +64,6 @@ CodepkuChatChannel.worldId = nil;
 CodepkuChatChannel.client = nil;
 CodepkuChatChannel.Messages = {}
 CodepkuChatChannel.UserOnlineStatus = {}
-MainSceneUIButtons.page = {}
 
 function CodepkuChatChannel.StaticInit()
     LOG.std("", "info", "CodepkuChatChannel", "StaticInit");
@@ -273,10 +272,11 @@ function CodepkuChatChannel.OnMsg(self, msg)
         return
     end
     msg = msg.data;
+    echo('=================================friendmsg====================')
+    echo(msg)
     local speakerIsMe = if_else(msg.from_user_id == System.User.id, 1, 0)
     local avatar = msg.from_user_avatar or 'codepku/image/textures/chat/default_avatar.png'
-    local action = tonumber(msg.action);
-    local channel = tonumber(msg.channel);  
+    local action = tonumber(msg.action);  
     if (action == messageActionsMap.status) then
         -- 上线通知 下线通知
         local status = if_else(msg.status == 'ONLINE', true, false)
@@ -290,7 +290,8 @@ function CodepkuChatChannel.OnMsg(self, msg)
                 v.is_online = status
             end
         end
-    else 
+    else
+        local channel = tonumber(msg.channel);
         -- private_chat = 0 -- 私聊好友
         -- system = 1, -- 系统通知
         -- world = 2,  -- 世界
@@ -312,7 +313,7 @@ function CodepkuChatChannel.OnMsg(self, msg)
             -- todo 频道:工会
         elseif (channel == channelsMap.school) then
             -- todo 频道: 学校
-        elseif (channel == channelsMap.private_chat) then
+        elseif (channel == 0) then
             -- 私聊
             msg_data = {speakerIsMe=speakerIsMe, dialog=msg.content, avatar=avatar, nickname=msg.from_user_nickname, level=msg.from_user_level or 1, channel=msg.channel, from=msg.from_user_id, to=msg.to_user_id}
             -- table.insert( CodepkuChatChannel.Messages, msg_data)
@@ -329,19 +330,19 @@ function CodepkuChatChannel.OnMsg(self, msg)
             MainSceneUIButtons.ScrollToEnd = "true"
         end
         -- 获取用户输入的文本
-        if (MainSceneUIButtons.page and MainSceneUIButtons.page[channel]) then
-            MainSceneUIButtons.words = MainSceneUIButtons.page[channel]:GetValue("DialogContent")
-        end
-        -- MainSceneUIButtons.words = 
-        ---[[ 从聊天发送点击事件获取是否需要清空输入框
-        if MainSceneUIButtons.words_refresh then
-            MainSceneUIButtons.words = ""
-            MainSceneUIButtons.words_refresh = false
-        end
+        -- if (MainSceneUIButtons.page and MainSceneUIButtons.page[channel]) then
+        --     MainSceneUIButtons.words = MainSceneUIButtons.page[channel]:GetValue("DialogContent")
+        -- end
+        --[[ 从聊天发送点击事件获取是否需要清空输入框
+        -- if MainSceneUIButtons.words_refresh then
+        --     MainSceneUIButtons.words = ""
+        --     MainSceneUIButtons.words_refresh = false
+        -- end
         --]]
-        if MainSceneUIButtons.page[channel] then
-            MainSceneUIButtons.page[channel]:Refresh()
-        end
+        -- if MainSceneUIButtons.page[channel] then
+        --     MainSceneUIButtons.page[channel]:Refresh()
+        -- end
+        MainSceneUIButtons.page:Refresh()
     end
     -- if FriendUI.page then
     --     FriendUI.page:Refresh(0)
