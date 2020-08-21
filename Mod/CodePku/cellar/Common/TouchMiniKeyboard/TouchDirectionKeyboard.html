@@ -1,0 +1,16 @@
+<pe:mcml>
+    <script type="text/npl" refresh="false" src="TouchDirectionKeyboard.lua">
+        TouchDirectionKeyboard = commonlib.gettable("Mod.CodePku.Cellar.Common.TouchMiniKeyboard.TouchDirectionKeyboard");
+        GameLogic = commonlib.gettable("MyCompany.Aries.Game.GameLogic");
+        TouchDirectionKeyboard.Init()
+        function dummy()
+        end
+    </script>
+    <pe:container name="touch_scene" style="position:relative;background:;" alignment="_fi" width="100%" height="100%" ontouch="TouchDirectionKeyboard.OnTouchScene"/>
+
+    <pe:container name="touch_direction_keyboard" ontouch="TouchDirectionKeyboard.OnTouchMove" style="width: 260; height: 260;background:;" ClickThrough="false" alignment="_lt">
+        <div style="position: relative; width: 260; height: 260; left: 0; top: 0; background: url(codepku/image/textures/main_ui/action.png#57 52 344 344)">
+            <div name="touch_direction_keyboard_point" style="position: relative; width: 85; height: 85; left: 87; top: 87; background: url(codepku/image/textures/main_ui/action.png#476 58 165 166)"></div>
+        </div>
+    </pe:container>
+</pe:mcml>
