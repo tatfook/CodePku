@@ -393,7 +393,8 @@ function CodePku:init()
 		function (defaultUrl) 
 			local subjectId = System.Codepku and System.Codepku.Coursewares and System.Codepku.Coursewares.course_subject_id;
 			if (subjectId and tonumber(subjectId) == 10) then
-				return "Mod/CodePku/cellar/codeblock/CodeBlockWindow.html";
+				-- return defaultUrl;
+				return "Mod/CodePku/cellar/CodeBlock/CodeBlockWindow.html";
 			else
 				return defaultUrl;
 			end
