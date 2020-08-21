@@ -1,0 +1,103 @@
+<!-- "script/apps/Aries/Creator/Game/Areas/BreakDown.html" -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+</head>
+<body>
+<pe:mcml>
+<script refresh="false" type="text/npl"><![CDATA[
+MainStorePage = NPL.load("(gl)Mod/CodePku/cellar/GUI/MainStore/MainStore.lua");
+cur_item = MainStorePage.cur_item
+menu = MainStorePage.menu
+
+function ClosePage()
+    Page:CloseWindow()
+end
+
+function Buy()
+    MainStorePage.mainWindow:Refresh(0)
+    ClosePage()
+end
+
+function GetMoney()
+    local info = Mod.CodePku.Store:Get('user/info');
+    local wallets = info.user_wallets or {};
+    local money = {goldcoin=0, wanxuecoin=0};
+    for _, v in ipairs(wallets) do
+        if v.currency_id == 1 then
+            money.goldcoin = v.amount;
+        elseif v.currency_id == 2 then
+            money.wanxuecoin = v.amount;
+        end
+    end
+    return money;
+end
+
+function ifAfford()
+    money = GetMoney()
+    if cur_item["coinType"] == 1 then
+        GameLogic.AddBBS(nil, string.format('%s %s',money.goldcoin,cur_item["price"]), 1000, "255 0 0")
+        return money.goldcoin >= cur_item["price"] 
+    elseif cur_item["coinType"] == 2 then
+        GameLogic.AddBBS(nil, string.format('%s %s',money.wanxuecoin,cur_item["price"]), 1000, "255 0 0")
+        return money.wanxuecoin >= cur_item["price"]
+    end
+
+    return false
+end
+
+if_afford = ifAfford()
+
+]]></script>
+<style type="text/mcss">
+
+</style>
+<pe:container alignment="_ct" width="1920" height="1080">
+    <div style="position: relative;left: 460px;top: 140px;width: 1000px;height: 800px; background:url(codepku/image/textures/store/buy.png);">
+        <div style="position: relative;left: 295px;top: 1px;width: 410px;height: 88px; color: #F36D3D;font-size: 45px;text-align: center;line-height: 88px;font-family:Noto Sans S Chinese Regular;font-weight: Medium;background:url(codepku/image/textures/store/common_32bits.png#2 384 434 88);">购买物品</div>
+        <div style='position: relative; width: 64px; height: 74px; left: 903px; top: 5px; background:url(codepku/image/textures/common_32bits.png#110 73 67 78);' onclick="ClosePage"></div>
+
+        <div style="position: relative;left: 75px;top: 146px;width: 360px;height: 336px; background:url(codepku/image/textures/store/common_32bits.png#12 9 369 345);">
+            <div style='<%= string.format("position: relative;left: 94px;top: 78px;width: 174px;height: 228px; background:url(%s);",cur_item["imgUrl"]) %>'></div>
+        </div>
+
+        <div style="position: relative;left: 506px;top: 173px;color: #FEFEFF;font-size: 36px;text-align: left;line-height: 36px;font-family:Noto Sans S Chinese Regular;font-weight: bold;">
+            <div style="margin-bottom: 46px;">名称：<%= cur_item["name"] %></div>
+            <div style="margin-bottom: 46px;">类型：<%= menu[cur_item["itemType"]]["name"] %></div>
+            <div style="margin-bottom: 46px;">数量：<%= cur_item["num"] %></div>
+            <div>
+                <div style="float:left;">价格：</div>
+                <pe:if condition='<%= cur_item["coinType"] == 1 %>'>
+                    <div style="float:left;width: 45px; height: 44px;margin-top: -2px;background: url(codepku/image/textures/common_32bits.png#913 41 73 71);"></div>
+                </pe:if>
+                <pe:if condition='<%= cur_item["coinType"] == 2 %>'>
+                    <div style="float:left;width: 45px; height: 44px;margin-top: -2px;background: url(codepku/image/textures/common_32bits.png#913 136 77 78);"></div>
+                </pe:if>
+                <div style="float:left;margin-left: 15px;"><%= cur_item["price"] %></div>
+            </div>
+        </div>
+
+        <div style="position: relative;left: 73px;top: 521px;width: 855px;height: 139px;color: #FEFEFF;font-size: 30px;font-family:Noto Sans S Chinese Regular;font-weight: Regular;background: url(codepku/image/textures/store/common_32bits.png#890 20 80 80:10 10 10 10 );">
+            <div style="position: relative;left: 28px;top: 23px;width: 797px;height: 78px;line-height: 48px;"><%= cur_item["desc"] %></div>
+        </div>
+
+        <pe:if condition='<%= if_afford %>'>
+            <div onclick="Buy" style="position: relative;left: 380px;top: 687px;width: 240px;height: 80px;text-align: center;line-height: 80px;color: #0E5516;font-size: 36px;font-family:Noto Sans S Chinese Regular;font-weight: bold;background: url(codepku/image/textures/store/common_32bits.png#784 16 86 87:10 10 10 10 );" >
+                购买
+            </div>
+        </pe:if> 
+
+        <pe:if condition='<%= not if_afford %>'>
+            <div style="position: relative;left: 380px;top: 687px;width: 240px;height: 80px;text-align: center;line-height: 80px;color: #686695;font-size: 36px;font-family:Noto Sans S Chinese Regular;font-weight: bold;background: url(codepku/image/textures/store/common_32bits.png#673 16 86 87:10 10 10 10 );" >
+                购买
+            </div>        
+        </pe:if> 
+
+
+    </div>
+</pe:container>
+</pe:mcml>
+</body>
+</html>

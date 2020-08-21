@@ -1,0 +1,38 @@
+<!-- "script/apps/Aries/Creator/Game/Areas/BreakDown.html" -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+</head>
+<body>
+<pe:mcml>
+<script refresh="false" type="text/npl"><![CDATA[
+MainStorePage = NPL.load("(gl)Mod/CodePku/cellar/GUI/MainStore/MainStore.lua");
+    
+function ClosePage()
+    local subWindow = MainStorePage.subWindow
+    if subWindow then subWindow:CloseWindow() end
+    Page:CloseWindow()
+end
+]]></script>
+<style type="text/mcss">
+
+</style>
+<pe:container alignment="_lt" width="1920" height="1080" style="background:url(codepku/image/textures/background/main.png);">
+    <!-- 金币 -->
+    <iframe src="Mod/CodePku/cellar/GUI/Money.html"></iframe>
+
+    <!-- 左侧竖蓝条 -->
+    <div style="position: relative; width: 230px; height: 1080px; background-color: #93E3FD;"></div>
+
+    <div style='position: relative; width:191px; height:113px; background:url(codepku/image/textures/common_32bits.png#251 49 191 113);' onclick="ClosePage"></div>
+    <div style="position: relative; width:417px; height:86px; margin-left: 144px; base-font-size:70px; font-size:65px; line-height: 86px;color: #D85D0B; font-family:PuHuiTi-Bold; padding-left: 136px; padding-top: 6px; background:url(codepku/image/textures/common_32bits.png#475 63 429 86);">商店</div>
+
+    <div style="position: relative; width: 1550px; height: 874px; left: 326px;top: 147px; background: url(codepku/image/textures/store/background.png);"></div>
+
+    <div style="position: relative; width: 1524px; height: 816px; left: 339px;top: 176px; background: url(codepku/image/textures/store/common_32bits.png#680 122 80 80:18 18 18 18);"></div>
+</pe:container>
+</pe:mcml>
+</body>
+</html>
