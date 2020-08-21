@@ -393,20 +393,15 @@ function CodePku:init()
 	)
 
 	-- 重写加载世界页面
-	Map3DSystem.App.MiniGames.SwfLoadingBarPage.url = "Mod/CodePKu/cellar/World/SwfLoadingBarPage.mc.html"
+	Map3DSystem.App.MiniGames.SwfLoadingBarPage.url = "Mod/CodePku/cellar/World/SwfLoadingBarPage.mc.html"
 
 	local guiHelperDefaultTemplate = "Mod/CodePku/cellar/GUI/DefaultMessageBox.html"
 	_guihelper.SetDefaultMsgBoxMCMLTemplate(guiHelperDefaultTemplate)
 	-- prevent indulage
 	PreventIndulge:Init()
 
-	local Online = commonlib.gettable("Mod.CodePku.Online")
-	Online:Init()
-
-	-- debug fatal error
-	-- local WebSocketClient = NPL.load("(gl)Mod/CodePku/chat/WebSocketClient.lua");
-	-- echo("websocket ============")
-	-- echo(WebSocketClient)
+	local Online = commonlib.gettable("Mod.CodePku.Online");
+    Online:Init();   
 
 	local CodepkuChatChannel = NPL.load("(gl)Mod/CodePku/chat/CodepkuChatChannel.lua")
 	CodepkuChatChannel.StaticInit()
@@ -425,11 +420,49 @@ function CodePku:init()
 				(System.Codepku.Coursewares.category == 1 or System.Codepku.Coursewares.category == 2 or
 					System.Codepku.Coursewares.category == 7))
 		end
+	);
+	GameLogic.GetFilters():add_filter(
+		"CodeBlockUIUrl",
+		function (defaultUrl) 
+			local subjectId = System.Codepku and System.Codepku.Coursewares and System.Codepku.Coursewares.course_subject_id;
+			if (subjectId and tonumber(subjectId) == 10) then
+				return "Mod/CodePku/cellar/codeblock/CodeBlockWindow.html";
+			else
+				return defaultUrl;
+			end
+		end
+	)
+	GameLogic.GetFilters():add_filter(
+		"CodeBlockEditorOpened",
+		function (CodeBlockWindow, entity) 
+			local subjectId = System.Codepku and System.Codepku.Coursewares and System.Codepku.Coursewares.course_subject_id;
+			if (subjectId and tonumber(subjectId) == 10) then
+				-- CodeBlockWindow.OpenBlocklyEditor();		
+			end
+		end
+	)
+
+	GameLogic.GetFilters():add_filter(
+		"CustomCodeBlockClicked",
+		function (default, entityCode, mouse_button, entity)
+			local subjectId = System.Codepku and System.Codepku.Coursewares and System.Codepku.Coursewares.course_subject_id;
+			if (subjectId and tonumber(subjectId) == 10 and mouse_button == "right") then
+				entityCode:OpenEditor("entity", entity);	
+				return true;
+			end
+
+			return default;	
+		end
 	)
 
 	GameLogic.GetFilters():add_filter(
 		"KeyPressEvent",
 		function(callbackVal, event)
+			local isEmployee = System.User and System.User.info and System.User.info.is_employee;
+			if isEmployee then
+				return true;
+			end
+
 			if event.keyname == "DIK_F5" then
 				event:accept()
 			elseif event.keyname == "DIK_B" then
@@ -461,7 +494,9 @@ function CodePku:init()
 			elseif event.keyname == "DIK_DELETE" or event.keyname == "DIK_BACKSPACE" or event.keyname == "DIK_DECIMAL" then
 				event:accept()
 			elseif event.keyname == "DIK_F12" then
-				event:accept()
+				event:accept();
+			elseif event.keyname == 'DIK_RETURN' then
+				event:accept();
 			end
 
 			return true
@@ -474,9 +509,7 @@ end
 -- called when a new world is loaded.
 
 function CodePku:OnWorldLoad()
-	NPL.load("(gl)Mod/CodePku/cellar/Common/TouchMiniKeyboard/TouchDirectionKeyboard.lua");
-	local TouchDirectionKeyboard = commonlib.gettable("Mod.CodePku.Cellar.Common.TouchMiniKeyboard.TouchDirectionKeyboard");
-	TouchDirectionKeyboard.Show(true);
+	
 
 --	NPL.load("(gl)script/apps/Aries/Creator/Game/GUI/TouchController.lua");
 --	local TouchController = commonlib.gettable("MyCompany.Aries.Game.GUI.TouchController");

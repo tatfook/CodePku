@@ -83,8 +83,10 @@ function RankPage:ShowPage(PageIndex, bShow)
     RankPage.pi = PageIndex
     PageIndex = tonumber(PageIndex)
     if PageIndex == 1 then
+        RankPage.userinfo, RankPage.myinfo = RankPage.GetSubjectItem(1, 1)
         RankPage.ui = AdaptWindow:QuickWindow(RankPage.params["subject"])
     elseif PageIndex == 2 then
+        RankPage.userinfo, RankPage.myinfo = RankPage.GetGameItem('parkour', 1)
         RankPage.ui = AdaptWindow:QuickWindow(RankPage.params["game"])
     end
 end
