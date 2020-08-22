@@ -406,6 +406,10 @@ function CodePku:init()
 	local CodepkuChatChannel = NPL.load("(gl)Mod/CodePku/chat/CodepkuChatChannel.lua")
 	CodepkuChatChannel.StaticInit()
 
+	NPL.load("(gl)Mod/CodePku/cellar/GUI/CourseLoadTips/CourseLoadTips.lua");
+	local CourseLoadTips = commonlib.gettable("Mod.CodePku.GUI.CourseLoadTips")
+	CourseLoadTips.StaticInit();
+
 	GameLogic.GetFilters():add_filter(
 		"DesktopMenuPage.ShowPage",
 		function(bShow)
