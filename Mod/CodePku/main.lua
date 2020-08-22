@@ -426,8 +426,8 @@ function CodePku:init()
 	GameLogic.GetFilters():add_filter(
 		"KeyPressEvent",
 		function(callbackVal, event)
-			local isEmployee = System.User and System.User.info and System.User.info.is_employee;
-			if isEmployee then
+			local isEmployee = System.User and System.User.info and System.User.info.is_employee;		
+			if isEmployee and tonumber(isEmployee) == 1 then
 				return true;
 			end
 
