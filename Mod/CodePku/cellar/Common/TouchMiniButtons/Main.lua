@@ -81,9 +81,20 @@ function MainUIButtons.show_dialog_ui(bshow)
 	MainUIButtons.dialog_window = MainSceneUIButtons.show_dialog_ui(bshow, 0)
 end
 
+MainUIButtons.money = {goldcoin=0, wanxuecoin=0};
 function MainUIButtons.show_money_ui()
 	local width = 746
 	local height = 89
+
+	local info = Mod.CodePku.Store:Get('user/info');
+	local wallets = info.user_wallets or {};
+	for _, v in ipairs(wallets) do
+		if v.currency_id == 1 then
+			MainUIButtons.money.goldcoin = v.amount;
+		elseif v.currency_id == 2 then
+			MainUIButtons.money.wanxuecoin = v.amount;
+		end
+	end
 
 	params = {
 		url="Mod/CodePku/cellar/Common/TouchMiniButtons/MainMoney.html", 

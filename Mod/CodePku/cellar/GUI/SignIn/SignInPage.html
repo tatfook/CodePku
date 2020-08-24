@@ -10,7 +10,7 @@
 <pe:mcml>
 <script refresh="false" type="text/npl" src="SignInPage.lua"><![CDATA[
     SignInPage = commonlib.gettable("Mod.CodePku.GUI.SignInPage")
-
+    local MainUIButtons = NPL.load("(gl)Mod/CodePku/cellar/Common/TouchMiniButtons/Main.lua");
     day = tonumber(SignInPage.day)
     function ClosePage()
         Page:CloseWindow()
@@ -19,24 +19,57 @@
     function ClickSignIn(name)
         local name = tonumber(name)
         local message = nil
+        local info = Mod.CodePku.Store:Get('user/info')
+        local wallets = info.user_wallets or {}
+        for _, v in ipairs(wallets) do
+            if v.currency_id == 1 and SignInPage.signin_data[name].prop_id == 1 then
+                v.amount = v.amount + SignInPage.signin_data[name].prop_num
+            elseif v.currency_id == 2 and SignInPage.signin_data[name].prop_id == 2 then
+                v.amount = v.amount + SignInPage.signin_data[name].prop_num
+            end
+        end
+        Mod.CodePku.Store:Set('user/info', info)
         if name == day then
             message = SignInPage:SetSignin()
             SignInPage:GetSigninData(SignInPage.year.."-"..SignInPage.month)
+            SignInPage:GetDayAward(SignInPage.year.."-"..SignInPage.month)
             SignInPage.supplement_card = SignInPage:GetSupplementCard()
             GameLogic.AddBBS(nil, message, 3000, "255 0 0", 21);
         elseif name < day and SignInPage.signin_data[name].state == 0 then
             message = SignInPage:retroactive(SignInPage.year.."-"..SignInPage.month.."-"..tostring(name))
             SignInPage:GetSigninData(SignInPage.year.."-"..SignInPage.month)
+            SignInPage:GetDayAward(SignInPage.year.."-"..SignInPage.month)
             SignInPage.supplement_card = SignInPage:GetSupplementCard()
             GameLogic.AddBBS(nil, message, 3000, "255 0 0", 21);
         end
+        Refresh()
         Page:Refresh(0)
     end
 
+    function Refresh()
+        if MainUIButtons.money_window ~= nil then
+            MainUIButtons.money_window:CloseWindow()
+            MainUIButtons.money_window = nil
+        end
+		MainUIButtons.show_money_ui()	
+    end
+
     function GetAward()
-        local message = SignInPage:GetAward()
+        local info = Mod.CodePku.Store:Get('user/info')
+        local wallets = info.user_wallets or {}
+        for _, v in ipairs(wallets) do
+            if v.currency_id == 1 and SignInPage.total_award[1].prop_id == 1 then
+                v.amount = v.amount +SignInPage.total_award[1].prop_num
+            elseif v.currency_id == 2 and SignInPage.total_award[1].prop_id == 2 then
+                v.amount = v.amount + SignInPage.total_award[1].prop_num
+            end
+        end
+        Mod.CodePku.Store:Set('user/info', info)
+        local message = SignInPage:SetAward()
         SignInPage:GetSigninData(SignInPage.year.."-"..SignInPage.month)
+        SignInPage:GetDayAward(SignInPage.year.."-"..SignInPage.month)
         GameLogic.AddBBS(nil, message, 3000, "255 0 0", 21);
+        Refresh()
         Page:Refresh(0)
     end
 
@@ -51,6 +84,7 @@
             SignInPage.year = year
             SignInPage.month = month
             SignInPage:GetSigninData(SignInPage.year.."-"..SignInPage.month)
+            SignInPage:GetDayAward(SignInPage.year.."-"..SignInPage.month)
             SignInPage.supplement_card = SignInPage:GetSupplementCard()
             Page:Refresh(0)
         end
@@ -79,6 +113,8 @@
         </div>
         
         <div style="position: relative; width: 151; height: 160; left: 1513; top: 14; background: url(codepku/image/textures/signin/signin_32bits.png#185 19 151 160);">
+            <div style="<%=format('position: relative; width: 60; height: 60; left: 40; top: 27; background: url(codepku/image/textures/signin/signin_32bits.png#%s)', SignInPage.award_item[SignInPage.total_award[1].prop_id].img)%>"></div>
+                <div style="position: relative; width: 151; height: 25; top: 72; padding-right: 7; text-align: right; color: #FFFFFF; font-size: 32; font-family: Noto Sans S Chinese Regular;"><%='x'..SignInPage.total_award[1].prop_num%></div>
             <pe:if condition="<%=SignInPage.signin_total_day &lt; 28%>">
                 <div style="color: #686695; width:143; height:49; margin-left:4; margin-top:107; background: url(codepku/image/textures/signin/signin_32bits.png#79 198 41 40:15 15 15 15); text-align: center; line-height:49;">领取</div>
             </pe:if>
@@ -92,8 +128,10 @@
     </div>
     <pe:repeat DataSource='<%=SignInPage.signin_data%>'>
         <pe:repeatitem>
-            <pe:if condition="<%= SignInPage.month == os.date('%m') and SignInPage.year == os.date('%Y') and day ~= Eval('date')%>">
-                <div style="<%=format('position: relative; width: 151; height: 160; left: %d; top: %d; background: url(codepku/image/textures/signin/signin_32bits.png#185 19 151 160);', (Eval('index')-1)%10*166+24, math.floor((Eval('index')-1)/10)*187+319)%>">
+            <div style="<%=format('position: relative; width: 151; height: 160; left: %d; top: %d; background: url(codepku/image/textures/signin/signin_32bits.png#185 19 151 160);', (Eval('index')-1)%10*166+24, math.floor((Eval('index')-1)/10)*187+319)%>">
+                <div style="<%=format('position: relative; width: 60; height: 60; left: 40; top: 27; background: url(codepku/image/textures/signin/signin_32bits.png#%s)', SignInPage.award_item[Eval('prop_id')].img)%>"></div>
+                <div style="position: relative; width: 151; height: 25; top: 72; padding-right: 7; text-align: right; color: #FFFFFF; font-size: 32; font-family: Noto Sans S Chinese Regular;"><%='x'..Eval('prop_num')%></div>
+                <pe:if condition="<%= SignInPage.month == os.date('%m') and SignInPage.year == os.date('%Y') and day ~= Eval('date')%>">
                     <pe:if condition="<%= Eval('state') == 0 and Eval('date') &lt; day %>">
                         <div onclick="ClickSignIn" name="<%=Eval('date')%>" style="color: #238E2D; width:143; height:49; margin-left:4; margin-top:107; background: url(codepku/image/textures/signin/signin_32bits.png#181 198 41 40:15 15 15 15); font-family: Noto Sans S Chinese Regular; font-size:28px; text-align: center; line-height:49;">补签</div>
                     </pe:if>
@@ -105,10 +143,8 @@
                     <pe:if condition="<%= Eval('state') == 0 and Eval('date') &gt; day%>">
                         <div style="color: #FFFFFF; width:143; height:49; margin-left:4; margin-top:107; background: url(codepku/image/textures/signin/signin_32bits.png#129 198 41 40:15 15 15 15); font-family: Noto Sans S Chinese Regular; font-size:28px; text-align:center; line-height:49;"><%='第'..Eval('index')..'天'%></div>
                     </pe:if>
-                </div>
-            </pe:if>
-            <pe:if condition="<%= day == Eval('date') and SignInPage.month == os.date('%m') and SignInPage.year == os.date('%Y')%>">
-                <div style="<%=format('position: relative; width: 151; height: 160; left: %d; top: %d; background: url(codepku/image/textures/signin/signin_32bits.png#26 19 151 160);', (Eval('index')-1)%10*166+24, math.floor((Eval('index')-1)/10)*187+319)%>">
+                </pe:if>
+                <pe:if condition="<%= day == Eval('date') and SignInPage.month == os.date('%m') and SignInPage.year == os.date('%Y')%>">
                     <pe:if condition="<%= Eval('state') == 0%>">
                         <div onclick="ClickSignIn" name="<%=Eval('index')%>" style="color: #B35D0A; width:143; height:49; margin-left:4; margin-top:107; background: url(codepku/image/textures/signin/signin_32bits.png#230 198 41 40:15 15 15 15); font-family: Noto Sans S Chinese Regular; font-size:28px; text-align: center; line-height:49;">领取</div>
                     </pe:if>
@@ -117,10 +153,8 @@
                         <div style="position: relative; width: 143; height: 156; margin-left: 4; background: url(codepku/image/textures/signin/signin_32bits.png#30 198 41 40:10 10 10 10);"></div>
                         <div style="position: relative; width: 67; height: 57; left: 38; top: 50; background: url(codepku/image/textures/signin/signin_32bits.png#375 104 67 57);"></div>
                     </pe:if>
-                </div>
-            </pe:if>
-            <pe:if condition="<%= SignInPage.month ~= os.date('%m') or SignInPage.year ~= os.date('%Y')%>">
-                <div style="<%=format('position: relative; width: 151; height: 160; left: %d; top: %d; background: url(codepku/image/textures/signin/signin_32bits.png#185 19 151 160);', (Eval('index')-1)%10*166+24, math.floor((Eval('index')-1)/10)*187+319)%>">
+                </pe:if>
+                <pe:if condition="<%= SignInPage.month ~= os.date('%m') or SignInPage.year ~= os.date('%Y')%>">
                     <pe:if condition="<%= Eval('state') == 0%>">
                         <div onclick="ClickSignIn" name="<%=Eval('date')%>" style="color: #238E2D; width:143; height:49; margin-left:4; margin-top:107; background: url(codepku/image/textures/signin/signin_32bits.png#181 198 41 40:15 15 15 15); font-family: Noto Sans S Chinese Regular; font-size:28px; text-align: center; line-height:49;">补签</div>
                     </pe:if>
@@ -129,8 +163,8 @@
                         <div style="position: relative; width: 143; height: 156; margin-left: 4; background: url(codepku/image/textures/signin/signin_32bits.png#30 198 41 40:10 10 10 10);"></div>
                         <div style="position: relative; width: 67; height: 57; left: 38; top: 50; background: url(codepku/image/textures/signin/signin_32bits.png#375 104 67 57);"></div>
                     </pe:if>
-                </div>
-            </pe:if>
+                </pe:if>
+            </div>
         </pe:repeatitem>
     </pe:repeat >
 </pe:container>
