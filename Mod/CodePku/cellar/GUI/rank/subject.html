@@ -22,7 +22,10 @@ RankPage.left_navig = {
 RankPage.subjects_navig = {
     [1] = {title = "语 文", name = 'chinese', index = 1},
     [2] = {title = "数 学", name = "math", index = 2},
-    [3] = {title = "外 语", name = "english", index = 3}
+    [3] = {title = "英 语", name = "english", index = 3},
+    [4] = {title = "科 学", name = "science", index = 13},
+    [5] = {title = "编 程", name = "programming", index = 10},
+    [6] = {title = "文 史", name = "literature_history", index = 12},
 }
 RankPage.top_navig = {
     [1] = {title = "世 界", name = "world", index = 1},
@@ -63,7 +66,7 @@ end
 function ClickedLeftNavigIndex(name)
     for k,v in pairs(RankPage.subjects_navig) do
         if v.name == name then
-            RankPage.left_navig_last_clicked = k
+            RankPage.left_navig_last_clicked = v.index
         end
     end
     RankPage.userinfo, RankPage.myinfo = RankPage.GetSubjectItem(RankPage.left_navig_last_clicked, RankPage.top_navig_clicked_index)
@@ -99,6 +102,9 @@ function GetPosition()
     elseif RankPage.left_navig_last_clicked == 2 then
         return '1436 274 130 120'
     elseif RankPage.left_navig_last_clicked == 3 then
+        return '959 273 130 120'
+    else
+        -- todo 新学科图标
         return '959 273 130 120'
     end
 end
