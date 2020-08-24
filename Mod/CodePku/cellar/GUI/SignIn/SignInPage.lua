@@ -56,7 +56,7 @@ function SignInPage:SetSignin()
     local response = request:post('/sign-in', {},{sync = true})
     if response.data.code == 400 then
         return response.data.message
-    elseif response.data.code == 200 and #response.data.data == 1 then
+    elseif response.data.code == 200 then
         return L"签到成功"
     end
 end

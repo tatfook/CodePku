@@ -25,6 +25,10 @@
             SignInPage:GetDayAward(SignInPage.year.."-"..SignInPage.month)
             SignInPage.supplement_card = SignInPage:GetSupplementCard()
             GameLogic.AddBBS(nil, message, 3000, "255 0 0", 21);
+            echo(type(message))
+            echo(message)
+            echo(type(L"签到成功"))
+            echo(message == L"签到成功")
             if message == L"签到成功" then
                 RefreshMoney(SignInPage.signin_data[name].prop_id, SignInPage.signin_data[name].prop_num)
             end
@@ -42,13 +46,19 @@
     end
 
     function RefreshMoney(id, num)
+        id = tonumber(id)
+        num = tonumber(num)
         local info = Mod.CodePku.Store:Get('user/info')
         local wallets = info.user_wallets or {}
-        for _, v in ipairs(wallets) do
-            if v.currency_id == 1 and id == 1 then
-                v.amount = v.amount + num
-            elseif v.currency_id == 2 and id == 2 then
-                v.amount = v.amount + num
+        if #wallets == 0 then
+            table.insert(wallets,{currency_id = id, amount = num})
+        else
+            for _, v in ipairs(wallets) do
+                if v.currency_id == 1 and id == 1 then
+                    v.amount = v.amount + num
+                elseif v.currency_id == 2 and id == 2 then
+                    v.amount = v.amount + num
+                end
             end
         end
         Mod.CodePku.Store:Set('user/info', info)
