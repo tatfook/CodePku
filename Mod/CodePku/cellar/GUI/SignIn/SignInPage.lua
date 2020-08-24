@@ -10,6 +10,7 @@ SignInPage.signin_total_day = nil
 SignInPage.year = nil
 SignInPage.month = nil
 SignInPage.day = nil
+SignInPage.full_attendance = nil
 SignInPage.gain_total_award = nil
 SignInPage.total_award = {}
 
@@ -42,6 +43,7 @@ function SignInPage:GetSigninData(month)
     if response.data.code == 200 then
         local data = response.data.data.lists
         SignInPage.signin_total_day = response.data.data.sign_count or 0
+        SignInPage.full_attendance = response.data.data.full_attendance or false
         SignInPage.gain_total_award = response.data.data.full_attendance_award or false
         for i = 1, #data do
             local day = tonumber(string.sub(data[i].sign_date, 9))
@@ -62,7 +64,7 @@ end
 function SignInPage:retroactive(date)
     local response = request:post('/sign-in/retroactive', {sign_date = date},{sync = true})
     if response.data.code == 200 then
-        return L"签到成功"
+        return L"补签成功"
     else
         return response.data.message
     end
@@ -70,7 +72,11 @@ end
 
 function SignInPage:SetAward()
     local response = request:get('/user-props/full-attendance-award', nil,{sync = true})
-    return response.data.message
+    if response.data.code == 200 then
+        return L"领取成功"
+    else
+        return response.data.message
+    end
 end
 
 function SignInPage:GetDayAward(month)
