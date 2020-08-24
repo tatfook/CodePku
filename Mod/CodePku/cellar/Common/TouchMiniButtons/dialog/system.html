@@ -12,7 +12,6 @@
 MainSceneUIButtons = commonlib.gettable("Mod.CodePku.Common.TouchMiniButtons.MainSceneUIButtons");
 DialogMessages = commonlib.gettable("Mod.CodePku.Common.MainUIButtons.DialogMessages")
 CodepkuChatChannel = NPL.load("(gl)Mod/CodePku/chat/CodepkuChatChannel.lua");
-FriendUI = NPL.load("(gl)Mod/CodePku/cellar/GUI/Friend/FriendUI.lua");
 local request = NPL.load("(gl)Mod/CodePku/api/BaseRequest.lua");
 Channels = MainSceneUIButtons.Channels
 
@@ -24,16 +23,7 @@ local sendable = true
 DEFAULT_AVATAR = 'codepku/image/textures/chat/default_avatar.png'
 frindNow = MainSceneUIButtons.FriendId
 
-friends = commonlib.deepcopy(FriendUI.vars["friends"])
-for i, v in ipairs(friends) do
-    v.index = i
-    if i == 1 then
-        FRIEND_IN_CHATTING = i
-        v.status = '449 802 100 100'
-    else
-        v.status = '581 801 100 100'
-    end
-end
+
 
 function OnClose()
     Page:CloseWindow()
@@ -43,7 +33,7 @@ end
 function OnClickChannel(index)
     if index ~= Channels['system'] then
         Page:CloseWindow()
-        MainSceneUIButtons.show_dialog_ui(true, index, frindNow)
+        MainSceneUIButtons.show_dialog_ui(true, index)
     end
 end
 

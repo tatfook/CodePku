@@ -48,6 +48,8 @@ MainSceneUIButtons.params={
 
 
 MainSceneUIButtons.FriendId = nil
+MainSceneUIButtons.Dialog_page = nil
+
 
 function MainSceneUIButtons.show_dialog_ui(bshow, PopIndex, friendid)
     FriendUI:GetFriend()
@@ -79,6 +81,7 @@ function MainSceneUIButtons.show_dialog_ui(bshow, PopIndex, friendid)
             alignment="_lb", left = 0, top = -136, width = 139, height = 136,
         }
         local window = AdaptWindow:QuickWindow(params)
+        MainSceneUIButtons.Dialog_page = window
         return window
     end
 end

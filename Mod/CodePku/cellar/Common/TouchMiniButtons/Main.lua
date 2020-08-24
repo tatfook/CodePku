@@ -124,6 +124,7 @@ function MainUIButtons.ShowPage()
 			MainUIButtons.show_function_ui()
 		else
 			MainUIButtons.show_common_ui()
+			if MainSceneUIButtons.Dialog_page then MainSceneUIButtons.Dialog_page:CloseWindow() end
 		end
 	end
 end
