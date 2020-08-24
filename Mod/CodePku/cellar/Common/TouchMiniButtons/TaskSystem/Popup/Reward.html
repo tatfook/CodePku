@@ -1,0 +1,104 @@
+<!-- "Mod/CodePku/cellar/Gui/FriendUI/MyFriend.html" -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+</head>
+
+<body>
+<pe:mcml>
+<script refresh="false" type="text/npl" src="FriendUI.lua">
+<![CDATA[
+
+TaskSystem = NPL.load("(gl)Mod/CodePku/cellar/Common/TouchMiniButtons/TaskSystem/TaskSystem.lua")
+
+task_table = TaskSystem.task_table  --任务表
+
+reward_table = TaskSystem.reward_table -- 奖励表
+
+acquire_flag = TaskSystem.acquire_flag
+
+nowReward = TaskSystem.nowReward
+
+function ClosePage()
+    Page:CloseWindow();
+end
+
+rewardNum_table = {{1},{2},{3}}
+
+function getText()
+    if(acquire_flag == 1)then
+        return "领取"
+    else
+        return "确认"
+    end
+end
+
+function getBG()
+    if(acquire_flag == 1)then
+        return "694 582 207 87:15 15 15 15"
+    else
+        return "694 450 207 87:15 15 15 15"
+    end
+end
+
+function getRewardNum()
+    return nowReward["info"]
+end
+
+function handleReward()
+    if(acquire_flag == 1) then    -- 如果奖励未领取且可领取
+        nowReward["acquired"] = 1
+        TaskSystem.Page:Refresh(0)
+    end
+    ClosePage()
+end
+
+reward_marginLeft = {"376", "293", "209", "115", "32"}
+
+function getMarginLeft()
+    local rewardInfo = nowReward["info"]
+    local length = #rewardInfo
+    echo("============="..reward_marginLeft[length])
+    return reward_marginLeft[length]
+end
+
+]]>
+</script>
+
+<pe:container alignment="_lt" width="1920" height="1080" >
+
+    <div style="position: relative; width: 952; height: 528; left: 504; top: 278; background: url(codepku/image/textures/tasksystem/reward_bg.png);"></div>
+
+    <!-- <div style="position: relative; width: 1158; height: 588; left: 406; top: 219; background:url(codepku/image/textures/commonpopup/main.png#99 275 1158 588);"></div> -->
+
+    <div style="position: relative; width: 410; height: 89; left: 755; top: 283; font-size: 70; color: #F46D3D; font-family: Noto Sans S Chinese Regular; text-align: center; line-height: 89; background: url(codepku/image/textures/common_32bits.png#1277 377 410 87);">
+        奖励信息
+    </div>
+
+    <div style="position: relative; width: 66; height: 76; left: 1335; top: 287; background: url(codepku/image/textures/tasksystem/main.png#897 111 64 74);" onclick="ClosePage"></div>
+
+    <div style="position: relative; width: 952; height: 134; left: 504; top: 460;">
+
+        <div style="<%=format('float:left; width: 1; height: 134; margin-left: %s;)', getMarginLeft())%>"></div>
+
+
+        <div style="float: left;">
+            <pe:repeat DataSource="<%=getRewardNum()%>">
+                <div style="width: 134; height: 134; margin-left: 33; float: left; background-color: #aa23aa;">
+                    <div style="width: 40; margin-left: 72; margin-top: 107;  text-align: center; font-size: 18; color: #7996ED; font-family: Noto Sans S Chinese Regular;">1111</div>
+                </div>  
+            </pe:repeat>
+        </div>
+        
+    </div>
+
+    <div style="<%=format('position: relative; width: 200; height: 80; left: 882; top: 660; color: #FEFEFE; line-height: 80; text-align: center; font-size: 36; font-family: Noto Sans S Chinese Regular; font-weight: bold; background: url(codepku/image/textures/tasksystem/main.png#%s);', getBG())%>" onclick="handleReward"><%=getText()%></div>
+    
+</pe:container>
+</pe:mcml>
+</body>
+
+</html>
