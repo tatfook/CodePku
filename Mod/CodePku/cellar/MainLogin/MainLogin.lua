@@ -52,43 +52,23 @@ function MainLogin:Show(index)
                     if PWDInfo and PWDInfo.account then
                         SessionsData:RemoveSession(PWDInfo.account)
                     end
-
                     local params = {url = "Mod/CodePku/cellar/MainLogin/MainLogin.html", 
-                                name = "MainLogin", 
-                                isShowTitleBar = false,
-                                DestroyOnClose = true,
-                                allowDrag = false,
-                                enable_esc_key = true,
-                                -- bShow = bShow,
-                                click_through = false, 
-                                zorder = 20,
-                                directPosition = true,
-                                alignment = "_ct",
-                                x = -1920/2,
-                                y = -1080/2,
-                                width = 1920,
-                                height = 1080
-                            }
-
-
+                        name = "MainLogin", 
+                        isShowTitleBar = false,
+                        DestroyOnClose = true,
+                        allowDrag = false,
+                        enable_esc_key = true,
+                        -- bShow = bShow,
+                        click_through = false, 
+                        zorder = 20,
+                        directPosition = true,
+                        alignment = "_ct",
+                        x = -1920/2,
+                        y = -1080/2,
+                        width = 1920,
+                        height = 1080
+                    }
                     MainLogin.MainLoginPage = AdaptWindow:QuickWindow(params)
-
-                    -- Mod.CodePku.Utils.ShowWindow({
-                    --     url = "Mod/CodePku/cellar/MainLogin/MainLogin.html", 
-                    --     name = "MainLogin", 
-                    --     isShowTitleBar = false,
-                    --     DestroyOnClose = true, -- prevent many ViewProfile pages staying in memory
-                    --     style = CommonCtrl.WindowFrame.ContainerStyle,
-                    --     zorder = -1,
-                    --     allowDrag = false,
-                    --     directPosition = true,
-                    --         align = "_fi",
-                    --         x = 0,
-                    --         y = 0,
-                    --         width = 0,
-                    --         height = 0,
-                    --     cancelShowAnimation = true,
-                    -- }) 
                 end
             end
         )         

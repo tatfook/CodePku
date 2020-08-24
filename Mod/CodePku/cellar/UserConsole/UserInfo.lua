@@ -264,11 +264,11 @@ function UserInfo:OnChangeAvatar(btnName)
     end
     
     if System.User.info.special_type == 1 then
-        GameLogic.options:SetMainPlayerAssetName('codepku/model/LI/lilaoshi.fbx')
+        GameLogic.options:SetMainPlayerAssetName('codepku/model/LLS_AN.x')
     elseif System.User.info.special_type == 2 then
-        GameLogic.options:SetMainPlayerAssetName('codepku/model/HAO/hao.fbx')
+        GameLogic.options:SetMainPlayerAssetName('codepku/model/HLS_AN.x')
     elseif System.User.info.special_type == 3 then
-        GameLogic.options:SetMainPlayerAssetName('codepku/model/WANG/WANG.fbx')
+        GameLogic.options:SetMainPlayerAssetName('codepku/model/WLS_AN.x')
     else
         filename = UserInfo.GetValidAvatarFilename(avatars[1])
         GameLogic.options:SetMainPlayerAssetName(filename)
