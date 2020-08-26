@@ -43,6 +43,10 @@
                 function ClickCommunity()
                     ParaGlobal.ShellExecute("open", L"http://kids.wanxueshijie.com/", "", "", 1)
                 end
+
+                function ClickQQGroup()
+                    ParaGlobal.ShellExecute("open", L"https://jq.qq.com/?_wv=1027&k=XWwlhVmm", "", "", 1)
+                end
             ]]></script>
             <style type="text/mcss">
 
@@ -74,6 +78,7 @@
                 <div style="position: relative; width: 76; height: 119; left: 1790; top: 38; background:url(codepku/image/textures/login/main.png#1392 255 76 119);" onclick="logout"></div>
                 <pe:if condition = "<%= not isHuaweiApproval()%>" >
                     <div style="position: relative; width: 79; height: 119; left: 1787; top: 180; background:url(codepku/image/textures/login/main.png#1256 255 79 119);" onclick="ClickCommunity"></div>
+                    <div style="position: relative; width: 76; height: 119; left: 1790; top: 332 ; background:url(codepku/image/textures/main_ui/main.png#304 480 88 138);" onclick="ClickQQGroup"></div>
                 </pe:if>
 
                 <!-- <pe:if condition="<%= System.os.IsMobilePlatform() %>">
