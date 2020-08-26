@@ -12,6 +12,7 @@ MainUIButtons.common_window = nil
 MainUIButtons.function_window = nil
 MainUIButtons.dialog_window = nil
 MainUIButtons.money_window = nil
+MainUIButtons.signin_window = nil
 MainUIButtons.open_function = nil
 MainUIButtons.open_common = nil
 
@@ -50,7 +51,7 @@ function MainUIButtons.show_function_ui(flag)	--flag == true,工具栏展开
 	local params = {
 		open = {
 			url="Mod/CodePku/cellar/Common/TouchMiniButtons/MainUIButtons_function.html", 
-			alignment="_rb", left = -541, top = -178, width = 541, height = 178,
+			alignment="_rb", left = -678, top = -178, width = 678, height = 178,
 			click_through = true,
 		},
 		close = {
@@ -77,15 +78,37 @@ function MainUIButtons.show_dialog_ui(bshow)
 	MainUIButtons.dialog_window = MainSceneUIButtons.show_dialog_ui(bshow, 0)
 end
 
+MainUIButtons.money = {goldcoin=0, wanxuecoin=0};
 function MainUIButtons.show_money_ui()
 	local width = 746
 	local height = 89
+
+	local info = Mod.CodePku.Store:Get('user/info');
+	local wallets = info.user_wallets or {};
+	for _, v in ipairs(wallets) do
+		if v.currency_id == 1 then
+			MainUIButtons.money.goldcoin = v.amount;
+		elseif v.currency_id == 2 then
+			MainUIButtons.money.wanxuecoin = v.amount;
+		end
+	end
 
 	local params = {
 		url="Mod/CodePku/cellar/Common/TouchMiniButtons/MainMoney.html", 
 		alignment="_lt", left = 1309, top = 0, width = width, height = height,
 	}
 	MainUIButtons.money_window = AdaptWindow:QuickWindow(params)	
+end
+
+function MainUIButtons.show_signin_ui()
+	local width = 100
+	local height = 100
+
+	params = {
+		url="Mod/CodePku/cellar/Common/TouchMiniButtons/MainUIButtons_signin.html", 
+		alignment="_rt", left = -width, top = 500, width = width, height = height,
+	}
+	MainUIButtons.signin_window = AdaptWindow:QuickWindow(params)	
 end
 
 function MainUIButtons.ShowPage()
@@ -105,6 +128,10 @@ function MainUIButtons.ShowPage()
 		MainUIButtons.money_window:CloseWindow()
 		MainUIButtons.money_window = nil
 	end
+	if MainUIButtons.signin_window ~= nil then
+		MainUIButtons.signin_window:CloseWindow()
+		MainUIButtons.signin_window = nil
+	end
 
 	local hideMenu = false;
 	local hideAllMenu = false;
@@ -119,6 +146,7 @@ function MainUIButtons.ShowPage()
 			MainUIButtons.show_dialog_ui(false)
 			MainUIButtons.show_money_ui()		
 			MainUIButtons.show_function_ui()
+			MainUIButtons.show_signin_ui()
 		else
 			MainUIButtons.show_common_ui()
 		end

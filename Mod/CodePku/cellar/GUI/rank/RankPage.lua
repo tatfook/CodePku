@@ -18,22 +18,23 @@ RankPage.params={
 }
 
 function RankPage.GetSubjectItem(id, range)
+    local param = nil
     if range == 2 then
         param = '?friend=1'
     else
         param = ''
     end
-    list = {}
-    mylist = {}
-    response = request:get('/user-exps/ranks/'..id..param, nil,{sync = true})
-    data = response.data.data
-    for i, d in ipairs(data) do
-        l = {}
-        l['name'] = d.user.nickname
-        l['score'] = d.current_level..'级'
+    local list = {}
+    local mylist = {}
+    local response = request:get('/user-exps/ranks/'..id..param, nil,{sync = true})
+    local data = response.data.data
+    for i = 1, #data do
+        local l = {}
+        l['name'] = data[i].user.nickname
+        l['score'] = data[i].current_level..'级'
         l['rank'] = i
         table.insert(list, l)
-        if d.current_user == 1 then
+        if data[i].current_user == 1 then
             table.insert(mylist, l)
         end
     end
@@ -46,22 +47,23 @@ function RankPage.GetSubjectItem(id, range)
 end
 
 function RankPage.GetGameItem(id, range)
+    local param = nil
     if range == 2 then
         param = '&friend=1'
     else
         param = ''
     end
-    list = {}
-    mylist = {}
-    response = request:get('/game-scores/ranks?game_name='..id..param,nil,{sync = true})
-    data = response.data.data
-    for i, d in ipairs(data) do
-        l = {}
-        l['name'] = d.user.nickname
-        l['score'] = d.score
+    local list = {}
+    local mylist = {}
+    local response = request:get('/game-scores/ranks?game_name='..id..param,nil,{sync = true})
+    local data = response.data.data
+    for i = 1, #data do
+        local l = {}
+        l['name'] = data[i].user.nickname
+        l['score'] = data[i].score
         l['rank'] = i
         table.insert(list, l)
-        if d.current_user == 1 then
+        if data[i].current_user == 1 then
             table.insert(mylist, l)
         end
     end
