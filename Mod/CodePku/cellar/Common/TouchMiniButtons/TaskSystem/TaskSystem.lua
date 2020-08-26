@@ -5,8 +5,8 @@ TaskSystem.Page = nil
 TaskSystem.nowReward = nil
 TaskSystem.acquire_flag = nil --判断奖励是可领取还是其他 1表示可领取
 
+-- 任务奖励表，详细奖励需根据字段来，需改变total_money, type_id
 -- state = 表示奖励是否领取
-    --0=登录 1=教学课 2=专题课 3=跑酷 4=游学记 5=爬山
 TaskSystem.task_table = {
         { type="游览", title="每日登陆玩学世界", state=1, finished_times=1, total_times=1, type_id=0, total_money=8888, tp_title="大门", world_id=1 },
         { type="学习", title="完成任意教学课程", state=0, finished_times=0, total_times=5, type_id=1,total_money=33, tp_title="教学区", world_id = 15855 },
@@ -14,17 +14,7 @@ TaskSystem.task_table = {
         { type="游戏", title="完成单词爱跑酷", state=0, finished_times=1, total_times=3, type_id=3, total_money=898, tp_title="单词爱跑酷", world_id = 12896}
 }
 
-
--- -- TaskSystem.Tp_table = {
--- --     [1] = {title="大门", word_id=1},
--- --     [2] = {title = "教学区", word_id = 15855},
--- --     [3] = {title = "专题课", word_id = 15857},
--- --     [4] = {title = "单词爱跑酷", word_id = 12896},
--- --     [5] = {title = "华夏游学记", word_id = 13426},
--- -- }
-
---TaskSystem.reward_table = {finished_task = 10, total_task= 12, reward_1 = 1, reward_2 = 0, reward_3 = 0, reward_4 = 0, reward_5 = 0}  -- 每个用户对应的任务情况 reward_n 表示第 n 个阶段的奖励是否领取
-
+-- 累计奖励表，详细奖励需根据字段来，需改变info
 --acquired表示奖励是否领取 1表示已领取
 TaskSystem.reward_table = {finished_task = 10, total_task= 12, 
                                 reward_detail = { 
