@@ -9,22 +9,17 @@
 <pe:mcml>
 <script refresh="true" type="text/npl"><![CDATA[
 MainStorePage = NPL.load("(gl)Mod/CodePku/cellar/GUI/MainStore/MainStore.lua");
-cur_index = MainStorePage.cur_index
-menu = MainStorePage.menu
 
-function ChangePage(pageIndex)
-    MainStorePage:ShowPage(pageIndex)
+
+function ChangePage(categoryId)
+    MainStorePage:ShowPage(categoryId)
 end
 
-function getItems()
-    local items = MainStorePage.items[cur_index]
-    --GameLogic.AddBBS(nil, string.format("getItems %s", cur_index), 1000, "255 0 0")
-    return items
+
+function ClickItem(itemId)
+    MainStorePage:ShowPage(-1, itemId)
 end
 
-function clickItem(itemIndex)
-    MainStorePage:ShowPage(-1, itemIndex)
-end
 ]]></script>
 <style type="text/mcss">
 
@@ -32,61 +27,61 @@ end
 <pe:container alignment="_lt" width="1920" height="900">
     <!-- 左侧菜单 -->
     <div style="position: relative;left:0px;top:0px;"> 
-        <pe:repeat DataSource="<%= menu %>" >
+        <pe:repeat DataSource="<%= MainStorePage.category %>" >
         <pe:repeatitem>
-            <pe:if condition='<%= Eval("pageIndex") ~= cur_index %>'>
-                <input type="button" style="width: 244px; height: 94px; margin-left: 0px; margin-top: 10px; font-family: PuHuiTi-Bold; font-size: 45px; color: #FFFFFF; text-align: center; background: url(codepku/image/textures/common_32bits.png#1294 66 134 94);" onclick="ChangePage" name="<%=Eval('pageIndex')%>" value="<%=Eval('name')%>" />
+            <pe:if condition='<%= Eval("categoryId") ~= MainStorePage.cur_index %>'>
+                <input type="button" style="width: 244px; height: 94px; margin-left: 0px; margin-top: 10px; font-family: PuHuiTi-Bold; font-size: 45px; color: #FFFFFF; text-align: center; background: url(codepku/image/textures/common_32bits.png#1294 66 134 94);" onclick="ChangePage" name="<%= Eval('categoryId') %>" value="<%= Eval('name') %>" />
             </pe:if>
-            <pe:if condition='<%= Eval("pageIndex") == cur_index %>'>
-                <input type="button" style="width: 261px; height: 96px; margin-left: 27px; margin-top: 10px; font-family: PuHuiTi-Bold; font-size: 45px; color: #F8DE8D; padding-left: 49px; padding-top: 19px; padding-right: 35; padding-bottom: 34; background: url(codepku/image/textures/common_32bits.png#1648 196 261 96);" name="<%=Eval('pageIndex')%>" value="<%=Eval('name')%>" />
+            <pe:if condition='<%= Eval("categoryId") == MainStorePage.cur_index %>'>
+                <input type="button" style="width: 261px; height: 96px; margin-left: 27px; margin-top: 10px; font-family: PuHuiTi-Bold; font-size: 45px; color: #F8DE8D; padding-left: 49px; padding-top: 19px; padding-right: 35; padding-bottom: 34; background: url(codepku/image/textures/common_32bits.png#1648 196 261 96);" name="<%= Eval('categoryId') %>" value="<%= Eval('name') %>" />
             </pe:if>
         </pe:repeatitem>
         </pe:repeat>
     </div>
 
     <!-- 商品栏 -->
-    <pe:gridview style="width: 1525px; height: 798px; left: 353px; top: 63px;" name='storeItems' DataSource="<%=getItems()%>" ItemsPerLine="5" AllowPaging="false" RememberScrollPos="true" VerticalScrollBarStep="36" VerticalScrollBarOffsetX="8">
+    <pe:gridview style="width: 1525px; height: 798px; left: 353px; top: 63px;" name='storeItems' DataSource="<%= MainStorePage.items %>" ItemsPerLine="5" AllowPaging="false" RememberScrollPos="true" VerticalScrollBarStep="36" VerticalScrollBarOffsetX="8">
         <Columns>
-            <pe:if condition='<%= Eval("remain") ~= 0 %>'>
-                <div style='width: 275px; height: 284px; margin-right: 30px; margin-bottom: 45px; text-align: center;font-family:Noto Sans S Chinese Regular;background: url(codepku/image/textures/store/common_32bits.png#381 12 275 284);' onclick="clickItem" name="<%=Eval('itemIndex')%>">
+            <pe:if condition='<%= Eval("remain_count") ~= 0 %>'>
+                <div onclick="ClickItem" name="<%= Eval('id') %>" style='width: 275px; height: 284px; margin-right: 30px; margin-bottom: 45px; text-align: center;font-family:Noto Sans S Chinese Regular;background: url(codepku/image/textures/store/common_32bits.png#381 12 275 284);'>
                                 
-                    <div style='position: relative;left:5px;top:5px;width: 223px; height: 44px;color: #155F9E;font-size: 26px;line-height: 44px;font-weight: bold;background: url(codepku/image/textures/store/common_32bits.png#443 411 223 44);'><%=Eval('name')%></div>
+                    <div style='position: relative;left:5px;top:5px;width: 223px; height: 44px;color: #155F9E;font-size: 26px;line-height: 44px;font-weight: bold;background: url(codepku/image/textures/store/common_32bits.png#443 411 223 44);'><%= Eval('prop').prop_name %></div>
                     
-                    <div style='<%= string.format("position: relative;left:80px;top:65px;width: 114px; height: 150px;background: url(%s);",Eval("imgUrl")) %>'></div>
+                    <div style='<%= string.format("position: relative;left:80px;top:65px;width: 114px; height: 150px;background: url(%s);", Eval("prop").prop_icon) %>'></div>
                     
                     <div style='position: relative;left:4px;top:228px;width: 266px; height: 54px;color: #FFFFFF;font-size: 28px;text-align: left;line-height: 54px;font-weight: Medium;background: url(codepku/image/textures/store/common_32bits.png#436 331 266 54);'>
-                        <pe:if condition='<%= Eval("coinType") == 1 %>'>
+                        <pe:if condition='<%= Eval("currency_id") == 1 %>'>
                             <div style="float:left;width: 45px; height: 44px;margin-left: 61px;margin-top: 6px;background: url(codepku/image/textures/common_32bits.png#913 41 73 71);"></div>
                         </pe:if>
-                        <pe:if condition='<%= Eval("coinType") == 2 %>'>
+                        <pe:if condition='<%= Eval("currency_id") == 2 %>'>
                             <div style="float:left;width: 45px; height: 44px;margin-left: 61px;margin-top: 6px;background: url(codepku/image/textures/common_32bits.png#913 136 77 78);"></div>
                         </pe:if>
                         <div style="float:left;margin-left: 15px;width: 145px;"><%=Eval('price')%></div>
                     </div>
 
-                    <div style='position: relative;left:193x;top:188px;width: 77px; height: 40px;color: #DA6411;font-size: 28px;text-align: center;line-height: 40px;font-weight: bold;background: url(codepku/image/textures/store/common_32bits.png#793 122 77 40);'><%= string.format('X%s',Eval('num')) %></div>
+                    <div style='position: relative;left:193x;top:188px;width: 77px; height: 40px;color: #DA6411;font-size: 28px;text-align: center;line-height: 40px;font-weight: bold;background: url(codepku/image/textures/store/common_32bits.png#793 122 77 40);'><%= string.format('X%s',Eval('prop_num')) %></div>
 
                 </div>
             </pe:if>
 
-            <pe:if condition='<%= Eval("remain") == 0 %>'>
+            <pe:if condition='<%= Eval("remain_count") == 0 %>'>
                 <div style='width: 275px; height: 284px; margin-right: 30px; margin-bottom: 45px; text-align: center;font-family:Noto Sans S Chinese Regular;background: url(codepku/image/textures/store/common_32bits.png#381 12 275 284);'>
 
-                    <div style='position: relative;left:5px;top:5px;width: 223px; height: 44px;color: #155F9E;font-size: 26px;line-height: 44px;font-weight: bold;background: url(codepku/image/textures/store/common_32bits.png#443 411 223 44);'><%=Eval('name')%></div>
+                    <div style='position: relative;left:5px;top:5px;width: 223px; height: 44px;color: #155F9E;font-size: 26px;line-height: 44px;font-weight: bold;background: url(codepku/image/textures/store/common_32bits.png#443 411 223 44);'><%= Eval('prop').prop_name %></div>
                     
-                    <div style='<%= string.format("position: relative;left:80px;top:65px;width: 114px; height: 150px;background: url(%s);",Eval("imgUrl")) %>'></div>
+                    <div style='<%= string.format("position: relative;left:80px;top:65px;width: 114px; height: 150px;background: url(%s);", Eval("prop").prop_icon)) %>'></div>
                     
                     <div style='position: relative;left:4px;top:228px;width: 266px; height: 54px;color: #FFFFFF;font-size: 28px;text-align: left;line-height: 54px;font-weight: Medium;background: url(codepku/image/textures/store/common_32bits.png#436 331 266 54);'>
-                        <pe:if condition='<%= Eval("coinType") == 1 %>'>
+                        <pe:if condition='<%= Eval("currency_id") == 1 %>'>
                             <div style="float:left;width: 45px; height: 44px;margin-left: 61px;margin-top: 6px;background: url(codepku/image/textures/common_32bits.png#913 41 73 71);"></div>
                         </pe:if>
-                        <pe:if condition='<%= Eval("coinType") == 2 %>'>
+                        <pe:if condition='<%= Eval("currency_id") == 2 %>'>
                             <div style="float:left;width: 45px; height: 44px;margin-left: 61px;margin-top: 6px;background: url(codepku/image/textures/common_32bits.png#913 136 77 78);"></div>
                         </pe:if>
                         <div style="float:left;margin-left: 15px;width: 145px;"><%=Eval('price')%></div>
                     </div>
 
-                    <div style='position: relative;left:193x;top:188px;width: 77px; height: 40px;color: #DA6411;font-size: 28px;text-align: center;line-height: 40px;font-weight: bold;background: url(codepku/image/textures/store/common_32bits.png#793 122 77 40);'><%= string.format('X%s',Eval('num')) %></div>
+                    <div style='position: relative;left:193x;top:188px;width: 77px; height: 40px;color: #DA6411;font-size: 28px;text-align: center;line-height: 40px;font-weight: bold;background: url(codepku/image/textures/store/common_32bits.png#793 122 77 40);'><%= string.format('X%s',Eval('prop_num')) %></div>
 
                     <!-- 售罄状态 -->
                     <div style='width: 275px; height: 284px;background: url(codepku/image/textures/store/common_32bits.png#758 331 80 80:10 10 10 10);'>

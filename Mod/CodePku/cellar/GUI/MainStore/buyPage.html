@@ -9,16 +9,23 @@
 <pe:mcml>
 <script refresh="false" type="text/npl"><![CDATA[
 MainStorePage = NPL.load("(gl)Mod/CodePku/cellar/GUI/MainStore/MainStore.lua");
-cur_item = MainStorePage.cur_item
-menu = MainStorePage.menu
 
 function ClosePage()
     Page:CloseWindow()
 end
 
 function Buy()
+    -- todo 
     MainStorePage.mainWindow:Refresh(0)
     ClosePage()
+end
+
+function GetCategoryName()
+    for _, v in pairs(MainStorePage.category) do
+        if v.categoryId == MainStorePage.cur_item.category then
+            return v.name
+        end
+    end
 end
 
 function GetMoney()
@@ -37,12 +44,10 @@ end
 
 function ifAfford()
     money = GetMoney()
-    if cur_item["coinType"] == 1 then
-        GameLogic.AddBBS(nil, string.format('%s %s',money.goldcoin,cur_item["price"]), 1000, "255 0 0")
-        return money.goldcoin >= cur_item["price"] 
-    elseif cur_item["coinType"] == 2 then
-        GameLogic.AddBBS(nil, string.format('%s %s',money.wanxuecoin,cur_item["price"]), 1000, "255 0 0")
-        return money.wanxuecoin >= cur_item["price"]
+    if MainStorePage.cur_item["currency_id"] == 1 then
+        return money.goldcoin >= MainStorePage.cur_item["price"] 
+    elseif MainStorePage.cur_item["currency_id"] == 2 then
+        return money.wanxuecoin >= MainStorePage.cur_item["price"]
     end
 
     return false
@@ -60,27 +65,27 @@ if_afford = ifAfford()
         <div style='position: relative; width: 64px; height: 74px; left: 903px; top: 5px; background:url(codepku/image/textures/common_32bits.png#110 73 67 78);' onclick="ClosePage"></div>
 
         <div style="position: relative;left: 75px;top: 146px;width: 360px;height: 336px; background:url(codepku/image/textures/store/common_32bits.png#12 9 369 345);">
-            <div style='<%= string.format("position: relative;left: 94px;top: 78px;width: 174px;height: 228px; background:url(%s);",cur_item["imgUrl"]) %>'></div>
+            <div style='<%= string.format("position: relative;left: 94px;top: 78px;width: 174px;height: 228px; background:url(%s);",MainStorePage.cur_item["prop"]["prop_icon"]) %>'></div>
         </div>
 
         <div style="position: relative;left: 506px;top: 173px;color: #FEFEFF;font-size: 36px;text-align: left;line-height: 36px;font-family:Noto Sans S Chinese Regular;font-weight: bold;">
-            <div style="margin-bottom: 46px;">名称：<%= cur_item["name"] %></div>
-            <div style="margin-bottom: 46px;">类型：<%= menu[cur_item["itemType"]]["name"] %></div>
-            <div style="margin-bottom: 46px;">数量：<%= cur_item["num"] %></div>
+            <div style="margin-bottom: 46px;">名称：<%= MainStorePage.cur_item["prop"]["prop_name"] %></div>
+            <div style="margin-bottom: 46px;">类型：<%= GetCategoryName() %></div>
+            <div style="margin-bottom: 46px;">数量：<%= MainStorePage.cur_item["prop_num"] %></div>
             <div>
                 <div style="float:left;">价格：</div>
-                <pe:if condition='<%= cur_item["coinType"] == 1 %>'>
+                <pe:if condition='<%= MainStorePage.cur_item["currency_id"] == 1 %>'>
                     <div style="float:left;width: 45px; height: 44px;margin-top: -2px;background: url(codepku/image/textures/common_32bits.png#913 41 73 71);"></div>
                 </pe:if>
-                <pe:if condition='<%= cur_item["coinType"] == 2 %>'>
+                <pe:if condition='<%= MainStorePage.cur_item["currency_id"] == 2 %>'>
                     <div style="float:left;width: 45px; height: 44px;margin-top: -2px;background: url(codepku/image/textures/common_32bits.png#913 136 77 78);"></div>
                 </pe:if>
-                <div style="float:left;margin-left: 15px;"><%= cur_item["price"] %></div>
+                <div style="float:left;margin-left: 15px;"><%= MainStorePage.cur_item["price"] %></div>
             </div>
         </div>
 
         <div style="position: relative;left: 73px;top: 521px;width: 855px;height: 139px;color: #FEFEFF;font-size: 30px;font-family:Noto Sans S Chinese Regular;font-weight: Regular;background: url(codepku/image/textures/store/common_32bits.png#890 20 80 80:10 10 10 10 );">
-            <div style="position: relative;left: 28px;top: 23px;width: 797px;height: 78px;line-height: 48px;"><%= cur_item["desc"] %></div>
+            <div style="position: relative;left: 28px;top: 23px;width: 797px;height: 78px;line-height: 48px;"><%= MainStorePage.cur_item["prop"]["prop_desc"] %></div>
         </div>
 
         <pe:if condition='<%= if_afford %>'>
