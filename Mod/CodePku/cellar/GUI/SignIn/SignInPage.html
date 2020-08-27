@@ -31,6 +31,8 @@
             echo(message == L"签到成功")
             if message == L"签到成功" then
                 RefreshMoney(SignInPage.signin_data[name].prop_id, SignInPage.signin_data[name].prop_num)
+                Page:Refresh(0)
+                SignInPage:ShowPopup(name)
             end
         elseif name < day and SignInPage.signin_data[name].state == 0 then
             message = SignInPage:retroactive(SignInPage.year.."-"..SignInPage.month.."-"..tostring(name))
@@ -39,10 +41,12 @@
             SignInPage.supplement_card = SignInPage:GetSupplementCard()
             GameLogic.AddBBS(nil, message, 3000, "255 0 0", 21);
             if message == L"补签成功" then
-                RefreshMoney(SignInPage.signin_data[name].prop_id, SignInPage.signin_data[name].prop_num)
+                RefreshMoney(SignInPage.signin_data[name].prop_id, SignInPage.signin_data[name].prop_num)                
+                Page:Refresh(0)
+                SignInPage:ShowPopup(name)
             end
         end
-        Page:Refresh(0)
+        SignInPage:ShowPopup(name)
     end
 
     function RefreshMoney(id, num)
