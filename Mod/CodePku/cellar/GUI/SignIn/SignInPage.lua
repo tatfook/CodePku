@@ -4,6 +4,7 @@ local request = NPL.load("(gl)Mod/CodePku/api/BaseRequest.lua")
 local AdaptWindow = commonlib.gettable("Mod.CodePku.GUI.Window.AdaptWindow")
 
 SignInPage.ui = nil
+SignInPage.popup = nil
 SignInPage.supplement_card = nil
 SignInPage.signin_data = {}
 SignInPage.signin_total_day = nil
@@ -12,6 +13,7 @@ SignInPage.month = nil
 SignInPage.day = nil
 SignInPage.full_attendance = nil
 SignInPage.gain_total_award = nil
+SignInPage.ClickIndex = nil
 SignInPage.total_award = {}
 
 function SignInPage:initData()
@@ -108,4 +110,15 @@ function SignInPage:ShowPage(bShow)
     SignInPage.ui = AdaptWindow:QuickWindow({url="Mod/CodePku/cellar/GUI/SignIn/SignInPage.html", 
     alignment="_ct", left = -960, top = -540, width = 1920, height = 1080,zorder =21})
     
+end
+
+function SignInPage:ShowPopup(index,bShow)
+    if SignInPage.popup ~= nil then
+        SignInPage.popup:CloseWindow()
+    end
+    SignInPage.bForceHide = bShow == false;
+    local index = tonumber(index)
+    SignInPage.ClickIndex = index
+    SignInPage.popup = AdaptWindow:QuickWindow({url="Mod/CodePku/cellar/GUI/SignIn/Popup/Reward.html", 
+    alignment="_lt", left = 0, top = 0, width = 1920, height = 1080,zorder =30})
 end
