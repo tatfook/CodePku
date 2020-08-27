@@ -14,19 +14,13 @@ SignInPage.full_attendance = nil
 SignInPage.gain_total_award = nil
 SignInPage.total_award = {}
 
-SignInPage.award_item = {
-    [1] = {prop_id = 1, name = '玩学币', img = '369 179 61 60'},
-    [2] = {prop_id = 2, name = '玩学券', img = '369 178 61 60'},
-    [11001] = {prop_id = 11001, name = '补签卡', img = '369 178 61 60'},
-}
-
 function SignInPage:initData()
     SignInPage.signin_data = {}
     SignInPage.total_award = {}
     for i = 1,28 do
-        table.insert(SignInPage.signin_data, {date = i, state = 0, prop_id = 1, prop_num = 0})
+        table.insert(SignInPage.signin_data, {date = i, state = 0, prop_id = 1, prop_num = 0, prop_icon_url = 'codepku/image/textures/signin/signin_32bits.png#369 179 61 60'})
     end
-    table.insert(SignInPage.total_award,{prop_id = 1, prop_num = 0})
+    table.insert(SignInPage.total_award,{prop_id = 1, prop_num = 0, prop_icon_url = ''})
 end
 
 function SignInPage:GetSupplementCard()
@@ -88,11 +82,13 @@ function SignInPage:GetDayAward(month)
             if day <=28 then
                 SignInPage.signin_data[day].prop_id = tonumber(data[i].prop_id)
                 SignInPage.signin_data[day].prop_num = data[i].prop_num
+                SignInPage.signin_data[day].prop_icon_url = data[i].props[1].prop_icon_url
             end
         end
         if #response.data.data.full_attendance_awards >=1 then
             SignInPage.total_award[1].prop_id = tonumber(response.data.data.full_attendance_awards[1].prop_id)
             SignInPage.total_award[1].prop_num = response.data.data.full_attendance_awards[1].prop_num
+            SignInPage.total_award[1].prop_icon_url = response.data.data.full_attendance_awards[1].prop.prop_icon_url
         end
     end
 end
