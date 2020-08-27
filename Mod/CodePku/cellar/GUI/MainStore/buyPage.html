@@ -15,8 +15,7 @@ function ClosePage()
 end
 
 function Buy()
-    -- todo 
-    MainStorePage.mainWindow:Refresh(0)
+    MainStorePage:BuyItem(MainStorePage.cur_item['id'])
     ClosePage()
 end
 

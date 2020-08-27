@@ -13,6 +13,7 @@ MainStorePage.subWindow = nil
 
 MainStorePage.cur_index = 1
 MainStorePage.cur_item = nil
+MainStorePage.items = {}
 
 MainStorePage.pages = {
     mainPage = {
@@ -112,5 +113,42 @@ function MainStorePage:ShowPage(pageIndex, itemId)
                 MainStorePage.subWindow:Refresh(0)
             end
         end
+    end
+end
+
+
+function RefreshMoney(id,num)
+    id = tonumber(id)
+    num = tonumber(num)
+    local info = Mod.CodePku.Store:Get('user/info')
+    local wallets = info.user_wallets or {}
+    if #wallets == 0 then
+        table.insert(wallets,{currency_id = id, amount = num})
+    else
+        for _, v in ipairs(wallets) do
+            if v.currency_id == 1 and id == 1 then
+                v.amount = v.amount - num
+            elseif v.currency_id == 2 and id == 2 then
+                v.amount = v.amount - num
+            end
+        end
+    end
+
+    Mod.CodePku.Store:Set('user/info', info)
+
+end
+
+
+function MainStorePage:BuyItem(itemId)
+    response = request:post('/shop/purchase',{prop_shop_id=itemId}, {sync = true})
+
+    if (response.status == 200 and response.data.code == 200) then
+        RefreshMoney(MainStorePage.cur_item['currency_id'], MainStorePage.cur_item['price'])
+        MainStorePage.mainWindow:Refresh(0)
+        GameLogic.AddBBS("CodeGlobals", L'购买成功', 2000, "#FF0000") 
+    else
+        errString = string.format('%s(%s)',L'购买失败',response.data.code)
+        echo(errString)
+        GameLogic.AddBBS("CodeGlobals", errString, 3000, "#FF0000")
     end
 end
