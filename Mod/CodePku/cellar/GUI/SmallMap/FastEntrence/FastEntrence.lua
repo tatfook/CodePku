@@ -238,14 +238,15 @@ function FastEntrence:ShowPopupPage(index, pageIndex)
     FastEntrence.popupPage = AdaptWindow:QuickWindow(FastEntrence.popupParams[Index])
 end
 
-function FastEntrence:ClosePage()
+function FastEntrence:ClosePage(num)
     if FastEntrence.page ~= nil then
         FastEntrence.page:CloseWindow()
     end
     if(num == 2)then
         if FastEntrence.coursePage ~= nil then
-            for i, v in ipairs(FastEntrence.subjects) do
-                v.course = {}
+            local length = (#FastEntrence.subjects)-1
+            for i=0, length do
+                FastEntrence.subjects[i].course = {}
             end
             FastEntrence.coursePage:CloseWindow()
         end

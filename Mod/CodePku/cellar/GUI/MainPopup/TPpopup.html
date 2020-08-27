@@ -12,12 +12,9 @@
 <script refresh="false" type="text/npl" src="MainPopup.lua">
 <![CDATA[
 local MainPopup = commonlib.gettable("Mod.CodePku.GUI.MainPopup");
-local SystemEntrencePage = commonlib.gettable("Mod.CodePku.SystemEntrencePage");
-local TopicEntrencePage = commonlib.gettable("Mod.CodePku.TopicEntrencePage");
-local CompeteEntrencePage = commonlib.gettable("Mod.CodePku.CompeteEntrencePage");
-local MainEntrencePage = commonlib.gettable("Mod.CodePku.MainEntrencePage")
 local GameLogic = commonlib.gettable("MyCompany.Aries.Game.GameLogic");
 local FastEntrence = NPL.load("(gl)Mod/CodePku/cellar/GUI/SmallMap/FastEntrence/FastEntrence.lua")
+local TopicCourse = NPL.load("(gl)Mod/CodePku/cellar/GUI/SmallMap/FastEntrence/TopicCourse.lua")
 local SmallMap = commonlib.gettable("Mod.CodePku.GUI.SmallMap")
 
 
@@ -51,6 +48,9 @@ function CloseAllPage()
     end
     if FastEntrence ~= nil then
         FastEntrence:ClosePage(2)
+    end
+    if TopicCourse ~= nil then
+        TopicCourse:ClosePage()
     end
 end
 
