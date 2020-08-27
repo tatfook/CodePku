@@ -64,7 +64,6 @@ local Messages = NPL.load("(gl)Mod/CodePku/cellar/common/TouchMiniButtons/Messag
 local MainPopup = NPL.load("(gl)Mod/CodePku/cellar/GUI/MainPopup/MainPopup.lua")
 local SmallMap = NPL.load("(gl)Mod/CodePku/cellar/GUI/SmallMap/SmallMap.lua")
 local ToWhere = NPL.load("(gl)Mod/CodePku/cellar/GUI/SmallMap/Popup/ToWhere.lua")
-local TaskSystem = NPL.load("(gl)Mod/CodePku/cellar/Common/TouchMiniButtons/TaskSystem/TaskSystem.lua")
 local FastEntrence = NPL.load("(gl)Mod/CodePku/cellar/GUI/SmallMap/FastEntrence/FastEntrence.lua")
 local TopicCourse = NPL.load("(gl)Mod/CodePku/cellar/GUI/SmallMap/FastEntrence/TopicCourse.lua")
 
