@@ -42,6 +42,18 @@ function getTask()
     return task_table or {}
 end
 
+function getRewardInfo(index)
+    return task_table[index].info
+end
+
+function getRwardBG(type)
+    if type == 0 then
+        return "347 424 100 100"
+    elseif type == 1 then
+        return "347 567 100 100"
+    end
+end
+
 function getText(index)
     local index = tonumber(index)
     if(state == 1)then --奖励已经领取
@@ -110,28 +122,22 @@ end
             DataSource='<%=getTask() %>' CellPadding="20" ItemsPerLine="3" AllowPaging="false" RememberScrollPos="true" RememberLastPage="true" 
             VerticalScrollBarStep="36" VerticalScrollBarOffsetX="8">
             <Columns>
-            <div style="width: 450; height: 429; margin-bottom: 40; margin-left: 13;">
-                <div style="position: relative; width: 450; height: 400; top: 47; line-height: 141; background: url(codepku/image/textures/tasksystem/main.png#21 252 251 141:12 12 12 12);"></div>
-                <div style="position: relative; width: 187; height: 78; line-height: 78; background: url(codepku/image/textures/tasksystem/main.png#14 428 167 58:6 6 6 6);"><span style="position: relative; left: 36; color: #B35D0A; font-size: 34; font-family: Noto Sans S Chinese Regular;"><%=Eval('type')%></span></div>
+                <div style="width: 450; height: 429; margin-bottom: 40; margin-left: 13;">
+                    <div style="position: relative; width: 450; height: 400; top: 47; line-height: 141; background: url(codepku/image/textures/tasksystem/main.png#21 252 251 141:12 12 12 12);"></div>
+                    <div style="position: relative; width: 187; height: 78; line-height: 78; background: url(codepku/image/textures/tasksystem/main.png#14 428 167 58:6 6 6 6);"><span style="position: relative; left: 36; color: #B35D0A; font-size: 34; font-family: Noto Sans S Chinese Regular;"><%=Eval('type')%></span></div>
 
-                <div style="position: relative; height: 141; left: 37; top: 50; line-height: 141; color:#123655; font-size: 34; font-family: Noto Sans S Chinese Regular; float: left;"><%=Eval('title')%>(<%=Eval('finished_times')%> / <%=Eval('total_times')%>)次</div>
+                    <div style="position: relative; height: 141; left: 37; top: 50; line-height: 141; color:#123655; font-size: 34; font-family: Noto Sans S Chinese Regular; float: left;"><%=Eval('title')%>(<%=Eval('finished_times')%> / <%=Eval('total_times')%>)次</div>
 
-                <div style="position: relative;  height: 134; left: 14; top: 170;">
-                    <div style="width: 134; height: 134; float: left; margin-right: 9; background: url(codepku/image/textures/tasksystem/main.png#347 424 100 100);">
-                        <div style="position: relative; width: 50; left: 74; top: 100; text-align: center; font-size: 22; color: #7996ED; font-family: Noto Sans S Chinese Regular;"><%=Eval('total_money')%></div>
-                    </div>
+                    <div style="<%=format('%s);', getBG(index))%>" name="<%=Eval('index')%>" onclick="HandleTask"><%=getText(index)%></div>
 
-                    <div style="width: 134; height: 134; float: left; margin-right: 9; background: url(codepku/image/textures/tasksystem/main.png#347 567 100 100);">
-                        <div style="position: relative; width: 50; left: 74; top: 100; text-align: center; font-size: 22; color: #7996ED; font-family: Noto Sans S Chinese Regular;"><%=Eval('total_money')%></div>
-                    </div>
-
-                    <div style="width: 134; height: 134; float: left; margin-right: 9; background: url(codepku/image/textures/tasksystem/main.png#347 424 100 100);">
-                        <div style="position: relative; width: 50; left: 74; top: 100; text-align: center; font-size: 22; color: #7996ED; font-family: Noto Sans S Chinese Regular;"><%=Eval('total_money')%></div>
+                    <div style="position: relative; height: 134; left: 14; top: 170;">
+                        <pe:repeat DataSource="<%=getRewardInfo(index)%>">
+                            <div style="<%=format('width: 134; height: 134; margin-left: 8; float: left; background: url(codepku/image/textures/tasksystem/main.png#%s);', getRwardBG(type))%>">
+                                <div style="width: 48; margin-left: 68; margin-top: 98;  text-align: center; font-size: 22; color: #7996ED; font-family: Noto Sans S Chinese Regular;"><%=Eval('num')%></div>
+                            </div>
+                        </pe:repeat>
                     </div>
                 </div>
-
-                <div style="<%=format('%s);', getBG(index))%>" name="<%=Eval('index')%>" onclick="HandleTask"><%=getText(index)%></div>
-            </div>
             </Columns>
         </pe:gridview>
     </div>

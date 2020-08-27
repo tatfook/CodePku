@@ -20,6 +20,8 @@ reward_table = TaskSystem.reward_table -- 奖励表
 
 acquire_flag = TaskSystem.acquire_flag
 
+
+
 nowReward = TaskSystem.nowReward
 
 function ClosePage()
@@ -44,8 +46,16 @@ function getBG()
     end
 end
 
-function getRewardNum()
+function getRewardInfo()
     return nowReward["info"]
+end
+
+function getRwardBG(type)
+    if type == 0 then
+        return "347 424 100 100"
+    elseif type == 1 then
+        return "347 567 100 100"
+    end
 end
 
 function handleReward()
@@ -86,10 +96,9 @@ end
 
 
         <div style="float: left;">
-            <pe:repeat DataSource="<%=getRewardNum()%>">
-                <div style="width: 134; height: 134; margin-left: 33; float: left; background-color: #aa23aa;">
-                    <div style="width: 40; margin-left: 72; margin-top: 107;  text-align: center; font-size: 18; color: #7996ED; font-family: Noto Sans S Chinese Regular;">1111</div>
-                </div>  
+            <pe:repeat DataSource="<%=getRewardInfo()%>">
+                <div style="<%=format('width: 134; height: 134; margin-left: 33; float: left; background: url(codepku/image/textures/tasksystem/main.png#%s);', getRwardBG(type))%>">
+                    <div style="width: 48; margin-left: 68; margin-top: 98;  text-align: center; font-size: 22; color: #7996ED; font-family: Noto Sans S Chinese Regular;"><%=Eval('num')%></div>                </div>
             </pe:repeat>
         </div>
         

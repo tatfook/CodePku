@@ -8,23 +8,38 @@ TaskSystem.acquire_flag = nil --判断奖励是可领取还是其他 1表示可�
 -- 任务奖励表，详细奖励需根据字段来，需改变total_money, type_id
 -- state = 表示奖励是否领取
 TaskSystem.task_table = {
-        { type="游览", title="每日登陆玩学世界", state=1, finished_times=1, total_times=1, type_id=0, total_money=8888, tp_title="大门", world_id=1 },
-        { type="学习", title="完成任意教学课程", state=0, finished_times=0, total_times=5, type_id=1,total_money=33, tp_title="教学区", world_id = 15855 },
-        { type="游戏", title="完成华夏游学记", state=0, finished_times=2, total_times=2, type_id=2, total_money=2, tp_title="华夏游学记", world_id = 13426},
-        { type="游戏", title="完成单词爱跑酷", state=0, finished_times=1, total_times=3, type_id=3, total_money=898, tp_title="单词爱跑酷", world_id = 12896}
+        { type="游览", title="每日登陆玩学世界", state=1, finished_times=1, total_times=1, info = { {type=0, num=888}, {type=0, num=888}, {type=1, num=1024} } , tp_title="大门", world_id=1 },
+        { type="学习", title="完成任意教学课程", state=0, finished_times=0, total_times=5, info = { {type=0, num=888}, {type=1, num=1024}, {type=0, num=888} } , tp_title="教学区", world_id = 15855 },
+        { type="游戏", title="完成华夏游学记", state=0, finished_times=2, total_times=2, info = { {type=0, num=888}, {type=1, num=1024},{type=0, num=888} } , tp_title="华夏游学记", world_id = 13426},
+        { type="游戏", title="完成单词爱跑酷", state=0, finished_times=1, total_times=3, info = { {type=0, num=888}, {type=1, num=1024},{type=0, num=888} } , tp_title="单词爱跑酷", world_id = 12896}
 }
 
 -- 累计奖励表，详细奖励需根据字段来，需改变info
 --acquired表示奖励是否领取 1表示已领取
 TaskSystem.reward_table = {finished_task = 10, total_task= 12, 
                                 reward_detail = { 
-                                    {acquired = 1, info = { {1} } },
-                                    {acquired = 0, info = { {1}, {2} } },
-                                    {acquired = 0, info = { {1}, {2}, {3} } },
-                                    {acquired = 0, info = { {1}, {2}, {3}, {4} } },
-                                    {acquired = 0, info = { {1}, {2}, {3}, {4}, {5} } }
-                                } 
-                            }
+                                    {
+                                        acquired = 1,
+                                        info = { {type=0, num=888} } 
+                                    },
+                                    {
+                                        acquired = 0, 
+                                        info = { {type=0, num=888}, {type=1, num=1024} } 
+                                    },
+                                    {
+                                        acquired = 0, 
+                                        info = { {type=0, num=888}, {type=0, num=1024}, {type=1, num=1024} } 
+                                    },
+                                    {
+                                        acquired = 0, 
+                                        info = { {type=0, num=888}, {type=1, num=1024}, {type=1, num=1024}, {type=1, num=1024} } 
+                                    },
+                                    {
+                                        acquired = 0, 
+                                        info = { {type=1, num=888}, {type=1, num=1024}, {type=1, num=888}, {type=1, num=1024}, {type=1, num=1024} } 
+                                    } 
+                                }
+                            } 
 
 TaskSystem.reward_stage = {2, 4, 6, 8, 12}  -- 每阶段奖励需要完成的任务数
 
