@@ -92,10 +92,17 @@ end
             <div style='<%=format("position:absolute;width:73px;height:71px;left:30px;top:32px;background:url(%s);", AchievementPage.award_png[1].url)%>'></div>
             <%=AchievementPage.achievementinfo.award.total%>
         </div>
-        <div onclick="AchievementPage.ClickReceiveScore" style="position: absolute;width: 245; height: 85; left: 78; top: 798;font-size:36;font-family:Noto Sans S Chinese Regular; font-weight:bolder;color: #fefefe;text-align:center;line-height: 80;background: url(codepku/image/textures/profile/achievement.png#21 190 86 86:15 15 15 15);">
-            <div style="position: absolute;width: 44; height: 44; left: 213; top: -25;font-size:32;font-family:Noto Sans S Chinese Regular; font-weight:bolder;color: #ffffff;text-align:center;line-height: 44;background: url(codepku/image/textures/profile/achievement.png#961 88 44 44);"><%=AchievementPage.achievementinfo.award.total_unreceive%></div>
-            领取奖励
-        </div>
+        <pe:if condition="<%= AchievementPage.achievementinfo.award.total_unreceive > 0 %>">
+            <div onclick="AchievementPage.ClickReceiveScore" style="<%=format('position: absolute;width: 245; height: 85; left: 78; top: 798;font-size:36;font-family:Noto Sans S Chinese Regular; font-weight:bolder;color: #fefefe;text-align:center;line-height: 80;background: url(%s);',AchievementPage.award_png[11].url)%>">
+                <div style='<%=format("position: absolute;width: 44; height: 44; left: 213; top: -25;font-size:32;font-family:Noto Sans S Chinese Regular; font-weight:bolder;color: #ffffff;text-align:center;line-height: 44;background:url(%s);", AchievementPage.award_png[13].url)%>'><%=AchievementPage.achievementinfo.award.total_unreceive%></div>
+                领取奖励
+            </div>
+        </pe:if>
+        <pe:if condition="<%= AchievementPage.achievementinfo.award.total_unreceive == 0 %>">
+            <div style="<%=format('position: absolute;width: 245; height: 85; left: 78; top: 798;font-size:36;font-family:Noto Sans S Chinese Regular; font-weight:bolder;color: #fefefe;text-align:center;line-height: 80;background: url(%s);',AchievementPage.award_png[12].url)%>">
+                领取奖励
+            </div>
+        </pe:if>
     </div>
     <!-- 导航栏下拉 -->
     <div style="position: absolute;width: 232; left:1011; top: 73;">

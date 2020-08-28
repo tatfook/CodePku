@@ -151,7 +151,6 @@ end
 
 -- 展示领取奖励
 function AchievementPage:ShowReceiveAwardPage()
-    GameLogic.AddBBS("CodeGlobals", L"领取奖励功能开发中", 3000, "#FF0000");
     params = {
         url="Mod/CodePku/cellar/GUI/Profile/AchievementFrame/ReceiveAward.html", 
         alignment="_lt", left = 0, top = 0, width = 1920 , height = 1080, zorder = 30
