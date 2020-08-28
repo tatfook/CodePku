@@ -1,0 +1,144 @@
+<!-- "script/apps/Aries/Creator/Game/Areas/EscFramePage.html" -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>个人中心</title>
+</head>
+<body>
+    <pe:mcml>
+<script refresh="false" type="text/npl" src="AchievementFrame.lua"><![CDATA[
+AchievementPage = NPL.load("(gl)Mod/CodePku/cellar/GUI/Profile/AchievementFrame/AchievementFrame.lua");
+
+--[[
+用户成就计分数据结构
+AchievementPage.achievementinfo.userachievement = {
+    total_score = 123123,       用户当前总积分
+    next_level = 654321,        下一个奖励积分
+    title = "成就奖励",         成就主界面标题，本页面用不上
+    name = "成就积分",          成就奖励页面标题
+    award_list = {
+        [1] = {status = 1, title = "领取", bounty = 300, background_pictrue = AchievementPage.award_png[9].url, picture = AchievementPage.award_png[1].url,},
+        [2] = {status = 2, title = "已领取", bounty = 600, background_pictrue = AchievementPage.award_png[9].url, picture = AchievementPage.award_png[1].url,},
+        [3] = {status = 3, title = "未解锁", bounty = 1000, background_pictrue = AchievementPage.award_png[9].url, picture = AchievementPage.award_png[1].url,},
+        [4] = {status = 3, title = "未解锁", bounty = 1500, background_pictrue = AchievementPage.award_png[9].url, picture = AchievementPage.award_png[1].url,},
+    },
+}
+--]]
+
+AchievementPage.award_pagination = 1
+AchievementPage.detail_perpage = 4
+AchievementPage.award_details_count = #AchievementPage.achievementinfo.userachievement.award_list
+AchievementPage.max_award_page = math.ceil(AchievementPage.award_details_count/AchievementPage.detail_perpage)
+
+
+
+function ClosePage()
+    Page:CloseWindow();
+end
+
+function GetOnePageAward()
+    -- 获取单页数据
+    local start_index = AchievementPage.detail_perpage * (AchievementPage.award_pagination - 1) + 1
+    local end_index = AchievementPage.detail_perpage * AchievementPage.award_pagination
+    local page_data = {}
+    for i=start_index,end_index do
+        table.insert(page_data,AchievementPage.achievementinfo.userachievement.award_list[i])
+    end
+    return page_data
+end
+
+function Page_turner(name)
+    -- 翻页
+    if "page_up"==name and AchievementPage.award_pagination>1 then
+        AchievementPage.award_pagination = AchievementPage.award_pagination - 1
+    elseif "page_down"==name and AchievementPage.award_pagination<AchievementPage.max_award_page then
+        AchievementPage.award_pagination = AchievementPage.award_pagination + 1
+    end
+    Page:Refresh(0)
+end
+
+function AchievementPage.ClickAchievementAward()
+    -- todo 领取成就奖励逻辑
+    GameLogic.AddBBS("CodeGlobals", L"领取奖励功能开发中", 3000, "#FF0000");
+end
+
+
+]]>
+</script>
+<style type="text/mcss">
+</style>
+
+<pe:container alignment="_lt" width="1920" height="1080">
+    <div style="position: relative;width: 1494;height: 910;left: 224;top: 78;background: url(codepku/image/textures/profile/achievementpopup.png);">
+        <div style="position: relative;width: 511;height: 108;left: 499;top: 0;font-size: 57;color: #f3693b; font-family: PuHuiTi-Bold; text-align: center; line-height: 108;background: url(codepku/image/textures/common_32bits.png#1277 377 410 87);">成就奖励</div>
+        <div onclick="ClosePage" style="position: relative;width: 68;height: 78;left: 1385;top: 16;background: url(codepku/image/textures/common_32bits.png#110 73 68 78);"></div>
+        <!-- 上半部分 -->
+        <div style='<%=format("position: relative;width: 1174; height: 190; left: 182;top: 177;background:url(%s);", AchievementPage.award_png[14].url)%>'>
+            <div style='<%=format("position: relative;width: 108; height: 105; left: 56;top: 35;background:url(%s);", AchievementPage.award_png[2].url)%>'></div>
+            <div style="position: relative;width: 400; height: 34; left: 198; top: 36;font-size: 36;color: #ffffff; font-family: Noto Sans S Chinese Regular; font-weight:bolder; text-align: left; line-height: 34;">
+                <div style="position: relative;"><%=AchievementPage.achievementinfo.userachievement.name%></div>
+                <div style="position: relative;left: 180;"><%=AchievementPage.achievementinfo.userachievement.total_score%></div>
+            </div>
+            <!-- 经验条 -->
+            <div style='<%=format("position: relative;width: 916; height: 32; left: 199;top: 108;background:url(%s);", AchievementPage.award_png[17].url)%>'>
+                <div style='<%=format("position: relative;width: %d; height: 32; background:url(%s);", 916*(AchievementPage.achievementinfo.userachievement.total_score/AchievementPage.achievementinfo.userachievement.next_level), AchievementPage.award_png[18].url)%>'></div>
+                <div style="position: relative;width: 350;height: 32;left: 532;text-align: right;line-height: 32;font-size: 32;color: #2085ff; font-family: Noto Sans S Chinese Regular;font-weight:bolder;"><%=AchievementPage.achievementinfo.userachievement.total_score .."/".. AchievementPage.achievementinfo.userachievement.next_level%></div>
+            </div>
+        </div>
+        <!-- 下半部分 -->
+        <div style='<%=format("position: relative;width: 1178; height: 475; left: 182;top: 394;background:url(%s);", AchievementPage.award_png[14].url)%>'>
+            <div style="position: relative;width: 1136;height: 418;left: 22;top: 18;">
+                <pe:repeat DataSource="<%=GetOnePageAward()%>">
+                    <pe:repeatitem>
+                        <pe:if condition='<%= 3 ~= Eval("status") %>'>
+                            <div style='<%=format("float: left;position: relative;width: 281; height: 418;margin-left:%d;background:url(%s);",281*(Eval("index")-1)+8, AchievementPage.award_png[15].url)%>'>
+                                <div style="position: relative;width: 281;height: 27;top: 52;text-align: center;line-height: 27;font-size: 36;color: #0e69cd;font-family:Noto Sans S Chinese Regular;font-weight:bolder;"><%=Eval("bounty")%></div>
+                                <div style="<%=format('position: relative;width: 134; height: 134; left: 79; top: 103;font-size:22;color: #a1b7f9;text-align:right;padding-top: 103;padding-right: 13;background: url(%s);',AchievementPage.award_png[9].url)%>">
+                                    <div style='<%=format("position:relative;width:73px;height:71px;left:30px;top:-71px;background:url(%s);", AchievementPage.award_png[1].url)%>'></div>
+                                    <%=AchievementPage.achievementinfo.award.total%>
+                                </div>
+                                <pe:if condition="<%= 1 == Eval('status') %>">
+                                    <!-- 未领取 -->
+                                    <div onclick="AchievementPage.ClickAchievementAward" style="<%=format('position: relative;width: 160;height: 80;left: 62; top: 272;text-align: center;font-size: 36;color: #fefefe; font-family: Noto Sans S Chinese Regular;line-height: 80;background: url(%s);',AchievementPage.award_png[11].url)%>">领取</div>
+                                </pe:if>
+                                <pe:if condition="<%= 2 == Eval('status') %>">
+                                    <!-- 已领取 -->
+                                    <div style="<%=format('position: relative;width: 160;height: 80;left: 62; top: 272;text-align: center;font-size: 36;color: #fefefe; font-family: Noto Sans S Chinese Regular;line-height: 80;background: url(%s);',AchievementPage.award_png[12].url)%>">已领取</div>
+                                </pe:if>
+                            </div>
+                        </pe:if>
+                        
+                        <pe:if condition='<%= 3 == Eval("status") %>'>
+                            <div style='<%=format("float: left;position: relative;width: 281; height: 418; margin-left:%d;background:url(%s);",281*(Eval("index")-1)+8, AchievementPage.award_png[15].url)%>'>
+                                <div style="position: relative;width: 281;height: 27;top: 52;text-align: center;line-height: 27;font-size: 36;color: #0e69cd;font-family:Noto Sans S Chinese Regular;font-weight:bolder;"><%=Eval("bounty")%></div>
+                                <div style="<%=format('position: relative;width: 134; height: 134; left: 79; top: 103;font-size:22;color: #a1b7f9;text-align:right;padding-top: 103;padding-right: 13;background: url(%s);',AchievementPage.award_png[9].url)%>">
+                                    <div style='<%=format("position:relative;width:73px;height:71px;left:30px;top:-71px;background:url(%s);", AchievementPage.award_png[1].url)%>'></div>
+                                    <%=AchievementPage.achievementinfo.award.total%>
+                                </div>
+                                <div style="<%=format('position: relative;width: 160;height: 80;left: 62; top: 272;text-align: center;font-size: 36;color: #fefefe;font-family: Noto Sans S Chinese Regular;line-height: 80;background: url(%s);',AchievementPage.award_png[12].url)%>">未解锁</div>
+                            </div>
+                            <!-- 灰色遮罩 -->
+                            <div style='<%=format("float: left;position: relative;width: 240; height: 385; margin-left:%d; top: 15;background:url(%s);",281*(Eval("index")-1)+28, AchievementPage.award_png[16].url)%>'></div>
+                        </pe:if>
+                    </pe:repeatitem>
+                </pe:repeat>
+            </div>
+        </div>
+        <!-- 翻页 -->
+        <pe:if condition='<%= AchievementPage.award_pagination > 1 %>'>
+            <div onclick="Page_turner" name="page_up" style='<%=format("position: relative;width: 78; height: 60; left: 100;top: 580;transform: rotate(90deg);transform-origin: 39px 30px;background:url(%s);", AchievementPage.award_png[19].url)%>'></div>
+        </pe:if>
+        <pe:if condition='<%= AchievementPage.award_pagination < AchievementPage.max_award_page %>'>
+        <div onclick="Page_turner" name="page_down" style='<%=format("position: relative;width: 78; height: 60; left: 1355;top: 580;transform: rotate(270deg);transform-origin: 39px 30px;background:url(%s);", AchievementPage.award_png[19].url)%>'></div>
+        </pe:if>
+    </div>
+
+
+
+</pe:container>
+
+</pe:mcml>
+</body>
+</html>
+ 

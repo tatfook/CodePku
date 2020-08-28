@@ -12,14 +12,14 @@ UserInfoPage.tab_ds_self = {
     -- {text=L"角色", name="Model"},
     -- {text=L"外观", name="Skin"},
     -- {text=L"背包", name="Backpack"},
-    -- {text=L"成就", name="Achievement"},
+    {text=L"成就", name="Achievement"},
     -- {text=L"动态", name="Activity"},
 };
 
 -- tabs - 他人
 UserInfoPage.tab_ds_other = {
     {text=L"首页", name="Home"},
-    -- {text=L"成就", name="Achievement"},
+    {text=L"成就", name="Achievement"},
     -- {text=L"动态", name="Activity"},
 };
 

@@ -225,21 +225,23 @@ end
             </pe:repeat>
         </div>
         <!-- 角色 -->
-        <div style='<%=format("position:relative;margin-left:235px;margin-top:298px;width:727px;height:653px;background:url(%s#410 490 750 653);", Eval("ProfilePng")) %>'>
-            <!-- 玩仔 -->
-            <div style='<%=format("margin-left:230px;margin-top:-100px;width:345px;height:600px;background:url(%s#66 531 345 600);", Eval("ProfilePng")) %>'>
-            </div>
-            <!-- <pe:mc_player /> 暂不支持mcml2, 待paracraft老师开发后替换，先显示玩仔 -->
-            <!-- <div style="width:100px;height:150px;" >
-                <div style="position:relative;margin-left:-90px;margin-top:-115px;width:130px;height:120px;" >
-                    <pe:mc_player name="MyPlayer" miniscenegraphname="AvatarMyselfTabCharacter" style="width:320px;height:320px;" IsInteractive="false" IsActiveRendering="true"/>
+        <pe:if condition='<%=GetTabDSName() == "Home" or GetTabDSName() == "Profile"%>'>
+            <div style='<%=format("position:relative;margin-left:235px;margin-top:298px;width:727px;height:653px;background:url(%s#410 490 750 653);", Eval("ProfilePng")) %>'>
+                <!-- 玩仔 -->
+                <div style='<%=format("margin-left:230px;margin-top:-100px;width:345px;height:600px;background:url(%s#66 531 345 600);", Eval("ProfilePng")) %>'>
                 </div>
-            </div> -->
-            <!-- hide for now -->
-            <!-- <div style='<%=format("position:absolute;margin-left:48px;top:-148px;padding:18px;font-size:36px;color:#ffffff;width:490px;height:180px;background:url(%s#1275 451 219 125:204 24 13 68);", Eval("ProfilePng")) %>'>
-                心情寄语
-            </div> -->
-        </div>
+                <!-- <pe:mc_player /> 暂不支持mcml2, 待paracraft老师开发后替换，先显示玩仔 -->
+                <!-- <div style="width:100px;height:150px;" >
+                    <div style="position:relative;margin-left:-90px;margin-top:-115px;width:130px;height:120px;" >
+                        <pe:mc_player name="MyPlayer" miniscenegraphname="AvatarMyselfTabCharacter" style="width:320px;height:320px;" IsInteractive="false" IsActiveRendering="true"/>
+                    </div>
+                </div> -->
+                <!-- hide for now -->
+                <!-- <div style='<%=format("position:absolute;margin-left:48px;top:-148px;padding:18px;font-size:36px;color:#ffffff;width:490px;height:180px;background:url(%s#1275 451 219 125:204 24 13 68);", Eval("ProfilePng")) %>'>
+                    心情寄语
+                </div> -->
+            </div>
+        </pe:if>
         <!-- <div style="position:relative;width:275;height:97;margin-top:960;font-size:18;base-font-size:40;background:url(codepku/image/textures/userinfo/options/shezhi.png)"onclick="Undefinde"></div> -->
         <!-- 首页 -->
         <pe:if condition='<%=GetTabDSName() == "Home"%>'>
@@ -248,6 +250,10 @@ end
         <!-- 属性 -->
         <pe:if condition='<%=GetTabDSName() == "Profile"%>'>
             <iframe name="ProfileFrame" src="Mod/CodePku/cellar/GUI/Profile/ProfileFrame.html" style="margin-left:1017px;"></iframe>
+        </pe:if>
+        <!-- 成就 -->
+        <pe:if condition='<%=GetTabDSName() == "Achievement"%>'>
+            <iframe name="AchievementFrame" src="Mod/CodePku/cellar/GUI/Profile/AchievementFrame/AchievementFrame.html" style="position: absolute;left:230px;"></iframe>
         </pe:if>
         <pe:if condition='<%=GetTabDSName() == "Backpack"%>'>
             <!-- 背包 -->
