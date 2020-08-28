@@ -13,7 +13,7 @@
 
                     Rebranding = commonlib.gettable("MyCompany.Aries.Creator.Game.Rebranding")
                     local GameMainLogin = commonlib.gettable("MyCompany.Aries.Game.MainLogin")
-                    local MainLogin = NPL.load("./MainLogin.lua")                                                            
+                    local MainLogin = NPL.load("./MainLogin.lua")
                     local CodePkuServiceSession = NPL.load("(gl)Mod/CodePku/service/CodePkuService/Session.lua")
 
                     local page = document:GetPageCtrl()
@@ -25,57 +25,13 @@
                         return appMarketQQ
                     end
 
-                    function OnOpenModulePage()
-                        NPL.load("(gl)script/apps/Aries/Creator/Game/Login/SelectModulePage.lua");
-                        local SelectModulePage = commonlib.gettable("MyCompany.Aries.Game.MainLogin.SelectModulePage")
-                        SelectModulePage.ShowPage()
-                    end
-
-                    function OnChangeLanguagePage()
-                        NPL.load("(gl)script/apps/Aries/Creator/Game/Common/Translation.lua")
-
-                        local Translation = commonlib.gettable("MyCompany.Aries.Game.Common.Translation")
-                        Translation.ShowPage(function()
-                            page:Refresh(0.01)
-                        end)
-                    end
-
-                    function GetModDes()
-                        local modname = ParaEngine.GetAppCommandLineByParam("mod","")
-                        local s = string.format(L"当前Mod:%s",modname)
-                        return s
-                    end
-
-                    function OnCustomCharacter()
-                    end                                        
-                        
-                    function GetModCountAsString()
-                        NPL.load("(gl)script/apps/Aries/Creator/Game/Mod/ModManager.lua")
-                        local ModManager = commonlib.gettable("Mod.ModManager")
-                        local pluginloader = ModManager:GetLoader()
-                        local nCount = pluginloader:GetActiveModCount()
-
-                        if nCount > 0 then
-                            return format("(%d)", nCount)
-                        else
-                            return ""
-                        end
-                    end
-
-                    function OnClickCustomerService()
-                        ParaGlobal.ShellExecute("open", L"https://keepwork.com/official/docs/FAQ/questions", "", "", 1)
-                    end
-
-                    function login_text()
-                        return Mod.CodePku.Store:Get("user/loginText")
-                    end
-
-                    function get_history_users()
-                        return MainLogin:GetHistoryUsers()
-                    end
-
                     function login()
                         MainLogin:LoginAction(1)
+                    end
+
+                    function quickLogin()
+                        LOG.std(nile, "MainLogin.html", "quickLogin", "Enter")
+
                     end
 
                     local isClickedGetPhoneCaptcha = false
@@ -210,8 +166,11 @@
                     </div>
 
                     <input type="button"  onclick="login" value='<%= L"登 录"%>'
-                        style="position: relative; width: 723; height: 89; left: 111; top: 414; font-size: 36; color: #0E5516; font-family: PuHuiTi-Bold; font-weight: bold; background:url(codepku/image/textures/login/main.png#1129 266 95 96:9 9 9 9);" />
-                    
+                        style="position: relative; width: 300; height: 89; left: 511; top: 414; font-size: 36; color: #0E5516; font-family: PuHuiTi-Bold; font-weight: bold; background:url(codepku/image/textures/login/main.png#1129 266 95 96:9 9 9 9);" />
+
+                    <input type="button"  onclick="login" value='<%= L"快速入口"%>'
+                        style="position: relative; width: 300; height: 89; left: 111; top: 414; font-size: 36; color: #0E5516; font-family: PuHuiTi-Bold; font-weight: bold; background:url(codepku/image/textures/login/main.png#1129 266 95 96:9 9 9 9);" />
+
                     <div style="position: relative; width: 32.1; height: 32.1; left: 111; top: 531; background:url(codepku/image/textures/login/main.png#1638 314 33 33);"></div>
 
                     <input type="checkbox" name="agree" checked="checked" UncheckedBG="codepku/image/textures/login/main.png#1638 314 33 33" CheckedBG="codepku/image/textures/login/main.png#708 299 32 32"

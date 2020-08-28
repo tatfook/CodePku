@@ -387,6 +387,38 @@ function MainLogin:RemoveAccount(username)
     self:Refresh()
 end
 
+-- 来自worldshare的sessionData中的借鉴
+function MainLogin:GetDeviceUUID()
+    local function getUUID()
+        local template ='xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'
+        return string.gsub(template, '[xy]', function (c)
+            local v = (c == 'x') and math.random(0, 0xf) or math.random(8, 0xb)
+            return string.format('%x', v)
+        end)
+    end
+
+    local UUIDData = GameLogic.GetPlayerController():LoadLocalData("UUIDData", {
+        selectedUser = "",
+        allUsers = {}
+    }, true)
+    local currentParacraftDir = ParaIO.GetWritablePath()
+
+    if not UUIDData.softwareUUID or
+       not UUIDData.paracraftDir or
+       UUIDData.paracraftDir ~= currentParacraftDir then
+        UUIDData.paracraftDir = ParaIO.GetWritablePath()
+        UUIDData.softwareUUID = getUUID()
+        GameLogic.GetPlayerController():SaveLocalData("UUIDData", UUIDData, true)
+    end
+    
+    local machineID = ParaEngine.GetAttributeObject():GetField("MachineID","")
+
+    LOG.std(nil, "MainLogin", "GetDeviceUUID", "UUIDData.softwareUUID = %s , machineID = %s", tostring(UUIDData.softwareUUID), tostring(machineID))
+
+    return UUIDData.softwareUUID .. "-" .. machineID
+end
+
+
 function MainLogin:getMobileCode()
     local MainLoginPage = Mod.CodePku.Store:Get("page/MainLogin")
 
