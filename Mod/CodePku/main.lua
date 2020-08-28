@@ -469,6 +469,16 @@ function CodePku:init()
 			return true;
 		end
 	)
+
+	GameLogic.GetFilters():add_filter(
+		"KeepworkPermission",
+		function (defaultBool,name,bOpenUIIfNot, callback)
+			if type(callback) == "function" then
+                callback(true)
+            end
+			return true;
+		end
+	)
 end
 
 function CodePku:OnLogin()
