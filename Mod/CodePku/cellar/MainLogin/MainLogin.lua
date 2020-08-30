@@ -182,7 +182,7 @@ function MainLogin:LoginAction(methodIndex)
     local agree_ctrl = agree:GetControl();
     local agree_val = agree_ctrl:isChecked();
 
-    if not account or account == "" then
+    if (not account or account == "") and (methodIndex == 1 or methodIndex == 2) then
         GameLogic.AddBBS(nil, L"请输入手机号码", 3000, "255 0 0", 21)
         return false
     end
@@ -196,7 +196,7 @@ function MainLogin:LoginAction(methodIndex)
             GameLogic.AddBBS(nil, L"请输入验证码", 3000, "255 0 0", 21)
             return false
         end
-    else
+    elseif (methodIndex == 2) then
         if not password or password == "" then
             GameLogic.AddBBS(nil, L"请输入密码", 3000, "255 0 0", 21)
             return false
@@ -260,7 +260,7 @@ function MainLogin:LoginAction(methodIndex)
             end
         )
     elseif (methodIndex == 3) then
-        CodePkuServiceSession:LoginWithPwd(
+        CodePkuServiceSession:QuickLogin(
             UUID,
             function(response, err)
                 if err == 503 then
@@ -415,25 +415,25 @@ function MainLogin:GetDeviceUUID()
         end)
     end
 
-    local UUIDData = GameLogic.GetPlayerController():LoadLocalData("UUIDData", {
-        selectedUser = "",
-        allUsers = {}
-    }, true)
+    local UUIDData = GameLogic.GetPlayerController():LoadLocalData("UUIDData", {}, true)
     local currentParacraftDir = ParaIO.GetWritablePath()
+    local machineID = ParaEngine.GetAttributeObject():GetField("MachineID","")
 
     if not UUIDData.softwareUUID or
+       not UUIDData.machineID or
        not UUIDData.paracraftDir or
-       UUIDData.paracraftDir ~= currentParacraftDir then
+       UUIDData.paracraftDir ~= currentParacraftDir or
+       UUIDData.machineID ~= machineID then
         UUIDData.paracraftDir = ParaIO.GetWritablePath()
         UUIDData.softwareUUID = getUUID()
+        UUIDData.machineID = machineID
         GameLogic.GetPlayerController():SaveLocalData("UUIDData", UUIDData, true)
     end
     
-    local machineID = ParaEngine.GetAttributeObject():GetField("MachineID","")
 
-    LOG.std(nil, "MainLogin", "GetDeviceUUID", "UUIDData.softwareUUID = %s , machineID = %s", tostring(UUIDData.softwareUUID), tostring(machineID))
+    LOG.std(nil, "MainLogin", "GetDeviceUUID", "UUIDData.softwareUUID = %s , UUIDData.machineID = %s", tostring(UUIDData.softwareUUID), tostring(UUIDData.machineID))
 
-    return UUIDData.softwareUUID .. "-" .. machineID
+    return UUIDData.softwareUUID .. "-" .. UUIDData.machineID
 end
 
 

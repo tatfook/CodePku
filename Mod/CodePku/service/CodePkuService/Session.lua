@@ -38,7 +38,7 @@ function CodePkuServiceSession:LoginWithToken(token, callback)
 end
 
 function CodePkuServiceSession:LoginResponse(response, err, callback)    
-    if err == 400 or err == 422 or err == 500  then
+    if err == 400 or err == 422 or err == 500 or error == 404 then
         Mod.CodePku.MsgBox:Close()
         local errorMsg = response.message or "用户名或者密码错误"
         GameLogic.AddBBS(nil, errorMsg, 3000, "255 0 0", 21)
