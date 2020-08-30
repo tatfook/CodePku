@@ -62,6 +62,25 @@ function CodePkuUsersApi:LoginWithPwd(mobile, password, success, error)
     CodePkuBaseApi:Post("/users/authorizations", params, nil, success, error, { 503, 400 })
 end
 
+-- url: /users/quicklogin
+-- method: POST
+-- params:
+--[[
+    UUID 唯一标识符
+]]
+-- return: object
+function CodePkuUsersApi:QuickLogin(UUID, success, error)
+    if type(UUID) ~= "string" then
+        return false
+    end
+
+    local params = {
+        UUID = UUID,
+    }
+
+    CodePkuBaseApi:Post("/users/quicklogin", params, nil, success, error, { 503, 400 })
+end
+
 -- url: /users/set-password
 -- method: PUT
 -- params:

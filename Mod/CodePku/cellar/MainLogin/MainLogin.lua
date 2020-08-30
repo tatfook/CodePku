@@ -149,8 +149,14 @@ function MainLogin:Close()
     end
 end
 
--- methodIndex: 1-captcha, 2-password
+-- methodIndex: 1-captcha, 2-password 3-quicklogin 4-QQ 5-WeChat //4 and 5 not opened
 function MainLogin:LoginAction(methodIndex)
+    -- 屏蔽微信登录和QQ登录  等做好了记得打开
+    if methodIndex > 3 then
+        GameLogic.AddBBS(nil, L"功能暂未开放", 3000, "255 0 0", 21);
+        return
+    end
+
     local MainLoginPage = Mod.CodePku.Store:Get('page/MainLogin')
 
     if not MainLoginPage then
@@ -162,6 +168,7 @@ function MainLogin:LoginAction(methodIndex)
         return false
     end
 
+    local UUID = MainLogin:GetDeviceUUID()
     local account = MainLoginPage:GetValue("account")
     
 
@@ -180,7 +187,7 @@ function MainLogin:LoginAction(methodIndex)
         return false
     end
 
-    if (methodIndex ~= 2) then
+    if (methodIndex == 1) then
         if not mobileToken or mobileToken == "" then
             GameLogic.AddBBS(nil, L"请先获取验证码", 3000, "255 0 0", 21)
             return false
@@ -227,7 +234,7 @@ function MainLogin:LoginAction(methodIndex)
         end
     end
 
-    if (methodIndex ~= 2) then
+    if (methodIndex == 1) then
         CodePkuServiceSession:Login(
             account,
             verifyCode,
@@ -240,10 +247,21 @@ function MainLogin:LoginAction(methodIndex)
                 CodePkuServiceSession:LoginResponse(response, err, HandleLogined)
             end
         )
-    else
+    elseif (methodIndex == 2) then
         CodePkuServiceSession:LoginWithPwd(
             account,
             password,
+            function(response, err)
+                if err == 503 then
+                    Mod.CodePku.MsgBox:Close()
+                    return false
+                end
+                CodePkuServiceSession:LoginResponse(response, err, HandleLogined)
+            end
+        )
+    elseif (methodIndex == 3) then
+        CodePkuServiceSession:LoginWithPwd(
+            UUID,
             function(response, err)
                 if err == 503 then
                     Mod.CodePku.MsgBox:Close()
@@ -387,7 +405,7 @@ function MainLogin:RemoveAccount(username)
     self:Refresh()
 end
 
--- 来自worldshare的sessionData中的借鉴
+-- 来自worldshare的sessionData中的借鉴 获取机器的唯一标识符
 function MainLogin:GetDeviceUUID()
     local function getUUID()
         local template ='xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'

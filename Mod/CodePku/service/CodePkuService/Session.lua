@@ -29,6 +29,10 @@ function CodePkuServiceSession:LoginWithPwd(account, password, callback)
     CodePkuUsersApi:LoginWithPwd(account, password, callback, callback)
 end
 
+function CodePkuServiceSession:QuickLogin(UUID, callback)
+    CodePkuUsersApi:QuickLogin(UUID, callback, callback)
+end
+
 function CodePkuServiceSession:LoginWithToken(token, callback)
     CodePkuUsersApi:Profile(token, callback, callback)
 end
