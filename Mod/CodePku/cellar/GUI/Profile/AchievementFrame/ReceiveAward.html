@@ -64,6 +64,7 @@ function AchievementPage.ClickAchievementAward(name)
     -- todo 领取成就奖励逻辑
     GameLogic.AddBBS("CodeGlobals", L"领取奖励功能开发中", 3000, "#FF0000");
     AchievementPage.achievementinfo.userachievement.award_list[name].status = 2
+    AchievementPage.GetTotalUnreceive(AchievementPage.achievementinfo)
     Page:Refresh(0)
 end
 

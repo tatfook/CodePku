@@ -60,7 +60,17 @@ AchievementPage.data = {
     {rank = 2, name = "成就13", status = 2, id = 13, description = "成就介绍，达成成就所需具备的条件，当前进度：", completed = 5, requirement = 10, award = {[1] = {title = "成就积分奖励", num = 200, image = "codepku/image/textures/profile/achievement.png#199 15 139 134"},[2] = {title = "金币", num = 1234, image = "codepku/image/textures/common_32bits.png#913 41 73 71"},},},
 }
 
-
+AchievementPage.award_data = {
+    [1] = {id = 1, status = 2, title = "已领取", bounty = 300, background_pictrue = AchievementPage.award_png[9].url, picture = AchievementPage.award_png[1].url,},
+    [2] = {id = 2, status = 2, title = "已领取", bounty = 600, background_pictrue = AchievementPage.award_png[9].url, picture = AchievementPage.award_png[1].url,},
+    [3] = {id = 3, status = 2, title = "已领取", bounty = 1000, background_pictrue = AchievementPage.award_png[9].url, picture = AchievementPage.award_png[1].url,},
+    [4] = {id = 4, status = 1, title = "领取", bounty = 1500, background_pictrue = AchievementPage.award_png[9].url, picture = AchievementPage.award_png[1].url,},
+    [5] = {id = 5, status = 1, title = "领取", bounty = 2000, background_pictrue = AchievementPage.award_png[9].url, picture = AchievementPage.award_png[1].url,},
+    [6] = {id = 6, status = 1, title = "领取", bounty = 2500, background_pictrue = AchievementPage.award_png[9].url, picture = AchievementPage.award_png[1].url,},
+    [7] = {id = 7, status = 3, title = "未解锁", bounty = 2500, background_pictrue = AchievementPage.award_png[9].url, picture = AchievementPage.award_png[1].url,},
+    [8] = {id = 8, status = 3, title = "未解锁", bounty = 2500, background_pictrue = AchievementPage.award_png[9].url, picture = AchievementPage.award_png[1].url,},
+    [9] = {id = 9, status = 3, title = "未解锁", bounty = 2500, background_pictrue = AchievementPage.award_png[9].url, picture = AchievementPage.award_png[1].url,},
+}
 
 -- 成就页面初始化
 function AchievementPage:Init()
@@ -78,17 +88,7 @@ function AchievementPage:Init()
             next_level = 654321,
             title = "成就奖励",
             name = "成就积分",
-            award_list = {
-                [1] = {id = 1, status = 2, title = "已领取", bounty = 300, background_pictrue = AchievementPage.award_png[9].url, picture = AchievementPage.award_png[1].url,},
-                [2] = {id = 2, status = 2, title = "已领取", bounty = 600, background_pictrue = AchievementPage.award_png[9].url, picture = AchievementPage.award_png[1].url,},
-                [3] = {id = 3, status = 2, title = "已领取", bounty = 1000, background_pictrue = AchievementPage.award_png[9].url, picture = AchievementPage.award_png[1].url,},
-                [4] = {id = 4, status = 1, title = "领取", bounty = 1500, background_pictrue = AchievementPage.award_png[9].url, picture = AchievementPage.award_png[1].url,},
-                [5] = {id = 5, status = 1, title = "领取", bounty = 2000, background_pictrue = AchievementPage.award_png[9].url, picture = AchievementPage.award_png[1].url,},
-                [6] = {id = 6, status = 1, title = "领取", bounty = 2500, background_pictrue = AchievementPage.award_png[9].url, picture = AchievementPage.award_png[1].url,},
-                [7] = {id = 7, status = 3, title = "未解锁", bounty = 2500, background_pictrue = AchievementPage.award_png[9].url, picture = AchievementPage.award_png[1].url,},
-                [8] = {id = 8, status = 3, title = "未解锁", bounty = 2500, background_pictrue = AchievementPage.award_png[9].url, picture = AchievementPage.award_png[1].url,},
-                [9] = {id = 9, status = 3, title = "未解锁", bounty = 2500, background_pictrue = AchievementPage.award_png[9].url, picture = AchievementPage.award_png[1].url,},
-            },
+            award_list = AchievementPage.award_data,
         },
         award = {
             total = 9999,
