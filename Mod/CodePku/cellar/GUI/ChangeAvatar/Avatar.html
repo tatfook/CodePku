@@ -78,40 +78,40 @@
         VerticalScrollBarStep="36" VerticalScrollBarOffsetX="8">
         <Columns>
             <div style="width: 181; height: 181; margin-left: 32; margin-top: 13;">
-                <div onclick="ChangeAvatar" name="<%=Eval('index')%>" style="<%=format('position: relative; width: 171; height: 171; left: 5; top: 5; background: url(%s);',Eval('img'))%>"></div>
+                <div onclick="ChangeAvatar" name="<%=Eval('index')%>" style="<%=format('position: relative; width: 171; height: 171; left: 5; top: 5; background: url(%s);',Eval('avatar_url'))%>"></div>
                 <pe:if condition="<%= avatar_choose == Eval('index')%>">
                     <div style="<%=format('position: relative; width: 181; height: 181; background: url(%s#557 69 174 176);',Eval('ProfilePng'))%>"></div>
                 </pe:if>
-                <pe:if condition="<%= Eval('is_open') == false %>">
+                <pe:if condition="<%= Eval('unlock_avatar') == 0 %>">
                     <div onclick="ChangeAvatar" name="<%=Eval('index')%>" style="<%=format('position: relative; width: 181; height: 181; background: url(%s#36 455 171 171:10 10 10 10);',Eval('ProfilePng'))%>"></div>
                     <div onclick="ChangeAvatar" name="<%=Eval('index')%>" style="<%=format('position: relative; width: 45; height: 58; left: 66; top: 54; background: url(%s#237 512 45 58);',Eval('ProfilePng'))%>"></div>
                 </pe:if>
-                <pe:if condition="<%= Eval('is_new') == true %>">
+                <pe:if condition="<%= Eval('has_clicked') == 0 %>">
                     <div style="<%=format('position: relative; width: 23; height: 23; left: 163; top: -5; background: url(%s#788 271 23 23:5 5 5 5);',Eval('ProfilePng'))%>"></div>
                 </pe:if>
-                <pe:if condition="<%= Eval('state') == 1 %>">
+                <pe:if condition="<%= Eval('is_using') == 1 %>">
                     <div onclick="ChangeAvatar" name="<%=Eval('index')%>" style="position: relative; width: 181; height: 181;  text-align:center; line-height:181; font-size:28; color: #4EFF00; font-family:PuHuiTi-Bold;">使用中</div>
                 </pe:if>
             </div>
         </Columns>
     </pe:gridview>
     <!--show-->
-    <div style="position: relative; width: 307; height: 817; left: 1194;">
+    <!-- <div style="position: relative; width: 307; height: 817; left: 1194;">
         <div style="<%=format('position: relative; width: 213; height: 213; left: 47; top: 70; background: url(%s#557 454 213 213);',Eval('ProfilePng'))%>">
-            <div style="<%=format('position: relative; width: 203; height: 203; left: 5; top: 5; background: url(%s);',info_table[Eval('avatar_choose')].img)%>"></div>
+            <div style="<%=format('position: relative; width: 203; height: 203; left: 5; top: 5; background: url(%s);',info_table[avatar_choose].avatar_url)%>"></div>
         </div>
-        <div style="position: relative; width:307; height:35; top: 305; text-align:center; line-height:35; color:#ffffff; font-size:36px; font-family:PuHuiTi-Bold;"><%=info_table[avatar_now].name%></div>
+        <div style="position: relative; width:307; height:35; top: 305; text-align:center; line-height:35; color:#ffffff; font-size:36px; font-family:PuHuiTi-Bold;"><%=info_table[avatar_now].avatar_name%></div>
         <div style="position: relative; width:307; height:35; top: 460; text-align:center; line-height:35; color:#054BD9; font-size:36px; font-family:PuHuiTi-Bold;">使用期限：永久</div>
-        <pe:if condition="<%= info_table[avatar_choose].is_open == false %>">
-            <div style="position: relative; width:307; height:35; top: 662; text-align:center; line-height:35; font-size:36px; font-family:PuHuiTi-Bold;">头像解锁条件</div>
+        <pe:if condition="<%= info_table[avatar_choose].unlock_avatar == 0 %>">
+            <div style="position: relative; width:307; height:35; top: 662; text-align:center; line-height:35; font-size:36px; font-family:PuHuiTi-Bold;"><%='头像解锁条件'..info_table[avatar_choose].unlock_desc%></div>
         </pe:if>
-        <pe:if condition="<%= info_table[avatar_choose].is_open == true and info_table[avatar_choose].state == 0 %>">
+        <pe:if condition="<%= info_table[avatar_choose].unlock_avatar == 1 and info_table[avatar_choose].is_using == 0 %>">
             <div onclick="UseAvatar" name="<%=avatar_choose%>" style="position: relative; width:240; height:80; left: 33; top: 662; background: url(codepku/image/textures/common_32bits.png#552 182 86 86:15 15 15 15); text-align:center; line-height:80; font-size:36px; font-family:PuHuiTi-Bold;">使用</div>
         </pe:if>
-        <pe:if condition="<%= info_table[avatar_choose].is_open == true and info_table[avatar_choose].state == 1 %>">
+        <pe:if condition="<%= info_table[avatar_choose].unlock_avatar == true and info_table[avatar_choose].is_using == 1 %>">
             <div style="position: relative; width:307; height:35; top: 662; text-align:center; line-height:35; font-size:36px; font-family:PuHuiTi-Bold;">使用中</div>
         </pe:if>
-    </div>
+    </div> -->
 </pe:container>
 </pe:mcml>
 </body>

@@ -18,7 +18,7 @@
     navig = ChangeAvatarPage.navig
     navig_clicked = ChangeAvatarPage.navig_index
     select_clicked  = 1
-    --avatar
+    
     info_table = ChangeAvatarPage.avatar_frame
     avatar_now = ChangeAvatarPage.now_avatar_frame
     avatar_choose = ChangeAvatarPage.now_avatar_frame
@@ -78,19 +78,18 @@
         VerticalScrollBarStep="36" VerticalScrollBarOffsetX="8">
         <Columns>
             <div style="width: 181; height: 181; margin-left: 32; margin-top: 13;">
-                <div onclick="ChangeAvatar" name="<%=Eval('index')%>" style="<%=format('position: relative; width: 171; height: 171; left: 5; top: 5; background: url(%s#1846 64 181 181);',Eval('ProfilePng'))%>"></div>
-                <div onclick="ChangeAvatar" name="<%=Eval('index')%>" style="<%=format('position: relative; width: 181; height: 181; background: url(%s);',Eval('img'))%>"></div>
+                <div onclick="ChangeAvatar" name="<%=Eval('index')%>" style="<%=format('position: relative; width: 171; height: 171; left: 5; top: 5; background: url(%s);',Eval('avatar_url'))%>"></div>
                 <pe:if condition="<%= avatar_choose == Eval('index')%>">
                     <div style="<%=format('position: relative; width: 181; height: 181; background: url(%s#557 69 174 176);',Eval('ProfilePng'))%>"></div>
                 </pe:if>
-                <pe:if condition="<%= Eval('is_open') == false %>">
-                    <div onclick="ChangeAvatar" name="<%=Eval('index')%>"  style="<%=format('position: relative; width: 181; height: 181; background: url(%s#36 455 171 171:10 10 10 10);',Eval('ProfilePng'))%>"></div>
-                    <div onclick="ChangeAvatar" name="<%=Eval('index')%>"  style="<%=format('position: relative; width: 45; height: 58; left: 66; top: 54; background: url(%s#237 512 45 58);',Eval('ProfilePng'))%>"></div>
+                <pe:if condition="<%= Eval('unlock_avatar') == 0 %>">
+                    <div onclick="ChangeAvatar" name="<%=Eval('index')%>" style="<%=format('position: relative; width: 181; height: 181; background: url(%s#36 455 171 171:10 10 10 10);',Eval('ProfilePng'))%>"></div>
+                    <div onclick="ChangeAvatar" name="<%=Eval('index')%>" style="<%=format('position: relative; width: 45; height: 58; left: 66; top: 54; background: url(%s#237 512 45 58);',Eval('ProfilePng'))%>"></div>
                 </pe:if>
-                <pe:if condition="<%= Eval('is_new') == true %>">
+                <pe:if condition="<%= Eval('has_clicked') == 0 %>">
                     <div style="<%=format('position: relative; width: 23; height: 23; left: 163; top: -5; background: url(%s#788 271 23 23:5 5 5 5);',Eval('ProfilePng'))%>"></div>
                 </pe:if>
-                <pe:if condition="<%= Eval('state') == 1 %>">
+                <pe:if condition="<%= Eval('is_using') == 1 %>">
                     <div onclick="ChangeAvatar" name="<%=Eval('index')%>" style="position: relative; width: 181; height: 181;  text-align:center; line-height:181; font-size:28; color: #4EFF00; font-family:PuHuiTi-Bold;">使用中</div>
                 </pe:if>
             </div>

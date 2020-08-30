@@ -1,5 +1,6 @@
 
 local ChangeAvatarPage = commonlib.gettable("Mod.CodePku.GUI.ChangeAvatarPage")
+local request = NPL.load("(gl)Mod/CodePku/api/BaseRequest.lua")
 
 ChangeAvatarPage.navig = {
     {text=L"头像", name="avatar"},
@@ -28,31 +29,109 @@ ChangeAvatarPage.params={
 }
 
 function ChangeAvatarPage.GetAvatar()
-    local avatar = {
-        {name = 'img1', img = ProfilePng..'#312 455 210 211', state = 1, is_open = true, is_new = false, index = 1},
-        {name = 'img2', img = ProfilePng..'#36 261 172 178', state = 0, is_open = true, is_new = false, index = 2},
-        {name = 'img3', img = ProfilePng..'#227 261 173 179', state = 0, is_open = true, is_new = false, index = 3},
-        {name = 'img4', img = ProfilePng..'#419 263 176 174', state = 0, is_open = true, is_new = true, index = 4},
-        {name = 'img5', img = ProfilePng..'#419 263 176 174', state = 0, is_open = false, is_new = false, index =5},
-        {name = 'img6', img = ProfilePng..'#419 263 176 174', state = 0, is_open = false, is_new = false, index = 6},
-        {name = 'img7', img = ProfilePng..'#419 263 176 174', state = 0, is_open = false, is_new = false, index = 7},
-        {name = 'img8', img = ProfilePng..'#419 263 176 174', state = 0, is_open = false, is_new = false, index = 8},
-    }
-    return avatar;
+    local response = request:get("/avatars", nil, {sync=true})
+    if response.data.code == 200 then
+        local data = response.data.data
+        for i=1,#data do
+            if tonumber(data[i].is_using) == 1 then
+                ChangeAvatarPage.now_avatar = i
+            end
+        end
+        return data or {}
+    else
+        return {}
+    end
+    -- local avatar = {
+    --     {
+    --         id = 1,
+    --         avatar_name = "初始头像",
+    --         category_id = 0,
+    --         need_unlock = 0,
+    --         unlock_desc = "",
+    --         limit_type = 1, 
+    --         limit_time = 86400,
+    --         user_id = 3,
+    --         has_clicked = 1,
+    --         receive_time = "2020-08-27 00:00:00",
+    --         unlock_avatar = 1,
+    --         file_path = "/game/admin/courseWareZip/d41d8cd98f00b204e9800998ecf8427e.zip",
+    --         is_using = 0,
+    --         avatar_url = "https://scratch-works-staging-1253386414.file.myqcloud.com/game/admin/courseWareZip/d41d8cd98f00b204e9800998ecf8427e.zip", 
+    --         left_time = "6小时45分" 
+    --     },
+    --     {
+    --         id = 2,
+    --         avatar_name = "红星鸾动",
+    --         category_id = 0,
+    --         need_unlock = 0,
+    --         unlock_desc = "",
+    --         limit_type = 0, 
+    --         limit_time = 0,
+    --         user_id = 3,
+    --         has_clicked = 0,
+    --         receive_time = "2020-08-27 00:00:00",
+    --         unlock_avatar = 1,
+    --         file_path = "/game/admin/courseWareZip/d41d8cd98f00b204e9800998ecf8427e.zip",
+    --         is_using = 1,
+    --         avatar_url = "https://scratch-works-staging-1253386414.file.myqcloud.com/game/admin/courseWareZip/d41d8cd98f00b204e9800998ecf8427e.zip", 
+    --         left_time = "6小时45分" 
+    --     }
+    -- }
+    -- return avatar
 end
+
 function ChangeAvatarPage.GetAvatarFrame()
-    local avatar = {
-        {name = 'img1', img = ProfilePng..'#770 69 176 176', state = 1, is_open = true, is_new = false, index = 1},
-        {name = 'img2', img = ProfilePng..'#770 69 176 176', state = 0, is_open = true, is_new = false, index = 2},
-        {name = 'img3', img = ProfilePng..'#770 69 176 176', state = 0, is_open = true, is_new = false, index = 3},
-        {name = 'img4', img = ProfilePng..'#770 69 176 176', state = 0, is_open = true, is_new = true, index = 4},
-        {name = 'img5', img = ProfilePng..'#770 69 176 176', state = 0, is_open = false, is_new = false, index =5},
-        {name = 'img6', img = ProfilePng..'#770 69 176 176', state = 0, is_open = false, is_new = false, index = 6},
-        {name = 'img7', img = ProfilePng..'#770 69 176 176', state = 0, is_open = false, is_new = false, index = 7},
-        {name = 'img8', img = ProfilePng..'#770 69 176 176', state = 0, is_open = false, is_new = false, index = 8},
-    }
-    return avatar;
+    local response = request:get("/avatar-frames", nil, {sync=true})
+    if response.data.code == 200 then
+        local data = response.data.data
+        for i=1,#data do
+            if tonumber(data[i].is_using) == 1 then
+                ChangeAvatarPage.now_avatar = i
+            end
+        end
+        return data or {}
+    else
+        return {}
+    end
 end
+
+
+function ChangeAvatarPage.SetAvatar(id)
+    local response = request:put("/avatars/change/"..tostring(id), nil, {sync=true})
+    if response.data.code == 200 then
+        return "更换头像成功"
+    else
+        return response.data.message
+    end
+end
+
+function ChangeAvatarPage.SetAvatarFrame(id)
+    local response = request:put("/avatar-frames/change/"..tostring(id), nil, {sync=true})
+    if response.data.code == 200 then
+        return "更换头像框成功"
+    else
+        return response.data.message
+    end
+end
+
+function ChangeAvatarPage.ClickNewAvatar(id)
+    local response = request:put("/avatar/click/"..tostring(id), nil, {sync=true})
+    if response.data.code == 200 then
+        return "ok"
+    else
+        return response.data.message
+    end
+end
+
+function ChangeAvatarPage.ClickNewAvatar(id)
+    local response = request:put("/avatar-frames/click/"..tostring(id), nil, {sync=true})
+    if response.data.code == 200 then
+        return "ok"
+    else
+        return response.data.message
+    end
+end
+
 
 function ChangeAvatarPage:ShowPage(Pageindex)
     
@@ -62,9 +141,7 @@ function ChangeAvatarPage:ShowPage(Pageindex)
     local AdaptWindow = commonlib.gettable("Mod.CodePku.GUI.Window.AdaptWindow")
     local Pageindex = tonumber(Pageindex) or 1
     ChangeAvatarPage.navig_index = Pageindex
-    print(ChangeAvatarPage.navig_index)
     if Pageindex == 1 then
-        print(ChangeAvatarPage.navig_index)
         ChangeAvatarPage.avatar = ChangeAvatarPage.GetAvatar()
         ChangeAvatarPage.now_avatar = 1
         ChangeAvatarPage.ui = AdaptWindow:QuickWindow(ChangeAvatarPage.params['avatar'])
