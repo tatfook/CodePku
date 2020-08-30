@@ -60,33 +60,9 @@ AchievementPage.data = {
     {rank = 2, name = "成就13", status = 2, id = 13, description = "成就介绍，达成成就所需具备的条件，当前进度：", completed = 5, requirement = 10, award = {[1] = {title = "成就积分奖励", num = 200, image = "codepku/image/textures/profile/achievement.png#199 15 139 134"},[2] = {title = "金币", num = 1234, image = "codepku/image/textures/common_32bits.png#913 41 73 71"},},},
 }
 
-AchievementPage.achievementinfo = {
-    userachievement = {
-        total_score = 123123,
-        next_level = 654321,
-        title = "成就奖励",
-        name = "成就积分",
-        award_list = {
-            [1] = {status = 1, title = "领取", bounty = 300, background_pictrue = AchievementPage.award_png[9].url, picture = AchievementPage.award_png[1].url,},
-            [2] = {status = 2, title = "已领取", bounty = 600, background_pictrue = AchievementPage.award_png[9].url, picture = AchievementPage.award_png[1].url,},
-            [3] = {status = 3, title = "未解锁", bounty = 1000, background_pictrue = AchievementPage.award_png[9].url, picture = AchievementPage.award_png[1].url,},
-            [4] = {status = 3, title = "未解锁", bounty = 1500, background_pictrue = AchievementPage.award_png[9].url, picture = AchievementPage.award_png[1].url,},
-            [5] = {status = 3, title = "未解锁", bounty = 2000, background_pictrue = AchievementPage.award_png[9].url, picture = AchievementPage.award_png[1].url,},
-            [6] = {status = 3, title = "未解锁", bounty = 2500, background_pictrue = AchievementPage.award_png[9].url, picture = AchievementPage.award_png[1].url,},
-            [7] = {status = 3, title = "未解锁", bounty = 2500, background_pictrue = AchievementPage.award_png[9].url, picture = AchievementPage.award_png[1].url,},
-            [8] = {status = 3, title = "未解锁", bounty = 2500, background_pictrue = AchievementPage.award_png[9].url, picture = AchievementPage.award_png[1].url,},
-            [9] = {status = 3, title = "未解锁", bounty = 2500, background_pictrue = AchievementPage.award_png[9].url, picture = AchievementPage.award_png[1].url,},
-        },
-    },
-    award = {
-        total = 9999,
-        total_unreceive = 2
-    },
-    achievementdata = AchievementPage.data
-}
 
 
-
+-- 成就页面初始化
 function AchievementPage:Init()
     AchievementPage.show_top_navig = 0          -- 下拉框是否显示
     AchievementPage.top_navig_index = 1         -- 当前选择框显示的分类index
@@ -96,6 +72,65 @@ function AchievementPage:Init()
         [2] = {title = "已解锁",name = "unlock",index = 2},
         [3] = {title = "未解锁",name = "lock", index = 3},
     }
+    AchievementPage.achievementinfo = {
+        userachievement = {
+            total_score = 123123,
+            next_level = 654321,
+            title = "成就奖励",
+            name = "成就积分",
+            award_list = {
+                [1] = {id = 1, status = 2, title = "已领取", bounty = 300, background_pictrue = AchievementPage.award_png[9].url, picture = AchievementPage.award_png[1].url,},
+                [2] = {id = 2, status = 2, title = "已领取", bounty = 600, background_pictrue = AchievementPage.award_png[9].url, picture = AchievementPage.award_png[1].url,},
+                [3] = {id = 3, status = 2, title = "已领取", bounty = 1000, background_pictrue = AchievementPage.award_png[9].url, picture = AchievementPage.award_png[1].url,},
+                [4] = {id = 4, status = 1, title = "领取", bounty = 1500, background_pictrue = AchievementPage.award_png[9].url, picture = AchievementPage.award_png[1].url,},
+                [5] = {id = 5, status = 1, title = "领取", bounty = 2000, background_pictrue = AchievementPage.award_png[9].url, picture = AchievementPage.award_png[1].url,},
+                [6] = {id = 6, status = 1, title = "领取", bounty = 2500, background_pictrue = AchievementPage.award_png[9].url, picture = AchievementPage.award_png[1].url,},
+                [7] = {id = 7, status = 3, title = "未解锁", bounty = 2500, background_pictrue = AchievementPage.award_png[9].url, picture = AchievementPage.award_png[1].url,},
+                [8] = {id = 8, status = 3, title = "未解锁", bounty = 2500, background_pictrue = AchievementPage.award_png[9].url, picture = AchievementPage.award_png[1].url,},
+                [9] = {id = 9, status = 3, title = "未解锁", bounty = 2500, background_pictrue = AchievementPage.award_png[9].url, picture = AchievementPage.award_png[1].url,},
+            },
+        },
+        award = {
+            total = 9999,
+            total_unreceive = 0
+        },
+        achievementdata = AchievementPage.data
+    }
+    AchievementPage.GetTotalUnreceive(AchievementPage.achievementinfo)
+    AchievementPage.SortData(AchievementPage.achievementinfo.achievementdata)
+end
+
+-- 领取奖励页面初始化
+function AchievementPage:AwardInit()
+    -- 当前所在页码
+    AchievementPage.award_pagination = 1
+    -- 首个展示的奖励
+    AchievementPage.frist_show_index = 1
+    -- 单页显示数量
+    AchievementPage.detail_perpage = 4
+    -- 奖励总个数
+    AchievementPage.award_details_count = #AchievementPage.achievementinfo.userachievement.award_list
+    -- 最大分页
+    AchievementPage.max_award_page = math.ceil(AchievementPage.award_details_count/AchievementPage.detail_perpage)
+    -- 获取展示的第一个奖励index
+    for k,v in ipairs(AchievementPage.achievementinfo.userachievement.award_list) do
+        if v.status == 1 then
+            AchievementPage.frist_show_index = k
+            return
+        end
+    end
+
+end
+
+-- 获取未领取奖励的个数
+function AchievementPage.GetTotalUnreceive(data)
+    local unreceive_num = 0
+    for _,i in pairs(data.userachievement.award_list) do
+        if i.status == 1 then
+            unreceive_num = unreceive_num + 1
+        end
+    end
+    data.award.total_unreceive = unreceive_num
 end
 
 -- 点击领取奖励
@@ -138,7 +173,27 @@ function AchievementPage.SelectShowPage()
         -- 全部
         AchievementPage.achievementinfo.achievementdata = AchievementPage.data
     end
+    AchievementPage.SortData(AchievementPage.achievementinfo.achievementdata)
 end
+
+-- 排序规则
+function AchievementPage.SortData(data)
+    if type(data) ~= "table" then
+        LOG.std(nil, "Designation", "data_sort", "error: data is not a table")
+        return nil
+    end
+    local function CompFunc(a, b)
+        if a.rank == b.rank then
+            if a.status == b.status then
+                return a.id < b.id
+            end
+            return a.status > b.status
+        end
+        return a.rank < b.rank
+    end
+    table.sort(data, CompFunc)
+end
+
 
 -- 展示成就详情
 function AchievementPage:ShowAchievementPage()

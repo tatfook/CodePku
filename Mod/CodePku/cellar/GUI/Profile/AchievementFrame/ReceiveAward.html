@@ -26,21 +26,18 @@ AchievementPage.achievementinfo.userachievement = {
 }
 --]]
 
-AchievementPage.award_pagination = 1
-AchievementPage.detail_perpage = 4
-AchievementPage.award_details_count = #AchievementPage.achievementinfo.userachievement.award_list
-AchievementPage.max_award_page = math.ceil(AchievementPage.award_details_count/AchievementPage.detail_perpage)
-
-
+-- 页面数据初始化
+AchievementPage:AwardInit()
 
 function ClosePage()
     Page:CloseWindow();
+    AchievementPage.mainpage:Refresh(0)
 end
 
 function GetOnePageAward()
     -- 获取单页数据
-    local start_index = AchievementPage.detail_perpage * (AchievementPage.award_pagination - 1) + 1
-    local end_index = AchievementPage.detail_perpage * AchievementPage.award_pagination
+    local start_index = AchievementPage.frist_show_index
+    local end_index = AchievementPage.frist_show_index + 3
     local page_data = {}
     for i=start_index,end_index do
         table.insert(page_data,AchievementPage.achievementinfo.userachievement.award_list[i])
@@ -50,17 +47,24 @@ end
 
 function Page_turner(name)
     -- 翻页
-    if "page_up"==name and AchievementPage.award_pagination>1 then
-        AchievementPage.award_pagination = AchievementPage.award_pagination - 1
-    elseif "page_down"==name and AchievementPage.award_pagination<AchievementPage.max_award_page then
-        AchievementPage.award_pagination = AchievementPage.award_pagination + 1
+    if "page_up"==name and AchievementPage.frist_show_index>1 then
+        if AchievementPage.frist_show_index<=4 then
+            AchievementPage.frist_show_index = 1
+        end
+        if AchievementPage.frist_show_index>4 then
+            AchievementPage.frist_show_index = AchievementPage.frist_show_index - 4
+        end
+    elseif "page_down"==name and AchievementPage.frist_show_index<AchievementPage.award_details_count-3 then
+        AchievementPage.frist_show_index = AchievementPage.frist_show_index + 4
     end
     Page:Refresh(0)
 end
 
-function AchievementPage.ClickAchievementAward()
+function AchievementPage.ClickAchievementAward(name)
     -- todo 领取成就奖励逻辑
     GameLogic.AddBBS("CodeGlobals", L"领取奖励功能开发中", 3000, "#FF0000");
+    AchievementPage.achievementinfo.userachievement.award_list[name].status = 2
+    Page:Refresh(0)
 end
 
 
@@ -100,7 +104,7 @@ end
                                 </div>
                                 <pe:if condition="<%= 1 == Eval('status') %>">
                                     <!-- 未领取 -->
-                                    <div onclick="AchievementPage.ClickAchievementAward" style="<%=format('position: relative;width: 160;height: 80;left: 62; top: 272;text-align: center;font-size: 36;color: #fefefe; font-family: Noto Sans S Chinese Regular;line-height: 80;background: url(%s);',AchievementPage.award_png[11].url)%>">领取</div>
+                                    <div onclick="AchievementPage.ClickAchievementAward" name="<%=Eval('id')%>" style="<%=format('position: relative;width: 160;height: 80;left: 62; top: 272;text-align: center;font-size: 36;color: #fefefe; font-family: Noto Sans S Chinese Regular;line-height: 80;background: url(%s);',AchievementPage.award_png[11].url)%>">领取</div>
                                 </pe:if>
                                 <pe:if condition="<%= 2 == Eval('status') %>">
                                     <!-- 已领取 -->
@@ -126,11 +130,11 @@ end
             </div>
         </div>
         <!-- 翻页 -->
-        <pe:if condition='<%= AchievementPage.award_pagination > 1 %>'>
+        <pe:if condition='<%= AchievementPage.frist_show_index>1 %>'>
             <div onclick="Page_turner" name="page_up" style='<%=format("position: relative;width: 78; height: 60; left: 100;top: 580;transform: rotate(90deg);transform-origin: 39px 30px;background:url(%s);", AchievementPage.award_png[19].url)%>'></div>
         </pe:if>
-        <pe:if condition='<%= AchievementPage.award_pagination < AchievementPage.max_award_page %>'>
-        <div onclick="Page_turner" name="page_down" style='<%=format("position: relative;width: 78; height: 60; left: 1355;top: 580;transform: rotate(270deg);transform-origin: 39px 30px;background:url(%s);", AchievementPage.award_png[19].url)%>'></div>
+        <pe:if condition='<%= AchievementPage.frist_show_index < AchievementPage.award_details_count-3 %>'>
+            <div onclick="Page_turner" name="page_down" style='<%=format("position: relative;width: 78; height: 60; left: 1355;top: 580;transform: rotate(270deg);transform-origin: 39px 30px;background:url(%s);", AchievementPage.award_png[19].url)%>'></div>
         </pe:if>
     </div>
 

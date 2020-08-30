@@ -9,8 +9,11 @@
     <pe:mcml>
 <script refresh="false" type="text/npl" src="AchievementFrame.lua"><![CDATA[
 AchievementPage = NPL.load("(gl)Mod/CodePku/cellar/GUI/Profile/AchievementFrame/AchievementFrame.lua");
+local page = document:GetPageCtrl()
+
 
 AchievementPage:Init()
+AchievementPage.mainpage = page
 
 function AchievementPage.ClickedTopNavig()
     -- 点击导航栏
@@ -74,7 +77,7 @@ end
             </pe:if>
             <!-- 未解锁 -->
             <pe:if condition="<%=Eval('rank') == 2 and AchievementPage.top_navig_index ~= 2%>">
-                <pe:div onclick="AchievementPage.ClickedAchievement" name="<%=Eval('id')%>" style="width: 263.1; height: 262.7;top: 20;">
+                <pe:div onclick="AchievementPage.ClickedAchievement" name="<%=Eval('id')%>" style="width: 263.1; height: 262.7;top: 10;">
                     <pe:div style='<%=format("width: 263.1; height: 262.7;background:url(%s);", AchievementPage.award_png[4].url)%>'>
                         <pe:div style="position: relative; width:45; height: 58; left: 109;top: 65;background: url(codepku/image/textures/profile/achievement.png#894 74 45 58)"></pe:div>
                         <pe:div style='<%=format("position: relative; width:253; height: 80.5; left: 4;top: 180; font-size: 43; base-font-size: 43;color: #686695; font-family: PuHuiTi-Bold; text-align: center; line-height: 80.5;background:url(%s);", AchievementPage.award_png[6].url)%>'><%=Eval('name')%></pe:div>

@@ -33,11 +33,15 @@ AchievementPage.detail.content = AchievementPage.detail.description .. "<span st
 function ClosePage()
     AchievementPage.detail = {}
     Page:CloseWindow();
+    AchievementPage.SortData(AchievementPage.achievementinfo.achievementdata)
+    AchievementPage.mainpage:Refresh(0)
 end
 
 function AchievementPage.ClickReceiveAward()
     -- todo 领取成就奖励逻辑
     GameLogic.AddBBS("CodeGlobals", L"领取奖励功能开发中", 3000, "#FF0000");
+    AchievementPage.detail.status = 1
+    Page:Refresh(0)
 end
 
 
