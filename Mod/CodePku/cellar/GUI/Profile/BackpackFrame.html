@@ -1,0 +1,110 @@
+<!-- "script/apps/Aries/Creator/Game/Areas/EscFramePage.html" -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>背包</title>
+</head>
+<body>
+<pe:mcml>
+<script refresh="false" type="text/npl" src="UserInfo.lua"><![CDATA[
+UserInfoPage = NPL.load("(gl)Mod/CodePku/cellar/GUI/UserInfo.lua");
+PropsInfoPage = NPL.load("(gl)Mod/CodePku/cellar/GUI/Props/PropsInfo.lua");
+
+UserInfoPage.BackpackPage = Page
+
+echo('UserInfoPage.PropsCategories')
+echo(UserInfoPage.PropsCategories)
+
+function ChoosePage(id)
+    if UserInfoPage.categoryIndex ~= id then
+        UserInfoPage.categoryIndex = id
+        Page:Refresh(0)
+    end
+end
+
+function GetCurItems()
+    local curItems = {}
+    if UserInfoPage.categoryIndex == 1 then
+        curItems = UserInfoPage.propsAll
+    else
+        curItems = UserInfoPage.props[UserInfoPage.categoryIndex] or {}
+    end
+
+    curItems = UserInfoPage:FillBlankCells(curItems)
+    return curItems
+end
+
+function OnClickItem(item)
+    UserInfoPage.ifItemList = false
+    Page:Refresh(0)
+    PropsInfoPage:ShowPage(item)
+end
+
+function GetCategoryName()
+    for _,v in pairs(UserInfoPage.PropsCategories) do
+        if v.index == UserInfoPage.categoryIndex then
+            return v.name
+        end
+    end
+    return L"背包"
+end
+
+function SortItems()
+    UserInfoPage.GetItemInfo({sort=1})
+    ChoosePage(UserInfoPage.categoryIndex)
+        Page:Refresh(0)
+end
+
+]]>   
+</script>
+<style type="text/mcss">
+</style>
+
+<pe:container style="width:1600;height:1000;margin-right:0;">
+    <!-- 背包 -->
+    <pe:if  condition='<%= UserInfoPage.ifItemList %>'>
+        <div style="position:absolute;width: 788;height: 888;left:0;top:5;background:url(codepku/image/textures/background/list.png);">
+            <div style="position:absolute;width: 332;height: 108;left:228;top:-10;text-align: center;color:#D85D0B;line-height: 108;font-size:48;base-font-size:48;font-family: Noto Sans S Chinese Regular;font-weight:bold;background:url(codepku/image/textures/profile_32bits.png#1233 951 482 156);"><%=GetCategoryName()%></div>
+    
+            <pe:gridview name='backpack_items' style="position:absolute;width: 790; height: 782; top: 95 ;left: 12;"
+                DataSource="<%= GetCurItems() %>"  DefaultNodeHeight = "195" ItemsPerLine="4"AllowPaging="false" RememberScrollPos="true">
+                <Columns>
+                    <pe:if  condition='<%= Eval("blank") %>'>
+                        <div style="margin-top: 12;margin-right: 25;width: 172; height:172; background:url(codepku/image/textures/userinfo/backpack.png#11 9 181 181);"></div>
+                    </pe:if>
+    
+                    <pe:if  condition='<%= not Eval("blank") %>'>
+                        <div onclick="OnClickItem" name="<%= GetCurItems()[Eval('index')] %>" style="margin-top: 12;margin-right: 25;width: 172; height:172; background:url(codepku/image/textures/userinfo/backpack.png#205 14 172 172);">
+                            <div style="width: 172; height:172; background:url(codepku/image/textures/userinfo/backpack.png#399 13 174 174);">
+                                <div style='<%= format("position:absolute;left:38;top: 40;width: 95; height: 92; background:url(%s);",Eval("prop_icon_url")) %>'>
+                                </div>
+                            </div>
+                            <div style='position:absolute;left: 90;top: 139;width: 77;height: 35;color:#E9EDFF;font-size: 27; base-font-size:27;font-family: Noto Sans S Chinese Regular;text-align: center;line-height: 35;background:url(codepku/image/textures/userinfo/backpack.png#753 74 79 37)'><%=prop_num%></div>
+                        </div>
+                    </pe:if>
+                </Columns>
+            </pe:gridview>
+        </div>
+    
+        <pe:gridview name="buttons" style="position:absolute;left: 795;top: 5; width: 108;height: 750;" 
+                DataSource="<%= UserInfoPage.PropsCategories %>" DefaultNodeHeight = "56" ItemsPerLine="1" AllowPaging="false" RememberScrollPos="true">
+            <Columns>
+                <pe:if  condition='<%= Eval("id")==UserInfoPage.categoryIndex %>'>
+                    <div onclick="ChoosePage" name='<%=Eval("id")%>'  style='margin-bottom:19;width:108;height:99;text-align:center;line-height: 99;font-size:36;base-font-size:36;font-family: Noto Sans S Chinese Regular;color: white;background:url(codepku/image/textures/profile_32bits.png#1569 46 108 99);'><%=Eval("category_name")%></div>
+                </pe:if>
+                <pe:if  condition='<%= Eval("id")~=UserInfoPage.categoryIndex %>'>
+                    <div onclick="ChoosePage" name='<%=Eval("id")%>'  style='margin-bottom:19;width:108;height:99;text-align:center;line-height: 99;font-size:36;base-font-size:36;font-family: Noto Sans S Chinese Regular;color: white;background:url(codepku/image/textures/profile_32bits.png#1694 46 108 99);'><%=Eval("category_name")%></div>
+                </pe:if>
+            </Columns>
+        </pe:gridview>
+    
+        <div onclick="SortItems" style='position:absolute;left: 795;top: 792;text-align:center;line-height: 99;font-size:36;base-font-size:36;font-family: Noto Sans S Chinese Regular;font-weight:bold ;color: white;width:108;height:99;background:url(codepku/image/textures/profile_32bits.png#1450 46 108 99);'>整理</div>
+    </pe:if>
+    
+</pe:container>     
+           
+</pe:mcml>
+</body>
+</html>
+ 

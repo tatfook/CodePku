@@ -4,6 +4,9 @@ local UserInfoPage = NPL.export();
 
 UserInfoPage.tab_ds_index = 1;
 UserInfoPage.tab_ds_name = "Home";
+UserInfoPage.categoryIndex = 1
+UserInfoPage.ifItemList = true
+
 
 -- tabs - 自己
 UserInfoPage.tab_ds_self = {
@@ -11,7 +14,7 @@ UserInfoPage.tab_ds_self = {
     {text=L"属性", name="Profile"},
     -- {text=L"角色", name="Model"},
     -- {text=L"外观", name="Skin"},
-    -- {text=L"背包", name="Backpack"},
+    {text=L"背包", name="Backpack"},
     -- {text=L"成就", name="Achievement"},
     -- {text=L"动态", name="Activity"},
 };
@@ -106,45 +109,59 @@ function UserInfoPage.GetUserInfo(id, show)
     end);
 end
 
+-- 道具分类
+function UserInfoPage:Classify(data)
+    local classifiedData = {}
+    for _,v in pairs(data) do
+        if classifiedData[v.prop_category_id] == nil then
+            classifiedData[v.prop_category_id] = {v}
+        else
+            table.insert(classifiedData[v.prop_category_id], v)
+        end
+    end
+    return classifiedData
+end
+
 -- 获取道具信息
 function UserInfoPage.GetItemInfo(params)
-    params = params or ''
-    response = request:get(string.format( "/user-props/backpack%s", params), nil, {sync=true})
+    response = request:get("/user-props/backpack", params, {sync=true})
     if response.data.code == 200 then
-        r_data = response.data.data
-        for i, v in ipairs(r_data) do
-            -- echo(string.format( "user_prop_id: %d  data : %s, category: %d", v.user_prop_id, v.prop_name, v.prop_id))
+        local r_props = response.data.data
+
+        for i, v in ipairs(r_props) do
             v.index = i
         end
-        UserInfoPage.props = r_data
-        return r_data
+        UserInfoPage.propsAll = r_props
+        UserInfoPage.props = UserInfoPage:Classify(r_props)
     end
-    
-    -- data = {}
-    -- -- 拆分堆叠道具
-    -- for i, v in ipairs(response) do
-    --     if v.num ~= v.max_stacked then -- 拆分堆叠数，1表示不拆分
-    --         stack = math.floor(v.num/ v.max_stacked) + 1
-    --     else
-    --         stack = 1
-    --     end
-    --     l = commonlib.deepcopy(response[i])
-    --     s = 1
-    --     while s < stack do
-    --         l.num = v.max_stacked
-    --         table.insert(data, l)
-    --         s = s + 1
-    --     end
-    --     if stack > 1 and v.num % v.max_stacked ~= 0 then
-    --         v.num = v.num % v.max_stacked
-    --         table.insert(data, v)
-    --     elseif stack == 1 then
-    --         table.insert(data, v)
-    --     end
-        
-    -- end
-    -- return data
+
+    response = request:get("/user-props/categories", nil, {sync=true})
+    UserInfoPage.PropsCategories = {{id=1,category_name='全部'}}
+    if response.data.code == 200 then
+        local PropsCategories = response.data.data
+        table.insert(PropsCategories, 1, {id=1, category_name='全部'})
+        UserInfoPage.PropsCategories = PropsCategories
+    end
 end
+
+--填充背包空格子
+function UserInfoPage:FillBlankCells(sourceProps)
+    local blankCells = 0
+    local newProps = commonlib.copy(sourceProps)
+    if #newProps < 16 then
+        -- 小于16个补充到16格
+        blankCells = 16 - #newProps
+    else
+        -- 大于16个补充到整行
+        blankCells = 4 - #newProps % 4
+    end
+
+    for i=1,blankCells do
+        table.insert(newProps, {blank=true})
+    end
+    return newProps
+end
+
 
 function UserInfoPage:ShowPage(PageIndex, bShow, id)
     if (id and id ~= "") then

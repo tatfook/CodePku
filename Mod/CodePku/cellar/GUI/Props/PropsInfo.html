@@ -7,14 +7,16 @@
 <pe:mcml onloadscript="script/apps/Aries/app_main.lua" callbackfunction="MyCompany.Aries.MSGProc">
 <script type="text/npl" refresh="false" src="PropsInfo.lua"><![CDATA[
 
-    local PropsInfo = commonlib.gettable("Mod.CodePku.PropsInfo");
+    local UserInfoPage = NPL.load("(gl)Mod/CodePku/cellar/GUI/UserInfo.lua");
+    local PropsInfoPage = NPL.load("(gl)Mod/CodePku/cellar/GUI/Props/PropsInfo.lua");
 
 
-    local mytable = PropsInfo.props
+    local mytable = PropsInfoPage.props
 
     local open_flag = 0
 
     local more_flag = 0
+    local more_name = L'更多'
 
     function get_open_flag()
         return open_flag
@@ -33,11 +35,11 @@
     end
 
     function get_tool_type()
-        return mytable.category_name
+        return string.format('%s%s', mytable.category_name or "", mytable.se_category_name or "")
     end
 
     function get_scene()
-        return mytable.scene_name..' '..mytable.se_category_name
+        return mytable.scene_name
     end
 
     function get_describe()
@@ -49,16 +51,24 @@
     end
 
     function OnClose()
+        UserInfoPage.ifItemList = true
+        UserInfoPage.BackpackPage:Refresh(0)
         ClosePage()
     end
 
     function show_more()
         if(more_flag == 1)then
             more_flag = 0
+            more_name = L'更多'
         else
             more_flag = 1
+            more_name = L'收起'
         end        
         Page:Refresh(0)
+    end
+
+    function get_more_name()
+        return more_name
     end
 
     function get_more_flag()
@@ -95,7 +105,8 @@
 
     function OnClickUse()
         if mytable.can_use == 1 then
-            Undefinde()
+            OnClose()
+            PropsInfoPage:UseProp(1, {UserInfoPage.mainPage})
         else
             GameLogic.RunCommand("/tip -duration 1500 此道具无法使用")
         end
@@ -106,61 +117,55 @@
 ]]></script>
 
 <style type="text/mcss"></style>
+<pe:container style="width: 1920; height: 1080;">
+    <div style="position:absolute;width: 777;height: 806;left:1021;top:155;font-family: Noto Sans S Chinese Regular;font-weight:bold;color: #FFFFFF; background:url(codepku/image/textures/background/detail.png); ">
 
-<div style="width: 1200px; height: 900px; margin-top: 70px; margin-left: 360px; font-weight: bolder; color: #fdfdfd; background:url(codepku/image/textures/tool_ui/main_board.png); ">
+        <div style="position:absolute; float: left;left: 695; top: 8;width:64;height: 74;background:url(codepku/image/textures/common_32bits.png#110 73 68 78);" onclick="OnClose"></div>
 
-    <div style="margin-left: 1100; margin-top: 30px;width:50;height: 50;background:url(codepku/image/textures/fastentrence/close.png); float: left;" onclick="OnClose"></div>
-
-    <div style="width: 300px; height: 300px; margin-left: 150px; background:url(codepku/image/textures/tool_ui/tool.png); float: left;">
-        <div style="<%=format('width: 300px; height: 300px;background:url(%s);', get_img())%>">
-            <div style="width: 100%; height: 40px; margin-left: 180px; margin-top: 250px; padding-top: 3px;line-height: 30px;font-size: 28px;text-align: center;background:url(codepku/image/textures/tool_ui/num_board.png);"><%=get_num()%></div>
+        <div style="<%=format('position:absolute;float: left;width: 210; height: 211; left: 37; top: 111;background:url(%s);', get_img())%>">
+            <!-- <div style="width: 100%; height: 40; left: 180; top: 250; padding-top: 3;line-height: 30;font-size: 28;text-align: center;background:url(codepku/image/textures/tool_ui/num_board.png);"><%=get_num()%></div> -->
         </div>
-    </div>
 
-    <div style="width: 500px; height: 300px; float: left; ">
-        <div style="width: 500px; height: 80px; margin-left: 80px; line-height: 80px; margin-top: 5px; font-size: 50px; background:url(codepku/image/textures/tool_ui/name_board.png);"><span style="margin-left: 10px;"><%=get_name()%></span></div>
+        <div style="position:absolute;float: left;width: 481; height: 227; left: 263; top: 106; ">
+            <div style="position:absolute;float: left;width: 481; height: 86;  left: 0; top: 0; line-height: 80;font-size: 36;padding-left: 30; line-height: 86 ;background:url(codepku/image/textures/profile_32bits.png#899 1672 481 86);"><span style="margin-left: 10;"><%=get_name()%></span></div>
 
-        <div style="width: 510px; height: 200px; margin-left: 75px; font-size: 30px; margin-top: 20px; float: left;background:url(codepku/image/textures/tool_ui/top_box.png)">
-            <div style="margin-top: 30px; margin-left: 20px;">
-                <span>剩余时间：</span> <span><%=get_rest_time()%></span>
-            </div>
-            <div style="margin-top: 10px; margin-left: 20px;">
-                <span>道具类型：</span> <span><%=get_tool_type()%></span>
-            </div>
-            <div style="margin-top: 10px; margin-left: 20px;">
-                <span>适用场景：</span> <span><%=get_scene()%></span>
+            <div style="position:absolute;float: left;width: 481; height: 138; left: 0; top: 89;font-size: 24;  float: left;background:url(codepku/image/textures/profile_32bits.png#1397 1672 481 138)">
+                <div style="margin-top: 16; margin-left: 34;">
+                    <span>剩余时间：</span> <span><%=get_rest_time()%></span>
+                </div>
+                <div style="margin-top: 10; margin-left: 34;">
+                    <span>道具类型：</span> <span><%=get_tool_type()%></span>
+                </div>
+                <div style="margin-top: 10; margin-left: 34;">
+                    <span>适用场景：</span> <span><%=get_scene()%></span>
+                </div>
             </div>
         </div>
-    </div>
 
-    <div style="position: absolute; z-index: 10; width: 880px; height: 300px; margin-top: 30px;margin-left: 150px; font-size: 50px; background:url(codepku/image/textures/tool_ui/bottom_box.png)">
-        <div style="margin-top: 20px; margin-left: 20px;"><%=get_describe()%></div>
-    </div>
-    
-
-    <div style="position: absolute; z-index: 5; height: 320px; margin-top: 120px; margin-left: 10px; font-size: 45px; line-height: 80px; font-weight: bolder; text-align: center;">
+        <div style="position: absolute;float: left;width: 717; height: 330; top: 336;left: 28; font-size: 26; background:url(codepku/image/textures/tool_ui/bottom_box.png)">
+            <div style="margin-top: 20; margin-left: 20;"><%=get_describe()%></div>
+        </div>
         
+
+        <div style="position: absolute;float: left;height: 320; top: 451; left: 91; font-size: 36; line-height: 80;text-align: center;">
             <pe:if condition="<%= get_more_flag() == 0 %>">
-                <div style="width: 300px; height: 80px; margin-left: 198px; margin-top: 240px; float: left; background:url(codepku/image/textures/tool_ui/more.png)" onclick="show_more"></div>
-                <div style="width: 30px; height: 20px;position:relative; margin-top: -50px;margin-left: 400px; background:url(codepku/image/textures/tool_ui/open.png)"></div>
+                <div style="width: 240; height: 80;float: left;top: 240; line-height: 90; color: #B35D0A; background:url(codepku/image/textures/common_32bits.png#1503 741 84 84:12 12 12 12)" onclick="show_more"><%= get_more_name() %></div>
+                <div style="width: 29; height: 16;float: left;margin-top: 247;margin-left: -133; background:url(codepku/image/textures/userinfo/backpack.png#886 84 29 16)"></div>
             </pe:if>
             <pe:if condition="<%= get_more_flag() == 1 %>">
-                <div style="width: 300px; height: 80px; margin-left: 198px; margin-top: 240px; float: left; background:url(codepku/image/textures/tool_ui/fold.png)" onclick="show_more"></div>
-                <div style="width: 30px; height: 20px; margin-top: -50px; margin-left: 400px; background:url(codepku/image/textures/tool_ui/close.png)"></div>
-                <div style="margin-left: 198px; width: 300px; margin-top: -315px; height: 235px; ">
-                    <div style="position: relative; margin-top: 17px; width: 300px; height: 80px; background:url(codepku/image/textures/tool_ui/compound.png)" onclick="OnClickCompound"></div>
-                    <div style="position: relative; margin-top: 90px; width: 300px; height: 80px;  background:url(codepku/image/textures/tool_ui/abandon.png)" onclick="OnClickAbandon"></div>
-                    <div style="position: relative; margin-top: 163px;  width: 300px; height: 80px; background:url(codepku/image/textures/tool_ui/sell.png)" onclick="OnClickSell"></div>
+                <div style="width: 240; height: 80;float: left;top: 240; line-height: 90; color: #B35D0A; background:url(codepku/image/textures/common_32bits.png#1503 741 84 84:12 12 12 12)" onclick="show_more"><%= get_more_name() %></div>
+                <div style="width: 28; height: 16;float: left;margin-top: 247;margin-left: -133;transform: rotate(180deg); transform-origin: 14 8; background:url(codepku/image/textures/userinfo/backpack.png#886 84 29 16)"></div>
+                <div style="position: absolute;float: left; left: 0;width: 240; height: 240;">
+                    <div style="position: absolute;float: left;top: 0; width: 240; height: 80; background:url(codepku/image/textures/common_32bits.png#1799 740 84 84:12 12 12 12)" onclick="OnClickCompound">合成</div>
+                    <div style="position: absolute;float: left;top: 80; width: 240; height: 80;  background:url(codepku/image/textures/common_32bits.png#1898 740 84 84:12 12 12 12)" onclick="OnClickSell">出售</div>
+                    <div style="position: absolute;float: left;top: 160;  width: 240; height: 80; background:url(codepku/image/textures/common_32bits.png#1306 741 84 84:12 12 12 12)" onclick="OnClickAbandon">丢弃</div>
                 </div>
             </pe:if>
         </div>
-        <div style="position: relative;  width: 300px; height: 80px; margin-top: 360px; margin-left: 670px; background:url(codepku/image/textures/tool_ui/use.png)" onclick="OnClickUse"></div>
-    </div>
 
-
-
+        <div style="position: absolute;float: left;width: 240; height: 80;left: 446; top: 691;color: #0E5516;font-size: 36;text-align: center;line-height: 80; background:url(codepku/image/textures/common_32bits.png#1405 741 84 84:12 12 12 12)" onclick="OnClickUse">使用</div>
 </div>
-
+</pe:container>
 </pe:mcml>
 </body>
 </html>
