@@ -34,16 +34,24 @@
     end
 
     function ChangeAvatar(index)
+        index = tonumber(index)
         avatar_choose = index
+        if info_table[index].has_clicked == 0 then
+            ChangeAvatarPage.ClickNewAvatarFrame(info_table[index].id)
+            info_table[index].has_clicked = 1
+        end
         Page:Refresh(0)
     end
 
     function UseAvatar(index)
-        info_table[avatar_now].state = 0
-        info_table[index].state = 1
+        index = tonumber(index)
+        ChangeAvatarPage.SetAvatarFrame(info_table[index].id)
+        info_table[avatar_now].is_using = 0
+        info_table[index].is_using = 1
         avatar_now = index
         Page:Refresh(0)
     end
+
 ]]>
 </script>
 <style type="text/mcss">
@@ -96,22 +104,22 @@
         </Columns>
     </pe:gridview>
     <!--show-->
-    <div style="position: relative; width: 307; height: 817; left: 1194;">
-        <div style="<%=format('position: relative; width: 213; height: 213; left: 47; top: 70; background: url(%s);',info_table[Eval('avatar_choose')].img)%>">
+    <!-- <div style="position: relative; width: 307; height: 817; left: 1194;">
+        <div style="<%=format('position: relative; width: 213; height: 213; left: 47; top: 70; background: url(%s);',info_table[Eval('avatar_choose')].avatar_url)%>">
             <div style="<%=format('position: relative; width: 203; height: 203; left: 5; top: 5; background: url(%s#1846 64 181 181);',Eval('ProfilePng'))%>"></div>
         </div>
-        <div style="position: relative; width:307; height:35; top: 305; text-align:center; line-height:35; color:#ffffff; font-size:36px; font-family:PuHuiTi-Bold;"><%=info_table[avatar_now].name%></div>
+        <div style="position: relative; width:307; height:35; top: 305; text-align:center; line-height:35; color:#ffffff; font-size:36px; font-family:PuHuiTi-Bold;"><%=info_table[avatar_now].avatar_name%></div>
         <div style="position: relative; width:307; height:35; top: 460; text-align:center; line-height:35; color:#054BD9; font-size:36px; font-family:PuHuiTi-Bold;">使用期限：永久</div>
         <pe:if condition="<%= info_table[avatar_choose].is_open == false %>">
-            <div style="position: relative; width:307; height:35; top: 662; text-align:center; line-height:35; font-size:36px; font-family:PuHuiTi-Bold;">头像解锁条件</div>
+            <div style="position: relative; width:307; height:35; top: 662; text-align:center; line-height:35; font-size:36px; font-family:PuHuiTi-Bold;"><%='头像解锁条件'..info_table[avatar_choose].unlock_desc%></div>
         </pe:if>
-        <pe:if condition="<%= info_table[avatar_choose].is_open == true and info_table[avatar_choose].state == 0 %>">
+        <pe:if condition="<%= info_table[avatar_choose].is_open == true and info_table[avatar_choose].is_using == 0 %>">
             <div onclick="UseAvatar" name="<%=avatar_choose%>" style="position: relative; width:240; height:80; left: 33; top: 662; background: url(codepku/image/textures/common_32bits.png#552 182 86 86:15 15 15 15); text-align:center; line-height:80; font-size:36px; font-family:PuHuiTi-Bold;">使用</div>
         </pe:if>
-        <pe:if condition="<%= info_table[avatar_choose].is_open == true and info_table[avatar_choose].state == 1 %>">
+        <pe:if condition="<%= info_table[avatar_choose].is_open == true and info_table[avatar_choose].is_using == 1 %>">
             <div style="position: relative; width:307; height:35; top: 662; text-align:center; line-height:35; font-size:36px; font-family:PuHuiTi-Bold;">使用中</div>
         </pe:if>
-    </div>
+    </div> -->
 </pe:container>
 </pe:mcml>
 </body>

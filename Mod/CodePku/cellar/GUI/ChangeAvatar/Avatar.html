@@ -34,13 +34,20 @@
     end
 
     function ChangeAvatar(index)
+        index = tonumber(index)
         avatar_choose = index
+        if info_table[index].has_clicked == 0 then
+            ChangeAvatarPage.ClickNewAvatar(info_table[index].id)
+            info_table[index].has_clicked = 1
+        end
         Page:Refresh(0)
     end
 
     function UseAvatar(index)
-        info_table[avatar_now].state = 0
-        info_table[index].state = 1
+        index = tonumber(index)
+        ChangeAvatarPage.SetAvatar(info_table[index].id)
+        info_table[avatar_now].is_using = 0
+        info_table[index].is_using = 1
         avatar_now = index
         Page:Refresh(0)
     end

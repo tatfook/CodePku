@@ -15,7 +15,6 @@ ChangeAvatarPage.avatar = nil
 ChangeAvatarPage.avatar_frame = nil
 ChangeAvatarPage.now_avatar = nil
 ChangeAvatarPage.now_avatar_frame = nil
-local ProfilePng = "codepku/image/textures/avatar_ui/avatar_32bits.png"
 
 ChangeAvatarPage.params={
     avatar = {
@@ -115,7 +114,7 @@ function ChangeAvatarPage.SetAvatarFrame(id)
 end
 
 function ChangeAvatarPage.ClickNewAvatar(id)
-    local response = request:put("/avatar/click/"..tostring(id), nil, {sync=true})
+    local response = request:get("/avatar/click/"..tostring(id), nil, {sync=true})
     if response.data.code == 200 then
         return "ok"
     else
@@ -123,8 +122,8 @@ function ChangeAvatarPage.ClickNewAvatar(id)
     end
 end
 
-function ChangeAvatarPage.ClickNewAvatar(id)
-    local response = request:put("/avatar-frames/click/"..tostring(id), nil, {sync=true})
+function ChangeAvatarPage.ClickNewAvatarFrame(id)
+    local response = request:get("/avatar-frames/click/"..tostring(id), nil, {sync=true})
     if response.data.code == 200 then
         return "ok"
     else
