@@ -54,7 +54,7 @@ function ChangeAvatarPage.GetAvatar()
             receive_time = "2020-08-27 00:00:00",
             unlock_avatar = 1,
             file_path = "/game/admin/courseWareZip/d41d8cd98f00b204e9800998ecf8427e.zip",
-            is_using = 0,
+            is_using = 1,
             avatar_url = "https://shouyou.3dmgame.com/uploadimg/upload/image/20190112/20190112130259_40153.jpg", 
             left_time = "6小时45分" 
         },
@@ -71,28 +71,83 @@ function ChangeAvatarPage.GetAvatar()
             receive_time = "2020-08-27 00:00:00",
             unlock_avatar = 1,
             file_path = "/game/admin/courseWareZip/d41d8cd98f00b204e9800998ecf8427e.zip",
-            is_using = 1,
-            avatar_url = "https://shouyou.3dmgame.com/uploadimg/upload/image/20190112/20190112130259_40153.jpg", 
+            is_using = 0,
+            avatar_url = "https://c-ssl.duitang.com/uploads/item/201412/28/20141228171331_L5T2n.jpeg", 
+            left_time = "6小时45分" 
+        },
+        {
+            id = 3,
+            avatar_name = "123",
+            category_id = 0,
+            need_unlock = 0,
+            unlock_desc = "你解锁不了",
+            limit_type = 0, 
+            limit_time = 0,
+            user_id = 3,
+            has_clicked = 0,
+            receive_time = "2020-08-27 00:00:00",
+            unlock_avatar = 0,
+            file_path = "/game/admin/courseWareZip/d41d8cd98f00b204e9800998ecf8427e.zip",
+            is_using = 0,
+            avatar_url = "http://img.hao661.com/qq.hao661.com/uploads/allimg/c140912/141050O4Q3310-513B9.jpg", 
             left_time = "6小时45分" 
         }
     }
-    ChangeAvatarPage.now_avatar = 2
+    ChangeAvatarPage.now_avatar = 1
     return avatar
 end
 
 function ChangeAvatarPage.GetAvatarFrame()
-    local response = request:get("/avatar-frames", nil, {sync=true})
-    if response.data.code == 200 then
-        local data = response.data.data
-        for i=1,#data do
-            if tonumber(data[i].is_using) == 1 then
-                ChangeAvatarPage.now_avatar = i
-            end
-        end
-        return data or {}
-    else
-        return {}
-    end
+    -- local response = request:get("/avatar-frames", nil, {sync=true})
+    -- if response.data.code == 200 then
+    --     local data = response.data.data
+    --     for i=1,#data do
+    --         if tonumber(data[i].is_using) == 1 then
+    --             ChangeAvatarPage.now_avatar_frame = i
+    --         end
+    --     end
+    --     return data or {}
+    -- else
+    --     return {}
+    -- end
+    local avatar = {
+        {
+            id = 1,
+            avatar_name = "初始头像",
+            category_id = 0,
+            need_unlock = 0,
+            unlock_desc = "",
+            limit_type = 1, 
+            limit_time = 86400,
+            user_id = 3,
+            has_clicked = 1,
+            receive_time = "2020-08-27 00:00:00",
+            unlock_avatar = 1,
+            file_path = "/game/admin/courseWareZip/d41d8cd98f00b204e9800998ecf8427e.zip",
+            is_using = 1,
+            avatar_url = "https://c-ssl.duitang.com/uploads/item/201810/05/20181005213919_xudyt.jpeg", 
+            left_time = "6小时45分" 
+        },
+        {
+            id = 2,
+            avatar_name = "红星鸾动",
+            category_id = 0,
+            need_unlock = 0,
+            unlock_desc = "",
+            limit_type = 0, 
+            limit_time = 0,
+            user_id = 3,
+            has_clicked = 0,
+            receive_time = "2020-08-27 00:00:00",
+            unlock_avatar = 1,
+            file_path = "/game/admin/courseWareZip/d41d8cd98f00b204e9800998ecf8427e.zip",
+            is_using = 0,
+            avatar_url = "https://c-ssl.duitang.com/uploads/item/201810/05/20181005213919_xudyt.jpeg", 
+            left_time = "6小时45分" 
+        }
+    }
+    ChangeAvatarPage.now_avatar_frame = 1
+    return avatar
 end
 
 
