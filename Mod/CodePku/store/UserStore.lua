@@ -19,7 +19,7 @@ function UserStore:Action()
             self.token = token
             commonlib.setfield("System.User.codepkuToken", token)
         end,
-        SetUserinfo = function(token, user)            
+        SetUserinfo = function(token, user)
             if type(user) ~= 'table' then
                 return false;
             end
@@ -29,14 +29,19 @@ function UserStore:Action()
             self.username = user.mobile
             self.nickname = user.nickname
             self.mobile = user.mobile
+            self.random_name = user.random_name
+            self.isvisitor = user.visitor_id and (user.mobile == nil)
             self.info = user
 
+            
             commonlib.setfield("System.User.codepkuToken", token or System.User.codepkuToken)
             commonlib.setfield("System.User.mobile", user.mobile)
             commonlib.setfield("System.User.username", user.nickname or user.no)
             commonlib.setfield('System.User.id', user.id)
-            commonlib.setfield("System.User.nickName", user.nickname)            
-            commonlib.setfield("System.User.info", user)  
+            commonlib.setfield("System.User.nickName", user.nickname)
+            commonlib.setfield("System.User.randomName", user.random_name)
+            commonlib.setfield("System.User.isVisitor", self.isvisitor)
+            commonlib.setfield("System.User.info", user)
 
             -- if Config.defaultEnv ~= Config.env.DEV then
                 GameLogic.GetFilters():add_filter(

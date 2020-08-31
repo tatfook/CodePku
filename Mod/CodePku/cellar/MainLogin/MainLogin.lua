@@ -168,7 +168,7 @@ function MainLogin:LoginAction(methodIndex)
         return false
     end
 
-    local UUID = MainLogin:GetDeviceUUID()
+    local visitor_id = MainLogin:GetDeviceUUID()
     local account = MainLoginPage:GetValue("account")
     
 
@@ -261,7 +261,7 @@ function MainLogin:LoginAction(methodIndex)
         )
     elseif (methodIndex == 3) then
         CodePkuServiceSession:QuickLogin(
-            UUID,
+            visitor_id,
             function(response, err)
                 if err == 503 then
                     Mod.CodePku.MsgBox:Close()

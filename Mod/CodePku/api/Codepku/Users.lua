@@ -69,16 +69,16 @@ end
     UUID 唯一标识符
 ]]
 -- return: object
-function CodePkuUsersApi:QuickLogin(UUID, success, error)
-    if type(UUID) ~= "string" then
+function CodePkuUsersApi:QuickLogin(visitor_id, success, error)
+    if type(visitor_id) ~= "string" then
         return false
     end
 
     local params = {
-        UUID = UUID,
+        visitor_id = visitor_id,
     }
 
-    CodePkuBaseApi:Post("/users/quicklogin", params, nil, success, error, { 503, 400 })
+    CodePkuBaseApi:Post("/users/visitor-login", params, nil, success, error, { 503, 400 })
 end
 
 -- url: /users/set-password
