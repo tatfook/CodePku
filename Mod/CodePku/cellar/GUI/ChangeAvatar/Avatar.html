@@ -37,7 +37,7 @@
         index = tonumber(index)
         avatar_choose = index
         if info_table[index].has_clicked == 0 then
-            ChangeAvatarPage.ClickNewAvatar(info_table[index].id)
+            --ChangeAvatarPage.ClickNewAvatar(info_table[index].id)
             info_table[index].has_clicked = 1
         end
         Page:Refresh(0)
@@ -45,7 +45,7 @@
 
     function UseAvatar(index)
         index = tonumber(index)
-        ChangeAvatarPage.SetAvatar(info_table[index].id)
+        --ChangeAvatarPage.SetAvatar(info_table[index].id)
         info_table[avatar_now].is_using = 0
         info_table[index].is_using = 1
         avatar_now = index
@@ -103,7 +103,7 @@
         </Columns>
     </pe:gridview>
     <!--show-->
-    <!-- <div style="position: relative; width: 307; height: 817; left: 1194;">
+    <div style="position: relative; width: 307; height: 817; left: 1194;">
         <div style="<%=format('position: relative; width: 213; height: 213; left: 47; top: 70; background: url(%s#557 454 213 213);',Eval('ProfilePng'))%>">
             <div style="<%=format('position: relative; width: 203; height: 203; left: 5; top: 5; background: url(%s);',info_table[avatar_choose].avatar_url)%>"></div>
         </div>
@@ -115,10 +115,10 @@
         <pe:if condition="<%= info_table[avatar_choose].unlock_avatar == 1 and info_table[avatar_choose].is_using == 0 %>">
             <div onclick="UseAvatar" name="<%=avatar_choose%>" style="position: relative; width:240; height:80; left: 33; top: 662; background: url(codepku/image/textures/common_32bits.png#552 182 86 86:15 15 15 15); text-align:center; line-height:80; font-size:36px; font-family:PuHuiTi-Bold;">使用</div>
         </pe:if>
-        <pe:if condition="<%= info_table[avatar_choose].unlock_avatar == true and info_table[avatar_choose].is_using == 1 %>">
+        <pe:if condition="<%= info_table[avatar_choose].unlock_avatar == 1 and info_table[avatar_choose].is_using == 1 %>">
             <div style="position: relative; width:307; height:35; top: 662; text-align:center; line-height:35; font-size:36px; font-family:PuHuiTi-Bold;">使用中</div>
         </pe:if>
-    </div> -->
+    </div>
 </pe:container>
 </pe:mcml>
 </body>

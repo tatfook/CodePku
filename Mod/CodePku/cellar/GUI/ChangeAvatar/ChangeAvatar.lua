@@ -28,55 +28,56 @@ ChangeAvatarPage.params={
 }
 
 function ChangeAvatarPage.GetAvatar()
-    local response = request:get("/avatars", nil, {sync=true})
-    if response.data.code == 200 then
-        local data = response.data.data
-        for i=1,#data do
-            if tonumber(data[i].is_using) == 1 then
-                ChangeAvatarPage.now_avatar = i
-            end
-        end
-        return data or {}
-    else
-        return {}
-    end
-    -- local avatar = {
-    --     {
-    --         id = 1,
-    --         avatar_name = "初始头像",
-    --         category_id = 0,
-    --         need_unlock = 0,
-    --         unlock_desc = "",
-    --         limit_type = 1, 
-    --         limit_time = 86400,
-    --         user_id = 3,
-    --         has_clicked = 1,
-    --         receive_time = "2020-08-27 00:00:00",
-    --         unlock_avatar = 1,
-    --         file_path = "/game/admin/courseWareZip/d41d8cd98f00b204e9800998ecf8427e.zip",
-    --         is_using = 0,
-    --         avatar_url = "https://scratch-works-staging-1253386414.file.myqcloud.com/game/admin/courseWareZip/d41d8cd98f00b204e9800998ecf8427e.zip", 
-    --         left_time = "6小时45分" 
-    --     },
-    --     {
-    --         id = 2,
-    --         avatar_name = "红星鸾动",
-    --         category_id = 0,
-    --         need_unlock = 0,
-    --         unlock_desc = "",
-    --         limit_type = 0, 
-    --         limit_time = 0,
-    --         user_id = 3,
-    --         has_clicked = 0,
-    --         receive_time = "2020-08-27 00:00:00",
-    --         unlock_avatar = 1,
-    --         file_path = "/game/admin/courseWareZip/d41d8cd98f00b204e9800998ecf8427e.zip",
-    --         is_using = 1,
-    --         avatar_url = "https://scratch-works-staging-1253386414.file.myqcloud.com/game/admin/courseWareZip/d41d8cd98f00b204e9800998ecf8427e.zip", 
-    --         left_time = "6小时45分" 
-    --     }
-    -- }
-    -- return avatar
+    -- local response = request:get("/avatars", nil, {sync=true})
+    -- if response.data.code == 200 then
+    --     local data = response.data.data
+    --     for i=1,#data do
+    --         if tonumber(data[i].is_using) == 1 then
+    --             ChangeAvatarPage.now_avatar = i
+    --         end
+    --     end
+    --     return data or {}
+    -- else
+    --     return {}
+    -- end
+    local avatar = {
+        {
+            id = 1,
+            avatar_name = "初始头像",
+            category_id = 0,
+            need_unlock = 0,
+            unlock_desc = "",
+            limit_type = 1, 
+            limit_time = 86400,
+            user_id = 3,
+            has_clicked = 1,
+            receive_time = "2020-08-27 00:00:00",
+            unlock_avatar = 1,
+            file_path = "/game/admin/courseWareZip/d41d8cd98f00b204e9800998ecf8427e.zip",
+            is_using = 0,
+            avatar_url = "https://shouyou.3dmgame.com/uploadimg/upload/image/20190112/20190112130259_40153.jpg", 
+            left_time = "6小时45分" 
+        },
+        {
+            id = 2,
+            avatar_name = "红星鸾动",
+            category_id = 0,
+            need_unlock = 0,
+            unlock_desc = "",
+            limit_type = 0, 
+            limit_time = 0,
+            user_id = 3,
+            has_clicked = 0,
+            receive_time = "2020-08-27 00:00:00",
+            unlock_avatar = 1,
+            file_path = "/game/admin/courseWareZip/d41d8cd98f00b204e9800998ecf8427e.zip",
+            is_using = 1,
+            avatar_url = "https://shouyou.3dmgame.com/uploadimg/upload/image/20190112/20190112130259_40153.jpg", 
+            left_time = "6小时45分" 
+        }
+    }
+    ChangeAvatarPage.now_avatar = 2
+    return avatar
 end
 
 function ChangeAvatarPage.GetAvatarFrame()
@@ -142,11 +143,9 @@ function ChangeAvatarPage:ShowPage(Pageindex)
     ChangeAvatarPage.navig_index = Pageindex
     if Pageindex == 1 then
         ChangeAvatarPage.avatar = ChangeAvatarPage.GetAvatar()
-        ChangeAvatarPage.now_avatar = 1
         ChangeAvatarPage.ui = AdaptWindow:QuickWindow(ChangeAvatarPage.params['avatar'])
     elseif Pageindex == 2 then
         ChangeAvatarPage.avatar_frame = ChangeAvatarPage.GetAvatarFrame()
-        ChangeAvatarPage.now_avatar_frame = 1
         ChangeAvatarPage.ui = AdaptWindow:QuickWindow(ChangeAvatarPage.params['avatar_frame'])
     end
     
