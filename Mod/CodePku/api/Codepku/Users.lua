@@ -69,7 +69,7 @@ end
     UUID 唯一标识符
 ]]
 -- return: object
-function CodePkuUsersApi:QuickLogin(visitor_id, app_market, success, error)
+function CodePkuUsersApi:QuickLogin(visitor_id, success, error)
     if type(visitor_id) ~= "string" then
         return false
     end
