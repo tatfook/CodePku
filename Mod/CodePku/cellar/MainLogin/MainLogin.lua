@@ -169,6 +169,7 @@ function MainLogin:LoginAction(methodIndex)
     end
 
     local visitor_id = MainLogin:GetDeviceUUID()
+    local app_market = ParaEngine.GetAppCommandLineByParam("app_market", nil)
     local account = MainLoginPage:GetValue("account")
     
 
@@ -262,6 +263,7 @@ function MainLogin:LoginAction(methodIndex)
     elseif (methodIndex == 3) then
         CodePkuServiceSession:QuickLogin(
             visitor_id,
+            app_market,
             function(response, err)
                 if err == 503 then
                     Mod.CodePku.MsgBox:Close()
