@@ -69,7 +69,7 @@ end
     UUID 唯一标识符
 ]]
 -- return: object
-function CodePkuUsersApi:QuickLogin(visitor_id, success, error)
+function CodePkuUsersApi:QuickLogin(visitor_id, app_market, success, error)
     if type(visitor_id) ~= "string" then
         return false
     end
@@ -77,6 +77,11 @@ function CodePkuUsersApi:QuickLogin(visitor_id, success, error)
     local params = {
         visitor_id = visitor_id,
     }
+
+    local AppMarket = ParaEngine.GetAppCommandLineByParam("app_market", nil)
+    if AppMarket then
+        params["app_market"] = AppMarket
+    end
 
     CodePkuBaseApi:Post("/users/visitor-login", params, nil, success, error, { 503, 400 })
 end
