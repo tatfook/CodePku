@@ -48,7 +48,7 @@ function ClickCommunity()
 end
 
 function ClickQQGroup()
-    GameLogic.RunCommand("/open https://jq.qq.com/?_wv=1027&k=XWwlhVmm")
+    GameLogic.RunCommand(string.format("/open ", Mod.CodePku.BasicConfig.qq_group_link))
 end
 
 function ClickFeedback()
