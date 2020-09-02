@@ -1,0 +1,95 @@
+<!-- 我的家长弹窗 -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+</head>
+<body>
+<pe:mcml>
+<script refresh="false" type="text/npl" src="Eldership.lua"><![CDATA[
+Eldership = NPL.load("(gl)Mod/CodePku/cellar/GUI/Eldership/Eldership.lua")
+-- System.User.info 用户信息,后面如果绑定了家长可以把家长信息放在里面
+UserInfoPage = NPL.load("(gl)Mod/CodePku/cellar/GUI/UserInfo.lua");
+
+local page = document:GetPageCtrl()
+
+
+UserInfoPage.eldership = "王大明"
+UserInfoPage.is_bind = 1  -- 1绑定,2未绑定
+
+function ClosePage()
+    Page:CloseWindow();
+end
+
+function Eldership.bindWechat()
+    GameLogic.AddBBS("CodeGlobals", L"绑定功能开发中", 3000, "#ff0000");
+    -- 发送绑定网络请求,根据具体业务确定请求的数据
+    Page:CloseWindow();
+    Eldership:ShowBindPage()
+end
+
+function Eldership.ShowUnbindWechat()
+    Eldership:ShowUnbindPage()
+end
+
+]]>
+
+</script>
+
+<pe:container alignment="_lt" width="1920" height="1080">
+    <!-- 窗口 -->
+    <div style="position: relative;width:1555;height:880;left:183;top:122;background:url(codepku/image/textures/eldership/eldershipbg.png)">
+        <!-- 标题 -->
+        <div style="position: relative; width: 410; height: 86;left: 572; top: 0; text-align: center;color: #f46d3d;font-family: Noto Sans S Chinese Regular;font-weight:bolder; font-size: 45px;line-height: 86; background:url(codepku/image/textures/common_32bits.png#1277 377 410 87);">我的家长</div>
+        <!-- 取消按钮 -->
+        <div style="position: relative; width: 64; height: 74; left:1476; top:7; background: url(codepku/image/textures/common_32bits.png#110 73 68 78);" onclick="ClosePage"></div>
+        
+        <!-- 我的家长 -->
+        <div style="position: relative;width:1395;height:608;left:80;top:120;">
+            <div style="<%=format('position: relative;width:1395;height:608;background:url(%s:20 20 20 20)', Eldership.GetEldershipIconHTMLStr(2))%>">
+                <div style="<%=format('position: relative;width:1293;height:288;left:51;top:66;background:url(%s:20 20 20 20)', Eldership.GetEldershipIconHTMLStr(3))%>">
+                    <!-- 已绑定 -->
+                    <pe:if condition="<%=UserInfoPage.is_bind == 1%>">
+                        <div style="position: relative;font-size:40px;line-height:288;padding-left:397px;font-family:PuHuiTi-Bold;color: #ffffff;"><%=Eldership.unbindContent[1] .. UserInfoPage.eldership%></div>
+                        <div onclick="Eldership.ShowUnbindWechat" style="<%=format('position: relative;width:144;height:58;left:753;top:114;text-align:center;font-size:40px;line-height:58;font-family:PuHuiTi-Bold;color: #f01100;background:url(%s:20 20 20 20)', Eldership.GetEldershipIconHTMLStr(4))%>">解绑</div>
+                    </pe:if>
+                    <!-- 未绑定 -->
+                    <pe:if condition="<%=UserInfoPage.is_bind == 2%>">
+                        <div style="position: relative;font-size:40px;line-height:288;padding-left:352px;font-family:PuHuiTi-Bold;color: #ffffff;"><%=Eldership.unbindContent[1] .. Eldership.unbindContent[8]%></div>
+                        <div onclick="Eldership.bindWechat" style="<%=format('position: relative;width:144;height:58;left:796;top:114;text-align:center;font-size:40px;line-height:58;font-family:PuHuiTi-Bold;color: #009c53;background:url(%s:20 20 20 20)', Eldership.GetEldershipIconHTMLStr(4))%>">绑定</div>
+                    </pe:if>
+                </div>
+
+                <div style="<%=format('position: relative;width:122;height:123;left:58;top:433;background:url(%s:20 20 20 20)', Eldership.GetEldershipIconHTMLStr(4))%>">
+                    <div style="<%=format('position: relative;width:67;height:85;left:27;top:16;background:url(%s)', Eldership.GetEldershipIconHTMLStr(5))%>"></div>
+                </div>
+                <div style="position: relative; width: 150; height: 35;left: 202; top: 447;color: #ffffff;font-family:PuHuiTi-Bold;font-size:36px;line-height:35;"><%=Eldership.unbindContent[2]%></div>
+                <div style="position: relative; width: 270; height: 31;left: 202; top: 501;color: #d3eeff;font-family: Noto Sans S Chinese Regular;font-weight:bolder;font-size:32px;line-height:31;"><%=Eldership.unbindContent[3]%></div>
+
+                <div style="<%=format('position: relative;width:122;height:123;left:519;top:431;background:url(%s:20 20 20 20)', Eldership.GetEldershipIconHTMLStr(4))%>">
+                    <div style="<%=format('position: relative;width:75;height:89;left:20;top:17;background:url(%s)', Eldership.GetEldershipIconHTMLStr(6))%>"></div>
+                </div>
+                <div style="position: relative; width: 150; height: 35;left: 664; top: 451;color: #ffffff;font-family:PuHuiTi-Bold;font-size:36px;line-height:35;"><%=Eldership.unbindContent[4]%></div>
+                <div style="position: relative; width: 300; height: 30;left: 665; top: 506;color: #d3eeff;font-family: Noto Sans S Chinese Regular;font-weight:bolder;font-size:32px;line-height:30;"><%=Eldership.unbindContent[5]%></div>
+
+                <div style="<%=format('position: relative;width:122;height:123;left:987;top:428;background:url(%s:20 20 20 20)', Eldership.GetEldershipIconHTMLStr(4))%>">
+                    <div style="<%=format('position: relative;width:73;height:81;left:26;top:22;background:url(%s)', Eldership.GetEldershipIconHTMLStr(7))%>"></div>
+                </div>
+                <div style="position: relative; width: 150; height: 35;left: 1128; top: 445;color: #ffffff;font-family:PuHuiTi-Bold;font-size:36px;line-height:35;"><%=Eldership.unbindContent[6]%></div>
+                <div style="position: relative; width: 240; height: 30;left: 1128; top: 500;color: #d3eeff;font-family: Noto Sans S Chinese Regular;font-weight:bolder;font-size:32px;line-height:30;"><%=Eldership.unbindContent[7]%></div>
+            </div>
+        </div>
+
+        <!-- 取消按钮 -->
+        <div onclick="ClosePage" style="<%=format('position: relative;width:240;height:80;left:657;top:767;text-align:center;font-size:36px;line-height:80;font-family: Noto Sans S Chinese Regular;font-weight:bolder;color: #0e5516;background:url(%s)', Eldership.GetEldershipIconHTMLStr(10))%>">确定</div>
+    </div>
+
+</pe:container>
+
+
+
+</pe:mcml>
+</body>
+</html>
+ 
