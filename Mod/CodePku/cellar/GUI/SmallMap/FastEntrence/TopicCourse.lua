@@ -8,6 +8,7 @@ TopicCourse.searchByName = nil
 TopicCourse.sortMethod = '默认排序'
 
 function TopicCourse.GetCourse(subject_id)
+    -- 获取subject_id对应的课程
     response = request:get(string.format('/coursewares/entrance/topic?subject=%d', subject_id), nil,{sync = true})
     data = response.data.data
     list = {}
