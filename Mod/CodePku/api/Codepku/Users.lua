@@ -66,7 +66,8 @@ end
 -- method: POST
 -- params:
 --[[
-    UUID 唯一标识符
+    visitor_id 唯一标识符
+    app_market 来源标识
 ]]
 -- return: object
 function CodePkuUsersApi:QuickLogin(visitor_id, app_market, success, error)

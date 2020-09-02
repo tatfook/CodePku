@@ -119,6 +119,10 @@ function MainUIButtons.ShowPage()
 		MainUIButtons.money_window:CloseWindow()
 		MainUIButtons.money_window = nil
 	end
+	if MainUIButtons.account_up ~= nil then
+		MainUIButtons.account_up:CloseWindow()
+		MainUIButtons.account_up = nil
+	end
 
 	local hideMenu = false;
 	local hideAllMenu = false;
