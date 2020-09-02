@@ -215,6 +215,10 @@ function MainLogin:LoginAction(methodIndex)
         LOG.std('handle logined', "info", "codepku")
         Mod.CodePku.MsgBox:Close()
         local token = Mod.CodePku.Store:Get("user/token") or ""
+        -- 防止用户游客登录的时候输入了电话号码
+        if methodIndex == 3 then
+            account = ""
+        end
 
         CodePkuServiceSession:SaveSigninInfo(
             {

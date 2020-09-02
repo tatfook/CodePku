@@ -9,13 +9,14 @@
 ]]
 NPL.load("(gl)Mod/CodePku/cellar/GUI/AccountUp/AccountUp.lua")
 local request = NPL.load("(gl)Mod/CodePku/api/BaseRequest.lua");
+local CodePkuServiceSession = NPL.load("(gl)Mod/CodePku/service/CodePkuService/Session.lua")
 
 local AdaptWindow = commonlib.gettable("Mod.CodePku.GUI.Window.AdaptWindow");
 local AccountUp = commonlib.gettable("Mod.CodePku.AccountUp")
 
 AccountUp.ui = nil
 
-function AccountUp.OnSureBtnCLicked(  )
+function AccountUp.OnSureBtnCLicked(page)
     local data = {
         mobile = "",
         verifiy_code = "",
@@ -32,35 +33,45 @@ end
 
 -- 获取手机验证码
 function AccountUp.GetMobileCode( page )
-
-
-    if AccountUp.isClickedGetPhoneCaptcha then
-        return false 
+    if not page then
+        return
     end
 
+    local account = page:GetValue("account")
+
+    if account and #account ~= 11 then
+        GameLogic.AddBBS(nil, L"手机号码位数不对", 3000, "255 0 0", 21)
+        return false
+    end
+
+    if account or account == "" then
+        GameLogic.AddBBS(nil, L"手机号码不能为空", 3000, "255 0 0", 21)
+        return false
+    end
+
+    if AccountUp.isClickedGetPhoneCaptcha then
+        return 
+    end
     AccountUp.isClickedGetPhoneCaptcha = true
-    
-    -- Mod.CodePku.MsgBox:Show(L"正在获取验证码...", 8000, L"链接超时", 300, 120)
-
     local times = 60
-
     local timer = commonlib.Timer:new({
         callbackFunc = function(timer)
-            page:SetValue("get_mobile_code_text", format("%s(%ds)", L"重新发送", times))
+            page:SetValue("GetMobileCodeBtn", format("%s(%ds)", L"重新发送", times))
 
             if times == 0 then
                 AccountUp.isClickedGetPhoneCaptcha = false
-                page:SetValue("get_mobile_code_text", L"获取验证码")
+                page:SetValue("GetMobileCodeBtn", L"获取验证码")
                 timer:Change(nil, nil)
             end
 
             times = times - 1
         end
     })
-
     timer:Change(1000, 1000)
 
-
+    CodePkuServiceSession:getMobileCode(
+        
+    )
 end
 
 function AccountUp.OnCancelBtnClicked()

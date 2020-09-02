@@ -17,6 +17,13 @@
         end
 
         function OnSetPassword()
+            local isVisitor = commonlib.getfield("System.User.isVisitor")
+            if (isVisitor) then
+                NPL.load("(gl)Mod/CodePku/cellar/GUI/AccountUp/AccountUpTips.lua")
+                local AccountUpTips = commonlib.gettable("Mod.CodePku.AccountUpTips")
+                AccountUpTips.ShowPage()
+                return
+            end
             PasswordSettingPage:ShowPage();
         end
         
