@@ -53,11 +53,14 @@ function AccountUp.OnSureBtnCLicked(page)
             commonlib.setfield("System.User.isVisitor", nil)
             commonlib.setfield("System.User.randomName", nil)
             commonlib.setfield("System.User.mobile", account)
+            commonlib.setfield("System.User.info.mobile", account) 
 
             -- 绑定成功后刷新界面
             page:CloseWindow()
             local MainUIButtons = NPL.load("(gl)Mod/CodePku/cellar/Common/TouchMiniButtons/Main.lua");
             MainUIButtons:ShowPage()
+
+            GameLogic.AddBBS(nil, L"账号升级成功", 3000, "255 0 0", 21);
         elseif response.data and response.data.message then
             GameLogic.AddBBS("CodeGlobals", response.data.message, 3000, "#00FF00");
         end		
