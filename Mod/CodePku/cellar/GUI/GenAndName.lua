@@ -64,6 +64,10 @@ function GenAndName:CreateRole(name,gen)
     }
     response =  request:put('/users/profile' ,data,{sync = true});
 
+    if response and response.data and response.data.data then
+        Mod.CodePku.Store:Set('user/info', response.data.data)
+    end
+
     commonlib.setfield("System.User.info.gender", gen) 
     commonlib.setfield("System.User.info.nickname", name)
     return response
