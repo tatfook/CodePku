@@ -12,6 +12,8 @@
     NPL.load("(gl)Mod/CodePku/cellar/GUI/AccountUp/AccountUp.lua")
     local AccountUp = commonlib.gettable("Mod.CodePku.AccountUp")
 
+    AccountUp.isClickedGetPhoneCaptcha = false
+
     function OnSureBtnClicked()
         AccountUp.OnSureBtnCLicked(Page)
     end
