@@ -15,11 +15,8 @@ MainUIButtons.common_window = nil
 MainUIButtons.function_window = nil
 MainUIButtons.dialog_window = nil
 MainUIButtons.money_window = nil
-MainUIButtons.signin_window = nil
-MainUIButtons.action_window = nil
 MainUIButtons.open_function = nil
 MainUIButtons.open_common = nil
-MainUIButtons.task_window = nil
 MainUIButtons.account_up = nil
 
 
@@ -106,17 +103,6 @@ function MainUIButtons.show_money_ui()
 	MainUIButtons.money_window = AdaptWindow:QuickWindow(params)	
 end
 
-function MainUIButtons.show_signin_ui()
-	local width = 100
-	local height = 100
-
-	params = {
-		url="Mod/CodePku/cellar/Common/TouchMiniButtons/MainUIButtons_signin.html", 
-		alignment="_rt", left = -width, top = 500, width = width, height = height,
-	}
-	MainUIButtons.signin_window = AdaptWindow:QuickWindow(params)
-end
-
 function MainUIButtons.show_account_up_ui()
 	local params = {
 		url = "Mod/CodePku/cellar/Common/TouchMiniButtons/MainUIButtons_account_up.html",
@@ -128,50 +114,6 @@ function MainUIButtons.show_account_up_ui()
 	if isVisitor then
 		MainUIButtons.account_up = AdaptWindow:QuickWindow(params)
 	end
-end
-
-function MainUIButtons.show_action_ui(left, right, bottom)
-
-	if left ~= nil then
-		MainUIButtons.show_action_left()
-	end
-
-	if right ~= nil then
-		MainUIButtons.show_action_right()
-	end
-
-	if bottom ~= nil then
-		MainUIButtons.show_action_bottom()
-	end
-	
-end
-
-function MainUIButtons.show_action_left()
-	params = { url="Mod/CodePku/cellar/Common/TouchMiniButtons/MainAction/MainActionLeft.html", 
-			alignment="_lt", left = 101, top = 534, width = 350, height = 350
-		}
-		MainUIButtons.action_window_left = AdaptWindow:QuickWindow(params)
-end
-
-function MainUIButtons.show_action_right()
-	params = { url="Mod/CodePku/cellar/Common/TouchMiniButtons/MainAction/MainActionRight.html", 
-			alignment="_lt", left = 1758, top = 471, width = 130, height = 300
-		}
-		MainUIButtons.action_window_right = AdaptWindow:QuickWindow(params)
-end
-
-function MainUIButtons.show_action_bottom()
-	params = { url="Mod/CodePku/cellar/Common/TouchMiniButtons/MainAction/MainActionBottom.html", 
-			alignment="_lt", zorder = 10, left = 1510, top = 755, width = 300, height = 305
-		}
-		MainUIButtons.action_window_bottom = AdaptWindow:QuickWindow(params)
-end
-
-function MainUIButtons.show_task_ui()
-	params = { url="Mod/CodePku/cellar/Common/TouchMiniButtons/MainUIButtons_task.html", 
-			alignment="_lt", zorder = 10, left = 1820, top = 300, width = 100, height = 100
-		}
-		MainUIButtons.task_window = AdaptWindow:QuickWindow(params)
 end
 
 function MainUIButtons.JudgeNil()
@@ -191,26 +133,10 @@ function MainUIButtons.JudgeNil()
 		MainUIButtons.money_window:CloseWindow()
 		MainUIButtons.money_window = nil
 	end
-	if MainUIButtons.signin_window ~= nil then
-		MainUIButtons.signin_window:CloseWindow()
-		MainUIButtons.signin_window = nil
+	if MainUIButtons.account_up ~= nil then
+		MainUIButtons.account_up:CloseWindow()
+		MainUIButtons.account_up = nil
 	end
-	if MainUIButtons.action_window_left ~= nil then
-		MainUIButtons.action_window_left:CloseWindow()
-		MainUIButtons.action_window_left = nil
-	end
-	if MainUIButtons.action_window_right ~= nil then
-		MainUIButtons.action_window_right:CloseWindow()
-		MainUIButtons.action_window_right = nil
-	end
-	if MainUIButtons.action_window_bottom ~= nil then
-		MainUIButtons.action_window_bottom:CloseWindow()
-		MainUIButtons.action_window_bottom = nil
-	end	
-	if MainUIButtons.task_window ~= nil then
-		MainUIButtons.task_window:CloseWindow()
-		MainUIButtons.task_window = nil
-	end	
 end
 
 
@@ -231,8 +157,7 @@ function MainUIButtons.ShowPage()
 			MainUIButtons.show_dialog_ui(false)
 			MainUIButtons.show_money_ui()		
 			MainUIButtons.show_function_ui()
-			MainUIButtons.show_signin_ui()
-			-- MainUIButtons.show_account_up_ui()
+			MainUIButtons.show_account_up_ui()
 		else
 			MainUIButtons.show_common_ui()
 		end

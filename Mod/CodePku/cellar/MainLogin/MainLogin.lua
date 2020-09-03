@@ -169,6 +169,7 @@ function MainLogin:LoginAction(methodIndex)
     end
 
     local visitor_id = MainLogin:GetDeviceUUID()
+    local app_market = ParaEngine.GetAppCommandLineByParam("app_market", nil)
     local account = MainLoginPage:GetValue("account")
     
 
@@ -214,14 +215,24 @@ function MainLogin:LoginAction(methodIndex)
         LOG.std('handle logined', "info", "codepku")
         Mod.CodePku.MsgBox:Close()
         local token = Mod.CodePku.Store:Get("user/token") or ""
+        local random_name = Mod.CodePku.Store:Get("user/random_name")
+        -- 防止用户游客登录的时候输入了电话号码
+        if methodIndex == 3 then
+            account = Mod.CodePku.Store:Get("user/mobile") or ""
+        end
 
-        CodePkuServiceSession:SaveSigninInfo(
-            {
-                loginServer = loginServer,
-                account = account,               
-                token = token,                
-            }
-        )
+        local data = {
+            loginServer = loginServer,
+            account = account,
+            token = token,
+        }
+        
+        -- 防止游客玩家在选择名字性别的界面推出游戏导致的bug
+        if random_name then
+            data["random_name"] = random_name
+        end
+        
+        CodePkuServiceSession:SaveSigninInfo(data)
         
         LOG.std('save sign in info')
         self:EnterUserConsole()
@@ -262,6 +273,7 @@ function MainLogin:LoginAction(methodIndex)
     elseif (methodIndex == 3) then
         CodePkuServiceSession:QuickLogin(
             visitor_id,
+            app_market,
             function(response, err)
                 if err == 503 then
                     Mod.CodePku.MsgBox:Close()
