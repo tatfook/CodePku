@@ -131,7 +131,7 @@ function MainUIButtons.show_account_up_ui()
 	end
 end
 
-function MainUIButtons.ShowPage()
+function MainUIButtons.JudgeNil()
 	if MainUIButtons.common_window ~= nil then
 		MainUIButtons.common_window:CloseWindow()
 		MainUIButtons.common_window = nil
