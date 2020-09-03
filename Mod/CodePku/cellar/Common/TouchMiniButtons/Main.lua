@@ -109,7 +109,9 @@ function MainUIButtons.show_signin_ui()
 		url="Mod/CodePku/cellar/Common/TouchMiniButtons/MainUIButtons_signin.html", 
 		alignment="_rt", left = -width, top = 500, width = width, height = height,
 	}
-	MainUIButtons.signin_window = AdaptWindow:QuickWindow(params)	
+	MainUIButtons.signin_window = AdaptWindow:QuickWindow(params)
+end
+
 function MainUIButtons.show_account_up_ui()
 	local params = {
 		url = "Mod/CodePku/cellar/Common/TouchMiniButtons/MainUIButtons_account_up.html",
