@@ -85,23 +85,6 @@
         Page:Refresh(0)
     end
 
-    function ChangeDate()
-        local year = Page('#year'):GetValue()
-        local month = Page('#month'):GetValue()
-        if year > os.date('%Y') then
-            GameLogic.AddBBS(nil, L"年份超出当前限制", 3000, "255 0 0", 21);
-        elseif year == os.date('%Y') and month > os.date('%m') then
-            GameLogic.AddBBS(nil, L"月份超出当前限制", 3000, "255 0 0", 21);
-        else
-            SignInPage.year = year
-            SignInPage.month = month
-            SignInPage:GetSigninData(SignInPage.year.."-"..SignInPage.month)
-            SignInPage:GetDayAward(SignInPage.year.."-"..SignInPage.month)
-            SignInPage.supplement_card = SignInPage:GetSupplementCard()
-            Page:Refresh(0)
-        end
-    end
-
 ]]>
 </script>
 <style type="text/mcss">
@@ -144,15 +127,15 @@
                 <div style="<%=format('position: relative; width: 60; height: 60; left: 40; top: 27; background: url(%s)', Eval('prop_icon_url'))%>"></div>
                 <div style="position: relative; width: 151; height: 25; top: 72; padding-right: 7; text-align: right; color: #FFFFFF; font-size: 32; font-family: Noto Sans S Chinese Regular;"><%='x'..Eval('prop_num')%></div>
                 <pe:if condition="<%= SignInPage.month == os.date('%m') and SignInPage.year == os.date('%Y') and day ~= Eval('date')%>">
-                    <pe:if condition="<%= Eval('state') == 0 and Eval('date') &lt; day %>">
+                    <!-- <pe:if condition="<%= Eval('state') == 0 and Eval('date') &lt; day %>">
                         <div onclick="ClickSignIn" name="<%=Eval('date')%>" style="color: #238E2D; width:143; height:49; margin-left:4; margin-top:107; background: url(codepku/image/textures/signin/signin_32bits.png#181 198 41 40:15 15 15 15); font-family: Noto Sans S Chinese Regular; font-size:28px; text-align: center; line-height:49;">补签</div>
-                    </pe:if>
+                    </pe:if> -->
                     <pe:if condition="<%= Eval('state') == 1%>">
                         <div style="color: #FFFFFF;position: relative; width:143; height:49; margin-left:4; margin-top:107; background: url(codepku/image/textures/signin/signin_32bits.png#129 198 41 40:15 15 15 15); font-family: Noto Sans S Chinese Regular; font-size:28px; text-align:center; line-height:49;"><%='第'..Eval('index')..'天'%></div>
                         <div style="position: relative; width: 143; height: 156; margin-left: 4; background: url(codepku/image/textures/signin/signin_32bits.png#30 198 41 40:10 10 10 10);"></div>
                         <div style="position: relative; width: 67; height: 57; left: 38; top: 50; background: url(codepku/image/textures/signin/signin_32bits.png#375 104 67 57);"></div>
                     </pe:if>
-                    <pe:if condition="<%= Eval('state') == 0 and Eval('date') &gt; day%>">
+                    <pe:if condition="<%= Eval('state') == 0%>">
                         <div style="color: #FFFFFF; width:143; height:49; margin-left:4; margin-top:107; background: url(codepku/image/textures/signin/signin_32bits.png#129 198 41 40:15 15 15 15); font-family: Noto Sans S Chinese Regular; font-size:28px; text-align:center; line-height:49;"><%='第'..Eval('index')..'天'%></div>
                     </pe:if>
                 </pe:if>
