@@ -99,26 +99,30 @@ function UserConsole:CourseEntry()
     
     if isHuawei and huaweiApprovalStatus then 
         self:HandleWorldId(Mod.CodePku.BasicConfig.huawei_entry_world_id)
-    else    
-        CodePkuServiceSession:CourseEntryWorld(function (response, err)         
-            if (err == 401) then
-                GameLogic.AddBBS(nil, L"请先登录", 3000, "255 0 0", 21)
-                -- todo 看下怎么回到登录页面
-                return false
-            end   
-            if (err ~= 200) then
-                GameLogic.AddBBS(nil, L"获取入口世界失败", 3000, "255 0 0", 21)
-                return false
-            end
+    else
+        if UserConsole.BeginnerGuideFlag then
+            self:HandleWorldId(Mod.CodePku.BasicConfig.beginner_guide_world_id)  
+        else 
+            CodePkuServiceSession:CourseEntryWorld(function (response, err)         
+                if (err == 401) then
+                    GameLogic.AddBBS(nil, L"请先登录", 3000, "255 0 0", 21)
+                    -- todo 看下怎么回到登录页面
+                    return false
+                end   
+                if (err ~= 200) then
+                    GameLogic.AddBBS(nil, L"获取入口世界失败", 3000, "255 0 0", 21)
+                    return false
+                end
 
-            local GeneralGameServerMod = commonlib.gettable("Mod.GeneralGameServerMod");
-            local GeneralGameClientClass = GeneralGameServerMod:GetClientClass("CodePku");
-            commonlib.setfield("System.Codepku.Coursewares", response.data);
-            GeneralGameClientClass:LoadWorld({
-                worldId = response.data.keepwork_project_id,
-                url = response.data.world
-            });           
-        end) 
+                local GeneralGameServerMod = commonlib.gettable("Mod.GeneralGameServerMod");
+                local GeneralGameClientClass = GeneralGameServerMod:GetClientClass("CodePku");
+                commonlib.setfield("System.Codepku.Coursewares", response.data);
+                GeneralGameClientClass:LoadWorld({
+                    worldId = response.data.keepwork_project_id,
+                    url = response.data.world
+                });           
+            end) 
+        end
     end
 end
 
@@ -206,4 +210,25 @@ function UserConsole:HandleWorldId(pid)
 
         LoadWorld(world, 'auto')    
     end)
+end
+
+function UserConsole:ShowBeginnerPage()
+    local params = {
+        url = "Mod/CodePku/cellar/UserConsole/BeginnerGuide.html", 
+        name = "StartLearning", 
+        isShowTitleBar = false,
+        DestroyOnClose = true,
+        allowDrag = false,
+        enable_esc_key = true,
+        -- bShow = bShow,
+        click_through = false, 
+        zorder = 30,
+        directPosition = true,
+        alignment = "_ct",
+        x = -1920/2,
+        y = -1080/2,
+        width = 1920,
+        height = 1080,
+        };
+    AdaptWindow:QuickWindow(params)
 end

@@ -22,7 +22,14 @@
                 end
 
                 function startLearning()
-                    UserConsole:CourseEntry()
+                    -- 新手老手选择界面
+                    local beginnerGuideState = GameLogic.GetPlayerController():LoadLocalData('beginnerGuideState',false,true);
+                    if not beginnerGuideState then
+                        Page:CloseWindow()
+                        UserConsole:ShowBeginnerPage()
+                    else
+                        UserConsole:CourseEntry()  
+                    end
                 end
 
                 function currentUserName()
