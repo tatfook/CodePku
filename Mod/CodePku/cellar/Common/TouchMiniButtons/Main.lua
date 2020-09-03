@@ -15,6 +15,7 @@ MainUIButtons.money_window = nil
 MainUIButtons.signin_window = nil
 MainUIButtons.open_function = nil
 MainUIButtons.open_common = nil
+MainUIButtons.account_up = nil
 
 
 function MainUIButtons.show_common_ui(flag)
@@ -109,6 +110,17 @@ function MainUIButtons.show_signin_ui()
 		alignment="_rt", left = -width, top = 500, width = width, height = height,
 	}
 	MainUIButtons.signin_window = AdaptWindow:QuickWindow(params)	
+function MainUIButtons.show_account_up_ui()
+	local params = {
+		url = "Mod/CodePku/cellar/Common/TouchMiniButtons/MainUIButtons_account_up.html",
+		alignment = "_lt", left = 1027, top = -8, width = 264, height = 127,
+	}
+
+	local isVisitor = commonlib.getfield("System.User.isVisitor")
+
+	if isVisitor then
+		MainUIButtons.account_up = AdaptWindow:QuickWindow(params)
+	end
 end
 
 function MainUIButtons.ShowPage()
@@ -147,6 +159,7 @@ function MainUIButtons.ShowPage()
 			MainUIButtons.show_money_ui()		
 			MainUIButtons.show_function_ui()
 			MainUIButtons.show_signin_ui()
+			-- MainUIButtons.show_account_up_ui()
 		else
 			MainUIButtons.show_common_ui()
 		end

@@ -29,12 +29,16 @@ function CodePkuServiceSession:LoginWithPwd(account, password, callback)
     CodePkuUsersApi:LoginWithPwd(account, password, callback, callback)
 end
 
+function CodePkuServiceSession:QuickLogin(visitor_id, callback)
+    CodePkuUsersApi:QuickLogin(visitor_id, callback, callback)
+end
+
 function CodePkuServiceSession:LoginWithToken(token, callback)
     CodePkuUsersApi:Profile(token, callback, callback)
 end
 
 function CodePkuServiceSession:LoginResponse(response, err, callback)    
-    if err == 400 or err == 422 or err == 500  then
+    if err == 400 or err == 422 or err == 500 then
         Mod.CodePku.MsgBox:Close()
         local errorMsg = response.message or "用户名或者密码错误"
         GameLogic.AddBBS(nil, errorMsg, 3000, "255 0 0", 21)

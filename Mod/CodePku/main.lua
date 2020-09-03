@@ -157,6 +157,7 @@ function CodePku:init()
 			if GenAndName.CheckNickName() then
 				UserConsole:ShowPage()
 			else
+				GenAndName.Init()
 				GenAndName:ShowPage()
 			end
             return false

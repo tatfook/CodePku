@@ -1,0 +1,89 @@
+<!-- "Mod/CodePku/cellar/GUI/GenAndNameQuickLogin.html" 1是男，2是女 -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+</head>
+
+<body>
+<pe:mcml>
+<script refresh="false" type="text/npl" src="GenAndName.lua"><![CDATA[
+    NPL.load("(gl)Mod/CodePku/cellar/GUI/GenAndName.lua")
+    local GenAndName = commonlib.gettable("Mod.CodePku.GenAndName")
+
+    function GenAndName.ChangeGen(name)
+        LOG.std(nil, "GenAndName", "ChangeGen", "Enter")
+        local gen = tonumber(name)
+        GenAndName.gen = gen
+        Page:Refresh(0)
+    end
+
+    function signtip(gen)
+        if (gen == 1) then
+            return "欢迎帅哥玩家： " .. GenAndName.randomName
+        elseif(gen == 2) then
+            return "欢迎美女玩家： " .. GenAndName.randomName
+        else
+            return "欢迎玩家： " .. GenAndName.randomName
+        end
+    end
+
+    function GenAndName.SubmitBtnClicked()
+        response = GenAndName:CreateRole(GenAndName.randomName,GenAndName.gen)
+        if response.status == 200 and response.data.code == 200 then
+            GameLogic.RunCommand(string.format("/tip -duration 1500 %s",signtip(GenAndName.gen)))
+
+            commonlib.setfield("System.User.username", GenAndName.randomName)
+            commonlib.setfield("System.User.nickName", GenAndName.randomName)  
+            UserConsole = NPL.load('(gl)Mod/CodePku/cellar/UserConsole/Main.lua')
+            UserConsole:ShowPage()
+            Page:CloseWindow();
+        elseif response.data.message then
+            GameLogic.AddBBS(nil, response.data.message,  3000, "255 0 0", 21)
+        end
+    end
+]]>
+</script>
+
+<style type="text/mcss">
+</style>
+
+<pe:container alignment="_lt" width="1920" height="1080" style="background:url(codepku/image/textures/login/choose_player.png)">
+
+    <div style="position: relative; width: 916px; height: 137px; left: 501px; top: 29px; background: url(codepku/image/textures/login/quickLogin.png#25 611 916 137);"></div>
+    
+    <div style="position: relative; width: 581px; height: 91px; left: 670px; top: 178px; background: url(codepku/image/textures/login/quickLogin.png#482 45 78 91:6 6 6 6);">
+        <div style="position: relative;left: 75px; top: 24px; width: 440px; height: 35px; font-size: 36px; color: #fffaf2; font-family: PuHuiTi-Bold;">
+            <%=L"游客账号暂不支持设置昵称"%>
+        </div>
+    </div>
+
+    <pe:if condition='<%=GenAndName.gen ~= 1%>'>
+        <div style="position: relative; width: 379; height: 455; left: 510; top: 291; background:url(codepku/image/textures/login/main.png#485 514 379 455)" name = "1" onclick="GenAndName.ChangeGen"></div>
+    </pe:if>
+
+    <pe:if condition='<%=GenAndName.gen == 1%>'>
+        <div style="position: relative; width: 386; height: 465; left: 502; top: 291; background:url(codepku/image/textures/login/main.png#68 511 386 465)" name = "1" onclick="GenAndName.ChangeGen"></div>
+    </pe:if>
+
+    <pe:if condition='<%=GenAndName.gen ~= 2%>'>
+        <div style="position: relative; width: 379; height: 455; left: 1033; top: 291; background:url(codepku/image/textures/login/main.png#1308 514 379 455)" name = "2" onclick="GenAndName.ChangeGen"></div>
+    </pe:if>
+
+    <pe:if condition='<%=GenAndName.gen == 2%>'>
+        <div style="position: relative; width: 386; height: 465; left: 1033; top: 291; background:url(codepku/image/textures/login/main.png#873 511 386 465)" name = "2" onclick="GenAndName.ChangeGen"></div>
+    </pe:if>
+
+    <div style="position: relative; width: 453; height: 83; left: 730; top: 772; color: #000000; font-size: 36px; font-weight: bold; font-family: font-family: Noto Sans S Chinese Regular; background:url(codepku/image/textures/login/main.png#68 412 453 83)">
+        <pe:label value="<%=GenAndName.randomName%>" style="position: relative;left: 135px; top: 20px; font-size: 36; text-align:center; font-weight:bold; white-space:nowrap;color:#000000"></pe:label>
+    </div>
+
+    <input type="button" style="position: relative; width: 240; height: 93; left: 837; top: 890; font-size: 52; color: #FEFEFE; font-family: PuHuiTi-Bold; font-weight: bold; background:url(codepku/image/textures/login/main.png#1011 408 240 93)" value="确定" onclick="GenAndName.SubmitBtnClicked" />
+    <div style="position: relative; left: 780; top: 1015; font-size: 34; color: #242426; font-family: PuHuiTi-Bold;"><%=L"Powered by Paracraft"%></div>
+
+</pe:container>
+<pe:mcml>
+
+</body>
+</html>
