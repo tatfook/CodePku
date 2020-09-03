@@ -65,6 +65,7 @@
                 end
             end
         end
+        info.user_wallets = wallets --防止初始化钱包为nil的时候客户端不同步的bug
         Mod.CodePku.Store:Set('user/info', info)
         if MainUIButtons.money_window ~= nil then
             MainUIButtons.money_window:CloseWindow()
