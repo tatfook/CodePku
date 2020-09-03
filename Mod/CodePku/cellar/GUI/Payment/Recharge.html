@@ -1,0 +1,40 @@
+<!-- "script/apps/Aries/Creator/Game/Areas/EscFramePage.html" -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+</head>
+<body>
+    <pe:mcml>
+<script refresh="false" type="text/npl" src="Payment.lua"><![CDATA[
+Payment = NPL.load("(gl)Mod/CodePku/cellar/GUI/Payment/Payment.lua");
+local page = document:GetPageCtrl()
+
+function ClosePage()
+    Page:CloseWindow();
+end
+
+
+]]>
+
+</script>
+
+<pe:container alignment="_lt" width="1920" height="1080">
+    <!-- 背景图 -->
+    <div style="position: relative; width: 885; height: 670;left: 507; top: 205; background:url(codepku/image/textures/feedback/feedbackbackground.png);"></div>
+    <!-- 标题 -->
+    <div style="position: relative; width: 316; height: 68;left: 792; top: 205; text-align: center;color: #ff9000; font-family: Noto Sans S Chinese Regular;font-weight: bold; font-size: 36px;line-height: 68; background:url(codepku/image/textures/feedback/feedback.png#30 354 410 88);">反馈</div>
+    <!-- 取消按钮 -->
+    <div style="position: relative; width: 50; height: 58; left:1316; top: 208; background: url(codepku/image/textures/common_32bits.png#110 73 68 78);" onclick="ClosePage"></div>
+    <div style="position: relative; width: 400; height: 31;left: 540; top: 333; font-family:Noto Sans S Chinese Regular;font-weight: bolder;color: #FFFFFF; font-size: 31.44px;">请选择反馈内容的类型：</div>
+
+
+
+
+</pe:container>
+
+</pe:mcml>
+</body>
+</html>
+ 
