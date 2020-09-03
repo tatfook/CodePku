@@ -57,8 +57,8 @@ function MainUIButtons.show_function_ui(flag)	--flag == true,工具栏展开
 	local params = {
 		open = {
 			url="Mod/CodePku/cellar/Common/TouchMiniButtons/MainUIButtons_function.html", 
-			alignment="_rb", left = -678, top = -178, width = 678, height = 178,
-			-- alignment="_rb", zorder=11, left = -541, top = -178, width = 541, height = 178,
+			-- alignment="_rb", left = -678, top = -178, width = 678, height = 178,
+			alignment="_rb", zorder=11, left = -541, top = -178, width = 541, height = 178,
 			click_through = true,
 		},
 		close = {
