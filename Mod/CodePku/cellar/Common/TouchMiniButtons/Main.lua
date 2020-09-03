@@ -15,12 +15,12 @@ MainUIButtons.common_window = nil
 MainUIButtons.function_window = nil
 MainUIButtons.dialog_window = nil
 MainUIButtons.money_window = nil
-MainUIButtons.action_window = nil
 MainUIButtons.signin_window = nil
+MainUIButtons.action_window = nil
 MainUIButtons.open_function = nil
 MainUIButtons.open_common = nil
-MainUIButtons.account_up = nil
 MainUIButtons.task_window = nil
+MainUIButtons.account_up = nil
 
 
 function MainUIButtons.show_common_ui(flag)
@@ -57,8 +57,7 @@ function MainUIButtons.show_function_ui(flag)	--flag == true,工具栏展开
 	local params = {
 		open = {
 			url="Mod/CodePku/cellar/Common/TouchMiniButtons/MainUIButtons_function.html", 
-			-- alignment="_rb", left = -678, top = -178, width = 678, height = 178,
-			alignment="_rb", zorder=11, left = -541, top = -178, width = 541, height = 178,
+			alignment="_rb", left = -678, top = -178, width = 678, height = 178,
 			click_through = true,
 		},
 		close = {
@@ -129,6 +128,50 @@ function MainUIButtons.show_account_up_ui()
 	if isVisitor then
 		MainUIButtons.account_up = AdaptWindow:QuickWindow(params)
 	end
+end
+
+function MainUIButtons.show_action_ui(left, right, bottom)
+
+	if left ~= nil then
+		MainUIButtons.show_action_left()
+	end
+
+	if right ~= nil then
+		MainUIButtons.show_action_right()
+	end
+
+	if bottom ~= nil then
+		MainUIButtons.show_action_bottom()
+	end
+	
+end
+
+function MainUIButtons.show_action_left()
+	params = { url="Mod/CodePku/cellar/Common/TouchMiniButtons/MainAction/MainActionLeft.html", 
+			alignment="_lt", left = 101, top = 534, width = 350, height = 350
+		}
+		MainUIButtons.action_window_left = AdaptWindow:QuickWindow(params)
+end
+
+function MainUIButtons.show_action_right()
+	params = { url="Mod/CodePku/cellar/Common/TouchMiniButtons/MainAction/MainActionRight.html", 
+			alignment="_lt", left = 1758, top = 471, width = 130, height = 300
+		}
+		MainUIButtons.action_window_right = AdaptWindow:QuickWindow(params)
+end
+
+function MainUIButtons.show_action_bottom()
+	params = { url="Mod/CodePku/cellar/Common/TouchMiniButtons/MainAction/MainActionBottom.html", 
+			alignment="_lt", zorder = 10, left = 1510, top = 755, width = 300, height = 305
+		}
+		MainUIButtons.action_window_bottom = AdaptWindow:QuickWindow(params)
+end
+
+function MainUIButtons.show_task_ui()
+	params = { url="Mod/CodePku/cellar/Common/TouchMiniButtons/MainUIButtons_task.html", 
+			alignment="_lt", zorder = 10, left = 1820, top = 300, width = 100, height = 100
+		}
+		MainUIButtons.task_window = AdaptWindow:QuickWindow(params)
 end
 
 function MainUIButtons.JudgeNil()
