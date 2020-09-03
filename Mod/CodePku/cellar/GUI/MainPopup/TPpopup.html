@@ -56,8 +56,11 @@ end
 
 function turnToWorld()
     CloseAllPage()
-    GameLogic.RunCommand(string.format("/loadworld %d", tonumber(world_id)));
-    --GameLogic.RunCommand(string.format('/connectCodePku %d', tonumber(world_id)));
+    if world_id == 1 then
+        GameLogic.RunCommand(string.format('/connectCodePku %d', tonumber(world_id)));
+    else
+        GameLogic.RunCommand(string.format("/loadworld %d", tonumber(world_id)));
+    end
 end
 
 ]]>
