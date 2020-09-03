@@ -153,10 +153,15 @@
         for i = 1, page_size do
             if num + i <= #conditional_course then
                 page_course[i] = conditional_course[num+i]
+                page_course[i].locked = 0                   -- 1表示已解锁,0表示未解锁
+                page_course[i].unlock_gold = 10             -- 解锁需要的货币数量
+                page_course[i].gold_type = 2                -- 解锁需要的货币种类
             else
                 break
             end
         end
+        echo("============page_course============")
+        echo(page_course)
         return page_course
     end
     
@@ -209,6 +214,11 @@
     function SetTPInfo(name, id)
         info = {name = name, id = id }
         return info
+    end
+
+    -- 点击未解锁课程
+    function ClickLockedCourse(name)
+    
     end
 
 ]]></script>
@@ -265,6 +275,8 @@
         <div style="position: relative; width: 1690; height: 630; top: 322;">
             <pe:repeat DataSource="<%=get_topic_course(GetConditionalCourse())%>">
                 <pe:repeatitem>
+                    <!-- 添加判断,未购买的增加遮罩 -->
+            
                     <div style="<%=format('position:absolute; z-index: 5; width:650;height:198;background:url(codepku/image/textures/fastentrence_ui/fastentrence_32bits.png#18 558 650 198);margin-left:%d;margin-top:%d; padding:8;',GetDivisible(Eval('index'))['left'], GetDivisible(Eval('index'))['top'])%>">
                         <div style="<%=format('width:268;height:178; margin-left: 2; float: left; background:url(%s);', Eval('img'))%>"></div>
                         <div style="width:225; margin-left: 26;float: left;">
@@ -272,7 +284,13 @@
                             <div style="width: 225; height: 21; margin-top: 17; font-size:28px; font-family:Noto Sans S Chinese Regular; color: #ffffff; line-height: 21;">ID:<%= Eval('id') %></div>
                         </div>
                         <div style="width: 96; height: 96;float: left; margin-top: 48; background:url(codepku/image/textures/fastentrence_ui/fastentrence_32bits.png#689 210 96 96);" name ="<%= SetTPInfo(Eval('name'), Eval('id')) %>" onclick="OnClickCourse"></div>
-                    </div>    
+                        <!-- 灰色遮罩,添加点击解锁事件 -->
+                        <pe:if condition="<%= Eval('locked') == 0 %>">
+                            <div onclick="ClickLockedCourse" name ="<%= SetTPInfo(Eval('name'), Eval('id')) %>" style="width: 632;height: 178;margin-top: -178;margin-left: 2;background:url(codepku/image/textures/fastentrence_ui/fastentrence_32bits.png#34 774 260 92:20 20 20 20);"></div>
+                            <div onclick="ClickLockedCourse" name ="<%= SetTPInfo(Eval('name'), Eval('id')) %>" style="width: 45;height: 58;margin-top: -115;margin-left: 300;background:url(codepku/image/textures/profile/achievement.png#894 74 45 58);"></div>
+                        </pe:if>
+                    </div>
+
                 </pe:repeatitem>
             </pe:repeat>
         </div>
