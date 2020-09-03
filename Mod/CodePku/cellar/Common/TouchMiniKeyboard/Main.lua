@@ -17,8 +17,8 @@ function TouchMiniKeyboard.CheckShow(show)
     local visible = true;
     local currentkpId = System.Codepku and System.Codepku.Coursewares and System.Codepku.Coursewares.keepwork_project_id
     local beginnerGuideId = Mod.CodePku.BasicConfig.beginner_guide_world_id or 18656;
-    
-    if tonumber(currentkpId) == beginnerGuideId then 
+
+    if tonumber(currentkpId) == tonumber(beginnerGuideId) then
         visible = false;
     end
     
