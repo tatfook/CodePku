@@ -23,7 +23,9 @@
 
                 function startLearning()
                     -- 新手老手选择界面
-                    local beginnerGuideState = GameLogic.GetPlayerController():LoadLocalData('beginnerGuideState',false,true);
+                    local userId = Mod.CodePku.Store:Get('user/userId')
+                    local guideUid = tostring(userId)..'beginnerGuideState'
+                    local beginnerGuideState = GameLogic.GetPlayerController():LoadLocalData(guideUid,false,true);
                     if not beginnerGuideState then
                         Page:CloseWindow()
                         UserConsole:ShowBeginnerPage()
