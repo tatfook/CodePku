@@ -1,0 +1,158 @@
+<!-- "script/apps/Aries/Creator/Game/Areas/SystemEntrencePage.html" -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+</head>
+<body>
+    <pe:mcml onloadscript="script/apps/Aries/app_main.lua" callbackfunction="MyCompany.Aries.MSGProc">
+<script refresh="false" type="text/npl" src=""><![CDATA[
+
+local FastEntrence = NPL.load("(gl)Mod/CodePku/cellar/GUI/SmallMap/FastEntrence/FastEntrence.lua")
+local MainPopup = commonlib.gettable("Mod.CodePku.GUI.MainPopup")
+local request = NPL.load("(gl)Mod/CodePku/api/BaseRequest.lua");
+
+showIndex = 2   --默认显示数学页，默认显示页必须要有数据
+
+showSubjects = FastEntrence.subjects
+
+nowCourse = showSubjects[showIndex].course
+
+pageNum = 1
+pageSize = 8
+
+function getShowSubjects()
+    return showSubjects
+end
+
+function changeSubject(index)
+    local i  = index - 1
+    if(showIndex ~= i)then
+        showIndex = i
+        FastEntrence:GetSubjects(FastEntrence.nowGrade, showIndex)
+        nowCourse = showSubjects[showIndex].course
+        pageNum = 1
+        Page:Refresh(0)
+    end
+end
+
+function getBG(index)
+    return nowCourse[index]["cover_file"]["file_url"]
+end
+
+function getShowCourse()
+    local showCourse = {}
+    local start = (pageNum - 1) * pageSize + 1
+    local myEnd = pageNum * pageSize
+    if(myEnd > #nowCourse)then
+        myEnd = #nowCourse
+    end
+    local index = 1
+    while start <= myEnd do
+        showCourse[index] = nowCourse[start]
+        index = index + 1
+        start = start + 1
+    end
+    return showCourse
+end
+
+function changePage(name)
+    if(name == "pre")then
+        if(pageNum > 1)then
+            pageNum = pageNum - 1
+            Page:Refresh(0)
+        end
+    elseif(name == "next") then
+        local totalPage = (#nowCourse) / pageSize
+        if (#nowCourse) % pageSize ~= 0 then
+            totalPage = math.floor((#nowCourse) / pageSize) + 1
+        end
+        if(pageNum < totalPage)then
+            pageNum = pageNum + 1
+            Page:Refresh(0)
+        end
+    end
+end
+
+function getCourseLength(index)
+    return #showSubjects[index].course
+end
+
+function goWorld(index)
+    local courseIndex = (pageNum - 1) * pageSize + index
+    local couserGo = nowCourse[courseIndex]
+    MainPopup:ShowPage("TPpopup", couserGo.name, couserGo.keepwork_project_id)
+end
+
+function getPageNum()
+    return pageNum
+end
+
+function ClosePage()
+    Page:CloseWindow();
+    FastEntrence:ShowPage(1)
+end
+
+]]></script>
+<style type="text/mcss">
+</style>
+
+<div style="width:1920;height: 1080;background:url(codepku/image/textures/commonpopup/backboard.png)">
+    <div style="position: relative; width:230; height:1080; background-color: #94E3FE;"></div>
+    <div style='position: relative;width:208px;height:127px;background: url(codepku/image/textures/commonpopup/main.png#251 49 208 127);' onclick="ClosePage"></div>
+    <div style="position: relative; width: 417; height: 86; margin-left: 144;  font-size:70px; color: #D85D0B; font-family:PuHuiTi-Bold; padding-left: 95; padding-top: 8; background:url(codepku/image/textures/common_32bits.png#475 63 429 86);">教学区</div>
+    
+    <div style="position: relative; width:200; height:900; top: 144px;">
+        <pe:repeat DataSource="<%=getShowSubjects()%>">
+            <pe:item>
+            <pe:if condition='<%=Eval("show") == true%>'>
+
+                <pe:if condition='<%=showIndex == index-1%>'>
+                    <div style="<%=format('background: url(codepku/image/textures/common_32bits.png#1648 196 261 96);width:261;height:96;margin-left:24px;float:left;')%>" name='<%=Eval("index")%>' onclick='changeSubject'>
+                        <div style="font-family:NotoSansHans-Medium;color:#F8DE8D; font-size:45px;font-weight:bold;width:261;height:80px;line-height: 80px;;text-align: center;">
+                            <%=Eval('name')%>
+                        </div>
+                    </div>
+                </pe:if>
+
+                <pe:if condition='<%=showIndex ~= index-1%>'>
+                    <div style="<%=format('background: url(codepku/image/textures/common_32bits.png#1294 66 134 94);width:261;height:94;float:left;')%>" name='<%=Eval("index")%>' onclick='changeSubject'>
+                        <div style="font-family:NotoSansHans-Medium;color:#ffffff; font-size:45px;font-family:NotoSansHans-Medium;font-weight:Medium;width:244px;height:94px;line-height: 94;text-align: center;">
+                            <%=Eval('name')%>
+                        </div>
+                    </div>
+                </pe:if>
+
+            </pe:if>
+        </pe:item>
+        </pe:repeat>
+    </div>
+
+    <div style="position: relative; width: 1540; height: 700; left: 297; top: 230;">
+        <pe:repeat DataSource="<%=getShowCourse()%>" >
+            <div style="width: 340; height: 282; float: left; margin-left: 41; margin-bottom: 89;">
+                <div style="position: relative; width:340px; height:80; font-family:PuHuiTi-Bold;text-align: center; line-height: 80; font-size:32px;color:#ffffff; font-weight:bold; background:url(codepku/image/textures/fastentrence_ui/main.png#28 45 340 80);" name="<%=Eval('index')%>" onclick="goWorld"><%=Eval('name')%></div>
+
+                <!-- <div style="position: relative; width: 340; height: 202; top: 80; format('background: url(codepku/image/textures/fastentrence_ui/main.png#667 356 346 288);"> -->
+
+                <div style="position: relative; width: 340; height: 202; top: 80; background:url(codepku/image/textures/fastentrence_map/main.png#147 1130 340 202);" name="<%=Eval('index')%>" onclick="goWorld"></div>
+
+                <div style="<%=format('position: relative; width: 340; height: 202; top: 80; background:url(%s);', getBG(index) )%>" name="<%=Eval('index')%>" onclick="goWorld"></div>
+
+            </div>
+        </pe:repeat>
+    </div>
+
+    <div style="position: relative; width: 169; height: 41; left: 1003; top:936; ">
+        <div style="width: 28; height: 40; float: left; background: url(codepku/image/textures/fastentrence_ui/fastentrence_32bits.png#207 378 28 41); transform:rotate(180deg); transform-origin: 14 20;" name="pre" onclick="changePage"></div>
+        <div style="width: 113; height: 33;font-size: 45px;color: #ffffff;float: left; text-align: center; line-height: 33;"><%=getPageNum()%></div>
+        <div style="width: 28; height: 40;float: left; background: url(codepku/image/textures/fastentrence_ui/fastentrence_32bits.png#207 378 28 41);" name="next" onclick="changePage"></div>
+    </div>
+
+</div>
+
+</pe:mcml>
+</body>
+</html>
+

@@ -22,6 +22,12 @@ mytable = {
     last_time = FriendUI.vars.search.last_time,
 }
 
+local report_table = {
+    [1] = {"色情低俗", "赌博诈骗", "违法违规"},
+    [2] = {"人身攻击", "侵犯隐私"},
+    [3] = {"发布公告", "其他"}
+}
+
 --reportedPlyer1 = commonlib.deepcopy(FriendUI.vars["search"])
 
 reportedPlyer = FriendUI.vars["search"]
@@ -67,58 +73,42 @@ function addFriend(fid)
     FriendUI:Add_Friend(fid)
 end
 
+local first_flag = 1
+local second_flag = 1
+local third_flag = 1
+
 function report(fid)
     echo("Todo report")    
 end
 
-local first_flag = 0
-local second_flag = 0
-local third_flag = 0
-
-function clickFirst(name)
-    if name == "first_one" then
-        first_flag = 1
-    elseif name == "first_two" then
-        first_flag = 2
-    elseif name == "first_three" then
-        first_flag = 3
-    end 
+function clickFirst(value)
+    first_flag = tonumber(value)
     Page:Refresh(0)
 end
 
-function clickSecond(name)
-    if name == "second_one" then
-        second_flag = 1
-    elseif name == "second_two" then
-        second_flag = 2
-    end
+function clickSecond(value)
+    second_flag = tonumber(value)
     Page:Refresh(0)
 end
 
-function clickThird(name)
-    if name == "third_one" then
-        third_flag = 1
-    elseif name == "third_two" then
-        third_flag = 2
-    end
+function clickThird(value)
+    third_flag = tonumber(value)
     Page:Refresh(0)
-end
-
-function getFirstFlag()
-    return first_flag
-end
-
-function getSecondFlag()
-    return second_flag
-end
-
-function getThirdFlag()
-    return third_flag
 end
 
 function clickReport()
+    local reported_table = {
+        report_table[1][first_flag],
+        report_table[2][second_flag],
+        report_table[3][third_flag]
+    }
+
+    echo("--------------------------------")
+    echo(reported_table)
+    echo("--------------------------------")
+
     GameLogic.RunCommand(string.format("/tip -duration 1500 %s", L"举报成功"))
-    Page:CloseWindow()
+    --Page:CloseWindow()
 end
 
 ]]>
@@ -150,9 +140,9 @@ end
 
     <div style="position: relative; width: 276; height: 70; left: 510; top: 432;text-align: center; font-family: PuHuiTi-Bold; line-height: 70; font-size: 36; color: #FDFDFD; background: url(codepku/image/textures/friend/main.png#715 95 40 40 : 10 10 10 10);">违反法律法规</div>
 
-    <input type="radio" name="first" value="1" checked="checked" onclick="clickFirst" width="30" height="30" style="position: relative; left: 517; top: 522;" UncheckedBG="codepku/image/textures/friend/main.png#651 100 30 30" CheckedBG="codepku/image/textures/friend/main.png#788 100 30 30" />
-    <input type="radio" name="first" value="2" onclick="clickFirst" width="30" height="30" style="position: relative; left: 766; top: 522; " UncheckedBG="codepku/image/textures/friend/main.png#651 100 30 30" CheckedBG="codepku/image/textures/friend/main.png#788 100 30 30"/>
-    <input type="radio" name="first" value="3" onclick="clickFirst" width="30" height="30" style="position: relative; left: 1015; top: 522;" UncheckedBG="codepku/image/textures/friend/main.png#651 100 30 30" CheckedBG="codepku/image/textures/friend/main.png#788 100 30 30"/>
+    <input id="first1" type="radio" name="first" value="1" checked="checked" onclick="clickFirst" width="30" height="30" style="position: relative; left: 517; top: 522;" UncheckedBG="codepku/image/textures/friend/main.png#651 100 30 30" CheckedBG="codepku/image/textures/friend/main.png#788 100 30 30" />
+    <input id="first1" type="radio" name="first" value="2" onclick="clickFirst" width="30" height="30" style="position: relative; left: 766; top: 522; " UncheckedBG="codepku/image/textures/friend/main.png#651 100 30 30" CheckedBG="codepku/image/textures/friend/main.png#788 100 30 30"/>
+    <input id="first1" type="radio" name="first" value="3" onclick="clickFirst" width="30" height="30" style="position: relative; left: 1015; top: 522;" UncheckedBG="codepku/image/textures/friend/main.png#651 100 30 30" CheckedBG="codepku/image/textures/friend/main.png#788 100 30 30"/>
     <div style="position: relative; width: 135; height: 31; left: 568; top: 520; font-size: 32; color: #FDFDFD; font-family: Noto Sans S Chinese Regular;" >色情低俗</div>
     <div style="position: relative; width: 135; height: 31; left: 816; top: 520; font-size: 32; color: #FDFDFD; font-family: Noto Sans S Chinese Regular;" >赌博诈骗</div>
     <div style="position: relative; width: 135; height: 31; left: 1066; top: 520; font-size: 32; color: #FDFDFD; font-family: Noto Sans S Chinese Regular;" >违法违规</div>
