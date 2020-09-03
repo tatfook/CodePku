@@ -194,20 +194,18 @@ function UserConsole:HandleWorldId(pid)
             return false
         end   
         if (error ~= 200) then
-            GameLogic.AddBBS(nil, L"获取入口世界失败", 3000, "255 0 0", 21)
+            GameLogic.AddBBS(nil, L"获取世界失败", 3000, "255 0 0", 21)
             return false
         end
         local url = response and response.data and response.data.world
         commonlib.setfield("System.Codepku.Coursewares", response.data);
 
         if not url then
-            GameLogic.AddBBS(nil, L"获取入口世界失败", 3000, "255 0 0", 21)
+            GameLogic.AddBBS(nil, L"获取世界失败", 3000, "255 0 0", 21)
             return false
         end
 
         local world = RemoteWorld.LoadFromHref(url, "self")
-        commonlib.setfield("System.Codepku.Coursewares", response.data);
-
         LoadWorld(world, 'auto')    
     end)
 end
