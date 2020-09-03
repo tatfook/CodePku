@@ -142,7 +142,7 @@ end
 
 function MainUIButtons.ShowPage()
 	local currentkpId = System.Codepku and System.Codepku.Coursewares and System.Codepku.Coursewares.keepwork_project_id
-	if tonumber(currentkpId) == 18656 then return
+	if tonumber(currentkpId) == 18656 then return end
 	
 	MainUIButtons.JudgeNil()
 

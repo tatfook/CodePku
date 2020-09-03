@@ -9,13 +9,13 @@ local TouchMiniKeyboard = NPL.export();
 local currentkpId = System.Codepku and System.Codepku.Coursewares and System.Codepku.Coursewares.keepwork_project_id
 
 function TouchMiniKeyboard:show(show)
-    if tonumber(currentkpId) == 18656 then return
+    if tonumber(currentkpId) == 18656 then return end
     DirectionKeyboard.getSingleton():show(show);
     FeatKeyboard.getSingleton():show(show);
 end
 
 function TouchMiniKeyboard.CheckShow(show)
-    if tonumber(currentkpId) == 18656 then return
+    if tonumber(currentkpId) == 18656 then return end
     DirectionKeyboard.getSingleton():show(show);
     FeatKeyboard.getSingleton():show(show);
 end
