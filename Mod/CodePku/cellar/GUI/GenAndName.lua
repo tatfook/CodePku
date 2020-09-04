@@ -133,6 +133,12 @@ function GenAndName:ShowPage()
         }
     };
     if GenAndName.isVisitor then
+        -- 判定是否获取成功游客信息 如果没有的话退回登录界面
+        if not GenAndName.randomName then
+            local MainLogin = NPL.load("(gl)Mod/CodePku/cellar/MainLogin/MainLogin.lua")
+            MainLogin:Show()
+            return
+        end
         AdaptWindow:QuickWindow(params[2])
     else
         AdaptWindow:QuickWindow(params[1])
