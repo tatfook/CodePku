@@ -9,6 +9,8 @@
         <pe:mcml>
             <script refresh="false" type="text/npl" src="UserInfo.lua">
                 <![CDATA[
+                    local MainUIButtons = NPL.load("(gl)Mod/CodePku/cellar/Common/TouchMiniButtons/Main.lua");
+                    
                     function GetMoney()
                         local info = Mod.CodePku.Store:Get('user/info');
                         local wallets = info.user_wallets or {};

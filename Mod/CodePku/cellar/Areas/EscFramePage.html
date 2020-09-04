@@ -38,11 +38,6 @@ function OnSettings()
 end
 
 function OnAccountSetting()
-    local isVisitor = commonlib.getfield("System.User.isVisitor")
-    if (isVisitor) then
-        GameLogic.AddBBS(nil, L"游客无法设置账号", 3000, "255 0 0", 21);
-        return
-    end
     AccountSettingPage:ShowPage(true);
 end
 

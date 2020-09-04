@@ -15,9 +15,9 @@ SmallMap.home = {
     main = {name = "玩学大厅-大门", id = 1}
 }
 
-SmallMap.tieiei = "112121"
+-- SmallMap.tieiei = "112121"
 
-SmallMap.aaaa = "324353"
+-- SmallMap.aaaa = "324353"
 
 SmallMap.params={
     SmallMapPage = {

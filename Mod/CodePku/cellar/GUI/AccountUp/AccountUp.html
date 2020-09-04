@@ -12,8 +12,10 @@
     NPL.load("(gl)Mod/CodePku/cellar/GUI/AccountUp/AccountUp.lua")
     local AccountUp = commonlib.gettable("Mod.CodePku.AccountUp")
 
+    AccountUp.isClickedGetPhoneCaptcha = false
+
     function OnSureBtnClicked()
-        AccountUp.OnSureBtnCLicked()
+        AccountUp.OnSureBtnCLicked(Page)
     end
 
     function OnCancelBtnClicked()
@@ -41,12 +43,23 @@
             <input type="button" name="numberChoose" onclick="OnNumberChooseBtnClicked" value='<%= L"+86"%>' style="position: relative; width: 101px; height: 88px; background: #000000;"/>
         </div>
 
+        <div name="verifyCodeDiv" style="position: relative; width: 722; height: 88; left: 111; top: 329;">
+
+            <div style="position: relative; width: 722; height: 88; font-size: 32; color:#FFFFFF; font-family: Noto Sans S Chinese Regular; background:url(codepku/image/textures/login/main.png#1011 271 88 88:10 10 10 10);">
+                <input type="text" name="verify_code" EmptyText='<%= L"请输入验证码" %>' style="position: relative; width: 672; height: 88; left: 25; line-height: 88; background: #000000;" />
+            </div>
+
+            <input type="button" name="GetMobileCodeBtn" onclick="OnGetMobileCodeBtnClicked()"
+                style="position: relative; width: 201; height: 89; left: 522; font-size: 32; font-family: PuHuiTi-Bold; font-weight: bold; color: #F46D3D; background:url(codepku/image/textures/login/main.png#1537 413 200 88:0 10 10 0);" value='<%= L"获取验证码" %>' />
+
+        </div>
+
 
         <input type="button"  onclick="OnSureBtnClicked" value='<%= L"确定升级"%>'
-        style="position: relative; width: 330; height: 90; left: 502; top: 414; font-size: 36; color: #0e5516; font-family: PuHuiTi-Bold; font-weight: bold; border-radius: 6px; background:url(codepku/image/textures/login/quickLogin.png#391 46 65 94:6 6 6 6);" />
+        style="position: relative; width: 286; height: 86; left: 542; top: 458; font-size: 36; color: #0e5516; font-family: PuHuiTi-Bold; font-weight: bold; border-radius: 6px; background:url(codepku/image/textures/login/quickLogin.png#276 46 74 94:6 6 6 6);" />
 
         <input type="button"  onclick="OnCancelBtnClicked" value='<%= L"取消"%>'
-        style="position: relative; width: 330; height: 90; left: 110; top: 414; font-size: 36; color: #85272b; font-family: PuHuiTi-Bold; font-weight: bold; border-radius: 6px; background:url(codepku/image/textures/login/quickLogin.png#276 46 74 94:6 6 6 6);" />
+        style="position: relative; width: 286; height: 86; left: 114; top: 458; font-size: 36; color: #85272b; font-family: PuHuiTi-Bold; font-weight: bold; border-radius: 6px; background:url(codepku/image/textures/login/quickLogin.png#344 478 102 86:6 6 6 6);" />
 
     </div>
 </pe:container>
