@@ -1,4 +1,4 @@
-<!-- "script/apps/Aries/Creator/Game/Areas/EscFramePage.html" -->
+<!-- 解锁课程弹窗 -->
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -11,25 +11,32 @@
 Payment = NPL.load("(gl)Mod/CodePku/cellar/GUI/Payment/Payment.lua");
 local page = document:GetPageCtrl()
 
+Payment.Recharge_send_content = "已发送信息至家长微信，提前与家长协商可更快获得玩学券。"
+
 function ClosePage()
     Page:CloseWindow();
 end
+
+
 
 
 ]]>
 
 </script>
 
-<pe:container alignment="_lt" width="1920" height="1080">
+<pe:container alignment="_lt" width="1920" height="1080" style="background-color: #00000094;">
     <!-- 背景图 -->
-    <div style="position: relative; width: 885; height: 670;left: 507; top: 205; background:url(codepku/image/textures/feedback/feedbackbackground.png);"></div>
+    <div style="<%=format('position: relative; width: 1153; height: 588;left: 383; top: 240; background:url(%s);', Payment.GetPaymentIconHTMLStr(1))%>"></div>
     <!-- 标题 -->
-    <div style="position: relative; width: 316; height: 68;left: 792; top: 205; text-align: center;color: #ff9000; font-family: Noto Sans S Chinese Regular;font-weight: bold; font-size: 36px;line-height: 68; background:url(codepku/image/textures/feedback/feedback.png#30 354 410 88);">反馈</div>
+    <div style="<%=format('position: relative; width: 410; height: 86;left: 769; top: 243; text-align: center;color: #f36d3d; font-family: Noto Sans S Chinese Regular;font-weight: bold; font-size: 45px;line-height: 86; background:url(%s);', Payment.GetPaymentIconHTMLStr(2))%>">解锁提示</div>
     <!-- 取消按钮 -->
-    <div style="position: relative; width: 50; height: 58; left:1316; top: 208; background: url(codepku/image/textures/common_32bits.png#110 73 68 78);" onclick="ClosePage"></div>
-    <div style="position: relative; width: 400; height: 31;left: 540; top: 333; font-family:Noto Sans S Chinese Regular;font-weight: bolder;color: #FFFFFF; font-size: 31.44px;">请选择反馈内容的类型：</div>
-
-
+    <div onclick="ClosePage" style="<%=format('position: relative; width: 64; height: 74;left: 1453; top: 250; background:url(%s);', Payment.GetPaymentIconHTMLStr(3))%>"></div>
+    <!-- 提示文字 -->
+    <div style="<%=format('position: relative; width: 960; height: 267;left: 495; top: 361; background:url(%s:10 10 10 10);', Payment.GetPaymentIconHTMLStr(4))%>">
+        <div style="position: relative;width: 780;height: 124;left: 89;top: 78;text-align: center;font-size: 36;line-height: 62;font-family: Noto Sans S Chinese Regular;font-weight: bold;color: #ffffff;"><%= Payment.Recharge_send_content %></div>
+    </div>
+    <!-- 确认按钮 -->
+    <div onclick="ClosePage" style="<%=format('position: relative;width:240;height:80;left:839;top:691;text-align:center;font-size:36px;line-height:80;font-family: PuHuiTi-Bold;color: #0d5416;background:url(%s:20 20 20 20)', Payment.GetPaymentIconHTMLStr(6))%>">知道啦</div>
 
 
 </pe:container>

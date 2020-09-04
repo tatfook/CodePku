@@ -12,7 +12,7 @@
     local TopicCourse = NPL.load("(gl)Mod/CodePku/cellar/GUI/SmallMap/FastEntrence/TopicCourse.lua")
     local FastEntrence = NPL.load("(gl)Mod/CodePku/cellar/GUI/SmallMap/FastEntrence/FastEntrence.lua")
     local MainPopup = commonlib.gettable("Mod.CodePku.GUI.MainPopup");
-    local Payment = NPL.load("(gl)Mod/CodePku/cellar/GUI/Payment/Payment.lua");
+    Payment = NPL.load("(gl)Mod/CodePku/cellar/GUI/Payment/Payment.lua");
 
     
     local page = document:GetPageCtrl()
@@ -154,15 +154,15 @@
         for i = 1, page_size do
             if num + i <= #conditional_course then
                 TopicCourse.page_course[i] = conditional_course[num+i]
-                TopicCourse.page_course[i].locked = 0                   -- 1表示已解锁,0表示未解锁
+                if TopicCourse.page_course[i].locked == nil then
+                    TopicCourse.page_course[i].locked = 0                   -- 1表示已解锁,0表示未解锁
+                end
                 TopicCourse.page_course[i].unlock_gold = 100             -- 解锁需要的货币数量
                 TopicCourse.page_course[i].gold_type = 2                -- 解锁需要的货币种类
             else
                 break
             end
         end
-        echo("============TopicCourse.page_course============")
-        echo(TopicCourse.page_course)
         return TopicCourse.page_course
     end
     
@@ -234,24 +234,18 @@
 
     -- 点击未解锁课程
     function ClickLockedCourse(name)
-        -- 判断用户剩余玩学币是否足够解锁课程,不够时弹出充值界面
+    -- 判断用户剩余玩学币是否足够解锁课程,不够时弹出充值界面
 
-        -- 获取点击的课程详细信息
-        local PaymentCourse
-        local UserMoney = GetMoney()
+        -- 获取点击的课程详细信息及用户当前持有货币数量
+        Payment.PaymentCourse = nil
+        Payment.UserMoney = GetMoney()
         for k,v in pairs(TopicCourse.page_course) do
             if v.id == name.id then
-                PaymentCourse = v
+                Payment.PaymentCourse = v
             end
         end
-        if UserMoney.wanxuecoin >= PaymentCourse.unlock_gold then
-            GameLogic.AddBBS("CodeGlobals", L"进入购买弹窗", 3000, "#00FF00");
-            Payment:ShowPage("CoursePayment")
-        end
-        if UserMoney.wanxuecoin < PaymentCourse.unlock_gold then
-            GameLogic.AddBBS("CodeGlobals", L"余额不足弹窗", 3000, "#00FF00");
-            Payment:ShowPage("Recharge")
-        end
+        Payment.TopicCoursePage = page
+        Payment:ShowPage("CoursePayment")
     end
 
 ]]></script>
