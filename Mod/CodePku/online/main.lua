@@ -33,28 +33,6 @@ function Online:Init()
 	self:RegisterCommand();
 end
 
-function ParseOption(cmd_text)
-	local value, cmd_text_remain = cmd_text:match("^%s*%-([%w%._]+%S+)%s*(.*)$");
-	if(value) then
-		return value, cmd_text_remain;
-	end
-	return nil, cmd_text;
-end
-
-function ParseOptions(cmd_text)
-	local options = {};
-	local option, cmd_text_remain = nil, cmd_text;
-	while(cmd_text_remain) do
-		option, cmd_text_remain = ParseOption(cmd_text_remain);
-		if(option) then
-			key, value = option:match("([%w_]+)=?(%S*)");
-			options[key] = value;
-		else
-			break;
-		end
-	end
-	return options, cmd_text_remain;
-end
 
 function Online:RegisterCommand()
     Commands["connectCodePku"] = {
@@ -70,22 +48,10 @@ connectCodePku 145                    # 联机进入世界ID为145的世界
 connectCodePku 145 parallel           # 联机进入世界ID为145的平行世界 parallel
 ]], 
 		handler = function(cmd_name, cmd_text, cmd_params, fromEntity)		
-			Log:Info("run cmd: %s %s", cmd_name, cmd_text);
-			local options = {};
-			options, cmd_text = ParseOptions(cmd_text);	
-			worldId, cmd_text = CmdParser.ParseInt(cmd_text);
-			parallelWorldName, cmd_text = CmdParser.ParseString(cmd_text);
-
-			local GeneralGameClientClass = GeneralGameServerMod:GetClientClass("CodePku");
-			GeneralGameClientClass:LoadWorld({
-				worldId = (worldId and worldId ~= 0) and worldId or nil,
-				parallelWorldName = parallelWorldName,
-				ip = (options.host and options.host ~= "") and options.host or nil,
-				port = (options.port and options.port ~= "") and options.port or nil,
-				username = (options.u and options.u ~= "") and options.u or System.User.username or nil,
-				password = (options.p and options.p ~= "") and options.p or nil,
-				url = (options.url and options.url ~= "") and options.url or nil
-			});
+            Log:Info("run cmd: %s %s", cmd_name, cmd_text);
+            local ggsCmd = string.format("/ggs connect -app=CodePku %s", cmd_text);
+            Log:Info("run ggs connect cmd: %s", ggsCmd);
+            GameLogic.RunCommand(string.format("/ggs connect -app=CodePku %s", cmd_text));
 		end,
 	}
 end

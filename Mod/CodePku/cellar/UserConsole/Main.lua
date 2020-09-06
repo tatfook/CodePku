@@ -29,28 +29,6 @@ local MainLogin = NPL.load("(gl)Mod/CodePku/cellar/MainLogin/MainLogin.lua")
 local UserConsole = NPL.export()
 
 function UserConsole:ShowPage()
-    -- local url = "Mod/CodePku/cellar/UserConsole/StartLearning.html"
-    -- -- Mod.CodePku.Utils.ShowWindow(850, 470, url, "StartLearning", nil, nil, nil, false, 10)
-    -- UserInfo:OnChangeAvatar()
-    
-    -- params = {
-    --     url = url, 
-    --     name = "StartLearning", 
-    --     isShowTitleBar = false,
-    --     DestroyOnClose = true, -- prevent many ViewProfile pages staying in memory
-    --     style = CommonCtrl.WindowFrame.ContainerStyle,
-    --     allowDrag = false,
-    --     zorder = -1,
-    --     bShow = bShow,
-    --     directPosition = true,
-    --         align = "_fi",
-    --         x = 0,
-    --         y = 0,
-    --         width = 0,
-    --         height = 0,
-    --     cancelShowAnimation = true,
-    -- }
-
     UserInfo:OnChangeAvatar()
 
     local params = {
@@ -72,8 +50,6 @@ function UserConsole:ShowPage()
         };
         AdaptWindow:QuickWindow(params)
 
-
-    -- System.App.Commands.Call("File.MCMLWindowFrame", params);
 end
 
 function UserConsole:ClosePage()
@@ -119,8 +95,8 @@ function UserConsole:CourseEntry()
                 commonlib.setfield("System.Codepku.Coursewares", response.data);
                 GeneralGameClientClass:LoadWorld({
                     worldId = response.data.keepwork_project_id,
-                    url = response.data.world
-                });           
+                    worldUrl = response.data.world
+                });                          
             end) 
         end
     end

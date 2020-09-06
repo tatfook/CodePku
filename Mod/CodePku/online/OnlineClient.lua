@@ -45,11 +45,11 @@ function OnlineClient:Init()
     self.GetAssetsWhiteList().AddAsset("codepku/model/LLS_AN.x");
     self.GetAssetsWhiteList().AddAsset("codepku/model/WLS_AN.x");
 
-    self.GetAssetsWhiteList().AddAsset("codepku/model/HAO/hao.fbx");
-    self.GetAssetsWhiteList().AddAsset("codepku/model/LI/lilaoshi.fbx");
-    self.GetAssetsWhiteList().AddAsset("codepku/model/WANG/WANG.fbx");
+    self:GetOptions().serverIp = Config.defaultOnlineServer.host;
+    self:GetOptions().serverPort = Config.defaultOnlineServer.port;
 
-
+    -- self:GetOptions().ip = Config.defaultOnlineServer.host;
+    -- self:GetOptions().port = Config.defaultOnlineServer.port;
     self.inited = true;
 end
 
@@ -81,36 +81,45 @@ function OnlineClient:IsAnonymousUser()
     return false;
 end
 
-function OnlineClient:LoadWorld(options)
+function OnlineClient:LoadWorld(opts)
     -- 初始化
     self:Init();
-
+    local worldUrl = opts.worldUrl;
     -- 保存选项
-    self.options = options;
+    local options = self:SetOptions(opts);
 
     -- 设定世界ID 优先取当前世界ID  其次用默认世界ID
     local curWorldId = GameLogic.options:GetProjectId();
 
     -- 确定世界ID
-    options.worldId = options.worldId or curWorldId or Config.defaultOnlineServer.defaultWorldId;
+    options.worldId = tostring(options.worldId or curWorldId or Config.defaultOnlineServer.defaultWorldId);
     options.username = options.username or self:GetUserInfo().username;
+
+    -- 打印选项值
+    Log:Info(options);
+
     -- only reload world if world id does not match
-    local isReloadWorld = options.worldId ~= curWorldId; 
-    local worldId = options.worldId;
+    local isReloadWorld = tostring(options.worldId) ~= tostring(curWorldId); 
 
     -- 退出旧世界
-    if (self:GetWorld()) then self:GetWorld():OnExit(); end
+    if (self:GetWorld()) then 
+        -- 相同世界且已登录直接跳出
+        if (not IsDevEnv and self:GetWorld():IsLogin() and self:GetWorld():GetWorldId() == options.worldId) then return end
+        -- 退出旧世界
+        self:GetWorld():OnExit(); 
+    end
+
 
     -- 标识替换, 其它方式loadworld不替换
     self.IsReplaceWorld = true;
 
     if (isReloadWorld) then
-        if (options.url)then
+        if (worldUrl)then
             local InternetLoadWorld = commonlib.gettable("MyCompany.Aries.Creator.Game.Login.InternetLoadWorld")
             local RemoteWorld = commonlib.gettable("MyCompany.Aries.Creator.Game.Login.RemoteWorld")
             local DownloadWorld = commonlib.gettable("MyCompany.Aries.Game.MainLogin.DownloadWorld")
 
-            local world = RemoteWorld.LoadFromHref(options.url, "self")
+            local world = RemoteWorld.LoadFromHref(worldUrl, "self")
             local function LoadWorld(world, refreshMode)
                 if world then
                     if refreshMode == 'never' then
@@ -120,9 +129,7 @@ function OnlineClient:LoadWorld(options)
                     end
 
                     local url = world:GetLocalFileName()               
-                    DownloadWorld.ShowPage(url)
-                    echo("loadworld")
-                    echo(world)
+                    DownloadWorld.ShowPage(url)                    
                     local mytimer = commonlib.Timer:new(
                         {
                             callbackFunc = function(timer)
@@ -146,59 +153,11 @@ function OnlineClient:LoadWorld(options)
 
             LoadWorld(world, 'auto');
         else
-            GameLogic.RunCommand(string.format("/loadworld %d", worldId));
+            GameLogic.RunCommand(string.format("/loadworld %d", options.worldId));
         end
     else
         self:OnWorldLoaded();
     end
-end
-
-function OnlineClient:SelectServerAndWorld()
-    if (self:IsShowWorldList()) then
-        self.controlServerConnection:AddPacketToSendQueue(Packets.PacketGeneral:new():Init({
-            action = "ServerWorldList"
-        }));
-    else
-        
-    end
-    self.controlServerConnection:AddPacketToSendQueue(Packets.PacketWorldServer:new():Init({
-        worldId = worldId,
-        parallelWorldName = self.options.parallelWorldName,
-    }));
-end
-
--- 发送获取世界服务器
-function OnlineClient:handleWorldServer(packetWorldServer)
-    local options = self.options;
-    options.ip = packetWorldServer.ip or Config.defaultOnlineServer.host;
-    options.port = packetWorldServer.port or Config.defaultOnlineServer.port;
-    if (not options.ip or not options.port) then
-        Log:Info("服务器繁忙, 暂无合适的世界服务器提供");
-        return;
-    end
-
-    -- 登录世界
-    self:GetWorld():Login(options);
-
-    -- 关闭控制服务器的链接
-    self.controlServerConnection:CloseConnection();
-end
-
--- 连接控制服务器
-function OnlineClient:ConnectControlServer(options)
-    Log:Debug("ServerIp: %s, ServerPort: %s", Config.defaultOnlineServer.host, Config.defaultOnlineServer.port);
-    self.controlServerConnection = Connection:new():InitByIpPort(Config.defaultOnlineServer.host, Config.defaultOnlineServer.port, self);
-    self.controlServerConnection:SetDefaultNeuronFile("Mod/GeneralGameServerMod/Core/Server/ControlServer.lua");
-    self.controlServerConnection:Connect(5, function(success)
-        if (not success) then
-            return Log:Info("无法连接控制器服务器");
-        end
-
-        self.controlServerConnection:AddPacketToSendQueue(Packets.PacketWorldServer:new():Init({
-            worldId = worldId,
-            parallelWorldName = options.parallelWorldName,
-        }));
-    end);
 end
 
 -- 初始化成单列模式
