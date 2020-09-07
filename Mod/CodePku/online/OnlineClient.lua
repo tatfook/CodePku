@@ -99,7 +99,7 @@ function OnlineClient:LoadWorld(options)
     local worldId = options.worldId;
 
     -- 退出旧世界
-    if (self.world) then self.world:OnExit(); end
+    if (self:GetWorld()) then self:GetWorld():OnExit(); end
 
     -- 标识替换, 其它方式loadworld不替换
     self.IsReplaceWorld = true;
@@ -178,7 +178,7 @@ function OnlineClient:handleWorldServer(packetWorldServer)
     end
 
     -- 登录世界
-    self.world:Login(options);
+    self:GetWorld():Login(options);
 
     -- 关闭控制服务器的链接
     self.controlServerConnection:CloseConnection();

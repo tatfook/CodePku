@@ -68,6 +68,8 @@ function UserStore:Action()
             self.username = nil
             self.nickname = nil    
             self.mobile = nil
+            self.random_name = nil
+            self.isvisitor = nil
             self.info = nil      
 
             commonlib.setfield("System.User.codepkuToken", nil)
@@ -75,6 +77,8 @@ function UserStore:Action()
             commonlib.setfield("System.User.username", nil)
             commonlib.setfield("System.User.id", nil)            
             commonlib.setfield("System.User.nickName", nil)
+            commonlib.setfield("System.User.randomName", nil)
+            commonlib.setfield("System.User.isVisitor", nil)
             commonlib.setfield("System.User.info", nil)
         end
     }

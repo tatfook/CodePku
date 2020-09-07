@@ -1,0 +1,54 @@
+<!-- "Mod/CodePku/cellar/Gui/FriendUI/MyFriend.html" -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+</head>
+
+<body>
+<pe:mcml>
+<script refresh="false" type="text/npl" src="CourseLoadTips.lua">
+<![CDATA[
+CourseLoadTips = commonlib.gettable("Mod.CodePku.GUI.CourseLoadTips")
+function OnCanceBtnClicked()
+    CourseLoadTips:CloseWindow()
+end
+
+function OnSureBtnClicked()
+    local world_x = CourseLoadTips.vars["world_position"].x
+    local world_y = CourseLoadTips.vars["world_position"].y
+    local world_z = CourseLoadTips.vars["world_position"].z
+    LOG.std(nil, "CourseLoadTipsHTML", "OnSurlBtnClicked World_X=%s", tostring(world_x))
+    LOG.std(nil, "CourseLoadTipsHTML", "OnSurlBtnClicked World_Y=%s", tostring(world_y))
+    LOG.std(nil, "CourseLoadTipsHTML", "OnSurlBtnClicked World_Z=%s", tostring(world_z))
+    local x, y, z = CourseLoadTips:ConvertWorldPosToPlayerPos(world_x, world_y, world_z)
+    GameLogic.RunCommand(format("/goto %d %d %d", x, y+1, z));
+    CourseLoadTips:CloseWindow()
+end
+
+]]>
+</script>
+<pe:container alignment="_lt" width="1920" height="1080">
+
+    <div style="position: relative; width: 1158; height: 588; left: 406; top: 219; background:url(codepku/image/textures/commonpopup/main.png#99 275 1158 588);"></div>
+
+    <div style="position: relative; width: 434; height: 115; left: 768; top: 206; text-align: center; font-family: PuHuiTi-Bold; color: #F46D3D; font-size: 45px; line-height: 115px; background:url(codepku/image/textures/commonpopup/main.png#1265 363 434 115);">
+        传送提示
+    </div>
+
+    <div style="position: relative; width: 960; height: 233; left: 505; top: 372; background:url(codepku/image/textures/commonpopup/main.png#1404 292 40 40 : 10 10 10 10);">
+        <span style="position: relative; left: 188; color:#ffffff; font-family: Noto Sans S Chinese Regular; line-height: 233; font-weight: bold; font-size: 36px;">是否加载存档，传送到上次位置？</span>
+    </div>
+
+    <div style="position: relative; width: 240; height: 80; left: 650; top: 668; font-size: 36px; font-weight: bold; font-family: PuHuiTi-Bold; line-height: 80; text-align: center; color: #85272B; background:url(codepku/image/textures/commonpopup/main.png#1305 740 86 86 : 9 9 9 9);" onclick="OnCanceBtnClicked">取消</div>
+
+    <div style="position: relative; width: 240; height: 80; left: 1096; top: 668; font-size: 36px; font-weight: bold; font-family: PuHuiTi-Bold; line-height: 80; text-align: center; color: #0E5516; background:url(codepku/image/textures/commonpopup/main.png#1404 740 86 86 : 9 9 9 9);" onclick="OnSureBtnClicked">确认</div>
+
+</div>
+</pe:container>
+</pe:mcml>
+</body>
+
+</html>

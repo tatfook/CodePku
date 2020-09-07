@@ -9,8 +9,10 @@ function GenAndName.OnInit()
 end
 
 function GenAndName.Init()
+    local CodePkuServiceSession = NPL.load("(gl)Mod/CodePku/service/CodePkuService/Session.lua")
+    local sessionInfo = CodePkuServiceSession:LoadSigninInfo()
     GenAndName.isVisitor = commonlib.getfield("System.User.isVisitor")
-    GenAndName.randomName = commonlib.getfield("System.User.randomName")
+    GenAndName.randomName = commonlib.getfield("System.User.randomName") or sessionInfo.random_name
     GenAndName.gen = 0
     LOG.std(nil, "GenAndName", "Init", "isVisitor = %s, randomName = %s", tostring(GenAndName.isVisitor), tostring(GenAndName.randomName))
 end
@@ -61,6 +63,10 @@ function GenAndName:CreateRole(name,gen)
         gender=gen
     }
     response =  request:put('/users/profile' ,data,{sync = true});
+
+    if response and response.data and response.data.data then
+        Mod.CodePku.Store:Set('user/info', response.data.data)
+    end
 
     commonlib.setfield("System.User.info.gender", gen) 
     commonlib.setfield("System.User.info.nickname", name)

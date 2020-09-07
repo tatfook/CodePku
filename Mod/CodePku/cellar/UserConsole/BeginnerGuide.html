@@ -1,0 +1,102 @@
+<!-- "script/apps/Aries/Creator/Game/Areas/EscFramePage.html" -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+</head>
+<body>
+    <pe:mcml>
+<script refresh="false" type="text/npl">
+<![CDATA[
+UserConsole = NPL.load('./Main.lua')
+
+BeginnerGuideChooseState = 0
+BeginnerGuideConfirmState = false
+
+function GetBeginnerGuideUrls()
+    urls = {
+        new = 'codepku/image/textures/beginner_guide/beginner_guide.png#459 1127 361 452',
+        old = 'codepku/image/textures/beginner_guide/beginner_guide.png#1249 1127 361 452',
+        newChosen = 'codepku/image/textures/beginner_guide/beginner_guide.png#851 1127 361 452',
+        oldChosen = 'codepku/image/textures/beginner_guide/beginner_guide.png#1647 1127 361 452',
+    }
+    if BeginnerGuideChooseState == 0 then
+        return {urlLeft = urls.new, urlRight = urls.old}
+    elseif BeginnerGuideChooseState == 1 then
+        return {urlLeft = urls.newChosen, urlRight = urls.old}
+    elseif BeginnerGuideChooseState == 2 then
+        return {urlLeft = urls.new, urlRight = urls.oldChosen}
+    end
+
+    return {urlLeft = urls.new, urlRight = urls.old}
+end
+
+function BeginnerGuideOnChoose(name)
+    if name ~= BeginnerGuideChooseState then
+        if name == 'new' then
+            UserConsole.BeginnerGuideFlag = true
+            BeginnerGuideChooseState = 1
+            BeginnerGuideOnClose()
+            UserConsole:CourseEntry()
+        elseif name == 'old' then
+            BeginnerGuideChooseState = 2
+            BeginnerGuideOnConfirm()
+        else
+            BeginnerGuideChooseState = 0
+        end
+
+    end
+end
+
+function BeginnerGuideOnConfirm()
+    BeginnerGuideConfirmState = true
+    Page:Refresh(0)
+end
+
+function BeginnerGuideOnYes()
+    BeginnerGuideOnClose()
+    UserConsole:CourseEntry()
+end
+
+function BeginnerGuideOnNo()
+    UserConsole.BeginnerGuideFlag = true
+    BeginnerGuideOnClose()
+    UserConsole:CourseEntry()
+end
+
+function BeginnerGuideOnClose()
+    local userId = Mod.CodePku.Store:Get("user/userId")
+    local guideUid = tostring(userId)..'beginnerGuideState'
+    GameLogic.GetPlayerController():SaveLocalData(guideUid,true,true)
+    Page:CloseWindow()
+end
+
+]]></script>
+<style type="text/mcss">
+
+</style>
+<pe:container alignment="_lt" width="1920" height="1080" style="font-family: Noto Sans S Chinese Regular; font-weight: bold; text-align: center; background-color: #000000;">
+    <div style="position: absolute; left: 353; top: 204; width: 1215; height: 762; background: url(codepku/image/textures/beginner_guide/beginner_guide.png#71 1158 334 210:28 28 28 28);">
+        <div name="new" onclick="BeginnerGuideOnChoose" style="<%= format('position: absolute; left: 147; top: 137; width: 361; height: 452; background: url(%s);' ,GetBeginnerGuideUrls().urlLeft) %>"></div>
+        <div name="old" onclick="BeginnerGuideOnChoose" style="<%= format('position: absolute; left: 740; top: 137; width: 361; height: 452; background: url(%s);' ,GetBeginnerGuideUrls().urlRight) %>"></div>
+        <div style="position: absolute; left: 148; top: 604; width: 360; height: 83; font-size: 32; line-height: 86; color: #FF8A00; background: url(codepku/image/textures/beginner_guide/beginner_guide.png#64 1451 360 83);">我是新学员，需要帮助</div>
+        <div style="position: absolute; left: 740; top: 604; width: 360; height: 83; font-size: 32; line-height: 86; color: #FF8A00; background: url(codepku/image/textures/beginner_guide/beginner_guide.png#64 1451 360 83);">我是老学员，跳过引导</div>
+    </div>
+    <div onclick="BeginnerGuideOnClose" style="position: absolute; left: 743; top: 159; width: 434; height: 86; font-size: 45; line-height: 86; color: #F46D3D; background: url(codepku/image/textures/common_32bits.png#1277 377 410 87);">新手引导</div>
+
+    <pe:if condition="<%= BeginnerGuideConfirmState %>">
+        <div style="width: 1920; height: 1080;font-size: 28; font-family: Noto Sans S Chinese Regular;text-align: center;">
+            <div style="position: absolute; left: 550; top: 370; width: 820; height: 400;  font-weight: bold; background: url(codepku/image/textures/common_32bits.png#99 275 1158 588);">
+                <div onclick="BeginnerGuideOnClose" style="position: absolute; left: 260; top: 0; width: 300; height: 60; font-size: 30; line-height: 60; color: #F46D3D; background: url(codepku/image/textures/common_32bits.png#1277 377 410 87);">跳过提醒</div>
+                <div style="width: 700; height: 120;  left: 60;top: 120; font-size: 26;line-height: 120; color: #ffffff;background:url(codepku/image/textures/commonpopup/main.png#1404 292 40 40 : 10 10 10 10);"><span>是否跳过新手引导？</span></div>
+                <div onclick="BeginnerGuideOnNo" style="position: absolute; left: 160; top: 300; width: 160; height: 50; line-height: 50; color: #a5000b; background: url(codepku/image/textures/common_32bits.png#1307 742 82 82:12 12 12 12);">取消</div>
+                <div onclick="BeginnerGuideOnYes" style="position: absolute; left: 500; top: 300; width: 160; height: 50; line-height: 50; color: #005837; background: url(codepku/image/textures/common_32bits.png#1406 742 82 82:12 12 12 12);">跳过</div>
+            </div>
+        </div>
+    </pe:if>
+</pe:container>
+</pe:mcml>
+</body>
+</html>
+
