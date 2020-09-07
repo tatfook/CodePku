@@ -30,10 +30,7 @@ MainUIButtons.rb_buttons = {
 	[1]={url="codepku/image/textures/main_ui/main.png#148 25 107 142",top=22,width=103,height=134,name="ClickUserInfo"},
 	[2]={url="codepku/image/textures/main_ui/main.png#285 18 97 148",top=20,width=93,height=134,name="ClickFriend"},
 	[3]={url="codepku/image/textures/main_ui/main.png#416 18 84 148",top=20,width=80,height=134,name="ClickRank"},
-	[4]={url="codepku/image/textures/main_ui/main.png#416 18 84 148",top=20,width=100,height=134,name="ClickRank"},
-	[5]={url="codepku/image/textures/main_ui/main.png#416 18 84 148",top=20,width=80,height=134,name="ClickRank"},
-	[6]={url="codepku/image/textures/main_ui/main.png#416 18 84 148",top=20,width=80,height=134,name="ClickRank"},
-	[7]={url="codepku/image/textures/main_ui/main.png#416 18 84 148",top=20,width=80,height=134,name="ClickRank"},
+	[4]={url="codepku/image/textures/main_ui/main.png#557 478 97 137",top=18,width=97,height=137,name="ClickSignin"},
 }
 
 -- get width of button group of left top corner

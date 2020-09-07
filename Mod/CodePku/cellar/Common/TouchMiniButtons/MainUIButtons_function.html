@@ -10,6 +10,7 @@
 <pe:mcml>
 <script refresh="false" type="text/npl" src="MainSceneUIButtons.lua"><![CDATA[
 local MainUIButtons = NPL.load("(gl)Mod/CodePku/cellar/Common/TouchMiniButtons/Main.lua");
+local SignInPage = commonlib.gettable("Mod.CodePku.GUI.SignInPage")
 
 is_open = MainUIButtons.open_function
 Rb_buttons = MainUIButtons.rb_buttons
@@ -45,6 +46,8 @@ function ClickChooseFun(name)
         FriendUI:ShowPage(1)
     elseif(name == "ClickRank") then 
         RankPage:ShowPage(1)
+    elseif(name == "ClickSignin") then 
+        SignInPage:ShowPage()
     else
         GameLogic.AddBBS("CodeGlobals", L"功能开发中", 3000, "#ff0000");
     end
