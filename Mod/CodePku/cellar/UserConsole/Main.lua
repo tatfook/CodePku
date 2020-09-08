@@ -90,13 +90,10 @@ function UserConsole:CourseEntry()
                     return false
                 end
 
-                local GeneralGameServerMod = commonlib.gettable("Mod.GeneralGameServerMod");
-                local GeneralGameClientClass = GeneralGameServerMod:GetClientClass("CodePku");
-                commonlib.setfield("System.Codepku.Coursewares", response.data);
-                GeneralGameClientClass:LoadWorld({
-                    worldId = response.data.keepwork_project_id,
-                    worldUrl = response.data.world
-                });                          
+                NPL.load("(gl)script/apps/Aries/Creator/Game/Commands/CommandManager.lua");
+                local CommandManager = commonlib.gettable("MyCompany.Aries.Game.CommandManager");
+                CommandManager:Init();
+                CommandManager:RunCommand(string.format("/ggs connect -app=CodePku %s", response.data.keepwork_project_id))                        
             end) 
         end
     end
