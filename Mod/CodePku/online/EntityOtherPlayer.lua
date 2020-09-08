@@ -13,7 +13,6 @@ NPL.load("Mod/GeneralGameServerMod/Core/Client/EntityOtherPlayer.lua");
 NPL.load("Mod/CodePku/online/EntityPlayerHelper.lua");
 local EntityPlayerHelper = commonlib.gettable("Mod.CodePku.Online.EntityPlayerHelper");
 local EntityOtherPlayer = commonlib.inherit(commonlib.gettable("Mod.GeneralGameServerMod.Core.Client.EntityOtherPlayer"), commonlib.gettable("Mod.CodePku.Online.EntityOtherPlayer"));
-
 local moduleName = "Mod.CodePku.Online.EntityOtherPlayer";
 
 -- 构造函数
@@ -25,9 +24,6 @@ end
 
 -- 玩家被点击
 function EntityOtherPlayer:OnClick(x,y,z, mouse_button,entity,side)
-    -- info = self:GetPlayerInfo()
-    -- echo(info.userinfo.id)
-
     local MainUIButtons = NPL.load("(gl)Mod/CodePku/cellar/Common/TouchMiniButtons/Main.lua");
     MainUIButtons.show_interact_ui(self)
     return true;
