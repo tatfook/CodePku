@@ -151,7 +151,6 @@ function UserInfoPage:ShowPage(PageIndex, bShow, id, mainasset)
     if (id and id ~= "") then
         UserInfoPage.isSelf = false;
         UserInfoPage.tab_ds_name = UserInfoPage.tab_ds_other[PageIndex or 1].name;
-        UserInfoPage.mainasset = mainasset; -- 获取他人角色asset path
     else
         UserInfoPage.isSelf = true;
         UserInfoPage.tab_ds_name = UserInfoPage.tab_ds_self[PageIndex or 1].name;
@@ -160,6 +159,7 @@ function UserInfoPage:ShowPage(PageIndex, bShow, id, mainasset)
     UserInfoPage.tab_ds_index = PageIndex or 1;
     UserInfoPage.GetUserInfo(id, true);
     UserInfoPage.GetItemInfo();
+    UserInfoPage.mainasset = mainasset; -- 获取他人角色asset path
 end
 
 function UserInfoPage:InitWindow()
