@@ -324,18 +324,19 @@ end
         <!-- 角色展示区 note: 放在其它tag后面 -->
         <div style='<%=format("position:absolute;margin-left:235px;margin-top:298px;width:727px;height:653px;background:url(%s#410 490 750 653);", Eval("ProfilePng")) %>'>
             <div style="margin-left:40px;margin-top:-138px;width:640px;height:640px;" >
-                <pe:mc_player align="center" assetfile="<%= GetMainAsset() %>" miniscenegraphname="AvatarMyselfTabCharacter" LookAtHeight=1 CameraObjectDist=4 RenderTargetSize=640 style="width:640px;height:640px;"></pe:mc_player>
-                <!-- <pe:mc_player name="MyPlayer" miniscenegraphname="AvatarMyselfTabCharacter" LookAtHeight="1" CameraObjectDist="4" RenderTargetSize="640" style="width:640px;height:640px;"/> -->
+                <div style='<%=format("margin-left:178px;margin-top:35px;width:345px;height:600px;background:url(%s#66 531 345 600);", Eval("ProfilePng")) %>'>
+                </div>
+                <!-- <pe:mc_player align="center" assetfile="<%= GetMainAsset() %>" miniscenegraphname="AvatarMyselfTabCharacter" LookAtHeight=1 CameraObjectDist=4 RenderTargetSize=640 style="width:640px;height:640px;"></pe:mc_player> -->
             </div>
             <!-- hide for now -->
             <!-- <div style='<%=format("position:absolute;margin-left:48px;top:-148px;padding:18px;font-size:36px;color:#ffffff;width:490px;height:180px;background:url(%s#1275 451 219 125:204 24 13 68);", Eval("ProfilePng")) %>'>
                 心情寄语
             </div> -->
-            <pe:if condition='<%= GetIsAuthUser() == true %>'>
+            <!-- <pe:if condition='<%= GetIsAuthUser() == true %>'>
                 <div><%= isAuthUser %></div>
                 <div onclick="ClickPrevAsset" style="position:relative;margin-left:28px;margin-top:-240px;transform:rotate(180deg);transform-origin:25 25;width:50px;height:50px;background:url(codepku/image/textures/common_32bits.png#1048 152 50 50);"></div>
                 <div onclick="ClickNextAsset" style="position:relative;margin-left:640px;margin-top:-240px;width:50px;height:50px;background:url(codepku/image/textures/common_32bits.png#1048 152 50 50);"></div>    
-            </pe:if>
+            </pe:if> -->
         </div>
     </div>
 </pe:container>
