@@ -38,7 +38,8 @@ function changeSubject(index)
 end
 
 function getBG(index)
-    return nowCourse[index]["cover_file"]["file_url"]
+    local courseIndex = (pageNum - 1) * pageSize + index
+    return nowCourse[courseIndex]["cover_file"]["file_url"]
 end
 
 function getShowCourse()
