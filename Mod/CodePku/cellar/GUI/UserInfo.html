@@ -21,7 +21,60 @@ PropsInfo = commonlib.gettable("Mod.CodePku.PropsInfo");
 ProfilePng = "codepku/image/textures/profile_32bits.png";
 
 local HomeWorldId = 14293;
+local systemUserNo = System.User.info and (System.User.info.no or System.User.info.id);
+local currentUserNo = UserInfoPage.no or UserInfoPage.id;
+local isAuthUser = false;
+if (systemUserNo == currentUserNo) then
+    isAuthUser = true;
+end
 
+local mainasset = UserInfoPage.mainasset or nil;
+
+function GetMainAsset()
+    return mainasset;
+end
+
+function GetIsAuthUser()
+    return isAuthUser;
+end
+-- 角色
+local assets = {
+    "character/CC/02human/paperman/boy01.x",
+    "character/CC/02human/paperman/boy02.x",
+    "character/CC/02human/paperman/boy03.x",
+    "character/CC/02human/paperman/boy04.x",
+    "character/CC/02human/paperman/boy05.x",
+    "character/CC/02human/paperman/boy06.x",
+    "character/CC/02human/paperman/boy07.x",
+    "character/CC/02human/paperman/girl01.x",
+    "character/CC/02human/paperman/girl02.x",
+    "character/CC/02human/paperman/girl03.x",
+    "character/CC/02human/paperman/girl04.x",
+    "character/CC/02human/paperman/girl05.x",
+};
+local curAssetIndex = 1;
+
+function ClickPrevAsset()
+    if (curAssetIndex == 1) then
+        curAssetIndex = #assets;
+    else
+        curAssetIndex = curAssetIndex - 1;
+    end
+    mainasset = assets[curAssetIndex];
+    GameLogic.GetPlayerController():GetPlayer():SetMainAssetPath(mainasset);
+    Page:Refresh(0.01);
+end
+
+function ClickNextAsset()
+    if (curAssetIndex == #assets) then
+        curAssetIndex = 1;
+    else
+        curAssetIndex = curAssetIndex + 1;
+    end
+    mainasset = assets[curAssetIndex];
+    GameLogic.GetPlayerController():GetPlayer():SetMainAssetPath(mainasset);
+    Page:Refresh(0.01)
+end
 
     -- =============================================================================== start 背包
 
@@ -224,22 +277,6 @@ end
                 </pe:repeatitem>
             </pe:repeat>
         </div>
-        <!-- 角色 -->
-        <div style='<%=format("position:relative;margin-left:235px;margin-top:298px;width:727px;height:653px;background:url(%s#410 490 750 653);", Eval("ProfilePng")) %>'>
-            <!-- 玩仔 -->
-            <div style='<%=format("margin-left:230px;margin-top:-100px;width:345px;height:600px;background:url(%s#66 531 345 600);", Eval("ProfilePng")) %>'>
-            </div>
-            <!-- <pe:mc_player /> 暂不支持mcml2, 待paracraft老师开发后替换，先显示玩仔 -->
-            <!-- <div style="width:100px;height:150px;" >
-                <div style="position:relative;margin-left:-90px;margin-top:-115px;width:130px;height:120px;" >
-                    <pe:mc_player name="MyPlayer" miniscenegraphname="AvatarMyselfTabCharacter" style="width:320px;height:320px;" IsInteractive="false" IsActiveRendering="true"/>
-                </div>
-            </div> -->
-            <!-- hide for now -->
-            <!-- <div style='<%=format("position:absolute;margin-left:48px;top:-148px;padding:18px;font-size:36px;color:#ffffff;width:490px;height:180px;background:url(%s#1275 451 219 125:204 24 13 68);", Eval("ProfilePng")) %>'>
-                心情寄语
-            </div> -->
-        </div>
         <!-- <div style="position:relative;width:275;height:97;margin-top:960;font-size:18;base-font-size:40;background:url(codepku/image/textures/userinfo/options/shezhi.png)"onclick="Undefinde"></div> -->
         <!-- 首页 -->
         <pe:if condition='<%=GetTabDSName() == "Home"%>'>
@@ -247,7 +284,7 @@ end
         </pe:if>
         <!-- 属性 -->
         <pe:if condition='<%=GetTabDSName() == "Profile"%>'>
-            <iframe name="ProfileFrame" src="Mod/CodePku/cellar/GUI/Profile/ProfileFrame.html" style="margin-left:1017px;"></iframe>
+            <iframe name="ProfileFrame" src="Mod/CodePku/cellar/GUI/Profile/ProfileFrame.html" style="position:absolute;left:1017px;"></iframe>
         </pe:if>
         <pe:if condition='<%=GetTabDSName() == "Backpack"%>'>
             <!-- 背包 -->
@@ -281,10 +318,25 @@ end
                 <div style = "margin-top: 30; width:145;height:85; font-size: 40px; line-height: 85px; background-color: #7210ce;" onclick="nextPage">下一页</div>
                         <div style="width: 150px; height: 75px; font-size: 50px; line-height: 75px;"></div>  -->
                 <div style = "width:145; height:85; font-size: 40px; line-height: 85px; background:url(codepku/image/textures/userinfo/options/zhengli.png);" onclick="sort_backpack"></div>
-            </div> 
-                   
-            
+            </div>
         </pe:if>
+
+        <!-- 角色展示区 note: 放在其它tag后面 -->
+        <div style='<%=format("position:absolute;margin-left:235px;margin-top:298px;width:727px;height:653px;background:url(%s#410 490 750 653);", Eval("ProfilePng")) %>'>
+            <div style="margin-left:40px;margin-top:-138px;width:640px;height:640px;" >
+                <pe:mc_player align="center" assetfile="<%= GetMainAsset() %>" miniscenegraphname="AvatarMyselfTabCharacter" LookAtHeight=1 CameraObjectDist=4 RenderTargetSize=640 style="width:640px;height:640px;"></pe:mc_player>
+                <!-- <pe:mc_player name="MyPlayer" miniscenegraphname="AvatarMyselfTabCharacter" LookAtHeight="1" CameraObjectDist="4" RenderTargetSize="640" style="width:640px;height:640px;"/> -->
+            </div>
+            <!-- hide for now -->
+            <!-- <div style='<%=format("position:absolute;margin-left:48px;top:-148px;padding:18px;font-size:36px;color:#ffffff;width:490px;height:180px;background:url(%s#1275 451 219 125:204 24 13 68);", Eval("ProfilePng")) %>'>
+                心情寄语
+            </div> -->
+            <pe:if condition='<%= GetIsAuthUser() == true %>'>
+                <div><%= isAuthUser %></div>
+                <div onclick="ClickPrevAsset" style="position:relative;margin-left:28px;margin-top:-240px;transform:rotate(180deg);transform-origin:25 25;width:50px;height:50px;background:url(codepku/image/textures/common_32bits.png#1048 152 50 50);"></div>
+                <div onclick="ClickNextAsset" style="position:relative;margin-left:640px;margin-top:-240px;width:50px;height:50px;background:url(codepku/image/textures/common_32bits.png#1048 152 50 50);"></div>    
+            </pe:if>
+        </div>
     </div>
 </pe:container>
 <!-- <pe:container alignment="_ct" width="1158" height="588" style="position:absolute;margin-left:200px;margin-top:100px;background-color: #1a3a2e55;"> -->

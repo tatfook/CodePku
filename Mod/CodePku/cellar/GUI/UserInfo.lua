@@ -4,6 +4,7 @@ local UserInfoPage = NPL.export();
 
 UserInfoPage.tab_ds_index = 1;
 UserInfoPage.tab_ds_name = "Home";
+UserInfoPage.mainasset = nil;
 
 -- tabs - 自己
 UserInfoPage.tab_ds_self = {
@@ -146,10 +147,11 @@ function UserInfoPage.GetItemInfo(params)
     -- return data
 end
 
-function UserInfoPage:ShowPage(PageIndex, bShow, id)
+function UserInfoPage:ShowPage(PageIndex, bShow, id, mainasset)
     if (id and id ~= "") then
         UserInfoPage.isSelf = false;
         UserInfoPage.tab_ds_name = UserInfoPage.tab_ds_other[PageIndex or 1].name;
+        UserInfoPage.mainasset = mainasset; -- 获取他人角色asset path
     else
         UserInfoPage.isSelf = true;
         UserInfoPage.tab_ds_name = UserInfoPage.tab_ds_self[PageIndex or 1].name;
