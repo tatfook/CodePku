@@ -1,0 +1,50 @@
+<!-- "Mod/CodePku/cellar/GUI/AccountUp/AccountUpTips.html" -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" >
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+</head>
+
+<body>
+<pe:mcml>
+<script refresh="false" type="text/npl" src="AccountUpTips.lua"><![CDATA[
+    NPL.load("(gl)Mod/CodePku/cellar/GUI/AccountUp/AccountUpTips.lua")
+    local AccountUpTips = commonlib.gettable("Mod.CodePku.AccountUpTips")
+
+    function OnSureBtnClicked()
+        AccountUpTips.OnSureBtnClicked()
+    end
+
+    function OnCancelBtnClicked()
+        AccountUpTips.OnCancelBtnClicked()
+    end
+
+]]></script>
+<style type="text/mcss">
+</style>
+
+<pe:container alignment="_lt" width="1920" height="1080">
+    <div style="position: relative; width: 945px; height: 615px;left: 477px; top: 255px; background: url(codepku/image/textures/login/updataAccountBg.png);">
+        <div style="position: relative; width: 410; height: 86; left: 267; line-height: 86; font-size: 45; font-weight: bold; font-family: PuHuiTi-Bold; color: #F46D3D; text-align: center; background:url(codepku/image/textures/login/quickLogin.png#444 205 434 86);">修改提醒</div>
+
+        <div style="position: relative; width: 862px; height: 320px; left: 37; top: 107;background:url(codepku/image/textures/login/main.png#1011 271 88 88:10 10 10 10)">
+            <div style="position: relative; width: 789px; height: 82px;left: 41; top: 118;font-size: 36; color: #ffffff; font-family: PuHuiTi-Bold; font-weight: bold; border-radius: 6px;">
+                <%= L"你现在是游客账号，暂不支持该操作，是否立即升级账号?"%>
+            </div>
+        </div>
+
+
+        <input type="button"  onclick="OnSureBtnClicked" value='<%= L"立即升级(推荐)"%>'
+        style="position: relative; width: 286; height: 86; left: 542; top: 458; font-size: 36; color: #0e5516; font-family: PuHuiTi-Bold; font-weight: bold; border-radius: 6px; background:url(codepku/image/textures/login/quickLogin.png#276 46 74 94:6 6 6 6);" />
+
+        <input type="button"  onclick="OnCancelBtnClicked" value='<%= L"暂不升级"%>'
+        style="position: relative; width: 286; height: 86; left: 114; top: 458; font-size: 36; color: #85272b; font-family: PuHuiTi-Bold; font-weight: bold; border-radius: 6px; background:url(codepku/image/textures/login/quickLogin.png#344 478 102 86:6 6 6 6);" />
+
+    </div>
+</pe:container>
+
+
+</pe:mcml> 
+</body>
+</html>
