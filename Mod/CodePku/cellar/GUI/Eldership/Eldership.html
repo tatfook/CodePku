@@ -16,7 +16,7 @@ local page = document:GetPageCtrl()
 
 
 UserInfoPage.eldership = "王大明"
-UserInfoPage.is_bind = 1  -- 1绑定,2未绑定
+UserInfoPage.is_bind = 0  -- 1绑定,0未绑定
 
 function ClosePage()
     Page:CloseWindow();
@@ -55,7 +55,7 @@ end
                         <div onclick="Eldership.ShowUnbindWechat" style="<%=format('position: relative;width:144;height:58;left:753;top:114;text-align:center;font-size:40px;line-height:58;font-family:PuHuiTi-Bold;color: #f01100;background:url(%s:20 20 20 20)', Eldership.GetEldershipIconHTMLStr(4))%>">解绑</div>
                     </pe:if>
                     <!-- 未绑定 -->
-                    <pe:if condition="<%=UserInfoPage.is_bind == 2%>">
+                    <pe:if condition="<%=UserInfoPage.is_bind == 0%>">
                         <div style="position: relative;font-size:40px;line-height:288;padding-left:352px;font-family:PuHuiTi-Bold;color: #ffffff;"><%=Eldership.unbindContent[1] .. Eldership.unbindContent[8]%></div>
                         <div onclick="Eldership.bindWechat" style="<%=format('position: relative;width:144;height:58;left:796;top:114;text-align:center;font-size:40px;line-height:58;font-family:PuHuiTi-Bold;color: #009c53;background:url(%s:20 20 20 20)', Eldership.GetEldershipIconHTMLStr(4))%>">绑定</div>
                     </pe:if>

@@ -9,7 +9,7 @@
 <pe:mcml>
 <script refresh="false" type="text/npl" src="Eldership.lua"><![CDATA[
 Eldership = NPL.load("(gl)Mod/CodePku/cellar/GUI/Eldership/Eldership.lua")
--- System.User.info 用户信息,后面如果绑定了家长可以把家长信息放在里面
+
 UserInfoPage = NPL.load("(gl)Mod/CodePku/cellar/GUI/UserInfo.lua");
 local Payment = NPL.load("(gl)Mod/CodePku/cellar/GUI/Payment/Payment.lua");
 
@@ -23,7 +23,7 @@ end
 function Eldership.goback()
     Page:CloseWindow();
     if Payment.from_course_payment_page ~= 1 then
-        Eldership:ShowPage()        -- 用户不是从专题课解锁页面过来的,所以是从主页面家长系统进入,需要重新打开家长绑定页面
+        Eldership:ShowPage()        -- 用户可能从专题课解锁页面过来的,如果是从主页面家长系统进入,需要重新打开家长绑定页面
     end
 end
 

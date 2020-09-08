@@ -157,7 +157,7 @@
                 if TopicCourse.page_course[i].locked == nil then
                     TopicCourse.page_course[i].locked = 0                   -- 1表示已解锁,0表示未解锁
                 end
-                TopicCourse.page_course[i].unlock_gold = 100             -- 解锁需要的货币数量
+                TopicCourse.page_course[i].unlock_gold = 10             -- 解锁需要的货币数量
                 TopicCourse.page_course[i].gold_type = 2                -- 解锁需要的货币种类
             else
                 break
@@ -218,7 +218,7 @@
     end
 
     -- 获取用户缓存在本地的当前货币数量
-    function GetMoney()
+    function Payment.GetMoney()
         local info = Mod.CodePku.Store:Get('user/info');
         local wallets = info.user_wallets or {};
         local money = {goldcoin=0, wanxuecoin=0};
@@ -238,7 +238,7 @@
 
         -- 获取点击的课程详细信息及用户当前持有货币数量
         Payment.PaymentCourse = nil
-        Payment.UserMoney = GetMoney()
+        Payment.UserMoney = Payment.GetMoney()
         for k,v in pairs(TopicCourse.page_course) do
             if v.id == name.id then
                 Payment.PaymentCourse = v
