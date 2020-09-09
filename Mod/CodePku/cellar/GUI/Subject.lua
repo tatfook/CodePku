@@ -17,15 +17,12 @@ end
 function SubjectPage.OnInitSubject()
     SubjectPage.subject_list = {}
     local const_subject = {
-        [1] = {'chinese', '语文', 'codepku/image/textures/profile_32bits.png#1700 164 104 106',1},
-        [2] = {'math', '数学', 'codepku/image/textures/profile_32bits.png#1700 281 104 106',2},
-        [3] = {'english', '英语', 'codepku/image/textures/profile_32bits.png#1702 398 104 106',3},
-        -- [4] = {'physics', '物理', 'codepku/image/textures/profile_32bits.png#1576 280 104 106'},
-        -- [5] = {'chemistry', '化学', 'codepku/image/textures/profile_32bits.png#1576 397 104 106'},
-        -- [6] = {'biology', '生物', 'codepku/image/textures/profile_32bits.png#1579 164 104 106'},
-        [4] = {'science', '科学', 'codepku/image/textures/profile_32bits.png#1700 164 104 106',13},
-        [5] = {'programming', '编程', 'codepku/image/textures/profile_32bits.png#1700 281 104 106',10},
-        [6] = {'literature_history', '文史', 'codepku/image/textures/profile_32bits.png#1702 398 104 106',12}
+        [1] = {'chinese', '语文', 'codepku/image/textures/subjects/subjects.png#156 44 79 93',1},
+        [2] = {'math', '数学', 'codepku/image/textures/subjects/subjects.png#376 44 82 97',2},
+        [3] = {'english', '英语', 'codepku/image/textures/subjects/subjects.png#251 51 85 78',3},
+        [4] = {'science', '科学', 'codepku/image/textures/subjects/subjects.png#829 52 96 81',13},
+        [5] = {'humanity', '人文', 'codepku/image/textures/subjects/subjects.png#144 180 83 76',12},
+        [6] = {'programming', '编程', 'codepku/image/textures/subjects/subjects.png#31 175 89 86',10},
     }
     -- SubjectPage.subject_list = {
     --     {name: 'chinese', chname: '语文', icon: 'codepku/image/textures/profile_32bits.png#1700 164 104 106'},
@@ -36,7 +33,7 @@ function SubjectPage.OnInitSubject()
     --     {name: 'biology', chname: '生物', icon: 'codepku/image/textures/profile_32bits.png#1579 164 104 106'},
     -- };
 
-    for i = 1,6 do
+    for i = 1,#const_subject  do
         -- local trow = math.floor((i-1)/2)
         -- local tcol = math.floor((i-1)%2)
         table.insert(SubjectPage.subject_list,{
@@ -74,7 +71,7 @@ function SubjectPage.GetLevels()
         if (response.status == 200) then
             local data = response.data.data;
             for i = 1, #data do
-                if data[i].level_type and data[i].level_type ~= 11 then
+                if data[i].level_type and (data[i].level_type == 1 or data[i].level_type == 2 or data[i].level_type == 3 or data[i].level_type == 13 or data[i].level_type == 10 or data[i].level_type == 12)then
                     SubjectPage.subject_list[GetSubjectIndex(data[i].level_type)].level = data[i].current_level .. "级";
                     SubjectPage.subject_list[GetSubjectIndex(data[i].level_type)].percent = data[i].current_exp / data[i].next_exp;
                     SubjectPage.subject_list[GetSubjectIndex(data[i].level_type)].current_exp = data[i].current_exp;

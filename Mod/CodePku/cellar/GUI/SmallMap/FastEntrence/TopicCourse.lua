@@ -39,11 +39,13 @@ function TopicCourse:ShowPage(index)
         [3] = {name='英语', title='english', index=3, subject_id=3, show=true},
         [4] = {name='物理', title='physics', index=4, subject_id=4, show=false},
         [5] = {name='化学', title='chemestry', index=5, subject_id=5, show=false},
-        [6] = {name='生物', title='biology', index=6, subject_id=6, show=true},
+        [6] = {name='生物', title='biology', index=6, subject_id=6, show=false},
         [7] = {name='政治', title='politics', index=7, subject_id=7, show=false},
         [8] = {name='历史', title='history', index=8, subject_id=8, show=false},
         [9] = {name='地理', title='geography', index=9, subject_id=9, show=false},
-        [10] = {name='编程', title='programming', index=10, subject_id=10, show=true},
+        [10] = {name='科学', title='science', index=10, subject_id=13, show=true},
+        [11] = {name='人文', title='humanity', index=11, subject_id=12, show=false},
+        [12] = {name='编程', title='programming', index=12, subject_id=10, show=true},
     }
     local params = {
         url = "Mod/CodePku/cellar/GUI/SmallMap/FastEntrence/TopicCourse.html", 
