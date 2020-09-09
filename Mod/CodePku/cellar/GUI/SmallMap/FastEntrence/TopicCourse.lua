@@ -30,8 +30,8 @@ function TopicCourse.GetCourse(subject_id)
 end
 
 function TopicCourse:ShowPage(index)
-    
-    TopicCourse.lastClickIndex = tonumber(index)
+
+    TopicCourse.lastClickSubjectId = tonumber(index)
     
     TopicCourse.subjects = {
         [1] = {name='语文', title='chinese', index=1, subject_id=1, show=true},
@@ -47,6 +47,13 @@ function TopicCourse:ShowPage(index)
         [11] = {name='人文', title='humanity', index=11, subject_id=12, show=false},
         [12] = {name='编程', title='programming', index=12, subject_id=10, show=true},
     }
+
+    for k,v in ipairs(TopicCourse.subjects) do
+        if v.subject_id == TopicCourse.lastClickSubjectId  then
+            TopicCourse.lastClickIndex = k
+        end
+    end
+
     local params = {
         url = "Mod/CodePku/cellar/GUI/SmallMap/FastEntrence/TopicCourse.html", 
         name = "TopicCourse", 

@@ -46,7 +46,7 @@
     }
 
     function get_full_course()
-        course = TopicCourse.GetCourse(last_clicked_index)
+        course = TopicCourse.GetCourse(TopicCourse.lastClickSubjectId)
         return course
     end
 
@@ -163,6 +163,14 @@
     function OnClickSubject(name)
         if last_clicked_index ~= name then
             last_clicked_index = name
+
+            for k,v in ipairs(TopicCourse.subjects) do
+                if k == last_clicked_index  then
+                    TopicCourse.lastClickSubjectId= v.subject_id
+                    break
+                end
+            end
+        
             topic_course = get_full_course()
             Page:Refresh(0)
         end
@@ -220,7 +228,7 @@
         <pe:repeat DataSource="<%=GetSubjects()%>" style=" margin-top: 143;">
             <pe:repeatitem>
                 <pe:if condition="<%=Eval('show')==true and last_clicked_index == Eval('index')%>">
-                    <div style="width:261; height:96; margin-left:25; base-font-size:45px; font-size:45px; font-family:Noto Sans S Chinese Regular; padding-left: 94;padding-top: 17; color: #F8DE8D; background:url(codepku/image/textures/common_32bits.png#1648 196 261 96:30 30 30 30);" name='<%=Eval("index")%>' onclick='OnClickSubject'><%=Eval('name')%></div>
+                    <div style="width:261; height:96; margin-left:25; base-font-size:45px; font-size:45px; font-family:Noto Sans S Chinese Regular; padding-left: 94;padding-top: 17; color: #F8DE8D; background:url(codepku/image/textures/common_32bits.png#1648 196 261 96:30 30 30 30);" name='<%=Eval("index")%>'><%=Eval('name')%></div>
                 </pe:if>
                 <pe:if condition="<%=Eval('show')==true and last_clicked_index ~= Eval('index')%>">
                     <div style="width:244; height:94; base-font-size:45px; font-size:45px; font-family:Noto Sans S Chinese Regular; padding-left: 72;padding-top: 20; color: #FFFFFF; background:url(codepku/image/textures/common_32bits.png#1294 66 134 94:30 30 30 30);" name='<%=Eval("index")%>' onclick='OnClickSubject'><%=Eval('name')%></div>
