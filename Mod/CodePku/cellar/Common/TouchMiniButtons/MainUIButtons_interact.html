@@ -10,6 +10,7 @@
 <pe:mcml>
 <script refresh="false" type="text/npl" src="MainSceneUIButtons.lua"><![CDATA[
 local UserInfoPage = NPL.load("(gl)Mod/CodePku/cellar/GUI/UserInfo.lua");
+local MainUIButtons = NPL.load("(gl)Mod/CodePku/cellar/Common/TouchMiniButtons/Main.lua");
 NPL.load("(gl)Mod/CodePku/cellar/GUI/Friend/FriendUI.lua");
 FriendUI = NPL.load("(gl)Mod/CodePku/cellar/GUI/Friend/FriendUI.lua")
 wsize = 434
@@ -39,7 +40,7 @@ function CloseInteract()
 end
 
 function ClickSeeInfo()
-    UserInfoPage:ShowPage(1, false, pid)
+    UserInfoPage:ShowPage(1, false, pid, MainUIButtons.user_asset);
     Page:CloseWindow();
 end
 
