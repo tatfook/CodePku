@@ -88,6 +88,8 @@ function OnClickSend()
 end
 
 function GetMessages()
+    echo("=====================msg===================")
+    echo(CodepkuChatChannel.Messages)
     return CodepkuChatChannel.Messages[Channels[Channels['system']].channel]
 end
 

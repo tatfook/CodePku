@@ -77,7 +77,7 @@ function AdaptWindow:QuickWindow(params)
 
 	local FocusPolicy = commonlib.gettable("System.Core.Namespace.FocusPolicy");
 	window:setFocusPolicy(FocusPolicy.NoFocus);
-
+	LOG.std(nil, "main","AdaptWindow", "QuickWindow"..params.url)
     return window
 end
 

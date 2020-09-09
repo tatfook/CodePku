@@ -26,28 +26,50 @@
 
         Page:CloseWindow()
         MainSceneUIButtons.show_dialog_ui(false, 0)
+
+        local page = document:GetPageCtrl()
+
+
+        --local words = page:GetValue("DialogContent")
+        if not emoName or emoName == '' then
+            return
+        end
+      
+        if not sendable then
+            GameLogic.RunCommand("/tip -duration 1500 发言太频繁，请稍后尝试")
+            return
+        end
+        sendable = false
+        local times = 2
+        local timer = commonlib.Timer:new({
+            callbackFunc = function(timer)
+
+                if times == 0 then
+                    sendable = true
+                    timer:Change(nil, nil)
+                end
+
+                times = times - 1
+            end
+        })
+        timer:Change(1000, 1000)
+        CodepkuChatChannel.SendWorldMsg(words)
+        Page:Refresh()
     end
 
 
 ]]></script>
 <style type="text/mcss">
 </style>
-<pe:container alignment="_ct" width="1004" height="1080">
+<pe:container alignment="_ct" width="100%" height="100%">
     <div style="width:1920;height:1080;position:absolute;" onclick="OnClose">
         <!-- 表情 -->
         <div style="width:598;height:345;background-color:white;position: relative;left: 336;top:601px;">
-            <!-- <pe:repeat DataSource="<%=Emoticons%>">
-                <pe:repeatitem>
-                    <div style="<%=format('width:86;height:84;background: url(%s);margin-left:28;left:%d;top:%d',Eval('url'),Eval('left'),Eval('top'))%>" name="<%=Eval('name')" title="<%=Eval('title')%>"></div>
-                    
-                </pe:repeatitem>
-            </pe:repeat> -->
             <pe:gridview style="width: 598; height: 345; background-color:white; text-align: center;"  name='backpack_items' LineWidth="598"  DataSource="<%=Emoticons%>" DefaultNodeHeight = "143" ItemsPerLine="5" AllowPaging="false" RememberScrollPos="true" RememberLastPage="true"> 
                 <Columns>
                     <div style="<%=format('margin-top: 59;margin-left: 28;width:86;height:84;background: url(%s);',Eval('url'))%>" name="<%=Eval('name')%>" title="<%=Eval('title')%>" onclick="OnChoose"></div>
                 </Columns>
             </pe:gridview>
-
         </div>
     </div>
 </pe:container>

@@ -59,7 +59,12 @@ MainSceneUIButtons.Emoticons = {
     [10]={name="wordless",title="无语",url="codepku/image/textures/chat_ui/chat_32bits.png#541 177 79 90",index =10,left=484,top=143},
 }
 
-
+MainSceneUIButtons.chat_bg_url = {
+    [1]={url="codepku/image/textures/chat_ui/chat_opt.png#217 136 73 32:4 4 4 4",title="系统",color="#F31111",},
+    [2]={url="codepku/image/textures/chat_ui/chat_opt.png#312 136 72 32:4 4 4 4",title="世界",color="#FFE84D",},
+    [3]={url="codepku/image/textures/chat_ui/chat_opt.png#32 136 73 32:4 4 4 4",title="本地",color="#01FFFC",},
+    [4]={url="codepku/image/textures/chat_ui/chat_opt.png#123 136 73 33:4 4 4 4",title="好友",color="#00FF4E",},
+}
 
 MainSceneUIButtons.FriendId = nil
 
@@ -89,18 +94,17 @@ function MainSceneUIButtons.show_dialog_ui(bshow, PopIndex, friendid)
     else
         params = {
             url="Mod/CodePku/cellar/Common/TouchMiniButtons/MainUIButtons_dialog_close.html", 
-            alignment="_lb", left = 0, top = -136, width = 139, height = 136,
+            alignment="_lb", left = 57, top = -136, width = 139, height = 136,
         }
         local window = AdaptWindow:QuickWindow(params)
         return window
     end
 end
 
-function MainSceneUIButtons.show_emoticon_ui(bshow, PopIndex, friendid)
+function MainSceneUIButtons.show_emoticon_ui()
     local param = {
         url = "Mod/CodePku/cellar/Common/TouchMiniButtons/dialog/emoticon.html",
         alignment="_ct", left = -960, top = -540, width = 1920, height = 1080,zorder = 30,
     }
-    echo("-------------------show_emoticon_ui-------------------------")
     return  AdaptWindow:QuickWindow(param)
 end

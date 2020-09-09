@@ -109,6 +109,7 @@ function Axios.request(self, ...)
         -- Log.info('### sync request response ###',request);\
         echo('### sync request response ###',response)
         echo(response)
+        echo(request.data)
     else
         request = Promise.new(function(resolve, reject)
             System.os.GetUrl(config, function(status, headers, data)

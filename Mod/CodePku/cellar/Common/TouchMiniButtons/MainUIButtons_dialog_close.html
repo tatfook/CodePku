@@ -10,6 +10,46 @@
 <pe:mcml>
 <script refresh="false" type="text/npl" src="MainSceneUIButtons.lua"><![CDATA[
 MainSceneUIButtons = commonlib.gettable("Mod.CodePku.Common.TouchMiniButtons.MainSceneUIButtons");
+local page = document:GetPageCtrl()
+has_new_msg = GameLogic.GetPlayerController():LoadLocalData("has_new_msg", "", true);
+
+-- 1：系统  2：世界  3：本地  4：好友
+chat_dialog = GameLogic.GetPlayerController():LoadLocalData("chat_dialog",1, true);
+chat_bg_url = MainSceneUIButtons.chat_bg_url;
+width = 600;
+--content_value = page:GetNode("chat_content")
+--echo("===================content_value===================");
+--echo(content_value)
+--content_value = "11111111111111"
+--page:SetValue("chat_content","【"..chat_bg_url[chat_dialog].title.."】："..content_value)
+
+nick_name = "小助手七个字了"
+chat_content = "发送内容最长"
+chat_content_value = "【"..nick_name.."】："..chat_content
+flag = commonlib.utf8.len(chat_content_value) > 15
+
+echo(flag)
+echo(chat_content_value)
+echo(commonlib.utf8.len(chat_content_value))
+
+
+local index = 1
+local timer = commonlib.Timer:new({
+    callbackFunc = function(timer)
+        if times == 0 then
+            sendable = true
+            timer:Change(nil, nil)
+        end
+
+        if index == 4 then
+            index = 1
+        else
+            index = index + 1
+        end
+        Page:Refresh(0.01);
+    end
+})
+timer:Change(1000, 3000)
 
 function ClickOpen() 
     Page:CloseWindow();
@@ -19,9 +59,36 @@ end
 ]]></script>
 <style type="text/mcss">
 </style>
-<pe:container alignment="_lb" width="139" height="136">
-    <div style="position:relative;width:100; height:95; left:39; background: url(codepku/image/textures/main_ui/main.png#551 192 104 99);" onclick="ClickOpen"></div>
-    <div style="position:relative;width:20; height:20; left:123; top:-4; background: url(codepku/image/textures/main_ui/main.png#795 235 24 24);">
+<pe:container alignment="_lb" width="500" height="136">
+    <!-- <div style="position:relative;width:100; height:95; left:39; background: url(codepku/image/textures/main_ui/main.png#551 192 104 99);" onclick="ClickOpen"></div> -->
+    <!-- <pe:if condition='<%= has_new_msg %>'> -->
+        <!-- <div style="position:relative;width:20; height:20; left:123; top:-4; background: url(codepku/image/textures/main_ui/main.png#795 235 24 24);"> -->
+    <!-- </pe:if> -->
+
+    <div>
+        <!-- 好友消息 -->
+        <div style="<%=format('position:relative;left:%d;width:120; height:31; background: url(codepku/image/textures/chat_ui/chat_opt.png#135 51 120 31);',(width-120-44-15))%>"></div>
+        <!-- 消息图标 -->
+        <div style="<%=format('position:relative;left:%d;width:48; height:42; background: url(codepku/image/textures/chat_ui/chat_opt.png#267 47 48 42);',(width-48))%>"></div>
+    </div>
+    <div style="<%=format('position:relative;top:38;width:%d;height:82;padding-right: 15;background:url(codepku/image/textures/chat_ui/chat_opt.png#346 24 127 86:10 10 10 10);',width)%>">
+        <!-- 箭头图标 -->
+        <div style="position:relative; left: -42;width:84; height:84;  background: url(codepku/image/textures/chat_ui/chat_opt.png#25 24 84 84);" onclick="ClickOpen"></div>
+        <!-- 多行消息 -->
+        <pe:if condition="<%= flag %>">
+            <div style="<%=format('position:relative; left: 59;top :10;width:73; height:32;  background: url(%s);color:#ffffff;line-height:32;font-size:28;text-align:center;font-family:Noto Sans S Chinese Regular;',chat_bg_url[chat_dialog].url)%>"><%=chat_bg_url[chat_dialog].title%></div>
+            <div style="<%=format('position:relative; left: 147;top:10;color:%s;width:438;font-size:28;line-height:32;font-family:Noto Sans S Chinese Regular;',chat_bg_url[chat_dialog].color)%>" name="chat_content"><%=chat_content_value%></div>
+        </pe:if>
+        <!-- 单行消息 -->
+        <pe:if condition="<%= not flag %>">
+            <div style="<%=format('position:relative; left: 59;top :26;width:73; height:32;  background: url(%s);color:#ffffff;line-height:32;font-size:28;text-align:center;font-family:Noto Sans S Chinese Regular;',chat_bg_url[chat_dialog].url)%>"><%=chat_bg_url[chat_dialog].title%></div>
+            <div style="<%=format('position:relative; left: 147;top:25;color:%s;font-size:28;line-height:32;font-family:Noto Sans S Chinese Regular;',chat_bg_url[chat_dialog].color)%>" name="chat_content"><%=chat_content_value%></div>
+        </pe:if>
+        
+        <!-- 测试 -->
+        <!-- <div style="<%=format('position:relative; left: 59;top :26;width:73; height:32;  background: url(%s);color:#ffffff;line-height:32;font-size:28;text-align:center;font-family:Noto Sans S Chinese Regular;',chat_bg_url[chat_dialog].url)%>"><%=chat_bg_url[chat_dialog].title%></div> -->
+        <!-- <a style="<%=format('position:relative; left: 147;top:25;color:%s;font-size:28;font-family:Noto Sans S Chinese Regular;',chat_bg_url[chat_dialog].color)%>" name="chat_content"><%=chat_content_value%></a> -->
+    </div>
 </pe:container>
 </pe:mcml> 
 </body>
