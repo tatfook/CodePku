@@ -45,6 +45,11 @@
 
     function get_full_course()
         course = TopicCourse.GetCourse(last_clicked_index)
+        if math.ceil(#course/page_size) == 0 then
+            TopicCourse.max_page = 1
+        else
+            TopicCourse.max_page = math.ceil(#course/page_size)
+        end
         return course
     end
 
@@ -68,7 +73,7 @@
     end
     
     function GetPageNum()
-        return page_num
+        return (page_num .. "/" .. TopicCourse.max_page)
     end
     
     function get_searchByName_table()
