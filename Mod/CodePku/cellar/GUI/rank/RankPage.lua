@@ -18,27 +18,43 @@ RankPage.params={
 }
 
 function RankPage.GetSubjectItem(id, range)
+    local param = nil
     if range == 2 then
         param = '?friend=1'
     else
         param = ''
     end
-    list = {}
-    mylist = {}
-    response = request:get('/user-exps/ranks/'..id..param, nil,{sync = true})
-    data = response.data.data
-    for i, d in ipairs(data) do
-        l = {}
-        l['name'] = d.user.nickname
-        l['score'] = d.current_level..'级'
-        l['rank'] = i
-        table.insert(list, l)
-        if d.current_user == 1 then
+    local list = {}
+    local mylist = {}
+    local response = request:get('/user-exps/ranks/'..id..param, nil,{sync = true})
+    local data = response.data.data
+    for i = 1, #data do
+        if data[i].is_top_n then
+            local l = {}
+            l['name'] = data[i].user.nickname
+            l['score'] = data[i].current_level..'级'
+            l['rank'] = i
+            table.insert(list, l)
+        end
+        if data[i].current_user == 1 then
+            local l = {}
+            l['name'] = data[i].user.nickname
+            l['score'] = data[i].current_level..'级'
+            if data[i].is_top_n then
+                l['rank'] = i
+            else
+                l['rank'] = "未上榜"
+            end
             table.insert(mylist, l)
         end
     end
     if #mylist == 0 or mylist == nil then
-        table.insert(mylist, {name = '---', score = '---', rank = '---'})
+        -- local nickname = System.User.nickName
+        -- local score = '1级'
+        -- if System.User.info.self_level and System.User.info.self_level.current_level then
+        --     score = System.User.info.self_level.current_level..'级'
+        -- end
+        table.insert(mylist, {name = "---", score = "---", rank = '未上榜'})
     end
     if response.data.code == 200 then
         return list, mylist
@@ -46,27 +62,43 @@ function RankPage.GetSubjectItem(id, range)
 end
 
 function RankPage.GetGameItem(id, range)
+    local param = nil
     if range == 2 then
         param = '&friend=1'
     else
         param = ''
     end
-    list = {}
-    mylist = {}
-    response = request:get('/game-scores/ranks?game_name='..id..param,nil,{sync = true})
-    data = response.data.data
-    for i, d in ipairs(data) do
-        l = {}
-        l['name'] = d.user.nickname
-        l['score'] = d.score
-        l['rank'] = i
-        table.insert(list, l)
-        if d.current_user == 1 then
+    local list = {}
+    local mylist = {}
+    local response = request:get('/game-scores/ranks?game_name='..id..param,nil,{sync = true})
+    local data = response.data.data
+    for i = 1, #data do
+        if data[i].is_top_n then
+            local l = {}
+            l['name'] = data[i].user.nickname
+            l['score'] = data[i].score
+            l['rank'] = i
+            table.insert(list, l)
+        end
+        if data[i].current_user == 1 then
+            local l = {}
+            l['name'] = data[i].user.nickname
+            l['score'] = data[i].score
+            if data[i].is_top_n then
+                l['rank'] = i
+            else
+                l['rank'] = "未上榜"
+            end
             table.insert(mylist, l)
         end
     end
     if #mylist == 0 or mylist == nil then
-        table.insert(mylist, {name = '---', score = '---', rank = '---'})
+        -- local nickname = System.User.nickName
+        -- local score = '1级'
+        -- if System.User.info.self_level and System.User.info.self_level.current_level then
+        --     score = System.User.info.self_level.current_level..'级'
+        -- end
+        table.insert(mylist, {name = '---', score = '---', rank = '未上榜'})
     end
     if response.data.code == 200 then
         return list, mylist

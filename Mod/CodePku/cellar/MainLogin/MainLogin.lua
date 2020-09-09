@@ -149,8 +149,14 @@ function MainLogin:Close()
     end
 end
 
--- methodIndex: 1-captcha, 2-password
+-- methodIndex: 1-captcha, 2-password 3-quicklogin 4-QQ 5-WeChat //4 and 5 not opened
 function MainLogin:LoginAction(methodIndex)
+    -- 屏蔽微信登录和QQ登录  等做好了记得打开
+    if methodIndex > 3 then
+        GameLogic.AddBBS(nil, L"功能暂未开放", 3000, "255 0 0", 21);
+        return
+    end
+
     local MainLoginPage = Mod.CodePku.Store:Get('page/MainLogin')
 
     if not MainLoginPage then
@@ -162,6 +168,8 @@ function MainLogin:LoginAction(methodIndex)
         return false
     end
 
+    local visitor_id = MainLogin:GetDeviceUUID()
+    local app_market = ParaEngine.GetAppCommandLineByParam("app_market", nil)
     local account = MainLoginPage:GetValue("account")
     
 
@@ -175,12 +183,12 @@ function MainLogin:LoginAction(methodIndex)
     local agree_ctrl = agree:GetControl();
     local agree_val = agree_ctrl:isChecked();
 
-    if not account or account == "" then
+    if (not account or account == "") and (methodIndex == 1 or methodIndex == 2) then
         GameLogic.AddBBS(nil, L"请输入手机号码", 3000, "255 0 0", 21)
         return false
     end
 
-    if (methodIndex ~= 2) then
+    if (methodIndex == 1) then
         if not mobileToken or mobileToken == "" then
             GameLogic.AddBBS(nil, L"请先获取验证码", 3000, "255 0 0", 21)
             return false
@@ -189,7 +197,7 @@ function MainLogin:LoginAction(methodIndex)
             GameLogic.AddBBS(nil, L"请输入验证码", 3000, "255 0 0", 21)
             return false
         end
-    else
+    elseif (methodIndex == 2) then
         if not password or password == "" then
             GameLogic.AddBBS(nil, L"请输入密码", 3000, "255 0 0", 21)
             return false
@@ -207,14 +215,24 @@ function MainLogin:LoginAction(methodIndex)
         LOG.std('handle logined', "info", "codepku")
         Mod.CodePku.MsgBox:Close()
         local token = Mod.CodePku.Store:Get("user/token") or ""
+        local random_name = Mod.CodePku.Store:Get("user/random_name")
+        -- 防止用户游客登录的时候输入了电话号码
+        if methodIndex == 3 then
+            account = Mod.CodePku.Store:Get("user/mobile") or ""
+        end
 
-        CodePkuServiceSession:SaveSigninInfo(
-            {
-                loginServer = loginServer,
-                account = account,               
-                token = token,                
-            }
-        )
+        local data = {
+            loginServer = loginServer,
+            account = account,
+            token = token,
+        }
+        
+        -- 防止游客玩家在选择名字性别的界面推出游戏导致的bug
+        if random_name then
+            data["random_name"] = random_name
+        end
+        
+        CodePkuServiceSession:SaveSigninInfo(data)
         
         LOG.std('save sign in info')
         self:EnterUserConsole()
@@ -227,7 +245,7 @@ function MainLogin:LoginAction(methodIndex)
         end
     end
 
-    if (methodIndex ~= 2) then
+    if (methodIndex == 1) then
         CodePkuServiceSession:Login(
             account,
             verifyCode,
@@ -240,10 +258,22 @@ function MainLogin:LoginAction(methodIndex)
                 CodePkuServiceSession:LoginResponse(response, err, HandleLogined)
             end
         )
-    else
+    elseif (methodIndex == 2) then
         CodePkuServiceSession:LoginWithPwd(
             account,
             password,
+            function(response, err)
+                if err == 503 then
+                    Mod.CodePku.MsgBox:Close()
+                    return false
+                end
+                CodePkuServiceSession:LoginResponse(response, err, HandleLogined)
+            end
+        )
+    elseif (methodIndex == 3) then
+        CodePkuServiceSession:QuickLogin(
+            visitor_id,
+            app_market,
             function(response, err)
                 if err == 503 then
                     Mod.CodePku.MsgBox:Close()
@@ -386,6 +416,38 @@ function MainLogin:RemoveAccount(username)
 
     self:Refresh()
 end
+
+-- 来自worldshare的sessionData中的借鉴 获取机器的唯一标识符
+function MainLogin:GetDeviceUUID()
+    local function getUUID()
+        local template ='xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'
+        return string.gsub(template, '[xy]', function (c)
+            local v = (c == 'x') and math.random(0, 0xf) or math.random(8, 0xb)
+            return string.format('%x', v)
+        end)
+    end
+
+    local UUIDData = GameLogic.GetPlayerController():LoadLocalData("UUIDData", {}, true)
+    local currentParacraftDir = ParaIO.GetWritablePath()
+    local machineID = ParaEngine.GetAttributeObject():GetField("MachineID","")
+
+    if not UUIDData.softwareUUID or
+       not UUIDData.machineID or
+       not UUIDData.paracraftDir or
+       UUIDData.paracraftDir ~= currentParacraftDir or
+       UUIDData.machineID ~= machineID then
+        UUIDData.paracraftDir = ParaIO.GetWritablePath()
+        UUIDData.softwareUUID = getUUID()
+        UUIDData.machineID = machineID
+        GameLogic.GetPlayerController():SaveLocalData("UUIDData", UUIDData, true)
+    end
+    
+
+    LOG.std(nil, "MainLogin", "GetDeviceUUID", "UUIDData.softwareUUID = %s , UUIDData.machineID = %s", tostring(UUIDData.softwareUUID), tostring(UUIDData.machineID))
+
+    return UUIDData.softwareUUID .. "-" .. UUIDData.machineID
+end
+
 
 function MainLogin:getMobileCode()
     local MainLoginPage = Mod.CodePku.Store:Get("page/MainLogin")

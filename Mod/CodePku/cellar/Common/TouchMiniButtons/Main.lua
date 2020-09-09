@@ -4,6 +4,9 @@ local AdaptWindow = commonlib.gettable("Mod.CodePku.GUI.Window.AdaptWindow")
 local EntityManager = commonlib.gettable("MyCompany.Aries.Game.EntityManager")
 local MainSceneUIButtons = commonlib.gettable("Mod.CodePku.Common.TouchMiniButtons.MainSceneUIButtons");
 
+NPL.load("(gl)script/apps/Aries/Creator/Game/GUI/TouchController.lua");
+local TouchController = commonlib.gettable("MyCompany.Aries.Game.GUI.TouchController");
+
 local MainUIButtons = NPL.export();
 
 MainUIButtons.hasshown = false
@@ -14,10 +17,12 @@ MainUIButtons.dialog_window = nil
 MainUIButtons.money_window = nil
 MainUIButtons.open_function = nil
 MainUIButtons.open_common = nil
+MainUIButtons.account_up = nil
+MainUIButtons.user_asset = nil
 
 
 function MainUIButtons.show_common_ui(flag)
-	local open_width = 780
+	local open_width = 804
 	local open_height = 178
 	local close_width = 82
 	local close_height = 178
@@ -50,7 +55,7 @@ function MainUIButtons.show_function_ui(flag)	--flag == true,工具栏展开
 	local params = {
 		open = {
 			url="Mod/CodePku/cellar/Common/TouchMiniButtons/MainUIButtons_function.html", 
-			alignment="_rb", left = -541, top = -178, width = 541, height = 178,
+			alignment="_rb", left = -678, top = -178, width = 678, height = 178,
 			click_through = true,
 		},
 		close = {
@@ -77,9 +82,20 @@ function MainUIButtons.show_dialog_ui(bshow)
 	MainUIButtons.dialog_window = MainSceneUIButtons.show_dialog_ui(bshow, 0)
 end
 
+MainUIButtons.money = {goldcoin=0, wanxuecoin=0};
 function MainUIButtons.show_money_ui()
 	local width = 746
 	local height = 89
+
+	local info = Mod.CodePku.Store:Get('user/info');
+	local wallets = info.user_wallets or {};
+	for _, v in ipairs(wallets) do
+		if v.currency_id == 1 then
+			MainUIButtons.money.goldcoin = v.amount;
+		elseif v.currency_id == 2 then
+			MainUIButtons.money.wanxuecoin = v.amount;
+		end
+	end
 
 	local params = {
 		url="Mod/CodePku/cellar/Common/TouchMiniButtons/MainMoney.html", 
@@ -88,7 +104,20 @@ function MainUIButtons.show_money_ui()
 	MainUIButtons.money_window = AdaptWindow:QuickWindow(params)	
 end
 
-function MainUIButtons.ShowPage()
+function MainUIButtons.show_account_up_ui()
+	local params = {
+		url = "Mod/CodePku/cellar/Common/TouchMiniButtons/MainUIButtons_account_up.html",
+		alignment = "_lt", left = 1027, top = -8, width = 264, height = 127,
+	}
+
+	local isVisitor = commonlib.getfield("System.User.isVisitor")
+
+	if isVisitor then
+		MainUIButtons.account_up = AdaptWindow:QuickWindow(params)
+	end
+end
+
+function MainUIButtons.JudgeNil()
 	if MainUIButtons.common_window ~= nil then
 		MainUIButtons.common_window:CloseWindow()
 		MainUIButtons.common_window = nil
@@ -105,6 +134,15 @@ function MainUIButtons.ShowPage()
 		MainUIButtons.money_window:CloseWindow()
 		MainUIButtons.money_window = nil
 	end
+	if MainUIButtons.account_up ~= nil then
+		MainUIButtons.account_up:CloseWindow()
+		MainUIButtons.account_up = nil
+	end
+end
+
+
+function MainUIButtons.ShowPage()
+	MainUIButtons.JudgeNil()
 
 	local hideMenu = false;
 	local hideAllMenu = false;
@@ -119,6 +157,7 @@ function MainUIButtons.ShowPage()
 			MainUIButtons.show_dialog_ui(false)
 			MainUIButtons.show_money_ui()		
 			MainUIButtons.show_function_ui()
+			MainUIButtons.show_account_up_ui()
 		else
 			MainUIButtons.show_common_ui()
 		end
@@ -136,7 +175,8 @@ function MainUIButtons.show_interact_ui(obj)
 		GameLogic.AddBBS("CodeGlobals", L"距离玩家过远，走近点再尝试。", 3000, "#ff0000");
 		return
 	end
-
+	-- asset
+	MainUIButtons.user_asset = obj:GetMainAssetPath();
 	
 	local username =  obj:GetUserName()
 	local displayname = obj:GetDisplayName()

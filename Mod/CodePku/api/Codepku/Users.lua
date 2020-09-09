@@ -62,6 +62,27 @@ function CodePkuUsersApi:LoginWithPwd(mobile, password, success, error)
     CodePkuBaseApi:Post("/users/authorizations", params, nil, success, error, { 503, 400 })
 end
 
+-- url: /users/quicklogin
+-- method: POST
+-- params:
+--[[
+    visitor_id 唯一标识符
+    app_market 来源标识
+]]
+-- return: object
+function CodePkuUsersApi:QuickLogin(visitor_id, app_market, success, error)
+    if type(visitor_id) ~= "string" then
+        return false
+    end
+
+    local params = {
+        visitor_id = visitor_id,
+        app_market = app_market,
+    }
+
+    CodePkuBaseApi:Post("/users/visitor-login", params, nil, success, error, { 503, 400 })
+end
+
 -- url: /users/set-password
 -- method: PUT
 -- params:
@@ -204,6 +225,11 @@ function CodePkuUsersApi:GetMobileCode(mobile, success, error)
     local params = {
         mobile = mobile
     }
+    -- 游客升级账号时获取验证码给服务器传送一个数据，判定是否手机号被绑定
+    local isVisitor = commonlib.getfield("System.User.isVisitor")
+    if isVisitor then
+        params['is_bind'] = 1
+    end
     CodePkuBaseApi:Post('/users/mobile-code', params, { notTokenRequest = true }, success, error, {503, 400, 422, 500})
 end
 

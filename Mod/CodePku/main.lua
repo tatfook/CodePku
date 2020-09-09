@@ -64,6 +64,9 @@ local Messages = NPL.load("(gl)Mod/CodePku/cellar/common/TouchMiniButtons/Messag
 local MainPopup = NPL.load("(gl)Mod/CodePku/cellar/GUI/MainPopup/MainPopup.lua")
 local SmallMap = NPL.load("(gl)Mod/CodePku/cellar/GUI/SmallMap/SmallMap.lua")
 local ToWhere = NPL.load("(gl)Mod/CodePku/cellar/GUI/SmallMap/Popup/ToWhere.lua")
+local SignInPage = NPL.load("(gl)Mod/CodePku/cellar/GUI/SignIn/SignInPage.lua")
+local FastEntrence = NPL.load("(gl)Mod/CodePku/cellar/GUI/SmallMap/FastEntrence/FastEntrence.lua")
+local TopicCourse = NPL.load("(gl)Mod/CodePku/cellar/GUI/SmallMap/FastEntrence/TopicCourse.lua")
 
 local DownloadWorld = commonlib.gettable("MyCompany.Aries.Game.MainLogin.DownloadWorld")
 
@@ -156,6 +159,7 @@ function CodePku:init()
 			if GenAndName.CheckNickName() then
 				UserConsole:ShowPage()
 			else
+				GenAndName.Init()
 				GenAndName:ShowPage()
 			end
             return false
@@ -375,6 +379,10 @@ function CodePku:init()
     local CodepkuChatChannel = NPL.load("(gl)Mod/CodePku/chat/CodepkuChatChannel.lua");
 	CodepkuChatChannel.StaticInit();
 
+	NPL.load("(gl)Mod/CodePku/cellar/GUI/CourseLoadTips/CourseLoadTips.lua");
+	local CourseLoadTips = commonlib.gettable("Mod.CodePku.GUI.CourseLoadTips")
+	CourseLoadTips.StaticInit();
+
 	GameLogic.GetFilters():add_filter(
 		"DesktopMenuPage.ShowPage",
 		function(bShow)
@@ -426,8 +434,8 @@ function CodePku:init()
 	GameLogic.GetFilters():add_filter(
 		"KeyPressEvent",
 		function(callbackVal, event)
-			local isEmployee = System.User and System.User.info and System.User.info.is_employee;
-			if isEmployee then
+			local isEmployee = System.User and System.User.info and System.User.info.is_employee;		
+			if isEmployee and tonumber(isEmployee) == 1 then
 				return true;
 			end
 
@@ -461,6 +469,16 @@ function CodePku:init()
 				event:accept();
 			end
 
+			return true;
+		end
+	)
+
+	GameLogic.GetFilters():add_filter(
+		"KeepworkPermission",
+		function (defaultBool,name,bOpenUIIfNot, callback)
+			if type(callback) == "function" then
+                callback(true)
+            end
 			return true;
 		end
 	)
