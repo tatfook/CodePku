@@ -9,7 +9,7 @@ UserInfoPage.mainasset = nil;
 -- tabs - 自己
 UserInfoPage.tab_ds_self = {
     {text=L"首页", name="Home"},
-    {text=L"属性", name="Profile"},
+    -- {text=L"属性", name="Profile"},
     -- {text=L"角色", name="Model"},
     -- {text=L"外观", name="Skin"},
     -- {text=L"背包", name="Backpack"},

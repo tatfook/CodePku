@@ -55,7 +55,7 @@ function MainUIButtons.show_function_ui(flag)	--flag == true,工具栏展开
 	local params = {
 		open = {
 			url="Mod/CodePku/cellar/Common/TouchMiniButtons/MainUIButtons_function.html", 
-			alignment="_rb", left = -678, top = -178, width = 678, height = 178,
+			alignment="_rb", left = -547, top = -178, width = 678, height = 178,
 			click_through = true,
 		},
 		close = {
@@ -84,6 +84,7 @@ end
 
 MainUIButtons.money = {goldcoin=0, wanxuecoin=0};
 function MainUIButtons.show_money_ui()
+	-- return
 	local width = 746
 	local height = 89
 
@@ -101,7 +102,7 @@ function MainUIButtons.show_money_ui()
 		url="Mod/CodePku/cellar/Common/TouchMiniButtons/MainMoney.html", 
 		alignment="_lt", left = 1309, top = 0, width = width, height = height,
 	}
-	MainUIButtons.money_window = AdaptWindow:QuickWindow(params)	
+	-- MainUIButtons.money_window = AdaptWindow:QuickWindow(params)	
 end
 
 function MainUIButtons.show_account_up_ui()

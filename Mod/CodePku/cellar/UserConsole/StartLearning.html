@@ -26,12 +26,12 @@
                     local userId = Mod.CodePku.Store:Get('user/userId')
                     local guideUid = tostring(userId)..'beginnerGuideState'
                     local beginnerGuideState = GameLogic.GetPlayerController():LoadLocalData(guideUid,false,true);
-                    if not beginnerGuideState then
-                        Page:CloseWindow()
-                        UserConsole:ShowBeginnerPage()
-                    else
+                    --if not beginnerGuideState then
+                        --Page:CloseWindow()
+                        --UserConsole:ShowBeginnerPage()
+                    --else
                         UserConsole:CourseEntry()  
-                    end
+                    --end
                 end
 
                 function currentUserName()
