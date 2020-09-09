@@ -12,15 +12,12 @@ local EntityOtherPlayer = commonlib.gettable("Mod.CodePku.Online.Client.EntityOt
 NPL.load("Mod/GeneralGameServerMod/Core/Client/EntityOtherPlayer.lua");
 NPL.load("Mod/GeneralGameServerMod/App/Client/AppEntityPlayerHelper.lua");
 
-local AppEntityPlayerHelper = commonlib.gettable("Mod.GeneralGameServerMod.App.Client.AppEntityPlayerHelper");
 local EntityOtherPlayer = commonlib.inherit(commonlib.gettable("Mod.GeneralGameServerMod.Core.Client.EntityOtherPlayer"), commonlib.gettable("Mod.CodePku.Online.Client.EntityOtherPlayer"));
 
 local moduleName = "Mod.CodePku.Online.Client.EntityOtherPlayer";
 
 -- 构造函数
-function EntityOtherPlayer:ctor()
-    self.appEntityPlayerHelper = AppEntityPlayerHelper:new():Init(self, false);
-
+function EntityOtherPlayer:ctor()    
     self:SetCheckCollision(false);
 end
 
