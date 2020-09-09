@@ -9,14 +9,14 @@
 <pe:mcml>
 <script refresh="false" type="text/npl"><![CDATA[
 
-TaskSettlementPage = NPL.load("(gl)Mod/CodePku/cellar/GUI/TaskSettlement/TaskSettlement.lua")
+TaskSettlement = NPL.load("(gl)Mod/CodePku/cellar/GUI/TaskSettlement/TaskSettlement.lua")
 
-TaskSettlementPage.subjectInfo = TaskSettlementPage:GetSubejectInfo()
-TaskSettlementPage.userInfo = TaskSettlementPage:GetUserInfo()
-TaskSettlementPage.props = TaskSettlementPage:GetProps(TaskSettlementPage.subjectInfo)
+TaskSettlement.subjectInfo = TaskSettlement:GetSubejectInfo()
+TaskSettlement.userInfo = TaskSettlement:GetUserInfo()
+TaskSettlement.props = TaskSettlement:GetProps()
 
 
-function TaskSettlementPage.ClosePage()
+function TaskSettlement.ClosePage()
     Page:CloseWindow();
 end
 
@@ -28,7 +28,7 @@ end
 <pe:container alignment="_lt" width="1920" height="1080">
     <div style="position:absolute;left:218;top:97;width:1494;height:910;text-align:center;font-family:Noto Sans S Chinese Regular; font-weight:bold;background:url(codepku/image/textures/task_settlement/task_settlement.png#53 69 1494 910);">
         <div style="position:absolute;left:499;top:0;width:511;height:108;color:#F3693B;font-size:57;line-height:108;background:url(codepku/image/textures/task_settlement/task_settlement.png#97 1024 511 108);">任务结算</div>
-        <div onclick="TaskSettlementPage.ClosePage" style="position:absolute;left:1385;top:16;width:68;height:78;background:url(codepku/image/textures/common_32bits.png#110 73 68 78);"></div>
+        <div onclick="TaskSettlement.ClosePage" style="position:absolute;left:1385;top:16;width:68;height:78;background:url(codepku/image/textures/common_32bits.png#110 73 68 78);"></div>
 
         <div style="position:absolute;left:192;top:121;width:1142;height:202;color:#ffffff;;">
             <!-- 升级特效 -->
@@ -36,14 +36,14 @@ end
                 <div style="position:absolute;left:0;top:18;width:178;height:178;background:url(codepku/image/textures/task_settlement/task_settlement.png#492 1220 178 178);"></div>
             </pe:if>
             <!-- 头像头像框 -->
-            <div style="<%= format('position:absolute;left:28;top:44;width:124;height:126;background:url(%s);',TaskSettlementPage.userInfo.avatar_url) %>"></div>
-            <div style="<%= format('position:absolute;left:22;top:40;width:134;height:134;background:url(%s);',TaskSettlementPage.userInfo.avatar_frame_url) %>"></div>
+            <div style="<%= format('position:absolute;left:28;top:44;width:124;height:126;background:url(%s);',TaskSettlement.userInfo.avatar_url) %>"></div>
+            <div style="<%= format('position:absolute;left:22;top:40;width:134;height:134;background:url(%s);',TaskSettlement.userInfo.avatar_frame_url) %>"></div>
             <!-- 玩家名字 -->
-            <div style="position:absolute;left:184;top:38;width:303;height:62;font-size:33;line-height:62;text-align:left;padding-left:19;background:url(codepku/image/textures/task_settlement/task_settlement.png#1633 109 303 62);"><%= TaskSettlementPage.userInfo.nickname %></div>
+            <div style="position:absolute;left:184;top:38;width:303;height:62;font-size:33;line-height:62;text-align:left;padding-left:19;background:url(codepku/image/textures/task_settlement/task_settlement.png#1633 109 303 62);"><%= TaskSettlement.userInfo.nickname %></div>
             <!-- 获得玩家经验 -->
             <div style="position:absolute;left:769;top:30;width:199;height:74;">
                 <div style="position:absolute;left:0;width:75;height:74;background:url(codepku/image/textures/common_32bits.png#1324 878 98 98);"></div>
-                <span style="position:absolute;left:87;font-size:33;line-height:74;text-align:left;">+<%= TaskSettlementPage.subjectInfo.total_exp %></span>
+                <span style="position:absolute;left:87;font-size:33;line-height:74;text-align:left;">+<%= TaskSettlement.subjectInfo.total_exp %></span>
             </div>
             <!-- 玩家经验条 -->
             <div style="position:absolute;left:184;top:115;width:769;height:52;background:url(codepku/image/textures/task_settlement/task_settlement.png#97 1570 769 52);">
@@ -58,14 +58,14 @@ end
         <div style="position:absolute;left:192;top:273;width:1142;height:202;color:#ffffff;">
             <!-- 学科icon -->
             <div style="position:absolute;left:22;top:40;width:134;height:134;background:url(codepku/image/textures/subjects/subjects.png#27 37 104 106);">
-                <div style="<%= format('position:absolute;left:20;top:20;width:94;height:94;background:url(%s);', TaskSettlementPage.subjectInfo.subject_url) %>"></div>
+                <div style="<%= format('position:absolute;left:20;top:20;width:94;height:94;background:url(%s);', TaskSettlement.subjectInfo.subject_url) %>"></div>
             </div>
             <!-- 学科名字 -->
-            <div style="position:absolute;left:184;top:38;width:303;height:62;font-size:33;line-height:62;text-align:left;padding-left:19;background:url(codepku/image/textures/task_settlement/task_settlement.png#1633 109 303 62);"><%= TaskSettlementPage.subjectInfo.subject_name %></div>
+            <div style="position:absolute;left:184;top:38;width:303;height:62;font-size:33;line-height:62;text-align:left;padding-left:19;background:url(codepku/image/textures/task_settlement/task_settlement.png#1633 109 303 62);"><%= TaskSettlement.subjectInfo.subject_name %></div>
             <!-- 获得学科经验 -->
             <div style="position:absolute;left:769;top:30;width:199;height:74;">
                 <div style="position:absolute;left:0;width:75;height:74;background:url(codepku/image/textures/common_32bits.png#1467 878 98 98);"></div>
-                <span style="position:absolute;left:87;font-size:33;line-height:74;text-align:left;">+<%= TaskSettlementPage.subjectInfo.subject_exp %></span>
+                <span style="position:absolute;left:87;font-size:33;line-height:74;text-align:left;">+<%= TaskSettlement.subjectInfo.subject_exp %></span>
             </div>
             <!-- 学科经验条 -->
             <div style="position:absolute;left:184;top:115;width:769;height:52;background:url(codepku/image/textures/task_settlement/task_settlement.png#97 1570 769 52);">
@@ -76,25 +76,28 @@ end
                 <div style="position:absolute;left:969;top:0;width:173;height:202;background:url(codepku/image/textures/task_settlement/task_settlement.png#1612 222 173 202);"></div>
             </pe:if>
         </div>
-
-        <pe:if condition='<%= true %>'>
-            <div style="position:absolute;left:179;top:475;width:1136;height:300;background:url(codepku/image/textures/task_settlement/task_settlement.png#866 1070 1136 300);">
-                <pe:gridview name="props" style="position: absolute; width: 1250; height: 400; left: -5; top: -50;" DataSource="<%= TaskSettlementPage.props %>" CellPadding="80" ItemsPerLine="5" AllowPaging="false" RememberScrollPos="true" RememberLastPage="true">
-                    <Columns>
-                        <div style="position: relative; left: 5;top: 6;width: 126; height: 125;background:url(codepku/image/textures/common_32bits.png#264 879 126 125);"></div>
+        <!-- 获得道具 -->
+        <div style="position:absolute;left:179;top:475;width:1136;height:300;background:url(codepku/image/textures/task_settlement/task_settlement.png#866 1070 1136 300);">
+            <pe:gridview name="props" style="position: absolute; width: 1250; height: 400; left: -5; top: -42;" DataSource="<%= TaskSettlement.props %>" CellPadding="80" ItemsPerLine="5" AllowPaging="false" RememberScrollPos="true" RememberLastPage="true">
+                <Columns>
+                    <div style="color:#0E69CD;;font-size:36;text-align: center;line-height:36;font-family:Noto Sans S Chinese Regular; font-weight:bold;">
+                        <div style="position: relative; left: 5;top: 6;width: 126; height: 125;background:url(codepku/image/textures/common_32bits.png#264 879 126 125);">
+                            <div style="<%= format('position: relative; left: 25;top: 26;width: 73; height: 71;background:url(%s);', prop_icon_url) %>"></div>
+                        </div>
                         <div style="width: 134; height: 134;background:url(codepku/image/textures/common_32bits.png#99 873 134 134);"></div>
-                        <pe:if condition='<%= true %>'>
-                            <div style="width: 134; height: 134;background:url(codepku/image/textures/common_32bits.png#99 873 134 134);"></div>
+                        <div style="position: relative; left: -8;top: 8;width: 150;height:36;"><%= prop_name %></div>
+                        <pe:if condition='<%= prop_id == 1 or prop_id == 2 %>'>
+                            <div style="position: relative; left: -8;top: 46;width: 150;height:36;"><%= format('+%d',prop_num) %></div>
                         </pe:if>
-                        <pe:if condition='<%= true %>'>
-                            <div style="width: 134; height: 134;background:url(codepku/image/textures/common_32bits.png#99 873 134 134);"></div>
+                        <pe:if condition='<%= prop_id ~= 1 and prop_id ~= 2  %>'>
+                            <div style="position: relative; left: -8;top: 46;width: 150;height:36;"><%= format('x%d',prop_num) %></div>
                         </pe:if>
-                    </Columns>
-                </pe:gridview>
-            </div>
-        </pe:if>
+                    </div>  
+                </Columns>
+            </pe:gridview>
+        </div>
 
-        <div onclick="TaskSettlementPage.ClosePage" style="position:absolute;left:627;top:776;width:240;height:80;color:#0D5416;;font-size:36;line-height:80;background:url(codepku/image/textures/common_32bits.png#1405 741 84 84:6 6 6 6);">确定</div>
+        <div onclick="TaskSettlement.ClosePage" style="position:absolute;left:627;top:776;width:240;height:80;color:#0D5416;;font-size:36;line-height:80;background:url(codepku/image/textures/common_32bits.png#1405 741 84 84:6 6 6 6);">确定</div>
     </div>
 </pe:container>
 

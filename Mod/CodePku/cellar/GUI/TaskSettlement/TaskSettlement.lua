@@ -6,9 +6,9 @@ Desc: 任务结算界面
     --]]
 local AdaptWindow = commonlib.gettable("Mod.CodePku.GUI.Window.AdaptWindow");
 
-local TaskSettlementPage = NPL.export()
+local TaskSettlement = NPL.export()
 
-function TaskSettlementPage:GetuserInfo()
+function TaskSettlement:GetUserInfo()
     local userInfo = {}
     local info = System.User.info
     userInfo.nickname = info.nickname or ''
@@ -25,13 +25,14 @@ function TaskSettlementPage:GetuserInfo()
 end
 
 
-function TaskSettlementPage:GetSubejectInfo()
+function TaskSettlement:GetSubejectInfo()
     local subejectInfo = {}
-    if TaskSettlementPage.data then
-        subejectInfo.total_exp = TaskSettlementPage.data.total_exp or 0
-        subejectInfo.subject_exp = TaskSettlementPage.data.subject_exp or 0
-        subejectInfo.subject_name = TaskSettlementPage.data.subject_name
-        subejectInfo.props = TaskSettlementPage.data.props or {}
+    if TaskSettlement.data then
+        subejectInfo.total_exp = TaskSettlement.data.total_exp or 0
+        subejectInfo.subject_exp = TaskSettlement.data.subject_exp or 0
+        subejectInfo.subject_name = TaskSettlement.data.subject_name
+        subejectInfo.props = TaskSettlement.data.props or {}
+        subejectInfo.subject_url = ''
     end
 
     local subjectUrls = {
@@ -47,8 +48,7 @@ function TaskSettlementPage:GetSubejectInfo()
     }
 
     for _,v in pairs(subjectUrls) do
-        if v.subjectName..'经验' == subejectInfo.subject_name then
-            subejectInfo.subject_name = v.subjectName
+        if v.subjectName == subejectInfo.subject_name then
             subejectInfo.subject_url = v.subjectUrl
             return subejectInfo
         end
@@ -57,22 +57,67 @@ function TaskSettlementPage:GetSubejectInfo()
 end
 
 
-function TaskSettlementPage.GetProps(subjectInfo)
-    if next(subjectInfo.props) == nil then
-        return {
-            {prop_id=1,prop_num=100,prop_name='玩学币'},
-            {prop_id=1,prop_num=100,prop_name='玩学币'},
-            {prop_id=2,prop_num=1,prop_name='玩学券'},
-            {prop_id=2,prop_num=1,prop_name='玩学券'},
-            {prop_id=11001,prop_num=1,prop_name='补签卡',prop_icon_url='https://scratch-works-staging-1253386414.file.myqcloud.com/game/admin/propIcons/11001.png'}}
+function TaskSettlement.GetProps()
+    if not TaskSettlement.subjectInfo or not TaskSettlement.subjectInfo.props or next(TaskSettlement.subjectInfo.props) == nil then
+        local emptyProps = {  -- todo 测试数据,本为{}
+            {prop_id=1,prop_num=100,prop_name='玩学币',prop_icon_url='codepku/image/textures/common_32bits.png#913 41 73 71'},
+            {prop_id=2,prop_num=1,prop_name='玩学券',prop_icon_url='codepku/image/textures/common_32bits.png#913 136 77 78'},
+            {prop_id=11001,prop_num=1,prop_name='补签卡',prop_icon_url='https://scratch-works-staging-1253386414.file.myqcloud.com/game/admin/propIcons/11001.png'},
+            {prop_id=2,prop_num=2,prop_name='玩学券',prop_icon_url='codepku/image/textures/common_32bits.png#913 136 77 78'},
+            {prop_id=1,prop_num=200,prop_name='玩学币',prop_icon_url='codepku/image/textures/common_32bits.png#913 41 73 71'},
+        }
+        table.sort(emptyProps, function (a, b)
+            if a.prop_id < b.prop_id then
+                return true
+            elseif  a.prop_id == b.prop_id then
+                if a.prop_num < b.prop_num then
+                    return true
+                else
+                    return false
+                end
+            else
+                return false
+            end
+        end)
+        return emptyProps
     end
-    return subjectInfo.props
+
+    local newProps = {}
+    for _,v in pairs(TaskSettlement.subjectInfo.props) do
+        if v.prop_num > 0 then
+            if v.prop_id == 1 then
+                v.prop_icon_url = 'codepku/image/textures/common_32bits.png#913 41 73 71'
+                table.insert(newProps, v)
+            elseif v.prop_id == 2 then
+                v.prop_icon_url = 'codepku/image/textures/common_32bits.png#913 136 77 78'
+                table.insert(newProps, v)
+            else
+                if not v.prop_icon_url then
+                    v.prop_icon_url = ''
+                end
+                table.insert(newProps, v)
+            end
+        end
+    end
+    table.sort(newProps, function (a, b)
+        if a.prop_id < b.prop_id then
+            return true
+        elseif  a.prop_id == b.prop_id then
+            if a.prop_num < b.prop_num then
+                return true
+            else
+                return false
+            end
+        else
+            return false
+        end
+    end)
+    return newProps
 end
 
-TaskSettlementPage.props = TaskSettlementPage:GetProps()
 
-function TaskSettlementPage:ShowPage(data)
-    TaskSettlementPage.data = data
+function TaskSettlement:ShowPage(data)
+    TaskSettlement.data = data
     --[[eg:
     {
         "total_exp": 0,
@@ -91,7 +136,7 @@ function TaskSettlementPage:ShowPage(data)
                 "prop_name": "玩学券"
             }
         ]
-    }    
+    }
     --]]
 
     local params = {
@@ -103,5 +148,5 @@ function TaskSettlementPage:ShowPage(data)
         height = 1080,
         zorder = 30,
         };
-    TaskSettlementPage.window = AdaptWindow:QuickWindow(params)
+    TaskSettlement.window = AdaptWindow:QuickWindow(params)
 end
