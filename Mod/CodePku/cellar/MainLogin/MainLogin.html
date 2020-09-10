@@ -11,6 +11,12 @@
         NPL.load("(gl)script/apps/Aries/Creator/Game/Login/Rebranding.lua")
         local Config = NPL.load("(gl)Mod/CodePku/config/Config.lua")
 
+        NPL.load("(gl)Mod/CodePku/cellar/Common/CommonFunc/CommonFunc.lua")
+        local CommonFunc = commonlib.gettable("Mod.CodePku.Common.CommonFunc")
+        function isHuaweiApproval()
+            return CommonFunc.isHuaweiApproval()
+        end
+
         Rebranding = commonlib.gettable("MyCompany.Aries.Creator.Game.Rebranding")
         local GameMainLogin = commonlib.gettable("MyCompany.Aries.Game.MainLogin")
         local MainLogin = NPL.load("./MainLogin.lua")
@@ -181,11 +187,18 @@
                 </div>
             </div>
 
-            <input type="button"  onclick="login" value='<%= L"登  录"%>'
-                style="position: relative; width: 330; height: 90; left: 307; top: 414; font-size: 36; color: #0E5516; font-family: PuHuiTi-Bold; font-weight: bold; border-radius: 6px; background:url(codepku/image/textures/login/quickLogin.png#391 46 65 94:6 6 6 6);" />
+            <pe:if condition = "<%= not isHuaweiApproval()%>" >
+                <input type="button"  onclick="login" value='<%= L"登  录"%>'
+                    style="position: relative; width: 330; height: 90; left: 502; top: 414; font-size: 36; color: #0E5516; font-family: PuHuiTi-Bold; font-weight: bold; border-radius: 6px; background:url(codepku/image/textures/login/quickLogin.png#391 46 65 94:6 6 6 6);" />
 
-            <!-- <input type="button"  onclick="quicklogin" value='<%= L"游客模式"%>' -->
-                <!-- style="position: relative; width: 330; height: 90; left: 110; top: 414; font-size: 36; color: #0E5516; font-family: PuHuiTi-Bold; font-weight: bold; border-radius: 6px; background:url(codepku/image/textures/login/quickLogin.png#276 46 74 94:6 6 6 6);" /> -->
+                <input type="button"  onclick="quicklogin" value='<%= L"游客模式"%>'
+                    style="position: relative; width: 330; height: 90; left: 110; top: 414; font-size: 36; color: #0E5516; font-family: PuHuiTi-Bold; font-weight: bold; border-radius: 6px; background:url(codepku/image/textures/login/quickLogin.png#276 46 74 94:6 6 6 6);" />
+            </pe:if>
+
+            <pe:if condition = "<%= isHuaweiApproval()%>" >
+                <input type="button"  onclick="login" value='<%= L"登  录"%>'
+                style="position: relative; width: 330; height: 90; left: 307; top: 414; font-size: 36; color: #0E5516; font-family: PuHuiTi-Bold; font-weight: bold; border-radius: 6px; background:url(codepku/image/textures/login/quickLogin.png#391 46 65 94:6 6 6 6);" />
+            </pe:if>
 
             <div style="position: relative; width: 32; height: 32; left: 111; top: 535; background:url(codepku/image/textures/login/main.png#1638 314 33 33);"></div>
 

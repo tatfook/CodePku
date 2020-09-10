@@ -5,6 +5,10 @@ local EntityManager = commonlib.gettable("MyCompany.Aries.Game.EntityManager")
 local MainSceneUIButtons = commonlib.gettable("Mod.CodePku.Common.TouchMiniButtons.MainSceneUIButtons");
 
 NPL.load("(gl)script/apps/Aries/Creator/Game/GUI/TouchController.lua");
+
+-- CommonFunc = NPL.load("(gl)Mod/CodePku/cellar/Common/CommonFunc/CommonFunc.lua")
+CommonFunc = commonlib.gettable("Mod.CodePku.Common.CommonFunc")
+
 local TouchController = commonlib.gettable("MyCompany.Aries.Game.GUI.TouchController");
 
 local MainUIButtons = NPL.export();
@@ -50,7 +54,41 @@ function MainUIButtons.show_common_ui(flag)
 	
 end
 
+MainUIButtons.isHuaweiApproval = CommonFunc.isHuaweiApproval()
+-- MainUIButtons.isFlymeApproval = CommonFunc.isFlymeApproval()
+-- MainUIButtons.isSogouApproval = CommonFunc.isSogouApproval()
+
 function MainUIButtons.show_function_ui(flag)	--flag == true,工具栏展开
+	echo("-----------show_function_ui------------")
+	if MainUIButtons.isHuaweiApproval then
+		echo("===========true")
+		local params = {
+			open = {
+				url="Mod/CodePku/cellar/Common/TouchMiniButtons/MainUIButtons_function.html", 
+				alignment="_rb", left = -547, top = -178, width = 678, height = 178,
+				click_through = true,
+			},
+			close = {
+				url="Mod/CodePku/cellar/Common/TouchMiniButtons/MainUIButtons_function.html", 
+				alignment="_rb", left = -85, top = -178, width = 85, height = 178,
+				click_through = true,
+			}
+		}
+	else 
+		echo("==========false")
+		local params = {
+			open = {
+				url="Mod/CodePku/cellar/Common/TouchMiniButtons/MainUIButtons_function.html", 
+				alignment="_rb", left = -678, top = -178, width = 678, height = 178,
+				click_through = true,
+			},
+			close = {
+				url="Mod/CodePku/cellar/Common/TouchMiniButtons/MainUIButtons_function.html", 
+				alignment="_rb", left = -85, top = -178, width = 85, height = 178,
+				click_through = true,
+			}	
+		}	
+	end
 
 	local params = {
 		open = {
@@ -64,6 +102,9 @@ function MainUIButtons.show_function_ui(flag)	--flag == true,工具栏展开
 			click_through = true,
 		}
 	}
+	
+	echo("==========params===========")
+	echo(params)
 
 	if("close" == flag)then
 		MainUIButtons.open_function = false
@@ -83,6 +124,7 @@ function MainUIButtons.show_dialog_ui(bshow)
 end
 
 MainUIButtons.money = {goldcoin=0, wanxuecoin=0};
+
 function MainUIButtons.show_money_ui()
 	-- return
 	local width = 746
@@ -102,7 +144,12 @@ function MainUIButtons.show_money_ui()
 		url="Mod/CodePku/cellar/Common/TouchMiniButtons/MainMoney.html", 
 		alignment="_lt", left = 1309, top = 0, width = width, height = height,
 	}
-	-- MainUIButtons.money_window = AdaptWindow:QuickWindow(params)	
+	
+	if MainUIButtons.isHuaweiApproval then
+		return
+	else 
+		MainUIButtons.money_window = AdaptWindow:QuickWindow(params)	
+	end
 end
 
 function MainUIButtons.show_account_up_ui()
