@@ -11,6 +11,7 @@ local CommonFunc = commonlib.gettable("Mod.CodePku.Common.CommonFunc")
 ]]
 
 CommonFunc = commonlib.gettable("Mod.CodePku.Common.CommonFunc");
+NPL.load("(gl)script/ide/System/os/os.lua");
 
 -- local CommonFunc = NPL.export();
 
@@ -28,3 +29,15 @@ CommonFunc.isHuaweiApproval = function ()
     end
 end
 
+CommonFunc.isIOSApproval = function ()
+    -- local iosApprovalStatus = Mod.CodePku.BasicConfigTable.ios_approval_status == 'on'
+    local mock_ios = ParaEngine.GetAppCommandLineByParam("mock_ios", "") == "true"
+    local isIOSPlatform = System.os.GetPlatform() == 'ios'
+    local iosApprovalStatus = true
+    -- echo("---------isIOSApproval---------")
+    -- echo(System.os.GetPlatform())
+    -- echo(isIOSPlatform)
+    -- echo(mock_ios)
+    -- echo((isIOSPlatform or mock_ios) and iosApprovalStatus)
+    return (isIOSPlatform or mock_ios) and iosApprovalStatus
+end

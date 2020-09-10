@@ -24,9 +24,16 @@ MainUIButtons.open_common = nil
 MainUIButtons.account_up = nil
 MainUIButtons.user_asset = nil
 
+MainUIButtons.isIOSApproval = CommonFunc.isIOSApproval()
 
 function MainUIButtons.show_common_ui(flag)
-	local open_width = 804
+	-- ios渠道屏蔽Q群
+	local open_width = 0
+	if MainUIButtons.isIOSApproval then
+		open_width = 643
+	else
+		open_width = 804
+	end
 	local open_height = 178
 	local close_width = 82
 	local close_height = 178
@@ -55,17 +62,14 @@ function MainUIButtons.show_common_ui(flag)
 end
 
 MainUIButtons.isHuaweiApproval = CommonFunc.isHuaweiApproval()
--- MainUIButtons.isFlymeApproval = CommonFunc.isFlymeApproval()
--- MainUIButtons.isSogouApproval = CommonFunc.isSogouApproval()
 
 function MainUIButtons.show_function_ui(flag)	--flag == true,工具栏展开
-	echo("-----------show_function_ui------------")
+	-- 华为渠道屏蔽排行榜
 	if MainUIButtons.isHuaweiApproval then
-		echo("===========true")
 		local params = {
 			open = {
 				url="Mod/CodePku/cellar/Common/TouchMiniButtons/MainUIButtons_function.html", 
-				alignment="_rb", left = -547, top = -178, width = 678, height = 178,
+				alignment="_rb", left = -547, top = -178, width = 547, height = 178,
 				click_through = true,
 			},
 			close = {
@@ -75,7 +79,6 @@ function MainUIButtons.show_function_ui(flag)	--flag == true,工具栏展开
 			}
 		}
 	else 
-		echo("==========false")
 		local params = {
 			open = {
 				url="Mod/CodePku/cellar/Common/TouchMiniButtons/MainUIButtons_function.html", 
@@ -102,9 +105,6 @@ function MainUIButtons.show_function_ui(flag)	--flag == true,工具栏展开
 			click_through = true,
 		}
 	}
-	
-	echo("==========params===========")
-	echo(params)
 
 	if("close" == flag)then
 		MainUIButtons.open_function = false

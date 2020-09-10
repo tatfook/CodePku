@@ -25,6 +25,12 @@
     function turnToTeach()
         MainPopup:ShowPage("TPpopup", "教学区", 15855)
     end
+
+    CommonFunc = NPL.load("(gl)Mod/CodePku/cellar/Common/CommonFunc/CommonFunc.lua")
+
+    function isIOSApproval()
+        return CommonFunc.isIOSApproval()
+    end
     
 ]]></script>
 
@@ -39,8 +45,10 @@
 
     <div style="position: relative; width: 410; height: 83; left: 760.5; top: 2; text-align: center; font-family: PuHuiTi-Bold; color: #D85D0B; font-size: 70; line-height: 83; background:url(codepku/image/textures/common_32bits.png#1277 377 410 87);">地图</div>
 
-    <div style="position: relative; width: 122; height: 70; left: 878; top: 231; color:#FFFFFF; line-height: 70; text-align: center; font-size: 48; font-family: Noto Sans S Chinese Regular; font-weight: bold; background:url(codepku/image/textures/fastentrence_map/main.png#488 819 122 70:15 15 15 15);" name="3" onclick="onChoose">高中</div>
-    <div style="position: relative; width: 122; height: 70; left: 960; top: 499; color:#FFFFFF; line-height: 70; text-align: center; font-size: 48; font-family: Noto Sans S Chinese Regular; font-weight: bold; background:url(codepku/image/textures/fastentrence_map/main.png#488 819 122 70:15 15 15 15);" name="2" onclick="onChoose">初中</div>
+    <pe:if condition = "<%= not isIOSApproval()%>" >
+        <div style="position: relative; width: 122; height: 70; left: 878; top: 231; color:#FFFFFF; line-height: 70; text-align: center; font-size: 48; font-family: Noto Sans S Chinese Regular; font-weight: bold; background:url(codepku/image/textures/fastentrence_map/main.png#488 819 122 70:15 15 15 15);" name="3" onclick="onChoose">高中</div>
+        <div style="position: relative; width: 122; height: 70; left: 960; top: 499; color:#FFFFFF; line-height: 70; text-align: center; font-size: 48; font-family: Noto Sans S Chinese Regular; font-weight: bold; background:url(codepku/image/textures/fastentrence_map/main.png#488 819 122 70:15 15 15 15);" name="2" onclick="onChoose">初中</div>
+    </pe:if>
     <div style="position: relative; width: 122; height: 70; left: 860; top: 736; color:#FFFFFF; line-height: 70; text-align: center; font-size: 48; font-family: Noto Sans S Chinese Regular; font-weight: bold; background:url(codepku/image/textures/fastentrence_map/main.png#488 819 122 70:15 15 15 15);" name="1" onclick="onChoose">小学</div>
 
     <div style="position: relative; width: 250; height: 143; left: 91.7; top: 858; font-family: Noto Sans S Chinese Regular; font-weight: bold; text-align: center; background:url(codepku/image/textures/fastentrence_map/main.png#1023 987 251 143:15 15 15 15);">

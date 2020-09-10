@@ -17,6 +17,13 @@
             return CommonFunc.isHuaweiApproval()
         end
 
+        function isIOSApproval()
+            return CommonFunc.isIOSApproval()
+        end
+
+        echo("---------isIOSApproval----------")
+        echo(isIOSApproval());
+
         Rebranding = commonlib.gettable("MyCompany.Aries.Creator.Game.Rebranding")
         local GameMainLogin = commonlib.gettable("MyCompany.Aries.Game.MainLogin")
         local MainLogin = NPL.load("./MainLogin.lua")
@@ -216,13 +223,17 @@
                 <input name="btn_ToggleMethod" style="position: relative; left: 712; top: 532; font-size: 28; text-align: left; font-family: Noto Sans S Chinese Regular; color: #005BFF; font-weight: bold; background: #00000000;" type="button" value='<%= L"密码登录"%>'  onclick="OnChangeLoginMethod"/>
             </pe:if>
 
-            <div onclick="QQLogin" style="position: relative; width: 75px; height: 74px; left: 301; top: 591;background:url(codepku/image/textures/login/quickLogin.png#190 211 75 74);">
+            <pe:if condition = "<%= not isIOSApproval() %>">
+                <div onclick="QQLogin" style="position: relative; width: 75px; height: 74px; left: 301; top: 591;background:url(codepku/image/textures/login/quickLogin.png#190 211 75 74);">
 
-            </div>
+                </div>
+    
+                <div onclick="WeChatLogin" style="position: relative; width: 75px; height: 74px; left: 559; top: 591;background:url(codepku/image/textures/login/quickLogin.png#319 211 75 74);">
+    
+                </div>
+            </pe:if>
 
-            <div onclick="WeChatLogin" style="position: relative; width: 75px; height: 74px; left: 559; top: 591;background:url(codepku/image/textures/login/quickLogin.png#319 211 75 74);">
-
-            </div>
+            
         </div>
     </pe:container>
 </pe:mcml>

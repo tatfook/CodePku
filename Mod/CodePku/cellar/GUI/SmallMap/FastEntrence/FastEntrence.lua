@@ -13,6 +13,85 @@ FastEntrence.GradePrimary = {{},{},{}}
 FastEntrence.GradeMiddle = {}
 FastEntrence.GradeHigh = {}
 
+NPL.load("(gl)Mod/CodePku/cellar/Common/CommonFunc/CommonFunc.lua")
+local CommonFunc = commonlib.gettable("Mod.CodePku.Common.CommonFunc")
+
+echo("-------CommonFunc--------")
+-- echo(CommonFunc)
+-- echo(CommonFunc.isHuaweiApproval())
+-- echo(CommonFunc.isIOSApproval())
+FastEntrence.isIOSApproval = CommonFunc.isIOSApproval()
+
+-- if FastEntrence.isIOSApproval then 
+--     FastEntrence.GradeDetails = {
+--         {
+--             {name='一年级(上)', grade=2, semester=1, count=0, open=0},
+--             {name='二年级(上)', grade=3, semester=1, count=0, open=0},
+--         },
+--         {
+--             {name='三年级(上)', grade=4, semester=1, count=0, open=0},
+--             {name='四年级(上)', grade=5, semester=1, count=0, open=0},
+
+--         },
+--         {
+--             {name='五年级(上)', grade=6, semester=1, count=0, open=0},
+--             {name='六年级(上)', grade=7, semester=1, count=0, open=0},
+--         },
+-- }
+-- else
+--     FastEntrence.GradeDetails = {
+--         {
+--             {name='一年级(上)', grade=2, semester=1, count=0, open=0},
+--             {name='一年级(下)', grade=2, semester=2, count=0, open=0}
+--         },
+--         {
+--             {name='二年级(上)', grade=3, semester=1, count=0, open=0},
+--             {name='二年级(下)', grade=3, semester=2, count=0, open=0}
+--         },
+--         {
+--             {name='三年级(上)', grade=4, semester=1, count=0, open=0},
+--             {name='三年级(下)', grade=4, semester=2, count=0, open=0}
+--         },
+--         {
+--             {name='四年级(上)', grade=5, semester=1, count=0, open=0},
+--             {name='四年级(下)', grade=5, semester=2, count=0, open=0}
+--         },
+--         {
+--             {name='五年级(上)', grade=6, semester=1, count=0, open=0},
+--             {name='五年级(下)', grade=6, semester=2, count=0, open=0}
+--         },
+--         {
+--             {name='六年级(上)', grade=7, semester=1, count=0, open=0},
+--             {name='六年级(下)', grade=7, semester=2, count=0, open=0}
+--         },
+--         {
+--             {name='初一(上)', grade=8, semester=1, count=0, open=0},
+--             {name='初一(下)', grade=8, semester=2, count=0, open=0}
+--         },
+--         {
+--             {name='初二(上)', grade=9, semester=1, count=0, open=0},
+--             {name='初二(下)', grade=9, semester=2, count=0, open=0}
+--         },
+--         {
+--             {name='初三(上)', grade=10, semester=1, count=0, open=0},
+--             {name='初三(下)', grade=10, semester=2, count=0, open=0}
+--         },
+--         {
+--             {name='高一(上)', grade=11, semester=1, count=0, open=0},
+--             {name='高一(下)', grade=11, semester=2, count=0, open=0}
+--         },
+--         {
+--             {name='高二(上)', grade=12, semester=1, count=0, open=0},
+--             {name='高二(下)', grade=12, semester=2, count=0, open=0}
+--         },
+--         {
+--             {name='高三(上)', grade=13, semester=1, count=0, open=0},
+--             {name='高三(下)', grade=13, semester=2, count=0, open=0}
+--         }
+-- }
+-- end
+
+
 FastEntrence.GradeDetails = {
         {
             {name='一年级(上)', grade=2, semester=1, count=0, open=0},
@@ -67,7 +146,9 @@ FastEntrence.GradeDetails = {
 function FastEntrence:GetGradeInfo(grade)
     local response = request:get('/coursewares/by-grade',nil,{sync = true})
     data = response.data.data
-
+    echo("---------GetGradeInfo-------")
+    echo(data)
+    echo(#data)
     if response.data.code == 200 then
         local myIndex, max = 1, #data
         while myIndex <= max do
