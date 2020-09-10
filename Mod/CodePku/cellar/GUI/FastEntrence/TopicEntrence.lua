@@ -6,7 +6,7 @@ TopicEntrencePage.nowPage = nil
 
 function TopicEntrencePage.GetCourse(subject_id)
     response = request:get(string.format('/coursewares/entrance/topic?subject=%d', subject_id), nil,{sync = true})
-    data = response.data.data
+    data = response.data.data or {}
     list = {}
     for i, d in ipairs(data) do
         courses = d.course_wares
@@ -41,7 +41,9 @@ function TopicEntrencePage:ShowPage(bShow)
         [7] = {name='政治', title='politics', index=7, subject_id=7, show=true},
         [8] = {name='历史', title='history', index=8, subject_id=8, show=true},
         [9] = {name='地理', title='geography', index=9, subject_id=9, show=true},
-        [10] = {name='编程', title='programming', index=10, subject_id=10, show=true},
+        [10] = {name='科学', title='science', index=10, subject_id=13, show=true},
+        [11] = {name='编程', title='programming', index=11, subject_id=10, show=true},
+        [12] = {name='人文', title='humanity', index=12, subject_id=12, show=true},
     }
     for i, v in ipairs(TopicEntrencePage.subjects) do
         course = TopicEntrencePage.GetCourse(v.subject_id)
