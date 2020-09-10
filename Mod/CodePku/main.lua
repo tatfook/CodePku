@@ -483,9 +483,6 @@ function CodePku:init()
 		end
 	)
 
-	echo('codepkuTaskSettlement')
-	echo('codepkuTaskSettlement')
-	echo('codepkuTaskSettlement')
 	GameLogic.GetFilters():add_filter(
 		"codepkuTaskSettlement",
 		function (data)

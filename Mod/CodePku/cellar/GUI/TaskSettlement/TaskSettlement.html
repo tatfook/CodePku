@@ -14,7 +14,7 @@ TaskSettlement = NPL.load("(gl)Mod/CodePku/cellar/GUI/TaskSettlement/TaskSettlem
 TaskSettlement.subjectInfo = TaskSettlement:GetSubejectInfo()
 TaskSettlement.userInfo = TaskSettlement:GetUserInfo()
 TaskSettlement.props = TaskSettlement:GetProps()
-
+TaskSettlement.expInfo = TaskSettlement:GetExpinfo()
 
 function TaskSettlement.ClosePage()
     Page:CloseWindow();
@@ -32,7 +32,7 @@ end
 
         <div style="position:absolute;left:192;top:121;width:1142;height:202;color:#ffffff;;">
             <!-- 升级特效 -->
-            <pe:if condition='<%= true %>'>
+            <pe:if condition='<%= TaskSettlement.expInfo.totalLvUp > 0 %>'>
                 <div style="position:absolute;left:0;top:18;width:178;height:178;background:url(codepku/image/textures/task_settlement/task_settlement.png#492 1220 178 178);"></div>
             </pe:if>
             <!-- 头像头像框 -->
@@ -47,10 +47,10 @@ end
             </div>
             <!-- 玩家经验条 -->
             <div style="position:absolute;left:184;top:115;width:769;height:52;background:url(codepku/image/textures/task_settlement/task_settlement.png#97 1570 769 52);">
-                <div style="position:absolute;left:0;top:0;width:769;height:52;font-size:28;line-height:52;text-align:left;padding-left:23;background:url(codepku/image/textures/task_settlement/task_settlement.png#97 1666 769 52);">200/300</div>
+                <div style="<%= format('position:absolute;left:0;top:0;width:(%d);height:52;font-size:28;line-height:52;text-align:left;padding-left:23;background:url(codepku/image/textures/task_settlement/task_settlement.png#97 1666 769 52);',math.floor(TaskSettlement.expInfo.totalPer*769)) %>"><%= format("%d/%d",TaskSettlement.expInfo.totalCur,TaskSettlement.expInfo.totalNext) %></div>
             </div>
             <!-- 玩家经验升级 -->
-            <pe:if condition='<%= true %>'>
+            <pe:if condition='<%= TaskSettlement.expInfo.totalLvUp > 0 %>'>
                 <div style="position:absolute;left:969;top:0;width:173;height:202;background:url(codepku/image/textures/task_settlement/task_settlement.png#1612 222 173 202);"></div>
             </pe:if>
         </div>
@@ -69,10 +69,10 @@ end
             </div>
             <!-- 学科经验条 -->
             <div style="position:absolute;left:184;top:115;width:769;height:52;background:url(codepku/image/textures/task_settlement/task_settlement.png#97 1570 769 52);">
-                <div style="position:absolute;left:0;top:0;width:769;height:52;font-size:28;line-height:52;text-align:left;padding-left:23;background:url(codepku/image/textures/task_settlement/task_settlement.png#97 1487 769 52);">200/300</div>
+                <div style="<%= format('position:absolute;left:0;top:0;width:(%d);height:52;font-size:28;line-height:52;text-align:left;padding-left:23;background:url(codepku/image/textures/task_settlement/task_settlement.png#97 1666 769 52);',math.floor(TaskSettlement.expInfo.subjectPer*769)) %>"><%= format("%d/%d",TaskSettlement.expInfo.subjectCur,TaskSettlement.expInfo.subjectNext) %></div>
             </div>
             <!-- 学科经验升级 -->
-            <pe:if condition='<%= true %>'>
+            <pe:if condition='<%= TaskSettlement.expInfo.subjectLvUp > 0  %>'>
                 <div style="position:absolute;left:969;top:0;width:173;height:202;background:url(codepku/image/textures/task_settlement/task_settlement.png#1612 222 173 202);"></div>
             </pe:if>
         </div>

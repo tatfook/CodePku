@@ -61,27 +61,7 @@ end
 
 function TaskSettlement.GetProps()
     if  TaskSettlement.subjectInfo == nil or TaskSettlement.subjectInfo.props == nil  or next(TaskSettlement.subjectInfo.props) == nil then
-        local emptyProps = {  -- todo 测试数据,本为{}
-            {prop_id=1,prop_num=100,prop_name='玩学币',prop_icon_url='codepku/image/textures/common_32bits.png#913 41 73 71'},
-            {prop_id=2,prop_num=1,prop_name='玩学券',prop_icon_url='codepku/image/textures/common_32bits.png#913 136 77 78'},
-            {prop_id=11001,prop_num=1,prop_name='补签卡',prop_icon_url='https://scratch-works-staging-1253386414.file.myqcloud.com/game/admin/propIcons/11001.png'},
-            {prop_id=2,prop_num=2,prop_name='玩学券',prop_icon_url='codepku/image/textures/common_32bits.png#913 136 77 78'},
-            {prop_id=1,prop_num=200,prop_name='玩学币',prop_icon_url='codepku/image/textures/common_32bits.png#913 41 73 71'},
-        }
-        table.sort(emptyProps, function (a, b)
-            if a.prop_id < b.prop_id then
-                return true
-            elseif  a.prop_id == b.prop_id then
-                if a.prop_num < b.prop_num then
-                    return true
-                else
-                    return false
-                end
-            else
-                return false
-            end
-        end)
-        return emptyProps
+        return {}
     end
 
     table.sort(TaskSettlement.subjectInfo.props, function (a, b)
@@ -99,6 +79,22 @@ function TaskSettlement.GetProps()
     end)
     return TaskSettlement.subjectInfo.props
 end
+
+function TaskSettlement.GetExpinfo()
+    local expInfo = {
+        totalCur  = TaskSettlement.subjectInfo.total_level_info.current_exp,
+        totalNext  = TaskSettlement.subjectInfo.total_level_info.next_exp,
+        totalLvUp  = TaskSettlement.subjectInfo.total_level_info.level_up,
+        totalPer = TaskSettlement.subjectInfo.total_level_info.current_exp/TaskSettlement.subjectInfo.total_level_info.next_exp,
+
+        subjectCur  = TaskSettlement.subjectInfo.subject_level_info.current_exp,
+        subjectNext  = TaskSettlement.subjectInfo.subject_level_info.next_exp,
+        subjectLvUp  = TaskSettlement.subjectInfo.subject_level_info.level_up,
+        subjectPer = TaskSettlement.subjectInfo.subject_level_info.current_exp/TaskSettlement.subjectInfo.subject_level_info.next_exp,
+    }
+    return expInfo
+end
+
 
 
 function TaskSettlement:ShowPage(data)
