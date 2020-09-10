@@ -47,7 +47,8 @@ end
             </div>
             <!-- 玩家经验条 -->
             <div style="position:absolute;left:184;top:115;width:769;height:52;background:url(codepku/image/textures/task_settlement/task_settlement.png#97 1570 769 52);">
-                <div style="<%= format('position:absolute;left:0;top:0;width:(%d);height:52;font-size:28;line-height:52;text-align:left;padding-left:23;background:url(codepku/image/textures/task_settlement/task_settlement.png#97 1666 769 52);',math.floor(TaskSettlement.expInfo.totalPer*769)) %>"><%= format("%d/%d",TaskSettlement.expInfo.totalCur,TaskSettlement.expInfo.totalNext) %></div>
+                <div style="<%= format('position:absolute;left:0;top:0;width:(%d);height:52;background:url(codepku/image/textures/task_settlement/task_settlement.png#97 1666 769 52);',math.floor(TaskSettlement.expInfo.totalPer*769)) %>"></div>
+                <div style="width:769;height:52;font-size:28;line-height:52;text-align:center;"><%= format("%d/%d",TaskSettlement.expInfo.totalCur,TaskSettlement.expInfo.totalNext) %></div>
             </div>
             <!-- 玩家经验升级 -->
             <pe:if condition='<%= TaskSettlement.expInfo.totalLvUp > 0 %>'>
@@ -69,7 +70,8 @@ end
             </div>
             <!-- 学科经验条 -->
             <div style="position:absolute;left:184;top:115;width:769;height:52;background:url(codepku/image/textures/task_settlement/task_settlement.png#97 1570 769 52);">
-                <div style="<%= format('position:absolute;left:0;top:0;width:(%d);height:52;font-size:28;line-height:52;text-align:left;padding-left:23;background:url(codepku/image/textures/task_settlement/task_settlement.png#97 1666 769 52);',math.floor(TaskSettlement.expInfo.subjectPer*769)) %>"><%= format("%d/%d",TaskSettlement.expInfo.subjectCur,TaskSettlement.expInfo.subjectNext) %></div>
+                <div style="<%= format('position:absolute;left:0;top:0;width:(%d);height:52;background:url(codepku/image/textures/task_settlement/task_settlement.png#97 1487 769 52);',math.floor(TaskSettlement.expInfo.subjectPer*769)) %>"></div>
+                <div style="width:769;height:52;font-size:28;line-height:52;text-align:center;"><%= format("%d/%d",TaskSettlement.expInfo.subjectCur,TaskSettlement.expInfo.subjectNext) %></div>
             </div>
             <!-- 学科经验升级 -->
             <pe:if condition='<%= TaskSettlement.expInfo.subjectLvUp > 0  %>'>
