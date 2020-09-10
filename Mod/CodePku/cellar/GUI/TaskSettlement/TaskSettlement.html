@@ -86,12 +86,7 @@ end
                         </div>
                         <div style="width: 134; height: 134;background:url(codepku/image/textures/common_32bits.png#99 873 134 134);"></div>
                         <div style="position: relative; left: -8;top: 8;width: 150;height:36;"><%= prop_name %></div>
-                        <pe:if condition='<%= prop_id == 1 or prop_id == 2 %>'>
-                            <div style="position: relative; left: -8;top: 46;width: 150;height:36;"><%= format('+%d',prop_num) %></div>
-                        </pe:if>
-                        <pe:if condition='<%= prop_id ~= 1 and prop_id ~= 2  %>'>
-                            <div style="position: relative; left: -8;top: 46;width: 150;height:36;"><%= format('x%d',prop_num) %></div>
-                        </pe:if>
+                        <div style="position: relative; left: -8;top: 46;width: 150;height:36;"><%= format('x%d',prop_num) %></div>
                     </div>  
                 </Columns>
             </pe:gridview>

@@ -33,6 +33,8 @@ function TaskSettlement:GetSubejectInfo()
         subejectInfo.subject_name = TaskSettlement.data.subject_name
         subejectInfo.props = TaskSettlement.data.props or {}
         subejectInfo.subject_url = ''
+        subejectInfo.total_level_info = TaskSettlement.data.total_level_info or {}
+        subejectInfo.subject_level_info = TaskSettlement.data.subject_level_info or {}
     end
 
     local subjectUrls = {
@@ -58,7 +60,7 @@ end
 
 
 function TaskSettlement.GetProps()
-    if not TaskSettlement.subjectInfo or not TaskSettlement.subjectInfo.props or next(TaskSettlement.subjectInfo.props) == nil then
+    if  TaskSettlement.subjectInfo == nil or TaskSettlement.subjectInfo.props == nil  or next(TaskSettlement.subjectInfo.props) == nil then
         local emptyProps = {  -- todo 测试数据,本为{}
             {prop_id=1,prop_num=100,prop_name='玩学币',prop_icon_url='codepku/image/textures/common_32bits.png#913 41 73 71'},
             {prop_id=2,prop_num=1,prop_name='玩学券',prop_icon_url='codepku/image/textures/common_32bits.png#913 136 77 78'},
@@ -82,24 +84,7 @@ function TaskSettlement.GetProps()
         return emptyProps
     end
 
-    local newProps = {}
-    for _,v in pairs(TaskSettlement.subjectInfo.props) do
-        if v.prop_num > 0 then
-            if v.prop_id == 1 then
-                v.prop_icon_url = 'codepku/image/textures/common_32bits.png#913 41 73 71'
-                table.insert(newProps, v)
-            elseif v.prop_id == 2 then
-                v.prop_icon_url = 'codepku/image/textures/common_32bits.png#913 136 77 78'
-                table.insert(newProps, v)
-            else
-                if not v.prop_icon_url then
-                    v.prop_icon_url = ''
-                end
-                table.insert(newProps, v)
-            end
-        end
-    end
-    table.sort(newProps, function (a, b)
+    table.sort(TaskSettlement.subjectInfo.props, function (a, b)
         if a.prop_id < b.prop_id then
             return true
         elseif  a.prop_id == b.prop_id then
@@ -112,7 +97,7 @@ function TaskSettlement.GetProps()
             return false
         end
     end)
-    return newProps
+    return TaskSettlement.subjectInfo.props
 end
 
 
