@@ -34,10 +34,10 @@
     }
    select_method = {
         [1] = {title='默认排序', name='default_select', index=1},
-        [2] = {title='热度', name='hot_select', index=2},
+        -- [2] = {title='热度', name='hot_select', index=2},
         ['默认排序'] = 'default_select',
-        ['热度'] = 'hot_select',
-        ['人数'] = 'pepole_select'
+        -- ['热度'] = 'hot_select',
+        -- ['人数'] = 'pepole_select'
     }
     classification = {
         {name = 'total', title = '全部', index = 1},
@@ -128,7 +128,8 @@
         if name == 'default_select' then
             TopicCourse.sortMethod = '默认排序'
         elseif name == 'hot_select' then
-            TopicCourse.sortMethod = '热度'
+            TopicCourse.sortMethod = '默认排序'
+            -- TopicCourse.sortMethod = '热度'
             GameLogic.RunCommand("/tip -duration 1500 功能开发中，敬请期待")
         end
         Page:Refresh(0)
