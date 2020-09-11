@@ -77,6 +77,7 @@ function UserConsole:CourseEntry()
         self:HandleWorldId(Mod.CodePku.BasicConfig.huawei_entry_world_id)
     else
         if UserConsole.BeginnerGuideFlag then
+            UserConsole.BeginnerGuideFlag = false
             self:HandleWorldId(Mod.CodePku.BasicConfig.beginner_guide_world_id)  
         else 
             CodePkuServiceSession:CourseEntryWorld(function (response, err)         
