@@ -49,7 +49,7 @@ end
 
 function Notice:getNotice()
     return {
-        
+
     }
 end
 
@@ -72,6 +72,6 @@ function Notice:ShowPage(PageIndex, bShow, id, mainasset)
 		alignment="_lt", left = 0, top = 0, width = 1920, height = 1080, zorder = 30,
 		click_through = false,
 	}
-	local window = AdaptWindow:QuickWindow(params)
+	return AdaptWindow:QuickWindow(params)
 end
 
