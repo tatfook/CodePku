@@ -128,5 +128,10 @@ function GeneralGameClient:IsAnonymousUser()
     return false;
 end
 
+-- 获取当前世界类型
+function GeneralGameClient:GetWorldType()
+    return "World";
+end
+
 -- 初始化成单列模式
 GeneralGameClient:InitSingleton();
