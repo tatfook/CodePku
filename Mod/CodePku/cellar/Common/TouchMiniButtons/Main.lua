@@ -59,10 +59,9 @@ MainUIButtons.isHuaweiApproval = CommonFunc.isHuaweiApproval()
 -- MainUIButtons.isSogouApproval = CommonFunc.isSogouApproval()
 
 function MainUIButtons.show_function_ui(flag)	--flag == true,工具栏展开
-	echo("-----------show_function_ui------------")
+	local params = {}
 	if MainUIButtons.isHuaweiApproval then
-		echo("===========true")
-		local params = {
+		params = {
 			open = {
 				url="Mod/CodePku/cellar/Common/TouchMiniButtons/MainUIButtons_function.html", 
 				alignment="_rb", left = -547, top = -178, width = 678, height = 178,
@@ -75,8 +74,7 @@ function MainUIButtons.show_function_ui(flag)	--flag == true,工具栏展开
 			}
 		}
 	else 
-		echo("==========false")
-		local params = {
+		params = {
 			open = {
 				url="Mod/CodePku/cellar/Common/TouchMiniButtons/MainUIButtons_function.html", 
 				alignment="_rb", left = -678, top = -178, width = 678, height = 178,
@@ -89,22 +87,6 @@ function MainUIButtons.show_function_ui(flag)	--flag == true,工具栏展开
 			}	
 		}	
 	end
-
-	local params = {
-		open = {
-			url="Mod/CodePku/cellar/Common/TouchMiniButtons/MainUIButtons_function.html", 
-			alignment="_rb", left = -547, top = -178, width = 678, height = 178,
-			click_through = true,
-		},
-		close = {
-			url="Mod/CodePku/cellar/Common/TouchMiniButtons/MainUIButtons_function.html", 
-			alignment="_rb", left = -85, top = -178, width = 85, height = 178,
-			click_through = true,
-		}
-	}
-	
-	echo("==========params===========")
-	echo(params)
 
 	if("close" == flag)then
 		MainUIButtons.open_function = false
