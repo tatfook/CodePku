@@ -65,8 +65,9 @@ MainUIButtons.isHuaweiApproval = CommonFunc.isHuaweiApproval()
 
 function MainUIButtons.show_function_ui(flag)	--flag == true,工具栏展开
 	-- 华为渠道屏蔽排行榜
+	local params = {}
 	if MainUIButtons.isHuaweiApproval then
-		local params = {
+		params = {
 			open = {
 				url="Mod/CodePku/cellar/Common/TouchMiniButtons/MainUIButtons_function.html", 
 				alignment="_rb", left = -547, top = -178, width = 547, height = 178,
@@ -79,7 +80,7 @@ function MainUIButtons.show_function_ui(flag)	--flag == true,工具栏展开
 			}
 		}
 	else 
-		local params = {
+		params = {
 			open = {
 				url="Mod/CodePku/cellar/Common/TouchMiniButtons/MainUIButtons_function.html", 
 				alignment="_rb", left = -678, top = -178, width = 678, height = 178,
@@ -92,19 +93,6 @@ function MainUIButtons.show_function_ui(flag)	--flag == true,工具栏展开
 			}	
 		}	
 	end
-
-	local params = {
-		open = {
-			url="Mod/CodePku/cellar/Common/TouchMiniButtons/MainUIButtons_function.html", 
-			alignment="_rb", left = -547, top = -178, width = 678, height = 178,
-			click_through = true,
-		},
-		close = {
-			url="Mod/CodePku/cellar/Common/TouchMiniButtons/MainUIButtons_function.html", 
-			alignment="_rb", left = -85, top = -178, width = 85, height = 178,
-			click_through = true,
-		}
-	}
 
 	if("close" == flag)then
 		MainUIButtons.open_function = false

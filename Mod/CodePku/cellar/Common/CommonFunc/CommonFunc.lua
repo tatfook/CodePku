@@ -33,6 +33,8 @@ CommonFunc.isHuaweiApproval = function ()
         return flymeApprovalStatus
     elseif app_market == 'sogou' then
         return sogouApprovalStatus
+    else 
+        return false
     end
 end
 
