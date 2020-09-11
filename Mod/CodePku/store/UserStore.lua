@@ -11,7 +11,7 @@ local UserStore = commonlib.gettable('Mod.WorldShare.store.User')
 ]]
 
 local UserStore = commonlib.gettable('Mod.CodePku.store.User')
-local Config = NPL.load("(gl)Mod/Codepku/config/Config.lua")
+local Config = NPL.load("(gl)Mod/CodePku/config/Config.lua")
 
 function UserStore:Action()
     return {
