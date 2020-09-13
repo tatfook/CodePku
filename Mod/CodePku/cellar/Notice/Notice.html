@@ -48,9 +48,19 @@
         end
 
         notice_data = {
-            [1] = {},
-            [2] = {},
+            [1] = {title="1111",status=1},
+            [2] = {title="2222",status=2},
         }
+
+        notice_status = {
+            [1] = {title = "新",style = "position:relative;width: 82;height:53;left:15;top:-95;font-size:42;line-height: 110;background:url(codepku/image/textures/notice_system/detail_32bits.png#105 179 82 53)"},
+            [2] = {title = "火热",style = "position:relative;width: 82;height:60;left:10;top:-110;font-size:42;line-height: 110;background:url(codepku/image/textures/notice_system/detail_32bits.png#99 420 82 60)"},
+            [3] = {title = "限时",style = "position:relative;width: 68;height:72;left:10;top:-105;font-size:42;line-height: 110;background:url(codepku/image/textures/notice_system/detail_32bits.png#100 552 68 72)"},
+        }
+
+        function getStatus(status)
+            return notice_status[status]
+        end
        
     ]]>
     </script>
@@ -91,7 +101,7 @@
 
 
 
-                <pe:repeat DataSource="<%=Channels%>">
+                <pe:repeat DataSource="<%=notice_data%>">
                     <pe:repeatitem>
                         <pe:if condition="<%=Eval('index') == Channels['friend']%>">
                             <div style="<%=format('width: 102;height:60;position:relative;left:%d;margin-top:20;base-font-size:30px;font-size:30px;color: #ffffff; text-align: center;line-height:60; background:url(codepku/image/textures/chat_ui/chat_32bits.png#589 659 67 67:20 20 20 20)', (Eval('index')-1)*132+28)%>" name="<%=Eval('index')%>" onclick="OnClickChannel"><%=Eval('title')%></div>
@@ -103,11 +113,14 @@
                             <div style="position:relative;width: 370;height:110;margin-left:5;margin-top:4;font-size:42;line-height: 110;color: #0e3565;font-family: PuHuiTi-Bold; text-align: center;background:url(codepku/image/textures/notice_system/detail_32bits.png#529 157 370 110)" onclick="OnClickNotice">内测公告</div>
                         </div>
                         <div style="width: 382;height:118;margin-left:19;top:18;font-size:42;line-height: 110;background:url(codepku/image/textures/notice_system/detail_32bits.png#527 292 382 118)" onclick="OnClickNotice">
-                        <div style="position:relative;width: 370;height:110;margin-left:5;margin-top:4;font-size:42;line-height: 110;color: #0e3565;font-family: PuHuiTi-Bold; text-align: center;background:url(codepku/image/textures/notice_system/detail_32bits.png#529 157 370 110)" onclick="OnClickNotice">内测公告</div>
-                    </div>
+                            <div style="position:relative;width: 370;height:110;margin-left:5;margin-top:4;font-size:42;line-height: 110;color: #0e3565;font-family: PuHuiTi-Bold; text-align: center;background:url(codepku/image/textures/notice_system/detail_32bits.png#529 157 370 110)" onclick="OnClickNotice">内测公告</div>
+                        </div>
                     </pe:repeatitem>
                 </pe:repeat>
             </pe:treeview>
+
+            <!-- 右侧公告内容 -->
+
         </div>
     </pe:container>
 </pe:mcml>
