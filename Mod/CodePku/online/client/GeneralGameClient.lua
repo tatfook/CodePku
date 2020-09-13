@@ -125,10 +125,12 @@ end
 
 -- 是否是匿名用户
 function GeneralGameClient:IsAnonymousUser()
-    local isAnonymousUser = self:GetOptions().isAnonymousUser;
-    if (isAnonymousUser ~= nil) then return isAnonymousUser end
+    return false;
+end
 
-    return System.User.isVisitor;
+-- 获取当前世界类型
+function GeneralGameClient:GetWorldType()
+    return "World";
 end
 
 -- 初始化成单列模式
