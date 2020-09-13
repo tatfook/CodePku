@@ -8,6 +8,7 @@
 <body>
 <pe:mcml>
     <script type="text/npl" refresh="false"><![CDATA[
+        local page = document:GetPageCtrl()
         NPL.load("(gl)script/apps/Aries/Creator/Game/Login/Rebranding.lua")
         local Config = NPL.load("(gl)Mod/CodePku/config/Config.lua")
 
@@ -17,8 +18,6 @@
         local CodePkuServiceSession = NPL.load("(gl)Mod/CodePku/service/CodePkuService/Session.lua")
 
 
-
-        local appMarketQQ = ParaEngine.GetAppCommandLineByParam("app_market", "")
 
         function OnClose()
             echo("close")
@@ -43,25 +42,52 @@
             return Messages
         end
 
-        function OnClickNotice()
-            echo("OnClickNotice")
-        end
-
         notice_data = {
-            [1] = {title="1111",status=1},
-            [2] = {title="2222",status=2},
+            [1] = {title="内测公告1",status=1,id=4},
+            [2] = {title="内测公告2",status=2,id=2},
+            [3] = {title="内测公告3",status=3,id=3},
+            [4] = {title="内测公告4",status=0,id=4},
+
         }
 
+        current_id = notice_data[1].id
+
         notice_status = {
+            [0] = {style = ""},
             [1] = {title = "新",style = "position:relative;width: 82;height:53;left:15;top:-95;font-size:42;line-height: 110;background:url(codepku/image/textures/notice_system/detail_32bits.png#105 179 82 53)"},
             [2] = {title = "火热",style = "position:relative;width: 82;height:60;left:10;top:-110;font-size:42;line-height: 110;background:url(codepku/image/textures/notice_system/detail_32bits.png#99 420 82 60)"},
             [3] = {title = "限时",style = "position:relative;width: 68;height:72;left:10;top:-105;font-size:42;line-height: 110;background:url(codepku/image/textures/notice_system/detail_32bits.png#100 552 68 72)"},
         }
 
+        
         function getStatus(status)
-            return notice_status[status]
+            return notice_status[status].style
         end
-       
+
+
+        local t1 = os.date("%Y-%m-%d %H:%M:%S")
+        ti = os.time()
+        function OnClickNotice(name)
+            echo("OnClickNotice")
+            --echo(name);
+            current_id = name;
+            --echo(current_id)
+            echo(os.date("%d"))
+            --echo(os.date("%c"))
+            --echo(os.date("*t"))
+
+            t2 = os.date("%Y-%m-%d %H:%M:%S")
+            t2 = os.time()
+            echo(os.time())
+            --echo(toNumber(t1))
+            echo(t1)
+            echo(t2)
+            echo(os.difftime (t2, t1))
+            Page:Refresh(0)
+        end
+
+        content ="      11"
+
     ]]>
     </script>
     <style type="text/mcss">
@@ -72,55 +98,57 @@
             <div style="position: relative;left: 491; width: 511; height: 108; line-height: 108; font-size: 57; font-weight: bold; font-family: PuHuiTi-Bold; color: #F46D3D; text-align: center; background:url(codepku/image/textures/login/quickLogin.png#444 205 434 86);">公告</div>
             <div style="position: relative;left: 1382; top: 15; width:68; height: 78; background:url(codepku/image/textures/commonpopup/main.png#110 73 68 78);" onclick="OnClose"></div>
             <!-- 左侧公告标题 -->
-            <pe:treeview style="margin-top:110; margin-left:4;width: 431; height: 794;" name='messages' DefaultNodeHeight = "110" ItemsPerLine="1" AllowPaging="false" RememberScrollPos="true" RememberLastPage="false" VerticalScrollBarStep="40">
-                <!-- <div style="top:18;width: 382;height:118;margin-left:19;top:18;font-size:42;line-height: 110;background:url(codepku/image/textures/notice_system/detail_32bits.png#527 292 382 118)" onclick="OnClickNotice">
-                    <div style="position:relative;width: 370;height:110;margin-left:5;margin-top:4;font-size:42;line-height: 110;color: #0e3565;font-family: PuHuiTi-Bold; text-align: center;background:url(codepku/image/textures/notice_system/detail_32bits.png#529 157 370 110)" onclick="OnClickNotice">内测公告</div>
-                </div> -->
-
+            <pe:treeview style="position: relative;top:110; left:4;width: 431; height: 794;" name='messages' DefaultNodeHeight = "110" ItemsPerLine="1" AllowPaging="false" RememberScrollPos="true" RememberLastPage="false" VerticalScrollBarStep="40">
                 <!-- 新 + 选中 -->
-                <div style="margin-top:0;width:431;height:136">
-                    <div style="position:relative;width: 382;height:118;margin-left:19;margin-top:18;font-size:42;line-height: 110;background:url(codepku/image/textures/notice_system/detail_32bits.png#527 292 382 118)" onclick="OnClickNotice"></div>
-                    <div style="width: 370;height:110;margin-left:25;top:22;font-size:42;line-height: 110;color: #0e3565;font-family: PuHuiTi-Bold; text-align: center;background:url(codepku/image/textures/notice_system/detail_32bits.png#529 157 370 110)" onclick="OnClickNotice">内测公告</div>
+                <!-- <div style="margin-top:0;width:431;height:136"> -->
+                    <!-- <div style="position:relative;width: 382;height:118;margin-left:19;margin-top:18;font-size:42;line-height: 110;background:url(codepku/image/textures/notice_system/detail_32bits.png#527 292 382 118)" onclick="OnClickNotice"></div> -->
+                    <!-- <div style="width: 370;height:110;margin-left:25;top:22;font-size:42;line-height: 110;color: #0e3565;font-family: PuHuiTi-Bold; text-align: center;background:url(codepku/image/textures/notice_system/detail_32bits.png#529 157 370 110)" onclick="OnClickNotice">内测公告</div> -->
                     <!-- 新 -->
                     <!-- <div style="position:relative;width: 82;height:53;left:15;top:-100;font-size:42;line-height: 110;background:url(codepku/image/textures/notice_system/detail_32bits.png#105 179 82 53)"></div> -->
-                    <div style="position:relative;width: 82;height:53;left:15;top:-95;font-size:42;line-height: 110;background:url(codepku/image/textures/notice_system/detail_32bits.png#105 179 82 53)"></div>
-                
-                </div>
+                    <!-- <div style="position:relative;width: 82;height:53;left:15;top:-95;font-size:42;line-height: 110;background:url(codepku/image/textures/notice_system/detail_32bits.png#105 179 82 53)"></div> -->
+                <!-- </div> -->
 
                 <!-- 新 + 未选中 -->
-                <div style="width:431;height:128">
-                    <div style="width: 370;height:110;margin-left:25;top:18;font-size:42;line-height: 110;color: #0e3565;font-family: PuHuiTi-Bold; text-align: center;background:url(codepku/image/textures/notice_system/detail_32bits.png#529 157 370 110)" onclick="OnClickNotice">内测公告</div>
+                <!-- <div style="width:431;height:128"> -->
+                    <!-- <div style="width: 370;height:110;margin-left:25;top:18;font-size:42;line-height: 110;color: #0e3565;font-family: PuHuiTi-Bold; text-align: center;background:url(codepku/image/textures/notice_system/detail_32bits.png#529 157 370 110)" onclick="OnClickNotice">内测公告</div> -->
                     <!-- 新 -->
                     <!-- <div style="position:relative;width: 82;height:53;left:15;top:-95;font-size:42;line-height: 110;background:url(codepku/image/textures/notice_system/detail_32bits.png#105 179 82 53)"></div> -->
                     <!-- 火热 -->
                     <!-- <div style="position:relative;width: 82;height:60;left:10;top:-110;font-size:42;line-height: 110;background:url(codepku/image/textures/notice_system/detail_32bits.png#99 420 82 60)"></div> -->
                     <!-- 限时 -->
-                    <div style="position:relative;width: 68;height:72;left:10;top:-105;font-size:42;line-height: 110;background:url(codepku/image/textures/notice_system/detail_32bits.png#100 552 68 72)"></div>
-
-                </div>
-
-
+                    <!-- <div style="position:relative;width: 68;height:72;left:10;top:-105;font-size:42;line-height: 110;background:url(codepku/image/textures/notice_system/detail_32bits.png#100 552 68 72)"></div> -->
+                <!-- </div> -->
 
                 <pe:repeat DataSource="<%=notice_data%>">
                     <pe:repeatitem>
-                        <pe:if condition="<%=Eval('index') == Channels['friend']%>">
-                            <div style="<%=format('width: 102;height:60;position:relative;left:%d;margin-top:20;base-font-size:30px;font-size:30px;color: #ffffff; text-align: center;line-height:60; background:url(codepku/image/textures/chat_ui/chat_32bits.png#589 659 67 67:20 20 20 20)', (Eval('index')-1)*132+28)%>" name="<%=Eval('index')%>" onclick="OnClickChannel"><%=Eval('title')%></div>
+                        <!-- 未选中 -->
+                        <pe:if condition="<%= Eval('id') ~= current_id %>">
+                            <div style="width:431;height:136">
+                                <div style="<%=format('width: 370;height:110;margin-left:25;top:22;font-size:42;line-height: 110;color: #0e3565;font-family: PuHuiTi-Bold; text-align: center;background:url(codepku/image/textures/notice_system/detail_32bits.png#529 157 370 110)', (Eval('index')-1)*132+28)%>" name="<%=Eval('id')%>" onclick="OnClickNotice"><%=Eval('title')%></div>
+                                <div style="<%= getStatus(Eval('status')) %>"></div>
+                            </div>
                         </pe:if>
-                        <pe:if condition="<%=Eval('index') ~= Channels['friend']%>">
-                            <div style="<%=format('width: 102;height:60;position:relative;left:%d;margin-top:20;base-font-size:30px;font-size:30px;color: #ffffff; text-align: center;line-height:60; background:url(codepku/image/textures/chat_ui/chat_32bits.png#687 660 67 67:20 20 20 20)', (Eval('index')-1)*132+28)%>" name="<%=Eval('index')%>" onclick="OnClickChannel"><%=Eval('title')%></div>
+                         <!-- 选中 -->
+                         <pe:if condition="<%= Eval('status') == current_id %>">
+                            <div style="margin-top:0;width:431;height:136">
+                                <div style="position:relative;width: 382;height:118;margin-left:19;margin-top:18;font-size:42;line-height: 110;background:url(codepku/image/textures/notice_system/detail_32bits.png#527 292 382 118)" onclick="OnClickNotice"></div>
+                                <div style="<%=format('width: 370;height:110;margin-left:25;top:22;font-size:42;line-height: 110;color: #0e3565;font-family: PuHuiTi-Bold; text-align: center;background:url(codepku/image/textures/notice_system/detail_32bits.png#529 157 370 110)', (Eval('index')-1)*132+28)%>" name="<%=Eval('id')%>" onclick="OnClickNotice"><%=Eval('title')%></div>
+                                <div style="<%= getStatus(Eval('status')) %>"></div>
+                            </div>
                         </pe:if>
-                        <div style="width: 382;height:118;margin-left:19;top:18;font-size:42;line-height: 110;background:url(codepku/image/textures/notice_system/detail_32bits.png#527 292 382 118)" onclick="OnClickNotice">
-                            <div style="position:relative;width: 370;height:110;margin-left:5;margin-top:4;font-size:42;line-height: 110;color: #0e3565;font-family: PuHuiTi-Bold; text-align: center;background:url(codepku/image/textures/notice_system/detail_32bits.png#529 157 370 110)" onclick="OnClickNotice">内测公告</div>
-                        </div>
-                        <div style="width: 382;height:118;margin-left:19;top:18;font-size:42;line-height: 110;background:url(codepku/image/textures/notice_system/detail_32bits.png#527 292 382 118)" onclick="OnClickNotice">
-                            <div style="position:relative;width: 370;height:110;margin-left:5;margin-top:4;font-size:42;line-height: 110;color: #0e3565;font-family: PuHuiTi-Bold; text-align: center;background:url(codepku/image/textures/notice_system/detail_32bits.png#529 157 370 110)" onclick="OnClickNotice">内测公告</div>
-                        </div>
                     </pe:repeatitem>
                 </pe:repeat>
             </pe:treeview>
 
             <!-- 右侧公告内容 -->
-
+            <div style="position: relative;left:437;top:129;width: 1033; height: 756;background:url(codepku/image/textures/notice_system/content_32bits.png);">
+                <div style="height:92;width:1033;line-height: 92;font-weight: bold;font-size: 42; font-family: PuHuiTi-Bold;color:white;text-align: center;">防诈骗指南</div>
+                <div style="text-indent:50;padding: 25;margin-top: 20;margin-left: 22;height:619;width:980;line-height: 56;font-weight: bold;font-size: 36; font-family: PuHuiTi-Bold;color:#0e69cd;background:url(codepku/image/textures/notice_system/detail_32bits.png#293 480 164 103:10 10 10 10);">
+                    <p style="line-height: 56;font-weight: bold;font-size: 36; font-family: PuHuiTi-Bold;color:#0e69cd;">&nbsp;&nbsp;&nbsp;111</p>
+                    <p style="line-height: 56;font-weight: bold;font-size: 36; font-family: PuHuiTi-Bold;color:#0e69cd;">          111</p>
+                    <p style="line-height: 56;font-weight: bold;font-size: 36; font-family: PuHuiTi-Bold;color:#0e69cd;text-align: right;">《玩学世界官方项目组》</p>
+                </div>
+            </div>
         </div>
     </pe:container>
 </pe:mcml>
