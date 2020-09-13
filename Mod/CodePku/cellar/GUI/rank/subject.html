@@ -20,9 +20,12 @@ RankPage.left_navig = {
     {title = '游 戏', name = 'game', index = 2}
 }
 RankPage.subjects_navig = {
-    [1] = {title = "语 文", name = 'chinese', index = 1},
-    [2] = {title = "数 学", name = "math", index = 2},
-    [3] = {title = "外 语", name = "english", index = 3}
+    [1] = {title = "语 文", name = 'chinese', index = 1, show = true, icon_url='codepku/image/textures/subjects/subjects.png#156 44 79 93'},
+    [2] = {title = "数 学", name = "math", index = 2, show = true, icon_url='codepku/image/textures/subjects/subjects.png#376 44 82 97'},
+    [3] = {title = "英 语", name = "english", index = 3, show = true, icon_url='codepku/image/textures/subjects/subjects.png#251 51 85 78'},
+    [4] = {title = "科 学", name = "science", index = 13, show = true, icon_url='codepku/image/textures/subjects/subjects.png#829 52 96 81'},
+    [5] = {title = "人 文", name = "humanity", index = 12, show = true, icon_url='codepku/image/textures/subjects/subjects.png#144 180 83 76'},
+    [6] = {title = "编 程", name = "programming", index = 10, show = true, icon_url='codepku/image/textures/subjects/subjects.png#31 175 89 86'},
 }
 RankPage.top_navig = {
     [1] = {title = "世 界", name = "world", index = 1},
@@ -63,7 +66,7 @@ end
 function ClickedLeftNavigIndex(name)
     for k,v in pairs(RankPage.subjects_navig) do
         if v.name == name then
-            RankPage.left_navig_last_clicked = k
+            RankPage.left_navig_last_clicked = v.index
         end
     end
     RankPage.userinfo, RankPage.myinfo = RankPage.GetSubjectItem(RankPage.left_navig_last_clicked, RankPage.top_navig_clicked_index)
@@ -94,13 +97,14 @@ function ClickedTopNavigIndex(name)
 end
 
 function GetPosition()
-    if RankPage.left_navig_last_clicked == 1 then
-        return '829 273 130 120'
-    elseif RankPage.left_navig_last_clicked == 2 then
-        return '1436 274 130 120'
-    elseif RankPage.left_navig_last_clicked == 3 then
-        return '959 273 130 120'
+    local leftIndex = 1
+    for k,v in pairs(RankPage.subjects_navig) do
+        if v.index == RankPage.left_navig_last_clicked  then
+            leftIndex = k
+            break
+        end
     end
+    return RankPage.subjects_navig[leftIndex]['icon_url']
 end
 
 ]]>
@@ -133,7 +137,7 @@ end
                 <pe:div style="width: 1380; height: 149; background: url(codepku/image/textures/rank/rank_32bits.png#91 472 1380 149);">
                     <pe:div style="position: relative; width: 108; height: 108; left: 91; top: 21; background: url(codepku/image/textures/rank/rank_32bits.png#1546 472 108 108)"></pe:div>
                     <pe:div style="position: relative; width: 336; height: 47; left: 337; top: 48; font-size: 49; base-font-size: 49; color: #ffffff; font-family: Noto Sans S Chinese Regular; text-align: center; line-height: 47;"><%=Eval('name')%></pe:div>
-                    <pe:div style="<%=format('position: relative; width: 130; height: 120; left: 870; top: 10; background: url(codepku/image/textures/rank/rank_32bits.png#%s);', GetPosition())%>"></pe:div>
+                    <pe:div style="<%=format('position: relative; width: 110; height: 120; left: 870; top: 10; background: url(%s);', GetPosition())%>"></pe:div>
                     <pe:div style="position: relative; width: 133; height: 39; left: 1071; top: 50; font-size: 49; base-font-size: 49; color: #ffffff; font-family: Noto Sans S Chinese Regular; text-align: center; line-height: 39;"><%=Eval('score')%></pe:div>
                 </pe:div>
             </pe:if>
@@ -141,7 +145,7 @@ end
                 <pe:div style="width: 1380; height: 149; background: url(codepku/image/textures/rank/rank_32bits.png#91 472 1380 149);">
                     <pe:div style="<%=format('position: relative; width: 100; height: 101; left: 95; top: 24; background: url(codepku/image/textures/rank/rank_32bits.png#1683 479 100 101)', Eval('rank'))%>"></pe:div>
                     <pe:div style="position: relative; width: 336; height: 46; left: 337; top: 48; font-size: 49; base-font-size: 49; color: #ffffff; font-family: Noto Sans S Chinese Regular; text-align: center; line-height: 46;"><%=Eval('name')%></pe:div>
-                    <pe:div style="<%=format('position: relative; width: 130; height: 120; left: 870; top: 10; background: url(codepku/image/textures/rank/rank_32bits.png#%s);', GetPosition())%>"></pe:div>
+                    <pe:div style="<%=format('position: relative; width: 110; height: 120; left: 870; top: 10; background: url(%s);', GetPosition())%>"></pe:div>
                     <pe:div style="position: relative; width: 133; height: 39; left: 1071; top: 50; font-size: 49; base-font-size: 49; color: #ffffff; font-family: Noto Sans S Chinese Regular; text-align: center; line-height: 39;"><%=Eval('score')%></pe:div>
                 </pe:div>
             </pe:if>
@@ -149,7 +153,7 @@ end
                 <pe:div style="width: 1380; height: 149; background: url(codepku/image/textures/rank/rank_32bits.png#91 472 1380 149);">
                     <pe:div style="<%=format('position: relative; width: 96; height: 95; left: 98; top: 27; background: url(codepku/image/textures/rank/rank_32bits.png#1815 485 96 95)', Eval('rank'))%>"></pe:div>
                     <pe:div style="position: relative; width: 336; height: 46; left: 337; top: 48; font-size: 49; base-font-size: 49; color: #ffffff; font-family: Noto Sans S Chinese Regular; text-align: center; line-height: 46;"><%=Eval('name')%></pe:div>
-                    <pe:div style="<%=format('position: relative; width: 130; height: 120; left: 870; top: 10; background: url(codepku/image/textures/rank/rank_32bits.png#%s);', GetPosition())%>"></pe:div>
+                    <pe:div style="<%=format('position: relative; width: 110; height: 120; left: 870; top: 10; background: url(%s);', GetPosition())%>"></pe:div>
                     <pe:div style="position: relative; width: 133; height: 39; left: 1071; top: 50; font-size: 49; base-font-size: 49; color: #ffffff; font-family: Noto Sans S Chinese Regular; text-align: center; line-height: 39;"><%=Eval('score')%></pe:div>
                 </pe:div>
             </pe:if>
@@ -157,7 +161,7 @@ end
                 <pe:div style="width: 1376; height: 138; margin-left: 2; background: url(codepku\image\textures\fastentrence\rank\bg_rank_basic.png);">
                     <pe:div style="position: relative; width: 150; height: 50; left: 68; top: 44; font-size: 49; base-font-size: 49; color: #FFA800; text-align: center; border:4px solid #a76002;"><%=Eval('rank')%></pe:div>
                     <pe:div style="position: relative; width: 336; height: 47; left: 338; top: 37; font-size: 49; base-font-size: 49; color: #ffffff; font-family: Noto Sans S Chinese Regular; text-align: center; line-height: 47;"><%=Eval('name')%></pe:div>
-                    <pe:div style="<%=format('position: relative; width: 130; height: 120; left: 870; top: 4; background: url(codepku/image/textures/rank/rank_32bits.png#%s);', GetPosition())%>"></pe:div>
+                    <pe:div style="<%=format('position: relative; width: 110; height: 120; left: 870; top: 4; background: url(%s);', GetPosition())%>"></pe:div>
                     <pe:div style="position: relative; width: 133; height: 39; left: 1072; top: 44; font-size: 49; base-font-size: 49; color: #ffffff; font-family: Noto Sans S Chinese Regular; text-align: center; line-height: 39;"><%=Eval('score')%></pe:div>
                 </pe:div>
             </pe:if>
@@ -167,7 +171,7 @@ end
     <pe:div style="position: relative; width: 1385; height: 163; left: 377; top: 849; background: url(codepku/image/textures/rank/rank_32bits.png#91 805 1385 163);">
         <div style="position: relative; width: 150; height: 51; left: 75; top: 56; font-size: 49; base-font-size: 49; color: #FFA800; text-align: center; border:4px solid #a76002;"><%=RankPage.myinfo[1].rank%></div>
         <div style="position: relative; width: 336; height: 47 ; left: 342; top: 54; font-size: 49; base-font-size: 49; color: #ffffff; font-family: Noto Sans S Chinese Regular; text-align: center;"><%=RankPage.myinfo[1].name%></div>
-        <pe:div style="<%=format('position: relative; width: 130; height: 120; left: 875; top: 22; background: url(codepku/image/textures/rank/rank_32bits.png#%s);', GetPosition())%>"></pe:div>
+        <pe:div style="<%=format('position: relative; width: 110; height: 120; left: 875; top: 22; background: url(%s);', GetPosition())%>"></pe:div>
         <div style="position: relative; width: 133; height: 39 ; left: 1076; top: 56; font-size: 49; base-font-size: 49;font-family: Noto Sans S Chinese Regular; color: #ffffff; text-align: center; line-height: 39;"><%=RankPage.myinfo[1].score%></div>
     </pe:div>
 
@@ -183,12 +187,12 @@ end
         <div name='navig_block' style="width: 293;">
             <pe:repeat DataSource="<%=RankPage.subjects_navig%>">
                 <pe:repeatitem>
-                    <pe:if condition="<%=Eval('index') == RankPage.left_navig_last_clicked%>">
-                        <div style="width: 261; height: 96; margin-left: 32; background: url(codepku/image/textures/common_32bits.png#1648 196 261 96:30 30 30 30);" name="<%=Eval('name')%>" onclick="ClickedLeftNavigIndex">
+                    <pe:if condition="<%= Eval('show') and Eval('index') == RankPage.left_navig_last_clicked%>">
+                        <div style="width: 261; height: 96; margin-left: 32; background: url(codepku/image/textures/common_32bits.png#1648 196 261 96:30 30 30 30);" name="<%=Eval('name')%>">
                         <div style="width:175; height:42; margin-left:38; margin-top: 20; base-font-size:45px; font-size:45px; font-family:Noto Sans S Chinese Regular;font-weight:bolder; font-weight:500; color:#F8DE8D; text-align: center;"><%=Eval('title')%></div>
                         </div>
                     </pe:if>
-                    <pe:if condition="<%=Eval('index') ~= RankPage.left_navig_last_clicked%>">
+                    <pe:if condition="<%= Eval('show') and Eval('index') ~= RankPage.left_navig_last_clicked%>">
                         <div style="width: 249; height: 94; background: url(codepku/image/textures/common_32bits.png#1294 66 134 94:30 30 30 30);" name="<%=Eval('name')%>" value="<%=Eval('title')%>" onclick="ClickedLeftNavigIndex">
                             <div style="width:175; height:42; margin-left:38; margin-top: 22; base-font-size:45px; font-size:45px; font-family:Noto Sans S Chinese Regular;font-weight:bolder; font-weight:500; color:#ffffff; text-align: center;"><%=Eval('title')%></div>
                         </div>
