@@ -1,0 +1,48 @@
+<!-- 
+Author: zouren
+Date: 2020-09-14 17:13:32
+Des:
+Path:"Mod/CodePku/cellar/Common/TouchMiniButtons/MainUIButtons_home_window.html"
+-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+</head>
+<body>
+<pe:mcml>
+<script refresh="false" type="text/npl">
+<![CDATA[
+NPL.load("(gl)Mod/CodePku/cellar/GUI/Home/HomeManage.lua");
+local HomeManage = commonlib.gettable("Mod.CodePku.Common.HomeManage")
+
+function StartEditWorld()
+    LOG.std(nil, "MainUIButtons_home_window", "StartEditWorldBtn", "clicked")
+    HomeManage:ChangeGameMode()
+    Page:Refresh()
+end
+
+function SaveAndExitEditWorld()
+    LOG.std(nil, "MainUIButtons_home_window", "SaveAndExitEditWorldBtn", "clicked")
+    HomeManage:ChangeGameMode()
+    Page:Refresh()
+end
+
+]]></script>
+<style type="text/mcss">
+
+</style>
+<pe:container alignment="_lt" width="135" height="155">
+    <pe:if condition='<%=GameLogic.GameMode:IsEditor()==false%>'>
+        <div name="StartEditWorldBtn" onclick="StartEditWorld" style="position: relative; width: 135; height: 155; background: url(codepku/image/textures/enter_world_btn/enter_world_btn.png#1384 790 135 155);"></div>
+    </pe:if>
+    <pe:if condition='<%=GameLogic.GameMode:IsEditor()==true%>'>
+        <div name="SaveAndExitEditWorldBtn" onclick="SaveAndExitEditWorld" style="position: relative; width: 135; height: 155;background: url(codepku/image/textures/enter_world_btn/enter_world_btn.png#1554 790 135 155);"></div>
+    </pe:if>
+</pe:container>
+
+
+</pe:mcml>
+</body>
+</html>
