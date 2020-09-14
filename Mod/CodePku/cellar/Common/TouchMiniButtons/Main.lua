@@ -108,7 +108,11 @@ function MainUIButtons.show_function_ui(flag)	--flag == true,工具栏展开
 end
 
 function MainUIButtons.show_dialog_ui(bshow)
-	MainUIButtons.dialog_window = MainSceneUIButtons.show_dialog_ui(bshow, 0)
+	if MainUIButtons.isIOSApproval then
+		return
+	else
+		MainUIButtons.dialog_window = MainSceneUIButtons.show_dialog_ui(bshow, 0)
+	end
 end
 
 MainUIButtons.money = {goldcoin=0, wanxuecoin=0};
