@@ -383,6 +383,11 @@ function CodePku:init()
 	local CourseLoadTips = commonlib.gettable("Mod.CodePku.GUI.CourseLoadTips")
 	CourseLoadTips.StaticInit();
 
+	--初始化世界加载完毕后时候家园区标识变量
+	NPL.load("(gl)Mod/CodePku/cellar/GUI/Home/HomeManage.lua");
+	local HomeManage = commonlib.gettable("Mod.CodePku.Common.HomeManage")
+	HomeManage:OnInit()
+
 	GameLogic.GetFilters():add_filter(
 		"DesktopMenuPage.ShowPage",
 		function(bShow)

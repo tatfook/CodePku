@@ -125,8 +125,6 @@ function MainUIButtons.show_home_window_ui()
 	}
 
 	local isHome = commonlib.getfield("System.Codepku.isHome")
-	--test
-	isHome = true
 
 	if isHome then
 		MainUIButtons.home_window = AdaptWindow:QuickWindow(params)
