@@ -12,7 +12,7 @@ function UserInfoPage.getHuaweiNav()
     local isHuawei = ParaEngine.GetAppCommandLineByParam("app_market", "") == 'huawei';
     local flymeApprovalStatus = Mod.CodePku.BasicConfigTable.flyme_approval_status == 'on'  
     local isFlyMe = ParaEngine.GetAppCommandLineByParam("app_market", "") == 'flyme';
-    local sogouApprovalStatus = Mod.CodePku.BasicConfigTable.sogou_approval_status == 'off'  
+    local sogouApprovalStatus = Mod.CodePku.BasicConfigTable.sogou_approval_status == 'on'  
     local isSoGou = ParaEngine.GetAppCommandLineByParam("app_market", "") == 'sogou';
 
     if (huaweiApprovalStatus and isHuawei) or (flymeApprovalStatus and isFlyMe) or (sogouApprovalStatus and isSoGou) then
