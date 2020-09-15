@@ -103,8 +103,8 @@ function CodepkuChatChannel.OnCodepkuUserAward(data)
     -- sysMsg = '系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息'
     -- msg1 = {msgContent=sysMsg,heightPx=math.ceil(commonlib.utf8.len(sysMsg)/28)*46,msgType='sys'}
 
-    props = data['props']
-    data_array = {}
+    local props = data['props']
+    local data_array = {}
     if (props) then
         for _i=1,#props do
             if (props[_i]['prop_num']>0) then
@@ -113,15 +113,15 @@ function CodepkuChatChannel.OnCodepkuUserAward(data)
         end 
     end
 
-    total_exp = data['total_exp']
+    local total_exp = data['total_exp']
     if (total_exp>0) then
         table.insert(data_array,{msgType='get',heightPx=46,itemType=2,dataLen=165+commonlib.utf8.len(data['total_exp_name'])*26,itemName=data['total_exp_name'],itemNum=total_exp})
     end
-    subject_exp = data['subject_exp']
+    local subject_exp = data['subject_exp']
     if (subject_exp>0) then
-        table.insert(data_array,{msgType='get',heightPx=46,itemType=2,dataLen=165+commonlib.utf8.len(data['subject_name'])*26,itemName=data['subject_name'],itemNum=subject_exp})
+        table.insert(data_array,{msgType='get',heightPx=46,itemType=2,dataLen=165+commonlib.utf8.len(data['subject_exp_name'])*26,itemName=data['subject_exp_name'],itemNum=subject_exp})
     end
-    
+
     for _i=1,#data_array do 
         CodepkuChatChannel.SetMessage(channelsMap.system, data_array[_i], 1)
     end
