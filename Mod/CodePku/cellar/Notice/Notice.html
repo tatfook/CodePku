@@ -38,6 +38,7 @@
         }
 
         current_id = notice_data[1].id
+        content = "公告1"
 
         --公告状态标签
         notice_status = {
@@ -63,7 +64,7 @@
             --echo(os.date("%d"))
             --echo(os.date("%c"))
             --echo(os.date("*t"))
-
+            content = Notice:getNotice()
             t2 = os.date("%Y-%m-%d %H:%M:%S")
             t2 = os.time()
             --echo(os.time(os.date()))
@@ -72,15 +73,17 @@
             --echo(t1)
             --echo(t2)
             --echo(os.difftime (t2, t1))
-
+            
             Page:Refresh(0)
+
+            
         end
 
         function OnClickMistake()
             
         end
 
-        content ="为防止游戏内出现拉人的骗子，今天玩学就给大家普及下骗子的特征和套路：<a href=''>   1111111111111</a>1、内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容"
+        --content ="为防止游戏内出现拉人的骗子，今天玩学就给大家普及下骗子的特征和套路：<a href=''>   1111111111111</a>1、内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容"
 
         function hideVbar()
             local page = document:GetPageCtrl()
@@ -182,15 +185,16 @@
 
 
                         <pe:treeview style="height:575;width:940;" name='messages' DefaultNodeHeight = "110" ItemsPerLine="1" AllowPaging="false" RememberScrollPos="true" RememberLastPage="false" VerticalScrollBarStep="40">
-                            <pe:repeat DataSource="<%=notice_data%>">
+                            <pe:repeat DataSource="<%=content%>">
                                 <pe:repeatitem>
                                     <div style="line-height: 56;font-weight: bold;font-size: 36; font-family: PuHuiTi-Bold;color:#0e69cd;">
                                         <span style="height:59;width: 72;"></span>
-                                        <%= content %>
-                                        为防止游戏内出现拉人的骗子，今天玩学就给大家普及下骗子的特征和套路：
+                                        <!-- <%= content %> -->
+                                        Eval('index')
+                                        <!-- 为防止游戏内出现拉人的骗子，今天玩学就给大家普及下骗子的特征和套路：
                                         1、内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容
                                         2、内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容
-                                        3、内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容
+                                        3、内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容 -->
                                         <!-- <a href="">11111</a> -->
                                     </div>
                                     <!-- <a href="">11111</a> -->

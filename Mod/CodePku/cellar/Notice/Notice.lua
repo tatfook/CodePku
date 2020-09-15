@@ -30,8 +30,7 @@ local Notice = commonlib.gettable("Mod.CodePku.celler.Notice")
 local AdaptWindow = commonlib.gettable("Mod.CodePku.GUI.Window.AdaptWindow")
 Notice = commonlib.gettable("Mod.CodePku.celler.Notice");
 
-
--- local CommonFunc = NPL.export();
+Notice.content = {}
 
 Notice.isHuaweiApproval = function ()
     local huaweiApprovalStatus = Mod.CodePku.BasicConfigTable.huawei_approval_status == 'on'
@@ -75,3 +74,26 @@ function Notice:ShowPage(PageIndex, bShow, id, mainasset)
 	return AdaptWindow:QuickWindow(params)
 end
 
+function Notice:getNotice()
+    -- local request = NPL.load("(gl)Mod/CodePku/api/BaseRequest.lua");
+    -- request:get('/config/basic',{}):next(function(response)
+        
+    --     -- Notice.content = response.data.data;
+    -- end):catch(function(e)
+        
+    -- end);
+
+    local content ="为防止游戏内出现拉人的骗子，今天玩学就给大家普及下骗子的特征和套路：\n<a href=''>   1111111111111</a>1、内容内容内容内容内容内容内容内\n容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容"
+    Notice.content = commonlib.split(content, "\n")
+    echo("---------------Notice.content--------------")
+    echo(Notice.content)
+    local new_content = {}
+    for i,j in ipairs(Notice.content) do
+        print(i)
+        print(j)
+        local temp = {}
+        new_content.insert(i,j)
+    end
+    echo(new_content)
+    return commonlib.split(content, "\n")
+end
