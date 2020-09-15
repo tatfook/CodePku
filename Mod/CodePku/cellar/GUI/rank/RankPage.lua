@@ -127,13 +127,16 @@ function RankPage.GetActivityLists()
         local path = '/game-scores/limited-time-lists'
         request:get(path):next(function(response)
             if (response.status == 200) then
-                RankPage.ShowActivityNavig = 1
-                if RankPage.ui then
-                    RankPage.ui:Refresh(0)
-                end
+                RankPage.ShowActivityNavig = 0
                 local data = response.data.data
                 for i=1,#data do
                     RankPage.activity_navig[i] = {title = data[i].activity_name, id = data[i].id, game_id = data[i].game_id, index = i}
+                end
+                if next(data) ~= nil then
+                    RankPage.ShowActivityNavig = 1
+                end
+                if RankPage.ui then
+                    RankPage.ui:Refresh(0)
                 end
             end
         end):catch(function(e)
