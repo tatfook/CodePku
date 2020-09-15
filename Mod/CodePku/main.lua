@@ -133,6 +133,14 @@ function CodePku:init()
 			end
 	)
 
+	--退出世界时将世界课程数据置位空
+	GameLogic.GetFilters():add_filter(
+			"OnWorldUnloaded",
+			function()
+				commonlib.setfield("System.Codepku.Coursewares", nil)
+			end
+	)
+
 	-- 重写移动端虚拟小键盘
 	GameLogic.GetFilters():add_filter(
 			"TouchMiniKeyboard",
@@ -439,7 +447,7 @@ function CodePku:init()
 	GameLogic.GetFilters():add_filter(
 		"KeyPressEvent",
 		function(callbackVal, event)
-			local isEmployee = System.User and System.User.info and System.User.info.is_employee;		
+			local isEmployee = System.User and System.User.info and System.User.info.is_employee;
 			if isEmployee and tonumber(isEmployee) == 1 then
 				return true;
 			end

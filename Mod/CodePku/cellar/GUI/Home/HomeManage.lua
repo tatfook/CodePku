@@ -12,6 +12,7 @@ NPL.load("(gl)script/apps/Aries/Creator/WorldCommon.lua")
 NPL.load("(gl)script/apps/Aries/Creator/Game/GameRules/GameMode.lua")
 local request = NPL.load("(gl)Mod/CodePku/api/BaseRequest.lua")
 
+local HttpRequest = NPL.load("(gl)Mod/WorldShare/service/HttpRequest.lua")
 local RemoteWorld = commonlib.gettable("MyCompany.Aries.Creator.Game.Login.RemoteWorld")
 local InternetLoadWorld = commonlib.gettable("MyCompany.Aries.Creator.Game.Login.InternetLoadWorld")
 local DownloadWorld = commonlib.gettable("MyCompany.Aries.Game.MainLogin.DownloadWorld")
@@ -38,11 +39,14 @@ function HomeManage:OnWorldLoaded()
 end
 
 function HomeManage:EnterHome()
-    LOG.std(nil, "SaveHome", "OpenLocalWorld", "Enter")
+    LOG.std(nil, "HomeManage", "EnterHome", "Enter")
     System.Codepku.isLoadingHome = true -- 设置当前正在进入家园区判定
     local worldFolder = ParaWorld.GetWorldDirectory()
+    echo("-----------zr-------------")
+    echo("---worldFolder-- = "..tostring(worldFolder))
+    echo("-----------zr-------------")
     WorldCommon.CopyWorldTo(worldFolder)
-    WorldCommon.OpenWorld(worldFolder, true)
+    Game.Start(worldFolder)
 end
 
 function HomeManage:GetHomeWorld()
@@ -53,7 +57,7 @@ function HomeManage:GetHomeWorld()
         local mytimer = commonlib.Timer:new(
             {
                 callbackFunc = function(timer)
-                    InternetLoadWorld.LoadWorld(
+                    HomeManage:InternetLoadWorld(
                         world,
                         nil,
                         refreshMode or "auto",
@@ -67,14 +71,114 @@ function HomeManage:GetHomeWorld()
         -- prevent recursive calls.
         mytimer:Change(1,nil);
     end
+
+    request:get('/house/mime'):next(function (response, error)
+        if (error == 401) then
+            GameLogic.AddBBS(nil, L"请先登录", 3000, "255 0 0", 21)
+            -- todo 看下怎么回到登录页面
+            return false
+        end
+        if (error ~= 200) then
+            GameLogic.AddBBS(nil, L"获取世界失败", 3000, "255 0 0", 21)
+            return false
+        end
+        local url = response and response.data and response.data.my_house and response.data.my_house.file and response.data.my_house.file.file_url
+        -- commonlib.setfield("System.Codepku.Coursewares", response.data);
+
+        if not url then
+            GameLogic.AddBBS(nil, L"获取世界失败", 3000, "255 0 0", 21)
+            return false
+        end
+
+        local world = RemoteWorld.LoadFromHref(url, "self")
+        LoadWorld(world, 'auto')
+    end)
 end
 
-function HomeManage:UploadHomeWorld()
-    --body
-    local params = {
+--因为原来的的InternetLoadWorld.LoadWorld()中直接就加载了压缩包，这里就重写一下，前面的逻辑完全相同，后面加载世界时先解压
+function HomeManage:InternetLoadWorld(world, homeserver_nid, refreshMode, onDownloadCompleted)
+	if( world.remotefile and world.remotefile:match("^local://")) then
+		NPL.load("(gl)script/apps/Aries/Creator/WorldCommon.lua");
+		local WorldCommon = commonlib.gettable("MyCompany.Aries.Creator.WorldCommon")
+		local worldpath = world.remotefile:gsub("^(local://)", "");
+		WorldCommon.OpenWorld(worldpath, true)
+		return;
+	elseif(homeserver_nid) then
+		-- home world
+		local cur_svr_page = InternetLoadWorld.GetCurrentServerPage() or {};
+		local params = {nid = cur_svr_page.player_nid, type="creativespace", world = world};
+		OtherPeopleWorlds.OnHandleGotoHomeLandCmd(params);
+		--System.App.Commands.Call("Profile.Aries.GotoHomeLand", {nid = cur_svr_page.player_nid, type="creativespace", world = world});
+		return;
+    end
 
-    }
-    local response = request:post("", params):next(function(response)
+    NPL.load("(gl)script/apps/Aries/Creator/Game/main.lua");
+	local Game = commonlib.gettable("MyCompany.Aries.Game")
+
+	local force_nid = world.force_nid;
+	local gs_nid, ws_id = world.gs_nid, world.ws_id;
+
+	if(not world.DownloadRemoteFile) then
+		return;
+    end
+    world:DownloadRemoteFile(function(bSucceed, msg)
+		if(onDownloadCompleted) then
+			if(onDownloadCompleted(bSucceed, world.worldpath)) then
+				return;
+			end
+		end
+		if(bSucceed and world.worldpath) then
+			ParaAsset.OpenArchive(world.worldpath, true)
+			local output = {}
+
+			commonlib.Files.Find(output, "", 0, 500, ":worldconfig.txt", world.worldpath)
+			ParaAsset.CloseArchive(world.worldpath)
+
+			if #output == 0 then
+                GameLogic.AddBBS(nil, L"世界文件异常，请重新下载", 3000, "255 0 0", 21)
+                LOG.std(nil, "warn", "InternetLoadWorld", "invalid downloaded file will be deleted: %s", world.worldpath);
+				ParaIO.DeleteFile(world.worldpath)
+				return false
+			end
+
+			if(page) then
+				page:CloseWindow();
+            end
+			if(not gs_nid or not ws_id or System.User.nid == 0) then
+				Game.Start(world.worldpath);
+			else
+				InternetLoadWorld.SwitchWorldServer(gs_nid, ws_id, function(bSuccess)
+					if(bSuccess) then
+						Game.Start(world.worldpath, nil, force_nid, gs_nid, ws_id);
+					else
+						InternetLoadWorld.ReturnLastStep();
+					end
+				end);
+			end
+		else
+            GameLogic.AddBBS(nil, msg, 3000, "255 0 0", 21)
+		end
+	end, refreshMode)
+end
+
+function HomeManage:UploadHomeWorld(zipfile)
+    --body
+    local params = {}
+    local file = nil
+    if ParaIO.DoesFileExist(zipfile, true) then
+        file = ParaIO.open(zipfile, "r")
+        if(file:IsValid()) then
+            local total = file:GetFileSize();
+            file:SetSegment(0, 100);
+            params.file = file
+        end
+    end
+
+    -- HttpRequest:PostFields(url, headers, content, success, error)
+
+    print(type(params.file))
+    echo(params.file)
+    request:post("/house/mime", params):next(function(response)
         GameLogic.AddBBS("CodeGlobals", L"世界上传成功", 3000, "#00FF00");
     end):catch(function(response)
         GameLogic.AddBBS("CodeGlobals", response.data.message or L"世界上传失败", 3000, "#00FF00");
@@ -99,13 +203,6 @@ function HomeManage:SaveHome()
     local worldpath = source.."/";
     local zipfile = source..".zip";
     local worldname = string.gsub(source, ".*/(.-)$", "%1");
-    echo("-----------zr-------------")
-    echo("---filesTotal-- = "..tostring(filesTotal))
-    echo("---source-- = "..tostring(source))
-    echo("---worldpath-- = "..tostring(worldpath))
-    echo("---zipfile-- = "..tostring(zipfile))
-    echo("---worldname-- = "..tostring(worldname))
-    echo("-----------zr-------------")
 
     local function MakeNewZipPackage_()
         if(ParaIO.DoesFileExist(zipfile)) then
@@ -126,6 +223,5 @@ function HomeManage:SaveHome()
     GameLogic.SaveAll(true)
     MakeNewZipPackage_()
 
-    SaveHome.UI:CloseWindow()
-    SaveHome.UI = nil
+    HomeManage:UploadHomeWorld(zipfile)
 end
