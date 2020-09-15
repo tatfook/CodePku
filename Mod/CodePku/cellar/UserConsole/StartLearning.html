@@ -14,11 +14,9 @@
                 local page = document:GetPageCtrl()
                 Mod.CodePku.Store:Set("page/StartLearning", page)
 
-                local huaweiApprovalStatus = Mod.CodePku.BasicConfig.huawei_approval_status == 'on'  
-                local isHuawei = ParaEngine.GetAppCommandLineByParam("app_market", "") == 'huawei';
-
+                CommonFunc = NPL.load("(gl)Mod/CodePku/cellar/Common/CommonFunc/CommonFunc.lua")
                 function isHuaweiApproval()
-                    return huaweiApprovalStatus and isHuawei
+                    return CommonFunc.isHuaweiApproval()
                 end
 
                 function startLearning()
@@ -26,11 +24,16 @@
                     local userId = Mod.CodePku.Store:Get('user/userId')
                     local guideUid = tostring(userId)..'beginnerGuideState'
                     local beginnerGuideState = GameLogic.GetPlayerController():LoadLocalData(guideUid,false,true);
-                    if not beginnerGuideState then
-                        Page:CloseWindow()
-                        UserConsole:ShowBeginnerPage()
-                    else
+                
+                    if isHuaweiApproval() then 
                         UserConsole:CourseEntry()  
+                    else
+                        if not beginnerGuideState then
+                            Page:CloseWindow()
+                            UserConsole:ShowBeginnerPage()
+                        else
+                            UserConsole:CourseEntry()  
+                        end
                     end
                 end
 
@@ -54,7 +57,7 @@
                 end
 
                 function ClickQQGroup()
-                    ParaGlobal.ShellExecute("open", Mod.CodePku.BasicConfig.qq_group_link, "", "", 1)
+                    ParaGlobal.ShellExecute("open", Mod.CodePku.BasicConfigTable.qq_group_link, "", "", 1)
                 end
             ]]></script>
             <style type="text/mcss">
