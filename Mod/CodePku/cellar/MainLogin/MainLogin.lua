@@ -62,11 +62,9 @@ function MainLogin:Show(index)
                         click_through = false, 
                         zorder = 20,
                         directPosition = true,
-                        alignment = "_ct",
-                        x = -1920/2,
-                        y = -1080/2,
-                        width = 1920,
-                        height = 1080
+                        alignment = "_ctt",
+                        width = 944,
+                        height = 944                                                
                     }
                     MainLogin.MainLoginPage = AdaptWindow:QuickWindow(params)
                 end
@@ -90,11 +88,10 @@ function MainLogin:Show(index)
                     click_through = false, 
                     zorder = 20,
                     directPosition = true,
-                    alignment = "_ct",
-                    x = -1920/2,
-                    y = -1080/2,
-                    width = 1920,
-                    height = 1080},
+                    alignment = "_ctt",
+                    width = 944,
+                    height = 944 
+                },
 
             [2] = {url = "Mod/CodePku/cellar/MainLogin/MainLoginPassword.html", 
                     name = "MainLoginPassword", 
@@ -106,11 +103,10 @@ function MainLogin:Show(index)
                     click_through = false, 
                     zorder = 20,
                     directPosition = true,
-                    alignment = "_ct",
-                    x = -1920/2,
-                    y = -1080/2,
-                    width = 1920,
-                    height = 1080,}
+                    alignment = "_ctt",
+                    width = 944,
+                    height = 944 
+                }
             };
 
             MainLogin.MainLoginPage = AdaptWindow:QuickWindow(params[IsPassword])
