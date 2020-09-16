@@ -4,7 +4,7 @@ Date: 2020-09-14 16:17:34
 Des:
 use the lib:
 ------------------------------------
-NPL.load("(gl)Mod/CodePku/cellar/GUI/Home/HomeManage.lua");
+NPL.load("(gl)Mod/CodePku/cellar/GUI/Home/HomeManage.lua")
 local HomeManage = commonlib.gettable("Mod.CodePku.Common.HomeManage")
 -----------------------------------
 ]]--
@@ -12,6 +12,7 @@ NPL.load("(gl)script/apps/Aries/Creator/WorldCommon.lua")
 NPL.load("(gl)script/apps/Aries/Creator/Game/GameRules/GameMode.lua")
 local request = NPL.load("(gl)Mod/CodePku/api/BaseRequest.lua")
 
+local CodePkuBaseApi = NPL.load("(gl)Mod/CodePku/api/Codepku/BaseApi.lua")
 local HttpRequest = NPL.load("(gl)Mod/WorldShare/service/HttpRequest.lua")
 local RemoteWorld = commonlib.gettable("MyCompany.Aries.Creator.Game.Login.RemoteWorld")
 local InternetLoadWorld = commonlib.gettable("MyCompany.Aries.Creator.Game.Login.InternetLoadWorld")
@@ -162,28 +163,23 @@ function HomeManage:InternetLoadWorld(world, homeserver_nid, refreshMode, onDown
 end
 
 function HomeManage:UploadHomeWorld(zipfile)
-    --body
-    local params = {}
-    local file = nil
+    local content = nil
     if ParaIO.DoesFileExist(zipfile, true) then
-        file = ParaIO.open(zipfile, "r")
+        local file = ParaIO.open(zipfile, "r")
         if(file:IsValid()) then
-            local total = file:GetFileSize();
-            file:SetSegment(0, 100);
-            params.file = file
+            content = file:GetText(0, -1)
         end
     end
 
-    -- HttpRequest:PostFields(url, headers, content, success, error)
+	function success()
+		GameLogic.AddBBS("CodeGlobals", L"世界上传成功", 3000, "#00FF00");
+	end
+	
+    function error()
+        GameLogic.AddBBS("CodeGlobals", L"世界上传失败", 3000, "#FF0000");
+    end
 
-    print(type(params.file))
-    echo(params.file)
-    request:post("/house/mime", params):next(function(response)
-        GameLogic.AddBBS("CodeGlobals", L"世界上传成功", 3000, "#00FF00");
-    end):catch(function(response)
-        GameLogic.AddBBS("CodeGlobals", response.data.message or L"世界上传失败", 3000, "#00FF00");
-    end);
-
+    CodePkuBaseApi:PostFields("/house/mime", nil, content, success, error)
 end
 
 function HomeManage:ChangeGameMode()

@@ -137,7 +137,9 @@ function CodePku:init()
 	GameLogic.GetFilters():add_filter(
 			"OnWorldUnloaded",
 			function()
-				commonlib.setfield("System.Codepku.Coursewares", nil)
+				if System.Codepku.isHome or System.Codepku.isLoadingHome then
+					commonlib.setfield("System.Codepku.Coursewares", nil)
+				end
 			end
 	)
 

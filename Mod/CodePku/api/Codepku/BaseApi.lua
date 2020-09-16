@@ -72,3 +72,23 @@ function CodePkuBaseApi:ErrorCollect(method, url, error)
         end
     end
 end
+
+-- public
+function CodePkuBaseApi:PostFields(url, headers, content, success, error)    
+    local boundary = ParaMisc.md5('')
+    local boundaryLine = "--WebKitFormBoundary" .. boundary .. "\n"
+    local postFieldsString = boundaryLine ..
+                             "Content-Disposition: form-data; name=\"file\"\n" ..
+                             "Content-Type: application/octet-stream\n" ..
+                             "Content-Transfer-Encoding: binary\n\n" ..
+                             content .. "\n" ..
+                             boundaryLine
+
+    url = self:GetApi() .. url
+    if type(headers) ~= "table" then
+        headers = {}
+    end
+    headers['Content-Type'] = "multipart/form-data; boundary=WebKitFormBoundary" .. boundary,
+
+    BaseApi:PostFields(url, self:GetHeaders(headers), postFieldsString, success, self:ErrorCollect("Delete", url, error))
+end
