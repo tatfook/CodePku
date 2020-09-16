@@ -52,6 +52,7 @@ end
 
 function HomeManage:GetHomeWorld()
     --body
+    GameLogic.AddBBS(nil, L"HomeManage:GetHomeWorld enter", 3000, "255 0 0", 21)
     local function LoadWorld(world, refreshMode)
         local url = world:GetLocalFileName()
         DownloadWorld.ShowPage(url)
@@ -60,7 +61,6 @@ function HomeManage:GetHomeWorld()
                 callbackFunc = function(timer)
                     HomeManage:InternetLoadWorld(
                         world,
-                        nil,
                         refreshMode or "auto",
                         function(bSucceed, localWorldPath)          
                             DownloadWorld.Close()
@@ -74,21 +74,14 @@ function HomeManage:GetHomeWorld()
     end
 
     request:get('/house/mime'):next(function (response, error)
-        if (error == 401) then
-            GameLogic.AddBBS(nil, L"请先登录", 3000, "255 0 0", 21)
-            -- todo 看下怎么回到登录页面
-            return false
-        end
-        if (error ~= 200) then
-            GameLogic.AddBBS(nil, L"获取世界失败", 3000, "255 0 0", 21)
-            return false
-        end
         local url = response and response.data and response.data.my_house and response.data.my_house.file and response.data.my_house.file.file_url
-        -- commonlib.setfield("System.Codepku.Coursewares", response.data);
 
         if not url then
-            GameLogic.AddBBS(nil, L"获取世界失败", 3000, "255 0 0", 21)
-            return false
+            url = response and response.data and response.data.default_house and response.data.default_house.upload_file and response.data.default_house.upload_file.file_url
+            if not url then
+                GameLogic.AddBBS(nil, L"获取世界失败没有URL", 3000, "255 0 0", 21)
+                return false
+            end
         end
 
         local world = RemoteWorld.LoadFromHref(url, "self")
@@ -97,22 +90,7 @@ function HomeManage:GetHomeWorld()
 end
 
 --因为原来的的InternetLoadWorld.LoadWorld()中直接就加载了压缩包，这里就重写一下，前面的逻辑完全相同，后面加载世界时先解压
-function HomeManage:InternetLoadWorld(world, homeserver_nid, refreshMode, onDownloadCompleted)
-	if( world.remotefile and world.remotefile:match("^local://")) then
-		NPL.load("(gl)script/apps/Aries/Creator/WorldCommon.lua");
-		local WorldCommon = commonlib.gettable("MyCompany.Aries.Creator.WorldCommon")
-		local worldpath = world.remotefile:gsub("^(local://)", "");
-		WorldCommon.OpenWorld(worldpath, true)
-		return;
-	elseif(homeserver_nid) then
-		-- home world
-		local cur_svr_page = InternetLoadWorld.GetCurrentServerPage() or {};
-		local params = {nid = cur_svr_page.player_nid, type="creativespace", world = world};
-		OtherPeopleWorlds.OnHandleGotoHomeLandCmd(params);
-		--System.App.Commands.Call("Profile.Aries.GotoHomeLand", {nid = cur_svr_page.player_nid, type="creativespace", world = world});
-		return;
-    end
-
+function HomeManage:InternetLoadWorld(world, refreshMode, onDownloadCompleted)
     NPL.load("(gl)script/apps/Aries/Creator/Game/main.lua");
 	local Game = commonlib.gettable("MyCompany.Aries.Game")
 
