@@ -87,14 +87,12 @@ function MainLogin:Show(index)
                     allowDrag = false,
                     enable_esc_key = true,
                     -- bShow = bShow,
-                    click_through = false, 
                     zorder = 20,
                     directPosition = true,
-                    alignment = "_ct",
-                    x = -1920/2,
-                    y = -1080/2,
-                    width = 1920,
-                    height = 1080},
+                    alignment = "_ctt",
+                    width = 944,
+                    height = 944
+                },
 
             [2] = {url = "Mod/CodePku/cellar/MainLogin/MainLoginPassword.html", 
                     name = "MainLoginPassword", 
@@ -103,14 +101,12 @@ function MainLogin:Show(index)
                     allowDrag = false,
                     enable_esc_key = true,
                     -- bShow = bShow,
-                    click_through = false, 
                     zorder = 20,
                     directPosition = true,
-                    alignment = "_ct",
-                    x = -1920/2,
-                    y = -1080/2,
-                    width = 1920,
-                    height = 1080,}
+                    alignment = "_ctt",
+                    width = 944,
+                    height = 944
+                }
             };
 
             MainLogin.MainLoginPage = AdaptWindow:QuickWindow(params[IsPassword])
@@ -168,7 +164,7 @@ function MainLogin:LoginAction(methodIndex)
         return false
     end
 
-    local visitor_id = MainLogin:GetDeviceUUID()
+    local visitor_id = MainLogin:GetVisitorUUID()
     local app_market = ParaEngine.GetAppCommandLineByParam("app_market", nil)
     local account = MainLoginPage:GetValue("account")
     
@@ -250,6 +246,7 @@ function MainLogin:LoginAction(methodIndex)
             account,
             verifyCode,
             mobileToken,
+            visitor_id,
             function(response, err)                        
                 if err == 503 then
                     Mod.CodePku.MsgBox:Close()
@@ -417,8 +414,8 @@ function MainLogin:RemoveAccount(username)
     self:Refresh()
 end
 
--- 来自worldshare的sessionData中的借鉴 获取机器的唯一标识符
-function MainLogin:GetDeviceUUID()
+-- 来自worldshare的sessionData中的借鉴 获取游客的唯一标识符
+function MainLogin:GetVisitorUUID()
     local function getUUID()
         local template ='xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'
         return string.gsub(template, '[xy]', function (c)

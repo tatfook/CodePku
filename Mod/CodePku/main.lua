@@ -376,6 +376,11 @@ function CodePku:init()
 	local Online = commonlib.gettable("Mod.CodePku.Online");
     Online:Init();   
 
+	local StudyStats = NPL.load("(gl)Mod/CodePku/script/apps/Statistics/StudyStats.lua");
+	StudyStats.StaticInit();
+
+	local AppStats = NPL.load("(gl)Mod/CodePku/script/apps/Statistics/AppStats.lua");
+	AppStats:init();
     local CodepkuChatChannel = NPL.load("(gl)Mod/CodePku/chat/CodepkuChatChannel.lua");
 	CodepkuChatChannel.StaticInit();
 
@@ -482,6 +487,16 @@ function CodePku:init()
 			return true;
 		end
 	)
+	
+	-- GameLogic.GetFilters():add_filter(
+	-- 	"user_event_stat",
+	-- 	function (position, action)
+	-- 		if (position == 'desktop' and action == "ForceExit") then
+	-- 			local StudyStats = NPL.load("(gl)Mod/CodePku/script/apps/Statistics/StudyStats.lua");
+    --             StudyStats.OnExitApp();
+	-- 		end
+	-- 	end
+	-- )
 end
 
 function CodePku:OnLogin()
@@ -514,4 +529,5 @@ function CodePku:BasicConfig()
         
     end);
 end
+
 
