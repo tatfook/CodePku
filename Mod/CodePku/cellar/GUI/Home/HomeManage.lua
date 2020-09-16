@@ -6,6 +6,8 @@ use the lib:
 ------------------------------------
 NPL.load("(gl)Mod/CodePku/cellar/GUI/Home/HomeManage.lua")
 local HomeManage = commonlib.gettable("Mod.CodePku.Common.HomeManage")
+HomeManage:EnterHome()
+HomeManage:SaveHome()
 -----------------------------------
 ]]--
 NPL.load("(gl)script/apps/Aries/Creator/WorldCommon.lua")
@@ -37,17 +39,6 @@ function HomeManage:OnWorldLoaded()
     end
     --判定结束后将正在进入家园区判定变量设置为false
     System.Codepku.isLoadingHome = false
-end
-
-function HomeManage:EnterHome()
-    LOG.std(nil, "HomeManage", "EnterHome", "Enter")
-    System.Codepku.isLoadingHome = true -- 设置当前正在进入家园区判定
-    local worldFolder = ParaWorld.GetWorldDirectory()
-    echo("-----------zr-------------")
-    echo("---worldFolder-- = "..tostring(worldFolder))
-    echo("-----------zr-------------")
-    WorldCommon.CopyWorldTo(worldFolder)
-    Game.Start(worldFolder)
 end
 
 function HomeManage:GetHomeWorld()
@@ -94,9 +85,6 @@ function HomeManage:InternetLoadWorld(world, refreshMode, onDownloadCompleted)
     NPL.load("(gl)script/apps/Aries/Creator/Game/main.lua");
 	local Game = commonlib.gettable("MyCompany.Aries.Game")
 
-	local force_nid = world.force_nid;
-	local gs_nid, ws_id = world.gs_nid, world.ws_id;
-
 	if(not world.DownloadRemoteFile) then
 		return;
     end
@@ -111,29 +99,37 @@ function HomeManage:InternetLoadWorld(world, refreshMode, onDownloadCompleted)
 			local output = {}
 
 			commonlib.Files.Find(output, "", 0, 500, ":worldconfig.txt", world.worldpath)
-			ParaAsset.CloseArchive(world.worldpath)
+            ParaAsset.CloseArchive(world.worldpath)
 
+            
 			if #output == 0 then
                 GameLogic.AddBBS(nil, L"世界文件异常，请重新下载", 3000, "255 0 0", 21)
                 LOG.std(nil, "warn", "InternetLoadWorld", "invalid downloaded file will be deleted: %s", world.worldpath);
 				ParaIO.DeleteFile(world.worldpath)
 				return false
-			end
+            end
+
+            --解压世界zip文件
+            local filesOut = {}
+            commonlib.Files.Find(filesOut, "", 0, 10000, ":.", world.worldpath);
+            
+            local rootDir = world.worldpath:gsub("/[%w%s_]*.zip$", "")
+            local worldDir = rootDir.."/"..commonlib.Encoding.DefaultToUtf8(filesOut[1].filename)
+            NPL.load("(gl)script/ide/System/Util/ZipFile.lua");
+            local ZipFile = commonlib.gettable("System.Util.ZipFile");
+            local zipFile = ZipFile:new();
+            if(zipFile:open(world.worldpath)) then
+                zipFile:unzip(rootDir.."/");
+                zipFile:close();
+            end
+
 
 			if(page) then
 				page:CloseWindow();
             end
-			if(not gs_nid or not ws_id or System.User.nid == 0) then
-				Game.Start(world.worldpath);
-			else
-				InternetLoadWorld.SwitchWorldServer(gs_nid, ws_id, function(bSuccess)
-					if(bSuccess) then
-						Game.Start(world.worldpath, nil, force_nid, gs_nid, ws_id);
-					else
-						InternetLoadWorld.ReturnLastStep();
-					end
-				end);
-			end
+            System.Codepku.isLoadingHome = true -- 设置当前正在进入家园区判定
+
+            Game.Start(worldDir);
 		else
             GameLogic.AddBBS(nil, msg, 3000, "255 0 0", 21)
 		end
@@ -146,6 +142,7 @@ function HomeManage:UploadHomeWorld(zipfile)
         local file = ParaIO.open(zipfile, "r")
         if(file:IsValid()) then
             content = file:GetText(0, -1)
+            file:close()
         end
     end
 
@@ -157,7 +154,13 @@ function HomeManage:UploadHomeWorld(zipfile)
         GameLogic.AddBBS("CodeGlobals", L"世界上传失败", 3000, "#FF0000");
     end
 
-    CodePkuBaseApi:PostFields("/house/mime", nil, content, success, error)
+    -- CodePkuBaseApi:PostFields("/house/mime", nil, content, success, error)
+    local headers = {}
+    headers['Content-Type'] = "multipart/form-data";
+    local params = {
+        file = {file="myhouse", data=content}
+    }
+    CodePkuBaseApi:Post("/house/mime", params, headers, success, error)
 end
 
 function HomeManage:ChangeGameMode()
@@ -198,4 +201,6 @@ function HomeManage:SaveHome()
     MakeNewZipPackage_()
 
     HomeManage:UploadHomeWorld(zipfile)
+
+    HomeManage:ChangeGameMode()
 end
