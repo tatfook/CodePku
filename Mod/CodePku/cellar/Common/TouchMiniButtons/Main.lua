@@ -18,6 +18,7 @@ MainUIButtons.money_window = nil
 MainUIButtons.open_function = nil
 MainUIButtons.open_common = nil
 MainUIButtons.account_up = nil
+MainUIButtons.user_asset = nil
 
 
 function MainUIButtons.show_common_ui(flag)
@@ -174,7 +175,8 @@ function MainUIButtons.show_interact_ui(obj)
 		GameLogic.AddBBS("CodeGlobals", L"距离玩家过远，走近点再尝试。", 3000, "#ff0000");
 		return
 	end
-
+	-- asset
+	MainUIButtons.user_asset = obj:GetMainAssetPath();
 	
 	local username =  obj:GetUserName()
 	local displayname = obj:GetDisplayName()

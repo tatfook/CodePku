@@ -5,7 +5,7 @@ Date: 2020-07-10 16:23:49
 Desc: 玩学世界联机配置
 Example:
 ------------------------------------------------------------
-local Config = NPL.load("(gl)Mod/CodePku/online/Config.lua");
+local Config = NPL.load("(gl)Mod/CodePku/online/client/Config.lua");
 -------------------------------------------------------
 ]]
 

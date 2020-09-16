@@ -9,7 +9,7 @@
     <pe:mcml onloadscript="script/apps/Aries/app_main.lua" callbackfunction="MyCompany.Aries.MSGProc">
 <script refresh="false" type="text/npl" src=""><![CDATA[
 
-    local TopicCourse = NPL.load("(gl)Mod/CodePku/cellar/GUI/SmallMap/FastEntrence/TopicCourse.lua")
+    TopicCourse = NPL.load("(gl)Mod/CodePku/cellar/GUI/SmallMap/FastEntrence/TopicCourse.lua")
     local FastEntrence = NPL.load("(gl)Mod/CodePku/cellar/GUI/SmallMap/FastEntrence/FastEntrence.lua")
     local MainPopup = commonlib.gettable("Mod.CodePku.GUI.MainPopup");
     Payment = NPL.load("(gl)Mod/CodePku/cellar/GUI/Payment/Payment.lua");
@@ -23,7 +23,7 @@
     local show_flag = 0
     classify_index = 1
     searchByName = TopicCourse.searchByName
-    sortMethod = TopicCourse.sortMethod
+    TopicCourse.sortMethod = '默认排序'
 
     
     local navig = {
@@ -35,19 +35,22 @@
     }
    select_method = {
         [1] = {title='默认排序', name='default_select', index=1},
-        [2] = {title='热度', name='hot_select', index=2},
-        [3] = {title='ID', name='ID_select', index=3},
+        -- [2] = {title='热度', name='hot_select', index=2},
         ['默认排序'] = 'default_select',
-        ['ID'] = 'ID_select',
-        ['热度'] = 'hot_select',
-        ['人数'] = 'pepole_select'
+        -- ['热度'] = 'hot_select',
+        -- ['人数'] = 'pepole_select'
     }
     classification = {
         {name = 'total', title = '全部', index = 1},
     }
 
     function get_full_course()
-        course = TopicCourse.GetCourse(last_clicked_index)
+        course = TopicCourse.GetCourse(TopicCourse.lastClickSubjectId)
+        if math.ceil(#course/page_size) == 0 then
+            TopicCourse.max_page = 1
+        else
+            TopicCourse.max_page = math.ceil(#course/page_size)
+        end
         return course
     end
 
@@ -71,7 +74,7 @@
     end
     
     function GetPageNum()
-        return page_num
+        return (page_num .. "/" .. TopicCourse.max_page)
     end
     
     function get_searchByName_table()
@@ -103,13 +106,8 @@
     
     function sort_course(course, sort_method)
         local sort_course = {}
-        if sort_method == 'default_select' then
+        if sort_method == 'default_select' or true then         -- 暂时强制进行默认排序
             sort_course = course
-        elseif sort_method == 'ID_select' then
-            sort_course = commonlib.deepcopy(course)
-            table.sort(sort_course, function(a, b)
-                return a.id > b.id
-            end)
         end
         for i = 1,#sort_course do
             sort_course[i].index = (i-1)%page_size
@@ -130,9 +128,9 @@
         select_button_clicked = 0
         if name == 'default_select' then
             TopicCourse.sortMethod = '默认排序'
-        elseif name == 'ID_select' then
-            TopicCourse.sortMethod = 'ID'
-        else
+        elseif name == 'hot_select' then
+            TopicCourse.sortMethod = '默认排序'
+            -- TopicCourse.sortMethod = '热度'
             GameLogic.RunCommand("/tip -duration 1500 功能开发中，敬请期待")
         end
         Page:Refresh(0)
@@ -169,6 +167,14 @@
     function OnClickSubject(name)
         if last_clicked_index ~= name then
             last_clicked_index = name
+
+            for k,v in ipairs(TopicCourse.subjects) do
+                if k == last_clicked_index  then
+                    TopicCourse.lastClickSubjectId= v.subject_id
+                    break
+                end
+            end
+        
             topic_course = get_full_course()
             Page:Refresh(0)
         end
@@ -257,7 +263,7 @@
         <pe:repeat DataSource="<%=GetSubjects()%>" style=" margin-top: 143;">
             <pe:repeatitem>
                 <pe:if condition="<%=Eval('show')==true and last_clicked_index == Eval('index')%>">
-                    <div style="width:261; height:96; margin-left:25; base-font-size:45px; font-size:45px; font-family:Noto Sans S Chinese Regular; padding-left: 94;padding-top: 17; color: #F8DE8D; background:url(codepku/image/textures/common_32bits.png#1648 196 261 96:30 30 30 30);" name='<%=Eval("index")%>' onclick='OnClickSubject'><%=Eval('name')%></div>
+                    <div style="width:261; height:96; margin-left:25; base-font-size:45px; font-size:45px; font-family:Noto Sans S Chinese Regular; padding-left: 94;padding-top: 17; color: #F8DE8D; background:url(codepku/image/textures/common_32bits.png#1648 196 261 96:30 30 30 30);" name='<%=Eval("index")%>'><%=Eval('name')%></div>
                 </pe:if>
                 <pe:if condition="<%=Eval('show')==true and last_clicked_index ~= Eval('index')%>">
                     <div style="width:244; height:94; base-font-size:45px; font-size:45px; font-family:Noto Sans S Chinese Regular; padding-left: 72;padding-top: 20; color: #FFFFFF; background:url(codepku/image/textures/common_32bits.png#1294 66 134 94:30 30 30 30);" name='<%=Eval("index")%>' onclick='OnClickSubject'><%=Eval('name')%></div>
@@ -278,7 +284,7 @@
 
         <!--选择框-->
         <div style="position: relative; width: 256;height: 74; left: 1406; top: 111;">
-            <div style="width:182; height:74; font-size: 32px; background: url(codepku/image/textures/fastentrence_ui/fastentrence_32bits.png#551 359 74 74:10 10 10 10); color: #0C59E0; font-family: Noto Sans S Chinese Regular; line-height: 74; text-align: center; float: left;" name="sort_input" ><%=sortMethod%></div>
+            <div style="width:182; height:74; font-size: 32px; background: url(codepku/image/textures/fastentrence_ui/fastentrence_32bits.png#551 359 74 74:10 10 10 10); color: #0C59E0; font-family: Noto Sans S Chinese Regular; line-height: 74; text-align: center; float: left;" name="sort_input" ><%=TopicCourse.sortMethod%></div>
             <div style="width: 74; height: 74; float: left; background: url(codepku/image/textures/fastentrence_ui/fastentrence_32bits.png#457 359 74 74);"  onclick="OnIsClickedSelect">
                 <div style="width: 31; height: 22;margin-left: 21;margin-top: 29; background:url(codepku/image/textures/fastentrence_ui/fastentrence_32bits.png#148 387 31 22); float: left;" onclick="OnIsClickedSelect"></div>
             </div>
@@ -307,8 +313,12 @@
                     <div style="<%=format('position:absolute; z-index: 5; width:650;height:198;background:url(codepku/image/textures/fastentrence_ui/fastentrence_32bits.png#18 558 650 198);margin-left:%d;margin-top:%d; padding:8;',GetDivisible(Eval('index'))['left'], GetDivisible(Eval('index'))['top'])%>">
                         <div style="<%=format('width:268;height:178; margin-left: 2; float: left; background:url(%s);', Eval('img'))%>"></div>
                         <div style="width:225; margin-left: 26;float: left;">
-                            <div style="width: 225; height: 37; margin-top: 60; font-size:38px; font-family:Noto Sans S Chinese Regular; color: #ffffff; line-height: 37;"><%= Eval('name') %></div>
-                            <div style="width: 225; height: 21; margin-top: 17; font-size:28px; font-family:Noto Sans S Chinese Regular; color: #ffffff; line-height: 21;">ID:<%= Eval('id') %></div>
+                            <pe:if condition="<%=commonlib.utf8.len(Eval('name')) > 5%>">
+                                <div style="width: 225; height: 37; margin-top: 50; vertical-align: middle;font-size:38px; font-family:Noto Sans S Chinese Regular; color: #ffffff; line-height: 37;"><%= Eval('name') %></div>
+                            </pe:if>
+                            <pe:if condition="<%=commonlib.utf8.len(Eval('name')) <= 5%>">
+                                <div style="width: 225; height: 37; margin-top: 68; vertical-align: middle;font-size:38px; font-family:Noto Sans S Chinese Regular; color: #ffffff; line-height: 37;"><%= Eval('name') %></div>
+                            </pe:if>
                         </div>
                         <div style="width: 96; height: 96;float: left; margin-top: 48; background:url(codepku/image/textures/fastentrence_ui/fastentrence_32bits.png#689 210 96 96);" name ="<%= SetTPInfo(Eval('name'), Eval('id')) %>" onclick="OnClickCourse"></div>
                         <!-- 灰色遮罩,添加点击解锁事件 -->

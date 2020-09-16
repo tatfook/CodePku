@@ -22,6 +22,12 @@ nowCourse = showSubjects[showIndex].course
 pageNum = 1
 pageSize = 8
 
+if math.ceil(#nowCourse/pageSize) == 0 then
+    max_pageNum = 1
+else
+    max_pageNum = math.ceil(#nowCourse/pageSize)
+end
+
 function getShowSubjects()
     return showSubjects
 end
@@ -38,7 +44,8 @@ function changeSubject(index)
 end
 
 function getBG(index)
-    return nowCourse[index]["cover_file"]["file_url"]
+    local courseIndex = (pageNum - 1) * pageSize + index
+    return nowCourse[courseIndex]["cover_file"]["file_url"]
 end
 
 function getShowCourse()
@@ -86,7 +93,7 @@ function goWorld(index)
 end
 
 function getPageNum()
-    return pageNum
+    return (pageNum .. "/" .. max_pageNum)
 end
 
 function ClosePage()
