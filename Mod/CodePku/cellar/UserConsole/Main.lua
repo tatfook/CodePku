@@ -129,6 +129,13 @@ function UserConsole:HandleWorldId(pid)
 
     pid = tonumber(pid)
 
+    if pid == 14293 then
+        NPL.load("(gl)Mod/CodePku/cellar/GUI/Home/HomeManage.lua")
+        local HomeManage = commonlib.gettable("Mod.CodePku.Common.HomeManage")
+        HomeManage:GetHomeWorld()
+        return
+    end
+
     local function LoadWorld(world, refreshMode)
         if world then
             if refreshMode == 'never' then

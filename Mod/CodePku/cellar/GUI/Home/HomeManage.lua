@@ -6,7 +6,7 @@ use the lib:
 ------------------------------------
 NPL.load("(gl)Mod/CodePku/cellar/GUI/Home/HomeManage.lua")
 local HomeManage = commonlib.gettable("Mod.CodePku.Common.HomeManage")
-HomeManage:EnterHome()
+HomeManage:GetHomeWorld()
 HomeManage:SaveHome()
 -----------------------------------
 ]]--
@@ -43,7 +43,6 @@ end
 
 function HomeManage:GetHomeWorld()
     --body
-    GameLogic.AddBBS(nil, L"HomeManage:GetHomeWorld enter", 3000, "255 0 0", 21)
     local function LoadWorld(world, refreshMode)
         local url = world:GetLocalFileName()
         DownloadWorld.ShowPage(url)
@@ -64,13 +63,13 @@ function HomeManage:GetHomeWorld()
         mytimer:Change(1,nil);
     end
 
-    request:get('/house/mime'):next(function (response, error)
+    request:get('/house/mime'):next(function (response)
         local url = response and response.data and response.data.my_house and response.data.my_house.file and response.data.my_house.file.file_url
 
         if not url then
             url = response and response.data and response.data.default_house and response.data.default_house.upload_file and response.data.default_house.upload_file.file_url
             if not url then
-                GameLogic.AddBBS(nil, L"获取世界失败没有URL", 3000, "255 0 0", 21)
+                GameLogic.AddBBS(nil, L"获取家园失败", 3000, "255 0 0", 21)
                 return false
             end
         end
@@ -112,7 +111,7 @@ function HomeManage:InternetLoadWorld(world, refreshMode, onDownloadCompleted)
             --解压世界zip文件
             local filesOut = {}
             commonlib.Files.Find(filesOut, "", 0, 10000, ":.", world.worldpath);
-            
+
             local rootDir = world.worldpath:gsub("/[%w%s_]*.zip$", "")
             local worldDir = rootDir.."/"..commonlib.Encoding.DefaultToUtf8(filesOut[1].filename)
             NPL.load("(gl)script/ide/System/Util/ZipFile.lua");
