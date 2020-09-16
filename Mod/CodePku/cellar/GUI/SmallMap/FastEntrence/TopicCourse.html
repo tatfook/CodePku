@@ -152,11 +152,6 @@
         for i = 1, page_size do
             if num + i <= #conditional_course then
                 TopicCourse.page_course[i] = conditional_course[num+i]
-                if TopicCourse.page_course[i].locked == nil then
-                    TopicCourse.page_course[i].locked = 0                   -- 1表示已解锁,0表示未解锁
-                end
-                TopicCourse.page_course[i].unlock_gold = 10             -- 解锁需要的货币数量
-                TopicCourse.page_course[i].gold_type = 2                -- 解锁需要的货币种类
             else
                 break
             end
@@ -238,22 +233,6 @@
         return money;
     end
 
-    -- 点击未解锁课程
-    function ClickLockedCourse(name)
-    -- 判断用户剩余玩学币是否足够解锁课程,不够时弹出充值界面
-
-        -- 获取点击的课程详细信息及用户当前持有货币数量
-        Payment.PaymentCourse = nil
-        Payment.UserMoney = Payment.GetMoney()
-        for k,v in pairs(TopicCourse.page_course) do
-            if v.id == name.id then
-                Payment.PaymentCourse = v
-            end
-        end
-        Payment.TopicCoursePage = page
-        Payment:ShowPage("CoursePayment")
-    end
-
 ]]></script>
 <style type="text/mcss">
 </style>
@@ -321,18 +300,6 @@
                             </pe:if>
                         </div>
                         <div style="width: 96; height: 96;float: left; margin-top: 48; background:url(codepku/image/textures/fastentrence_ui/fastentrence_32bits.png#689 210 96 96);" name ="<%= SetTPInfo(Eval('name'), Eval('id')) %>" onclick="OnClickCourse"></div>
-                        <!-- 灰色遮罩,添加点击解锁事件 -->
-                        <pe:if condition="<%= Eval('locked') == 0 %>">
-                            <div onclick="ClickLockedCourse" name ="<%= SetTPInfo(Eval('name'), Eval('id')) %>" style="width: 632;height: 178;margin-top: -178;margin-left: 2;background:url(codepku/image/textures/fastentrence_ui/fastentrence_32bits.png#34 774 260 92:20 20 20 20);">
-                                <div name ="<%= SetTPInfo(Eval('name'), Eval('id')) %>" style="width: 45;height: 58;top: 60;left: 300;background:url(codepku/image/textures/profile/achievement.png#894 74 45 58);"></div>
-                                <div style="width: 250;height: 32;left: 378;top: 83;">
-                                    <div style="float: right;width: 80;left: 50;font-size: 32;line-height: 32;font-family: Noto Sans S Chinese Regular;font-weight:bold;color: #FFFFFF;">解锁:</div>
-                                    <div style="float: right;left: 50;text-align: right;width: 40;height: 40;top: -5;background: url(codepku/image/textures/common_32bits.png#913 136 77 78);"></div>
-                                    <div style="float: right;left:0;width: 130;text-align: center;font-size: 32;line-height: 32;font-family: Noto Sans S Chinese Regular;color: #FFFFFF;">X<%= Eval('unlock_gold') %></div>
-                                </div>
-                            </div>
-                            
-                        </pe:if>
                     </div>
 
                 </pe:repeatitem>

@@ -37,7 +37,7 @@ Payment.params = {
 }
 
 Payment.iconData = {
-    [1] = {url=Payment.iconPng, left=99, top=275, width=1158, height=588, describe="弹窗背景图"},      
+    [1] = {url=Payment.iconPng, left=99, top=275, width=1158, height=588, describe="弹窗背景图"},
     [2] = {url=Payment.iconPng, left=1277, top=377, width=410, height=87, describe="黄色标题背景"},
     [3] = {url=Payment.iconPng, left=110, top=73, width=68, height=78, describe="关闭按钮"},
     [4] = {url=Payment.iconPng, left=1404, top=292, width=40, height=40, describe="蓝色背景"},

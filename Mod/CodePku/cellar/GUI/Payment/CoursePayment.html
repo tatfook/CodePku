@@ -1,4 +1,7 @@
-<!-- 解锁课程弹窗 -->
+<!-- 
+    解锁课程弹窗
+    2020/9/16:取消专题课付费解锁，本页面做废弃处理
+-->
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -83,7 +86,7 @@ function ClickUnbindButton(name)
             Payment:ShowPage("Recharge")
         end
         if UserInfoPage.is_bind == 0 then
-        -- 未绑定
+            -- 未绑定
             Payment.from_course_payment_page = 1        -- 标记从哪个页面打开微信绑定页面的flag
             ClosePage()
             Eldership:ShowBindPage()

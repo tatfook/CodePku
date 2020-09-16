@@ -9,6 +9,7 @@
 <pe:mcml>
 <script refresh="false" type="text/npl" src="Eldership.lua"><![CDATA[
 Eldership = NPL.load("(gl)Mod/CodePku/cellar/GUI/Eldership/Eldership.lua")
+local UserInfoPage = NPL.load("(gl)Mod/CodePku/cellar/GUI/UserInfo.lua");
 local page = document:GetPageCtrl()
 
 function ClosePage()
@@ -16,9 +17,12 @@ function ClosePage()
 end
 
 function Unbind()
-    GameLogic.AddBBS("CodeGlobals", L"解绑逻辑开发中", 3000, "#ff0000");
+    UserInfoPage.is_bind = 0
+    UserInfoPage.eldership = Eldership.unbindContent[8]     -- 未绑定的描述
     -- 发送解绑网络请求
-    Page:CloseWindow();
+    Eldership:Unbind()
+    Page:CloseWindow()
+    Eldership.IndexPage:Refresh(0)
 end
 
 

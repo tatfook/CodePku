@@ -22,9 +22,10 @@ end
 
 function Eldership.goback()
     Page:CloseWindow();
-    if Payment.from_course_payment_page ~= 1 then
+    if not Payment.from_course_payment_page then
         Eldership:ShowPage()        -- 用户可能从专题课解锁页面过来的,如果是从主页面家长系统进入,需要重新打开家长绑定页面
     end
+    Payment.from_course_payment_page = nil
 end
 
 

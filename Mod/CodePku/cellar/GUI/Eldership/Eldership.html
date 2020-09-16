@@ -9,27 +9,29 @@
 <pe:mcml>
 <script refresh="false" type="text/npl" src="Eldership.lua"><![CDATA[
 Eldership = NPL.load("(gl)Mod/CodePku/cellar/GUI/Eldership/Eldership.lua")
--- System.User.info 用户信息,后面如果绑定了家长可以把家长信息放在里面
 UserInfoPage = NPL.load("(gl)Mod/CodePku/cellar/GUI/UserInfo.lua");
 
 local page = document:GetPageCtrl()
 
 
-UserInfoPage.eldership = "王大明"
-UserInfoPage.is_bind = 0  -- 1绑定,0未绑定
+-- 获取绑定信息
+Eldership:GetBindStatus()
+
 
 function ClosePage()
     Page:CloseWindow();
 end
 
-function Eldership.bindWechat()
-    GameLogic.AddBBS("CodeGlobals", L"绑定功能开发中", 3000, "#ff0000");
-    -- 发送绑定网络请求,根据具体业务确定请求的数据
+function BindWechat()
     Page:CloseWindow();
+    -- 展示绑定页面
     Eldership:ShowBindPage()
+    -- 请求二维码，获取后刷新页面
+    Eldership:GetQR()
 end
 
 function Eldership.ShowUnbindWechat()
+    Eldership.IndexPage = page
     Eldership:ShowUnbindPage()
 end
 
@@ -51,13 +53,14 @@ end
                 <div style="<%=format('position: relative;width:1293;height:288;left:51;top:66;background:url(%s:20 20 20 20)', Eldership.GetEldershipIconHTMLStr(3))%>">
                     <!-- 已绑定 -->
                     <pe:if condition="<%=UserInfoPage.is_bind == 1%>">
-                        <div style="position: relative;font-size:40px;line-height:288;padding-left:397px;font-family:PuHuiTi-Bold;color: #ffffff;"><%=Eldership.unbindContent[1] .. UserInfoPage.eldership%></div>
+                        <div style="position: relative;left: 397;font-size:40px;line-height:288;font-family:PuHuiTi-Bold;color: #ffffff;"><%=Eldership.unbindContent[1]%></div>
+                        <div style="position: relative;left: 570;width: 180;text-align:center;font-size:40px;line-height:288;font-family:PuHuiTi-Bold;color: #ffffff;"><%=UserInfoPage.eldership%></div>
                         <div onclick="Eldership.ShowUnbindWechat" style="<%=format('position: relative;width:144;height:58;left:753;top:114;text-align:center;font-size:40px;line-height:58;font-family:PuHuiTi-Bold;color: #f01100;background:url(%s:20 20 20 20)', Eldership.GetEldershipIconHTMLStr(4))%>">解绑</div>
                     </pe:if>
                     <!-- 未绑定 -->
                     <pe:if condition="<%=UserInfoPage.is_bind == 0%>">
-                        <div style="position: relative;font-size:40px;line-height:288;padding-left:352px;font-family:PuHuiTi-Bold;color: #ffffff;"><%=Eldership.unbindContent[1] .. Eldership.unbindContent[8]%></div>
-                        <div onclick="Eldership.bindWechat" style="<%=format('position: relative;width:144;height:58;left:796;top:114;text-align:center;font-size:40px;line-height:58;font-family:PuHuiTi-Bold;color: #009c53;background:url(%s:20 20 20 20)', Eldership.GetEldershipIconHTMLStr(4))%>">绑定</div>
+                        <div style="position: relative;font-size:40px;line-height:288;padding-left:352px;font-family:PuHuiTi-Bold;color: #ffffff;"><%=Eldership.unbindContent[1] .. UserInfoPage.eldership%></div>
+                        <div onclick="BindWechat" style="<%=format('position: relative;width:144;height:58;left:796;top:114;text-align:center;font-size:40px;line-height:58;font-family:PuHuiTi-Bold;color: #009c53;background:url(%s:20 20 20 20)', Eldership.GetEldershipIconHTMLStr(4))%>">绑定</div>
                     </pe:if>
                 </div>
 
