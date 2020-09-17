@@ -35,8 +35,6 @@
             
         end
 
-        hideVbar()
-
         function GoToUrl(name)
             echo(name)
             ParaGlobal.ShellExecute("open", name, "", "", 1)
@@ -61,7 +59,7 @@
                             <!-- 未选中 -->
                             <pe:if condition="<%= Eval('id') ~= current_id %>">
                                 <div style="width:431;height:136">
-                                    <div style="<%=format('overflow: hidden;white-space:nowrap;text-overflow:ellipsis;width: 370;height:110;margin-left:25;top:22;font-size:42;line-height: 110;color: #0e3565;font-family: PuHuiTi-Bold; text-align: center;background:url(codepku/image/textures/notice_system/detail_32bits.png#529 157 370 110)', (Eval('index')-1)*132+28)%>" name="<%=Eval('id')%>" onclick="OnClickNotice"><%=Eval('title')%></div>
+                                    <div style="<%=format('overflow: hidden;white-space:nowrap;text-overflow:ellipsis;width: 370;height:110;margin-left:25;top:22;font-size:42;line-height: 110;color: #0e3565;font-family: PuHuiTi-Bold; text-align: center;background:url(codepku/image/textures/notice_system/detail_32bits.png#529 157 370 110)', (Eval('index')-1)*132+28)%>" name="<%=Eval('id')%>" onclick="OnClickNotice"><%=Notice:HandleTitle(Eval('title'))%></div>
                                     <div style="<%= getStatus(Eval('flag'),Eval('publish_time')) %>"></div>
                                 </div>
                             </pe:if>
@@ -69,7 +67,7 @@
                             <pe:if condition="<%= Eval('id') == current_id %>">
                                 <div style="margin-top:0;width:431;height:136">
                                     <div style="position:relative;width: 382;height:118;margin-left:19;margin-top:18;font-size:42;line-height: 110;background:url(codepku/image/textures/notice_system/detail_32bits.png#527 292 382 118)"></div>
-                                    <div style="<%=format('width: 370;height:110;margin-left:25;top:22;font-size:42;line-height: 110;color: #0e3565;font-family: PuHuiTi-Bold; text-align: center;background:url(codepku/image/textures/notice_system/detail_32bits.png#529 157 370 110)', (Eval('index')-1)*132+28)%>" name="<%=Eval('id')%>" onclick="OnClickNotice"><%=Eval('title')%></div>
+                                    <div style="<%=format('width: 370;height:110;margin-left:25;top:22;font-size:42;line-height: 110;color: #0e3565;font-family: PuHuiTi-Bold; text-align: center;background:url(codepku/image/textures/notice_system/detail_32bits.png#529 157 370 110)', (Eval('index')-1)*132+28)%>" name="<%=Eval('id')%>" onclick="OnClickNotice"><%=Notice:HandleTitle(Eval('title'))%></div>
                                     <div style="<%= getStatus(Eval('flag'),Eval('publish_time')) %>"></div>
                                 </div>
                             </pe:if>

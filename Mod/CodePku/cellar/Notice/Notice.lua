@@ -111,3 +111,11 @@ function Notice:GetArticleByID(id)
     end
     return value
 end
+
+function Notice:HandleTitle(title)
+    if commonlib.utf8.len(title) > 6 then 
+        return commonlib.utf8.sub(title,1,6).."..."
+    else
+      return title  
+    end
+end
