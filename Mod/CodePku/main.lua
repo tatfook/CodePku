@@ -486,9 +486,9 @@ function CodePku:init()
 
 	GameLogic.GetFilters():add_filter(
 		"codepkuTaskSettlement",
-		function (data)
+		function (data, ifEnd)
 			local TaskSettlement = NPL.load("(gl)Mod/CodePku/cellar/GUI/TaskSettlement/TaskSettlement.lua")
-			TaskSettlement:ShowPage(data)
+			TaskSettlement:ShowPage(data, ifEnd)
 		end
 	)
 end
