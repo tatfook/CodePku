@@ -82,15 +82,15 @@ end
 
 function TaskSettlement:GetExpinfo()
     local expInfo = {
-        totalCur  = self.subjectInfo.total_level_info.current_exp,
-        totalNext  = self.subjectInfo.total_level_info.next_exp,
-        totalLvUp  = self.subjectInfo.total_level_info.level_up,
-        totalPer = self.subjectInfo.total_level_info.current_exp/self.subjectInfo.total_level_info.next_exp,
+        totalCur  = self.subjectInfo.total_level_info.current_exp or 0,
+        totalNext  = self.subjectInfo.total_level_info.next_exp or 1,
+        totalLvUp  = self.subjectInfo.total_level_info.level_up or 0,
+        totalPer = (self.subjectInfo.total_level_info.current_exp or 0)/(self.subjectInfo.total_level_info.next_exp or 1),
 
-        subjectCur  = self.subjectInfo.subject_level_info.current_exp,
-        subjectNext  = self.subjectInfo.subject_level_info.next_exp,
-        subjectLvUp  = self.subjectInfo.subject_level_info.level_up,
-        subjectPer = self.subjectInfo.subject_level_info.current_exp/self.subjectInfo.subject_level_info.next_exp,
+        subjectCur  = self.subjectInfo.subject_level_info.current_exp or 0,
+        subjectNext  = self.subjectInfo.subject_level_info.next_exp or 1,
+        subjectLvUp  = self.subjectInfo.subject_level_info.level_up or 0,
+        subjectPer = (self.subjectInfo.subject_level_info.current_exp or 0)/(self.subjectInfo.subject_level_info.next_exp or 1),
     }
     return expInfo
 end
