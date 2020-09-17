@@ -9,47 +9,25 @@
 <pe:mcml>
     <script type="text/npl" refresh="false"><![CDATA[
         local page = document:GetPageCtrl()
-        --NPL.load("(gl)script/apps/Aries/Creator/Game/Login/Rebranding.lua")
-        --local Config = NPL.load("(gl)Mod/CodePku/config/Config.lua")
-
-        --Rebranding = commonlib.gettable("MyCompany.Aries.Creator.Game.Rebranding")
-        --local GameMainLogin = commonlib.gettable("MyCompany.Aries.Game.MainLogin")
-        --local MainLogin = NPL.load("./MainLogin.lua")
-        --local CodePkuServiceSession = NPL.load("(gl)Mod/CodePku/service/CodePkuService/Session.lua")
-
 
         function OnClose()
-            echo("close")
             Page:CloseWindow()
-            echo("closeend")
-            --MainSceneUIButtons.show_dialog_ui(false, 0)
         end
 
-        --notice_data = Notice:GetNoticeList()
         notice_data = Notice.noticeList
         value = notice_data[1]
         current_id = value.id
         content = Notice:HandleNotice(value.game_announcement_content)
         
-        
-        echo("---------notice_data-----------")
-        echo(notice_data[1])
-        echo(notice_data[1].game_announcement_content)
-        echo(content)
-
         --获取状态标签 火热，限时 > 新 > 无
         function getStatus(flag, publish_time)
             return Notice:GetStatus(flag, publish_time)
         end
 
-        --local t1 = os.date("%Y-%m-%d %H:%M:%S")
-        ti = os.time()
         function OnClickNotice(name)
             current_id = name;
-            echo("------current_id--------"..current_id)
             value = Notice:GetArticleByID(name)
             content = Notice:HandleNotice(value.game_announcement_content)
-            echo(value)
             Page:Refresh(0)
         end
 
@@ -57,37 +35,6 @@
             
         end
 
-        function hideVbar()
-            local page = document:GetPageCtrl()
-            local notice_title = page:GetNode("notice_title");
-            notice_title:SetAttribute("ScrollBarTrackWidth", 0);
-            local scrollareaCtrl = notice_title and notice_title:GetControl();
-            echo("---------hideVbar-------")
-            --echo(document)
-            --echo(document:GetControl())
-            echo(page:GetNode("ScrollBar"))
-            --echo(page)
-            --echo(notice_title:GetChild("VScrollBar"))
-            --echo(notice_title:next())
-            VScrollBar = notice_title:GetChild("VScrollBar")
-            ScrollBar = notice_title:GetChild("ScrollBar")
-            echo(VScrollBar)
-            --echo(ScrollBar)
-
-            --echo(scrollareaCtrl)
-
-            --NPL.load("(gl)script/ide/System/Windows/Controls/ScrollBar.lua");
-            --local ScrollBar = commonlib.gettable("System.Windows.Controls.ScrollBar");
-
-            --local notice_ui = ParaUI.GetUIObject("notice_title");
-            echo("------notice_ui------")
-            --echo(notice_ui)
-
-            --local ScrollArea = commonlib.inherit(commonlib.gettable("System.Windows.Controls.Primitives.ScrollAreaBase"), commonlib.gettable("System.Windows.Controls.ScrollArea"));
-            --ScrollArea:Property("Name", "ScrollArea");
-            --ScrollBar:Property({"GrooveBackgroundColor", #ffffff00,auto=true});
-
-        end
         hideVbar()
 
         function GoToUrl(name)
@@ -107,7 +54,7 @@
             <div style="position: relative;top:85;width:1494;height:910;left: 213;background:url(codepku/image/textures/notice_system/bg_32bits.png);">
                 <div style="position: relative;left: 491; width: 511; height: 108; line-height: 108; font-size: 57; font-weight: bold; font-family: PuHuiTi-Bold; color: #F46D3D; text-align: center; background:url(codepku/image/textures/login/quickLogin.png#444 205 434 86);">公告</div>
                 <div style="position: relative;left: 1382; top: 15; width:68; height: 78; background:url(codepku/image/textures/commonpopup/main.png#110 73 68 78);" onclick="OnClose"></div>
-                <!-- 公告标题 -->
+                <!-- 公告标题列表 -->
                 <pe:treeview style="position: relative;top:110; left:4;width: 431; height: 794;padding-bottom: 20;" id="notice_title" name='notice_title' DefaultNodeHeight = "110" ItemsPerLine="1" AllowPaging="false" RememberScrollPos="true" RememberLastPage="false" VerticalScrollBarStep="40">
                     <pe:repeat DataSource="<%=notice_data%>">
                         <pe:repeatitem>
@@ -134,11 +81,11 @@
                 <div style="position: relative;left:437;top:129;width: 1033; height: 756;background:url(codepku/image/textures/notice_system/content_32bits.png);">
                     <div style="height:92;width:1033;line-height: 92;font-weight: bold;font-size: 42; font-family: PuHuiTi-Bold;color:white;text-align: center;"><%=value.title%></div>
                     <div style="text-indent:50;padding: 25;margin-top: 20;margin-left: 22;height:619;width:980;line-height: 56;font-weight: bold;font-size: 36; font-family: PuHuiTi-Bold;color:#0e69cd;background:url(codepku/image/textures/notice_system/detail_32bits.png#293 480 164 103:10 10 10 10);">
-                        <!-- 默认一段 -->
+                        <!-- 方案1：默认一段 -->
                         <!-- <span style="float: left;height:59;width: 72;"></span> -->
                         <!-- <%=value.game_announcement_content%> -->
 
-                        <!-- todo 分段处理 -->
+                        <!-- 方案2：分段处理 -->
                         <pe:treeview style="height:470;width:940;padding: 20;" name='messages' DefaultNodeHeight = "110" ItemsPerLine="1" AllowPaging="false" RememberScrollPos="true" RememberLastPage="false" VerticalScrollBarStep="40">
                             <pe:repeat DataSource="<%=content%>">
                                 <pe:repeatitem>
@@ -151,7 +98,7 @@
                         </pe:treeview>
                         <p style="margin-top: 30;padding-right: 30;line-height: 56;font-size: 36; font-family: Noto Sans S Chinese Regular ;color:#0e69cd;text-align: right;"><%=value.author%></p> 
 
-                        <!-- todo testarea处理，存在问题：背景图片无法正常显示，内容点击后消失 -->
+                        <!-- 方案3：testarea处理，存在问题：背景图片无法正常显示，内容点击后消失 -->
                         <!-- <textarea
                             rows="10"
                             value="<%=value.game_announcement_content%>"

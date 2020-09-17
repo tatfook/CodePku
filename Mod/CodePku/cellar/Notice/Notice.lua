@@ -41,7 +41,6 @@ Notice.Status = {
 }
 
 function Notice:ShowPage(PageIndex, bShow, id, mainasset)
-    echo("==========show==========")
     self:GetNoticeList()
 
     local params = {
@@ -92,10 +91,8 @@ end
 
 function Notice:HandleNotice(content)
     -- 对内容做分段处理，以\n为分割符
-    -- local content ="为防止游戏内出现拉人的骗子，今天玩学就给大家普及下骗子的特征和套路：<div name='https://www.baidu.com' style='float:left;text-decoration:underline;' onclick='GoToUrl'> QQ</div><a href='https://keepwork.com/official/paracraft/VideoTutorials' class='link_big_event'>555555555</a>\n1、内容内容内容内容内容内容内容内\n2.容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容\n<a style='float:left' href=''>   1111111111111</a>\n<p style='text-align:right'>《玩学世界》官方项目组</p>"
     Notice.content = commonlib.split(content, "\n");
     echo("---------------Notice.content--------------")
-    echo(type(Notice.content))
     local new_content = {};
     for i,j in ipairs(Notice.content) do
         table.insert(new_content,{pContent=j});
