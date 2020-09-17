@@ -293,7 +293,10 @@ function TaskSettlement:ShowPage(data, ifEnd)
         if self.onceAward[1] then
             self.ShowInfo()
         end
-
+        
+        if self.timer then
+            self.timer:Change()
+        end
         if #self.onceAward >=2 then
             self.timer = commonlib.TimerManager.SetInterval(self.ShowInfo, 1200)
         end
