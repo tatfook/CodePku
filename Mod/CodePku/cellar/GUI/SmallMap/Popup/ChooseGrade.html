@@ -142,18 +142,34 @@ end
         </div>
 
         <div style="position: relative; width: 800; height: 600; left: 533; top: 303.5;">
-            <pe:gridview name="" style="width: 800; height: 600;" 
-                DataSource='<%=getShow() %>' CellPadding="0" ItemsPerLine="2" AllowPaging="false" RememberScrollPos="true" RememberLastPage="true" 
-                VerticalScrollBarStep="36" VerticalScrollBarOffsetX="8">
-                <Columns>
-                    <pe:if condition="<%= Eval('semester') == 1 %>">
-                        <div style="<%=format('width: 260; height: 92; font-size: 42; font-family: Noto Sans S Chinese Regular; font-weight: bold; text-align: center; line-height: 92; color: #FFFFFF; margin-left: 129; margin-top: 45; background:url(codepku/image/textures/fastentrence_map/main.png#%s:15 15 15 15);', getBG(count) )%>" name="<%=getCourse(grade, semester)%>" onclick="showCourse"><%=Eval('name')%></div>
-                    </pe:if>
-                    <pe:if condition="<%= Eval('semester') == 2 %>">
-                        <div style="<%=format('display:none;width: 260; height: 92; font-size: 42; font-family: Noto Sans S Chinese Regular; font-weight: bold; text-align: center; line-height: 92; color: #FFFFFF; margin-left: 129; margin-top: 45; background:url(codepku/image/textures/fastentrence_map/main.png#%s:15 15 15 15);', getBG(count) )%>" name="<%=getCourse(grade, semester)%>" onclick="showCourse"><%=Eval('name')%></div>
-                    </pe:if>
-                </Columns>
-            </pe:gridview>
+            <pe:if condition="<%= not isIOSApproval%>">
+                <pe:gridview name="" style="width: 800; height: 600;" 
+                    DataSource='<%=getShow() %>' CellPadding="0" ItemsPerLine="2" AllowPaging="false" RememberScrollPos="true" RememberLastPage="true" 
+                    VerticalScrollBarStep="36" VerticalScrollBarOffsetX="8">
+                    <Columns>
+                        <pe:if condition="<%= Eval('semester') == 1 %>">
+                            <div style="<%=format('width: 260; height: 92; font-size: 42; font-family: Noto Sans S Chinese Regular; font-weight: bold; text-align: center; line-height: 92; color: #FFFFFF; margin-left: 129; margin-top: 45; background:url(codepku/image/textures/fastentrence_map/main.png#%s:15 15 15 15);', getBG(count) )%>" name="<%=getCourse(grade, semester)%>" onclick="showCourse"><%=Eval('name')%></div>
+                        </pe:if>
+                        <pe:if condition="<%= Eval('semester') == 2 %>">
+                            <div style="<%=format('width: 260; height: 92; font-size: 42; font-family: Noto Sans S Chinese Regular; font-weight: bold; text-align: center; line-height: 92; color: #FFFFFF; margin-left: 129; margin-top: 45; background:url(codepku/image/textures/fastentrence_map/main.png#%s:15 15 15 15);', getBG(count) )%>" name="<%=getCourse(grade, semester)%>" onclick="showCourse"><%=Eval('name')%></div>
+                        </pe:if>
+                    </Columns>
+                </pe:gridview>
+            </pe:if>
+            <pe:if condition="<%= isIOSApproval %>">
+                <pe:gridview name="" style="width: 800; height: 600;" 
+                    DataSource='<%=getShow() %>' CellPadding="0" ItemsPerLine="2" AllowPaging="false" RememberScrollPos="true" RememberLastPage="true" 
+                    VerticalScrollBarStep="36" VerticalScrollBarOffsetX="8">
+                    <Columns>
+                        <pe:if condition="<%= Eval('semester') == 1 %>">
+                            <div style="<%=format('width: 260; height: 92; font-size: 42; font-family: Noto Sans S Chinese Regular; font-weight: bold; text-align: center; line-height: 92; color: #FFFFFF; margin-left: 129; margin-top: 45; background:url(codepku/image/textures/fastentrence_map/main.png#%s:15 15 15 15);', getBG(count) )%>" name="<%=getCourse(grade, semester)%>" onclick="showCourse"><%=Eval('name')%></div>
+                        </pe:if>
+                        <pe:if condition="<%= Eval('semester') == 2 %>">
+                            <div style="<%=format('display:none;width: 260; height: 92; font-size: 42; font-family: Noto Sans S Chinese Regular; font-weight: bold; text-align: center; line-height: 92; color: #FFFFFF; margin-left: 129; margin-top: 45; background:url(codepku/image/textures/fastentrence_map/main.png#%s:15 15 15 15);', getBG(count) )%>" name="<%=getCourse(grade, semester)%>" onclick="showCourse"><%=Eval('name')%></div>
+                        </pe:if>
+                    </Columns>
+                </pe:gridview>
+            </pe:if>
         </div>
 
         <pe:if condition = "<%=gradeIndex == 1 and preOrNext == 2%>">
