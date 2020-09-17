@@ -24,14 +24,6 @@ function SubjectPage.OnInitSubject()
         [5] = {'humanity', '人文', 'codepku/image/textures/subjects/subjects.png#144 180 83 76',12},
         [6] = {'programming', '编程', 'codepku/image/textures/subjects/subjects.png#31 175 89 86',10},
     }
-    -- SubjectPage.subject_list = {
-    --     {name: 'chinese', chname: '语文', icon: 'codepku/image/textures/profile_32bits.png#1700 164 104 106'},
-    --     {name: 'math', chname: '数学', icon: 'codepku/image/textures/profile_32bits.png#1700 281 104 106'},
-    --     {name: 'english', chname: '英语', icon: 'codepku/image/textures/profile_32bits.png#1702 398 104 106'},
-    --     {name: 'physics', chname: '物理', icon: 'codepku/image/textures/profile_32bits.png#1576 280 104 106'},
-    --     {name: 'chemistry', chname: '化学', icon: 'codepku/image/textures/profile_32bits.png#1576 397 104 106'},
-    --     {name: 'biology', chname: '生物', icon: 'codepku/image/textures/profile_32bits.png#1579 164 104 106'},
-    -- };
 
     for i = 1,#const_subject  do
         -- local trow = math.floor((i-1)/2)

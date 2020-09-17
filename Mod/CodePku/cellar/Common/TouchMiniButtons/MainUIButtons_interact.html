@@ -64,6 +64,11 @@ function ClickDelFriend()
     Page:Refresh(0)
 end
 
+local CommonFunc = commonlib.gettable("Mod.CodePku.Common.CommonFunc")
+
+function isIOSApproval()
+    return CommonFunc.isIOSApproval()
+end
 
 ]]></script>
 <style type="text/mcss">
@@ -87,12 +92,15 @@ end
             </div>
         </pe:if>
        
-        <div style="position:relative; width:124;height:124;left:14;top:219;">
-            <input type="button" style="width:124;height:124;background:url(codepku/image/textures/mainuibuttons/new_interact/defriend.png);" onclick="ClickBlackList" />
-        </div>
-        <div style="position:relative; width:124;height:124;left:303;top:219;">
-            <input type="button" style="width:124;height:124;background:url(codepku/image/textures/mainuibuttons/new_interact/chat.png);" onclick="ClickChat" />
-        </div>
+        <pe:if condition = "<%= not isIOSApproval() %>">
+            <div style="position:relative; width:124;height:124;left:14;top:219;">
+                <input type="button" style="width:124;height:124;background:url(codepku/image/textures/mainuibuttons/new_interact/defriend.png);" onclick="ClickBlackList" />
+            </div>
+            <div style="position:relative; width:124;height:124;left:303;top:219;">
+                <input type="button" style="width:124;height:124;background:url(codepku/image/textures/mainuibuttons/new_interact/chat.png);" onclick="ClickChat" />
+            </div>
+        </pe:if>
+       
         <div style="position:relative; width:176;height:144;left:125;top:103;background:url(codepku/image/textures/mainuibuttons/new_interact/info.png);">
             <div style="position:relative; width:80;height:80;left:48;top:10;background:url(codepku/image/textures/mainuibuttons/new_interact/head_pane.png);"></div>
             <div style="position:relative; width:74;height:74;left:51;top:13;background:url(codepku/image/textures/mainuibuttons/new_interact/head.png);"></div>

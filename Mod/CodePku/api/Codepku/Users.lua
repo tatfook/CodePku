@@ -13,6 +13,8 @@ local CodePkuBaseApi = NPL.load('./BaseApi.lua')
 
 local CodePkuUsersApi = NPL.export()
 
+local osPlatform = System.os.GetPlatform()
+
 -- url: /users/login
 -- method: POST
 -- params:
@@ -21,7 +23,7 @@ local CodePkuUsersApi = NPL.export()
     password string 必须 密码
 ]]
 -- return: object
-function CodePkuUsersApi:Login(mobile, verifyCode, mobileToken, success, error)
+function CodePkuUsersApi:Login(mobile, verifyCode, mobileToken, visitorId, success, error)
     if type(mobile) ~= "string" or type(verifyCode) ~= "string" or type(mobileToken) ~= "string" then
         return false
     end
@@ -29,7 +31,9 @@ function CodePkuUsersApi:Login(mobile, verifyCode, mobileToken, success, error)
     local params = {
         mobile = mobile,
         verify_code = verifyCode,
-        mobile_token = mobileToken
+        mobile_token = mobileToken,
+        visitor_id = visitorId,
+        os_platform = osPlatform
     }
 
     local AppMarket = ParaEngine.GetAppCommandLineByParam("app_market", nil);
@@ -56,7 +60,8 @@ function CodePkuUsersApi:LoginWithPwd(mobile, password, success, error)
 
     local params = {
         mobile = mobile,
-        password = password
+        password = password,
+        os_platform = osPlatform
     }
 
     CodePkuBaseApi:Post("/users/authorizations", params, nil, success, error, { 503, 400 })
@@ -78,6 +83,7 @@ function CodePkuUsersApi:QuickLogin(visitor_id, app_market, success, error)
     local params = {
         visitor_id = visitor_id,
         app_market = app_market,
+        os_platform = osPlatform
     }
 
     CodePkuBaseApi:Post("/users/visitor-login", params, nil, success, error, { 503, 400 })
@@ -113,6 +119,18 @@ function CodePkuUsersApi:Profile(token, success, error)
     local headers = { Authorization = format("Bearer %s", token) }
 
     CodePkuBaseApi:Get("/users/profile", nil, headers, success, error, 401)
+end
+
+function CodePkuUsersApi:LoginWithToken(token, success, error)
+    if type(token) ~= "string" and #token == 0 then
+        return false
+    end
+
+    local headers = { Authorization = format("Bearer %s", token) }
+    local params = {
+        os_platform = osPlatform
+    }
+    CodePkuBaseApi:Get("/users/me-with-token", params, headers, success, error, 401)
 end
 
 -- url: /users/register
