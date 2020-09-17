@@ -5,6 +5,10 @@ local EntityManager = commonlib.gettable("MyCompany.Aries.Game.EntityManager")
 local MainSceneUIButtons = commonlib.gettable("Mod.CodePku.Common.TouchMiniButtons.MainSceneUIButtons");
 
 NPL.load("(gl)script/apps/Aries/Creator/Game/GUI/TouchController.lua");
+
+-- CommonFunc = NPL.load("(gl)Mod/CodePku/cellar/Common/CommonFunc/CommonFunc.lua")
+CommonFunc = commonlib.gettable("Mod.CodePku.Common.CommonFunc")
+
 local TouchController = commonlib.gettable("MyCompany.Aries.Game.GUI.TouchController");
 
 local MainUIButtons = NPL.export();
@@ -20,9 +24,16 @@ MainUIButtons.open_common = nil
 MainUIButtons.account_up = nil
 MainUIButtons.user_asset = nil
 
+MainUIButtons.isIOSApproval = CommonFunc.isIOSApproval()
 
 function MainUIButtons.show_common_ui(flag)
-	local open_width = 804
+	-- ios渠道屏蔽Q群
+	local open_width = 0
+	if MainUIButtons.isIOSApproval then
+		open_width = 643
+	else
+		open_width = 804
+	end
 	local open_height = 178
 	local close_width = 82
 	local close_height = 178
@@ -50,20 +61,38 @@ function MainUIButtons.show_common_ui(flag)
 	
 end
 
-function MainUIButtons.show_function_ui(flag)	--flag == true,工具栏展开
+MainUIButtons.isHuaweiApproval = CommonFunc.isHuaweiApproval()
 
-	local params = {
-		open = {
-			url="Mod/CodePku/cellar/Common/TouchMiniButtons/MainUIButtons_function.html", 
-			alignment="_rb", left = -678, top = -178, width = 678, height = 178,
-			click_through = true,
-		},
-		close = {
-			url="Mod/CodePku/cellar/Common/TouchMiniButtons/MainUIButtons_function.html", 
-			alignment="_rb", left = -85, top = -178, width = 85, height = 178,
-			click_through = true,
+function MainUIButtons.show_function_ui(flag)	--flag == true,工具栏展开
+	-- 华为渠道屏蔽排行榜
+	local params = {}
+	if MainUIButtons.isHuaweiApproval then
+		params = {
+			open = {
+				url="Mod/CodePku/cellar/Common/TouchMiniButtons/MainUIButtons_function.html", 
+				alignment="_rb", left = -547, top = -178, width = 547, height = 178,
+				click_through = true,
+			},
+			close = {
+				url="Mod/CodePku/cellar/Common/TouchMiniButtons/MainUIButtons_function.html", 
+				alignment="_rb", left = -85, top = -178, width = 85, height = 178,
+				click_through = true,
+			}
 		}
-	}
+	else 
+		params = {
+			open = {
+				url="Mod/CodePku/cellar/Common/TouchMiniButtons/MainUIButtons_function.html", 
+				alignment="_rb", left = -678, top = -178, width = 678, height = 178,
+				click_through = true,
+			},
+			close = {
+				url="Mod/CodePku/cellar/Common/TouchMiniButtons/MainUIButtons_function.html", 
+				alignment="_rb", left = -85, top = -178, width = 85, height = 178,
+				click_through = true,
+			}	
+		}	
+	end
 
 	if("close" == flag)then
 		MainUIButtons.open_function = false
@@ -79,11 +108,17 @@ function MainUIButtons.show_function_ui(flag)	--flag == true,工具栏展开
 end
 
 function MainUIButtons.show_dialog_ui(bshow)
-	MainUIButtons.dialog_window = MainSceneUIButtons.show_dialog_ui(bshow, 0)
+	if MainUIButtons.isIOSApproval then
+		return
+	else
+		MainUIButtons.dialog_window = MainSceneUIButtons.show_dialog_ui(bshow, 0)
+	end
 end
 
 MainUIButtons.money = {goldcoin=0, wanxuecoin=0};
+
 function MainUIButtons.show_money_ui()
+	-- return
 	local width = 746
 	local height = 89
 
@@ -101,7 +136,12 @@ function MainUIButtons.show_money_ui()
 		url="Mod/CodePku/cellar/Common/TouchMiniButtons/MainMoney.html", 
 		alignment="_lt", left = 1309, top = 0, width = width, height = height,
 	}
-	MainUIButtons.money_window = AdaptWindow:QuickWindow(params)	
+	
+	if MainUIButtons.isHuaweiApproval then
+		return
+	else 
+		MainUIButtons.money_window = AdaptWindow:QuickWindow(params)	
+	end
 end
 
 function MainUIButtons.show_account_up_ui()

@@ -42,7 +42,6 @@ function WebSocketClient:Connect(url)
         return
     end
     local protocol,host,port,uri = tools.parse_url(url);
-    commonlib.echo({protocol,host,port,uri});
 
     local ws_protocols_tbl = {""}
     if type(ws_protocol) == "string" then
@@ -88,13 +87,10 @@ function WebSocketClient:KeepAlive()
     end
 end
 function WebSocketClient:HandleClose(nid, decoded)
-    echo("连接关闭")
     self.state = "CLOSED";
     self:DispatchEvent({type = "OnClose" });
 end
 function WebSocketClient:HandleMsg(nid, msg)
-    echo("收到消息:");
-    echo(msg)
     self:DispatchEvent({type = "OnMsg", data = msg });
 end
 
@@ -103,7 +99,6 @@ function WebSocketClient:IsConnected()
 end
 
 function WebSocketClient:Ping()
-    echo("发送:ping");
     local result = self:SendPacket("ping",frame.PING);
     if(result ~= 0)then
         self.state = "CLOSED";
@@ -122,8 +117,9 @@ function WebSocketClient:SendPacket(message,opcode)
 end
 
 function WebSocketClient:HandlePong(nid,decoded)
-    echo("收到:pong")
+
 end
+
 function WebSocketClient:HandlePacket(nid,decoded,fin,opcode)    
     if(opcode == frame.CLOSE)then
         self:HandleClose(nid,decoded)
@@ -139,8 +135,6 @@ function WebSocketClient:HandlePacket(nid,decoded,fin,opcode)
     end
 end
 local function activate()
-    commonlib.echo("==============msg");
-    commonlib.echo(msg);
     --LOG.std("", "debug", "WebSocketClient OnMsg", msg);
     local nid = msg.nid;
     if(not nid)then

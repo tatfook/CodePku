@@ -124,7 +124,6 @@ function scrollEnd()
     return MainSceneUIButtons.ScrollToEnd
 end
 
-
 ]]></script>
 <style type="text/mcss">
 </style>
@@ -201,13 +200,14 @@ end
         <pe:if condition="<%= #friends ~= 0%>">
             <div style='width: 960;height:134;'>
                 <div style="width:608px;height:54px;float:left;background-color:#ffffff; background: url(codepku/image/textures/chat_ui/chat_32bits.png#928 663 54 54:10 10 10 10);margin-left:27px;margin-top:38px;padding-left:15px;padding-right:15px;">
-                    <input valign="center" type="text" width="100%" style='height:48px;font-size: 26px;color:#424141;background:#ffffff00' name='DialogContent'/>
+                    <input valign="center" MoveViewWhenAttachWithIME="true" type="text" width="100%" style='height:48px;font-size: 26px;color:#424141;background:#ffffff00' name='DialogContent'/>
                 </div>
                 <!--<div style='width:54;height:54;float: left; background: url(codepku/image/textures/chat_ui/chat_32bits.png#848 665 54 54);margin-top: 38;margin-left: 15;' onclick="OnClickVoice"></div>-->
                 <!--<div style='width:54;height:54;float: left; background: url(codepku/image/textures/chat_ui/chat_32bits.png#773 666 54 54);margin-top: 38;margin-left: 18' onclick="OnClickEmoji"></div>-->
                 <div style='width:125px;height:54px;float:left;background:url(codepku/image/textures/chat_ui/chat_32bits.png#928 340 54 54:25 25 25 25);margin-top:38px;margin-left:25px; color:#F46D3D; base-font-size:30px;font-size:30px;padding-left:32;line-height:54px;' onclick="OnClickSend">发送</div>
             </div>
         </pe:if>
+    
     </div>
     <div style="width: 44;height:150;background:url(codepku/image/textures/chat_ui/chat_32bits.png#478 636 44 144);margin-left: 960;margin-top: -600;" onclick="OnClose"></div>
 </pe:container>
