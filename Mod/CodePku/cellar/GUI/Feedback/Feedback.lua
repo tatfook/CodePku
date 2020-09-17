@@ -13,13 +13,21 @@ local Feedback = NPL.export();
 local AdaptWindow = commonlib.gettable("Mod.CodePku.GUI.Window.AdaptWindow")
 local request = NPL.load("(gl)Mod/CodePku/api/BaseRequest.lua");
 
-function Feedback:ShowPage(bShow)  
-
+function Feedback:ShowPage(bShow)
+  if not self.BG then
+    BGparams = {
+      url="Mod/CodePku/cellar/GUI/Feedback/EmptyPage.html", 
+      alignment="_lt", left = 0, top = 0, width = 1920 , height = 1080, zorder = 21
+    }
+    self.BG = AdaptWindow:QuickWindow(BGparams)
+  end
+  if not self.ui then
     params = {
       url="Mod/CodePku/cellar/GUI/Feedback/SubmitFeedback.html", 
-      alignment="_lt", left = 0, top = 0, width = 1920 , height = 1080, zorder = 30
+      alignment="_lt", left = 507, top = 205, width = 885 , height = 670, zorder = 30
     };
-    AdaptWindow:QuickWindow(params)
+    self.ui = AdaptWindow:QuickWindow(params)
+  end
 end
 
 function Feedback:submit(params)

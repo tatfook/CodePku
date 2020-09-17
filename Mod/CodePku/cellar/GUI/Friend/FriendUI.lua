@@ -1,5 +1,6 @@
 local request = NPL.load("(gl)Mod/CodePku/api/BaseRequest.lua");
 local AdaptWindow = commonlib.gettable("Mod.CodePku.GUI.Window.AdaptWindow")
+local Feedback = NPL.load("(gl)Mod/CodePku/cellar/GUI/Feedback/Feedback.lua")
 
 --local FriendUI = NPL.load("(gl)Mod/CodePku/cellar/GUI/Friend/FriendUI.lua")
 local FriendUI = NPL.export()
@@ -30,7 +31,7 @@ FriendUI.params={
 FriendUI.popparams={
     search = {
         url="Mod/CodePku/cellar/GUI/Friend/popup/search.html",
-        alignment="_ct", left = -960, top = -540, width = 1920, height = 1080,zorder =30
+        alignment="_ct", left = -554, top = -321, width = 1158, height = 588,zorder =30
     },
     apply = {
         url="Mod/CodePku/cellar/GUI/Friend/popup/apply.html",
@@ -274,6 +275,14 @@ function FriendUI:ShowPopup(PopIndex)
     PopIndex = tonumber(PopIndex)
 
     if PopIndex == 1 then
+        -- 添加底部的遮罩window
+        if not Feedback.BG then
+            BGparams = {
+              url="Mod/CodePku/cellar/GUI/Feedback/EmptyPage.html", 
+              alignment="_lt", left = 0, top = 0, width = 1920 , height = 1080, zorder = 21
+            }
+            Feedback.BG = AdaptWindow:QuickWindow(BGparams)
+        end
         FriendUI.popui = AdaptWindow:QuickWindow(FriendUI.popparams["search"])
     elseif PopIndex == 2 then
         FriendUI.popui = AdaptWindow:QuickWindow(FriendUI.popparams["add"])
