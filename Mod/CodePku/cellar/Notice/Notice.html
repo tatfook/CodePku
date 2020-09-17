@@ -9,13 +9,13 @@
 <pe:mcml>
     <script type="text/npl" refresh="false"><![CDATA[
         local page = document:GetPageCtrl()
-        NPL.load("(gl)script/apps/Aries/Creator/Game/Login/Rebranding.lua")
-        local Config = NPL.load("(gl)Mod/CodePku/config/Config.lua")
+        --NPL.load("(gl)script/apps/Aries/Creator/Game/Login/Rebranding.lua")
+        --local Config = NPL.load("(gl)Mod/CodePku/config/Config.lua")
 
-        Rebranding = commonlib.gettable("MyCompany.Aries.Creator.Game.Rebranding")
-        local GameMainLogin = commonlib.gettable("MyCompany.Aries.Game.MainLogin")
-        local MainLogin = NPL.load("./MainLogin.lua")
-        local CodePkuServiceSession = NPL.load("(gl)Mod/CodePku/service/CodePkuService/Session.lua")
+        --Rebranding = commonlib.gettable("MyCompany.Aries.Creator.Game.Rebranding")
+        --local GameMainLogin = commonlib.gettable("MyCompany.Aries.Game.MainLogin")
+        --local MainLogin = NPL.load("./MainLogin.lua")
+        --local CodePkuServiceSession = NPL.load("(gl)Mod/CodePku/service/CodePkuService/Session.lua")
 
 
         function OnClose()
@@ -25,65 +25,37 @@
             --MainSceneUIButtons.show_dialog_ui(false, 0)
         end
 
-        -- mock数据
-        notice_data = {
-            [1] = {title="内测公告1",status=1,id=1},
-            [2] = {title="内测公告2",status=2,id=2},
-            [3] = {title="内测公告3",status=3,id=3},
-            [4] = {title="内测公告4",status=0,id=4},
-            [5] = {title="内测公告5",status=0,id=5},
-            [6] = {title="内测公告6",status=0,id=6},
-            [7] = {title="内测公告7",status=0,id=7},
-            [8] = {title="内测公告8",status=0,id=8},
-        }
+        --notice_data = Notice:GetNoticeList()
+        notice_data = Notice.noticeList
+        value = notice_data[1]
+        current_id = value.id
+        content = Notice:HandleNotice(value.game_announcement_content)
+        
+        
+        echo("---------notice_data-----------")
+        echo(notice_data[1])
+        echo(notice_data[1].game_announcement_content)
+        echo(content)
 
-        current_id = notice_data[1].id
-        content = "公告1"
-
-        --公告状态标签
-        notice_status = {
-            [0] = {style = ""},
-            [1] = {title = "新",style = "position:relative;width: 82;height:53;left:15;top:-95;font-size:42;line-height: 110;background:url(codepku/image/textures/notice_system/detail_32bits.png#105 179 82 53)"},
-            [2] = {title = "火热",style = "position:relative;width: 82;height:60;left:10;top:-110;font-size:42;line-height: 110;background:url(codepku/image/textures/notice_system/detail_32bits.png#99 420 82 60)"},
-            [3] = {title = "限时",style = "position:relative;width: 68;height:72;left:10;top:-105;font-size:42;line-height: 110;background:url(codepku/image/textures/notice_system/detail_32bits.png#100 552 68 72)"},
-        }
-
-        --获取状态标签
-        function getStatus(status)
-            return notice_status[status].style
+        --获取状态标签 火热，限时 > 新 > 无
+        function getStatus(flag, publish_time)
+            return Notice:GetStatus(flag, publish_time)
         end
-
 
         --local t1 = os.date("%Y-%m-%d %H:%M:%S")
         ti = os.time()
         function OnClickNotice(name)
-            echo("OnClickNotice")
-            echo(name);
             current_id = name;
             echo("------current_id--------"..current_id)
-            --echo(os.date("%d"))
-            --echo(os.date("%c"))
-            --echo(os.date("*t"))
-            content = Notice:getNotice()
-            t2 = os.date("%Y-%m-%d %H:%M:%S")
-            t2 = os.time()
-            --echo(os.time(os.date()))
-            --echo(os.date("%Y-%m-%d %H:%M:%S",))
-            --echo(toNumber(t1))
-            --echo(t1)
-            --echo(t2)
-            --echo(os.difftime (t2, t1))
-            
+            value = Notice:GetArticleByID(name)
+            content = Notice:HandleNotice(value.game_announcement_content)
+            echo(value)
             Page:Refresh(0)
-
-            
         end
 
         function OnClickMistake()
             
         end
-
-        --content ="为防止游戏内出现拉人的骗子，今天玩学就给大家普及下骗子的特征和套路：<a href=''>   1111111111111</a>1、内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容"
 
         function hideVbar()
             local page = document:GetPageCtrl()
@@ -91,6 +63,8 @@
             notice_title:SetAttribute("ScrollBarTrackWidth", 0);
             local scrollareaCtrl = notice_title and notice_title:GetControl();
             echo("---------hideVbar-------")
+            --echo(document)
+            --echo(document:GetControl())
             echo(page:GetNode("ScrollBar"))
             --echo(page)
             --echo(notice_title:GetChild("VScrollBar"))
@@ -115,6 +89,11 @@
 
         end
         hideVbar()
+
+        function GoToUrl(name)
+            echo(name)
+            ParaGlobal.ShellExecute("open", name, "", "", 1)
+        end
     ]]>
     </script>
     <style type="text/mcss">
@@ -129,14 +108,14 @@
                 <div style="position: relative;left: 491; width: 511; height: 108; line-height: 108; font-size: 57; font-weight: bold; font-family: PuHuiTi-Bold; color: #F46D3D; text-align: center; background:url(codepku/image/textures/login/quickLogin.png#444 205 434 86);">公告</div>
                 <div style="position: relative;left: 1382; top: 15; width:68; height: 78; background:url(codepku/image/textures/commonpopup/main.png#110 73 68 78);" onclick="OnClose"></div>
                 <!-- 公告标题 -->
-                <pe:treeview style="position: relative;top:110; left:4;width: 431; height: 794;" id="notice_title" name='notice_title' DefaultNodeHeight = "110" ItemsPerLine="1" AllowPaging="false" RememberScrollPos="true" RememberLastPage="false" VerticalScrollBarStep="40">
+                <pe:treeview style="position: relative;top:110; left:4;width: 431; height: 794;padding-bottom: 20;" id="notice_title" name='notice_title' DefaultNodeHeight = "110" ItemsPerLine="1" AllowPaging="false" RememberScrollPos="true" RememberLastPage="false" VerticalScrollBarStep="40">
                     <pe:repeat DataSource="<%=notice_data%>">
                         <pe:repeatitem>
                             <!-- 未选中 -->
                             <pe:if condition="<%= Eval('id') ~= current_id %>">
                                 <div style="width:431;height:136">
-                                    <div style="<%=format('width: 370;height:110;margin-left:25;top:22;font-size:42;line-height: 110;color: #0e3565;font-family: PuHuiTi-Bold; text-align: center;background:url(codepku/image/textures/notice_system/detail_32bits.png#529 157 370 110)', (Eval('index')-1)*132+28)%>" name="<%=Eval('id')%>" onclick="OnClickNotice"><%=Eval('title')%></div>
-                                    <div style="<%= getStatus(Eval('status')) %>"></div>
+                                    <div style="<%=format('overflow: hidden;white-space:nowrap;text-overflow:ellipsis;width: 370;height:110;margin-left:25;top:22;font-size:42;line-height: 110;color: #0e3565;font-family: PuHuiTi-Bold; text-align: center;background:url(codepku/image/textures/notice_system/detail_32bits.png#529 157 370 110)', (Eval('index')-1)*132+28)%>" name="<%=Eval('id')%>" onclick="OnClickNotice"><%=Eval('title')%></div>
+                                    <div style="<%= getStatus(Eval('flag'),Eval('publish_time')) %>"></div>
                                 </div>
                             </pe:if>
                             <!-- 选中 -->
@@ -144,7 +123,7 @@
                                 <div style="margin-top:0;width:431;height:136">
                                     <div style="position:relative;width: 382;height:118;margin-left:19;margin-top:18;font-size:42;line-height: 110;background:url(codepku/image/textures/notice_system/detail_32bits.png#527 292 382 118)"></div>
                                     <div style="<%=format('width: 370;height:110;margin-left:25;top:22;font-size:42;line-height: 110;color: #0e3565;font-family: PuHuiTi-Bold; text-align: center;background:url(codepku/image/textures/notice_system/detail_32bits.png#529 157 370 110)', (Eval('index')-1)*132+28)%>" name="<%=Eval('id')%>" onclick="OnClickNotice"><%=Eval('title')%></div>
-                                    <div style="<%= getStatus(Eval('status')) %>"></div>
+                                    <div style="<%= getStatus(Eval('flag'),Eval('publish_time')) %>"></div>
                                 </div>
                             </pe:if>
                         </pe:repeatitem>
@@ -153,66 +132,35 @@
 
                 <!-- 公告内容 -->
                 <div style="position: relative;left:437;top:129;width: 1033; height: 756;background:url(codepku/image/textures/notice_system/content_32bits.png);">
-                    <div style="height:92;width:1033;line-height: 92;font-weight: bold;font-size: 42; font-family: PuHuiTi-Bold;color:white;text-align: center;">防诈骗指南</div>
+                    <div style="height:92;width:1033;line-height: 92;font-weight: bold;font-size: 42; font-family: PuHuiTi-Bold;color:white;text-align: center;"><%=value.title%></div>
                     <div style="text-indent:50;padding: 25;margin-top: 20;margin-left: 22;height:619;width:980;line-height: 56;font-weight: bold;font-size: 36; font-family: PuHuiTi-Bold;color:#0e69cd;background:url(codepku/image/textures/notice_system/detail_32bits.png#293 480 164 103:10 10 10 10);">
-                        
-                        <!-- <div style="height:619;line-height: 56;font-weight: bold;font-size: 36; font-family: PuHuiTi-Bold;color:#0e69cd;">
-                            <span style="height:59;width: 72;"></span>
-                            <%= content %>
-                            为防止游戏内出现拉人的骗子，今天玩学就给大家普及下骗子的特征和套路：
-                            1、内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容
-                            2、内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容
-                            3、内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容
-                            <a href="">11111</a>
-                        </div> -->
-                        <!-- <input LineWrap="false" style="width:800;height:150;background:white" value='            为防止游戏内出现拉人的骗子，今天玩学就给大家普及下骗子的特征和套路：X'/>
-                        <input type="text" rows="20" style="width:800;height:150;" LineWrap="true" value="  渠道：渠道名称
-                            激活量：该渠道的新设备启动数，同设备去重
-                            注册新用户（全部）：该渠道当日注册用户总数
-                            注册新用户（游客）：该渠道当日注册游客数
-                            游客转化率 = 注册新用户（游客） / 激活量
-                            "/> -->
-                           
-                        <!-- <textarea
-                            align="center"
-                            EmptyText=""
-                            lineWrap="false"
-                            AlwaysShowCurLineBackground="false"
-                            style="color:#ffffff;margin-top:34px;font-size:36px;padding:30px;width:960px;height:233px;background:url(codepku/image/textures/common_32bits.png#1315 292 40 40:19 19 19 19)"
-                        >     为防止游戏内出现拉人的骗子，今天玩学就给大家普及下骗子的特征和套路：<a href="">1111111111111</a>
-                        1、内容内容内容内容内容内容内容内容内容内容内容
-                        内容内容内容内容内容内容内容内容内容内容内容内容内容</textarea> -->
+                        <!-- 默认一段 -->
+                        <!-- <span style="float: left;height:59;width: 72;"></span> -->
+                        <!-- <%=value.game_announcement_content%> -->
 
-
-                        <pe:treeview style="height:575;width:940;" name='messages' DefaultNodeHeight = "110" ItemsPerLine="1" AllowPaging="false" RememberScrollPos="true" RememberLastPage="false" VerticalScrollBarStep="40">
+                        <!-- todo 分段处理 -->
+                        <pe:treeview style="height:470;width:940;padding: 20;" name='messages' DefaultNodeHeight = "110" ItemsPerLine="1" AllowPaging="false" RememberScrollPos="true" RememberLastPage="false" VerticalScrollBarStep="40">
                             <pe:repeat DataSource="<%=content%>">
                                 <pe:repeatitem>
-                                    <div style="line-height: 56;font-weight: bold;font-size: 36; font-family: PuHuiTi-Bold;color:#0e69cd;">
-                                        <span style="height:59;width: 72;"></span>
-                                        <!-- <%= content %> -->
-                                        Eval('index')
-                                        <!-- 为防止游戏内出现拉人的骗子，今天玩学就给大家普及下骗子的特征和套路：
-                                        1、内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容
-                                        2、内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容
-                                        3、内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容 -->
-                                        <!-- <a href="">11111</a> -->
+                                    <div style="line-height: 56;font-size: 36; font-family: Noto Sans S Chinese Regular ;color:#0e69cd;">
+                                        <span style="float: left;height:59;width: 72;"></span>
+                                        <%=Eval('pContent')%>
                                     </div>
-                                    <!-- <a href="">11111</a> -->
                                 </pe:repeatitem>
                             </pe:repeat>
                         </pe:treeview>
-                        <!-- <p style="margin-top: 56;line-height: 56;font-weight: bold;font-size: 36; font-family: PuHuiTi-Bold;color:#0e69cd;text-align: right;">《玩学世界》官方项目组</p> -->
-                        
+                        <p style="margin-top: 30;padding-right: 30;line-height: 56;font-size: 36; font-family: Noto Sans S Chinese Regular ;color:#0e69cd;text-align: right;"><%=value.author%></p> 
+
+                        <!-- todo testarea处理，存在问题：背景图片无法正常显示，内容点击后消失 -->
+                        <!-- <textarea
+                            rows="10"
+                            value="<%=value.game_announcement_content%>"
+                            LineWrap="true"
+                            disabled="disabled"
+                            AlwaysShowCurLineBackground="false"
+                            style="width:940;height:470;line-height: 56;font-weight: bold;font-size: 36; font-family: PuHuiTi-Bold;color:#0e69cd;background-color:#a6eeff;border-radius: 10px;"
+                        ></textarea> -->
                     </div>
-
-                    <!-- <textarea
-                        rows="10"
-                        value="<%=content%>"
-                        LineWrap="true"
-                        AlwaysShowCurLineBackground="false"
-                        style="margin-top: 20;margin-left: 22;width:980;height:619;line-height: 56;font-weight: bold;font-size: 36; font-family: PuHuiTi-Bold;color:#0e69cd;background-color:#a6eeff;border-radius: 10px;"
-                    ></textarea> -->
-
                 </div>
             </div>
     </pe:container>

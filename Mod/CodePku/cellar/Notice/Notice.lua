@@ -31,41 +31,19 @@ local AdaptWindow = commonlib.gettable("Mod.CodePku.GUI.Window.AdaptWindow")
 Notice = commonlib.gettable("Mod.CodePku.celler.Notice");
 
 Notice.content = {}
+Notice.noticeList = {}
 
-Notice.isHuaweiApproval = function ()
-    local huaweiApprovalStatus = Mod.CodePku.BasicConfigTable.huawei_approval_status == 'on'
-    local app_market = ParaEngine.GetAppCommandLineByParam("app_market", "")
-    local flymeApprovalStatus = Mod.CodePku.BasicConfigTable.flyme_approval_status == 'on'
-    local sogouApprovalStatus = Mod.CodePku.BasicConfigTable.sogou_approval_status == 'on'
-    if app_market == 'huawei' then
-        return huaweiApprovalStatus
-    elseif app_market == 'flyme' then
-        return flymeApprovalStatus
-    elseif app_market == 'sogou' then
-        return sogouApprovalStatus
-    end
-end
-
-function Notice:getNotice()
-    return {
-
-    }
-end
+Notice.Status = {
+    [0] = {style = ""},
+    [1] = {title = "火热",style = "position:relative;width: 82;height:60;left:10;top:-110;font-size:42;line-height: 110;background:url(codepku/image/textures/notice_system/detail_32bits.png#99 420 82 60)"},
+    [2] = {title = "限时",style = "position:relative;width: 68;height:72;left:10;top:-105;font-size:42;line-height: 110;background:url(codepku/image/textures/notice_system/detail_32bits.png#100 552 68 72)"},
+    [3] = {title = "新",style = "position:relative;width: 82;height:53;left:15;top:-95;font-size:42;line-height: 110;background:url(codepku/image/textures/notice_system/detail_32bits.png#105 179 82 53)"},
+}
 
 function Notice:ShowPage(PageIndex, bShow, id, mainasset)
-    -- if (id and id ~= "") then
-    --     Notice.isSelf = false;
-    --     Notice.tab_ds_name = Notice.tab_ds_other[PageIndex or 1].name;
-    -- else
-    --     Notice.isSelf = true;
-    --     Notice.tab_ds_name = Notice.tab_ds_self[PageIndex or 1].name;
-    -- end
-    -- Notice.bForceHide = bShow == false;
-    -- Notice.tab_ds_index = PageIndex or 1;
-    -- Notice.GetUserInfo(id, true);
-    -- Notice.GetItemInfo();
-    -- Notice.mainasset = mainasset; -- 获取他人角色asset path
     echo("==========show==========")
+    self:GetNoticeList()
+
     local params = {
 		url = "Mod/CodePku/cellar/Notice/Notice.html",
 		alignment="_lt", left = 0, top = 0, width = 1920, height = 1080, zorder = 30,
@@ -74,26 +52,65 @@ function Notice:ShowPage(PageIndex, bShow, id, mainasset)
 	return AdaptWindow:QuickWindow(params)
 end
 
-function Notice:getNotice()
-    -- local request = NPL.load("(gl)Mod/CodePku/api/BaseRequest.lua");
-    -- request:get('/config/basic',{}):next(function(response)
-        
-    --     -- Notice.content = response.data.data;
-    -- end):catch(function(e)
-        
-    -- end);
+-- Judge whether the interval between the given time and the current time is less than 7 days
+-- @param NoticeTime: the given time
+-- @return true if it is less than or equal to 7
+function Notice:IsNew(NoticeTime)
+    local strDate = NoticeTime
+    local _, _, y, m, d, _hour, _min, _sec = string.find(strDate, "(%d+)-(%d+)-(%d+)%s*(%d+):(%d+):(%d+)");
+    -- print(y, m, d, _hour, _min, _sec);
+    local timestamp = os.time({year=y, month = m, day = d, hour = _hour, min = _min, sec = _sec});
+    local nowDate = os.time();
+    local res = math.abs(nowDate - timestamp) / (24*60*60);
+    return res<=7
+end
 
-    local content ="为防止游戏内出现拉人的骗子，今天玩学就给大家普及下骗子的特征和套路：\n<a href=''>   1111111111111</a>1、内容内容内容内容内容内容内容内\n容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容"
-    Notice.content = commonlib.split(content, "\n")
-    echo("---------------Notice.content--------------")
-    echo(Notice.content)
-    local new_content = {}
-    for i,j in ipairs(Notice.content) do
-        print(i)
-        print(j)
-        local temp = {}
-        new_content.insert(i,j)
+-- Get notice status
+-- @param flag: 0-无 1-火热 2-限时
+-- @param time: announcement time
+-- @return background image of the state
+function Notice:GetStatus(flag,time)
+    if flag == 1 or flag == 2 then
+        return self.Status[flag].style
+    else
+        if Notice:IsNew(time) then
+            return self.Status[3].style
+        else
+            return self.Status[0].style
+        end
     end
-    echo(new_content)
-    return commonlib.split(content, "\n")
+end
+
+function Notice:GetNoticeList()
+    local request = NPL.load("(gl)Mod/CodePku/api/BaseRequest.lua");
+    local response = request:get('/game-announcements',{},{sync = true});
+	if response.status == 200 then
+        self.noticeList = response.data.data or {};
+	end
+    return self.noticeList
+end
+
+function Notice:HandleNotice(content)
+    -- 对内容做分段处理，以\n为分割符
+    -- local content ="为防止游戏内出现拉人的骗子，今天玩学就给大家普及下骗子的特征和套路：<div name='https://www.baidu.com' style='float:left;text-decoration:underline;' onclick='GoToUrl'> QQ</div><a href='https://keepwork.com/official/paracraft/VideoTutorials' class='link_big_event'>555555555</a>\n1、内容内容内容内容内容内容内容内\n2.容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容\n<a style='float:left' href=''>   1111111111111</a>\n<p style='text-align:right'>《玩学世界》官方项目组</p>"
+    Notice.content = commonlib.split(content, "\n");
+    echo("---------------Notice.content--------------")
+    echo(type(Notice.content))
+    local new_content = {};
+    for i,j in ipairs(Notice.content) do
+        table.insert(new_content,{pContent=j});
+    end
+    return new_content
+end
+
+function Notice:GetArticleByID(id)
+    echo("-------GetArticleByID------")
+    local notice_data = self.noticeList;
+    local value = {};
+    for k, v in ipairs(notice_data) do
+        if v.id == id then
+            value = v;
+        end
+    end
+    return value
 end
