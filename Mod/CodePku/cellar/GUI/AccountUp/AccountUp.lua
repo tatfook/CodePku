@@ -12,6 +12,7 @@ local request = NPL.load("(gl)Mod/CodePku/api/BaseRequest.lua");
 local CodePkuServiceSession = NPL.load("(gl)Mod/CodePku/service/CodePkuService/Session.lua")
 local CodePkuService = NPL.load("(gl)Mod/CodePku/service/CodePkuService.lua")
 local Config = NPL.load("(gl)Mod/CodePku/config/Config.lua")
+local Feedback = NPL.load("(gl)Mod/CodePku/cellar/GUI/Feedback/Feedback.lua");
 
 local AdaptWindow = commonlib.gettable("Mod.CodePku.GUI.Window.AdaptWindow");
 local AccountUp = commonlib.gettable("Mod.CodePku.AccountUp")
@@ -59,6 +60,12 @@ function AccountUp.OnSureBtnCLicked(page)
             page:CloseWindow()
             local MainUIButtons = NPL.load("(gl)Mod/CodePku/cellar/Common/TouchMiniButtons/Main.lua");
             MainUIButtons:ShowPage()
+
+            -- 关闭遮罩window
+            if Feedback.BG then
+                Feedback.BG:CloseWindow()
+                Feedback.BG = nil
+            end
 
             GameLogic.AddBBS(nil, L"账号升级成功", 3000, "255 0 0", 21);
         elseif response.data and response.data.message then
@@ -131,12 +138,24 @@ function AccountUp.GetMobileCode( page )
 end
 
 function AccountUp.OnCancelBtnClicked()
+    -- 关闭遮罩window
+    if Feedback.BG then
+        Feedback.BG:CloseWindow()
+        Feedback.BG = nil
+    end
     if AccountUp.ui then
         AccountUp.ui:CloseWindow()
     end
 end
 
 function AccountUp.ShowPage()
+    if not Feedback.BG then
+        BGparams = {
+          url="Mod/CodePku/cellar/GUI/Feedback/EmptyPage.html",
+          alignment="_lt", left = 0, top = 0, width = 1920 , height = 1080, zorder = 21
+        }
+        Feedback.BG = AdaptWindow:QuickWindow(BGparams)
+    end
     local params = {
         url = "Mod/CodePku/cellar/GUI/AccountUp/AccountUp.html",
         name = "AccountUpPage", 
@@ -144,10 +163,10 @@ function AccountUp.ShowPage()
         allowDrag = false,
         enable_esc_key = true,
         alignment="_ct",
-        left = -960,
-        top = -540,
-        width = 1920,
-        height = 1080,
+        left = -483,
+        top = -285,
+        width = 945,
+        height = 615,
         zorder = 30,
     }
     if AccountUp.ui then
