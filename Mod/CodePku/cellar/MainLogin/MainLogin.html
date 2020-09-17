@@ -150,7 +150,7 @@
 
             <div style="position: relative; width: 722; height: 88; left: 111; top: 151; font-family: Noto Sans S Chinese Regular-Regular;
                 font-size: 32px; font-weight: normal; font-stretch: normal; line-height: 40px; letter-spacing: 0px; color: #ffffff; background:url(codepku/image/textures/login/main.png#1011 271 88 88:10 10 10 10)">
-                <input type="text" name="account" EmptyText='<%= L"请输入手机号码" %>' style="position: relative;left: 139px; width: 583; height: 88; background: #000000;"/>
+                <input type="text" MoveViewWhenAttachWithIME="true" name="account" EmptyText='<%= L"请输入手机号码" %>' style="position: relative;left: 139px; width: 583; height: 88; background: #000000;"/>
                 <div style="position: relative; left: 93px; top: 41px; width: 16px; height: 8px;background: url(codepku/image/textures/login/quickLogin.png#751 82 16 8);"></div>
                 <input type="button" name="numberChoose" onclick="OnNumberChooseBtnClicked" value='<%= L"+86"%>' style="position: relative; width: 101px; height: 88px; background: #000000;"/>
             </div>
@@ -162,7 +162,7 @@
                 <div name="verifyCodeDiv" style="position: relative; width: 722; height: 88; left: 111; top: 293;">
 
                     <div style="position: relative; width: 722; height: 88; font-size: 32; color:#FFFFFF; font-family: Noto Sans S Chinese Regular; background:url(codepku/image/textures/login/main.png#1011 271 88 88:10 10 10 10);">
-                        <input type="text" name="verify_code" EmptyText='<%= L"请输入验证码" %>' style="position: relative; width: 672; height: 88; left: 25; line-height: 88; background: #000000;" />
+                        <input type="text" MoveViewWhenAttachWithIME="true" name="verify_code" EmptyText='<%= L"请输入验证码" %>' style="position: relative; width: 672; height: 88; left: 25; line-height: 88; background: #000000;" />
                     </div>
 
                     <input type="button" name="get_mobile_code_text" onclick="get_mobile_code()"
@@ -175,7 +175,7 @@
 
             <div name="passwordDiv" style="position: relative; width: 722; height: 88; left: 111; top: 293; display: none;">
                 <div  style="position: relative; width: 722; height: 88; font-size: 32; color:#FFFFFF; font-family: Noto Sans S Chinese Regular; background:url(codepku/image/textures/login/main.png#1011 271 88 88:10 10 10 10);">
-                    <input type="password" name="password" EmptyText='<%= L"请输入密码" %>' style="position: relative; width: 672; height: 88; left: 25; line-height: 88; background: #000000; " />
+                    <input type="password" MoveViewWhenAttachWithIME="true" name="password" EmptyText='<%= L"请输入密码" %>' style="position: relative; width: 672; height: 88; left: 25; line-height: 88; background: #000000; " />
                 </div>
             </div>
 
