@@ -9,6 +9,8 @@
 <pe:mcml>
     <script type="text/npl" refresh="false"><![CDATA[
         local page = document:GetPageCtrl()
+        NPL.load("(gl)Mod/CodePku/cellar/Notice/Notice.lua")
+        local Notice = commonlib.gettable("Mod.CodePku.celler.Notice")
 
         function OnClose()
             Page:CloseWindow()
@@ -35,6 +37,7 @@
             
         end
 
+        -- 跳转链接
         function GoToUrl(name)
             echo(name)
             ParaGlobal.ShellExecute("open", name, "", "", 1)

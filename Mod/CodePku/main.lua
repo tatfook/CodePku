@@ -523,7 +523,6 @@ function CodePku:OnInitDesktop()
 end
 
 function CodePku:BasicConfig()
-	echo("--BasicConfig---")
 	local request = NPL.load("(gl)Mod/CodePku/api/BaseRequest.lua");
 	-- request:get('/config/basic',nil,{sync = true}):next(function(response)		
 	-- 	CodePku.BasicConfig = response.data.data;
@@ -537,7 +536,4 @@ function CodePku:BasicConfig()
 	if response.status == 200 then
 		CodePku.BasicConfigTable = response.data.data;
 	end
-	echo("-----------------------CodePku.BasicConfigTable--------");
-	echo(CodePku.BasicConfigTable)
-	echo(Mod.CodePku.BasicConfigTable)
 end

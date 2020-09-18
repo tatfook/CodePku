@@ -5,23 +5,13 @@ Date: 2020/9/11
 Desc:
 use the lib:
 virtual functions:
-	mousePressEvent(event)
-	mouseMoveEvent
-	mouseReleaseEvent
-	mouseWheelEvent
-	keyPressEvent
-	keyReleaseEvent: not implemented
-
-	OnSelect()
-	OnUnselect()
-	OnLeftLongHoldBreakBlock()
-	OnLeftMouseHold(fDelta)
-	OnRightMouseHold(fDelta)
-
-	handleHistoryKeyEvent();
-	handlePlayerKeyEvent();
-
-	GetClickData()
+    Notice:ShowPage()
+    Notice:IsNew(NoticeTime)
+    Notice:GetStatus(flag,time)
+    Notice:GetNoticeList()
+    Notice:HandleNotice(content)
+    Notice:GetArticleByID(id)
+    Notice:HandleTitle(title)
 ------------------------------------------------------------
 NPL.load("(gl)Mod/CodePku/cellar/Notice/Notice.lua")
 local Notice = commonlib.gettable("Mod.CodePku.celler.Notice")
@@ -92,7 +82,6 @@ end
 function Notice:HandleNotice(content)
     -- 对内容做分段处理，以\n为分割符
     Notice.content = commonlib.split(content, "\n");
-    echo("---------------Notice.content--------------")
     local new_content = {};
     for i,j in ipairs(Notice.content) do
         table.insert(new_content,{pContent=j});
@@ -101,7 +90,6 @@ function Notice:HandleNotice(content)
 end
 
 function Notice:GetArticleByID(id)
-    echo("-------GetArticleByID------")
     local notice_data = self.noticeList;
     local value = {};
     for k, v in ipairs(notice_data) do
