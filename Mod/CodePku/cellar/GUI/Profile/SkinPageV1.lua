@@ -42,10 +42,10 @@ function SkinPageV1.GetAllFiles()
 				if (string.find(assetfile, 'paperman') ~= nil) then
 					if(assetfile and assetfile~="") then
 						local isMale = string.find(assetfile, 'boy..') or string.find(assetfile, 'Male..') or string.find(assetfile, 'xiaolong') or string.find(assetfile, 'zaizai');
-						if (tonumber(gender) ~= 1 and isMale) then -- male
+						if (tonumber(gender) ~= 2 and isMale) then -- male
 							allFiles[#allFiles+1] = {name="commonfile", text=item.displayname or item.filename, filename=item.name or item.filename};
 							-- allFiles[#allFiles+1] = {name="commonfile", attr={text=item.displayname or item.filename, filename=item.name or item.filename}};
-						elseif (tonumber(gender) == 1 and isMale == nil) then
+						elseif (tonumber(gender) == 2 and isMale == nil) then
 							allFiles[#allFiles+1] = {name="commonfile", text=item.displayname or item.filename, filename=item.name or item.filename};
 							-- allFiles[#allFiles+1] = {name="commonfile", attr={text=item.displayname or item.filename, filename=item.name or item.filename}};
 						end
@@ -143,7 +143,7 @@ function SkinPageV1.ShowPage(OnClose)
 			DestroyOnClose = true,
 			--bToggleShowHide=true, 
 			style = CommonCtrl.WindowFrame.ContainerStyle,
-			allowDrag = true,
+			allowDrag = false,
 			enable_esc_key = true,
 			--bShow = bShow,
 			click_through = false, 
@@ -151,10 +151,10 @@ function SkinPageV1.ShowPage(OnClose)
 			app_key = MyCompany.Aries.Creator.Game.Desktop.App.app_key, 
 			directPosition = true,
 			align = "_ct",
-			x = -934/2,
-			y = -570/2,
-			width = 934,
-			height = 570,
+			x = -830/2,
+			y = -480/2,
+			width = 830,
+			height = 480,
 		};
 	System.App.Commands.Call("File.MCMLWindowFrame", params);
 
