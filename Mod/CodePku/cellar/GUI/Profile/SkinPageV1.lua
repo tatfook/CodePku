@@ -29,32 +29,59 @@ function SkinPageV1.OnInit()
 	SkinPageV1.result = nil;
 end
 
-local allFiles;
+-- local allFiles;
+local male_assets = {
+	{filename="character/CC/02human/paperman/boy01.x", name="boy01", displayname="新年红"},
+	{filename="character/CC/02human/paperman/boy02.x", name="boy02", displayname="蓝色浪潮"},
+	{filename="character/CC/02human/paperman/boy03.x", name="boy03", displayname="蓝色非主流"},
+	{filename="character/CC/02human/paperman/boy04.x", name="boy04", displayname="非非变身器"},
+	{filename="character/CC/02human/paperman/boy05.x", name="boy05", displayname="学霸变身器"},
+	{filename="character/CC/02human/paperman/boy06.x", name="boy06", displayname="新年蓝"},
+	{filename="character/CC/02human/paperman/boy07.x", name="boy07", displayname="劳动最光荣"},
+	{filename="character/CC/02human/paperman/Male_teacher.x", name="Male_teacher", displayname="男老师"},
+	{filename="character/CC/02human/paperman/xiaolong.x", name="xiaolong", displayname="李小龙变身器"},
+	{filename="character/CC/02human/paperman/zaizai.x", name="zaizai", displayname="欢度中秋"},
+};
+local female_assets = {
+	{filename="character/CC/02human/paperman/girl01.x", name="girl01", displayname="新年套装红"},
+	{filename="character/CC/02human/paperman/girl02.x", name="girl02", displayname="夏日时光"},
+	{filename="character/CC/02human/paperman/girl03.x", name="girl03", displayname="夏日校园"},
+	{filename="character/CC/02human/paperman/girl04.x", name="girl04", displayname="粉红花裙"},
+	{filename="character/CC/02human/paperman/girl05.x", name="girl05", displayname="音乐潮人"},
+	{filename="character/CC/02human/paperman/Female_teachers.x", name="Female_teachers", displayname="女老师"},
+	{filename="character/CC/02human/paperman/nuannuan.x", name="nuannuan", displayname="欢度中秋"},
+};
 function SkinPageV1.GetAllFiles()
-	if(not allFiles) then
-		allFiles = {}
-		-- fill local files
-		if(PlayerAssetFile:HasCategory('people')) then
-			local items = PlayerAssetFile:GetCategoryItems('people');
-			local gender = System.User and System.User.info and System.User.info.gender;
-			for i, item in ipairs(items) do
-				local assetfile = item.filename;
-				if (string.find(assetfile, 'paperman') ~= nil) then
-					if(assetfile and assetfile~="") then
-						local isMale = string.find(assetfile, 'boy..') or string.find(assetfile, 'Male..') or string.find(assetfile, 'xiaolong') or string.find(assetfile, 'zaizai');
-						if (tonumber(gender) ~= 2 and isMale) then -- male
-							allFiles[#allFiles+1] = {name="commonfile", text=item.displayname or item.filename, filename=item.name or item.filename};
-							-- allFiles[#allFiles+1] = {name="commonfile", attr={text=item.displayname or item.filename, filename=item.name or item.filename}};
-						elseif (tonumber(gender) == 2 and isMale == nil) then
-							allFiles[#allFiles+1] = {name="commonfile", text=item.displayname or item.filename, filename=item.name or item.filename};
-							-- allFiles[#allFiles+1] = {name="commonfile", attr={text=item.displayname or item.filename, filename=item.name or item.filename}};
-						end
-					end
-                end
-			end
-		end
+	local gender = System.User and System.User.info and System.User.info.gender;
+	if (tonumber(gender) == 2) then
+		return female_assets;
+	else
+		return male_assets;
 	end
-	return allFiles;
+	-- if(not allFiles) then
+	-- 	allFiles = {}
+	-- 	if(PlayerAssetFile:HasCategory('people')) then
+	-- 		local items = PlayerAssetFile:GetCategoryItems('people');
+	-- 		local gender = System.User and System.User.info and System.User.info.gender;
+	-- 		for i, item in ipairs(items) do
+	-- 			local assetfile = item.filename;
+	-- 			if (string.find(assetfile, 'paperman') ~= nil) then
+	-- 				if(assetfile and assetfile~="") then
+	-- 					local isMale = string.find(assetfile, 'boy..') or string.find(assetfile, 'Male..') or string.find(assetfile, 'xiaolong') or string.find(assetfile, 'zaizai');
+	-- 					if (tonumber(gender) ~= 2 and isMale) then -- male
+	-- 						allFiles[#allFiles+1] = {name="commonfile", text=item.displayname or item.filename, filename=item.name or item.filename};
+	-- 						-- allFiles[#allFiles+1] = {name="commonfile", attr={text=item.displayname or item.filename, filename=item.name or item.filename}};
+	-- 					elseif (tonumber(gender) == 2 and isMale == nil) then
+	-- 						allFiles[#allFiles+1] = {name="commonfile", text=item.displayname or item.filename, filename=item.name or item.filename};
+	-- 						-- allFiles[#allFiles+1] = {name="commonfile", attr={text=item.displayname or item.filename, filename=item.name or item.filename}};
+	-- 					end
+	-- 				end
+    --             end
+	-- 		end
+	-- 	end
+	-- end
+	-- echo(allFiles)
+	-- return allFiles;
 end
 
 function SkinPageV1.GetEntity()
@@ -129,6 +156,7 @@ function SkinPageV1.OnOK()
 
 		if(filepath ~= lastFilepath) then
 			GameLogic.RunCommand("/avatar "..filepath);
+			GameLogic.options:SetMainPlayerAssetName(filepath);
 		end
 		
 		page:CloseWindow();
