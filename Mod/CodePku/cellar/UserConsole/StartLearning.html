@@ -60,6 +60,8 @@
                     UserConsole:Logout()
                 end
 
+                list = Notice:GetNoticeList()
+
                 function ClickNotice()
                     Notice:ShowPage()
                 end
@@ -100,11 +102,21 @@
                 </pe:container> -->
 
                 <div style="position: relative; width: 114; height: 134; left: 1775; top: 40; background:url(codepku/image/textures/main_ui/main.png#702 481 114 134);" onclick="logout"></div>
-                <div style="position: relative; width: 102; height: 125; left: 1781; top: 200; background:url(codepku/image/textures/main_ui/main.png#420 490 102 125);" onclick="ClickNotice"></div>
-                <pe:if condition = "<%= not isHuaweiApproval()%>" >
-                    <div style="position: relative; width: 101; height: 135; left: 1781; top: 360; background:url(codepku/image/textures/main_ui/main.png#160 313 101 135);" onclick="ClickCommunity"></div>
-                    <pe:if condition = "<%= not isIOSApproval()%>" >
-                        <div style="position: relative; width: 106; height: 138; left: 1779; top: 520 ; background:url(codepku/image/textures/main_ui/main.png#285 480 106 138);" onclick="ClickQQGroup"></div>
+                <pe:if condition = "<%= #list > 0 %>">
+                    <div style="position: relative; width: 102; height: 125; left: 1781; top: 200; background:url(codepku/image/textures/main_ui/main.png#420 490 102 125);" onclick="ClickNotice"></div>
+                    <pe:if condition = "<%= not isHuaweiApproval()%>" >
+                        <div style="position: relative; width: 101; height: 135; left: 1781; top: 360; background:url(codepku/image/textures/main_ui/main.png#160 313 101 135);" onclick="ClickCommunity"></div>
+                        <pe:if condition = "<%= not isIOSApproval()%>" >
+                            <div style="position: relative; width: 106; height: 138; left: 1779; top: 520 ; background:url(codepku/image/textures/main_ui/main.png#285 480 106 138);" onclick="ClickQQGroup"></div>
+                        </pe:if>
+                    </pe:if>
+                </pe:if>
+                <pe:if condition = "<%= #list == 0 %>">
+                    <pe:if condition = "<%= not isHuaweiApproval()%>" >
+                        <div style="position: relative; width: 101; height: 135; left: 1781; top: 200; background:url(codepku/image/textures/main_ui/main.png#160 313 101 135);" onclick="ClickCommunity"></div>
+                        <pe:if condition = "<%= not isIOSApproval()%>" >
+                            <div style="position: relative; width: 106; height: 138; left: 1779; top: 360 ; background:url(codepku/image/textures/main_ui/main.png#285 480 106 138);" onclick="ClickQQGroup"></div>
+                        </pe:if>
                     </pe:if>
                 </pe:if>
 
