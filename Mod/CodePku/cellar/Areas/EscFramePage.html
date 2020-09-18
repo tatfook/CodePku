@@ -17,6 +17,8 @@ EscFramePage.OnInit();
 local UserConsole = NPL.load('(gl)Mod/CodePku/cellar/UserConsole/Main.lua');
 
 local AccountSettingPage = NPL.load("(gl)Mod/CodePku/cellar/Areas/AccountSettingPage.lua");
+NPL.load("(gl)Mod/CodePku/cellar/GUI/Home/HomeManage.lua")
+local HomeManage = commonlib.gettable("Mod.CodePku.Common.HomeManage")
 
 function ClosePage()
     Page:CloseWindow();
@@ -24,7 +26,7 @@ end
 
 function OnLeave()
     -- GameLogic.RunCommand("/menu file.exit");
-    if (System.Codepku and System.Codepku.Coursewares) then
+    if (System.Codepku and System.Codepku.Coursewares) or HomeManage:IsMyHome() then
         if (System.Codepku.Coursewares.category == 3) then
             ClosePage();
         else

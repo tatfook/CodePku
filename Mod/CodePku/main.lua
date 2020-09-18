@@ -417,8 +417,7 @@ function CodePku:init()
 		"QuickSelectBar.ShowPage",
 		function(bShow)
 			if HomeManage:IsMyHome() then
-				local MainUIButtons = NPL.load("(gl)Mod/CodePku/cellar/Common/TouchMiniButtons/Main.lua")
-				return not MainUIButtons.open_function
+				return false
 			end
 			return not (System.Codepku.Coursewares and (System.Codepku.Coursewares.category == 1 or System.Codepku.Coursewares.category == 2 or System.Codepku.Coursewares.category == 7));
 		end

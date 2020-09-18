@@ -173,7 +173,7 @@ end
 function MainUIButtons.show_home_window_ui()
 	local params = {
 		url = "Mod/CodePku/cellar/Common/TouchMiniButtons/MainUIButtons_home_window.html",
-		alignment = "_lt", left = 1769, top = 493, width = 135, height = 155,
+		alignment = "_lt", left = 1600, top = 493, width = 135, height = 155,
 	}
 
 	local isHome = commonlib.getfield("System.Codepku.isHome")

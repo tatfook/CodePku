@@ -34,7 +34,7 @@ function HomeManage:OnWorldLoaded()
     --如果当前正在进入家园区就在进入世界后设置家园区判定变量为true
     if System.Codepku.isLoadingHome then
         System.Codepku.isHome = true
-        GameLogic.RunCommand("/mode edit")
+        GameLogic.RunCommand("/mode game")
     else
         System.Codepku.isHome = false
     end
