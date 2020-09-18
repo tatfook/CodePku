@@ -98,9 +98,6 @@ function CodepkuChatChannel.SetMessage(_table, message, index)
 end
 
 function CodepkuChatChannel.OnCodepkuUserAward(data)
-    -- echo('xxxxxxxaaaaaaaaaxxxxxxxaaaaaaaaaxxxxxxx')
-    -- echo(data)
-    -- sysMsg = '系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息'
     -- msg1 = {msgContent=sysMsg,heightPx=math.ceil(commonlib.utf8.len(sysMsg)/28)*46,msgType='sys'}
 
     props = data['props']

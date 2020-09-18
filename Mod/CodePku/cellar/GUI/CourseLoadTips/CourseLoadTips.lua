@@ -33,6 +33,13 @@ function CourseLoadTips.OnWorldLoaded()
     local category = System.Codepku and System.Codepku.Coursewares and System.Codepku.Coursewares.category
     LOG.std(nil, "info", "CourseLoadTips", "OnWorldLoaded Category = %s", tostring(category))
     if category and (category == 1 or category == 2) then
+
+        -- 进入一个课程世界,初始化结算累计的奖励
+        local TaskSettlement = NPL.load("(gl)Mod/CodePku/cellar/GUI/TaskSettlement/TaskSettlement.lua")
+        TaskSettlement.allAward = nil --初始化统计的奖励
+        TaskSettlement.allProps = nil --初始化统计的奖励
+        ----
+
         local courseware_id = System.Codepku.Coursewares.id
         LOG.std(nil, "info", "CourseLoadTips", "OnWorldLoaded CourseId = %s", tostring(courseware_id))
         request:get('/learn-records/last/' .. courseware_id):next(function(response)

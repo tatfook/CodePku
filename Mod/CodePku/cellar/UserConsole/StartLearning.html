@@ -14,11 +14,17 @@
                 local page = document:GetPageCtrl()
                 Mod.CodePku.Store:Set("page/StartLearning", page)
 
-                local huaweiApprovalStatus = Mod.CodePku.BasicConfig.huawei_approval_status == 'on'  
-                local isHuawei = ParaEngine.GetAppCommandLineByParam("app_market", "") == 'huawei';
+                NPL.load("(gl)Mod/CodePku/cellar/Notice/Notice.lua")
+                local Notice = commonlib.gettable("Mod.CodePku.celler.Notice")
+
+                CommonFunc = NPL.load("(gl)Mod/CodePku/cellar/Common/CommonFunc/CommonFunc.lua")
 
                 function isHuaweiApproval()
-                    return huaweiApprovalStatus and isHuawei
+                    return CommonFunc.isHuaweiApproval()
+                end
+
+                function isIOSApproval()
+                    return CommonFunc.isIOSApproval()
                 end
 
                 function startLearning()
@@ -26,11 +32,16 @@
                     local userId = Mod.CodePku.Store:Get('user/userId')
                     local guideUid = tostring(userId)..'beginnerGuideState'
                     local beginnerGuideState = GameLogic.GetPlayerController():LoadLocalData(guideUid,false,true);
-                    if not beginnerGuideState then
-                        Page:CloseWindow()
-                        UserConsole:ShowBeginnerPage()
-                    else
+                
+                    if isHuaweiApproval() then 
                         UserConsole:CourseEntry()  
+                    else
+                        if not beginnerGuideState then
+                            Page:CloseWindow()
+                            UserConsole:ShowBeginnerPage()
+                        else
+                            UserConsole:CourseEntry()  
+                        end
                     end
                 end
 
@@ -49,12 +60,16 @@
                     UserConsole:Logout()
                 end
 
+                function ClickNotice()
+                    Notice:ShowPage()
+                end
+
                 function ClickCommunity()
                     ParaGlobal.ShellExecute("open", L"http://kids.wanxueshijie.com/", "", "", 1)
                 end
 
                 function ClickQQGroup()
-                    ParaGlobal.ShellExecute("open", Mod.CodePku.BasicConfig.qq_group_link, "", "", 1)
+                    ParaGlobal.ShellExecute("open", Mod.CodePku.BasicConfigTable.qq_group_link, "", "", 1)
                 end
             ]]></script>
             <style type="text/mcss">
@@ -85,9 +100,12 @@
                 </pe:container> -->
 
                 <div style="position: relative; width: 114; height: 134; left: 1775; top: 40; background:url(codepku/image/textures/main_ui/main.png#702 481 114 134);" onclick="logout"></div>
+                <div style="position: relative; width: 102; height: 125; left: 1781; top: 200; background:url(codepku/image/textures/main_ui/main.png#420 490 102 125);" onclick="ClickNotice"></div>
                 <pe:if condition = "<%= not isHuaweiApproval()%>" >
-                    <div style="position: relative; width: 101; height: 135; left: 1781; top: 200; background:url(codepku/image/textures/main_ui/main.png#160 313 101 135);" onclick="ClickCommunity"></div>
-                    <div style="position: relative; width: 106; height: 138; left: 1779; top: 360 ; background:url(codepku/image/textures/main_ui/main.png#285 480 106 138);" onclick="ClickQQGroup"></div>
+                    <div style="position: relative; width: 101; height: 135; left: 1781; top: 360; background:url(codepku/image/textures/main_ui/main.png#160 313 101 135);" onclick="ClickCommunity"></div>
+                    <pe:if condition = "<%= not isIOSApproval()%>" >
+                        <div style="position: relative; width: 106; height: 138; left: 1779; top: 520 ; background:url(codepku/image/textures/main_ui/main.png#285 480 106 138);" onclick="ClickQQGroup"></div>
+                    </pe:if>
                 </pe:if>
 
                 <!-- <pe:if condition="<%= System.os.IsMobilePlatform() %>">

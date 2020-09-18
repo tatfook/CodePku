@@ -265,6 +265,11 @@ end
 function GetIdentity()
     return UserInfoPage.isSelf;
 end
+
+local CommonFunc = commonlib.gettable("Mod.CodePku.Common.CommonFunc")
+function isHuaweiApproval()
+    return CommonFunc.isHuaweiApproval()
+end
 ]]>   
 </script>
 <style type="text/mcss">
@@ -275,9 +280,13 @@ end
         <div style="text-align:center;">
             <input type="button" name="close" onclick="ClosePage" style="float:left;width:208px;height:127px;background:url(codepku/image/textures/common_32bits.png#251 49 208 127);"/>
             <div style="position:absolute;left:132px;top:0;width:441px;height:102px;background:url(codepku/image/textures/common_32bits.png#463 63 441 100);padding-top:4px;font-family:PuHuiTi-Bold;font-size:70px;color:#d85d0b;">个人中心</div>
-            <pe:if condition="<%=GetIdentity()%>">
-                <iframe name="money" src="Money.html" style="position:absolute;top:0;"></iframe>
+            <pe:if condition="<%= not isHuaweiApproval()%>">
+                <pe:if condition="<%=GetIdentity()%>">
+                    <iframe name="money" src="Money.html" style="position:absolute;top:0;"></iframe>
+                </pe:if>
             </pe:if>
+           
+
         </div>
         <div style="font-size:45px;font-weight:bold;font-family:Noto Sans S Chinese Regular;text-align:center;position:relative;">
             <pe:repeat DataSource="<%=GetTabButtons()%>">

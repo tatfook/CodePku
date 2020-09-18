@@ -31,6 +31,10 @@ local UserConsole = NPL.export()
 function UserConsole:ShowPage()
     UserInfo:OnChangeAvatar()
 
+    NPL.load("(gl)Mod/CodePku/cellar/Notice/Notice.lua")
+    local Notice = commonlib.gettable("Mod.CodePku.celler.Notice")
+    Notice:ShowPage()
+
     local params = {
         url = "Mod/CodePku/cellar/UserConsole/StartLearning.html", 
         name = "StartLearning", 
@@ -69,15 +73,22 @@ end
 function UserConsole:CourseEntry()    
     --判断是否是华为审核版
     -- echo("Mod.CodePku.BasicConfig:")
-    -- echo(Mod.CodePku.BasicConfig)
-    local huaweiApprovalStatus = Mod.CodePku.BasicConfig.huawei_approval_status == 'on'  
+    -- echo(Mod.CodePku.BasicConfigTable)
+    local huaweiApprovalStatus = Mod.CodePku.BasicConfigTable.huawei_approval_status == 'on'  
     local isHuawei = ParaEngine.GetAppCommandLineByParam("app_market", "") == 'huawei';
-    
+    local flymeApprovalStatus = Mod.CodePku.BasicConfigTable.flyme_approval_status == 'on'  
+    local isFlyMe = ParaEngine.GetAppCommandLineByParam("app_market", "") == 'flyme';
+    local sogouApprovalStatus = Mod.CodePku.BasicConfigTable.sogou_approval_status == 'on'  
+    local isSoGou = ParaEngine.GetAppCommandLineByParam("app_market", "") == 'sogou';
     if isHuawei and huaweiApprovalStatus then 
-        self:HandleWorldId(Mod.CodePku.BasicConfig.huawei_entry_world_id)
+        self:HandleWorldId(Mod.CodePku.BasicConfigTable.huawei_entry_world_id)
+    elseif isFlyMe and flymeApprovalStatus then 
+        self:HandleWorldId(Mod.CodePku.BasicConfigTable.flyme_entry_world_id)
+    elseif isSoGou and sogouApprovalStatus then 
+        self:HandleWorldId(Mod.CodePku.BasicConfigTable.sogou_entry_world_id)
     else
         if UserConsole.BeginnerGuideFlag then
-            self:HandleWorldId(Mod.CodePku.BasicConfig.beginner_guide_world_id)  
+            self:HandleWorldId(Mod.CodePku.BasicConfigTable.beginner_guide_world_id)  
         else 
             CodePkuServiceSession:CourseEntryWorld(function (response, err)         
                 if (err == 401) then
