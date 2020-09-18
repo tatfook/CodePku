@@ -157,22 +157,50 @@ function HomeManage:UploadHomeWorld(zipfile)
         end
     end
     local zipFileName = zipfile:match("[%w%s_]*.zip$")
-
-	function success()
-		GameLogic.AddBBS("CodeGlobals", L"世界上传成功", 3000, "#00FF00");
-	end
-	
-    function error()
-        GameLogic.AddBBS("CodeGlobals", L"世界上传失败", 3000, "#FF0000");
+    
+    local function uploadSucceed(data, err)        
+        GameLogic.AddBBS("CodeGlobals", L"世界上传成功", 3000, "#00FF00");
+    end
+    local function uploadFailed(data, err)        
+        local errMsg = data.message or L"世界上传失败"
+        GameLogic.AddBBS("CodeGlobals", errMsg, 3000, "#FF0000");
     end
 
-    -- CodePkuBaseApi:PostFields("/house/mime", nil, content, success, error)
-    local headers = {}
-    headers['Content-Type'] = "multipart/form-data";
-    local params = {
-        file = {file=zipFileName, data=content}
+    local baseUrl = CodePkuBaseApi:GetApi();
+    local boundary = ParaMisc.md5('');
+    local boundaryLine = "--WebKitFormBoundary" .. boundary .. "\n";
+    local postFieldsString = boundaryLine ..
+                            "Content-Disposition: form-data; name=\"file\"; filename=\"" .. zipFileName .. "\"\n" ..
+                            "Content-Type: application/octet-stream\n" ..
+                            "Content-Transfer-Encoding: binary\n\n" ..
+                            content .. "\n" ..
+                            boundaryLine;
+
+    local token = Mod.CodePku.Store:Get("user/token")
+    local headers = {        
+        ['User-Agent'] = "wanxueshijie",
+        ["Accept"] = "application/json",
+        ["Cache-Control"] = "no-cache",
+        ['Content-Type'] = "multipart/form-data; boundary=WebKitFormBoundary" .. boundary,
+        ['Content-Length'] = #postFieldsString,
+        ['Connection'] = "keep-alive",
+        ["Authorization"] = format("Bearer %s", token)
     }
-    CodePkuBaseApi:Post("/house/mime", params, headers, success, error)
+
+    System.os.GetUrl(
+        {            
+            url = baseUrl .. "/house/mime", 
+            postfields = postFieldsString, 
+            headers = headers 
+        },
+        function (err, msg, response)            
+            LOG.std("HomeManage", "debug", "uploadMyHouse", "Status Code: %s, Method: %s, URL: %s", err, "PUT", url)
+            if err == 200 then
+                uploadSucceed(response, err)
+            else
+                uploadFailed(response, err)
+            end
+        end)    
 end
 
 function HomeManage:ChangeGameMode()
