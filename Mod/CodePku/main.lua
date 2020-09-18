@@ -519,6 +519,14 @@ function CodePku:init()
 	-- 		end
 	-- 	end
 	-- )
+
+	GameLogic.GetFilters():add_filter(
+		"codepkuTaskSettlement",
+		function (data, ifEnd)
+			local TaskSettlement = NPL.load("(gl)Mod/CodePku/cellar/GUI/TaskSettlement/TaskSettlement.lua")
+			TaskSettlement:ShowPage(data, ifEnd)
+		end
+	)
 end
 
 function CodePku:OnLogin()
@@ -544,7 +552,6 @@ function CodePku:OnInitDesktop()
 end
 
 function CodePku:BasicConfig()
-	echo("--BasicConfig---")
 	local request = NPL.load("(gl)Mod/CodePku/api/BaseRequest.lua");
 	-- request:get('/config/basic',nil,{sync = true}):next(function(response)		
 	-- 	CodePku.BasicConfig = response.data.data;
@@ -558,7 +565,4 @@ function CodePku:BasicConfig()
 	if response.status == 200 then
 		CodePku.BasicConfigTable = response.data.data;
 	end
-	echo("-----------------------CodePku.BasicConfigTable--------");
-	echo(CodePku.BasicConfigTable)
-	echo(Mod.CodePku.BasicConfigTable)
 end

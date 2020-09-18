@@ -31,6 +31,10 @@ local UserConsole = NPL.export()
 function UserConsole:ShowPage()
     UserInfo:OnChangeAvatar()
 
+    NPL.load("(gl)Mod/CodePku/cellar/Notice/Notice.lua")
+    local Notice = commonlib.gettable("Mod.CodePku.celler.Notice")
+    Notice:ShowPage()
+
     local params = {
         url = "Mod/CodePku/cellar/UserConsole/StartLearning.html", 
         name = "StartLearning", 

@@ -76,7 +76,7 @@ function RankPage.GetGameItem(id, range)
     end
     local list = {}
     local mylist = {}
-    local response = request:get('/game-scores/ranks?game_id='..id..param,nil,{sync = true})
+    local response = request:get('/game-scores/ranks?game_name='..id..param,nil,{sync = true})
     local data = response.data.data
     for i = 1, #data do
         if data[i].is_top_n then
@@ -219,7 +219,7 @@ function RankPage:ShowPage(PageIndex, bShow)
         RankPage.userinfo, RankPage.myinfo = RankPage.GetSubjectItem(1, 1)
         RankPage.ui = AdaptWindow:QuickWindow(RankPage.params["subject"])
     elseif PageIndex == 2 then
-        RankPage.userinfo, RankPage.myinfo = RankPage.GetGameItem(22, 1)
+        RankPage.userinfo, RankPage.myinfo = RankPage.GetGameItem("parkour", 1)
         RankPage.ui = AdaptWindow:QuickWindow(RankPage.params["game"])
     elseif PageIndex == 3 then
         RankPage.userinfo, RankPage.myinfo = RankPage.GetActivityItem(RankPage.activity_navig[1].game_id, 1, RankPage.activity_navig[1].id)
