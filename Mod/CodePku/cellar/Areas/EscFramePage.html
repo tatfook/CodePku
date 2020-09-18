@@ -27,7 +27,7 @@ end
 function OnLeave()
     -- GameLogic.RunCommand("/menu file.exit");
     if (System.Codepku and System.Codepku.Coursewares) or HomeManage:IsMyHome() then
-        if (System.Codepku.Coursewares.category == 3) then
+        if (System.Codepku and System.Codepku.Coursewares and System.Codepku.Coursewares.category == 3) then
             ClosePage();
         else
             UserConsole:CourseEntry();
