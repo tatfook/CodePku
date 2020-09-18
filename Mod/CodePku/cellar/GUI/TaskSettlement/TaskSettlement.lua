@@ -85,11 +85,13 @@ function TaskSettlement:GetExpinfo()
         totalCur  = self.subjectInfo.total_level_info.current_exp or 0,
         totalNext  = self.subjectInfo.total_level_info.next_exp or 1,
         totalLvUp  = self.subjectInfo.total_level_info.level_up or 0,
+        totalLv  = self.subjectInfo.total_level_info.current_level or 0,
         totalPer = (self.subjectInfo.total_level_info.current_exp or 0)/(self.subjectInfo.total_level_info.next_exp or 1),
 
         subjectCur  = self.subjectInfo.subject_level_info.current_exp or 0,
         subjectNext  = self.subjectInfo.subject_level_info.next_exp or 1,
         subjectLvUp  = self.subjectInfo.subject_level_info.level_up or 0,
+        subjectLv  = self.subjectInfo.subject_level_info.current_level or 0,
         subjectPer = (self.subjectInfo.subject_level_info.current_exp or 0)/(self.subjectInfo.subject_level_info.next_exp or 1),
     }
     return expInfo
@@ -108,11 +110,13 @@ function TaskSettlement:AddUpAaward()
             self.allAward.totalCur = self.expInfo.totalCur
             self.allAward.totalNext = self.expInfo.totalNext
             self.allAward.totalLvUp = self.expInfo.totalLvUp
+            self.allAward.totalLv = self.expInfo.totalLv
             self.allAward.totalPer = self.expInfo.totalPer
 
             self.allAward.subjectCur = self.expInfo.subjectCur
             self.allAward.subjectNext = self.expInfo.subjectNext
             self.allAward.subjectLvUp = self.expInfo.subjectLvUp
+            self.allAward.subjectLv = self.expInfo.subjectLv
             self.allAward.subjectPer = self.expInfo.subjectPer
 
             self.allProps = {}
@@ -122,8 +126,19 @@ function TaskSettlement:AddUpAaward()
         else
             self.allAward.totalExp = self.allAward.totalExp + self.subjectInfo.total_exp
             self.allAward.subjectExp = self.allAward.subjectExp + self.subjectInfo.subject_exp
+
+            self.allAward.totalCur = self.expInfo.totalCur
+            self.allAward.totalNext = self.expInfo.totalNext
             self.allAward.totalLvUp = self.allAward.totalLvUp + self.expInfo.totalLvUp
+            self.allAward.totalLv = self.expInfo.totalLv
+            self.allAward.totalPer = self.expInfo.totalPer
+
+            self.allAward.subjectCur = self.expInfo.subjectCur
+            self.allAward.subjectNext = self.expInfo.subjectNext
             self.allAward.subjectLvUp = self.allAward.subjectLvUp +  self.expInfo.subjectLvUp
+            self.allAward.subjectLv = self.expInfo.subjectLv
+            self.allAward.subjectPer = self.expInfo.subjectPer
+
             for _,v in pairs(self.props) do
                 if self.allProps[v.prop_id] then
                     self.allProps[v.prop_id].prop_num = self.allProps[v.prop_id].prop_num + v.prop_num
@@ -133,28 +148,31 @@ function TaskSettlement:AddUpAaward()
             end
         end
     else
-        if not self.allAward then self.allAward = {} end
-        if not self.allProps then self.allProps = {} end
+        if self.subjectInfo.total_exp > 0 or self.subjectInfo.subject_exp > 0 or next(self.props) then
+            if not self.allAward then self.allAward = {} end
+            if not self.allProps then self.allProps = {} end
+            self.allAward.totalExp = (self.allAward.totalExp or 0) + self.subjectInfo.total_exp
+            self.allAward.subjectExp = (self.allAward.subjectExp or 0) + self.subjectInfo.subject_exp
+            self.allAward.subjectName = self.subjectInfo.subject_name
+            self.allAward.subjectUrl  = self.subjectInfo.subject_url
 
-        self.allAward.totalExp = (self.allAward.totalExp or 0) + self.subjectInfo.total_exp
-        self.allAward.subjectExp = (self.allAward.subjectExp or 0) + self.subjectInfo.subject_exp
-        self.allAward.subjectName = self.subjectInfo.subject_name
-        self.allAward.subjectUrl  = self.subjectInfo.subject_url
+            self.allAward.totalCur = self.expInfo.totalCur
+            self.allAward.totalNext = self.expInfo.totalNext
+            self.allAward.totalLvUp = (self.allAward.totalLvUp or 0) + self.expInfo.totalLvUp
+            self.allAward.totalLv = self.expInfo.totalLv
+            self.allAward.totalPer = self.expInfo.totalPer
 
-        self.allAward.totalCur = self.expInfo.totalCur
-        self.allAward.totalNext = self.expInfo.totalNext
-        self.allAward.totalLvUp = (self.allAward.totalLvUp or 0) + self.expInfo.totalLvUp
-        self.allAward.totalPer = self.expInfo.totalPer
-
-        self.allAward.subjectCur = self.expInfo.subjectCur
-        self.allAward.subjectNext = self.expInfo.subjectNext
-        self.allAward.subjectLvUp = (self.allAward.subjectLvUp or 0) +  self.expInfo.subjectLvUp
-        self.allAward.subjectPer = self.expInfo.subjectPer
-        for _,v in pairs(self.props) do
-            if self.allProps[v.prop_id] then
-                self.allProps[v.prop_id].prop_num = self.allProps[v.prop_id].prop_num + v.prop_num
-            else
-                self.allProps[v.prop_id] = {prop_num = v.prop_num, prop_name = v.prop_name, prop_icon_url= v.prop_icon_url}
+            self.allAward.subjectCur = self.expInfo.subjectCur
+            self.allAward.subjectNext = self.expInfo.subjectNext
+            self.allAward.subjectLvUp = (self.allAward.subjectLvUp or 0) +  self.expInfo.subjectLvUp
+            self.allAward.subjectLv = self.expInfo.subjectLv
+            self.allAward.subjectPer = self.expInfo.subjectPer
+            for _,v in pairs(self.props) do
+                if self.allProps[v.prop_id] then
+                    self.allProps[v.prop_id].prop_num = self.allProps[v.prop_id].prop_num + v.prop_num
+                else
+                    self.allProps[v.prop_id] = {prop_num = v.prop_num, prop_name = v.prop_name, prop_icon_url= v.prop_icon_url}
+                end
             end
         end
     end
@@ -164,22 +182,26 @@ end
 function TaskSettlement:GetOnceAward()
     local onceAward = {}
     local index = 1
-    onceAward[index] = {name= L'玩学经验', num = self.subjectInfo.total_exp, type='totalExp'}
-    index = index + 1
+    if self.subjectInfo.total_exp > 0 then
+        onceAward[index] = {name= L'玩学经验', num = self.subjectInfo.total_exp, type='totalExp'}
+        index = index + 1
+    end
     if self.expInfo.totalLvUp > 0 then
         onceAward[index] = {name= L'玩学经验', up = self.expInfo.totalLvUp, type='totalLvUp'}
         index = index + 1
     end
-    onceAward[index] = {name= self.subjectInfo.subject_name, num = self.subjectInfo.subject_exp, type='subjectExp'}
-    index = index + 1
+    if self.subjectInfo.subject_exp > 0 then
+        onceAward[index] = {name= self.subjectInfo.subject_name, num = self.subjectInfo.subject_exp, type='subjectExp'}
+        index = index + 1
+    end
     if self.expInfo.subjectLvUp > 0 then
         onceAward[index] = {name= self.subjectInfo.subject_name, up = self.expInfo.subjectLvUp, type='subjectLvUp'}
-        index = index +1
+        index = index + 1
     end
     for _,v in pairs(self.props) do
         if v.prop_num > 0 then
             onceAward[index] = {name= v.prop_name, num = v.prop_num, type='prop'}
-            index = index+1
+            index = index + 1
         end
     end
     return onceAward
@@ -190,13 +212,15 @@ TaskSettlement.infoFormat = {
     totalExp = '您获得了%d%s',
     totalLvUp = "恭喜您升级啦！",
     subjectExp = '您获得了%d%s积分',
-    subjectLvUp = '恭喜您%s升级啦！',
+    subjectLvUp = '恭喜您<%s>升级啦！',
     prop = '您获得了%d%s',
 }
 
 function TaskSettlement:ShowInfo()
     local conmmandStr = ''
-    TaskSettlement.curInfo = TaskSettlement.onceAward[TaskSettlement.infoIndex]
+    TaskSettlement.curInfo = TaskSettlement.onceAward and TaskSettlement.onceAward[TaskSettlement.infoIndex] or nil
+    if not TaskSettlement.curInfo then return end
+
     if TaskSettlement.curInfo.type == 'totalExp' or TaskSettlement.curInfo.type == 'subjectExp' or TaskSettlement.curInfo.type == 'prop' then
         conmmandStr = string.format(TaskSettlement.infoFormat[TaskSettlement.curInfo.type], TaskSettlement.curInfo.num, TaskSettlement.curInfo.name)
     elseif TaskSettlement.curInfo.type == 'totalLvUp'  then
@@ -211,12 +235,15 @@ function TaskSettlement:ShowInfo()
     TaskSettlement.infoIndex = TaskSettlement.infoIndex + 1
     if TaskSettlement.infoIndex > # TaskSettlement.onceAward then
         TaskSettlement.timer:Change()
+        TaskSettlement.onceAward = nil
     end
 end
 
 function TaskSettlement:ShowPage(data, ifEnd)
     self.ifEnd = ifEnd
     self.data = data
+    echo('TaskSettlement:ShowPage')
+    echo(self.data)
     --[[data eg:
     {
         "total_exp": 333,
@@ -266,17 +293,7 @@ function TaskSettlement:ShowPage(data, ifEnd)
     self.curInfo = self.onceAward[1]
 
     if self.ifEnd and self.allAward then
-        local params = {
-            url = "Mod/CodePku/cellar/GUI/TaskSettlement/TaskSettlement.html",
-            alignment = "_ct",
-            x = -960,
-            y = -540,
-            width = 1920,
-            height = 1080,
-            zorder = 31,
-            }
-        self.window = AdaptWindow:QuickWindow(params)
-        self.allAward = nil --初始化统计的奖励
+        commonlib.TimerManager.SetTimeout(self.Show,3000)
     else
         self:AddUpAaward() --累加奖励
         -- local params = {
@@ -289,16 +306,38 @@ function TaskSettlement:ShowPage(data, ifEnd)
         --     zorder = 30,
         --     };
         -- self.window = AdaptWindow:QuickWindow(params)
+        if self.timer then
+            self.timer:Change()
+            self.onceAward = nil
+        end
+
+        self.onceAward = self:GetOnceAward()
+        self.infoIndex = 1
+        self.curInfo = self.onceAward[1]
 
         if self.onceAward[1] then
             self.ShowInfo()
-        end
-        
-        if self.timer then
-            self.timer:Change()
         end
         if #self.onceAward >=2 then
             self.timer = commonlib.TimerManager.SetInterval(self.ShowInfo, 1200)
         end
     end
+end
+
+function TaskSettlement:Show()
+    local params = {
+        url = "Mod/CodePku/cellar/GUI/TaskSettlement/TaskSettlement.html",
+        alignment = "_ct",
+        x = -960,
+        y = -540,
+        width = 1920,
+        height = 1080,
+        zorder = 31,
+        }
+
+    AdaptWindow:QuickWindow(params)
+
+    TaskSettlement.allAward = nil --初始化统计的奖励
+    TaskSettlement.allProps = nil --初始化统计的奖励
+
 end

@@ -22,7 +22,7 @@ end
 
 <pe:container alignment="_lt" width="1920" height="1080">
     <div style="position:absolute;left:218;top:97;width:1494;height:910;text-align:center;font-family:Noto Sans S Chinese Regular; font-weight:bold;background:url(codepku/image/textures/task_settlement/task_settlement.png#53 69 1494 910);">
-        <div style="position:absolute;left:499;top:0;width:511;height:108;color:#F3693B;font-size:57;line-height:108;background:url(codepku/image/textures/task_settlement/task_settlement.png#97 1024 511 108);">任务结算</div>
+        <div style="position:absolute;left:499;top:0;width:511;height:108;color:#F3693B;font-size:57;line-height:108;background:url(codepku/image/textures/task_settlement/task_settlement.png#97 1024 511 108);">课程结算</div>
         <div onclick="TaskSettlement.ClosePage" style="position:absolute;left:1385;top:16;width:68;height:78;background:url(codepku/image/textures/common_32bits.png#110 73 68 78);"></div>
 
         <div style="position:absolute;left:192;top:121;width:1142;height:202;color:#ffffff;;">
@@ -32,7 +32,10 @@ end
             </pe:if>
             <!-- 头像头像框 -->
             <div style="<%= format('position:absolute;left:28;top:44;width:124;height:126;background:url(%s);',TaskSettlement.userInfo.avatar_url) %>"></div>
-            <div style="<%= format('position:absolute;left:22;top:40;width:134;height:134;background:url(%s);',TaskSettlement.userInfo.avatar_frame_url) %>"></div>
+            <div style="<%= format('position:absolute;left:22;top:40;width:134;height:134;background:url(%s);',TaskSettlement.userInfo.avatar_frame_url) %>">
+                <!-- 玩家等级 -->
+                <div style="position:absolute;left:80;top:100;width:44;height:26;font-size:25;line-height:26;text-align:center;background:url(codepku/image/textures/common_32bits.png#438 929 61 27:13 13 13 13);"><%= TaskSettlement.allAward.totalLv %></div>
+            </div>
             <!-- 玩家名字 -->
             <div style="position:absolute;left:184;top:38;width:303;height:62;font-size:33;line-height:62;text-align:left;padding-left:19;background:url(codepku/image/textures/task_settlement/task_settlement.png#1633 109 303 62);"><%= TaskSettlement.userInfo.nickname %></div>
             <!-- 获得玩家经验 -->
@@ -55,9 +58,11 @@ end
             <!-- 学科icon -->
             <div style="position:absolute;left:22;top:40;width:134;height:134;background:url(codepku/image/textures/subjects/subjects.png#27 37 104 106);">
                 <div style="<%= format('position:absolute;left:20;top:20;width:94;height:94;background:url(%s);', TaskSettlement.allAward.subjectUrl) %>"></div>
+                <!-- 学科等级 -->
+                <div style="position:absolute;left:80;top:100;width:44;height:26;font-size:25;line-height:26;text-align:center;background:url(codepku/image/textures/common_32bits.png#438 929 61 27:13 13 13 13);"><%= TaskSettlement.allAward.subjectLv %></div>
             </div>
             <!-- 学科名字 -->
-            <div style="position:absolute;left:184;top:38;width:303;height:62;font-size:33;line-height:62;text-align:left;padding-left:19;background:url(codepku/image/textures/task_settlement/task_settlement.png#1633 109 303 62);"><%= TaskSettlement.allAward.subject_name %></div>
+            <div style="position:absolute;left:184;top:38;width:303;height:62;font-size:33;line-height:62;text-align:left;padding-left:19;background:url(codepku/image/textures/task_settlement/task_settlement.png#1633 109 303 62);"><%= TaskSettlement.allAward.subjectName %></div>
             <!-- 获得学科经验 -->
             <div style="position:absolute;left:769;top:30;width:199;height:74;">
                 <div style="position:absolute;left:0;width:75;height:74;background:url(codepku/image/textures/common_32bits.png#1467 878 98 98);"></div>
