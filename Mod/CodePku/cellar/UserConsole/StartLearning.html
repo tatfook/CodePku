@@ -14,14 +14,22 @@
                 local page = document:GetPageCtrl()
                 Mod.CodePku.Store:Set("page/StartLearning", page)
 
+<<<<<<< HEAD
                 NPL.load("(gl)Mod/CodePku/cellar/Notice/Notice.lua")
                 local Notice = commonlib.gettable("Mod.CodePku.celler.Notice")
 
                 local huaweiApprovalStatus = Mod.CodePku.BasicConfig.huawei_approval_status == 'on'  
                 local isHuawei = ParaEngine.GetAppCommandLineByParam("app_market", "") == 'huawei';
+=======
+                CommonFunc = NPL.load("(gl)Mod/CodePku/cellar/Common/CommonFunc/CommonFunc.lua")
+>>>>>>> 6699fda8f5ca0e556b74e458566faa65d4db4074
 
                 function isHuaweiApproval()
-                    return huaweiApprovalStatus and isHuawei
+                    return CommonFunc.isHuaweiApproval()
+                end
+
+                function isIOSApproval()
+                    return CommonFunc.isIOSApproval()
                 end
 
                 function startLearning()
@@ -29,11 +37,16 @@
                     local userId = Mod.CodePku.Store:Get('user/userId')
                     local guideUid = tostring(userId)..'beginnerGuideState'
                     local beginnerGuideState = GameLogic.GetPlayerController():LoadLocalData(guideUid,false,true);
-                    if not beginnerGuideState then
-                        Page:CloseWindow()
-                        UserConsole:ShowBeginnerPage()
-                    else
+                
+                    if isHuaweiApproval() then 
                         UserConsole:CourseEntry()  
+                    else
+                        if not beginnerGuideState then
+                            Page:CloseWindow()
+                            UserConsole:ShowBeginnerPage()
+                        else
+                            UserConsole:CourseEntry()  
+                        end
                     end
                 end
 
@@ -61,7 +74,7 @@
                 end
 
                 function ClickQQGroup()
-                    ParaGlobal.ShellExecute("open", Mod.CodePku.BasicConfig.qq_group_link, "", "", 1)
+                    ParaGlobal.ShellExecute("open", Mod.CodePku.BasicConfigTable.qq_group_link, "", "", 1)
                 end
             ]]></script>
             <style type="text/mcss">
@@ -95,7 +108,9 @@
                 <div style="position: relative; width: 102; height: 125; left: 1781; top: 200; background:url(codepku/image/textures/main_ui/main.png#420 490 102 125);" onclick="ClickNotice"></div>
                 <pe:if condition = "<%= not isHuaweiApproval()%>" >
                     <div style="position: relative; width: 101; height: 135; left: 1781; top: 360; background:url(codepku/image/textures/main_ui/main.png#160 313 101 135);" onclick="ClickCommunity"></div>
-                    <div style="position: relative; width: 106; height: 138; left: 1779; top: 520 ; background:url(codepku/image/textures/main_ui/main.png#285 480 106 138);" onclick="ClickQQGroup"></div>
+                    <pe:if condition = "<%= not isIOSApproval()%>" >
+                        <div style="position: relative; width: 106; height: 138; left: 1779; top: 520 ; background:url(codepku/image/textures/main_ui/main.png#285 480 106 138);" onclick="ClickQQGroup"></div>
+                    </pe:if>
                 </pe:if>
 
                 <!-- <pe:if condition="<%= System.os.IsMobilePlatform() %>">

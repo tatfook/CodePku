@@ -85,6 +85,7 @@ CodePku.Store = Store
 CodePku.MsgBox = MsgBox
 CodePku.Utils = Utils
 CodePku.BasicConfig = {}
+CodePku.BasicConfigTable = {}
 
 function CodePku:ctor()
 	
@@ -376,6 +377,11 @@ function CodePku:init()
 	local Online = commonlib.gettable("Mod.CodePku.Online");
     Online:Init();   
 
+	local StudyStats = NPL.load("(gl)Mod/CodePku/script/apps/Statistics/StudyStats.lua");
+	StudyStats.StaticInit();
+
+	local AppStats = NPL.load("(gl)Mod/CodePku/script/apps/Statistics/AppStats.lua");
+	AppStats:init();
     local CodepkuChatChannel = NPL.load("(gl)Mod/CodePku/chat/CodepkuChatChannel.lua");
 	CodepkuChatChannel.StaticInit();
 
@@ -482,6 +488,16 @@ function CodePku:init()
 			return true;
 		end
 	)
+	
+	-- GameLogic.GetFilters():add_filter(
+	-- 	"user_event_stat",
+	-- 	function (position, action)
+	-- 		if (position == 'desktop' and action == "ForceExit") then
+	-- 			local StudyStats = NPL.load("(gl)Mod/CodePku/script/apps/Statistics/StudyStats.lua");
+    --             StudyStats.OnExitApp();
+	-- 		end
+	-- 	end
+	-- )
 end
 
 function CodePku:OnLogin()
@@ -507,11 +523,21 @@ function CodePku:OnInitDesktop()
 end
 
 function CodePku:BasicConfig()
+	echo("--BasicConfig---")
 	local request = NPL.load("(gl)Mod/CodePku/api/BaseRequest.lua");
-	request:get('/config/basic',{}):next(function(response)		
-		CodePku.BasicConfig = response.data.data; 		
-    end):catch(function(e)
+	-- request:get('/config/basic',nil,{sync = true}):next(function(response)		
+	-- 	CodePku.BasicConfig = response.data.data;
+	-- 	echo("-----------------------config");
+	-- 	echo(response.data.data)
+	-- 	echo(CodePku.BasicConfig)
+    -- end):catch(function(e)
         
-    end);
+	-- end);
+	local response = request:get('/config/basic',{},{sync = true});
+	if response.status == 200 then
+		CodePku.BasicConfigTable = response.data.data;
+	end
+	echo("-----------------------CodePku.BasicConfigTable--------");
+	echo(CodePku.BasicConfigTable)
+	echo(Mod.CodePku.BasicConfigTable)
 end
-
