@@ -29,8 +29,8 @@
 <style type="text/mcss">
 </style>
 
-<pe:container alignment="_lt" width="1920" height="1080">
-    <div style="position: relative; width: 945px; height: 615px;left: 477px; top: 255px; background: url(codepku/image/textures/login/updataAccountBg.png);">
+<pe:container alignment="_lt" width="945" height="615">
+    <div style="position: relative; width: 945px; height: 615px;background: url(codepku/image/textures/login/updataAccountBg.png);">
 
         <div style="position: relative; width: 410; height: 86; left: 267; line-height: 86; font-size: 45; font-weight: bold; font-family: PuHuiTi-Bold; color: #F46D3D; text-align: center; background:url(codepku/image/textures/login/quickLogin.png#444 205 434 86);">账号升级</div>
 
@@ -38,7 +38,7 @@
 
         <div style="position: relative; width: 722; height: 88; left: 112; top: 210; font-family: Noto Sans S Chinese Regular-Regular;
             font-size: 32px; font-weight: normal; font-stretch: normal; line-height: 40px; letter-spacing: 0px; color: #ffffff; background:url(codepku/image/textures/login/main.png#1011 271 88 88:10 10 10 10)">
-            <input type="text" name="account" EmptyText='<%= L"请输入手机号码" %>' style="position: relative;left: 139px; width: 583; height: 88; background: #000000;"/>
+            <input type="text" MoveViewWhenAttachWithIME="true" name="account" EmptyText='<%= L"请输入手机号码" %>' style="position: relative;left: 139px; width: 583; height: 88; background: #000000;"/>
             <div style="position: relative; left: 93px; top: 41px; width: 16px; height: 8px;background: url(codepku/image/textures/login/quickLogin.png#751 82 16 8);"></div>
             <input type="button" name="numberChoose" onclick="OnNumberChooseBtnClicked" value='<%= L"+86"%>' style="position: relative; width: 101px; height: 88px; background: #000000;"/>
         </div>
@@ -46,7 +46,7 @@
         <div name="verifyCodeDiv" style="position: relative; width: 722; height: 88; left: 111; top: 329;">
 
             <div style="position: relative; width: 722; height: 88; font-size: 32; color:#FFFFFF; font-family: Noto Sans S Chinese Regular; background:url(codepku/image/textures/login/main.png#1011 271 88 88:10 10 10 10);">
-                <input type="text" name="verify_code" EmptyText='<%= L"请输入验证码" %>' style="position: relative; width: 672; height: 88; left: 25; line-height: 88; background: #000000;" />
+                <input type="text" MoveViewWhenAttachWithIME="true" name="verify_code" EmptyText='<%= L"请输入验证码" %>' style="position: relative; width: 672; height: 88; left: 25; line-height: 88; background: #000000;" />
             </div>
 
             <input type="button" name="GetMobileCodeBtn" onclick="OnGetMobileCodeBtnClicked()"

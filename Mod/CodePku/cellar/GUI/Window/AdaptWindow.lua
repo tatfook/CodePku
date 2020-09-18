@@ -75,6 +75,7 @@ function AdaptWindow:QuickWindow(params)
     });
     window:SetMinimumScreenSize(1920,1080);
 
+	echo("========AdaptWindow========"..params.url)
 	local FocusPolicy = commonlib.gettable("System.Core.Namespace.FocusPolicy");
 	window:setFocusPolicy(FocusPolicy.NoFocus);
 
