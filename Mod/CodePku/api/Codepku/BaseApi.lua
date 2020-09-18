@@ -5,7 +5,7 @@ Date:  2019.11.8
 Place: Foshan
 use the lib:
 ------------------------------------------------------------
-local KeepworkBaseApi = NPL.load("(gl)Mod/WorldShare/api/Keepwork/BaseApi.lua")
+local CodePkuBaseApi = NPL.load("(gl)Mod/CodePku/api/Codepku/BaseApi.lua")
 ------------------------------------------------------------
 ]]
 
@@ -29,8 +29,12 @@ function CodePkuBaseApi:GetHeaders(headers)
         headers["Authorization"] = format("Bearer %s", token)
     end
 
+    if (not headers.Accept) then
+        headers["Accept"] = "application/json";
+    end
+    
     headers.notTokenRequest = nil
-    headers["Accept"] = "application/json";
+    
     return headers
 end
 
@@ -46,6 +50,12 @@ function CodePkuBaseApi:Post(url, params, headers, success, error, noTryStatus)
     url = self:GetApi() .. url
 
     BaseApi:Post(url, params, self:GetHeaders(headers), success, self:ErrorCollect("Post", url, error), noTryStatus)
+end
+
+function CodePkuBaseApi:PostFields(url, headers, content, success, error)
+    url = self:GetApi() .. url
+
+    BaseApi:PostFields(url, params, self:GetHeaders(headers), success, self:ErrorCollect("Post", url, error), noTryStatus)
 end
 
 -- public

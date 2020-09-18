@@ -1,5 +1,7 @@
 NPL.load("./MainSceneUIButtons.lua");
 NPL.load("(gl)script/apps/Aries/Creator/WorldCommon.lua");
+NPL.load("(gl)Mod/CodePku/cellar/GUI/Home/HomeManage.lua")
+local HomeManage = commonlib.gettable("Mod.CodePku.Common.HomeManage")
 local AdaptWindow = commonlib.gettable("Mod.CodePku.GUI.Window.AdaptWindow")
 local EntityManager = commonlib.gettable("MyCompany.Aries.Game.EntityManager")
 local MainSceneUIButtons = commonlib.gettable("Mod.CodePku.Common.TouchMiniButtons.MainSceneUIButtons");
@@ -23,10 +25,17 @@ MainUIButtons.open_function = nil
 MainUIButtons.open_common = nil
 MainUIButtons.account_up = nil
 MainUIButtons.user_asset = nil
+MainUIButtons.home_window = nil
 
 MainUIButtons.isIOSApproval = CommonFunc.isIOSApproval()
 
 function MainUIButtons.show_common_ui(flag)
+
+	if MainUIButtons.common_window then
+		MainUIButtons.common_window:CloseWindow()
+		MainUIButtons.common_window = nil
+	end
+
 	-- ios渠道屏蔽Q群
 	local open_width = 0
 	if MainUIButtons.isIOSApproval then
@@ -61,10 +70,14 @@ function MainUIButtons.show_common_ui(flag)
 	
 end
 
-MainUIButtons.isHuaweiApproval = CommonFunc.isHuaweiApproval()
-
 function MainUIButtons.show_function_ui(flag)	--flag == true,工具栏展开
 	-- 华为渠道屏蔽排行榜
+	MainUIButtons.isHuaweiApproval = CommonFunc.isHuaweiApproval()
+
+	if MainUIButtons.function_window then
+		MainUIButtons.function_window:CloseWindow()
+		MainUIButtons.function_window = nil
+	end
 	local params = {}
 	if MainUIButtons.isHuaweiApproval then
 		params = {
@@ -157,6 +170,19 @@ function MainUIButtons.show_account_up_ui()
 	end
 end
 
+function MainUIButtons.show_home_window_ui()
+	local params = {
+		url = "Mod/CodePku/cellar/Common/TouchMiniButtons/MainUIButtons_home_window.html",
+		alignment = "_lt", left = 1600, top = 493, width = 135, height = 155,
+	}
+
+	local isHome = commonlib.getfield("System.Codepku.isHome")
+
+	if isHome then
+		MainUIButtons.home_window = AdaptWindow:QuickWindow(params)
+	end
+end
+
 function MainUIButtons.JudgeNil()
 	if MainUIButtons.common_window ~= nil then
 		MainUIButtons.common_window:CloseWindow()
@@ -178,6 +204,10 @@ function MainUIButtons.JudgeNil()
 		MainUIButtons.account_up:CloseWindow()
 		MainUIButtons.account_up = nil
 	end
+	if MainUIButtons.home_window ~= nil then
+		MainUIButtons.home_window:CloseWindow()
+		MainUIButtons.home_window = nil
+	end
 end
 
 
@@ -198,9 +228,14 @@ function MainUIButtons.ShowPage()
 			MainUIButtons.show_money_ui()		
 			MainUIButtons.show_function_ui()
 			MainUIButtons.show_account_up_ui()
+			MainUIButtons.show_home_window_ui()
 		else
 			MainUIButtons.show_common_ui()
 		end
+	end
+	--进入家园区初始化时隐藏下排按钮
+	if HomeManage:IsMyHome() then
+		MainUIButtons.show_function_ui("close")
 	end
 end
 

@@ -39,6 +39,7 @@ NPL.load("(gl)script/ide/System/Encoding/jwt.lua")
 NPL.load("(gl)Mod/CodePku/cellar/GUI/Window/AdaptWindow.lua");
 NPL.load("(gl)Mod/CodePku/online/main.lua");
 NPL.load("(gl)Mod/CodePku/cellar/GUI/GenAndName.lua")
+NPL.load("(gl)Mod/CodePku/cellar/GUI/Home/HomeManage.lua")
 
 
 local Store = NPL.load("(gl)Mod/CodePku/store/Store.lua")
@@ -68,6 +69,7 @@ local SignInPage = NPL.load("(gl)Mod/CodePku/cellar/GUI/SignIn/SignInPage.lua")
 local FastEntrence = NPL.load("(gl)Mod/CodePku/cellar/GUI/SmallMap/FastEntrence/FastEntrence.lua")
 local TopicCourse = NPL.load("(gl)Mod/CodePku/cellar/GUI/SmallMap/FastEntrence/TopicCourse.lua")
 
+local HomeManage = commonlib.gettable("Mod.CodePku.Common.HomeManage")
 local DownloadWorld = commonlib.gettable("MyCompany.Aries.Game.MainLogin.DownloadWorld")
 
 local CodePku = commonlib.inherit(commonlib.gettable("Mod.ModBase"),commonlib.gettable("Mod.CodePku"));
@@ -131,6 +133,16 @@ function CodePku:init()
 				MainLogin:Show()
 				LOG.std(nil, "info", "CodePku", "add_filter ShowLoginModePage")
 				return false
+			end
+	)
+
+	--退出世界时将世界课程数据置位空
+	GameLogic.GetFilters():add_filter(
+			"OnWorldUnloaded",
+			function()
+				if HomeManage:IsMyHome() then
+					commonlib.setfield("System.Codepku.Coursewares", nil)
+				end
 			end
 	)
 
@@ -389,6 +401,11 @@ function CodePku:init()
 	local CourseLoadTips = commonlib.gettable("Mod.CodePku.GUI.CourseLoadTips")
 	CourseLoadTips.StaticInit();
 
+	--初始化世界加载完毕后时候家园区标识变量
+	NPL.load("(gl)Mod/CodePku/cellar/GUI/Home/HomeManage.lua");
+	local HomeManage = commonlib.gettable("Mod.CodePku.Common.HomeManage")
+	HomeManage:OnInit()
+
 	GameLogic.GetFilters():add_filter(
 		"DesktopMenuPage.ShowPage",
 		function(bShow)
@@ -399,6 +416,9 @@ function CodePku:init()
 	GameLogic.GetFilters():add_filter(
 		"QuickSelectBar.ShowPage",
 		function(bShow)
+			if HomeManage:IsMyHome() then
+				return false
+			end
 			return not (System.Codepku.Coursewares and (System.Codepku.Coursewares.category == 1 or System.Codepku.Coursewares.category == 2 or System.Codepku.Coursewares.category == 7));
 		end
 	);
@@ -440,7 +460,7 @@ function CodePku:init()
 	GameLogic.GetFilters():add_filter(
 		"KeyPressEvent",
 		function(callbackVal, event)
-			local isEmployee = System.User and System.User.info and System.User.info.is_employee;		
+			local isEmployee = System.User and System.User.info and System.User.info.is_employee;
 			if isEmployee and tonumber(isEmployee) == 1 then
 				return true;
 			end
