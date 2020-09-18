@@ -1,0 +1,158 @@
+<!-- temporary solution -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+</head>
+<body>
+    <pe:mcml>
+<script refresh="false" type="text/npl" src="SkinPageV1.lua"><![CDATA[
+
+SkinPageV1 = commonlib.gettable("Mod.CodePku.GUI.Profile.SkinPage");
+SkinPageV1.OnInit();
+
+function ChangeSkin(name, mcmlNode)
+    local filename = mcmlNode:GetAttribute('param2');
+    if (filename) then
+        SkinPageV1.SetText(filename);
+    end
+end
+
+function SkinIsSelected(filename)
+    if(SkinPageV1.cur_filename == filename) then
+        return true;
+    else
+        return false;
+    end
+end
+
+-- function ChangeSkinWithTreeNode(treenode)
+--     local mcmlNode = treenode.mcmlNode
+--     local filename = mcmlNode:GetPreValue("this").filename;
+--     if (filename) then
+--         SkinPageV1.SetText(filename);
+--     end
+-- end
+
+function ClosePage()
+    Page:CloseWindow();
+end
+
+function OnOK()
+    SkinPageV1.OnOK();
+    ClosePage();
+end
+
+]]></script>
+<style type="text/mcss">
+    {
+        green_button = {
+            background = "codepku/image/textures/common_32bits.png#1404 740 86 86:14 14 14 14",
+            color = "#0E5516",
+            width = 132,
+            height = 48,
+            ["font-size"] = 24,
+            ["base-font-size"] = 24,
+            ['font-family'] = 'Noto Sans S Chinese Regular',
+        },
+        modal_title = {
+            width = 284,
+            height = 92,
+            background = "codepku/image/textures/common_32bits.png#1265 363 434 115",
+            ["margin-top"] = -10,
+            color = '#F46A3C',
+            ["font-size"] = 36,
+            ["base-font-size"] = 36,
+            ["font-family"] = "PuHuiTi-Bold",
+            ["text-align"] = "center",
+        },
+        close_button = {
+            background = "codepku/image/textures/common_32bits.png#110 73 68 78",
+            width = 42,
+            height = 48,
+            ["margin-top"] = -70,
+            ["margin-right"] = 22
+        },
+        list_container = {
+            background = "codepku/image/textures/profile/achievement.png#731 183 100 100: 33 33 33 33",
+            ['base-font-size'] = 20,
+            ['font-size'] = 20,
+            ['font-family'] = 'Noto Sans S Chinese Regular',
+            
+        }
+    }
+</style>
+
+<pe:container alignment="_lt" style="position:relative;width:830px;height:480px;background:url(codepku/image/textures/common_32bits.png#99 275 1158 588);font-family:Noto Sans S Chinese Regular;">
+    <div>
+        <div align="center" class="modal_title" style="line-height: 78;">角色外貌</div>
+        <input align="right" type="button" value="" class="close_button" onclick="ClosePage"/>
+    </div>
+    <pe:container alignment="_ctt" style="background:;">
+        <div style="float:left;margin-left:13px;margin-top:3px;width:320px;height:320px;">
+            <pe:canvas3d name="AssetPreview" DefaultRotY="-1.57" DefaultCameraObjectDist="5" autoRotateSpeed="0.12" miniscenegraphname="AssetPreview" RenderTargetSize="512" style="width:320px;height:320px;" />
+                
+            <!-- <pe:mc_player name="MyPlayer" miniscenegraphname="AvatarMyselfTabCharacter" style="width:256px;height:256px;" RenderTargetSize=256 isinteractive="false" /> -->
+        </div>
+            <!-- <input type="button" onclick="SkinPageV1.OnChangeAvatarModel"  value='<%=L"更改造型..."%>' style="position:relative;margin-top:260px;margin-left:20px;min-width:130px;" class="mc_light_grey_button_with_fillet"/>
+            <input type="button" onclick="SkinPageV1.OnChangeAvatarSkin"  value='<%=L"更改皮肤..."%>' style="position:relative;margin-top:295px;margin-left:20px;min-width:130px;" class="mc_light_grey_button_with_fillet"/> -->
+    
+        <div style="float:left;margin-left:10px;width:386px;height:320px;">
+            <div class="list_container" style="margin-top:5px;padding:12px;">
+                <div style="float:left;margin-left:42px;color:#ffffff;">
+                    ID
+                </div>
+                <div style="float:left;margin-left:92px;color:#ffffff;">
+                    <%=L"描述"%>
+                </div>
+                
+                <!-- <pe:treeview ShowIcon="false" name="tvwFiles" VerticalScrollBarStep="20" DataSource='<%=SkinPageV1.GetAllFiles()%>' DefaultNodeHeight="20" style="height:300px;background:;">
+                    <NodeTemplates>
+                        <NodeTemplate DataType="commonfile">
+                            <pe:treenode style="height:20px;" indent="10" param1='<%=Eval("index") %>' OnClick="ChangeSkin" can_select="true" text='<%=XPath("this|text")%>'></pe:treenode>
+                        </NodeTemplate>
+                    </NodeTemplates>
+                    <DataNodePlaceholder xpath="*" />
+                </pe:treeview> -->
+                <pe:gridview style="margin-top:5px;height:260px;" name="gvwSkins" CellPadding="4" VerticalScrollBarStep="42" VerticalScrollBarOffsetX="0" AllowPaging="false"
+                ItemsPerLine="1" DefaultNodeHeight="42" ScrollBarTrackWidth="24" VerticalScrollBarWidth="" DataSource='<%=SkinPageV1.GetAllFiles()%>'>
+                <Columns>
+                    <div style="height:42px;margin-left:12px;font-size:18px;base-font-size:18px;font-family:Noto Sans S Chinese Regular;">
+                        <pe:if condition='<%= SkinIsSelected(Eval("filename")) == true %>'>
+                            <div style="float:left;color:#155F9E;height:40px;line-height:36px;background:url(codepku/image/textures/profile/achievement.png#246 192 80 82:16 0 16 0)">
+                                <div style="float:left;margin-left:20px;width:30px;text-align:center;">
+                                    <%= Eval("index") %>
+                                </div>
+                                <div style="float:left;width:240px;text-align:center;padding-right:20px;">
+                                    <%= Eval("text") %>
+                                </div>
+                            </div>
+                        </pe:if>
+                        <pe:if condition='<%= SkinIsSelected(Eval("filename")) == false %>'>
+                            <div style="position:relative;color:#686695;height:40px;line-height:36px;background:url(codepku/image/textures/profile/achievement.png#361 192 81 81:16 0 16 0)">
+                                <div style="float:left;margin-left:20px;width:30px;text-align:center;">
+                                    <%= Eval("index") %>
+                                </div>
+                                <div style="float:left;width:240px;text-align:center;padding-right:20px;">
+                                    <%= Eval("text") %>
+                                </div>
+                            </div>
+                            <input type="button" onclick="ChangeSkin" name="btn_change" param1='<%=Eval("index") %>' param2='<%= Eval("filename") %>' style="position:relative;min-width:290px;height:42px;background:#00000020"/>
+                        </pe:if>
+                    </div>
+                </Columns> 
+                <EmptyDataTemplate>
+                </EmptyDataTemplate>
+            </pe:gridview>
+            </div>
+        </div>
+    </pe:container> 
+    <pe:container alignment="_ctt" style="position:relative;margin-top:334px;background:;">
+        <input type="button" onclick="OnOK" value='<%=L"确定"%>' class="green_button" />
+    </pe:container>
+</pe:container>
+</pe:mcml>
+</body>
+</html>
+
