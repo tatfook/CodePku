@@ -36,7 +36,7 @@ function SkinPageV1.GetAllFiles()
 		-- fill local files
 		if(PlayerAssetFile:HasCategory('people')) then
 			local items = PlayerAssetFile:GetCategoryItems('people');
-			local gender = System.User and System.User.gender;
+			local gender = System.User and System.User.info and System.User.info.gender;
 			for i, item in ipairs(items) do
 				local assetfile = item.filename;
 				if (string.find(assetfile, 'paperman') ~= nil) then
