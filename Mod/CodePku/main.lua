@@ -488,22 +488,20 @@ function CodePku:init()
 			return true;
 		end
 	)
-	
-	-- GameLogic.GetFilters():add_filter(
-	-- 	"user_event_stat",
-	-- 	function (position, action)
-	-- 		if (position == 'desktop' and action == "ForceExit") then
-	-- 			local StudyStats = NPL.load("(gl)Mod/CodePku/script/apps/Statistics/StudyStats.lua");
-    --             StudyStats.OnExitApp();
-	-- 		end
-	-- 	end
-	-- )
 
 	GameLogic.GetFilters():add_filter(
 		"codepkuTaskSettlement",
 		function (data, ifEnd)
 			local TaskSettlement = NPL.load("(gl)Mod/CodePku/cellar/GUI/TaskSettlement/TaskSettlement.lua")
 			TaskSettlement:ShowPage(data, ifEnd)
+		end
+	)
+
+	-- CheckInstallUrlProtocol
+	GameLogic.GetFilters():add_filter(
+		"CheckInstallUrlProtocol",
+		function (default)
+			return true;
 		end
 	)
 end
