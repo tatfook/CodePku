@@ -68,7 +68,7 @@ function ClickedLeftNavigIndex(name)
             RankPage.left_navig_last_clicked = k
         end
     end
-    RankPage.userinfo, RankPage.myinfo = RankPage.GetGameItem(RankPage.game_navig[RankPage.left_navig_last_clicked].game_id, RankPage.top_navig_clicked_index)
+    RankPage.userinfo, RankPage.myinfo = RankPage.GetGameItem(RankPage.game_navig[RankPage.left_navig_last_clicked].name, RankPage.top_navig_clicked_index)
     Page:Refresh(0)
 end
 
@@ -91,7 +91,7 @@ function ClickedTopNavigIndex(name)
             RankPage.top_navig_clicked_index = k
         end
     end
-    RankPage.userinfo, RankPage.myinfo = RankPage.GetGameItem(RankPage.game_navig[RankPage.left_navig_last_clicked].game_id, RankPage.top_navig_clicked_index)
+    RankPage.userinfo, RankPage.myinfo = RankPage.GetGameItem(RankPage.game_navig[RankPage.left_navig_last_clicked].name, RankPage.top_navig_clicked_index)
     Page:Refresh(0)
 end
 
