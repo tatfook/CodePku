@@ -39,6 +39,7 @@ NPL.load("(gl)script/ide/System/Encoding/jwt.lua")
 NPL.load("(gl)Mod/CodePku/cellar/GUI/Window/AdaptWindow.lua");
 NPL.load("(gl)Mod/CodePku/online/main.lua");
 NPL.load("(gl)Mod/CodePku/cellar/GUI/GenAndName.lua")
+NPL.load("(gl)Mod/CodePku/cellar/GUI/Home/HomeManage.lua")
 
 
 local Store = NPL.load("(gl)Mod/CodePku/store/Store.lua")
@@ -68,6 +69,7 @@ local SignInPage = NPL.load("(gl)Mod/CodePku/cellar/GUI/SignIn/SignInPage.lua")
 local FastEntrence = NPL.load("(gl)Mod/CodePku/cellar/GUI/SmallMap/FastEntrence/FastEntrence.lua")
 local TopicCourse = NPL.load("(gl)Mod/CodePku/cellar/GUI/SmallMap/FastEntrence/TopicCourse.lua")
 
+local HomeManage = commonlib.gettable("Mod.CodePku.Common.HomeManage")
 local DownloadWorld = commonlib.gettable("MyCompany.Aries.Game.MainLogin.DownloadWorld")
 
 local CodePku = commonlib.inherit(commonlib.gettable("Mod.ModBase"),commonlib.gettable("Mod.CodePku"));
@@ -137,7 +139,7 @@ function CodePku:init()
 	GameLogic.GetFilters():add_filter(
 			"OnWorldUnloaded",
 			function()
-				if System.Codepku.isHome or System.Codepku.isLoadingHome then
+				if HomeManage:IsMyHome() then
 					commonlib.setfield("System.Codepku.Coursewares", nil)
 				end
 			end
@@ -408,7 +410,11 @@ function CodePku:init()
 	GameLogic.GetFilters():add_filter(
 		"QuickSelectBar.ShowPage",
 		function(bShow)
-			return not (System.Codepku.Coursewares and (System.Codepku.Coursewares.category == 1 or System.Codepku.Coursewares.category == 2 or System.Codepku.Coursewares.category == 7) or System.Codepku.isHome);
+			if HomeManage:IsMyHome() then
+				local MainUIButtons = NPL.load("(gl)Mod/CodePku/cellar/Common/TouchMiniButtons/Main.lua")
+				return not MainUIButtons.open_function
+			end
+			return not (System.Codepku.Coursewares and (System.Codepku.Coursewares.category == 1 or System.Codepku.Coursewares.category == 2 or System.Codepku.Coursewares.category == 7));
 		end
 	);
 	GameLogic.GetFilters():add_filter(

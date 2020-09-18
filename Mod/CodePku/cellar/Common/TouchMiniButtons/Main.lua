@@ -1,5 +1,7 @@
 NPL.load("./MainSceneUIButtons.lua");
 NPL.load("(gl)script/apps/Aries/Creator/WorldCommon.lua");
+NPL.load("(gl)Mod/CodePku/cellar/GUI/Home/HomeManage.lua")
+local HomeManage = commonlib.gettable("Mod.CodePku.Common.HomeManage")
 local AdaptWindow = commonlib.gettable("Mod.CodePku.GUI.Window.AdaptWindow")
 local EntityManager = commonlib.gettable("MyCompany.Aries.Game.EntityManager")
 local MainSceneUIButtons = commonlib.gettable("Mod.CodePku.Common.TouchMiniButtons.MainSceneUIButtons");
@@ -23,6 +25,12 @@ MainUIButtons.home_window = nil
 
 
 function MainUIButtons.show_common_ui(flag)
+
+	if MainUIButtons.common_window then
+		MainUIButtons.common_window:CloseWindow()
+		MainUIButtons.common_window = nil
+	end
+
 	local open_width = 804
 	local open_height = 178
 	local close_width = 82
@@ -52,6 +60,11 @@ function MainUIButtons.show_common_ui(flag)
 end
 
 function MainUIButtons.show_function_ui(flag)	--flag == true,工具栏展开
+
+	if MainUIButtons.function_window then
+		MainUIButtons.function_window:CloseWindow()
+		MainUIButtons.function_window = nil
+	end
 
 	local params = {
 		open = {
@@ -180,6 +193,10 @@ function MainUIButtons.ShowPage()
 		else
 			MainUIButtons.show_common_ui()
 		end
+	end
+	--进入家园区初始化时隐藏下排按钮
+	if HomeManage:IsMyHome() then
+		MainUIButtons.show_function_ui("close")
 	end
 end
 

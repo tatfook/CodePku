@@ -41,6 +41,11 @@ function HomeManage:OnWorldLoaded()
     System.Codepku.isLoadingHome = false
 end
 
+-- 判断是否在自己的家园
+function HomeManage:IsMyHome()
+    return System.Codepku.isHome or System.Codepku.isLoadingHome
+end
+
 function HomeManage:GetHomeWorld()
     --body
     local function LoadWorld(world, refreshMode)
@@ -79,7 +84,7 @@ function HomeManage:GetHomeWorld()
     end)
 end
 
---因为原来的的InternetLoadWorld.LoadWorld()中直接就加载了压缩包，这里就重写一下，前面的逻辑完全相同，后面加载世界时先解压
+--因为原来的的InternetLoadWorld.LoadWorld()中直接就加载了压缩包，这里就重写一下，前面的逻辑删除了不要的部分，后面加载世界时先解压
 function HomeManage:InternetLoadWorld(world, refreshMode, onDownloadCompleted)
     NPL.load("(gl)script/apps/Aries/Creator/Game/main.lua");
 	local Game = commonlib.gettable("MyCompany.Aries.Game")
@@ -111,9 +116,16 @@ function HomeManage:InternetLoadWorld(world, refreshMode, onDownloadCompleted)
             local filesOut = {}
             commonlib.Files.Find(filesOut, "", 0, 10000, ":.", world.worldpath);
 
-            local rootDir = world.worldpath:gsub("[%w%s_]*.zip$", "")
-            local worldDir = rootDir..commonlib.Encoding.DefaultToUtf8(filesOut[1].filename)
-            LOG.std(nil, "world", "zipFile", "rootDir = %s", rootDir)
+            local dirName = Mod.CodePku.Store:Get("user/userId").."Home/"
+            local userHomeDir = world.worldpath:gsub("[%w%s_]*.zip$", "")..dirName
+            local worldDir = userHomeDir..commonlib.Encoding.DefaultToUtf8(filesOut[1].filename)
+            -- local worldDir = userHomeDir..Mod.CodePku.Store:Get("user/userId")..commonlib.Encoding.DefaultToUtf8(filesOut[1].filename)
+            if(not ParaIO.DoesFileExist(userHomeDir)) then
+                ParaIO.CreateDirectory(userHomeDir)
+                log("users home dir created\n");
+            end
+            LOG.std(nil, "world", "zipFile", "dirName = %s", dirName)
+            LOG.std(nil, "world", "zipFile", "userHomeDir = %s", userHomeDir)
             LOG.std(nil, "world", "zipFile", "worldDir = %s", worldDir)
             LOG.std(nil, "world", "zipFile", "world.worldpath = %s", world.worldpath)
             NPL.load("(gl)script/ide/System/Util/ZipFile.lua");
@@ -121,26 +133,17 @@ function HomeManage:InternetLoadWorld(world, refreshMode, onDownloadCompleted)
             local zipFile = ZipFile:new();
             if(zipFile:open(world.worldpath)) then
                 LOG.std(nil, "world", "zipFile", "unzip")
-                zipFile:unzip(rootDir);
+                zipFile:unzip(userHomeDir);
                 zipFile:close();
             end
-
-            -- local testout = {}
-            -- commonlib.Files.SearchFiles(testout, worldDir, "*.*", 3, 200, true, true);
-            -- for i = 1,#testout do
-            --     local item = testout[i];
-            --     echo("----zr----")
-            --     echo(item)
-            -- end
 
 			if(page) then
 				page:CloseWindow();
             end
+
             System.Codepku.isLoadingHome = true -- 设置当前正在进入家园区判定
 
             Game.Start(worldDir);
-            -- Game.Start(worldDir, true);
-            -- Game.Start(world.worldpath);
 		else
             GameLogic.AddBBS(nil, msg, 3000, "255 0 0", 21)
 		end
@@ -220,7 +223,10 @@ function HomeManage:SaveHome()
     local worldpath = source.."/";
     local zipfile = source..".zip";
     local worldname = string.gsub(source, ".*/(.-)$", "%1");
-
+    LOG.std(nil, "HomeManage", "SaveHome", "source = %s", source)
+    LOG.std(nil, "HomeManage", "SaveHome", "worldpath = %s", worldpath)
+    LOG.std(nil, "HomeManage", "SaveHome", "zipfile = %s", zipfile)
+    LOG.std(nil, "HomeManage", "SaveHome", "worldname = %s", worldname)
     local function MakeNewZipPackage_()
         if(ParaIO.DoesFileExist(zipfile)) then
             -- close and delete old file.
@@ -232,20 +238,14 @@ function HomeManage:SaveHome()
         local writer = ParaIO.CreateZip(zipfile,"");
         writer:AddDirectory(worldname, worldpath.."*.*", 6);
         writer:close();
-
-        -- local filesOut = {}
-        -- commonlib.Files.Find(filesOut, "", 0, 10000, ":.", zipfile);
-        -- for i = 1,#filesOut do
-        --     local item = filesOut[i];
-        --     echo("----zr3----")
-        --     echo(item.filename)
-        -- end
+        if(ParaIO.DoesFileExist(zipfile)) then
+            log("Home zip file exist, create succeed\n");
+        end
     end
     NPL.load("(gl)script/apps/Aries/Creator/WorldCommon.lua");
     local WorldCommon = commonlib.gettable("MyCompany.Aries.Creator.WorldCommon")
-    -- WorldCommon.SaveWorldAs()
+
     -- todo 后期加上世界是否被修改的判定，然后提示玩家是否保存并上传
-    -- GameLogic.SaveAll(true, true)
     GameLogic.SaveAll(true)
     MakeNewZipPackage_()
 
