@@ -258,7 +258,7 @@ function HttpRequest:Delete(url, params, headers, success, error, noTryStatus)
     )
 end
 
-function HttpRequest:PostFields(url, headers, content, success, error)
+function HttpRequest:PostFields(url, headers, content, success, error)    
     System.os.GetUrl({ url = url, headers = headers, postfields = content }, function(err, msg, data)
         LOG.std("HttpRequest", "debug", "Request", "Status Code: %s, Method: %s, URL: %s", err, "POST", url)
 
