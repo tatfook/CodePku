@@ -34,7 +34,7 @@ function CodePkuServiceSession:QuickLogin(visitor_id, app_market, callback)
 end
 
 function CodePkuServiceSession:LoginWithToken(token, callback)
-    CodePkuUsersApi:Profile(token, callback, callback)
+    CodePkuUsersApi:LoginWithToken(token, callback, callback)
 end
 
 function CodePkuServiceSession:LoginResponse(response, err, callback)    
