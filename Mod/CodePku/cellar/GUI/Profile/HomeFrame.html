@@ -57,12 +57,12 @@ end
 
 function OnClickHome()
     -- if (System.Codepku and System.Codepku.Coursewares and System.Codepku.Coursewares.keepwork_project_id ~= HomeWorldId) then
-    if not System.Codepku.isHome then
-        GameLogic.RunCommand(string.format('/loadworld %d', HomeWorldId));
-    else
-        GameLogic.RunCommand("/tip -duration 1500 您已位于家园")
-    end
-    ClosePage();
+    -- if not System.Codepku.isHome then
+    --    GameLogic.RunCommand(string.format('/loadworld %d', HomeWorldId));
+    -- else
+    --    GameLogic.RunCommand("/tip -duration 1500 您已位于家园")
+    -- end
+    -- ClosePage();
 end
 
 CommonFunc = NPL.load("(gl)Mod/CodePku/cellar/Common/CommonFunc/CommonFunc.lua")
