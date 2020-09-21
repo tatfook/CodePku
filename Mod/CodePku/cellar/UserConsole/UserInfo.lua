@@ -49,6 +49,7 @@ local curIndex = 1
 -- cycle through
 -- @param btnName: if nil, we will load the default one if scene is not started.
 function UserInfo:OnChangeAvatar(btnName)
+    local EntityManager = commonlib.gettable("MyCompany.Aries.Game.EntityManager");
     local UserConsolePage = Store:Get("page/UserConsole")
 
     local avatars = default_avatars;
@@ -58,16 +59,18 @@ function UserInfo:OnChangeAvatar(btnName)
     elseif System.User.info.gender == 2 then
         avatars = DefaultGirlAvatars;
     end
-    
-    if System.User.info.special_type == 1 then
-        GameLogic.options:SetMainPlayerAssetName('codepku/model/LLS_AN.x')
-    elseif System.User.info.special_type == 2 then
-        GameLogic.options:SetMainPlayerAssetName('codepku/model/HLS_AN.x')
-    elseif System.User.info.special_type == 3 then
-        GameLogic.options:SetMainPlayerAssetName('codepku/model/WLS_AN.x')
-    else
-        filename = UserInfo.GetValidAvatarFilename(avatars[1])
-        GameLogic.options:SetMainPlayerAssetName(filename)
-    end
 
+    local GeneralGameClient = commonlib.gettable("Mod.CodePku.Online.Client.GeneralGameClient")
+    if (not GeneralGameClient.GetAssetsWhiteList().IsInWhiteList(GameLogic.options:GetMainPlayerAssetName())) then
+        if System.User.info.special_type == 1 then
+            GameLogic.options:SetMainPlayerAssetName('codepku/model/LLS_AN.x')
+        elseif System.User.info.special_type == 2 then
+            GameLogic.options:SetMainPlayerAssetName('codepku/model/HLS_AN.x')
+        elseif System.User.info.special_type == 3 then
+            GameLogic.options:SetMainPlayerAssetName('codepku/model/WLS_AN.x')
+        else
+            filename = UserInfo.GetValidAvatarFilename(avatars[1])
+            GameLogic.options:SetMainPlayerAssetName(filename)
+        end
+    end
 end

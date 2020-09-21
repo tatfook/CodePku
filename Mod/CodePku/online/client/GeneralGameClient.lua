@@ -24,6 +24,11 @@ function GeneralGameClient:Init()
     self.GetAssetsWhiteList().AddAsset("codepku/model/HLS_AN.x");
     self.GetAssetsWhiteList().AddAsset("codepku/model/LLS_AN.x");
     self.GetAssetsWhiteList().AddAsset("codepku/model/WLS_AN.x");
+    self.GetAssetsWhiteList().AddAsset("character/CC/02human/paperman/Female_teachers.x");
+    self.GetAssetsWhiteList().AddAsset("character/CC/02human/paperman/Male_teacher.x");
+    self.GetAssetsWhiteList().AddAsset("character/CC/02human/paperman/xiaolong.x");
+    self.GetAssetsWhiteList().AddAsset("character/CC/02human/paperman/zaizai.x");
+    self.GetAssetsWhiteList().AddAsset("character/CC/02human/paperman/nuannuan.x");
 
     self:GetOptions().serverIp = Config.defaultOnlineServer.host;
     self:GetOptions().serverPort = Config.defaultOnlineServer.port;

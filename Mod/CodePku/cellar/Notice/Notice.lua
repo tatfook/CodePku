@@ -32,13 +32,16 @@ Notice.Status = {
 
 function Notice:ShowPage(PageIndex, bShow, id, mainasset)
     self:GetNoticeList()
-
-    local params = {
-		url = "Mod/CodePku/cellar/Notice/Notice.html",
-		alignment="_lt", left = 0, top = 0, width = 1920, height = 1080, zorder = 30,
-		click_through = false,
-	}
-	return AdaptWindow:QuickWindow(params)
+    if #self.noticeList > 0 then 
+        local params = {
+            url = "Mod/CodePku/cellar/Notice/Notice.html",
+            alignment="_lt", left = 0, top = 0, width = 1920, height = 1080, zorder = 30,
+            click_through = false,
+        }
+        return AdaptWindow:QuickWindow(params)
+    else
+        return
+    end
 end
 
 -- Judge whether the interval between the given time and the current time is less than 7 days
