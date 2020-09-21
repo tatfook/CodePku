@@ -44,6 +44,8 @@ end
 
 -- 判断是否在自己的家园
 function HomeManage:IsMyHome()
+    LOG.std(nil, "HomeManage", "IsMyHome", "System.Codepku.isHome = %s", tostring(System.Codepku.isHome))
+    LOG.std(nil, "HomeManage", "IsMyHome", "System.Codepku.isLoadingHome = %s", tostring(System.Codepku.isLoadingHome))
     return System.Codepku.isHome or System.Codepku.isLoadingHome
 end
 
