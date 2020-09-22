@@ -138,12 +138,42 @@ function CodePku:init()
 
 	--退出世界时将世界课程数据置位空
 	GameLogic.GetFilters():add_filter(
-			"OnWorldUnloaded",
-			function()
-				if HomeManage:IsMyHome() then
-					commonlib.setfield("System.Codepku.Coursewares", nil)
+		"OnWorldUnloaded",
+		function()
+			-- 这里因为只能在世界加载完成之前，所以只能用isLoadingHome来判断
+			if System.Codepku.isLoadingHome then
+				LOG.std(nil, "info", "codepku", "add_filter OnWorldUnloaded")
+				commonlib.setfield("System.Codepku.Coursewares", nil)
+			end
+		end
+	)
+
+	GameLogic.GetFilters():add_filter(
+		"BaseContextMousePressEvent",
+		function (event)
+			LOG.std(nil, "info", "codepku", "add_filter BaseContextMousePressEvent")
+			if HomeManage:IsMyHome() then
+				if event.mouse_button == "left" then
+					event.mouse_button = "right"
+				elseif event.mouse_button == "right" then
+					event.mouse_button = "left"
 				end
 			end
+		end
+	)
+
+	GameLogic.GetFilters():add_filter(
+		"BaseContextMouseReleaseEvent",
+		function (event)
+			LOG.std(nil, "info", "codepku", "add_filter BaseContextMouseReleaseEvent")
+			if HomeManage:IsMyHome() then
+				if event.mouse_button == "left" then
+					event.mouse_button = "right"
+				elseif event.mouse_button == "right" then
+					event.mouse_button = "left"
+				end
+			end
+		end
 	)
 
 	-- 重写移动端虚拟小键盘
