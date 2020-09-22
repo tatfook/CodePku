@@ -1,0 +1,61 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+</head>
+<body>
+<pe:mcml>
+<script refresh="false" type="text/npl" src="TeachCourses.lua"><![CDATA[
+
+TeachCourses = NPL.load("(gl)Mod/CodePku/cellar/GUI/SmallMap/FastEntrence/TeachCourses/TeachCourses.lua");
+local FastEntrence = NPL.load("(gl)Mod/CodePku/cellar/GUI/SmallMap/FastEntrence/FastEntrence.lua")
+local SmallMap = commonlib.gettable("Mod.CodePku.GUI.SmallMap")
+local MainPopup = commonlib.gettable("Mod.CodePku.GUI.MainPopup");
+
+function ClosePage()
+    Page:CloseWindow();
+    SmallMap:ShowPage()
+end
+
+function onChoose(grade)
+    FastEntrence:GetGradeInfo(1)
+    FastEntrence:ShowPopupPage(1, grade)
+end
+
+function turnToTeach()
+    MainPopup:ShowPage("TPpopup", "教学区", 15855)
+end
+
+CommonFunc = NPL.load("(gl)Mod/CodePku/cellar/Common/CommonFunc/CommonFunc.lua")
+
+function isIOSApproval()
+    return CommonFunc.isIOSApproval()
+end
+    
+]]></script>
+
+<style type="text/mcss"></style>
+<pe:container alignment="_lt" width="1920" height="1080">
+
+    <div style="<%=format('position: relative; width: 1920; height: 1080; background:url(%s);', TeachCourses.background_path)%>"></div>
+    
+
+    <div style="position: relative; width: 221; height: 125; background:url(codepku/image/textures/common_32bits.png#251 49 208 127);" onclick="ClosePage"></div>
+
+    <div style="position: relative; width: 410; height: 83; left: 760.5; top: 2; text-align: center; font-family: PuHuiTi-Bold; color: #D85D0B; font-size: 70; line-height: 83; background:url(codepku/image/textures/common_32bits.png#1277 377 410 87);">进入新世界</div>
+
+    <pe:if condition = "<%= not isIOSApproval()%>" >
+        <!-- <div style="position: relative; width: 122; height: 70; left: 878; top: 231; color:#FFFFFF; line-height: 70; text-align: center; font-size: 48; font-family: Noto Sans S Chinese Regular; font-weight: bold; background:url(codepku/image/textures/fastentrence_map/main.png#488 819 122 70:15 15 15 15);" name="3" onclick="onChoose">高中</div> -->
+        <!-- <div style="position: relative; width: 122; height: 70; left: 960; top: 499; color:#FFFFFF; line-height: 70; text-align: center; font-size: 48; font-family: Noto Sans S Chinese Regular; font-weight: bold; background:url(codepku/image/textures/fastentrence_map/main.png#488 819 122 70:15 15 15 15);" name="2" onclick="onChoose">初中</div> -->
+        <div style="position: relative; width: 240; height: 121; left: 822; top: 143; background:url(codepku/image/textures/fastentrence_map/billboard2.png#1017 186 195 98);" name="3" onclick="onChoose"></div>
+        <div style="position: relative; width: 240; height: 121; left: 872; top: 393; background:url(codepku/image/textures/fastentrence_map/billboard2.png#1019 311 195 98);" name="2" onclick="onChoose"></div>
+    </pe:if>
+    <!-- <div style="position: relative; width: 122; height: 70; left: 860; top: 736; color:#FFFFFF; line-height: 70; text-align: center; font-size: 48; font-family: Noto Sans S Chinese Regular; font-weight: bold; background:url(codepku/image/textures/fastentrence_map/main.png#488 819 122 70:15 15 15 15);" name="1" onclick="onChoose">小学</div> -->
+    <div style="position: relative; width: 240; height: 121; left: 827; top: 658; background:url(codepku/image/textures/fastentrence_map/billboard2.png#1287 311 196 98);" name="1" onclick="onChoose"></div>
+    <div onclick="turnToTeach" style="position: relative; width: 424; height: 231; left: 66; top: 788; background:url(codepku/image/textures/fastentrence_map/billboard2.png#148 799 424 231);"></div>
+    
+</pe:container>
+</pe:mcml>
+</body>
+</html>

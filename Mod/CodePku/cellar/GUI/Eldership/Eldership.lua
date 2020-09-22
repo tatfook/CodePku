@@ -18,6 +18,8 @@ local UserInfoPage = NPL.load("(gl)Mod/CodePku/cellar/GUI/UserInfo.lua");
 Eldership.iconPng = "codepku/image/textures/eldership/eldership.png"                -- 按键雪碧图
 Eldership.backgroundPng = "codepku/image/textures/eldership/eldershipbg.png"        -- 我的家长背景图
 Eldership.unbindPng = "codepku/image/textures/eldership/unbind.png"                 -- 解绑提示背景图
+
+-- 存放所有使用的固定文本，unbindcontent这个名字是最早的时候写的，懒得改了
 Eldership.unbindContent = {
     [1] = "我的家长:",
     [2] = "学习报告",
@@ -45,7 +47,8 @@ Eldership.iconData = {
     [5] = {url=Eldership.iconPng, left=647, top=45, width=67, height=85},
     [6] = {url=Eldership.iconPng, left=775, top=44, width=75, height=89},
     [7] = {url=Eldership.iconPng, left=908, top=46, width=73, height=81},
-    [8] = {url=Eldership.iconPng, left=61, top=204, width=268, height=268},           -- 微信二维码
+    [8] = {url=Eldership.iconPng, left=470, top=29, width=122, height=123},           -- 微信二维码,默认使用[4]的纯白背景
+    -- [8] = {url=Eldership.iconPng, left=61, top=204, width=268, height=268},           -- 微信二维码，这个是玩学公众号
     [9] = {url=Eldership.iconPng, left=368, top=278, width=245, height=86},
     [10] = {url=Eldership.iconPng, left=694, top=278, width=245, height=86},
 }
@@ -115,7 +118,7 @@ function Eldership:GetQR()
         GameLogic.AddBBS("CodeGlobals", L"网络开小差了，重试一下吧", 3000, "#FF0000");
         return
       end
-      -- 替换公众号二维码为绑定二维码
+      -- 替换[8]为绑定二维码
       self.iconData[8] = {url = qr_code_url}
       -- 刷新页面
       self.ui:Refresh(0)
