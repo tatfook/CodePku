@@ -1,6 +1,8 @@
 NPL.load("Mod/GeneralGameServerMod/Core/Client/GeneralGameClient.lua");
 NPL.load("Mod/CodePku/online/client/EntityOtherPlayer.lua");
+NPL.load("Mod/CodePku/online/client/EntityMainPlayer.lua");
 
+local EntityMainPlayer = commonlib.gettable("Mod.CodePku.Online.Client.EntityMainPlayer");
 local EntityOtherPlayer = commonlib.gettable("Mod.CodePku.Online.Client.EntityOtherPlayer");
 local GeneralGameClient = commonlib.inherit(commonlib.gettable("Mod.GeneralGameServerMod.Core.Client.GeneralGameClient"), commonlib.gettable("Mod.CodePku.Online.Client.GeneralGameClient"));
 local Config = NPL.load("(gl)Mod/CodePku/online/client/Config.lua");
@@ -34,6 +36,11 @@ function GeneralGameClient:Init()
     self:GetOptions().serverPort = Config.defaultOnlineServer.port;
 
     self.inited = true;
+end
+
+-- 获取主玩家类
+function GeneralGameClient:GetEntityMainPlayerClass()
+    return EntityMainPlayer;
 end
 
 -- 获取其它玩家类
