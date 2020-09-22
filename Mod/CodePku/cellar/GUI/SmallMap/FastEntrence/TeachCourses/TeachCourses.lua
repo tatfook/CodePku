@@ -114,28 +114,28 @@ end
 -- 年级列表
 TeachCourses.grade_list = {
     [1] = {
-        [1] = {},
-        [2] = {},
+        [1] = {tips_url = TeachCourses.GetTeachCoursesIconPathStr(14), desc = '一年级(上)',},
+        [2] = {tips_url = TeachCourses.GetTeachCoursesIconPathStr(15), desc = '一年级(下)',},
     },
     [2] = {
-        [1] = {},
-        [2] = {},
+        [1] = {tips_url = TeachCourses.GetTeachCoursesIconPathStr(16), desc = '二年级(上)',},
+        [2] = {tips_url = TeachCourses.GetTeachCoursesIconPathStr(17), desc = '二年级(下)',},
     },
     [3] = {
-        [1] = {},
-        [2] = {},
+        [1] = {tips_url = TeachCourses.GetTeachCoursesIconPathStr(18), desc = '三年级(上)',},
+        [2] = {tips_url = TeachCourses.GetTeachCoursesIconPathStr(19), desc = '三年级(下)',},
     },
     [4] = {
-        [1] = {},
-        [2] = {},
+        [1] = {tips_url = TeachCourses.GetTeachCoursesIconPathStr(20), desc = '四年级(上)',},
+        [2] = {tips_url = TeachCourses.GetTeachCoursesIconPathStr(21), desc = '四年级(下)',},
     },
     [5] = {
-        [1] = {},
-        [2] = {},
+        [1] = {tips_url = TeachCourses.GetTeachCoursesIconPathStr(22), desc = '五年级(上)',},
+        [2] = {tips_url = TeachCourses.GetTeachCoursesIconPathStr(23), desc = '五年级(下)',},
     },
     [6] = {
-        [1] = {},
-        [2] = {},
+        [1] = {tips_url = TeachCourses.GetTeachCoursesIconPathStr(24), desc = '六年级(上)',},
+        [2] = {tips_url = TeachCourses.GetTeachCoursesIconPathStr(25), desc = '六年级(下)',},
     },
     -- [7] = {},
     -- [8] = {},
@@ -153,4 +153,23 @@ TeachCourses.params = {
 
 function TeachCourses:ShowPage(id)
     self.ui = AdaptWindow:QuickWindow(TeachCourses.params[id])
+end
+
+-- 获取年级列表
+function TeachCourses:GetGradeList(page)
+    request:get('/coursewares/by-grade'):next(function(response)
+        if (response.status == 200) then
+            -- 组装年级导图数据
+            local data = response.data.data
+            for _,v in pairs(data) do
+                local index = v.grade - 1
+                local semester = v.semester
+                TeachCourses.grade_list[index][semester].count = v.count
+            end
+            -- 拼完数据刷新页面展示数据
+            page:Refresh(0)
+        end
+    end):catch(function(e)
+        LOG.std(nil, "TeachCourses", "GetGradeList", "error_msg: = %s", e)
+    end)
 end

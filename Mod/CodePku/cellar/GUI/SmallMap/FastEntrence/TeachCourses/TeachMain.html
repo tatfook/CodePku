@@ -12,13 +12,22 @@ TeachCourses = NPL.load("(gl)Mod/CodePku/cellar/GUI/SmallMap/FastEntrence/TeachC
 local FastEntrence = NPL.load("(gl)Mod/CodePku/cellar/GUI/SmallMap/FastEntrence/FastEntrence.lua")
 local SmallMap = commonlib.gettable("Mod.CodePku.GUI.SmallMap")
 local MainPopup = commonlib.gettable("Mod.CodePku.GUI.MainPopup");
+local page = document:GetPageCtrl()
 
+-- 获取雪碧图图标
 function getIcon(id)
    return TeachCourses.GetTeachCoursesIconPathStr(id)
 end
 
+-- 打开促销包
 function ShowPurchase()
     TeachCourses:ShowPage(1)
+end
+
+-- 获取年级导图列表
+function getShow()
+    TeachCourses:GetGradeList(page)
+    return TeachCourses.grade_list
 end
 
 function ClosePage()
@@ -31,10 +40,14 @@ function onChoose(grade)
     FastEntrence:ShowPopupPage(1, grade)
 end
 
+
+
+-- 跳转到教学区世界
 function turnToTeach()
     MainPopup:ShowPage("TPpopup", "教学区", 15855)
 end
 
+-- 判断渠道
 CommonFunc = NPL.load("(gl)Mod/CodePku/cellar/Common/CommonFunc/CommonFunc.lua")
 
 function isIOSApproval()
@@ -50,6 +63,32 @@ end
 
     <div style="<%=format('position: relative; left: 87; top: 94; width: 1748; height: 968; background:url(%s);', getIcon(13))%>">
         <div style="<%=format('position: relative; left: 73; top: -45; width: 298; height: 130; background:url(%s);', getIcon(1))%>"></div>
+
+        <div style="position: relative; width: 1290; height: 682; left: 243; top: 98;background-color: #00000065;">
+
+            <pe:if condition="<%= not isIOSApproval%>">
+                <pe:gridview name="" style="width: 1290; height: 682;" DataSource='<%= getShow() %>' CellPadding="53" ItemsPerLine="3" AllowPaging="false" RememberScrollPos="true" RememberLastPage="true" 
+                    VerticalScrollBarStep="36" VerticalScrollBarOffsetX="8">
+                    <Columns>
+
+                        <pe:if condition="<%= Eval('index') == 1 %>">
+                            <div style="width: 324; height: 247;background-color: #ffffff;"></div>
+                        </pe:if>
+                        <pe:if condition="<%= Eval('index') == 2 %>">
+                            <div style="<%=format('width: 260; height: 92; font-size: 42; font-family: Noto Sans S Chinese Regular; font-weight: bold; text-align: center; line-height: 92; color: #FFFFFF; margin-left: 129; margin-top: 45; background:url(%s);', Eval('tips_url') )%>" name="<%=Eval('desc')%>"><%=Eval('desc')%></div>
+                        </pe:if>
+
+                    </Columns>
+                </pe:gridview>
+            </pe:if>
+
+
+
+            <pe:if condition="<%= isIOSApproval %>">
+
+            </pe:if>
+        </div>
+
         <div onclick="ShowPurchase" style="<%=format('position: relative; left: 925; top: -34; width: 502; height: 158; background:url(%s);', getIcon(7))%>"></div>
         <div onclick="ClosePage" style="<%=format('position: relative; left: 1587; top: 12; width: 101; height: 102; background:url(%s);', getIcon(2))%>"></div>
 
