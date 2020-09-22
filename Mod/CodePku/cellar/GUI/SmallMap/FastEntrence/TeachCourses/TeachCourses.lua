@@ -22,8 +22,8 @@ TeachCourses.courseware_background_path = "codepku/image/textures/smallmap/teach
 TeachCourses.icons = {
     -- 年级导图图标
     [1] = {url = TeachCourses.main_icons_path, left=41, top=34, width=298, height=130, desc = '左上角年级导图小学飘旗'},
-    [3] = {url = TeachCourses.main_icons_path, left=369, top=48, width=101, height=102, desc = '红叉'},
-    [2] = {url = TeachCourses.main_icons_path, left=500, top=34, width=111, height=155, desc = '左箭头'},
+    [2] = {url = TeachCourses.main_icons_path, left=369, top=48, width=101, height=102, desc = '红叉'},
+    [3] = {url = TeachCourses.main_icons_path, left=500, top=34, width=111, height=155, desc = '左箭头'},
     [4] = {url = TeachCourses.main_icons_path, left=657, top=36, width=111, height=155, desc = '右箭头'},
     [5] = {url = TeachCourses.main_icons_path, left=1027, top=105, width=24, height=24, desc = '实心页码点'},
     [6] = {url = TeachCourses.main_icons_path, left=1069, top=99, width=36, height=37, desc = '空心页码点'},
@@ -32,7 +32,7 @@ TeachCourses.icons = {
     [9] = {url = TeachCourses.main_icons_path, left=421, top=246, width=283, height=221, desc = '年级图片(暂用)'},
     [10] = {url = TeachCourses.main_icons_path, left=734, top=288, width=186, height=118, desc = '年级图片右上角胶带'},
     [11] = {url = TeachCourses.main_icons_path, left=965, top=327, width=380, height=73, desc = '这个年级没课啊，搞个东西给他遮着'},
-    [12] = {url = TeachCourses.main_icons_path, left=41, top=579, width=300, height=290, desc = '传送牌'},
+    [12] = {url = TeachCourses.main_icons_path, left=41, top=579, width=300, height=220, desc = '传送牌'},
     [13] = {url = TeachCourses.main_icons_path, left=91, top=938, width=1748, height=968, desc = '年级导图背景书本'},
     [14] = {url = TeachCourses.main_icons_path, left=419, top=626, width=204, height=68, desc = '一年级(上)'},
     [15] = {url = TeachCourses.main_icons_path, left=419, top=739, width=204, height=68, desc = '一年级(下)'},
@@ -81,7 +81,7 @@ TeachCourses.icons = {
     [56] = {url = TeachCourses.purchase_icons_path, left=21, top=215, width=399, height=327, desc = '紫色背景三星底座'},
     [57] = {url = TeachCourses.purchase_icons_path, left=437, top=215, width=399, height=327, desc = '绿色背景二星底座'},
     [58] = {url = TeachCourses.purchase_icons_path, left=852, top=215, width=399, height=327, desc = '蓝色背景一星底座'},
-    [59] = {url = TeachCourses.purchase_icons_path, left=1311, top=207, width=551, height=314, desc = '说明小弹窗'},
+    [59] = {url = TeachCourses.purchase_icons_path, left=1277, top=219, width=391, height=305, desc = '说明小弹窗'},
     [60] = {url = TeachCourses.purchase_icons_path, left=1345, top=88, width=46, height=53, desc = '一般型号的玩学币'},
     [61] = {url = TeachCourses.purchase_icons_path, left=1497, top=99, width=30, height=33, desc = '小号玩学币'},
     [62] = {url = TeachCourses.purchase_icons_path, left=53, top=633, width=257, height=206, desc = '一大堆书'},
@@ -145,3 +145,12 @@ TeachCourses.grade_list = {
     -- [12] = {},
 }
 
+TeachCourses.params = {
+    [1] = {url="Mod/CodePku/cellar/GUI/SmallMap/FastEntrence/TeachCourses/xueqibao.html",alignment="_lt", left = 0, top = 0, width = 1920 , height = 1080, zorder = 30},
+    [2] = {url="Mod/CodePku/cellar/GUI/SmallMap/FastEntrence/TeachCourses/kechengbao.html",alignment="_lt", left = 0, top = 0, width = 1920 , height = 1080, zorder = 30},
+    [3] = {url="Mod/CodePku/cellar/GUI/SmallMap/FastEntrence/TeachCourses/danke.html",alignment="_lt", left = 0, top = 0, width = 1920 , height = 1080, zorder = 30},
+}
+
+function TeachCourses:ShowPage(id)
+    self.ui = AdaptWindow:QuickWindow(TeachCourses.params[id])
+end

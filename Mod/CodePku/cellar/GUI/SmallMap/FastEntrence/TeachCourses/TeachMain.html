@@ -13,8 +13,12 @@ local FastEntrence = NPL.load("(gl)Mod/CodePku/cellar/GUI/SmallMap/FastEntrence/
 local SmallMap = commonlib.gettable("Mod.CodePku.GUI.SmallMap")
 local MainPopup = commonlib.gettable("Mod.CodePku.GUI.MainPopup");
 
-function getIcon()
-    
+function getIcon(id)
+   return TeachCourses.GetTeachCoursesIconPathStr(id)
+end
+
+function ShowPurchase()
+    TeachCourses:ShowPage(1)
 end
 
 function ClosePage()
@@ -44,19 +48,14 @@ end
 
     <div style="<%=format('position: relative; width: 1920; height: 1080; background:url(%s);', TeachCourses.background_path)%>"></div>
 
-    <div style="<%=format('position: relative; width: 221; height: 125; background:url(%s);', TeachCourses.background_path)%>" onclick="ClosePage"></div>
+    <div style="<%=format('position: relative; left: 87; top: 94; width: 1748; height: 968; background:url(%s);', getIcon(13))%>">
+        <div style="<%=format('position: relative; left: 73; top: -45; width: 298; height: 130; background:url(%s);', getIcon(1))%>"></div>
+        <div onclick="ShowPurchase" style="<%=format('position: relative; left: 925; top: -34; width: 502; height: 158; background:url(%s);', getIcon(7))%>"></div>
+        <div onclick="ClosePage" style="<%=format('position: relative; left: 1587; top: 12; width: 101; height: 102; background:url(%s);', getIcon(2))%>"></div>
 
-    <div style="position: relative; width: 410; height: 83; left: 760.5; top: 2; text-align: center; font-family: PuHuiTi-Bold; color: #D85D0B; font-size: 70; line-height: 83; background:url(codepku/image/textures/common_32bits.png#1277 377 410 87);">进入新世界</div>
+    </div>
 
-    <pe:if condition = "<%= not isIOSApproval()%>" >
-        <!-- <div style="position: relative; width: 122; height: 70; left: 878; top: 231; color:#FFFFFF; line-height: 70; text-align: center; font-size: 48; font-family: Noto Sans S Chinese Regular; font-weight: bold; background:url(codepku/image/textures/fastentrence_map/main.png#488 819 122 70:15 15 15 15);" name="3" onclick="onChoose">高中</div> -->
-        <!-- <div style="position: relative; width: 122; height: 70; left: 960; top: 499; color:#FFFFFF; line-height: 70; text-align: center; font-size: 48; font-family: Noto Sans S Chinese Regular; font-weight: bold; background:url(codepku/image/textures/fastentrence_map/main.png#488 819 122 70:15 15 15 15);" name="2" onclick="onChoose">初中</div> -->
-        <div style="position: relative; width: 240; height: 121; left: 822; top: 143; background:url(codepku/image/textures/fastentrence_map/billboard2.png#1017 186 195 98);" name="3" onclick="onChoose"></div>
-        <div style="position: relative; width: 240; height: 121; left: 872; top: 393; background:url(codepku/image/textures/fastentrence_map/billboard2.png#1019 311 195 98);" name="2" onclick="onChoose"></div>
-    </pe:if>
-    <!-- <div style="position: relative; width: 122; height: 70; left: 860; top: 736; color:#FFFFFF; line-height: 70; text-align: center; font-size: 48; font-family: Noto Sans S Chinese Regular; font-weight: bold; background:url(codepku/image/textures/fastentrence_map/main.png#488 819 122 70:15 15 15 15);" name="1" onclick="onChoose">小学</div> -->
-    <div style="position: relative; width: 240; height: 121; left: 827; top: 658; background:url(codepku/image/textures/fastentrence_map/billboard2.png#1287 311 196 98);" name="1" onclick="onChoose"></div>
-    <div onclick="turnToTeach" style="position: relative; width: 424; height: 231; left: 66; top: 788; background:url(codepku/image/textures/fastentrence_map/billboard2.png#148 799 424 231);"></div>
+    <div onclick="turnToTeach" style="<%=format('position: relative; left: 22; top: 860; width: 300; height: 220; background:url(%s);', getIcon(12))%>"></div>
     
 </pe:container>
 </pe:mcml>
