@@ -1,0 +1,211 @@
+<!-- "Mod/CodePku/cellar/Gui/FriendUI/MyFriend.html" -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+</head>
+
+<body>
+<pe:mcml>
+<script refresh="false" type="text/npl">
+<![CDATA[
+
+TaskSystem = NPL.load("(gl)Mod/CodePku/cellar/Common/TouchMiniButtons/TaskSystem/TaskSystem.lua")
+
+local ToWhere = commonlib.gettable("Mod.CodePku.GUI.Popup.ToWhere")
+
+task_table = TaskSystem.task_table
+
+reward_table = TaskSystem.reward_table
+
+reward_stage = TaskSystem.reward_stage
+
+reward_bg = {"343 240 111 51", "347 329 106 52", "345 149 106 52"} -- 顺序为 未完成 可领取 已领取
+
+state_table = {"前往", "领取", "已完成"}   --按钮的内容
+
+state_bg_table = {"497 226 167 87:15 15 15 15", "496 114 166 87:15 15 15 15", "497 342 166 87:15 15 15 15"}     -- 按钮的样式 前往 领取 已完成
+
+Tp_table = TaskSystem.Tp_table 
+
+
+---------------------------------------------- 下面处理任务奖励
+
+function getTask()
+    return task_table or {}
+end
+
+function getRewardInfo(index)
+    return task_table[index].info
+end
+
+function getRwardBG(type)
+    if type == 0 then
+        return "347 424 100 100"
+    elseif type == 1 then
+        return "347 567 100 100"
+    end
+end
+
+function showFinishedInfo(index)
+    if(reward_table["finished_task"] >= reward_stage[index])then
+        return reward_stage[index].."/"..reward_stage[index]
+    else
+        return reward_table["finished_task"].."/"..reward_stage[index]
+    end
+end
+
+function getText(index)
+        local index = tonumber(index)
+    if(state == 1)then --奖励已经领取
+        return state_table[3]
+    elseif(state == 0)then
+        if(finished_times == total_times)then   -- 任务完成但是未领取
+            return state_table[2]
+        elseif(finished_times < total_times) then   -- 任务未完成，显示前往
+            return state_table[1]
+        end
+    end
+end
+
+function getBG(index)
+    local index = tonumber(index)
+    if(state == 1)then --奖励已经领取
+        return state_bg_table[3]
+    elseif(state == 0)then
+        if(finished_times == total_times)then   -- 任务完成但是未领取
+            return state_bg_table[2]
+        elseif(finished_times < total_times) then   -- 任务未完成，显示前往
+            return state_bg_table[1]
+        end
+    end
+end
+
+function HandleTask(taskIndex)
+    echo("-----------------------------")
+    echo(taskIndex)
+    if(task_table[taskIndex]["state"] == 0) then
+        if(task_table[taskIndex]["finished_times"] == task_table[taskIndex]["total_times"])then
+            echo("领取奖励")
+            task_table[taskIndex]["state"] = 1
+            TaskSystem:GetTask()
+            Page:Refresh(0)
+        elseif(task_table[taskIndex]["finished_times"] < task_table[taskIndex]["total_times"])then
+            -- 跳转页面
+            ToWhere:ShowPage(task_table[taskIndex]["tp_title"], task_table[taskIndex]["world_id"])
+        end
+    end
+    --TaskSystem:ShowPopupPage(1, taskIndex, nil)
+end
+
+
+-------------------------------------------- 下面处理累计奖励
+
+function getReward()
+    return reward_table["reward_detail"] or {}
+end
+
+function showRewardBg(index)
+    if(reward_table["reward_detail"][index]["acquired"] == 1)then   --奖励已领取
+        return reward_bg[3]
+    elseif(reward_table["reward_detail"][index]["acquired"] == 0 and reward_table["finished_task"] >= reward_stage[index])then   --奖励可领取
+        return reward_bg[2]
+    else
+        return reward_bg[1]
+    end
+end
+
+function handleReward(rewardIndex)
+    TaskSystem:ShowPopupPage(1, rewardIndex)
+end
+
+function ClickBigPlan()
+    ClosePage()
+    TaskSystem:ShowPage(2)
+end
+
+function ClosePage()
+    Page:CloseWindow();
+end
+
+]]>
+</script>
+
+<pe:container alignment="_lt" width="1920" height="1080">
+
+    <div style="position: relative; width: 1768; height: 978; left: 76; top: 55; background: url(codepku/image/textures/tasksystem/small_bg.png);"></div>
+
+    <div style="position: relative; width: 410; height: 89; left: 755; top: 118; font-size: 70; color: #D85D0B; font-family: Noto Sans S Chinese Regular; font-weight: bold; text-align: center; line-height: 89; background: url(codepku/image/textures/common_32bits.png#1277 377 410 87);">
+        学习计划
+    </div>
+
+    <div style="position: relative; width: 64; height: 74; left: 1708; top: 118; background: url(codepku/image/textures/common_32bits.png#110 73 68 78);" onclick="ClosePage"></div>
+
+    <div style="position: relative; width: 160; height: 99; left: 104; top: 312; font-size: 36; color: #FFFFFF; font-family: Noto Sans S Chinese Regular; line-height: 99; text-align: center; background: url(codepku/image/textures/tasksystem/main.png#17 8 160 100:15 15 15 3);" onclick="ClickSamllGoal">
+        小目标
+    </div>
+
+    <div style="position: relative; width: 160; height: 99; left: 104; top: 451; font-size: 36; color: #FFFFFF; font-family: Noto Sans S Chinese Regular; line-height: 99; text-align: center; background: url(codepku/image/textures/tasksystem/main.png#17 129 160 100:15 15 15 3);" onclick="ClickBigPlan">
+        大计划
+    </div>
+
+    <!-- 计划列表 -->
+    <div style="position: relative; width: 928; height: 680; left: 307; top: 297;">
+        <pe:gridview name="MyFriend" style=" width: 928; height:680; " 
+            DataSource='<%=getTask() %>' CellPadding="10" ItemsPerLine="1" AllowPaging="false" RememberScrollPos="true" RememberLastPage="true" 
+            VerticalScrollBarStep="36" VerticalScrollBarOffsetX="8">
+            <Columns>
+                <div style="width: 888; height: 178; margin-bottom: 28;">
+                    <div style="position: relative; width: 888; height: 141; top: 47; line-height: 141; background: url(codepku/image/textures/tasksystem/main.png#21 252 251 141:12 12 12 12);"></div>
+                    <div style="position: relative; width: 187; height: 78; line-height: 78; background: url(codepku/image/textures/tasksystem/main.png#14 428 167 58:6 6 6 6);">
+                        <span style="position: relative; left: 36; color: #B35D0A; font-size: 34; font-family: Noto Sans S Chinese Regular;"><%=Eval('type')%></span>
+                    </div>
+
+                    <div style="<%=format('position: relative; width: 159.2; height: 80; left: 702; top: 76; color: #FEFEFE; line-height: 80; text-align: center; font-size: 36; font-family: Noto Sans S Chinese Regular; font-weight: bold; background: url(codepku/image/textures/tasksystem/main.png#%s);', getBG(index))%>" name="<%=Eval('index')%>" onclick="HandleTask">
+                        <%=getText(index)%>
+                    </div>
+
+                    <div style="position: relative; height: 141; left: 37; top: 47; line-height: 141; color:#123655; font-size: 30; font-family: Noto Sans S Chinese Regular; float: left;">
+                        <%=Eval('title')%>(<%=Eval('finished_times')%> / <%=Eval('total_times')%>)次
+                    </div>
+
+                    <div style="position: relative; height: 100; left: 388; top: 68;">
+                        <pe:repeat DataSource="<%=getRewardInfo(index)%>">
+                            <div style="<%=format('width: 100; height: 100; float: left; background: url(codepku/image/textures/tasksystem/main.png#%s);', getRwardBG(type))%>">
+                                <div style="width: 40; margin-left: 50; margin-top: 75;  text-align: center; font-size: 18; color: #7996ED; font-family: Noto Sans S Chinese Regular;"><%=Eval('num')%></div>
+                            </div>
+                        </pe:repeat>
+                    </div>
+                </div>
+            </Columns>
+        </pe:gridview>
+    </div>
+
+    <div style="position: relative; width: 573; height: 55; left: 1239; top: 237; line-height: 55; text-align: center; color: #FFFFFF; font-size: 36; font-family: Noto Sans S Chinese Regular; background: url(codepku/image/textures/tasksystem/main.png#232 24 573 55);">小目标任务与奖励每日六点重置</div>
+
+    <!-- 待办列表 -->
+    <div style="position: relative; width: 540; height: 660; left: 1256; top: 310;">
+        <pe:gridview name="" style=" width: 540; height:660; " 
+            DataSource='<%=getReward() %>' CellPadding="15" ItemsPerLine="2" AllowPaging="false" RememberScrollPos="true" RememberLastPage="true" 
+            VerticalScrollBarStep="36" VerticalScrollBarOffsetX="8">
+            <Columns>
+                <div style="width: 190; height: 160; margin-left: 43; margin-top: 34;">
+                    <div style="position: relative; width: 189; height: 119; background: url(codepku/image/textures/tasksystem/main.png#25 574 189 119);" name="<%=Eval('index')%>" onclick="handleReward"></div>
+                    <pe:if condition='<%= reward_table["reward_detail"][index]["acquired"] == 1 %>'>
+                        <div style="position: relative; width: 48; height: 53; left: 23; top: -30; background: url(codepku/image/textures/tasksystem/main.png#243 448 48 53);"></div>
+                    </pe:if>
+                    <div style="<%=format('position: relative; width: 106; height: 52; left: 41; top: 35; background: url(codepku/image/textures/tasksystem/main.png#%s);', showRewardBg(index) )%>" name="<%=Eval('index')%>"  onclick="handleReward"></div>
+                    <div style="width: 190; height: 32; margin-top: 128; text-align: center; color: #EEF9E9; line-height: 32; font-size: 32; font-family: PuHuiTi-Bold;"><%=showFinishedInfo(index)%></div>
+                </div>
+            </Columns>
+        </pe:gridview>
+    </div>
+
+</pe:container>
+
+</pe:mcml>
+</body>
+
+</html>
