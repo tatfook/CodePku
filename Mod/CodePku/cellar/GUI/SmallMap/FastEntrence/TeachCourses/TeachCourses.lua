@@ -82,7 +82,7 @@ TeachCourses.icons = {
     [57] = {url = TeachCourses.purchase_icons_path, left=437, top=215, width=399, height=327, desc = '绿色背景二星底座'},
     [58] = {url = TeachCourses.purchase_icons_path, left=852, top=215, width=399, height=327, desc = '蓝色背景一星底座'},
     [59] = {url = TeachCourses.purchase_icons_path, left=1277, top=219, width=391, height=305, desc = '说明小弹窗'},
-    [60] = {url = TeachCourses.purchase_icons_path, left=1345, top=88, width=46, height=53, desc = '一般型号的玩学币'},
+    [60] = {url = TeachCourses.purchase_icons_path, left=1345, top=88, width=50, height=53, desc = '一般型号的玩学币'},
     [61] = {url = TeachCourses.purchase_icons_path, left=1497, top=99, width=30, height=33, desc = '小号玩学币'},
     [62] = {url = TeachCourses.purchase_icons_path, left=53, top=633, width=257, height=206, desc = '一大堆书'},
     [63] = {url = TeachCourses.purchase_icons_path, left=338, top=648, width=236, height=190, desc = '小堆书'},
@@ -113,30 +113,12 @@ end
 
 -- 年级列表
 TeachCourses.grade_list = {
-    [1] = {
-        [1] = {tips_url = TeachCourses.GetTeachCoursesIconPathStr(14), desc = '一年级(上)',},
-        [2] = {tips_url = TeachCourses.GetTeachCoursesIconPathStr(15), desc = '一年级(下)',},
-    },
-    [2] = {
-        [1] = {tips_url = TeachCourses.GetTeachCoursesIconPathStr(16), desc = '二年级(上)',},
-        [2] = {tips_url = TeachCourses.GetTeachCoursesIconPathStr(17), desc = '二年级(下)',},
-    },
-    [3] = {
-        [1] = {tips_url = TeachCourses.GetTeachCoursesIconPathStr(18), desc = '三年级(上)',},
-        [2] = {tips_url = TeachCourses.GetTeachCoursesIconPathStr(19), desc = '三年级(下)',},
-    },
-    [4] = {
-        [1] = {tips_url = TeachCourses.GetTeachCoursesIconPathStr(20), desc = '四年级(上)',},
-        [2] = {tips_url = TeachCourses.GetTeachCoursesIconPathStr(21), desc = '四年级(下)',},
-    },
-    [5] = {
-        [1] = {tips_url = TeachCourses.GetTeachCoursesIconPathStr(22), desc = '五年级(上)',},
-        [2] = {tips_url = TeachCourses.GetTeachCoursesIconPathStr(23), desc = '五年级(下)',},
-    },
-    [6] = {
-        [1] = {tips_url = TeachCourses.GetTeachCoursesIconPathStr(24), desc = '六年级(上)',},
-        [2] = {tips_url = TeachCourses.GetTeachCoursesIconPathStr(25), desc = '六年级(下)',},
-    },
+    [1] = {tips_url_up = TeachCourses.GetTeachCoursesIconPathStr(14), desc_up = '一年级(上)', count_up = 0, tips_url_down = TeachCourses.GetTeachCoursesIconPathStr(15), desc_down = '一年级(下)',count_down = 0,},
+    [2] = {tips_url_up = TeachCourses.GetTeachCoursesIconPathStr(16), desc_up = '二年级(上)', count_up = 0, tips_url_down = TeachCourses.GetTeachCoursesIconPathStr(17), desc_down = '二年级(下)',count_down = 0,},
+    [3] = {tips_url_up = TeachCourses.GetTeachCoursesIconPathStr(18), desc_up = '三年级(上)', count_up = 0, tips_url_down = TeachCourses.GetTeachCoursesIconPathStr(19), desc_down = '三年级(下)',count_down = 0,},
+    [4] = {tips_url_up = TeachCourses.GetTeachCoursesIconPathStr(20), desc_up = '四年级(上)', count_up = 0, tips_url_down = TeachCourses.GetTeachCoursesIconPathStr(21), desc_down = '四年级(下)',count_down = 0,},
+    [5] = {tips_url_up = TeachCourses.GetTeachCoursesIconPathStr(22), desc_up = '五年级(上)', count_up = 0, tips_url_down = TeachCourses.GetTeachCoursesIconPathStr(23), desc_down = '五年级(下)',count_down = 0,},
+    [6] = {tips_url_up = TeachCourses.GetTeachCoursesIconPathStr(24), desc_up = '六年级(上)', count_up = 0, tips_url_down = TeachCourses.GetTeachCoursesIconPathStr(25), desc_down = '六年级(下)',count_down = 0,},
     -- [7] = {},
     -- [8] = {},
     -- [9] = {},
@@ -164,7 +146,13 @@ function TeachCourses:GetGradeList(page)
             for _,v in pairs(data) do
                 local index = v.grade - 1
                 local semester = v.semester
-                TeachCourses.grade_list[index][semester].count = v.count
+                if semester == 1 then
+                    TeachCourses.grade_list[index].count_up = v.count
+                end
+                if semester == 2 then
+                    TeachCourses.grade_list[index].count_down = v.count
+                end
+                TeachCourses.grade_list[index].grade = index
             end
             -- 拼完数据刷新页面展示数据
             page:Refresh(0)
@@ -172,4 +160,9 @@ function TeachCourses:GetGradeList(page)
     end):catch(function(e)
         LOG.std(nil, "TeachCourses", "GetGradeList", "error_msg: = %s", e)
     end)
+end
+
+-- 获取详细课件信息
+function TeachCourses:GetCoursewares(arg1, arg2, arg3)
+    
 end
