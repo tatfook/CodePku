@@ -72,7 +72,7 @@ TeachCourses.icons = {
     [48] = {url = TeachCourses.courseware_icons_path, left=361, top=748, width=231, height=91, desc = '语文'},
     [49] = {url = TeachCourses.courseware_icons_path, left=640, top=591, width=240, height=100, desc = '英语选中'},
     [50] = {url = TeachCourses.courseware_icons_path, left=649, top=748, width=231, height=91, desc = '英语'},
-    [51] = {url = TeachCourses.courseware_icons_path, left=649, top=748, width=231, height=91, desc = '单科分页第一层背景'},
+    [51] = {url = TeachCourses.courseware_icons_path, left=65, top=903, width=1631, height=894, desc = '单科分页第一层背景'},
     -- 解锁课程包图标
     [52] = {url = TeachCourses.purchase_icons_path, left=57, top=51, width=104, height=105, desc = '红叉'},
     [53] = {url = TeachCourses.purchase_icons_path, left=268, top=63, width=69, height=95, desc = '左箭头'},
@@ -113,30 +113,12 @@ end
 
 -- 年级列表
 TeachCourses.grade_list = {
-    [1] = {
-        [1] = {},
-        [2] = {},
-    },
-    [2] = {
-        [1] = {},
-        [2] = {},
-    },
-    [3] = {
-        [1] = {},
-        [2] = {},
-    },
-    [4] = {
-        [1] = {},
-        [2] = {},
-    },
-    [5] = {
-        [1] = {},
-        [2] = {},
-    },
-    [6] = {
-        [1] = {},
-        [2] = {},
-    },
+    [1] = {tips_url_up = TeachCourses.GetTeachCoursesIconPathStr(14), desc_up = '一年级(上)', count_up = 0, tips_url_down = TeachCourses.GetTeachCoursesIconPathStr(15), desc_down = '一年级(下)',count_down = 0,},
+    [2] = {tips_url_up = TeachCourses.GetTeachCoursesIconPathStr(16), desc_up = '二年级(上)', count_up = 0, tips_url_down = TeachCourses.GetTeachCoursesIconPathStr(17), desc_down = '二年级(下)',count_down = 0,},
+    [3] = {tips_url_up = TeachCourses.GetTeachCoursesIconPathStr(18), desc_up = '三年级(上)', count_up = 0, tips_url_down = TeachCourses.GetTeachCoursesIconPathStr(19), desc_down = '三年级(下)',count_down = 0,},
+    [4] = {tips_url_up = TeachCourses.GetTeachCoursesIconPathStr(20), desc_up = '四年级(上)', count_up = 0, tips_url_down = TeachCourses.GetTeachCoursesIconPathStr(21), desc_down = '四年级(下)',count_down = 0,},
+    [5] = {tips_url_up = TeachCourses.GetTeachCoursesIconPathStr(22), desc_up = '五年级(上)', count_up = 0, tips_url_down = TeachCourses.GetTeachCoursesIconPathStr(23), desc_down = '五年级(下)',count_down = 0,},
+    [6] = {tips_url_up = TeachCourses.GetTeachCoursesIconPathStr(24), desc_up = '六年级(上)', count_up = 0, tips_url_down = TeachCourses.GetTeachCoursesIconPathStr(25), desc_down = '六年级(下)',count_down = 0,},
     -- [7] = {},
     -- [8] = {},
     -- [9] = {},
@@ -145,12 +127,57 @@ TeachCourses.grade_list = {
     -- [12] = {},
 }
 
+-- 学课列表
+TeachCourses.subjects = {
+    [1] = {name='语文', title='chinese', index=2, subject_id=1, course = {}, show=false},
+    [2] = {name='数学', title='math', index=3, subject_id=2, course = {}, show=true},
+    [3] = {name='英语', title='english', index=4, subject_id=3, course = {}, show=false},
+    [4] = {name='物理', title='physics', index=5, subject_id=4, course = {}, show=false},
+    [5] = {name='化学', title='chemestry', index=6, subject_id=5, course = {}, show=false},
+    [6] = {name='生物', title='biology', index=7, subject_id=6, course = {}, show=false},
+}
+
 TeachCourses.params = {
     [1] = {url="Mod/CodePku/cellar/GUI/SmallMap/FastEntrence/TeachCourses/xueqibao.html",alignment="_lt", left = 0, top = 0, width = 1920 , height = 1080, zorder = 30},
     [2] = {url="Mod/CodePku/cellar/GUI/SmallMap/FastEntrence/TeachCourses/kechengbao.html",alignment="_lt", left = 0, top = 0, width = 1920 , height = 1080, zorder = 30},
+<<<<<<< HEAD
     [3] = {url="Mod/CodePku/cellar/GUI/SmallMap/FastEntrence/TeachCourses/PurchaseCourse.html",alignment="_lt", left = 0, top = 0, width = 1920 , height = 1080, zorder = 30},
+=======
+    [3] = {url="Mod/CodePku/cellar/GUI/SmallMap/FastEntrence/TeachCourses/danke.html",alignment="_lt", left = 0, top = 0, width = 1920 , height = 1080, zorder = 30},
+    [4] = {url="Mod/CodePku/cellar/GUI/SmallMap/FastEntrence/TeachCourses/TeachCourseware.html",alignment="_lt", left = 0, top = 0, width = 1920 , height = 1080, zorder = 30},
+>>>>>>> 157c81ec05a4c1104a90478782f9a104103120b6
 }
 
 function TeachCourses:ShowPage(id)
     self.ui = AdaptWindow:QuickWindow(TeachCourses.params[id])
+end
+
+-- 获取年级列表
+function TeachCourses:GetGradeList(page)
+    request:get('/coursewares/by-grade'):next(function(response)
+        if (response.status == 200) then
+            -- 组装年级导图数据
+            local data = response.data.data
+            for _,v in pairs(data) do
+                local index = v.grade - 1
+                local semester = v.semester
+                if semester == 1 then
+                    TeachCourses.grade_list[index].count_up = v.count
+                end
+                if semester == 2 then
+                    TeachCourses.grade_list[index].count_down = v.count
+                end
+                TeachCourses.grade_list[index].grade = index
+            end
+            -- 拼完数据刷新页面展示数据
+            page:Refresh(0)
+        end
+    end):catch(function(e)
+        LOG.std(nil, "TeachCourses", "GetGradeList", "error_msg: = %s", e)
+    end)
+end
+
+-- todo获取详细课件信息
+function TeachCourses:GetCoursewares(grade, semester, subject)
+    
 end
