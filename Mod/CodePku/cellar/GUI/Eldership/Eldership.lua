@@ -79,6 +79,7 @@ function Eldership:GetBindStatus()
         if data.bind_status then
           UserInfoPage.is_bind = 1
           UserInfoPage.eldership = data.user_wechat.wechat_nickname       -- 绑定的家长名称
+          commonlib.setfield("System.User.info.user_wechat_id", data.user_wechat.id)      -- 设置system缓存里用户的微信绑定信息
         elseif not data.bind_status then
           UserInfoPage.is_bind = 0
           UserInfoPage.eldership = Eldership.unbindContent[8]     -- 未绑定
@@ -135,6 +136,7 @@ function Eldership:Unbind()
   local path = '/users/unbind'
   request:put(path):next(function(response)
     if (response.status == 200) then
+      commonlib.setfield("System.User.info.user_wechat_id", nil)    -- 设置system缓存里用户的微信绑定信息
       GameLogic.AddBBS("CodeGlobals", L"解绑成功", 3000, "#00FF00");
     end
   end):catch(function(e)

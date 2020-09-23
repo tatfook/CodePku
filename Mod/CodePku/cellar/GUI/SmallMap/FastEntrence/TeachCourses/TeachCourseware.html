@@ -1,0 +1,85 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+</head>
+<body>
+<pe:mcml>
+<script refresh="false" type="text/npl" src="TeachCourses.lua"><![CDATA[
+
+TeachCourses = NPL.load("(gl)Mod/CodePku/cellar/GUI/SmallMap/FastEntrence/TeachCourses/TeachCourses.lua");
+local FastEntrence = NPL.load("(gl)Mod/CodePku/cellar/GUI/SmallMap/FastEntrence/FastEntrence.lua")
+local SmallMap = commonlib.gettable("Mod.CodePku.GUI.SmallMap")
+local MainPopup = commonlib.gettable("Mod.CodePku.GUI.MainPopup");
+local page = document:GetPageCtrl()
+
+
+TeachCourses.Courseware_Page_Index = 1
+TeachCourses.Courseware_PerPage_Grade = 8
+
+
+
+-- 获取雪碧图图标
+function getIcon(id)
+   return TeachCourses.GetTeachCoursesIconPathStr(id)
+end
+
+-- 打开促销包
+function ShowPurchase()
+    TeachCourses:ShowPage(2)
+end
+
+
+
+-- 点击上学期
+function OnClickUp(name)
+    if TeachCourses.grade_list[name].count_up > 0 then
+        GoToGrade(name, 1)
+    end
+end
+
+-- 点击下学期
+function OnClickDown(name)
+    if TeachCourses.grade_list[name].count_down > 0 then
+        GoToGrade(name, 2)
+    end
+end
+
+
+function ClosePage()
+    Page:CloseWindow();
+end
+
+
+    
+]]></script>
+
+<style type="text/mcss"></style>
+<pe:container alignment="_lt" width="1920" height="1080">
+
+    <div style="<%=format('position: relative; width: 1920; height: 1080; background:url(%s);', TeachCourses.background_path)%>"></div>
+
+    <!-- 最下层背景 -->
+    <div style="<%=format('position: relative; left: 126; top: 98; width: 1779; height: 950; background:url(%s);', TeachCourses.courseware_background_path)%>"></div>
+
+    <!-- 最上层背景 -->
+    <div style="<%=format('position: relative; left: 209; top: 123; width: 1631; height: 894; background:url(%s);', getIcon(51))%>"></div>
+    <!-- 左上角飘旗 -->
+    <div style="<%=format('position: relative; left: 165; top: 69; width: 298; height: 130; background:url(%s);', getIcon(26))%>">
+    
+    </div>
+
+
+
+
+
+    <!-- 关闭按键 -->
+    <div onclick="ClosePage" style="<%=format('position: relative; left: 1759; top: 101; width: 101; height: 102; background:url(%s);', getIcon(27))%>"></div>
+
+    
+    
+</pe:container>
+</pe:mcml>
+</body>
+</html>

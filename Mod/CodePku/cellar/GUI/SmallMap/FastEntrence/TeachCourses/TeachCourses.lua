@@ -23,8 +23,8 @@ TeachCourses.icons = {
     -- 年级导图图标
     [1] = {url = TeachCourses.main_icons_path, left=41, top=34, width=298, height=130, desc = '左上角年级导图小学飘旗'},
     [2] = {url = TeachCourses.main_icons_path, left=369, top=48, width=101, height=102, desc = '红叉'},
-    [3] = {url = TeachCourses.main_icons_path, left=500, top=34, width=111, height=155, desc = '左箭头'},
-    [4] = {url = TeachCourses.main_icons_path, left=657, top=36, width=111, height=155, desc = '右箭头'},
+    [3] = {url = TeachCourses.main_icons_path, left=546, top=33, width=127, height=161, desc = '左箭头'},
+    [4] = {url = TeachCourses.main_icons_path, left=703, top=33, width=127, height=161, desc = '右箭头'},
     [5] = {url = TeachCourses.main_icons_path, left=1027, top=105, width=24, height=24, desc = '实心页码点'},
     [6] = {url = TeachCourses.main_icons_path, left=1069, top=99, width=36, height=37, desc = '空心页码点'},
     [7] = {url = TeachCourses.main_icons_path, left=1287, top=36, width=502, height=158, desc = '解锁学期包'},
@@ -33,7 +33,7 @@ TeachCourses.icons = {
     [10] = {url = TeachCourses.main_icons_path, left=734, top=288, width=186, height=118, desc = '年级图片右上角胶带'},
     [11] = {url = TeachCourses.main_icons_path, left=965, top=327, width=380, height=73, desc = '这个年级没课啊，搞个东西给他遮着'},
     [12] = {url = TeachCourses.main_icons_path, left=41, top=579, width=300, height=220, desc = '传送牌'},
-    [13] = {url = TeachCourses.main_icons_path, left=91, top=938, width=1748, height=968, desc = '年级导图背景书本'},
+    [13] = {url = TeachCourses.main_icons_path, left=91, top=938, width=1755, height=968, desc = '年级导图背景书本'},
     [14] = {url = TeachCourses.main_icons_path, left=419, top=626, width=204, height=68, desc = '一年级(上)'},
     [15] = {url = TeachCourses.main_icons_path, left=419, top=739, width=204, height=68, desc = '一年级(下)'},
     [16] = {url = TeachCourses.main_icons_path, left=641, top=626, width=204, height=68, desc = '二年级(上)'},
@@ -72,7 +72,7 @@ TeachCourses.icons = {
     [48] = {url = TeachCourses.courseware_icons_path, left=361, top=748, width=231, height=91, desc = '语文'},
     [49] = {url = TeachCourses.courseware_icons_path, left=640, top=591, width=240, height=100, desc = '英语选中'},
     [50] = {url = TeachCourses.courseware_icons_path, left=649, top=748, width=231, height=91, desc = '英语'},
-    [51] = {url = TeachCourses.courseware_icons_path, left=649, top=748, width=231, height=91, desc = '单科分页第一层背景'},
+    [51] = {url = TeachCourses.courseware_icons_path, left=65, top=903, width=1631, height=894, desc = '单科分页第一层背景'},
     -- 解锁课程包图标
     [52] = {url = TeachCourses.purchase_icons_path, left=57, top=51, width=104, height=105, desc = '红叉'},
     [53] = {url = TeachCourses.purchase_icons_path, left=268, top=63, width=69, height=95, desc = '左箭头'},
@@ -127,10 +127,21 @@ TeachCourses.grade_list = {
     -- [12] = {},
 }
 
+-- 学课列表
+TeachCourses.subjects = {
+    [1] = {name='语文', title='chinese', index=2, subject_id=1, course = {}, show=false},
+    [2] = {name='数学', title='math', index=3, subject_id=2, course = {}, show=true},
+    [3] = {name='英语', title='english', index=4, subject_id=3, course = {}, show=false},
+    [4] = {name='物理', title='physics', index=5, subject_id=4, course = {}, show=false},
+    [5] = {name='化学', title='chemestry', index=6, subject_id=5, course = {}, show=false},
+    [6] = {name='生物', title='biology', index=7, subject_id=6, course = {}, show=false},
+}
+
 TeachCourses.params = {
     [1] = {url="Mod/CodePku/cellar/GUI/SmallMap/FastEntrence/TeachCourses/xueqibao.html",alignment="_lt", left = 0, top = 0, width = 1920 , height = 1080, zorder = 30},
     [2] = {url="Mod/CodePku/cellar/GUI/SmallMap/FastEntrence/TeachCourses/kechengbao.html",alignment="_lt", left = 0, top = 0, width = 1920 , height = 1080, zorder = 30},
     [3] = {url="Mod/CodePku/cellar/GUI/SmallMap/FastEntrence/TeachCourses/danke.html",alignment="_lt", left = 0, top = 0, width = 1920 , height = 1080, zorder = 30},
+    [4] = {url="Mod/CodePku/cellar/GUI/SmallMap/FastEntrence/TeachCourses/TeachCourseware.html",alignment="_lt", left = 0, top = 0, width = 1920 , height = 1080, zorder = 30},
 }
 
 function TeachCourses:ShowPage(id)
@@ -162,7 +173,7 @@ function TeachCourses:GetGradeList(page)
     end)
 end
 
--- 获取详细课件信息
-function TeachCourses:GetCoursewares(arg1, arg2, arg3)
+-- todo获取详细课件信息
+function TeachCourses:GetCoursewares(grade, semester, subject)
     
 end
