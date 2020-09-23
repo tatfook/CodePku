@@ -140,12 +140,8 @@ TeachCourses.subjects = {
 TeachCourses.params = {
     [1] = {url="Mod/CodePku/cellar/GUI/SmallMap/FastEntrence/TeachCourses/xueqibao.html",alignment="_lt", left = 0, top = 0, width = 1920 , height = 1080, zorder = 30},
     [2] = {url="Mod/CodePku/cellar/GUI/SmallMap/FastEntrence/TeachCourses/kechengbao.html",alignment="_lt", left = 0, top = 0, width = 1920 , height = 1080, zorder = 30},
-<<<<<<< HEAD
     [3] = {url="Mod/CodePku/cellar/GUI/SmallMap/FastEntrence/TeachCourses/PurchaseCourse.html",alignment="_lt", left = 0, top = 0, width = 1920 , height = 1080, zorder = 30},
-=======
-    [3] = {url="Mod/CodePku/cellar/GUI/SmallMap/FastEntrence/TeachCourses/danke.html",alignment="_lt", left = 0, top = 0, width = 1920 , height = 1080, zorder = 30},
     [4] = {url="Mod/CodePku/cellar/GUI/SmallMap/FastEntrence/TeachCourses/TeachCourseware.html",alignment="_lt", left = 0, top = 0, width = 1920 , height = 1080, zorder = 30},
->>>>>>> 157c81ec05a4c1104a90478782f9a104103120b6
 }
 
 function TeachCourses:ShowPage(id)
