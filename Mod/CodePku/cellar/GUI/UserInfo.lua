@@ -179,7 +179,7 @@ function UserInfoPage:ShowPage(PageIndex, bShow, id, mainasset)
     UserInfoPage.bForceHide = bShow == false;
     UserInfoPage.tab_ds_index = PageIndex or 1;
     UserInfoPage.GetUserInfo(id, true);
-    UserInfoPage.GetItemInfo();
+    -- UserInfoPage.GetItemInfo(); -- 获取背包内容，目前没用到，同步需改异步
     UserInfoPage.mainasset = mainasset; -- 获取他人角色asset path
 end
 
