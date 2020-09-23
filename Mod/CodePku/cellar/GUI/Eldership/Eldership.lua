@@ -19,6 +19,7 @@ Eldership.iconPng = "codepku/image/textures/eldership/eldership.png"            
 Eldership.backgroundPng = "codepku/image/textures/eldership/eldershipbg.png"        -- 我的家长背景图
 Eldership.unbindPng = "codepku/image/textures/eldership/unbind.png"                 -- 解绑提示背景图
 
+
 -- 存放所有使用的固定文本，unbindcontent这个名字是最早的时候写的，懒得改了
 Eldership.unbindContent = {
     [1] = "我的家长:",
@@ -70,6 +71,11 @@ function Eldership.GetEldershipIconHTMLStr( id )
     return path
 end
 
+-- 轮询查询绑定状态
+function Eldership:Polling()
+
+end
+
 -- 查询是否绑定
 function Eldership:GetBindStatus()
   local path = '/users/bind-status'
@@ -90,7 +96,9 @@ function Eldership:GetBindStatus()
   end):catch(function(e)
     echo("ERROR: catched at Eldership:GetBindStatus")
     echo(e)
-    GameLogic.AddBBS("CodeGlobals", e.data.message or L"网络开小差了，重试一下吧", 3000, "#FF0000");
+    if e.data.code == 400 then
+      GameLogic.AddBBS("CodeGlobals", e.data.message or L"网络开小差了，重试一下吧", 3000, "#FF0000");
+    end
   end);
 end
 
@@ -159,6 +167,18 @@ end
 
 -- 绑定页面
 function Eldership:ShowBindPage()
+
+    -- NPL.load("(gl)script/ide/timer.lua");
+    -- -- 注册计时器
+    -- Eldership.mytimer = commonlib.Timer:new({callbackFunc = function(timer)
+    -- Eldership:GetBindStatus()
+    --   if UserInfoPage.is_bind == 1 then
+    --       GameLogic.AddBBS("CodeGlobals", L"绑定成功", 1000, "#00FF00");
+    --       Eldership.mytimer:Change()
+    --   end
+    -- end})
+    -- Eldership.mytimer:Change(1000, 3000)
+
     params = {
       url="Mod/CodePku/cellar/GUI/Eldership/EldershipBind.html", 
       alignment="_lt", left = 0, top = 0, width = 1920 , height = 1080, zorder = 30
