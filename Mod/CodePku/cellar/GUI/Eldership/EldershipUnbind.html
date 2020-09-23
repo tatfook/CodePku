@@ -1,0 +1,57 @@
+<!-- 解绑提示弹窗 -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+</head>
+<body>
+<pe:mcml>
+<script refresh="false" type="text/npl" src="Eldership.lua"><![CDATA[
+Eldership = NPL.load("(gl)Mod/CodePku/cellar/GUI/Eldership/Eldership.lua")
+local UserInfoPage = NPL.load("(gl)Mod/CodePku/cellar/GUI/UserInfo.lua");
+local page = document:GetPageCtrl()
+
+function ClosePage()
+    Page:CloseWindow();
+end
+
+function Unbind()
+    UserInfoPage.is_bind = 0
+    UserInfoPage.eldership = Eldership.unbindContent[8]     -- 未绑定的描述
+    -- 发送解绑网络请求
+    Eldership:Unbind()
+    Page:CloseWindow()
+    Eldership.IndexPage:Refresh(0)
+end
+
+
+]]>
+
+</script>
+
+<pe:container alignment="_lt" width="1920" height="1080" style="background-color: #00000094;">
+    <!-- 窗口 -->
+    <div style="position: relative;width:1155;height:588;left:382;top:241;background:url(codepku/image/textures/eldership/unbind.png)">
+        <!-- 标题 -->
+        <div style="position: relative; width: 410; height: 86;left: 388; top: 2; text-align: center;color: #f46d3d;font-family: Noto Sans S Chinese Regular;font-weight:bolder; font-size: 45px;line-height: 86; background:url(codepku/image/textures/common_32bits.png#1277 377 410 87);">解绑提示</div>
+        <!-- 取消按钮 -->
+        <div style="position: relative; width: 64; height: 74; left:1071; top:7; background: url(codepku/image/textures/common_32bits.png#110 73 68 78);" onclick="ClosePage"></div>
+        
+        <div style="<%=format('position: relative;width:960;height:267;left:113;top:120;background:url(%s:20 20 20 20)', Eldership.GetEldershipIconHTMLStr(2))%>">
+            <div style="position: relative;width: 770; height: 122;left: 81;top: 80;text-align: center;color: #ffffff;font-family: Noto Sans S Chinese Regular;font-weight:bolder;font-size: 36;line-height: 61;"><%=Eldership.unbindContent[12]%></div>
+        </div>
+
+        <!-- 取消按钮 -->
+        <div onclick="ClosePage" style="<%=format('position: relative;width:240;height:80;left:258;top:450;text-align:center;font-size:36px;line-height:80;font-family: Noto Sans S Chinese Regular;font-weight:bolder;color: #85272b;background:url(%s)', Eldership.GetEldershipIconHTMLStr(9))%>">取消</div>
+
+        <!-- 解绑按钮 -->
+        <div onclick="Unbind" style="<%=format('position: relative;width:240;height:80;left:704;top:450;text-align:center;font-size:36px;line-height:80;font-family: Noto Sans S Chinese Regular;font-weight:bolder;color: #0e5516;background:url(%s)', Eldership.GetEldershipIconHTMLStr(10))%>">解绑</div>
+
+    </div>
+</pe:container>
+
+</pe:mcml>
+</body>
+</html>
+ 
