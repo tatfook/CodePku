@@ -50,7 +50,9 @@ local curIndex = 1
 -- @param btnName: if nil, we will load the default one if scene is not started.
 function UserInfo:OnChangeAvatar(btnName)
     local EntityManager = commonlib.gettable("MyCompany.Aries.Game.EntityManager");
-    local UserConsolePage = Store:Get("page/UserConsole")
+    local UserConsolePage = Store:Get("page/UserConsole");
+    local GeneralGameClient = commonlib.gettable("Mod.CodePku.Online.Client.GeneralGameClient");
+    GeneralGameClient:AddAssetsWhiteList();
 
     local avatars = default_avatars;
 
@@ -60,7 +62,6 @@ function UserInfo:OnChangeAvatar(btnName)
         avatars = DefaultGirlAvatars;
     end
 
-    local GeneralGameClient = commonlib.gettable("Mod.CodePku.Online.Client.GeneralGameClient")
     if (not GeneralGameClient.GetAssetsWhiteList().IsInWhiteList(GameLogic.options:GetMainPlayerAssetName())) then
         if System.User.info.special_type == 1 then
             GameLogic.options:SetMainPlayerAssetName('codepku/model/LLS_AN.x')
