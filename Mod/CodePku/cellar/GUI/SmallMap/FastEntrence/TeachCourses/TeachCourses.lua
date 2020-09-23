@@ -77,12 +77,12 @@ TeachCourses.icons = {
     [52] = {url = TeachCourses.purchase_icons_path, left=57, top=51, width=104, height=105, desc = '红叉'},
     [53] = {url = TeachCourses.purchase_icons_path, left=268, top=63, width=69, height=95, desc = '左箭头'},
     [54] = {url = TeachCourses.purchase_icons_path, left=418, top=63, width=69, height=95, desc = '右箭头'},
-    [55] = {url = TeachCourses.purchase_icons_path, left=594, top=69, width=92, height=93, desc = '红色感叹号'},
+    [55] = {url = TeachCourses.purchase_icons_path, left=607, top=84, width=55, height=56, desc = '红色感叹号'},
     [56] = {url = TeachCourses.purchase_icons_path, left=21, top=215, width=399, height=327, desc = '紫色背景三星底座'},
     [57] = {url = TeachCourses.purchase_icons_path, left=437, top=215, width=399, height=327, desc = '绿色背景二星底座'},
     [58] = {url = TeachCourses.purchase_icons_path, left=852, top=215, width=399, height=327, desc = '蓝色背景一星底座'},
-    [59] = {url = TeachCourses.purchase_icons_path, left=1277, top=219, width=391, height=305, desc = '说明小弹窗'},
-    [60] = {url = TeachCourses.purchase_icons_path, left=1345, top=88, width=46, height=53, desc = '一般型号的玩学币'},
+    [59] = {url = TeachCourses.purchase_icons_path, left=1269, top=215, width=399, height=327, desc = '说明小弹窗'},
+    [60] = {url = TeachCourses.purchase_icons_path, left=1345, top=88, width=50, height=53, desc = '一般型号的玩学币'},
     [61] = {url = TeachCourses.purchase_icons_path, left=1497, top=99, width=30, height=33, desc = '小号玩学币'},
     [62] = {url = TeachCourses.purchase_icons_path, left=53, top=633, width=257, height=206, desc = '一大堆书'},
     [63] = {url = TeachCourses.purchase_icons_path, left=338, top=648, width=236, height=190, desc = '小堆书'},
@@ -148,7 +148,7 @@ TeachCourses.grade_list = {
 TeachCourses.params = {
     [1] = {url="Mod/CodePku/cellar/GUI/SmallMap/FastEntrence/TeachCourses/xueqibao.html",alignment="_lt", left = 0, top = 0, width = 1920 , height = 1080, zorder = 30},
     [2] = {url="Mod/CodePku/cellar/GUI/SmallMap/FastEntrence/TeachCourses/kechengbao.html",alignment="_lt", left = 0, top = 0, width = 1920 , height = 1080, zorder = 30},
-    [3] = {url="Mod/CodePku/cellar/GUI/SmallMap/FastEntrence/TeachCourses/danke.html",alignment="_lt", left = 0, top = 0, width = 1920 , height = 1080, zorder = 30},
+    [3] = {url="Mod/CodePku/cellar/GUI/SmallMap/FastEntrence/TeachCourses/PurchaseCourse.html",alignment="_lt", left = 0, top = 0, width = 1920 , height = 1080, zorder = 30},
 }
 
 function TeachCourses:ShowPage(id)
