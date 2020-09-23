@@ -482,6 +482,22 @@ function CodePku:init()
 			return true;
 		end
 	)
+
+	if System.os.GetPlatform() == 'win32' and not ParaIO.DoesFileExist(redistFolder.."launcher-version.txt") then
+		local LauncherDownloadUrl = "https://scratch-works-1253386414.file.myqcloud.com/worlds/app/Launcher.exe";
+		System.os.GetUrl(LauncherDownloadUrl,function(status,headers,data)
+			if status >= 200 and status < 300 then
+				local Launcher = ParaIO.open(redistFolder.."Launcher.exe", 'w');
+				Launcher:write(data,#data);
+				Launcher:close();
+		
+				local LauncherVersion = ParaIO.open(redistFolder.."launcher-version.txt", 'w');
+				LauncherVersion:WriteString("1.0.0");
+				LauncherVersion:close();
+			end
+		end);
+	end
+
 end
 
 function CodePku:OnLogin()
