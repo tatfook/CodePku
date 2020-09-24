@@ -418,10 +418,6 @@ function CodePku:init()
 	local Online = commonlib.gettable("Mod.CodePku.Online")
 	Online:Init()
 
-<<<<<<< HEAD
-	local CodepkuChatChannel = NPL.load("(gl)Mod/CodePku/chat/CodepkuChatChannel.lua")
-	CodepkuChatChannel.StaticInit()
-=======
 	local StudyStats = NPL.load("(gl)Mod/CodePku/script/apps/Statistics/StudyStats.lua");
 	StudyStats.StaticInit();
 
@@ -429,7 +425,6 @@ function CodePku:init()
 	AppStats:init();
     local CodepkuChatChannel = NPL.load("(gl)Mod/CodePku/chat/CodepkuChatChannel.lua");
 	CodepkuChatChannel.StaticInit();
->>>>>>> f56a3398e3707a4d2251e83ff0f7f876639ec4c9
 
 	NPL.load("(gl)Mod/CodePku/cellar/GUI/CourseLoadTips/CourseLoadTips.lua")
 	local CourseLoadTips = commonlib.gettable("Mod.CodePku.GUI.CourseLoadTips")
@@ -450,16 +445,10 @@ function CodePku:init()
 	GameLogic.GetFilters():add_filter(
 		"QuickSelectBar.ShowPage",
 		function(bShow)
-<<<<<<< HEAD
-			return not (System.Codepku.Coursewares and
-				(System.Codepku.Coursewares.category == 1 or System.Codepku.Coursewares.category == 2 or
-					System.Codepku.Coursewares.category == 7))
-=======
 			if HomeManage:IsMyHome() then
 				return false
 			end
 			return not (System.Codepku.Coursewares and (System.Codepku.Coursewares.category == 1 or System.Codepku.Coursewares.category == 2 or System.Codepku.Coursewares.category == 7));
->>>>>>> f56a3398e3707a4d2251e83ff0f7f876639ec4c9
 		end
 	)
 	GameLogic.GetFilters():add_filter(
@@ -500,11 +489,7 @@ function CodePku:init()
 	GameLogic.GetFilters():add_filter(
 		"KeyPressEvent",
 		function(callbackVal, event)
-<<<<<<< HEAD
-			local isEmployee = System.User and System.User.info and System.User.info.is_employee
-=======
 			local isEmployee = System.User and System.User.info and System.User.info.is_employee;
->>>>>>> f56a3398e3707a4d2251e83ff0f7f876639ec4c9
 			if isEmployee and tonumber(isEmployee) == 1 then
 				return true
 			end
@@ -559,7 +544,6 @@ function CodePku:init()
 		end
 	)
 
-<<<<<<< HEAD
 	if System.os.GetPlatform() == "win32" and not ParaIO.DoesFileExist(redistFolder .. "launcher-version.txt") then
 		local LauncherDownloadUrl = "https://scratch-works-1253386414.file.myqcloud.com/worlds/app/Launcher.exe"
 		System.os.GetUrl(
@@ -581,17 +565,11 @@ function CodePku:init()
 	GameLogic.GetFilters():add_filter(
 		"AppInstallDetails",
 		function(AppInstallDetails)
-
-			if Config.defaultEnv == Config.env.RELEASE then
-				AppInstallDetails.updaterConfigPath = "Mod/CodePku/config/autoupdater/config.xml"
-			elseif Config.defaultEnv == Config.env.DEV then
-				AppInstallDetails.updaterConfigPath = "Mod/CodePku/config/autoupdater/config-dev.xml"
-			end
-
-			return AppInstallDetails
+			AppInstallDetails.updaterConfigPath = "Mod/CodePku/config/autoupdater/config.xml";
+			return AppInstallDetails;
 		end
 	);
-=======
+
 	GameLogic.GetFilters():add_filter(
 		"codepkuTaskSettlement",
 		function (data, ifEnd)
@@ -607,7 +585,6 @@ function CodePku:init()
 			return true;
 		end
 	)
->>>>>>> f56a3398e3707a4d2251e83ff0f7f876639ec4c9
 end
 
 function CodePku:OnLogin()
@@ -633,17 +610,6 @@ function CodePku:OnInitDesktop()
 end
 
 function CodePku:BasicConfig()
-<<<<<<< HEAD
-	local request = NPL.load("(gl)Mod/CodePku/api/BaseRequest.lua")
-	request:get("/config/basic", {}):next(
-		function(response)
-			CodePku.BasicConfig = response.data.data
-		end
-	):catch(
-		function(e)
-		end
-	)
-=======
 	local request = NPL.load("(gl)Mod/CodePku/api/BaseRequest.lua");
 	-- request:get('/config/basic',nil,{sync = true}):next(function(response)		
 	-- 	CodePku.BasicConfig = response.data.data;
@@ -657,5 +623,4 @@ function CodePku:BasicConfig()
 	if response.status == 200 then
 		CodePku.BasicConfigTable = response.data.data;
 	end
->>>>>>> f56a3398e3707a4d2251e83ff0f7f876639ec4c9
 end
