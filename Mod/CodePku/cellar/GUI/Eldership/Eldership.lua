@@ -19,20 +19,22 @@ Eldership.iconPng = "codepku/image/textures/eldership/eldership.png"            
 Eldership.backgroundPng = "codepku/image/textures/eldership/eldershipbg.png"        -- 我的家长背景图
 Eldership.unbindPng = "codepku/image/textures/eldership/unbind.png"                 -- 解绑提示背景图
 
+
 -- 存放所有使用的固定文本，unbindcontent这个名字是最早的时候写的，懒得改了
 Eldership.unbindContent = {
     [1] = "我的家长:",
     [2] = "学习报告",
     [3] = "实时掌握孩子学情",
-    [4] = "教学咨询",
+    [4] = "教学资讯",
     [5] = "一手教学课程全掌握",
     [6] = "充值代付",
     [7] = "消费充值全透明",
     [8] = "未绑定微信",
-    [9] = "扫码直接关联学生或者",
+    [9] = "扫码直接关联学生",
     [10] = "截屏保存二维码 > 打开微信扫描二维码关联",
     [11] = "温馨提示：扫码后微信将自动关联学生账号，请勿分享至陌生人",
     [12] = "小朋友，解除微信绑定后无法再解锁课程，是否解除家长绑定？",
+    [13] = "或者",
 }
 
 -- 设置默认的家长绑定信息，初始为未绑定
@@ -69,6 +71,11 @@ function Eldership.GetEldershipIconHTMLStr( id )
     return path
 end
 
+-- 轮询查询绑定状态
+function Eldership:Polling()
+
+end
+
 -- 查询是否绑定
 function Eldership:GetBindStatus()
   local path = '/users/bind-status'
@@ -89,7 +96,9 @@ function Eldership:GetBindStatus()
   end):catch(function(e)
     echo("ERROR: catched at Eldership:GetBindStatus")
     echo(e)
-    GameLogic.AddBBS("CodeGlobals", e.data.message or L"网络开小差了，重试一下吧", 3000, "#FF0000");
+    if e.data.code == 400 then
+      GameLogic.AddBBS("CodeGlobals", e.data.message or L"网络开小差了，重试一下吧", 3000, "#FF0000");
+    end
   end);
 end
 
@@ -158,6 +167,18 @@ end
 
 -- 绑定页面
 function Eldership:ShowBindPage()
+
+    -- NPL.load("(gl)script/ide/timer.lua");
+    -- -- 注册计时器
+    -- Eldership.mytimer = commonlib.Timer:new({callbackFunc = function(timer)
+    -- Eldership:GetBindStatus()
+    --   if UserInfoPage.is_bind == 1 then
+    --       GameLogic.AddBBS("CodeGlobals", L"绑定成功", 1000, "#00FF00");
+    --       Eldership.mytimer:Change()
+    --   end
+    -- end})
+    -- Eldership.mytimer:Change(1000, 3000)
+
     params = {
       url="Mod/CodePku/cellar/GUI/Eldership/EldershipBind.html", 
       alignment="_lt", left = 0, top = 0, width = 1920 , height = 1080, zorder = 30
