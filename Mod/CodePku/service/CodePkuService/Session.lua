@@ -21,8 +21,8 @@ local CodePkuServiceSession = NPL.export({});
 
 CodePkuServiceSession.captchaKey = ''
 
-function CodePkuServiceSession:Login(account, verifyCode, mobileToken, callback)
-    CodePkuUsersApi:Login(account, verifyCode, mobileToken, callback, callback)
+function CodePkuServiceSession:Login(account, verifyCode, mobileToken, visitorId, callback)
+    CodePkuUsersApi:Login(account, verifyCode, mobileToken, visitorId, callback, callback)
 end
 
 function CodePkuServiceSession:LoginWithPwd(account, password, callback)
@@ -34,7 +34,7 @@ function CodePkuServiceSession:QuickLogin(visitor_id, app_market, callback)
 end
 
 function CodePkuServiceSession:LoginWithToken(token, callback)
-    CodePkuUsersApi:Profile(token, callback, callback)
+    CodePkuUsersApi:LoginWithToken(token, callback, callback)
 end
 
 function CodePkuServiceSession:LoginResponse(response, err, callback)    

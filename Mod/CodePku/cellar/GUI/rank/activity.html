@@ -1,0 +1,217 @@
+<!-- rank for activity -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title></title>
+</head>
+
+<body>
+<pe:mcml>
+<script refresh="false" type="text/npl" src="RankPage.lua">
+<![CDATA[
+
+RankPage = commonlib.gettable("Mod.CodePku.RankPage");
+local MainEntrencePage = commonlib.gettable("Mod.CodePku.MainEntrencePage");
+local page = document:GetPageCtrl()
+
+
+RankPage.top_navig = {
+    [1] = {title = "世 界", name = "world", index = 1},
+    [2] = {title = "好 友", name = "friend", index = 2}
+}
+
+RankPage.left_navig_last_clicked = 1
+RankPage.show_left_navig = 1
+RankPage.top_navig_clicked_index = 1
+RankPage.show_top_navig = 0
+
+
+
+function ClosePage()
+    Page:CloseWindow()
+    RankPage.activity_navig = nil
+end
+
+function IsClickedLeftNavig(name)
+    if name =='subject' then
+        Page:CloseWindow()
+        RankPage:ShowPage(1)
+    elseif name == 'game' then
+        Page:CloseWindow()
+        RankPage:ShowPage(2)
+    elseif name == 'activity' then
+        if RankPage.show_left_navig == 0 then
+            RankPage.show_left_navig = 1
+            Page("#navig_block"):SetAttribute('style','width: 293;')
+        else
+            RankPage.show_left_navig = 0
+            Page("#navig_block"):SetAttribute('style','width: 293; display:none')
+        end
+        Page:Refresh(0)
+    end
+end
+
+function ClickedLeftNavigIndex(name)
+    local id = tonumber(name)
+    local game_id
+    for k,v in ipairs(RankPage.activity_navig) do
+        if v.id == id then
+            game_id = v.game_id
+            RankPage.left_navig_last_clicked = v.index
+        end
+    end
+    RankPage.userinfo, RankPage.myinfo = RankPage.GetActivityItem(game_id, RankPage.top_navig_clicked_index, id)
+    Page:Refresh(0)
+end
+
+function IsClickedTopNavig()
+    if RankPage.show_top_navig == 0 then
+        RankPage.show_top_navig = 1
+        Page("#top_navig_select"):SetAttribute('style','width: 213;')
+    else
+        RankPage.show_top_navig = 0
+        Page("#top_navig_select"):SetAttribute('style','width: 213; display:none')
+    end
+    Page:Refresh(0)
+end
+
+function ClickedTopNavigIndex(name)
+    for k,v in pairs(RankPage.top_navig) do
+        if name == v.name then
+            RankPage.show_top_navig = 0
+            Page("#top_navig_select"):SetAttribute('style','width: 213; display:none')
+            RankPage.top_navig_clicked_index = k
+        end
+    end
+    RankPage.userinfo, RankPage.myinfo = RankPage.GetActivityItem(RankPage.activity_navig[RankPage.left_navig_last_clicked].game_id, RankPage.top_navig_clicked_index, RankPage.activity_navig[RankPage.left_navig_last_clicked].id)
+    Page:Refresh(0)
+end
+
+function GetPosition()
+    if RankPage.left_navig_last_clicked == 1 then
+        return '1293 273 130 120'
+    elseif RankPage.left_navig_last_clicked == 2 then
+        return '1130 278 130 120'
+    end
+end
+
+]]>
+</script>
+<style type="text/mcss">
+</style>
+<pe:container alignment="_lt" width="1920" height="1080">
+    <div style="position:relative; top:108;left:79; width:1696;height:903;background:url(codepku/image/textures/rank/rank_32bits.png#91 1039 1696 903);"></div>
+    <div style="position: relative; width: 1697; height: 115; left: 78; top: 93; background: url(codepku/image/textures/rank/rank_32bits.png#78 70 1696 115);" ></div>
+    <div style="position: relative; width: 309; height: 172; left: 52; top: 22; background: url(codepku/image/textures/rank/rank_32bits.png#1619 208 309 172);" ></div>
+    <!--上导航栏-->
+    <div style="position: relative; width: 224; height: 91; left: 1416; top: 108; padding-left: 62; padding-top: 29; color: #F8DE8D; base-font-size: 35; font-size: 35; font-family:Noto Sans S Chinese Regular; font-weight:bolder; background: url(codepku/image/textures/rank/rank_32bits.png#91 294 224 91);" name="<%=RankPage.top_navig[RankPage.top_navig_clicked_index].name%>" onclick="IsClickedTopNavig"><%=RankPage.top_navig[RankPage.top_navig_clicked_index].title%></div>
+    <pe:if condition="<%=RankPage.show_top_navig == 0%>">
+        <pe:div style="position: relative; width: 37; height: 14; left: 1504; top: 174; background: url(codepku/image/textures/rank/rank_32bits.png#624 345 43 17);"></pe:div>
+    </pe:if>  
+    <pe:if condition="<%=RankPage.show_top_navig == 1%>">
+        <pe:div style="position: relative; width: 37; height: 14; left: 1504; top: 174; background: url(codepku/image/textures/rank/rank_32bits.png#720 345 43 17);"></pe:div>
+    </pe:if> 
+    <div style="position: relative; width: 62; height: 70; left: 1691; top: 116; background: url(codepku/image/textures/common_32bits.png#110 73 68 78);" name="close" onclick="ClosePage" ></div>
+    
+    <!--content-->
+    <div style="position: relative; width: 100; height: 41; left: 488; top: 200; base-font-size:44px; font-size:44px; font-family:Noto Sans S Chinese Regular; color: #ffffff;">排行</div>
+    <div style="position: relative; width: 100; height: 42; left: 831; top: 200; base-font-size:44px; font-size:44px; font-family:Noto Sans S Chinese Regular; color: #ffffff;">名称</div>
+    <div style="position: relative; width: 100; height: 41; left: 1474; top: 200; base-font-size:44px; font-size:44px; font-family:Noto Sans S Chinese Regular; color: #ffffff;">积分</div>
+    <!--滚动吧-->
+    <pe:gridview name="rank_content" style="position: relative; width: 1450; height: 600; left: 382; top: 255;" DataSource='<%=RankPage.userinfo %>' CellPadding="0" ItemsPerLine="1" AllowPaging="false" RememberScrollPos="true" RememberLastPage="true" pagesize="36" VerticalScrollBarStep="36" VerticalScrollBarOffsetX="8">
+        <Columns>
+            <pe:if condition="<%=Eval('rank') == 1 %>">
+                <pe:div style="width: 1380; height: 149; background: url(codepku/image/textures/rank/rank_32bits.png#91 472 1380 149);">
+                    <pe:div style="position: relative; width: 108; height: 108; left: 91; top: 21; background: url(codepku/image/textures/rank/rank_32bits.png#1546 472 108 108)"></pe:div>
+                    <pe:div style="position: relative; width: 336; height: 47; left: 337; top: 48; font-size: 49; base-font-size: 49; color: #ffffff; font-family: Noto Sans S Chinese Regular; text-align: center; line-height: 47;"><%=Eval('name')%></pe:div>
+                    <pe:div style="<%=format('position: relative; width: 130; height: 120; left: 870; top: 11.5; background: url(codepku/image/textures/rank/rank_32bits.png#%s);', GetPosition())%>"></pe:div>
+                    <pe:div style="position: relative; width: 170; height: 39; left: 1051; top: 50; font-size: 49; base-font-size: 49; color: #ffffff; font-family: Noto Sans S Chinese Regular; text-align: center; line-height: 39;"><%=Eval('score')%></pe:div>
+                </pe:div>
+            </pe:if>
+            <pe:if condition="<%=Eval('rank') == 2%>">
+                <pe:div style="width: 1380; height: 149; background: url(codepku/image/textures/rank/rank_32bits.png#91 472 1380 149);">
+                    <pe:div style="<%=format('position: relative; width: 100; height: 101; left: 95; top: 24; background: url(codepku/image/textures/rank/rank_32bits.png#1683 479 100 101)', Eval('rank'))%>"></pe:div>
+                    <pe:div style="position: relative; width: 336; height: 46; left: 337; top: 48; font-size: 49; base-font-size: 49; color: #ffffff; font-family: Noto Sans S Chinese Regular; text-align: center; line-height: 46;"><%=Eval('name')%></pe:div>
+                    <pe:div style="<%=format('position: relative; width: 130; height: 120; left: 870; top: 11.5; background: url(codepku/image/textures/rank/rank_32bits.png#%s);', GetPosition())%>"></pe:div>
+                    <pe:div style="position: relative; width: 170; height: 39; left: 1051; top: 50; font-size: 49; base-font-size: 49; color: #ffffff; font-family: Noto Sans S Chinese Regular; text-align: center; line-height: 39;"><%=Eval('score')%></pe:div>
+                </pe:div>
+            </pe:if>
+            <pe:if condition="<%=Eval('rank') == 3%>">
+                <pe:div style="width: 1380; height: 149; background: url(codepku/image/textures/rank/rank_32bits.png#91 472 1380 149);">
+                    <pe:div style="<%=format('position: relative; width: 96; height: 95; left: 98; top: 27; background: url(codepku/image/textures/rank/rank_32bits.png#1815 485 96 95)', Eval('rank'))%>"></pe:div>
+                    <pe:div style="position: relative; width: 336; height: 46; left: 337; top: 48; font-size: 49; base-font-size: 49; color: #ffffff; font-family: Noto Sans S Chinese Regular; text-align: center; line-height: 46;"><%=Eval('name')%></pe:div>
+                    <pe:div style="<%=format('position: relative; width: 130; height: 120; left: 870; top: 11.5; background: url(codepku/image/textures/rank/rank_32bits.png#%s);', GetPosition())%>"></pe:div>
+                    <pe:div style="position: relative; width: 170; height: 39; left: 1051; top: 50; font-size: 49; base-font-size: 49; color: #ffffff; font-family: Noto Sans S Chinese Regular; text-align: center; line-height: 39;"><%=Eval('score')%></pe:div>
+                </pe:div>
+            </pe:if>
+            <pe:if condition="<%=Eval('rank') ~= 1 and Eval('rank') ~= 2 and Eval('rank') ~= 3%>">
+                <pe:div style="width: 1376; height: 138; margin-left: 2; background: url(codepku\image\textures\fastentrence\rank\bg_rank_basic.png);">
+                    <pe:div style="position: relative; width: 150; height: 50; left: 68; top: 44; font-size: 49; base-font-size: 49; color: #FFA800; text-align: center; border:4px solid #a76002;"><%=Eval('rank')%></pe:div>
+                    <pe:div style="position: relative; width: 336; height: 47; left: 338; top: 37; font-size: 49; base-font-size: 49; color: #ffffff; font-family: Noto Sans S Chinese Regular; text-align: center; line-height: 47;"><%=Eval('name')%></pe:div>
+                    <pe:div style="<%=format('position: relative; width: 130; height: 120; left: 870; top: 6; background: url(codepku/image/textures/rank/rank_32bits.png#%s);', GetPosition())%>"></pe:div>
+                    <pe:div style="position: relative; width: 170; height: 39; left: 1052; top: 44; font-size: 49; base-font-size: 49; color: #ffffff; font-family: Noto Sans S Chinese Regular; text-align: center; line-height: 39;"><%=Eval('score')%></pe:div>
+                </pe:div>
+            </pe:if>
+        </Columns>
+    </pe:gridview>
+    <!--个人信息-->
+    <pe:div style="position: relative; width: 1385; height: 163; left: 377; top: 849; background: url(codepku/image/textures/rank/rank_32bits.png#91 805 1385 163);">
+        <div style="position: relative; width: 150; height: 51; left: 75; top: 56; font-size: 49; base-font-size: 49; color: #FFA800; text-align: center; border:4px solid #a76002;"><%=RankPage.myinfo[1].rank%></div>
+        <div style="position: relative; width: 336; height: 47 ; left: 342; top: 54; font-size: 49; base-font-size: 49; color: #ffffff; font-family: Noto Sans S Chinese Regular; text-align: center;"><%=RankPage.myinfo[1].name%></div>
+        <pe:div style="<%=format('position: relative; width: 130; height: 120; left: 875; top: 22; background: url(codepku/image/textures/rank/rank_32bits.png#%s);', GetPosition())%>"></pe:div>
+        <div style="position: relative; width: 170; height: 39 ; left: 1056; top: 56; font-size: 49; base-font-size: 49;font-family: Noto Sans S Chinese Regular; color: #ffffff; text-align: center; line-height: 39;"><%=RankPage.myinfo[1].score%></div>
+    </pe:div>
+
+    <!--左导航栏-->
+    <div style="position: relative; width: 239; height: 800; left: 78;top: 200;">
+        <div style="width: 293; height: 99; background: url(codepku/image/textures/common_32bits.png#1475 58 131 109:30 30 30 30);  base-font-size:60px; font-size:60px; font-family:Noto Sans S Chinese Regular;font-weight:bolder; color: #ffffff; padding-left:58; padding-top:15;" name="subject" onclick="IsClickedLeftNavig">学 科</div>
+        <pe:div style="width: 43; height: 17; margin-left: 205; margin-top: -65; background: url(codepku/image/textures/rank/rank_32bits.png#624 345 43 17);"></pe:div>
+        <div style="width: 293; height: 99; background: url(codepku/image/textures/common_32bits.png#1475 58 131 109:30 30 30 30); base-font-size:60px; font-size:60px; font-family:Noto Sans S Chinese Regular;font-weight:bolder; color: #ffffff; padding-left:58; padding-top:15;" name="game" onclick="IsClickedLeftNavig" >游 戏</div>
+        <pe:div style="width: 43; height: 17; margin-left: 205; margin-top: -65; background: url(codepku/image/textures/rank/rank_32bits.png#624 345 43 17);"></pe:div>
+        
+        <pe:if condition="<%= RankPage.ShowActivityNavig == 1 %>">
+            <div style="width: 293; height: 99; background: url(codepku/image/textures/common_32bits.png#1648 59 293 109:30 30 30 30);  base-font-size:60px; font-size:60px; font-family:Noto Sans S Chinese Regular;font-weight:bolder; color: #FF9430; padding-left:58; padding-top:15;" name="activity" onclick="IsClickedLeftNavig">活动</div>
+            <pe:if condition="<%=RankPage.show_left_navig == 0%>">
+                <pe:div style="width: 43; height: 17; margin-left: 205; margin-top: -65; background: url(codepku/image/textures/rank/rank_32bits.png#624 345 43 17);"></pe:div>     
+            </pe:if>
+            <pe:if condition="<%=RankPage.show_left_navig == 1%>">
+                <pe:div style="width: 43; height: 17; margin-left: 205; margin-top: -65; background: url(codepku/image/textures/rank/rank_32bits.png#720 345 43 17);"></pe:div>
+            </pe:if>
+            <div name='navig_block' style="width: 293;">
+                <pe:repeat DataSource="<%=RankPage.activity_navig%>">
+                    <pe:repeatitem>
+                        <pe:if condition="<%=Eval('index') == RankPage.left_navig_last_clicked%>">
+                            <div style="width: 261; height: 86; margin-left: 32; background: url(codepku/image/textures/common_32bits.png#1648 196 261 96:30 30 30 30);" name="<%=Eval('id')%>">
+                            <div style="width:200; height:42; margin-left:30; margin-top: 17; base-font-size:32px; font-size:32px; font-family:Noto Sans S Chinese Regular;font-weight:bolder; font-weight:500; color:#F8DE8D; text-align: center;"><%=Eval('title')%></div>
+                            </div>
+                        </pe:if>
+                        <pe:if condition="<%=Eval('index') ~= RankPage.left_navig_last_clicked%>">
+                            <div style="width: 249; height: 84; background: url(codepku/image/textures/common_32bits.png#1294 66 134 94:30 30 30 30);" name="<%=Eval('id')%>" value="<%=Eval('title')%>" onclick="ClickedLeftNavigIndex">
+                                <div style="width:200; height:42; margin-left:30; margin-top: 19; base-font-size:32px; font-size:32px; font-family:Noto Sans S Chinese Regular;font-weight:bolder; font-weight:500; color:#ffffff; text-align: center;"><%=Eval('title')%></div>
+                            </div>
+                        </pe:if>
+                    </pe:repeatitem>
+                </pe:repeat>
+            </div>
+        </pe:if>
+        
+    </div>
+
+    <!--上导航栏下拉-->
+    <div style="position: relative; width: 213; left: 1422; top: 188;">
+        <div name='top_navig_select' style="width: 213; display: none;">
+        <pe:repeat DataSource="<%=RankPage.top_navig%>">
+            <pe:repeatitem>
+            <pe:if condition="<%=RankPage.top_navig_clicked_index ~= Eval('index')%>">
+                <pe:div style="width: 213; height: 80;padding-left: 58; padding-top: 20; base-font-size:35; font-size:35; font-family:Noto Sans S Chinese Regular;font-weight:bolder;; color: #ffffff;  background: url(codepku/image/textures/rank/rank_32bits.png#338 305 213 80);" name="<%=Eval('name')%>" onclick="ClickedTopNavigIndex"><%=Eval('title')%></pe:div>
+            </pe:if>
+            </pe:repeatitem>
+        </pe:repeat>
+        </div>
+    </div>
+
+</pe:container>
+</pe:mcml>
+</body>
+</html>

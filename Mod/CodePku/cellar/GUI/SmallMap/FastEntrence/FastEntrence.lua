@@ -67,7 +67,6 @@ FastEntrence.GradeDetails = {
 function FastEntrence:GetGradeInfo(grade)
     local response = request:get('/coursewares/by-grade',nil,{sync = true})
     data = response.data.data
-
     if response.data.code == 200 then
         local myIndex, max = 1, #data
         while myIndex <= max do

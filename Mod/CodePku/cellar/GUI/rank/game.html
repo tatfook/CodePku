@@ -20,8 +20,8 @@ RankPage.left_navig = {
     {title = '游戏', name = 'game', index = 2}
 }
 RankPage.game_navig = {
-    [1] = {title = "单词爱跑酷", name = "parkour", index = 1},
-    [2] = {title = "华夏游学记", name = "monopoly", index = 2},
+    [1] = {title = "单词爱跑酷", name = "parkour", game_id = 22,},
+    [2] = {title = "华夏游学记", name = "monopoly", game_id = 7,},
 }
 RankPage.top_navig = {
     [1] = {title = "世 界", name = "world", index = 1},
@@ -40,23 +40,26 @@ RankPage.show_top_navig = 0
 
 function ClosePage()
     Page:CloseWindow()
+    RankPage.activity_navig = nil
 end
 
 function IsClickedLeftNavig(name)
     if name =='subject' then
-        ClosePage()
+        Page:CloseWindow()
         RankPage:ShowPage(1)
     elseif name == 'game' then
-        RankPage.left_navig_last_clicked = 1
         if RankPage.show_left_navig == 0 then
             RankPage.show_left_navig = 1
             Page("#navig_block"):SetAttribute('style','width: 293;')
-            else
+        else
             RankPage.show_left_navig = 0
             Page("#navig_block"):SetAttribute('style','width: 293; display:none')
         end
+        Page:Refresh(0)
+    elseif name == 'activity' then
+        Page:CloseWindow()
+        RankPage:ShowPage(3)
     end
-    Page:Refresh(0)
 end
 
 function ClickedLeftNavigIndex(name)
@@ -169,10 +172,10 @@ end
     </pe:div>
 
     <!--左导航栏-->
-    <div style="position: relative; width: 239; height: 800; left: 78;top: 220;">
-        <div style="width: 293; height: 109; background: url(codepku/image/textures/common_32bits.png#1475 58 131 109:30 30 30 30);  base-font-size:60px; font-size:60px; font-family:Noto Sans S Chinese Regular;font-weight:bolder; color: #ffffff; padding-left:58; padding-top:22;" name="subject" onclick="IsClickedLeftNavig">学 科</div>
+    <div style="position: relative; width: 239; height: 800; left: 78;top: 200;">
+        <div style="width: 293; height: 99; background: url(codepku/image/textures/common_32bits.png#1475 58 131 109:30 30 30 30);  base-font-size:60px; font-size:60px; font-family:Noto Sans S Chinese Regular;font-weight:bolder; color: #ffffff; padding-left:58; padding-top:15;" name="subject" onclick="IsClickedLeftNavig">学 科</div>
         <pe:div style="width: 43; height: 17; margin-left: 205; margin-top: -65; background: url(codepku/image/textures/rank/rank_32bits.png#624 345 43 17);"></pe:div>
-        <div style="width: 293; height: 109; background: url(codepku/image/textures/common_32bits.png#1648 59 293 109:30 30 30 30); base-font-size:60px; font-size:60px; font-family:Noto Sans S Chinese Regular;font-weight:bolder; color: #FF9430; padding-left:58; padding-top:22;" name="game" onclick="IsClickedLeftNavig" >游 戏</div>
+        <div style="width: 293; height: 99; background: url(codepku/image/textures/common_32bits.png#1648 59 293 109:30 30 30 30); base-font-size:60px; font-size:60px; font-family:Noto Sans S Chinese Regular;font-weight:bolder; color: #FF9430; padding-left:58; padding-top:15;" name="game" onclick="IsClickedLeftNavig" >游 戏</div>
         <pe:if condition="<%=RankPage.show_left_navig == 0%>">
             <pe:div style="width: 43; height: 17; margin-left: 205; margin-top: -65; background: url(codepku/image/textures/rank/rank_32bits.png#624 345 43 17);"></pe:div>     
         </pe:if>
@@ -183,18 +186,22 @@ end
             <pe:repeat DataSource="<%=RankPage.game_navig%>">
                 <pe:repeatitem>
                     <pe:if condition="<%=Eval('index') == RankPage.left_navig_last_clicked%>">
-                        <div style="width: 261; height: 96; margin-left: 32; background: url(codepku/image/textures/common_32bits.png#1648 196 261 96:30 30 30 30);" name="<%=Eval('name')%>" onclick="ClickedLeftNavigIndex">
-                        <div style="width:200; height:42; margin-left:30; margin-top: 20; base-font-size:35px; font-size:35px; font-family:Noto Sans S Chinese Regular;font-weight:bolder; font-weight:500; color:#F8DE8D; text-align: center;"><%=Eval('title')%></div>
+                        <div style="width: 261; height: 86; margin-left: 32; background: url(codepku/image/textures/common_32bits.png#1648 196 261 96:30 30 30 30);" name="<%=Eval('name')%>">
+                        <div style="width:200; height:42; margin-left:30; margin-top: 17; base-font-size:35px; font-size:35px; font-family:Noto Sans S Chinese Regular;font-weight:bolder; font-weight:500; color:#F8DE8D; text-align: center;"><%=Eval('title')%></div>
                         </div>
                     </pe:if>
                     <pe:if condition="<%=Eval('index') ~= RankPage.left_navig_last_clicked%>">
-                        <div style="width: 249; height: 94; background: url(codepku/image/textures/common_32bits.png#1294 66 134 94:30 30 30 30);" name="<%=Eval('name')%>" value="<%=Eval('title')%>" onclick="ClickedLeftNavigIndex">
-                            <div style="width:200; height:42; margin-left:30; margin-top: 22; base-font-size:35px; font-size:35px; font-family:Noto Sans S Chinese Regular;font-weight:bolder; font-weight:500; color:#ffffff; text-align: center;"><%=Eval('title')%></div>
+                        <div style="width: 249; height: 84; background: url(codepku/image/textures/common_32bits.png#1294 66 134 94:30 30 30 30);" name="<%=Eval('name')%>" value="<%=Eval('title')%>" onclick="ClickedLeftNavigIndex">
+                            <div style="width:200; height:42; margin-left:30; margin-top: 19; base-font-size:35px; font-size:35px; font-family:Noto Sans S Chinese Regular;font-weight:bolder; font-weight:500; color:#ffffff; text-align: center;"><%=Eval('title')%></div>
                         </div>
                     </pe:if>
                 </pe:repeatitem>
             </pe:repeat>
         </div>
+        <pe:if condition="<%= RankPage.ShowActivityNavig == 1 %>">
+            <div style="width: 293; height: 99; background: url(codepku/image/textures/common_32bits.png#1475 58 131 109:30 30 30 30);  base-font-size:60px; font-size:60px; font-family:Noto Sans S Chinese Regular;font-weight:bolder; color: #ffffff; padding-left:58; padding-top:15;" name="activity" onclick="IsClickedLeftNavig">活动</div>
+            <pe:div style="width: 43; height: 17; margin-left: 205; margin-top: -65; background: url(codepku/image/textures/rank/rank_32bits.png#624 345 43 17);"></pe:div>
+        </pe:if>
     </div>
 
     <!--上导航栏下拉-->

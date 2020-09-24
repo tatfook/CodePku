@@ -6,16 +6,37 @@ UserInfoPage.tab_ds_index = 1;
 UserInfoPage.tab_ds_name = "Home";
 UserInfoPage.mainasset = nil;
 
+
+function UserInfoPage.getHuaweiNav()
+    local huaweiApprovalStatus = Mod.CodePku.BasicConfigTable.huawei_approval_status == 'on'  
+    local isHuawei = ParaEngine.GetAppCommandLineByParam("app_market", "") == 'huawei';
+    local flymeApprovalStatus = Mod.CodePku.BasicConfigTable.flyme_approval_status == 'on'  
+    local isFlyMe = ParaEngine.GetAppCommandLineByParam("app_market", "") == 'flyme';
+    local sogouApprovalStatus = Mod.CodePku.BasicConfigTable.sogou_approval_status == 'on'  
+    local isSoGou = ParaEngine.GetAppCommandLineByParam("app_market", "") == 'sogou';
+
+    if (huaweiApprovalStatus and isHuawei) or (flymeApprovalStatus and isFlyMe) or (sogouApprovalStatus and isSoGou) then
+        --华为渠道
+        return {
+            {text=L"首页", name="Home"},
+        }
+    else 
+        -- 正常渠道
+        return {
+            {text=L"首页", name="Home"},
+            {text=L"属性", name="Profile"},
+            -- {text=L"角色", name="Model"},
+            -- {text=L"外观", name="Skin"},
+            -- {text=L"背包", name="Backpack"},
+            -- {text=L"成就", name="Achievement"},
+            -- {text=L"动态", name="Activity"},
+        }
+    end
+    
+end
+
 -- tabs - 自己
-UserInfoPage.tab_ds_self = {
-    {text=L"首页", name="Home"},
-    {text=L"属性", name="Profile"},
-    -- {text=L"角色", name="Model"},
-    -- {text=L"外观", name="Skin"},
-    -- {text=L"背包", name="Backpack"},
-    -- {text=L"成就", name="Achievement"},
-    -- {text=L"动态", name="Activity"},
-};
+UserInfoPage.tab_ds_self = UserInfoPage.getHuaweiNav()
 
 -- tabs - 他人
 UserInfoPage.tab_ds_other = {
@@ -158,7 +179,7 @@ function UserInfoPage:ShowPage(PageIndex, bShow, id, mainasset)
     UserInfoPage.bForceHide = bShow == false;
     UserInfoPage.tab_ds_index = PageIndex or 1;
     UserInfoPage.GetUserInfo(id, true);
-    UserInfoPage.GetItemInfo();
+    -- UserInfoPage.GetItemInfo(); -- 获取背包内容，目前没用到，同步需改异步
     UserInfoPage.mainasset = mainasset; -- 获取他人角色asset path
 end
 
