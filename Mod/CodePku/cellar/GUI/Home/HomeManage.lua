@@ -214,6 +214,7 @@ function HomeManage:ChangeGameMode()
         GameLogic.RunCommand("/mode game")
     else
         GameLogic.RunCommand("/mode edit")
+        GameLogic.AddBBS(nil, L"已经进入编辑模式，可以开始编辑家园", 3000, "0 255 0", 21)
     end
 end
 
