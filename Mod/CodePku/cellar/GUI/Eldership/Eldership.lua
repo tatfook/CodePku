@@ -90,8 +90,11 @@ function Eldership:GetBindStatus()
         elseif not data.bind_status then
           UserInfoPage.is_bind = 0
           UserInfoPage.eldership = Eldership.unbindContent[8]     -- 未绑定
+          commonlib.setfield("System.User.info.user_wechat_id", nil)    -- 设置system缓存里用户的微信绑定信息
         end
-      self.ui:Refresh(0)
+      if self.ui then
+        self.ui:Refresh(0)
+      end
     end
   end):catch(function(e)
     echo("ERROR: catched at Eldership:GetBindStatus")
