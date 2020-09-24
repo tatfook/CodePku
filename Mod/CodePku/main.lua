@@ -154,7 +154,7 @@ function CodePku:init()
 		function (backValue, event)
 			LOG.std(nil, "info", "codepku", "add_filter BaseContextMousePressEvent")
 			-- 家园区编辑模式特殊处理
-			if HomeManage:IsMyHome() then
+			if HomeManage:IsMyHome() and GameLogic.GameMode:IsEditor() then
 				-- 手机端特殊处理
 				local platform = System.os.GetPlatform()
 				if platform == "ios" or platform == "android" then
