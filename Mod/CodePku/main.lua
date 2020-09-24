@@ -9,7 +9,6 @@ NPL.load("(gl)Mod/CodePku/main.lua");
 local CodePku = commonlib.gettable("Mod.CodePku");
 ------------------------------------------------------------
 ]]
-
 NPL.load("(gl)script/ide/Files.lua")
 NPL.load("(gl)script/ide/Encoding.lua")
 NPL.load("(gl)script/ide/System/Encoding/sha1.lua")
@@ -36,10 +35,9 @@ NPL.load("(gl)script/apps/Aries/Creator/Game/Login/ParaWorldLessons.lua")
 NPL.load("(gl)script/ide/System/Encoding/jwt.lua")
 
 -- codepku
-NPL.load("(gl)Mod/CodePku/cellar/GUI/Window/AdaptWindow.lua");
-NPL.load("(gl)Mod/CodePku/online/main.lua");
+NPL.load("(gl)Mod/CodePku/cellar/GUI/Window/AdaptWindow.lua")
+NPL.load("(gl)Mod/CodePku/online/main.lua")
 NPL.load("(gl)Mod/CodePku/cellar/GUI/GenAndName.lua")
-
 
 local Store = NPL.load("(gl)Mod/CodePku/store/Store.lua")
 local MsgBox = NPL.load("(gl)Mod/CodePku/cellar/Common/MsgBox/MsgBox.lua")
@@ -70,15 +68,15 @@ local TopicCourse = NPL.load("(gl)Mod/CodePku/cellar/GUI/SmallMap/FastEntrence/T
 
 local DownloadWorld = commonlib.gettable("MyCompany.Aries.Game.MainLogin.DownloadWorld")
 
-local CodePku = commonlib.inherit(commonlib.gettable("Mod.ModBase"),commonlib.gettable("Mod.CodePku"));
+local CodePku = commonlib.inherit(commonlib.gettable("Mod.ModBase"), commonlib.gettable("Mod.CodePku"))
 local GenAndName = commonlib.gettable("Mod.CodePku.GenAndName")
+local Config = NPL.load("(gl)Mod/CodePku/config/Config.lua")
 
+NPL.load("(gl)Mod/CodePku/cellar/Common/AriesWindow/pe_aries_window2.lua")
+local pe_aries_window2 = commonlib.gettable("Mod.CodePku.Common.AriesWindow.pe_aries_window2")
+pe_aries_window2:RegisterAs("pe:aries_window2")
 
-NPL.load("(gl)Mod/CodePku/cellar/Common/AriesWindow/pe_aries_window2.lua");
-local pe_aries_window2 = commonlib.gettable("Mod.CodePku.Common.AriesWindow.pe_aries_window2");
-pe_aries_window2:RegisterAs("pe:aries_window2");
-
-CodePku:Property({"Name", "CodePku", "GetName", "SetName", { auto = true }})
+CodePku:Property({"Name", "CodePku", "GetName", "SetName", {auto = true}})
 
 -- register mod global variable
 CodePku.Store = Store
@@ -87,7 +85,6 @@ CodePku.Utils = Utils
 CodePku.BasicConfig = {}
 
 function CodePku:ctor()
-	
 end
 
 -- virtual function get mod name
@@ -96,65 +93,64 @@ function CodePku:GetName()
 	return "CodePku"
 end
 
--- virtual function get mod description 
+-- virtual function get mod description
 
 function CodePku:GetDesc()
 	return "CodePku is a plugin in paracraft"
 end
 
 function CodePku:init()
-	ParaAsset.SetAssetServerUrl("http://cdn.wanxue.codepku.com/");
+	ParaAsset.SetAssetServerUrl("http://cdn.wanxue.codepku.com/")
 	-- ParaAsset.SetAssetServerUrl("http://cdnwanxue.local.codepku.com/");
 
-	local manifestUrl = "http://cdnwanxue.codepku.com/assets_manifest_codepku.txt?version=" .. os.time();
-	local _, _, asset = System.os.GetUrl(manifestUrl);
+	local manifestUrl = "http://cdnwanxue.codepku.com/assets_manifest_codepku.txt?version=" .. os.time()
+	local _, _, asset = System.os.GetUrl(manifestUrl)
 
-	NPL.load("(gl)script/apps/Aries/Creator/Game/Login/ParaWorldLoginDocker.lua");
+	NPL.load("(gl)script/apps/Aries/Creator/Game/Login/ParaWorldLoginDocker.lua")
 	local ParaWorldLoginDocker = commonlib.gettable("MyCompany.Aries.Game.MainLogin.ParaWorldLoginDocker")
-	local redistFolder = ParaWorldLoginDocker.GetCurrentRedistFolder();
-	redistFolder = redistFolder:gsub("\\", "/");
-	
-	local assetManifest = ParaIO.open(redistFolder.."assets_manifest_codepku.txt", 'w');
-	assetManifest:WriteString(asset);
-	assetManifest:close();
+	local redistFolder = ParaWorldLoginDocker.GetCurrentRedistFolder()
+	redistFolder = redistFolder:gsub("\\", "/")
 
-	local asset_manager = ParaEngine.GetAttributeObject():GetChild("AssetManager");
-	local asset_manifest = asset_manager:GetChild("CAssetManifest");
-	asset_manifest:SetField("LoadManifestFile", redistFolder.."assets_manifest_codepku.txt");
+	local assetManifest = ParaIO.open(redistFolder .. "assets_manifest_codepku.txt", "w")
+	assetManifest:WriteString(asset)
+	assetManifest:close()
 
-	self:BasicConfig();
+	local asset_manager = ParaEngine.GetAttributeObject():GetChild("AssetManager")
+	local asset_manifest = asset_manager:GetChild("CAssetManifest")
+	asset_manifest:SetField("LoadManifestFile", redistFolder .. "assets_manifest_codepku.txt")
+
+	self:BasicConfig()
 
 	GameLogic.GetFilters():add_filter(
-			"ShowLoginModePage",
-			function()
-				MainLogin:Show()
-				LOG.std(nil, "info", "CodePku", "add_filter ShowLoginModePage")
-				return false
-			end
+		"ShowLoginModePage",
+		function()
+			MainLogin:Show()
+			LOG.std(nil, "info", "CodePku", "add_filter ShowLoginModePage")
+			return false
+		end
 	)
 
 	-- 重写移动端虚拟小键盘
 	GameLogic.GetFilters():add_filter(
-			"TouchMiniKeyboard",
-			function()
-				local TouchMiniKeyboard = NPL.load("(gl)Mod/CodePku/cellar/Common/TouchMiniKeyboard/Main.lua");
-				return TouchMiniKeyboard;
-			end
+		"TouchMiniKeyboard",
+		function()
+			local TouchMiniKeyboard = NPL.load("(gl)Mod/CodePku/cellar/Common/TouchMiniKeyboard/Main.lua")
+			return TouchMiniKeyboard
+		end
 	)
 
 	GameLogic.GetFilters():add_filter(
-			"TouchVirtualKeyboardIcon",
-			function()
-				NPL.load("(gl)Mod/CodePku/cellar/Common/TouchMiniKeyboard/TouchVirtualKeyboardIcon.lua");
-				local TouchVirtualKeyboardIcon = commonlib.gettable("Mod.CodePku.Common.TouchMiniKeyboard.TouchVirtualKeyboardIcon")
-				return TouchVirtualKeyboardIcon;
-			end
+		"TouchVirtualKeyboardIcon",
+		function()
+			NPL.load("(gl)Mod/CodePku/cellar/Common/TouchMiniKeyboard/TouchVirtualKeyboardIcon.lua")
+			local TouchVirtualKeyboardIcon = commonlib.gettable("Mod.CodePku.Common.TouchMiniKeyboard.TouchVirtualKeyboardIcon")
+			return TouchVirtualKeyboardIcon
+		end
 	)
-
 
 	-- replace load world page
 	GameLogic.GetFilters():add_filter(
-        "InternetLoadWorld.ShowPage",
+		"InternetLoadWorld.ShowPage",
 		function(bEnable, bShow)
 			if GenAndName.CheckNickName() then
 				UserConsole:ShowPage()
@@ -162,14 +158,14 @@ function CodePku:init()
 				GenAndName.Init()
 				GenAndName:ShowPage()
 			end
-            return false
-        end
+			return false
+		end
 	)
 
 	GameLogic.GetFilters():add_filter(
-		"ShowLoginBackgroundPage", 
-		function (bShow, bShowCopyRight, bShowLogo, bShowBg) 
-			LOG.std(nil, "info", "codepku", "add_filter ShowLoginBackgroundPage")			
+		"ShowLoginBackgroundPage",
+		function(bShow, bShowCopyRight, bShowLogo, bShowBg)
+			LOG.std(nil, "info", "codepku", "add_filter ShowLoginBackgroundPage")
 			MainLogin:ShowLoadingPage()
 			MainLogin:ShowLoginBackgroundPage()
 			return false
@@ -177,8 +173,8 @@ function CodePku:init()
 	)
 
 	GameLogic.GetFilters():add_filter(
-		"show_custom_download_world", 
-		function (show, url) 
+		"show_custom_download_world",
+		function(show, url)
 			LOG.std(nil, "info", "codepku", "add_filter show_custom_download_world")
 			CodePkuDownloadWorld:ShowPage(url)
 			return "close"
@@ -186,65 +182,98 @@ function CodePku:init()
 	)
 
 	GameLogic.GetFilters():add_filter(
-        "cmd_loadworld", 
+		"cmd_loadworld",
 		function(url, options)
 			LOG.std(nil, "info", "codepku", "add_filter cmd_loadworld")
-            local pid = UserConsole:GetProjectId(url)
-            if pid then
-                UserConsole:HandleWorldId(pid)
-                return
-            else
-                return url
-            end
-        end
-	)	
+			local pid = UserConsole:GetProjectId(url)
+			if pid then
+				UserConsole:HandleWorldId(pid)
+				return
+			else
+				return url
+			end
+		end
+	)
 
 	-- 下载世界进度条
 	GameLogic.GetFilters():add_filter(
 		"downloadFile_notify",
-		function (downloadState, text, currentFileSize, totalFileSize)
+		function(downloadState, text, currentFileSize, totalFileSize)
 			DownloadWorld.UpdateProgressText2(text)
 		end
 	)
 
 	GameLogic.GetFilters():add_filter(
 		"desktop_menu",
-		function (menuItems) 
+		function(menuItems)
 			return {}
 		end
 	)
 
 	GameLogic.GetFilters():add_filter(
-		"download_remote_world_show_bbs", 
-		function ()
+		"download_remote_world_show_bbs",
+		function()
 			return false
 		end
 	)
-	
+
 	GameLogic.GetFilters():add_filter(
-		"file_downloader_show_label", 
-		function ()
+		"file_downloader_show_label",
+		function()
 			return false
 		end
 	)
 	GameLogic.GetFilters():add_filter(
-		"AriesWindow.CustomStyle", 
-		function (show, rootName, mcmlNode, bindingContext, _parent, left, top, right, bottom, myLayout, css, mode)							
-			local codepku_pe_aries_window = NPL.load("(gl)Mod/CodePku/cellar/Common/AriesWindow/pe_aries_window.lua");
+		"AriesWindow.CustomStyle",
+		function(show, rootName, mcmlNode, bindingContext, _parent, left, top, right, bottom, myLayout, css, mode)
+			local codepku_pe_aries_window = NPL.load("(gl)Mod/CodePku/cellar/Common/AriesWindow/pe_aries_window.lua")
 			if (mode == "center") then
-				codepku_pe_aries_window.create_center(rootName, mcmlNode, bindingContext, _parent, left, top, right, bottom, myLayout, css);
+				codepku_pe_aries_window.create_center(
+					rootName,
+					mcmlNode,
+					bindingContext,
+					_parent,
+					left,
+					top,
+					right,
+					bottom,
+					myLayout,
+					css
+				)
 			elseif (mode == "thin" or mode == "mc") then
-				codepku_pe_aries_window.create_thin_mc(rootName, mcmlNode, bindingContext, _parent, left, top, right, bottom, myLayout, css);
+				codepku_pe_aries_window.create_thin_mc(
+					rootName,
+					mcmlNode,
+					bindingContext,
+					_parent,
+					left,
+					top,
+					right,
+					bottom,
+					myLayout,
+					css
+				)
 			elseif (mode == "modal") then
-				codepku_pe_aries_window.create_modal(rootName, mcmlNode, bindingContext, _parent, left, top, right, bottom, myLayout, css);
+				codepku_pe_aries_window.create_modal(
+					rootName,
+					mcmlNode,
+					bindingContext,
+					_parent,
+					left,
+					top,
+					right,
+					bottom,
+					myLayout,
+					css
+				)
 			end
-			return true;
+			return true
 		end
 	)
 
 	GameLogic.GetFilters():add_filter(
 		"EscFramePage.ShowPage",
-		function (default, bShow)
+		function(default, bShow)
 			CodePkuEscFramePage:ShowPage(bShow)
 			return true
 		end
@@ -252,7 +281,7 @@ function CodePku:init()
 
 	GameLogic.GetFilters():add_filter(
 		"EnterTextDialog.PageParams",
-		function (showParams)
+		function(showParams)
 			local CodePkuEnterTextDialog = NPL.load("(gl)Mod/CodePku/cellar/GUI/EnterTextDialog.lua")
 			return CodePkuEnterTextDialog.PageParams(showParams)
 		end
@@ -260,14 +289,14 @@ function CodePku:init()
 
 	GameLogic.GetFilters():add_filter(
 		"SystemSettingsPage.PageParams",
-		function ()
+		function()
 			return CodePkuSystemSettingsPage.PageParams()
 		end
 	)
 
 	GameLogic.GetFilters():add_filter(
 		"SystemSettingsPage.CheckBoxBackground",
-		function (page, name, bChecked)
+		function(page, name, bChecked)
 			CodePkuSystemSettingsPage.CheckBoxBackground(page, name, bChecked)
 			return false
 		end
@@ -275,15 +304,15 @@ function CodePku:init()
 
 	GameLogic.GetFilters():add_filter(
 		"InventoryPage.PageParams",
-		function ()
+		function()
 			local CodePkuInventoryPage = NPL.load("(gl)Mod/CodePku/cellar/Areas/InventoryPage.lua")
 			return CodePkuInventoryPage.PageParams()
 		end
 	)
-	
+
 	GameLogic.GetFilters():add_filter(
 		"InventoryPage.PageParams",
-		function ()
+		function()
 			local CodePkuInventoryPage = NPL.load("(gl)Mod/CodePku/cellar/Areas/InventoryPage.lua")
 			return CodePkuInventoryPage.PageParams()
 		end
@@ -291,7 +320,7 @@ function CodePku:init()
 
 	GameLogic.GetFilters():add_filter(
 		"ChestPage.PageParams",
-		function ()
+		function()
 			local CodePkuChestPage = NPL.load("(gl)Mod/CodePku/cellar/GUI/ChestPage.lua")
 			return CodePkuChestPage.PageParams()
 		end
@@ -299,7 +328,7 @@ function CodePku:init()
 
 	GameLogic.GetFilters():add_filter(
 		"SkinPage.PageParams",
-		function ()
+		function()
 			local CodePkuSkinPage = NPL.load("(gl)Mod/CodePku/cellar/Areas/SkinPage.lua")
 			return CodePkuSkinPage.PageParams()
 		end
@@ -307,16 +336,16 @@ function CodePku:init()
 
 	GameLogic.GetFilters():add_filter(
 		"ShowExitDialog",
-		function (bRestart) 
-			local Desktop = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop");				
+		function(bRestart)
+			local Desktop = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop")
 			local dialog = {
-				text = L"确定要退出当前世界么？", 
+				text = L "确定要退出当前世界么？",
 				callback = function(res)
-					Desktop.is_exiting = false;
-					if(res and res == _guihelper.DialogResult.OK) then
-						Desktop.ForceExit(bRestart);
-					elseif(res and res == _guihelper.DialogResult.Cancel) then
-						Desktop.ForceExit(bRestart);
+					Desktop.is_exiting = false
+					if (res and res == _guihelper.DialogResult.OK) then
+						Desktop.ForceExit(bRestart)
+					elseif (res and res == _guihelper.DialogResult.Cancel) then
+						Desktop.ForceExit(bRestart)
 					end
 				end,
 				messageBoxButton = _guihelper.MessageBoxButtons.OKCancel
@@ -327,31 +356,31 @@ function CodePku:init()
 
 	GameLogic.GetFilters().add_filter(
 		"AntiStuckPage:AntiStuck",
-		function (bShow)
+		function(bShow)
 			AntiStuckPage:ShowPage(bShow)
 			return true
 		end
 	)
-	
+
 	GameLogic.GetFilters():add_filter(
 		"GameName",
-		function ()
-			return L"玩学世界"
+		function()
+			return L "玩学世界"
 		end
 	)
 
 	GameLogic.GetFilters():add_filter(
 		"GameDescription",
-		function ()
-			return L"3D沉浸式游戏化教育平台"
+		function()
+			return L "3D沉浸式游戏化教育平台"
 		end
 	)
 
 	GameLogic.GetFilters():add_filter(
 		"WorldName.ResetWindowTitle",
-		function (title, windowTitle)
+		function(title, windowTitle)
 			echo("WorldName.ResetWindowTitle")
-			
+
 			return windowTitle
 		end
 	)
@@ -360,8 +389,8 @@ function CodePku:init()
 	GameLogic.GetFilters():add_filter(
 		"MainUIButtons",
 		function()
-			local MainUIButtons = NPL.load("(gl)Mod/CodePku/cellar/Common/TouchMiniButtons/Main.lua");
-			return MainUIButtons;
+			local MainUIButtons = NPL.load("(gl)Mod/CodePku/cellar/Common/TouchMiniButtons/Main.lua")
+			return MainUIButtons
 		end
 	)
 
@@ -373,141 +402,165 @@ function CodePku:init()
 	-- prevent indulage
 	PreventIndulge:Init()
 
-	local Online = commonlib.gettable("Mod.CodePku.Online");
-    Online:Init();   
+	local Online = commonlib.gettable("Mod.CodePku.Online")
+	Online:Init()
 
-    local CodepkuChatChannel = NPL.load("(gl)Mod/CodePku/chat/CodepkuChatChannel.lua");
-	CodepkuChatChannel.StaticInit();
+	local CodepkuChatChannel = NPL.load("(gl)Mod/CodePku/chat/CodepkuChatChannel.lua")
+	CodepkuChatChannel.StaticInit()
 
-	NPL.load("(gl)Mod/CodePku/cellar/GUI/CourseLoadTips/CourseLoadTips.lua");
+	NPL.load("(gl)Mod/CodePku/cellar/GUI/CourseLoadTips/CourseLoadTips.lua")
 	local CourseLoadTips = commonlib.gettable("Mod.CodePku.GUI.CourseLoadTips")
-	CourseLoadTips.StaticInit();
+	CourseLoadTips.StaticInit()
 
 	GameLogic.GetFilters():add_filter(
 		"DesktopMenuPage.ShowPage",
 		function(bShow)
-			return true;
+			return true
 		end
-	);
+	)
 
 	GameLogic.GetFilters():add_filter(
 		"QuickSelectBar.ShowPage",
 		function(bShow)
-			return not (System.Codepku.Coursewares and (System.Codepku.Coursewares.category == 1 or System.Codepku.Coursewares.category == 2 or System.Codepku.Coursewares.category == 7));
+			return not (System.Codepku.Coursewares and
+				(System.Codepku.Coursewares.category == 1 or System.Codepku.Coursewares.category == 2 or
+					System.Codepku.Coursewares.category == 7))
 		end
-	);
+	)
 	GameLogic.GetFilters():add_filter(
 		"CodeBlockUIUrl",
-		function (defaultUrl) 
-			local subjectId = System.Codepku and System.Codepku.Coursewares and System.Codepku.Coursewares.course_subject_id;
+		function(defaultUrl)
+			local subjectId = System.Codepku and System.Codepku.Coursewares and System.Codepku.Coursewares.course_subject_id
 			if (subjectId and tonumber(subjectId) == 10) then
 				-- return defaultUrl;
-				return "Mod/CodePku/cellar/CodeBlock/CodeBlockWindow.html";
+				return "Mod/CodePku/cellar/CodeBlock/CodeBlockWindow.html"
 			else
-				return defaultUrl;
+				return defaultUrl
 			end
 		end
 	)
 	GameLogic.GetFilters():add_filter(
 		"CodeBlockEditorOpened",
-		function (CodeBlockWindow, entity) 
-			local subjectId = System.Codepku and System.Codepku.Coursewares and System.Codepku.Coursewares.course_subject_id;
+		function(CodeBlockWindow, entity)
+			local subjectId = System.Codepku and System.Codepku.Coursewares and System.Codepku.Coursewares.course_subject_id
 			if (subjectId and tonumber(subjectId) == 10) then
-				-- CodeBlockWindow.OpenBlocklyEditor();		
+			-- CodeBlockWindow.OpenBlocklyEditor();
 			end
 		end
 	)
 
 	GameLogic.GetFilters():add_filter(
 		"CustomCodeBlockClicked",
-		function (default, entityCode, mouse_button, entity)
-			local subjectId = System.Codepku and System.Codepku.Coursewares and System.Codepku.Coursewares.course_subject_id;
+		function(default, entityCode, mouse_button, entity)
+			local subjectId = System.Codepku and System.Codepku.Coursewares and System.Codepku.Coursewares.course_subject_id
 			if (subjectId and tonumber(subjectId) == 10 and mouse_button == "right") then
-				entityCode:OpenEditor("entity", entity);	
-				return true;
+				entityCode:OpenEditor("entity", entity)
+				return true
 			end
 
-			return default;	
+			return default
 		end
 	)
 
 	GameLogic.GetFilters():add_filter(
 		"KeyPressEvent",
 		function(callbackVal, event)
-			local isEmployee = System.User and System.User.info and System.User.info.is_employee;		
+			local isEmployee = System.User and System.User.info and System.User.info.is_employee
 			if isEmployee and tonumber(isEmployee) == 1 then
-				return true;
+				return true
 			end
 
 			if event.keyname == "DIK_F5" then
-				event:accept();
+				event:accept()
 			elseif event.keyname == "DIK_B" then
-				if not (System.Codepku.Coursewares and (System.Codepku.Coursewares.category == 1 or System.Codepku.Coursewares.category == 2)) then
-					event:accept();
+				if
+					not (System.Codepku.Coursewares and
+						(System.Codepku.Coursewares.category == 1 or System.Codepku.Coursewares.category == 2))
+				 then
+					event:accept()
 				end
 			elseif event.keyname == "DIK_E" then
-				if not (System.Codepku.Coursewares and (System.Codepku.Coursewares.category == 1 or System.Codepku.Coursewares.category == 2)) then
-					event:accept();
+				if
+					not (System.Codepku.Coursewares and
+						(System.Codepku.Coursewares.category == 1 or System.Codepku.Coursewares.category == 2))
+				 then
+					event:accept()
 				end
 			elseif event.keyname == "DIK_F1" then
-				event:accept();
+				event:accept()
 			elseif event.keyname == "DIK_F4" then
-				event:accept();
+				event:accept()
 			elseif event.keyname == "DIK_F5" then
-				event:accept();
+				event:accept()
 			elseif event.keyname == "DIK_F9" then
-				event:accept();
+				event:accept()
 			elseif event.keyname == "DIK_F11" then
-				event:accept();
+				event:accept()
 			elseif event.keyname == "DIK_F12" then
-				event:accept();
+				event:accept()
 			elseif event.keyname == "DIK_DELETE" or event.keyname == "DIK_BACKSPACE" or event.keyname == "DIK_DECIMAL" then
-				event:accept();
+				event:accept()
 			elseif event.keyname == "DIK_F12" then
-				event:accept();
-			elseif event.keyname == 'DIK_RETURN' then
-				event:accept();
+				event:accept()
+			elseif event.keyname == "DIK_RETURN" then
+				event:accept()
 			end
 
-			return true;
+			return true
 		end
 	)
 
 	GameLogic.GetFilters():add_filter(
 		"KeepworkPermission",
-		function (defaultBool,name,bOpenUIIfNot, callback)
+		function(defaultBool, name, bOpenUIIfNot, callback)
 			if type(callback) == "function" then
-                callback(true)
-            end
-			return true;
+				callback(true)
+			end
+			return true
 		end
 	)
 
-	if System.os.GetPlatform() == 'win32' and not ParaIO.DoesFileExist(redistFolder.."launcher-version.txt") then
-		local LauncherDownloadUrl = "https://scratch-works-1253386414.file.myqcloud.com/worlds/app/Launcher.exe";
-		System.os.GetUrl(LauncherDownloadUrl,function(status,headers,data)
-			if status >= 200 and status < 300 then
-				local Launcher = ParaIO.open(redistFolder.."Launcher.exe", 'w');
-				Launcher:write(data,#data);
-				Launcher:close();
-		
-				local LauncherVersion = ParaIO.open(redistFolder.."launcher-version.txt", 'w');
-				LauncherVersion:WriteString("1.0.0");
-				LauncherVersion:close();
+	if System.os.GetPlatform() == "win32" and not ParaIO.DoesFileExist(redistFolder .. "launcher-version.txt") then
+		local LauncherDownloadUrl = "https://scratch-works-1253386414.file.myqcloud.com/worlds/app/Launcher.exe"
+		System.os.GetUrl(
+			LauncherDownloadUrl,
+			function(status, headers, data)
+				if status >= 200 and status < 300 then
+					local Launcher = ParaIO.open(redistFolder .. "Launcher.exe", "w")
+					Launcher:write(data, #data)
+					Launcher:close()
+
+					local LauncherVersion = ParaIO.open(redistFolder .. "launcher-version.txt", "w")
+					LauncherVersion:WriteString("1.0.0")
+					LauncherVersion:close()
+				end
 			end
-		end);
+		);
 	end
 
+	GameLogic.GetFilters():add_filter(
+		"AppInstallDetails",
+		function(AppInstallDetails)
+
+			if Config.defaultEnv == Config.env.RELEASE then
+				AppInstallDetails.updaterConfigPath = "Mod/CodePku/config/autoupdater/config.xml"
+			elseif Config.defaultEnv == Config.env.DEV then
+				AppInstallDetails.updaterConfigPath = "Mod/CodePku/config/autoupdater/config-dev.xml"
+			end
+
+			return AppInstallDetails
+		end
+	);
 end
 
 function CodePku:OnLogin()
 end
--- called when a new world is loaded. 
+-- called when a new world is loaded.
 
 function CodePku:OnWorldLoad()
 	UserConsole:ClosePage()
 end
--- called when a world is unloaded. 
+-- called when a world is unloaded.
 
 function CodePku:OnLeaveWorld()
 end
@@ -516,18 +569,20 @@ function CodePku:OnDestroy()
 end
 
 function CodePku:OnInitDesktop()
-	-- we will show our own UI here	
+	-- we will show our own UI here
 	log("CodePku:OnInitDesktop")
 	-- UserConsole:ShowPage()
 	-- return true
 end
 
 function CodePku:BasicConfig()
-	local request = NPL.load("(gl)Mod/CodePku/api/BaseRequest.lua");
-	request:get('/config/basic',{}):next(function(response)		
-		CodePku.BasicConfig = response.data.data; 		
-    end):catch(function(e)
-        
-    end);
+	local request = NPL.load("(gl)Mod/CodePku/api/BaseRequest.lua")
+	request:get("/config/basic", {}):next(
+		function(response)
+			CodePku.BasicConfig = response.data.data
+		end
+	):catch(
+		function(e)
+		end
+	)
 end
-
