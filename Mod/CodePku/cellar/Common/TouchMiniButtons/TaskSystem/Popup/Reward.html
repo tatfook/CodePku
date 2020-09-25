@@ -51,16 +51,15 @@ end
 function getRwardBG(type)
     local index = tonumber(index)
     local info = nowReward["reward_json"]
-    echo("---------getRwardBG-----------")
-    echo(info)
     return info[index]["prop_icon_url"]
-    --return "https://scratch-works-staging-1253386414.file.myqcloud.com/game/admin/propIcons/2.png"
 end
 
 function handleReward()
     if(nowReward["status"] == 1) then    -- 如果奖励未领取且可领取
         TaskSystem:GetReward(nowReward["id"])
         Page:Refresh(0)
+    else
+        Page:CloseWindow();
     end
 end
 
@@ -98,13 +97,9 @@ end
                     <div style="width: 134; height: 134;background:url(codepku/image/textures/common_32bits.png#99 873 134 134);"></div>
                     <div style="position: relative;top:-35;;width: 120; text-align: right; font-size: 22; color: #7996ed; font-family: Noto Sans S Chinese Regular;"><%=Eval('reward_num')%></div>
                 </div>
-                <!-- <div style="<%=format('width: 134; height: 134; margin-left: 33; float: left; background: url(codepku/image/textures/tasksystem/main.png#%s);', getRwardBG(reward_type))%>">
-                    <div style="width: 48; margin-left: 68; margin-top: 98;  text-align: center; font-size: 22; color: #7996ED; font-family: Noto Sans S Chinese Regular;"><%=Eval('reward_num')%></div>
-                </div> -->
             </pe:repeat>
         </div>
     </div>
-
     <div style="<%=format('position: relative; width: 200; height: 80; left: 860; top: 660; color: #FEFEFE; line-height: 80; text-align: center; font-size: 36; font-family: Noto Sans S Chinese Regular; font-weight: bold; background: url(codepku/image/textures/tasksystem/main.png#%s);', getBG())%>" onclick="handleReward"><%=getText()%></div>
     
 </pe:container>

@@ -18,6 +18,8 @@ local ToWhere = commonlib.gettable("Mod.CodePku.GUI.Popup.ToWhere")
 
 task_table =TaskSystem.goal or {}
 
+TaskSystem:GetTask("1")
+
 reward_table = TaskSystem.goalReward or {}
 
 tableIndex = 1
@@ -79,8 +81,6 @@ end
 function getWordWidth(index)
     local width = {"550","460","390"}
     local len = #task_table[index]["reward_json"]
-    echo("----------getWordWidth-----------")
-    echo(width[len])
     return width[len]
 end
 
@@ -93,6 +93,7 @@ function HandleTask(taskIndex)
     echo("--------------HandleTask---------------")
     echo(task_table[taskIndex])
     TaskSystem:HandleClickEvent(task_table[taskIndex])
+    Page:Refresh(0)
 end
 
 -------------------------------------------- 下面处理右侧累计奖励

@@ -28,6 +28,7 @@ TaskSystem = commonlib.gettable("Mod.CodePku.celler.TaskSystem")
 
 TaskSystem.Page = nil
 TaskSystem.nowReward = nil
+TaskSystem.PageIndex = nil
 TaskSystem.acquire_flag = nil --判断奖励是可领取还是其他 1表示可领取
 
 TaskSystem.task_table = {}
@@ -70,10 +71,12 @@ function TaskSystem:GetReward(taskID)
     local response = request:post('/tasks-reward-receive/store',{task_id=taskID},{sync = true})
 	if response.status == 200 then
         -- return true
-        TaskSystem.Page:Refresh(0)
+        -- TaskSystem.Page:Refresh(0)
         GameLogic.AddBBS(nil, L"领取成功", 3000, "255 0 0", 21);
-        TaskSystem.popupui:CloseWindow()
-        
+        if TaskSystem.popupui then
+            TaskSystem.popupui:CloseWindow()
+        end
+        TaskSystem:ShowPage(TaskSystem.PageIndex)
     else
         GameLogic.AddBBS(nil, L"领取失败", 3000, "255 0 0", 21);
     end
@@ -180,9 +183,11 @@ end
 function TaskSystem:ShowPage(index)
     if TaskSystem.Page ~= nil then
         TaskSystem.Page:CloseWindow()
+        TaskSystem.Page = nil
     end
 
     Index = tonumber(index)
+    TaskSystem.PageIndex = Index
     TaskSystem:GetTask(index)
     TaskSystem.Page = AdaptWindow:QuickWindow(TaskSystem.params[Index])
     
@@ -221,7 +226,6 @@ function TaskSystem:HandleClickEvent(data)
         data["reward_received"] = 1
         TaskSystem:GetReward(data["id"])
         TaskSystem:GetTask("1")
-        TaskSystem.Page:Refresh(0)
     elseif(data["status"] == 2) then  --前往
         -- 跳转页面，教学课，专题课
         local info = TaskSystem:GetJumpId(data["redirect"])
