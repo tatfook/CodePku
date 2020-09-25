@@ -66,6 +66,7 @@ local ToWhere = NPL.load("(gl)Mod/CodePku/cellar/GUI/SmallMap/Popup/ToWhere.lua"
 local SignInPage = NPL.load("(gl)Mod/CodePku/cellar/GUI/SignIn/SignInPage.lua")
 local FastEntrence = NPL.load("(gl)Mod/CodePku/cellar/GUI/SmallMap/FastEntrence/FastEntrence.lua")
 local TopicCourse = NPL.load("(gl)Mod/CodePku/cellar/GUI/SmallMap/FastEntrence/TopicCourse.lua")
+local EntityManager = commonlib.gettable("MyCompany.Aries.Game.EntityManager")
 
 local HomeManage = commonlib.gettable("Mod.CodePku.Common.HomeManage")
 local DownloadWorld = commonlib.gettable("MyCompany.Aries.Game.MainLogin.DownloadWorld")
@@ -135,12 +136,64 @@ function CodePku:init()
 
 	--退出世界时将世界课程数据置位空
 	GameLogic.GetFilters():add_filter(
-			"OnWorldUnloaded",
-			function()
-				if HomeManage:IsMyHome() then
-					commonlib.setfield("System.Codepku.Coursewares", nil)
+		"OnWorldUnloaded",
+		function()
+			-- 这里因为只能在世界加载完成之前，所以只能用isLoadingHome来判断
+			if System.Codepku.isLoadingHome then
+				LOG.std(nil, "info", "codepku", "add_filter OnWorldUnloaded")
+				commonlib.setfield("System.Codepku.Coursewares", nil)
+			end
+		end
+	)
+
+	GameLogic.GetFilters():add_filter(
+		"BaseContextMousePressEvent",
+		function (backValue, event)
+			LOG.std(nil, "info", "codepku", "add_filter BaseContextMousePressEvent")
+			-- 家园区编辑模式特殊处理
+			if HomeManage:IsMyHome() and GameLogic.GameMode:IsEditor() then
+				-- 手机端特殊处理
+				local platform = System.os.GetPlatform()
+				if platform == "ios" or platform == "android" then
+					if event.mouse_button == "left" then
+						event.mouse_button = "right"
+					elseif event.mouse_button == "right" then
+						event.mouse_button = "left"
+					end
 				end
 			end
+		end
+	)
+
+	GameLogic.GetFilters():add_filter(
+		"BaseContextMouseReleaseEvent",
+		function (backValue, event)
+			LOG.std(nil, "info", "codepku", "add_filter BaseContextMouseReleaseEvent")
+			-- 家园区编辑模式特殊处理
+			if HomeManage:IsMyHome() and GameLogic.GameMode:IsEditor() then
+				-- 判定鼠标点击的方块距离人物的距离是否过远，distance控制判定距离长短
+				local distance = 10
+				NPL.load("(gl)script/apps/Aries/Creator/Game/SceneContext/SelectionManager.lua");
+				local SelectionManager = commonlib.gettable("MyCompany.Aries.Game.SelectionManager")
+				local result = SelectionManager:GetPickingResult()
+				local px, py, pz = EntityManager.GetPlayer():GetPosition()
+				if(result.x and result.y and result.z) then
+					if(math.abs(result.x-px) > distance or math.abs(result.y-py) > distance or math.abs(result.z-pz) > distance) then
+						GameLogic.AddBBS("nil", L"距离过远，走近点再尝试。", 3000, "#ff0000");
+						event:accept()
+					end
+				end
+				-- 手机端特殊处理
+				local platform = System.os.GetPlatform()
+				if platform == "ios" or platform == "android" then
+					if event.mouse_button == "left" then
+						event.mouse_button = "right"
+					elseif event.mouse_button == "right" then
+						event.mouse_button = "left"
+					end
+				end
+			end
+		end
 	)
 
 	-- 重写移动端虚拟小键盘

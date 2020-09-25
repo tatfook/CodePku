@@ -176,8 +176,8 @@ function MainUIButtons.show_home_window_ui()
 		alignment = "_lt", left = 1600, top = 493, width = 135, height = 155,
 	}
 
-	local isHome = commonlib.getfield("System.Codepku.isHome")
-
+	local isHome = HomeManage:IsMyHome()
+	
 	if isHome then
 		MainUIButtons.home_window = AdaptWindow:QuickWindow(params)
 	end
