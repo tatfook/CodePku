@@ -1,0 +1,87 @@
+<!-- 绑定弹窗 -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+</head>
+<body>
+<pe:mcml>
+<script refresh="false" type="text/npl" src="Eldership.lua"><![CDATA[
+Eldership = NPL.load("(gl)Mod/CodePku/cellar/GUI/Eldership/Eldership.lua")
+
+UserInfoPage = NPL.load("(gl)Mod/CodePku/cellar/GUI/UserInfo.lua");
+local Payment = NPL.load("(gl)Mod/CodePku/cellar/GUI/Payment/Payment.lua");
+
+local page = document:GetPageCtrl()
+
+-- 请求二维码，获取后刷新页面
+Eldership:GetQR()
+
+function ClosePage()
+    Page:CloseWindow();
+end
+
+function Eldership.goback()
+    Page:CloseWindow();
+    if not Payment.from_course_payment_page then
+        Eldership:ShowPage()        -- 用户可能从专题课解锁页面过来的,如果是从主页面家长系统进入,需要重新打开家长绑定页面
+    end
+    Payment.from_course_payment_page = nil
+end
+
+
+]]>
+
+</script>
+
+<pe:container alignment="_lt" width="1920" height="1080" style="background-color: #00000094;">
+    <!-- 窗口 -->
+    <div style="position: relative;width:1555;height:880;left:183;top:122;background:url(codepku/image/textures/eldership/eldershipbg.png)">
+        <!-- 标题 -->
+        <div style="position: relative; width: 410; height: 86;left: 572; top: 0; text-align: center;color: #f46d3d;font-family: Noto Sans S Chinese Regular;font-weight:bolder; font-size: 45px;line-height: 86; background:url(codepku/image/textures/common_32bits.png#1277 377 410 87);">微信公众号绑定</div>
+        <!-- 取消按钮 -->
+        <div style="position: relative; width: 64; height: 74; left:1476; top:7; background: url(codepku/image/textures/common_32bits.png#110 73 68 78);" onclick="ClosePage"></div>
+        
+        <!-- 微信公众号绑定 -->
+        <div style="position: relative;width:1395;height:628;left:80;top:120;">
+            <div style="<%=format('position: relative;width:1395;height:628;background:url(%s:20 20 20 20)', Eldership.GetEldershipIconHTMLStr(2))%>">
+                <div style="<%=format('position: relative;width:754;height:489;left:74;top:38;background:url(%s:20 20 20 20)', Eldership.GetEldershipIconHTMLStr(4))%>">
+                    <!-- 二维码 -->
+                    <div style="<%=format('position: relative;width:268;height:268;left:237;top:42;background:url(%s)', Eldership.GetEldershipIconHTMLStr(8))%>"></div>
+                    <div style="position:relative;height:34;top:322;text-align:center;line-height: 34;color: #3f5377;font-size: 34;font-family: Noto Sans S Chinese Regular;font-weight:bolder;"><%=Eldership.unbindContent[9]%></div>
+                    <div style="position:relative;height:34;top:364;text-align:center;line-height: 34;color: #3f5377;font-size: 34;font-family: Noto Sans S Chinese Regular;font-weight:bolder;"><%=Eldership.unbindContent[13]%></div>
+                    <div style="position:relative;width:669;height:33;left:38;top:420;text-align:center;line-height: 33;color: #3f5377;font-size: 34;font-family: Noto Sans S Chinese Regular;font-weight:bolder;"><%=Eldership.unbindContent[10]%></div>
+                </div>
+
+                <div style="<%=format('position: relative;width:122;height:123;left:882;top:49;background:url(%s:20 20 20 20)', Eldership.GetEldershipIconHTMLStr(4))%>">
+                    <div style="<%=format('position: relative;width:67;height:85;left:27;top:16;background:url(%s)', Eldership.GetEldershipIconHTMLStr(5))%>"></div>
+                </div>
+                <div style="position: relative; width: 150; height: 35;left: 1023; top: 61;color: #ffffff;font-family:PuHuiTi-Bold;font-size:36px;line-height:35;"><%=Eldership.unbindContent[2]%></div>
+                <div style="position: relative; width: 271; height: 31;left: 1025; top: 118;color: #d3eeff;font-family: Noto Sans S Chinese Regular;font-weight:bolder;font-size:32px;line-height:31;"><%=Eldership.unbindContent[3]%></div>
+
+                <div style="<%=format('position: relative;width:122;height:123;left:882;top:224;background:url(%s:20 20 20 20)', Eldership.GetEldershipIconHTMLStr(4))%>">
+                    <div style="<%=format('position: relative;width:75;height:89;left:20;top:17;background:url(%s)', Eldership.GetEldershipIconHTMLStr(6))%>"></div>
+                </div>
+                <div style="position: relative; width: 150; height: 35;left: 1023; top: 242;color: #ffffff;font-family:PuHuiTi-Bold;font-size:36px;line-height:35;"><%=Eldership.unbindContent[4]%></div>
+                <div style="position: relative; width: 300; height: 30;left: 1025; top: 300;color: #d3eeff;font-family: Noto Sans S Chinese Regular;font-weight:bolder;font-size:32px;line-height:30;"><%=Eldership.unbindContent[5]%></div>
+
+                <div style="<%=format('position: relative;width:122;height:123;left:882;top:399;background:url(%s:20 20 20 20)', Eldership.GetEldershipIconHTMLStr(4))%>">
+                    <div style="<%=format('position: relative;width:73;height:81;left:26;top:22;background:url(%s)', Eldership.GetEldershipIconHTMLStr(7))%>"></div>
+                </div>
+                <div style="position: relative; width: 150; height: 35;left: 1023; top: 414;color: #ffffff;font-family:PuHuiTi-Bold;font-size:36px;line-height:35;"><%=Eldership.unbindContent[6]%></div>
+                <div style="position: relative; width: 240; height: 30;left: 1025; top: 472;color: #d3eeff;font-family: Noto Sans S Chinese Regular;font-weight:bolder;font-size:32px;line-height:30;"><%=Eldership.unbindContent[7]%></div>
+
+                <div style="position: relative; width: 980; height: 34;left: 196; top: 564;color: #ffeb99;font-family: Noto Sans S Chinese Regular;font-weight:bold;font-size:34px;line-height:34;"><%=Eldership.unbindContent[11]%></div>
+            </div>
+        </div>
+
+        <!-- 取消按钮 -->
+        <div onclick="Eldership.goback" style="<%=format('position: relative;width:240;height:80;left:657;top:767;text-align:center;font-size:36px;line-height:80;font-family: Noto Sans S Chinese Regular;font-weight:bolder;color: #0e5516;background:url(%s)', Eldership.GetEldershipIconHTMLStr(10))%>">返回</div>
+    </div>
+</pe:container>
+
+</pe:mcml>
+</body>
+</html>
+ 
