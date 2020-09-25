@@ -39,21 +39,21 @@ end
 
 function turnTo()
     CloseAllPage()
-    -- local _id = tonumber(id)
-    -- if (_id) == 1 then
-        -- GameLogic.RunCommand(string.format('/connectCodePku %d', _id));
-    -- else
-       -- GameLogic.RunCommand(string.format('/loadworld %d', _id));
-   -- end
+    local _id = tonumber(id)
+    if (_id) == 1 then
+        GameLogic.RunCommand(string.format('/connectCodePku %d', _id));
+    else
+        GameLogic.RunCommand(string.format('/loadworld %d', _id));
+    end
 end
 
 ]]>
 </script>
 <pe:container alignment="_lt" width="1920" height="1080">
+    <div style="position: relative;width: 1920;height:1080;background-color: #00000099;" onclick="ClosePage"></div>
+    <div style="position: relative; width: 1158; height: 588; left: 381; top: 219; background:url(codepku/image/textures/commonpopup/main.png#99 275 1158 588);"></div>
 
-    <div style="position: relative; width: 1158; height: 588; left: 406; top: 219; background:url(codepku/image/textures/commonpopup/main.png#99 275 1158 588);"></div>
-
-    <div style="position: relative; width: 410; height: 86; left: 738; top: 240.9; text-align: center; font-family: Noto Sans S Chinese Regular; color: #F46D3D; font-size: 45px; line-height: 86; background:url(codepku/image/textures/commonpopup/main.png#1265 363 434 115);">
+    <div style="position: relative; width: 410; height: 108; left: 755; top: 210; text-align: center; font-family: Noto Sans S Chinese Regular; color: #F46D3D; font-size: 45px; line-height: 108; background:url(codepku/image/textures/commonpopup/main.png#1265 363 434 115);">
         传送提示
     </div>
 

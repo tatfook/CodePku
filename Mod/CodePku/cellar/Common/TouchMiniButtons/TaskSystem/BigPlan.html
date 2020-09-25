@@ -25,72 +25,77 @@ function ClickSamllGoal()
     TaskSystem:ShowPage(1)
 end
 
--- state = 表示奖励是否领取
-task_table = TaskSystem.task_table
+-- reward_received = 表示奖励是否领取
+TaskSystem:GetTask("2")
+task_table = TaskSystem.plan
+tableIndex = 1
+echo("-----------大计划-----------")
+echo(task_table)
 
 reward_table = TaskSystem.reward_table
-
-state_table = {"前往", "领取", ""}    --按钮的内容
-
-state_bg_table = {
-    "position: relative; width: 160; height: 80; left: 146; top: 325; color: #FEFEFE; line-height: 80; text-align: center; font-size: 36; font-family: Noto Sans S Chinese Regular; font-weight: bold; background: url(codepku/image/textures/tasksystem/main.png#497 226 167 87:15 15 15 15",
-    "position: relative; width: 160; height: 80; left: 146; top: 325; color: #FEFEFE; line-height: 80; text-align: center; font-size: 36; font-family: Noto Sans S Chinese Regular; font-weight: bold; background: url(codepku/image/textures/tasksystem/main.png#496 114 166 87:15 15 15 15", 
-    "position: relative; width: 86; height: 86; left: 188; top: 323; background: url(codepku/image/textures/tasksystem/main.png#523 460 92 92)"
-}     -- 按钮的样式 前往 领取 已完成
 
 
 function getTask()
     return task_table or {}
 end
 
-function getRewardInfo(index)
-    return task_table[index].info
+function getTagType(index)
+    local tabType = {"所有","学习","游戏","游览"}
+    local index = tonumber(tag_types)+1
+    return tabType[index]
 end
 
-function getRwardBG(type)
-    if type == 0 then
-        return "347 424 100 100"
-    elseif type == 1 then
-        return "347 567 100 100"
-    end
+function getRewardInfo(index)
+    --return TaskSystem:ChangeStrToNum(task_table[index].reward_json)
+    return task_table[index]["reward_json"]
+end
+
+function getRwardBG(reward_type)
+    --if reward_type == 0 then
+    --    return "347 424 100 100"
+    --elseif reward_type == 1 then
+    --    return "347 567 100 100"
+    --end
+    local index = tonumber(index)
+    --local info = task_table[tableIndex]["reward_json"]
+    local info = TaskSystem:ChangeStrToNum(task_table[tableIndex]["reward_json"])
+    echo("---------getRwardBG-----------")
+    echo(info)
+    echo(info[1])
+    return info[index]["prop_icon_url"]
+    --return "https://scratch-works-staging-1253386414.file.myqcloud.com/game/admin/propIcons/2.png"
 end
 
 function getText(index)
-    local index = tonumber(index)
-    if(state == 1)then --奖励已经领取
-        return state_table[3]
-    elseif(state == 0)then
-        if(finished_times == total_times)then   -- 任务完成但是未领取
-            return state_table[2]
-        elseif(finished_times < total_times) then   -- 任务未完成，显示前往
-            return state_table[1]
-        end
-    end
+    tableIndex = index
+    local state_table = {"领取", "前往", "未完成", ""}   --按钮的内容
+    return state_table[status]
 end
 
 function getBG(index)
     local index = tonumber(index)
-    if(state == 1)then --奖励已经领取
+    local state_bg_table = {
+        "position: relative; width: 160; height: 80; left: 146; top: 340; color: #FEFEFE; line-height: 80; text-align: center; font-size: 36; font-family: Noto Sans S Chinese Regular; font-weight: bold; background: url(codepku/image/textures/tasksystem/main.png#497 226 167 87:15 15 15 15",
+        "position: relative; width: 160; height: 80; left: 146; top: 340; color: #FEFEFE; line-height: 80; text-align: center; font-size: 36; font-family: Noto Sans S Chinese Regular; font-weight: bold; background: url(codepku/image/textures/tasksystem/main.png#496 114 166 87:15 15 15 15", 
+        "position: relative; width: 86; height: 86; left: 188; top: 340; background: url(codepku/image/textures/tasksystem/main.png#523 460 92 92)"
+    }     -- 按钮的样式 前往 领取 已完成
+    if status == 4 then
         return state_bg_table[3]
-    elseif(state == 0)then
-        if(finished_times == total_times)then   -- 任务完成但是未领取
-            return state_bg_table[2]
-        elseif(finished_times < total_times) then   -- 任务未完成，显示前往
-            return state_bg_table[1]
-        end
+    elseif status == 1 then
+        return state_bg_table[2]
+    else
+        return state_bg_table[1]
     end
 end
 
+function getFinishType(index)
+    return TaskSystem:GetTaskDeac(task_table[index])
+end
+
 function HandleTask(taskIndex)
-    if(task_table[taskIndex]["state"] == 0) then
-        if(task_table[taskIndex]["finished_times"] == task_table[taskIndex]["total_times"])then
-            echo("领取奖励")
-            task_table[taskIndex]["state"] = 1
-            Page:Refresh(0)
-        elseif(task_table[taskIndex]["finished_times"] < task_table[taskIndex]["total_times"])then
-            ToWhere:ShowPage(task_table[taskIndex]["tp_title"], task_table[taskIndex]["world_id"])
-        end
-    end
+    echo("--------------HandleTask---------------")
+    echo(task_table[taskIndex])
+    TaskSystem:HandleClickEvent(task_table[taskIndex])
 end
 
 
@@ -127,21 +132,26 @@ end
                 <div style="width: 450; height: 429; margin-bottom: 40; margin-left: 13;">
                     <div style="position: relative; width: 450; height: 400; top: 47; line-height: 141; background: url(codepku/image/textures/tasksystem/main.png#21 252 251 141:12 12 12 12);"></div>
                     <div style="position: relative; width: 187; height: 78; line-height: 78; background: url(codepku/image/textures/tasksystem/main.png#14 428 167 58:6 6 6 6);">
-                        <span style="position: relative; left: 36; color: #B35D0A; font-size: 34; font-family: Noto Sans S Chinese Regular;"><%=Eval('type')%></span>
+                        <span style="position: relative; left: 36; color: #B35D0A; font-size: 34; font-family: Noto Sans S Chinese Regular;"><%=getTagType(index)%></span>
                     </div>
 
-                    <div style="position: relative; height: 141; left: 37; top: 50; line-height: 141; color:#123655; font-size: 34; font-family: Noto Sans S Chinese Regular; float: left;">
-                        <%=Eval('title')%>(<%=Eval('finished_times')%> / <%=Eval('total_times')%>)次
+                    <div style="position: relative; height: 141; left: 25; top: 90; line-height: 50; color:#123655; font-size: 34; font-family: Noto Sans S Chinese Regular; float: left;">
+                        <%=Eval('intro')%><%=getFinishType(index)%>
                     </div>
 
                     <div style="<%=format('%s);', getBG(index))%>" name="<%=Eval('index')%>" onclick="HandleTask">
                         <%=getText(index)%>
                     </div>
 
-                    <div style="position: relative; height: 134; left: 14; top: 170;">
+                    <div style="position: relative; height: 134; left: 14; top: 190;">
                         <pe:repeat DataSource="<%=getRewardInfo(index)%>">
-                            <div style="<%=format('width: 134; height: 134; margin-left: 8; float: left; background: url(codepku/image/textures/tasksystem/main.png#%s);', getRwardBG(type))%>">
-                                <div style="width: 48; margin-left: 68; margin-top: 98;  text-align: center; font-size: 22; color: #7996ED; font-family: Noto Sans S Chinese Regular;"><%=Eval('num')%></div>
+                            <!-- <div style="<%=format('width: 134; height: 134; margin-left: 8; float: left; background: url(codepku/image/textures/tasksystem/main.png#%s);', getRwardBG(reward_type))%>">
+                                <div style="width: 48; margin-left: 68; margin-top: 98;  text-align: center; font-size: 22; color: #7996ED; font-family: Noto Sans S Chinese Regular;"><%=Eval('reward_num')%></div>
+                            </div> -->
+                            <div style="float: left;width: 134; height: 134; margin-left: 8;">
+                                <div style="<%= format('position: relative; left: 31;top: 31;width: 72; height: 72;background:url(%s);', getRwardBG(reward_type)) %>"></div>
+                                <div style="width: 134; height: 134;background:url(codepku/image/textures/common_32bits.png#99 873 134 134);"></div>
+                                <div style="position: relative;top:-35;;width: 120; text-align: right; font-size: 22; color: #7996ed; font-family: Noto Sans S Chinese Regular;"><%=Eval('reward_num')%></div>
                             </div>
                         </pe:repeat>
                     </div>

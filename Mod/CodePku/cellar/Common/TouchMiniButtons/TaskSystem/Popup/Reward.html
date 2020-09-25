@@ -29,7 +29,7 @@ end
 rewardNum_table = {{1},{2},{3}}
 
 function getText()
-    if(acquire_flag == 1)then
+    if(nowReward["status"] == 1)then
         return "领取"
     else
         return "确认"
@@ -37,7 +37,7 @@ function getText()
 end
 
 function getBG()
-    if(acquire_flag == 1)then
+    if(nowReward["status"] == 1)then
         return "694 582 207 87:15 15 15 15"
     else
         return "694 450 207 87:15 15 15 15"
@@ -45,31 +45,30 @@ function getBG()
 end
 
 function getRewardInfo()
-    return nowReward["info"]
+    return TaskSystem:ChangeStrToNum(nowReward["reward_json"])
 end
 
 function getRwardBG(type)
-    if type == 0 then
-        return "347 424 100 100"
-    elseif type == 1 then
-        return "347 567 100 100"
-    end
+    local index = tonumber(index)
+    local info = nowReward["reward_json"]
+    echo("---------getRwardBG-----------")
+    echo(info)
+    return info[index]["prop_icon_url"]
+    --return "https://scratch-works-staging-1253386414.file.myqcloud.com/game/admin/propIcons/2.png"
 end
 
 function handleReward()
-    if(acquire_flag == 1) then    -- 如果奖励未领取且可领取
-        nowReward["acquired"] = 1
-        TaskSystem.Page:Refresh(0)
+    if(nowReward["status"] == 1) then    -- 如果奖励未领取且可领取
+        TaskSystem:GetReward(nowReward["id"])
+        Page:Refresh(0)
     end
-    ClosePage()
 end
 
 reward_marginLeft = {"376", "293", "209", "115", "32"}
 
 function getMarginLeft()
-    local rewardInfo = nowReward["info"]
+    local rewardInfo = TaskSystem:ChangeStrToNum(nowReward["reward_json"])
     local length = #rewardInfo
-    echo("============="..reward_marginLeft[length])
     return reward_marginLeft[length]
 end
 
@@ -92,12 +91,16 @@ end
 
         <div style="<%=format('float:left; width: 1; height: 134; margin-left: %s;)', getMarginLeft())%>"></div>
 
-
         <div style="float: left;">
             <pe:repeat DataSource="<%=getRewardInfo()%>">
-                <div style="<%=format('width: 134; height: 134; margin-left: 33; float: left; background: url(codepku/image/textures/tasksystem/main.png#%s);', getRwardBG(type))%>">
-                    <div style="width: 48; margin-left: 68; margin-top: 98;  text-align: center; font-size: 22; color: #7996ED; font-family: Noto Sans S Chinese Regular;"><%=Eval('num')%></div>
+                <div style="float: left;width: 134; height: 134; margin-left: 33;">
+                    <div style="<%= format('position: relative; left: 31;top: 31;width: 72; height: 72;background:url(%s);', getRwardBG(index)) %>"></div>
+                    <div style="width: 134; height: 134;background:url(codepku/image/textures/common_32bits.png#99 873 134 134);"></div>
+                    <div style="position: relative;top:-35;;width: 120; text-align: right; font-size: 22; color: #7996ed; font-family: Noto Sans S Chinese Regular;"><%=Eval('reward_num')%></div>
                 </div>
+                <!-- <div style="<%=format('width: 134; height: 134; margin-left: 33; float: left; background: url(codepku/image/textures/tasksystem/main.png#%s);', getRwardBG(reward_type))%>">
+                    <div style="width: 48; margin-left: 68; margin-top: 98;  text-align: center; font-size: 22; color: #7996ED; font-family: Noto Sans S Chinese Regular;"><%=Eval('reward_num')%></div>
+                </div> -->
             </pe:repeat>
         </div>
     </div>
