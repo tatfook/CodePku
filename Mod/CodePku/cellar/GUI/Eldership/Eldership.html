@@ -19,6 +19,11 @@ Eldership:GetBindStatus()
 
 
 function ClosePage()
+    -- 关闭计时器
+    -- if Eldership.mytimer then
+        -- Eldership.mytimer:Change()
+        -- Eldership.mytimer = nil
+    -- end
     Page:CloseWindow();
 end
 
@@ -26,8 +31,6 @@ function BindWechat()
     Page:CloseWindow();
     -- 展示绑定页面
     Eldership:ShowBindPage()
-    -- 请求二维码，获取后刷新页面
-    Eldership:GetQR()
 end
 
 function Eldership.ShowUnbindWechat()
@@ -53,9 +56,12 @@ end
                 <div style="<%=format('position: relative;width:1293;height:288;left:51;top:66;background:url(%s:20 20 20 20)', Eldership.GetEldershipIconHTMLStr(3))%>">
                     <!-- 已绑定 -->
                     <pe:if condition="<%=UserInfoPage.is_bind == 1%>">
-                        <div style="position: relative;left: 397;font-size:40px;line-height:288;font-family:PuHuiTi-Bold;color: #ffffff;"><%=Eldership.unbindContent[1]%></div>
-                        <div style="position: relative;left: 570;width: 180;text-align:center;font-size:40px;line-height:288;font-family:PuHuiTi-Bold;color: #ffffff;"><%=UserInfoPage.eldership%></div>
-                        <div onclick="Eldership.ShowUnbindWechat" style="<%=format('position: relative;width:144;height:58;left:753;top:114;text-align:center;font-size:40px;line-height:58;font-family:PuHuiTi-Bold;color: #f01100;background:url(%s:20 20 20 20)', Eldership.GetEldershipIconHTMLStr(4))%>">解绑</div>
+                        <div style="position: relative;left: 320;font-size:40px;top:124;font-family:PuHuiTi-Bold;color: #ffffff;"><%=Eldership.unbindContent[1]%>
+                            <div style="left: 50;float: left;width:450;position: relative;font-size:40px;font-family:PuHuiTi-Bold;color: #ffffff;"><%=UserInfoPage.eldership%></div>
+                        </div>
+                        <!-- <div style="background-color: #00000088;position: relative;left: 570;width: 180;text-align:center;font-size:40px;line-height:288;font-family:PuHuiTi-Bold;color: #ffffff;"><%=UserInfoPage.eldership%></div> -->
+                        
+                        <div onclick="Eldership.ShowUnbindWechat" style="<%=format('position: relative;width:144;height:58;left:913;top:114;text-align:center;font-size:40px;line-height:58;font-family:PuHuiTi-Bold;color: #f01100;background:url(%s:20 20 20 20)', Eldership.GetEldershipIconHTMLStr(4))%>">解绑</div>
                     </pe:if>
                     <!-- 未绑定 -->
                     <pe:if condition="<%=UserInfoPage.is_bind == 0%>">
