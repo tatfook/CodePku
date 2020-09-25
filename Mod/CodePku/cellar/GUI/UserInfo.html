@@ -365,7 +365,9 @@ end
                 <div onclick="ClickPrevAsset" style="position:relative;margin-left:28px;margin-top:-240px;transform:rotate(180deg);transform-origin:25 25;width:50px;height:50px;background:url(codepku/image/textures/common_32bits.png#1048 152 50 50);"></div>
                 <div onclick="ClickNextAsset" style="position:relative;margin-left:640px;margin-top:-240px;width:50px;height:50px;background:url(codepku/image/textures/common_32bits.png#1048 152 50 50);"></div>    
             </pe:if> -->
-            <input align="center" type="button" onclick="OpenSkinPage" style="background:url(codepku/image/textures/common_32bits.png#1502 740 86 86:14 14 14 14);width:246px;height:86px;color:#B35D0A;font-size:36px;font-weight:bold;margin-top:16px;" value="更换角色"/>
+            <pe:if condition='<%= UserInfoPage.isSelf %>'>
+                <input align="center" type="button" onclick="OpenSkinPage" style="background:url(codepku/image/textures/common_32bits.png#1502 740 86 86:14 14 14 14);width:246px;height:86px;color:#B35D0A;font-size:36px;font-weight:bold;margin-top:16px;" value="更换角色"/>
+            </pe:if>
         </div>
     </div>
 </pe:container>

@@ -638,7 +638,20 @@ function CodePku:init()
 			return true;
 		end
 	)
-	
+
+	GameLogic.GetFilters():add_filter(
+        "ShowClientUpdaterNotice",
+		function()
+            CodePku.MsgBox:Show(L"正在检查更新， 请稍后...", nil, nil, nil, nil, nil, "_ct")
+        end
+    )
+
+    GameLogic.GetFilters():add_filter(
+        "HideClientUpdaterNotice",
+        function()
+            CodePku.MsgBox:Close()
+        end
+    )
 end
 
 function CodePku:OnLogin()
