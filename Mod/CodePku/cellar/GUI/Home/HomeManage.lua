@@ -44,8 +44,8 @@ end
 
 -- 判断是否在自己的家园
 function HomeManage:IsMyHome()
-    LOG.std(nil, "HomeManage", "IsMyHome", "System.Codepku.isHome = %s", tostring(System.Codepku.isHome))
-    LOG.std(nil, "HomeManage", "IsMyHome", "System.Codepku.isLoadingHome = %s", tostring(System.Codepku.isLoadingHome))
+    -- LOG.std(nil, "HomeManage", "IsMyHome", "System.Codepku.isHome = %s", tostring(System.Codepku.isHome))
+    -- LOG.std(nil, "HomeManage", "IsMyHome", "System.Codepku.isLoadingHome = %s", tostring(System.Codepku.isLoadingHome))
     return System.Codepku.isHome or System.Codepku.isLoadingHome
 end
 
@@ -214,6 +214,7 @@ function HomeManage:ChangeGameMode()
         GameLogic.RunCommand("/mode game")
     else
         GameLogic.RunCommand("/mode edit")
+        GameLogic.AddBBS(nil, L"已经进入编辑模式，可以开始编辑家园", 3000, "0 255 0", 21)
     end
 end
 

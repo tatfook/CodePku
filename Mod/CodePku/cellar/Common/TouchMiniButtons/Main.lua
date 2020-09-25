@@ -41,7 +41,7 @@ function MainUIButtons.show_common_ui(flag)
 	if MainUIButtons.isIOSApproval then
 		open_width = 643
 	else
-		open_width = 804
+		open_width = 904
 	end
 	local open_height = 178
 	local close_width = 82
@@ -202,8 +202,8 @@ function MainUIButtons.show_home_window_ui()
 		alignment = "_lt", left = 1600, top = 493, width = 135, height = 155,
 	}
 
-	local isHome = commonlib.getfield("System.Codepku.isHome")
-
+	local isHome = HomeManage:IsMyHome()
+	
 	if isHome then
 		MainUIButtons.home_window = AdaptWindow:QuickWindow(params)
 	end

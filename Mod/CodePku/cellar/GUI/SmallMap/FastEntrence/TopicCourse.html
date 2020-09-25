@@ -12,6 +12,7 @@
     TopicCourse = NPL.load("(gl)Mod/CodePku/cellar/GUI/SmallMap/FastEntrence/TopicCourse.lua")
     local FastEntrence = NPL.load("(gl)Mod/CodePku/cellar/GUI/SmallMap/FastEntrence/FastEntrence.lua")
     local MainPopup = commonlib.gettable("Mod.CodePku.GUI.MainPopup");
+    Payment = NPL.load("(gl)Mod/CodePku/cellar/GUI/Payment/Payment.lua");
 
     
     local page = document:GetPageCtrl()
@@ -146,16 +147,16 @@
     end
     
     function get_topic_course(conditional_course)
-        page_course = {}
+        TopicCourse.page_course = {}
         num = (page_num - 1)*page_size
         for i = 1, page_size do
             if num + i <= #conditional_course then
-                page_course[i] = conditional_course[num+i]
+                TopicCourse.page_course[i] = conditional_course[num+i]
             else
                 break
             end
         end
-        return page_course
+        return TopicCourse.page_course
     end
     
     function OnClickSubject(name)
@@ -217,6 +218,21 @@
         return info
     end
 
+    -- 获取用户缓存在本地的当前货币数量
+    function Payment.GetMoney()
+        local info = Mod.CodePku.Store:Get('user/info');
+        local wallets = info.user_wallets or {};
+        local money = {goldcoin=0, wanxuecoin=0};
+        for _, v in ipairs(wallets) do
+            if v.currency_id == 1 then
+                money.goldcoin = v.amount;
+            elseif v.currency_id == 2 then
+                money.wanxuecoin = v.amount;
+            end
+        end
+        return money;
+    end
+
 ]]></script>
 <style type="text/mcss">
 </style>
@@ -271,6 +287,8 @@
         <div style="position: relative; width: 1690; height: 630; top: 322;">
             <pe:repeat DataSource="<%=get_topic_course(GetConditionalCourse())%>">
                 <pe:repeatitem>
+                    <!-- 添加判断,未购买的增加遮罩 -->
+            
                     <div style="<%=format('position:absolute; z-index: 5; width:650;height:198;background:url(codepku/image/textures/fastentrence_ui/fastentrence_32bits.png#18 558 650 198);margin-left:%d;margin-top:%d; padding:8;',GetDivisible(Eval('index'))['left'], GetDivisible(Eval('index'))['top'])%>">
                         <div style="<%=format('width:268;height:178; margin-left: 2; float: left; background:url(%s);', Eval('img'))%>"></div>
                         <div style="width:225; margin-left: 26;float: left;">
@@ -282,7 +300,8 @@
                             </pe:if>
                         </div>
                         <div style="width: 96; height: 96;float: left; margin-top: 48; background:url(codepku/image/textures/fastentrence_ui/fastentrence_32bits.png#689 210 96 96);" name ="<%= SetTPInfo(Eval('name'), Eval('id')) %>" onclick="OnClickCourse"></div>
-                    </div>    
+                    </div>
+
                 </pe:repeatitem>
             </pe:repeat>
         </div>
@@ -294,6 +313,7 @@
             <div style="width: 28; height: 40;float: left; background: url(codepku/image/textures/fastentrence_ui/fastentrence_32bits.png#207 378 28 41);" name="page_right" onclick="ChangeTopicPage"></div>
         </div>
     </div>
+    <iframe name="money" src="Mod/CodePku/cellar/GUI/Money.html" style="top:0;"></iframe>
     <div style='position: relative; width:208; height:127; background:url(codepku/image/textures/common_32bits.png#251 49 208 127);' onclick="OnClose"></div>
     <div style="position: relative; width: 417; height: 86; margin-left: 144; base-font-size:70px; font-size:70px; color: #D85D0B; font-family:PuHuiTi-Bold; padding-left: 95; padding-top: 8; background:url(codepku/image/textures/common_32bits.png#475 63 429 86);">专题区</div>
     <!--下拉选择框-->
