@@ -16,16 +16,12 @@ TaskSystem = NPL.load("(gl)Mod/CodePku/cellar/Common/TouchMiniButtons/TaskSystem
 
 local ToWhere = commonlib.gettable("Mod.CodePku.GUI.Popup.ToWhere")
 
-TaskSystem:GetTask("1")
 task_table =TaskSystem.goal or {}
-echo("--------task_table---------")
-echo(task_table)
 
 reward_table = TaskSystem.goalReward or {}
-echo("--------reward_table---------")
-echo(reward_table)
+
 tableIndex = 1
---reward_stage = TaskSystem.reward_stage
+
 ---------------------------------------------- 下面处理左侧任务奖励
 function getTagType(index)
     local tabType = {"所有","学习","游戏","游览"}
@@ -45,7 +41,6 @@ function getText(index)
 end
 
 function getBG(index)
-    --local index = tonumber(index)
     local state_bg_table = {"497 226 167 87:15 15 15 15", "496 114 166 87:15 15 15 15", "497 342 166 87:15 15 15 15"}     -- 按钮的样式 前往(未完成) 领取 已完成
     if status == 4 then
         return state_bg_table[3]
@@ -57,18 +52,9 @@ function getBG(index)
 end
 
 function getRwardBG(index)
-    --if reward_type == 0 then
-    --    return "347 424 100 100"
-    --elseif reward_type == 1 then
-    --    return "347 567 100 100"
-    --end
     local index = tonumber(index)
     local info = task_table[tableIndex]["reward_json"]
-    echo("---------getRwardBG-----------")
-    echo(info)
-    echo(info[1])
     return info[index]["prop_icon_url"]
-    --return "https://scratch-works-staging-1253386414.file.myqcloud.com/game/admin/propIcons/2.png"
 end
 
 function showRewardBg(index)

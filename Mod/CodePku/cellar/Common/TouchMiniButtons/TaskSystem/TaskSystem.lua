@@ -183,8 +183,9 @@ function TaskSystem:ShowPage(index)
     end
 
     Index = tonumber(index)
-
+    TaskSystem:GetTask(index)
     TaskSystem.Page = AdaptWindow:QuickWindow(TaskSystem.params[Index])
+    
 end
 
 function TaskSystem:ShowPopupPage(index, rewardIndex)
