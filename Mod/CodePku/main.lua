@@ -638,6 +638,7 @@ function CodePku:init()
 			return true;
 		end
 	)
+	
 end
 
 function CodePku:OnLogin()
@@ -674,6 +675,41 @@ function CodePku:BasicConfig()
 	-- end);
 	local response = request:get('/config/basic',{},{sync = true});
 	if response.status == 200 then
-		CodePku.BasicConfigTable = response.data.data;
+		echo("response.data.data")
+		echo(response.data.data)
+		CodePku.BasicConfigTable = commonlib.deepcopy(response.data.data);
+
+		CodePku:checkAppVersion()	
+	end
+end
+
+function CodePku:checkAppVersion()	
+	local isAndroid = System.os.GetPlatform() == 'android';	
+	if (not isAndroid) then return end;
+
+	local currentVersion = GameLogic.options.GetClientVersion()	
+	local v1,v2,v3 = currentVersion:match("(%d+)%D(%d+)%D(%d+)")
+	
+	if (tonumber(v1) >= 1 ) then return end	
+
+	local appUpdateStatus = CodePku.BasicConfigTable.app_update_status or {};	
+	local AppMarket = ParaEngine.GetAppCommandLineByParam("app_market", nil);
+
+	local function isAppApproval()
+		for k,v in ipairs(appUpdateStatus) do				
+			if v == AppMarket then
+				return true
+			end			
+		end
+		return false;
+	end		
+	if isAppApproval() then		
+		local codepkuenv = (ParaEngine.GetAppCommandLineByParam("codepkuenv", nil) or Config.env.RELEASE);
+		local defaultLink = "http://game.codepku.com/static/app_update_info.html";
+		local link = {
+			["DEV"] = "http://game.dev.codepku.com/static/app_update_info.html",
+			["RELEASE"] = "http://game.codepku.com/static/app_update_info.html"
+		}
+		ParaGlobal.ShellExecute("open", link[codepkuenv] or defaultLink, "", "", 1)
 	end
 end
