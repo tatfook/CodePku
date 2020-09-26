@@ -83,7 +83,7 @@ function UserConsole:CourseEntry()
     local isSoGou = ParaEngine.GetAppCommandLineByParam("app_market", "") == 'sogou';
     local iosApprovalStatus = Mod.CodePku.BasicConfigTable.ios_approval_status == 'on'
     local mock_ios = ParaEngine.GetAppCommandLineByParam("mock_ios", "") == "true"
-    local isIOS = ParaEngine.GetAppCommandLineByParam("app_market", "") == 'ios';
+    local isIOS = System.os.GetPlatform() == 'ios';
     if isHuawei and huaweiApprovalStatus then 
         self:HandleWorldId(Mod.CodePku.BasicConfigTable.huawei_entry_world_id)
     elseif isFlyMe and flymeApprovalStatus then 
