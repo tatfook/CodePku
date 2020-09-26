@@ -241,8 +241,16 @@ function CodePku:init()
 	GameLogic.GetFilters():add_filter(
 		"show_custom_download_world",
 		function(show, url)
-			LOG.std(nil, "info", "codepku", "add_filter show_custom_download_world")
-			CodePkuDownloadWorld:ShowPage(url)
+            LOG.std(nil, "info", "codepku", "add_filter show_custom_download_world")
+            local isIos = System.os.GetPlatform() == 'ios';
+
+            NPL.load("(gl)script/apps/Aries/Creator/Game/Login/ParaWorldLoginDocker.lua");
+            local ParaWorldLoginDocker = commonlib.gettable("MyCompany.Aries.Game.MainLogin.ParaWorldLoginDocker")
+            local appName = ParaWorldLoginDocker.GetAppTitle('paracraftAppVersion')
+            if (isIos and url == appName) then 
+                return "close"    
+            end
+            CodePkuDownloadWorld:ShowPage(url)
 			return "close"
 		end
 	)
