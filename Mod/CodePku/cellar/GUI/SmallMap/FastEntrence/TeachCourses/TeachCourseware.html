@@ -10,7 +10,6 @@
 
 TeachCourses = NPL.load("(gl)Mod/CodePku/cellar/GUI/SmallMap/FastEntrence/TeachCourses/TeachCourses.lua");
 local FastEntrence = NPL.load("(gl)Mod/CodePku/cellar/GUI/SmallMap/FastEntrence/FastEntrence.lua")
-local SmallMap = commonlib.gettable("Mod.CodePku.GUI.SmallMap")
 local MainPopup = commonlib.gettable("Mod.CodePku.GUI.MainPopup");
 local page = document:GetPageCtrl()
 
@@ -110,9 +109,9 @@ function GetOnePageCourseware()
     end_index = (#temp_table < end_index) and #temp_table or end_index
     echo("#temp_table")
     echo(#temp_table)
-    if next(TeachCourses.subjects[TeachCourses.courseware_last_click_index].course) then
+    if next(temp_table) then
         for i=start_index,end_index do
-            table.insert(now_show_table, TeachCourses.subjects[TeachCourses.courseware_last_click_index].course[i])
+            table.insert(now_show_table, temp_table[i])
         end
         return now_show_table
     else
@@ -149,7 +148,11 @@ function ClosePage()
     TeachCourses:CleanAllCoursewares()
 end
 
-
+-- 跳转到课件的世界
+function goWorld(id)
+    local name, keepwork_project_id = TeachCourses:GetCoursewareUniqueness(id)
+    MainPopup:ShowPage("TPpopup", name, keepwork_project_id)
+end
     
 ]]></script>
 
@@ -185,11 +188,13 @@ end
     <div onclick="ClosePage" style="<%=format('position: absolute; left: 1759; top: 101; width: 101; height: 102; background:url(%s);', getIcon(27))%>"></div>
     
     <!-- 课件内容 -->
-    <div style="position: relative; width: 1600; height: 700; left: 222; top: 297;background-color: #00000086;">
+    <div style="position: relative; width: 1600; height: 700; left: 222; top: 297;">
         <pe:repeat DataSource="<%=GetOnePageCourseware()%>" >
-            <div style="width: 324; height: 247; float: left; margin-left: 67; margin-bottom: 99;background-color: #d4262686;">
-                <div style="position: relative; width:324px; height:80; font-family:PuHuiTi-Bold;text-align: center; line-height: 80; font-size:32px;color:#ffffff; font-weight:bold; background:url(codepku/image/textures/fastentrence_ui/main.png#28 45 340 80);" name="<%=Eval('index')%>" onclick=""><%=Eval('name')%></div>
-
+            <div style="width: 324; height: 247; float: left; margin-left: 67; margin-bottom: 99;" name="<%=Eval('id')%>" onclick="goWorld">
+                <!-- <div style="position: relative; width:324px; height:80; font-family:PuHuiTi-Bold;text-align: center; line-height: 80; font-size:32px;color:#ffffff; font-weight:bold; background:url(codepku/image/textures/fastentrence_ui/main.png#28 45 340 80);" name="<%=Eval('id')%>" onclick="goWorld"><%=Eval('name')%></div> -->
+                <div style="<%=format('position: relative; width: 324; height: 247;background:url(%s);', getIcon(33))%>"></div>
+                <div style="<%=format('position: relative; left: 16; top:29; width: 290; height: 199;background:url(%s);', Eval('file_url'))%>"></div>
+                <div style="<%=format('position: relative; left: -23;top:-16;width: 321; height: 71;padding-left:21;font-family:alhy;line-height: 71; font-size:26px;color:#9a5d11;background:url(%s);', getIcon(35))%>"><%=Eval('name')%></div>
             </div>
         </pe:repeat>
     </div>

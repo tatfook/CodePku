@@ -192,6 +192,8 @@ function TeachCourses:GetCoursewares(grade, semester, subject)
             for i,v in pairs(data) do
                 for j,d in pairs(v.course_wares) do
                     TeachCourses.subjects[subject].course[index] = d
+                    -- 把课件的封面拿到外层放着
+                    TeachCourses.subjects[subject].course[index].file_url = d.cover_file.file_url
                     index = index + 1
                 end
             end
@@ -206,5 +208,15 @@ end
 function TeachCourses:CleanAllCoursewares()
     for k,v in pairs(TeachCourses.subjects) do
         TeachCourses.subjects[k].course = {}
+    end
+end
+
+-- 获取指定id课件的name和keepworkID
+function TeachCourses:GetCoursewareUniqueness(id)
+    local temp_table = TeachCourses.subjects[TeachCourses.courseware_last_click_index].course
+    for k,v in pairs(temp_table) do
+        if id == v.id then
+            return v.name, v.keepwork_project_id
+        end
     end
 end

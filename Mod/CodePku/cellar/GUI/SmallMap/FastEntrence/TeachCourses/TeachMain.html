@@ -140,7 +140,7 @@ end
             <pe:gridview style="width: 1600; height: 900;left: 50;top: 50;" DataSource='<%= GetOnePage() %>' CellPadding="6" ItemsPerLine="3" AllowPaging="false" RememberScrollPos="true" RememberLastPage="true" VerticalScrollBarStep="36" VerticalScrollBarOffsetX="8">
                 <Columns>
                     <pe:if condition="<%= not isIOSApproval()%>">
-                        <div style="width: 424; height: 676;font-family:hzgb;text-align:center;line-height:73;font-size: 24;color:#ffffff;">
+                        <div style="width: 424; height: 676;font-family:alhy;text-align:center;line-height:73;font-size: 24;color:#ffffff;">
                             <!-- 上年级 -->
                             <div onclick="OnClickUp" style="<%=format('position: relative;left: 50;top:50; width: 324; height: 247; background:url(%s);', getIcon(8))%>" name="<%=Eval('grade')%>">
                                 <div style="<%=format('position: relative; left: 20;top: 14; width: 283; height: 221; background:url(%s);', getIcon(9))%>"></div>
