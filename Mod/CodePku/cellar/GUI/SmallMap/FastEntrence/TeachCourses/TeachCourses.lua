@@ -143,11 +143,11 @@ TeachCourses.subjects = {
 
 TeachCourses.params = {
     -- 解锁学期包
-    [1] = {url="Mod/CodePku/cellar/GUI/SmallMap/FastEntrence/TeachCourses/PurchaseSemesterPackage.html",alignment="_lt", left = 0, top = 0, width = 1920 , height = 1080, zorder = 30},
+    [1] = {url="Mod/CodePku/cellar/GUI/SmallMap/FastEntrence/TeachCourses/PurchaseSemesterPackage.html",alignment="_lt", left = 0, top = 0, width = 1920 , height = 1080, zorder = 31},
     -- 解锁课程包
-    [2] = {url="Mod/CodePku/cellar/GUI/SmallMap/FastEntrence/TeachCourses/PurchaseCoursesPackage.html",alignment="_lt", left = 0, top = 0, width = 1920 , height = 1080, zorder = 30},
+    [2] = {url="Mod/CodePku/cellar/GUI/SmallMap/FastEntrence/TeachCourses/PurchaseCoursesPackage.html",alignment="_lt", left = 0, top = 0, width = 1920 , height = 1080, zorder = 31},
     -- 单课解锁
-    [3] = {url="Mod/CodePku/cellar/GUI/SmallMap/FastEntrence/TeachCourses/PurchaseCourse.html",alignment="_lt", left = 0, top = 0, width = 1920 , height = 1080, zorder = 30},
+    [3] = {url="Mod/CodePku/cellar/GUI/SmallMap/FastEntrence/TeachCourses/PurchaseCourse.html",alignment="_lt", left = 0, top = 0, width = 1920 , height = 1080, zorder = 31},
     -- 单科分页
     [4] = {url="Mod/CodePku/cellar/GUI/SmallMap/FastEntrence/TeachCourses/TeachCourseware.html",alignment="_lt", left = 0, top = 0, width = 1920 , height = 1080, zorder = 30},
 }
@@ -194,6 +194,7 @@ function TeachCourses:GetCoursewares(grade, semester, subject)
                     TeachCourses.subjects[subject].course[index] = d
                     -- 把课件的封面拿到外层放着
                     TeachCourses.subjects[subject].course[index].file_url = d.cover_file.file_url
+                    TeachCourses.subjects[subject].course[index].lock_status = true            -- 是否锁定，true锁定，false解锁
                     index = index + 1
                 end
             end

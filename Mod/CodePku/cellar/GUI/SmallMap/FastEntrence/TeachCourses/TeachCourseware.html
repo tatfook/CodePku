@@ -107,8 +107,6 @@ function GetOnePageCourseware()
     local start_index = 1 + TeachCourses.Courseware_PerPage_Grade * (TeachCourses.Courseware_Page_Index - 1)
     local end_index = TeachCourses.Courseware_PerPage_Grade * TeachCourses.Courseware_Page_Index
     end_index = (#temp_table < end_index) and #temp_table or end_index
-    echo("#temp_table")
-    echo(#temp_table)
     if next(temp_table) then
         for i=start_index,end_index do
             table.insert(now_show_table, temp_table[i])
@@ -153,6 +151,12 @@ function goWorld(id)
     local name, keepwork_project_id = TeachCourses:GetCoursewareUniqueness(id)
     MainPopup:ShowPage("TPpopup", name, keepwork_project_id)
 end
+
+-- 获取页码点坐标
+function GetPagenationsPoints()
+    local pointsCount = math.ceil(#TeachCourses.subjects[TeachCourses.courseware_last_click_index].course / TeachCourses.Courseware_PerPage_Grade)
+    return TeachCourses:GetPagePoints(pointsCount, 48, 480)
+end
     
 ]]></script>
 
@@ -189,24 +193,34 @@ end
     
     <!-- 课件内容 -->
     <div style="position: relative; width: 1600; height: 700; left: 222; top: 297;">
-        <pe:repeat DataSource="<%=GetOnePageCourseware()%>" >
+        <pe:repeat DataSource="<%=GetOnePageCourseware()%>">
             <div style="width: 324; height: 247; float: left; margin-left: 67; margin-bottom: 99;" name="<%=Eval('id')%>" onclick="goWorld">
-                <!-- <div style="position: relative; width:324px; height:80; font-family:PuHuiTi-Bold;text-align: center; line-height: 80; font-size:32px;color:#ffffff; font-weight:bold; background:url(codepku/image/textures/fastentrence_ui/main.png#28 45 340 80);" name="<%=Eval('id')%>" onclick="goWorld"><%=Eval('name')%></div> -->
                 <div style="<%=format('position: relative; width: 324; height: 247;background:url(%s);', getIcon(33))%>"></div>
                 <div style="<%=format('position: relative; left: 16; top:29; width: 290; height: 199;background:url(%s);', Eval('file_url'))%>"></div>
                 <div style="<%=format('position: relative; left: -23;top:-16;width: 321; height: 71;padding-left:21;font-family:alhy;line-height: 71; font-size:26px;color:#9a5d11;background:url(%s);', getIcon(35))%>"><%=Eval('name')%></div>
             </div>
+            <!-- 遮罩层 -->
+            <!-- <pe:if condition="<%= TeachCourses.Courseware_Page_Index == Eval('index') %>">
+                
+            </pe:if> -->
         </pe:repeat>
     </div>
-
-    
 
     <!-- 翻页区域 -->
     <div onclick="PageUp" style="<%=format('position: relative; left: 729; top: 907; width: 69; height: 95; background:url(%s);', getIcon(28))%>"></div>
     <div onclick="PageDown" style="<%=format('position: relative; left: 1266; top: 907; width: 69; height: 95; background:url(%s);', getIcon(29))%>"></div>
 
     <!-- 页码点 -->
-    
+    <div style="position: relative;left: 798;top: 938;width: 468;height: 37;">
+        <pe:repeat DataSource="<%=GetPagenationsPoints()%>">
+            <div style="<%=format('position: relative; left:%s; width: 36; height: 37; background:url(%s);', Eval('x'), getIcon(31))%>">
+                <pe:if condition="<%= TeachCourses.Courseware_Page_Index == Eval('index') %>">
+                    <div style="<%=format('position: relative; left:6; top:6;width: 24; height: 24; background:url(%s);', getIcon(30))%>"></div>
+                </pe:if>
+            </div>
+        </pe:repeat>
+    </div>
+    <iframe src="Mod/CodePku/cellar/GUI/MoneyV2.html"></iframe>
 </pe:container>
 </pe:mcml>
 </body>
