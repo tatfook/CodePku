@@ -27,7 +27,8 @@ end
 
 -- 玩家被点击
 function EntityOtherPlayer:OnClick(x,y,z, mouse_button,entity,side)
-    local MainUIButtons = NPL.load("(gl)Mod/CodePku/cellar/Common/TouchMiniButtons/Main.lua");
-    MainUIButtons.show_interact_ui(self)
+    -- 因好友搜索问题，暂时屏蔽好友功能
+    -- local MainUIButtons = NPL.load("(gl)Mod/CodePku/cellar/Common/TouchMiniButtons/Main.lua");
+    -- MainUIButtons.show_interact_ui(self)
     return true;
 end
