@@ -51,7 +51,5 @@ end
 CommonFunc.isIOSPlatform = function ()
     local mock_ios = ParaEngine.GetAppCommandLineByParam("mock_ios", "") == "true"
     local isIOSPlatform = System.os.GetPlatform() == 'ios'
-    echo("------isIOSPlatform----------")
-    echo(mock_ios or isIOSPlatform)
     return mock_ios or isIOSPlatform
 end
