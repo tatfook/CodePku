@@ -177,3 +177,27 @@ end
 function TeachCourses:GetCoursewares(grade, semester, subject)
     
 end
+
+-- 动态获取页码点的相对位置left坐标
+-- paras:
+-- pointsCount = 页码点数量(页数)
+-- distance = 每个页码点之间的距离
+-- divWidth = 放置页码点的父级div的width
+function TeachCourses:GetPagePoints(pointsCount, distance, divWidth)
+    local blocks = math.floor(divWidth/distance)
+    local evenSatrtX = math.floor((divWidth - distance*blocks)/2) + math.floor((blocks-pointsCount)/2)*distance
+    local oddSatrtX = evenSatrtX + math.floor(distance/2)
+
+    local points = {}
+    if pointsCount%2 == 0 then
+        for i = 1,pointsCount do
+            points[i] = {index=i, x=evenSatrtX+(i-1)*distance}
+        end
+        return points
+    else
+        for i = 1,pointsCount do
+            points[i] = {index=i, x=oddSatrtX+(i-1)*distance}
+        end
+        return points
+    end
+end
