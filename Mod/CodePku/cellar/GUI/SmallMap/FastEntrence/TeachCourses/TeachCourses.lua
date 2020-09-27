@@ -143,11 +143,11 @@ TeachCourses.subjects = {
 
 TeachCourses.params = {
     -- 解锁学期包
-    [1] = {url="Mod/CodePku/cellar/GUI/SmallMap/FastEntrence/TeachCourses/PurchaseSemesterPackage.html",alignment="_lt", left = 0, top = 0, width = 1920 , height = 1080, zorder = 30},
+    [1] = {url="Mod/CodePku/cellar/GUI/SmallMap/FastEntrence/TeachCourses/PurchaseSemesterPackage.html",alignment="_lt", left = 0, top = 0, width = 1920 , height = 1080, zorder = 31},
     -- 解锁课程包
-    [2] = {url="Mod/CodePku/cellar/GUI/SmallMap/FastEntrence/TeachCourses/PurchaseCoursesPackage.html",alignment="_lt", left = 0, top = 0, width = 1920 , height = 1080, zorder = 30},
+    [2] = {url="Mod/CodePku/cellar/GUI/SmallMap/FastEntrence/TeachCourses/PurchaseCoursesPackage.html",alignment="_lt", left = 0, top = 0, width = 1920 , height = 1080, zorder = 31},
     -- 单课解锁
-    [3] = {url="Mod/CodePku/cellar/GUI/SmallMap/FastEntrence/TeachCourses/PurchaseCourse.html",alignment="_lt", left = 0, top = 0, width = 1920 , height = 1080, zorder = 30},
+    [3] = {url="Mod/CodePku/cellar/GUI/SmallMap/FastEntrence/TeachCourses/PurchaseCourse.html",alignment="_lt", left = 0, top = 0, width = 1920 , height = 1080, zorder = 31},
     -- 单科分页
     [4] = {url="Mod/CodePku/cellar/GUI/SmallMap/FastEntrence/TeachCourses/TeachCourseware.html",alignment="_lt", left = 0, top = 0, width = 1920 , height = 1080, zorder = 30},
 }
