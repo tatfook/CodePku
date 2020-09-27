@@ -149,7 +149,7 @@ function CodePku:init()
 	GameLogic.GetFilters():add_filter(
 		"BaseContextMousePressEvent",
 		function (backValue, event)
-			LOG.std(nil, "info", "codepku", "add_filter BaseContextMousePressEvent")
+			-- LOG.std(nil, "info", "codepku", "add_filter BaseContextMousePressEvent")
 			-- 家园区编辑模式特殊处理
 			if HomeManage:IsMyHome() and GameLogic.GameMode:IsEditor() then
 				-- 手机端特殊处理
@@ -168,7 +168,7 @@ function CodePku:init()
 	GameLogic.GetFilters():add_filter(
 		"BaseContextMouseReleaseEvent",
 		function (backValue, event)
-			LOG.std(nil, "info", "codepku", "add_filter BaseContextMouseReleaseEvent")
+			-- LOG.std(nil, "info", "codepku", "add_filter BaseContextMouseReleaseEvent")
 			-- 家园区编辑模式特殊处理
 			if HomeManage:IsMyHome() and GameLogic.GameMode:IsEditor() then
 				-- 判定鼠标点击的方块距离人物的距离是否过远，distance控制判定距离长短
