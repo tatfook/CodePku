@@ -138,8 +138,8 @@ TeachCourses.subjects = {
 }
 
 TeachCourses.params = {
-    [1] = {url="Mod/CodePku/cellar/GUI/SmallMap/FastEntrence/TeachCourses/xueqibao.html",alignment="_lt", left = 0, top = 0, width = 1920 , height = 1080, zorder = 30},
-    [2] = {url="Mod/CodePku/cellar/GUI/SmallMap/FastEntrence/TeachCourses/kechengbao.html",alignment="_lt", left = 0, top = 0, width = 1920 , height = 1080, zorder = 30},
+    [1] = {url="Mod/CodePku/cellar/GUI/SmallMap/FastEntrence/TeachCourses/PurchaseSemesterPackage.html",alignment="_lt", left = 0, top = 0, width = 1920 , height = 1080, zorder = 30},
+    [2] = {url="Mod/CodePku/cellar/GUI/SmallMap/FastEntrence/TeachCourses/PurchaseCoursesPackage.html",alignment="_lt", left = 0, top = 0, width = 1920 , height = 1080, zorder = 30},
     [3] = {url="Mod/CodePku/cellar/GUI/SmallMap/FastEntrence/TeachCourses/PurchaseCourse.html",alignment="_lt", left = 0, top = 0, width = 1920 , height = 1080, zorder = 30},
     [4] = {url="Mod/CodePku/cellar/GUI/SmallMap/FastEntrence/TeachCourses/TeachCourseware.html",alignment="_lt", left = 0, top = 0, width = 1920 , height = 1080, zorder = 30},
 }

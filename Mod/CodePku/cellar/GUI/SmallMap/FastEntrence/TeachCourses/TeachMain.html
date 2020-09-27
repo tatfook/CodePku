@@ -121,6 +121,13 @@ function purchaseCourse()
     TeachCourses:ShowPage(3)
 end
     
+function purchaseCoursesPackage()
+    TeachCourses:ShowPage(2)
+end
+
+function purchaseSemesterPackage()
+    TeachCourses:ShowPage(1)
+end
 ]]></script>
 
 <style type="text/mcss"></style>
@@ -209,7 +216,12 @@ end
     <div onclick="turnToTeach" style="<%=format('position: relative; left: 22; top: 860; width: 300; height: 220; background:url(%s);', getIcon(12))%>"></div>
     
     <!-- 单课解锁测试 -->
-    <div onclick="purchaseCourse" style="position: relative; left: 500; top: 50; background-color: #ffffff; width: 300;height: 100;">nbsp;&nbsp;单课nbsp;解锁&nbsp;测试</div>
+    <div onclick="purchaseCourse" style="position: relative; left: 500; top: 550; background-color: #ffffff; width: 300;height: 80;font-size: 40;">单课解锁测试</div>
+    <!-- 课程包解锁测试 -->
+    <div onclick="purchaseCoursesPackage" style="position: relative; left: 500; top: 650; background-color: #ffffff; width: 300;height: 80;font-size: 40;">课程包解锁测试</div>
+    <!-- 学期包解锁测试 -->
+    <div onclick="purchaseSemesterPackage" style="position: relative; left: 500; top: 750; background-color: #ffffff; width: 300;height: 80;font-size: 40;">学期包解锁测试</div>
+    <iframe src="Mod/CodePku/cellar/GUI/MoneyV2.html"></iframe>
 </pe:container>
 </pe:mcml>
 </body>
