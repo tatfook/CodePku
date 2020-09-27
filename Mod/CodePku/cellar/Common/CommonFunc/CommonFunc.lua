@@ -47,3 +47,11 @@ CommonFunc.isIOSApproval = function ()
     local isIOSPlatform = System.os.GetPlatform() == 'ios'
     return (isIOSPlatform or mock_ios) and iosApprovalStatus
 end
+
+CommonFunc.isIOSPlatform = function ()
+    local mock_ios = ParaEngine.GetAppCommandLineByParam("mock_ios", "") == "true"
+    local isIOSPlatform = System.os.GetPlatform() == 'ios'
+    echo("------isIOSPlatform----------")
+    echo(mock_ios or isIOSPlatform)
+    return mock_ios or isIOSPlatform
+end
