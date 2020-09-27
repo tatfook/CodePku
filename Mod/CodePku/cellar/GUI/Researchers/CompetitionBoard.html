@@ -1,0 +1,49 @@
+<!-- 家园区付费课 -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+</head>
+<body>
+<pe:mcml>
+<script refresh="false" type="text/npl" src="Researchers.lua"><![CDATA[
+Researchers = NPL.load("(gl)Mod/CodePku/cellar/GUI/Researchers/Researchers.lua")
+local page = document:GetPageCtrl()
+
+function GetIcon(id)
+    return Researchers.GetResearchersIconHTMLStr(id)
+end
+
+function ClosePage()
+    Page:CloseWindow();
+end
+
+function StartLearning()
+    Page:CloseWindow();
+    NPL.load("(gl)Mod/CodePku/cellar/GUI/Home/HomeManage.lua")
+    local HomeManage = commonlib.gettable("Mod.CodePku.Common.HomeManage")
+    HomeManage:GetHomeWorld()
+end
+
+]]>
+</script>
+<pe:container alignment="_lt" width="1920" height="1080" style="background-color: #0000008f;">
+
+
+    <div style="<%=format('position: relative;left:213;top:61;width:1494;height:964;background:url(%s)', Researchers.PKV1)%>">
+
+        <div onclick="ClosePage" style="<%=format('position: relative;left:1385;top:70;width:68;height:78;background:url(%s)', GetIcon(3))%>"></div>
+
+        <div style="<%=format('position: relative;left:236;top:678;width:175;height:175;background:url(%s)', GetIcon(5))%>"></div>
+
+        <div onclick="StartLearning" style="<%=format('position: relative;left:926;top:715;width:289;height:100;text-align:center;font-family:PuHuiTi-Bold;color:#2E566E;font-size:42;line-height:100;background:url(%s)', GetIcon(4))%>"><%= Researchers.contents[3] %></div>
+
+    </div>
+
+
+</pe:container>
+</pe:mcml>
+</body>
+</html>
+ 
