@@ -195,6 +195,7 @@ function TeachCourses:GetCoursewares(grade, semester, subject)
                     -- 把课件的封面拿到外层放着
                     TeachCourses.subjects[subject].course[index].file_url = d.cover_file.file_url
                     TeachCourses.subjects[subject].course[index].lock_status = true            -- 是否锁定，true锁定，false解锁
+                    TeachCourses.subjects[subject].course[index].price = "x999"            -- 是否锁定，true锁定，false解锁
                     index = index + 1
                 end
             end

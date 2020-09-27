@@ -157,6 +157,11 @@ function GetPagenationsPoints()
     local pointsCount = math.ceil(#TeachCourses.subjects[TeachCourses.courseware_last_click_index].course / TeachCourses.Courseware_PerPage_Grade)
     return TeachCourses:GetPagePoints(pointsCount, 48, 480)
 end
+
+-- 单课解锁
+function unlock()
+    TeachCourses:ShowPage(3)
+end
     
 ]]></script>
 
@@ -194,15 +199,20 @@ end
     <!-- 课件内容 -->
     <div style="position: relative; width: 1600; height: 700; left: 222; top: 297;">
         <pe:repeat DataSource="<%=GetOnePageCourseware()%>">
-            <div style="width: 324; height: 247; float: left; margin-left: 67; margin-bottom: 99;" name="<%=Eval('id')%>" onclick="goWorld">
-                <div style="<%=format('position: relative; width: 324; height: 247;background:url(%s);', getIcon(33))%>"></div>
+            <div style="width: 324; height: 247; float: left; margin-left: 67; margin-bottom: 99;" name="<%=Eval('id')%>">
+                <div style="<%=format('position: relative; width: 324; height: 247;background:url(%s);', getIcon(33))%>" onclick="goWorld"></div>
                 <div style="<%=format('position: relative; left: 16; top:29; width: 290; height: 199;background:url(%s);', Eval('file_url'))%>"></div>
+                <!-- 遮罩层 -->
+                <pe:if condition="<%= Eval('lock_status') %>">
+                    <div style="<%=format('position: relative; width: 324; height: 247;background:url(%s);', getIcon(38))%>" onclick="unlock">
+                        <div style="<%=format('position: relative; left: 123; top: 87; width: 75; height: 81;background:url(%s);', getIcon(44))%>"></div>
+                        <div style="<%=format('position: relative; left: 146; top: 191; width: 103; height: 53;background:url(%s);', getIcon(42))%>"></div>
+                        <div style="position: relative; float: left; left: 246; top: 210; width: 75; height: 24;font-family: alhy;font-size: 22;color: #ffffff;"><%=Eval('price')%></div>
+                    </div>
+                </pe:if>
+                <!-- 标题 -->
                 <div style="<%=format('position: relative; left: -23;top:-16;width: 321; height: 71;padding-left:21;font-family:alhy;line-height: 71; font-size:26px;color:#9a5d11;background:url(%s);', getIcon(35))%>"><%=Eval('name')%></div>
             </div>
-            <!-- 遮罩层 -->
-            <!-- <pe:if condition="<%= TeachCourses.Courseware_Page_Index == Eval('index') %>">
-                
-            </pe:if> -->
         </pe:repeat>
     </div>
 
