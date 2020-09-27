@@ -199,8 +199,8 @@ function GetMaxPageCount()
 end
 
 -- 获取页码点坐标
-function GetPoints(pointsCount, distance, divWidth)
-    return TeachCourses:GetPagePoints(pointsCount, distance, divWidth)
+function GetPoints()
+    return TeachCourses:GetPagePoints(GetMaxPageCount(), 48, 480)
 end
 
 -- 刷新默认显示图片的状态
@@ -258,7 +258,7 @@ end
                     
                     <!-- 课程介绍 -->
                     <pe:if condition="<%= GetInfoFlag(1) %>">
-                        <div onclick="ShowInfo" name="1" style="<%= format('position: relative; left: 192; top: 209; width: 404; height: 323; color: #674622; font-family: alhy; font-weight: normal; background:url(%s);', getIcon(59)) %>">
+                        <div onclick="ShowInfo" name="1" style="<%= format('position: relative; left: 192; top: 209; width: 404; height: 323; color: #905e29; font-family: alhy; font-weight: normal; background:url(%s);', getIcon(59)) %>">
                             <span style="position: relative; left: 80; top: 31; font-size: 38; font-family: alhy;">课程包介绍</span>
                             <%= GetCourseInfo(1).desc %>
                         </div>
@@ -288,7 +288,7 @@ end
                     <div onclick="ShowInfo" name="2" style="<%= format('position: relative; left: 991; top: 203; width: 55; height: 56; background:url(%s);', getIcon(55)) %>"></div>
                 </pe:if>
                 <pe:if condition="<%= GetInfoFlag(2) %>">
-                    <div onclick="ShowInfo" name="2" style="<%= format('position: relative; left: 650; top: 209; width: 404; height: 323; color: #674622; font-family: alhy; font-weight: normal; background:url(%s);', getIcon(59)) %>">
+                    <div onclick="ShowInfo" name="2" style="<%= format('position: relative; left: 650; top: 209; width: 404; height: 323; color: #905e29; font-family: alhy; font-weight: normal; background:url(%s);', getIcon(59)) %>">
                         <span style="position: relative; left: 80; top: 31; font-size: 38; font-family: alhy;">课程包介绍</span>
                         <%= GetCourseInfo(2).desc %>
                     </div>
@@ -316,7 +316,7 @@ end
                         <div onclick="ShowInfo" name="3" style="<%= format('position: relative; left: 1458; top: 203; width: 55; height: 56; background:url(%s);', getIcon(55)) %>"></div>
                     </pe:if>
                     <pe:if condition="<%= GetInfoFlag(3) %>">
-                        <div onclick="ShowInfo" name="3" style="<%= format('position: relative; left: 1117; top: 209; width: 404; height: 323; color: #674622; font-family: alhy; font-weight: normal; background:url(%s);', getIcon(59)) %>">
+                        <div onclick="ShowInfo" name="3" style="<%= format('position: relative; left: 1117; top: 209; width: 404; height: 323; color: #905e29; font-family: alhy; font-weight: normal; background:url(%s);', getIcon(59)) %>">
                             <span style="position: relative; left: 80; top: 31; font-size: 38; font-family: alhy;">课程包介绍</span>
                             <%= GetCourseInfo(3).desc %>
                         </div>
@@ -347,7 +347,7 @@ end
                     <div onclick="ShowInfo" name="1" style="<%= format('position: relative; left: 769; top: 203; width: 55; height: 56; background:url(%s);', getIcon(55)) %>"></div>
                 </pe:if>
                 <pe:if condition="<%= GetInfoFlag(1) %>">
-                    <div onclick="ShowInfo" name="1" style="<%= format('position: relative; left: 428; top: 209; width: 404; height: 323; color: #674622; font-family: alhy; font-weight: normal; background:url(%s);', getIcon(59)) %>">
+                    <div onclick="ShowInfo" name="1" style="<%= format('position: relative; left: 428; top: 209; width: 404; height: 323; color: #905e29; font-family: alhy; font-weight: normal; background:url(%s);', getIcon(59)) %>">
                         <span style="position: relative; left: 80; top: 31; font-size: 38; font-family: alhy;">课程包介绍</span>
                         <%= GetCourseInfo(1).desc %>
                     </div>
@@ -373,7 +373,7 @@ end
                     <div onclick="ShowInfo" name="2" style="<%= format('position: relative; left: 1227; top: 203; width: 55; height: 56; background:url(%s);', getIcon(55)) %>"></div>
                 </pe:if>
                 <pe:if condition="<%= GetInfoFlag(2) %>">
-                    <div onclick="ShowInfo" name="2" style="<%= format('position: relative; left: 886; top: 209; width: 404; height: 323; color: #674622; font-family: alhy; font-weight: normal; background:url(%s);', getIcon(59)) %>">
+                    <div onclick="ShowInfo" name="2" style="<%= format('position: relative; left: 886; top: 209; width: 404; height: 323; color: #905e29; font-family: alhy; font-weight: normal; background:url(%s);', getIcon(59)) %>">
                         <span style="position: relative; left: 80; top: 31; font-size: 38; font-family: alhy;">课程包介绍</span>
                         <%= GetCourseInfo(2).desc %>
                     </div>
@@ -397,7 +397,7 @@ end
             <div onclick="PageDown" name="down" style="<%= format('position: relative; left: 1098; top: 699; width: 69; height: 95; background:url(%s);', getIcon(54)) %>"></div>
             <!-- 页码点 -->
             <div style="position: relative; left: 630; top: 731; width: 468; height: 37;">
-                <pe:repeat DataSource="<%= GetPoints(GetMaxPageCount(), 48, 480) %>">
+                <pe:repeat DataSource="<%= GetPoints() %>">
                     <pe:repeatitem>
                         <div style="<%=format('position: relative; left: %d; top: 0; width: 36; height: 37; background:url(%s);', x, getIcon(6))%>">
                             <pe:if condition="<%= TeachCourses.curIndexCourses == index %>">
