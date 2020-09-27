@@ -119,10 +119,6 @@ CommonFunc = NPL.load("(gl)Mod/CodePku/cellar/Common/CommonFunc/CommonFunc.lua")
 function isIOSApproval()
     return CommonFunc.isIOSApproval()
 end
-
-function purchaseCourse()
-    TeachCourses:ShowPage(3)
-end
     
 ]]></script>
 
@@ -213,8 +209,6 @@ end
 
     <div onclick="turnToTeach" style="<%=format('position: relative; left: 22; top: 860; width: 300; height: 220; background:url(%s);', getIcon(12))%>"></div>
     
-    <!-- 单课解锁测试 -->
-    <div onclick="purchaseCourse" style="position: relative; left: 500; top: 550; background-color: #ffffff; width: 300;height: 80;font-size: 40;">单课解锁测试</div>
 
     <iframe src="Mod/CodePku/cellar/GUI/MoneyV2.html"></iframe>
 </pe:container>
