@@ -49,7 +49,12 @@ function ClickCommunity()
 end
 
 function ClickQQGroup()
-    GameLogic.RunCommand(string.format("/open %s", Mod.CodePku.BasicConfigTable.qq_group_link))
+    -- 暂时屏蔽
+    --GameLogic.RunCommand(string.format("/open %s", Mod.CodePku.BasicConfigTable.qq_group_link))
+    -- 测试用
+    NPL.load("(gl)Mod/CodePku/cellar/Common/TouchMiniButtons/TaskSystem/TaskSystem.lua")
+    local TaskSystem = commonlib.gettable("Mod.CodePku.celler.TaskSystem")
+    TaskSystem:ShowPage(1)
 end
 
 function ClickFeedback()
@@ -78,7 +83,8 @@ isIOSApproval = CommonFunc.isIOSApproval()
         <div style="position: relative; width: 108; height: 134; left: 40; top: 10; background: url(codepku/image/textures/main_ui/main.png#38 314 108 134);" onclick="ClickSamllMap"></div>
         <div style="position: relative; width: 90; height: 120; left: 185; top: 22; background: url(codepku/image/textures/main_ui/main.png#165 175 90 120);" onclick="ClickAntiJamming"></div>
         <div style="position: relative; width: 101; height: 135; left: 302; top: 9; background: url(codepku/image/textures/main_ui/main.png#160 313 101 135);" onclick="ClickCommunity"></div>
-        <div style="position: relative; width: 74; height: 129; left: 445; top: 13; background: url(codepku/image/textures/main_ui/main.png#811 322 74 129);" onclick="ClickFeedback"></div>
+        <!-- <div style="position: relative; width: 74; height: 129; left: 445; top: 13; background: url(codepku/image/textures/main_ui/main.png#811 322 74 129);" onclick="ClickFeedback"></div> -->
+        <div style="position: relative; width: 106; height: 138; left: 445; top: 10; background: url(codepku/image/textures/main_ui/main.png#285 480 106 138);" onclick="ClickQQGroup"></div>
         <pe:if condition = "<%= isIOSApproval%>" >
             <div style="position: relative; width: 82; height: 178; left: 561; transform: rotate(180deg); transform-origin: 41px 89px; background: url(codepku/image/textures/main_ui/main.png#915 14 82 178);" onclick="ClickClose"></div>
         </pe:if>

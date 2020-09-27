@@ -64,14 +64,9 @@ TaskSystem.popup = {
 }
 
 function TaskSystem:GetReward(taskID)
-    echo("--------领取奖励-------")
-    echo(taskID)
-    echo(type(taskID))
     local request = NPL.load("(gl)Mod/CodePku/api/BaseRequest.lua");
     local response = request:post('/tasks-reward-receive/store',{task_id=taskID},{sync = true})
 	if response.status == 200 then
-        -- return true
-        -- TaskSystem.Page:Refresh(0)
         GameLogic.AddBBS(nil, L"领取成功", 3000, "255 0 0", 21);
         if TaskSystem.popupui then
             TaskSystem.popupui:CloseWindow()
@@ -80,7 +75,6 @@ function TaskSystem:GetReward(taskID)
     else
         GameLogic.AddBBS(nil, L"领取失败", 3000, "255 0 0", 21);
     end
-    echo(response)
 end
 
 -- Get task list
