@@ -28,12 +28,12 @@ function getIcon(id)
    return TeachCourses.GetTeachCoursesIconPathStr(id)
 end
 
--- 打开促销包
+-- 点击解锁学期包
 function ShowPurchase()
     TeachCourses:ShowPage(1)
 end
 
--- 获取年级导图列表
+-- 获取一页年级导图列表
 function GetOnePage()
     local now_grade_list = {}
     local start_index = 1 + TeachCourses.Main_PerPage_Grade * (TeachCourses.Main_Page_Index - 1)
@@ -64,12 +64,14 @@ end
 
 -- 打开对应年级课件
 function GoToGrade(grade, semester)
-    echo("grade:")
-    echo(grade)
-    echo("semester:")
-    echo(semester)
-    -- 打开教学分区
+    -- 记录当前选择的年级与学期
+    TeachCourses.Clicked_Grade = grade
+    TeachCourses.Clicked_Semester = semester
+    -- 请求课件详情，默认第一次打开为语文
+    TeachCourses.show_subject_name = "chinese"                  -- 对应展示标签的name
+    TeachCourses.show_subject_under_name = "chinese_display"    -- 对应展示标签的下层隐藏标签name
     TeachCourses:ShowPage(4)
+    TeachCourses:GetCoursewares(TeachCourses.Clicked_Grade + 1, TeachCourses.Clicked_Semester, 1)             -- 请求默认展示的页面课件详细信息
 end
 
 -- 上一页
@@ -82,7 +84,8 @@ end
 
 -- 下一页
 function PageDown()
-    if TeachCourses.Main_Page_Index < 2 then
+    TeachCourses.Max_Page_Grade = math.ceil(#TeachCourses.grade_list / TeachCourses.Main_PerPage_Grade)     -- 最大页码数
+    if TeachCourses.Main_Page_Index < TeachCourses.Max_Page_Grade then
         TeachCourses.Main_Page_Index = TeachCourses.Main_Page_Index + 1
         Page:Refresh(0)
     end
@@ -136,6 +139,7 @@ end
     <div style="<%=format('position: relative; width: 1920; height: 1080; background:url(%s);', TeachCourses.background_path)%>"></div>
 
     <div style="<%=format('position: relative; left: 87; top: 94; width: 1748; height: 968; background:url(%s);', getIcon(13))%>">
+        <!-- title小学 -->
         <div style="<%=format('position: relative; left: 73; top: -45; width: 298; height: 130; background:url(%s);', getIcon(1))%>"></div>
 
         <!-- 年级导图区域 -->
@@ -143,9 +147,9 @@ end
             <pe:gridview style="width: 1600; height: 900;left: 50;top: 50;" DataSource='<%= GetOnePage() %>' CellPadding="6" ItemsPerLine="3" AllowPaging="false" RememberScrollPos="true" RememberLastPage="true" VerticalScrollBarStep="36" VerticalScrollBarOffsetX="8">
                 <Columns>
                     <pe:if condition="<%= not isIOSApproval()%>">
-                        <div style="width: 424; height: 676;font-family:hzgb;text-align:center;line-height:73;font-size: 24;color:#ffffff;">
+                        <div style="width: 424; height: 676;font-family:alhy;text-align:center;line-height:73;font-size: 24;color:#ffffff;">
                             <!-- 上年级 -->
-                            <div onclick="OnClickUp" style="<%=format('position: relative;left: 50;top:50; width: 324; height: 247; background:url(%s);', getIcon(8))%>" name="<%=Eval('index')%>">
+                            <div onclick="OnClickUp" style="<%=format('position: relative;left: 50;top:50; width: 324; height: 247; background:url(%s);', getIcon(8))%>" name="<%=Eval('grade')%>">
                                 <div style="<%=format('position: relative; left: 20;top: 14; width: 283; height: 221; background:url(%s);', getIcon(9))%>"></div>
                                 <div style="<%=format('position: relative; left: 187;top: -36; width: 186; height: 118; background:url(%s);', getIcon(10))%>"></div>
                                 <div style="<%=format('position: relative; left: -35;top: 201; width: 204; height: 68; background:url(%s);', Eval('tips_url_up'))%>"></div>
@@ -155,7 +159,7 @@ end
                                 <div style="<%=format('position: relative; left: 22;top: 143; width: 380; height: 73; background:url(%s);', getIcon(11))%>">敬请期待...</div>
                             </pe:if>
                             <!-- 下年级 -->
-                            <div onclick="OnClickDown" style="<%=format('position: relative;left: 50;top:379; width: 324; height: 247; background:url(%s);', getIcon(8))%>" name="<%=Eval('index')%>">
+                            <div onclick="OnClickDown" style="<%=format('position: relative;left: 50;top:379; width: 324; height: 247; background:url(%s);', getIcon(8))%>" name="<%=Eval('grade')%>">
                                 <div style="<%=format('position: relative; left: 20;top: 14; width: 283; height: 221; background:url(%s);', getIcon(9))%>"></div>
                                 <div style="<%=format('position: relative; left: 187;top: -36; width: 186; height: 118; background:url(%s);', getIcon(10))%>"></div>
                                 <div style="<%=format('position: relative; left: -35;top: 201; width: 204; height: 68; background:url(%s);', Eval('tips_url_down'))%>"></div>
@@ -171,7 +175,7 @@ end
                         <div style="width: 424; height: 676;">
                             <!-- 上年级 -->
                             <pe:if condition="<%= Eval('count_up') > 1 %>">
-                                <div onclick="OnClickUp" style="<%=format('position: relative;left: 50;top:50; width: 324; height: 247; background:url(%s);', getIcon(8))%>" name="<%=Eval('index')%>">
+                                <div onclick="OnClickUp" style="<%=format('position: relative;left: 50;top:50; width: 324; height: 247; background:url(%s);', getIcon(8))%>" name="<%=Eval('grade')%>">
                                     <div style="<%=format('position: relative; left: 20;top: 14; width: 283; height: 221; background:url(%s);', getIcon(9))%>"></div>
                                     <div style="<%=format('position: relative; left: 187;top: -36; width: 186; height: 118; background:url(%s);', getIcon(10))%>"></div>
                                     <div style="<%=format('position: relative; left: -35;top: 201; width: 204; height: 68; background:url(%s);', Eval('tips_url_up'))%>"></div>
@@ -179,7 +183,7 @@ end
                             </pe:if>
                             <!-- 下年级 -->
                             <pe:if condition="<%= Eval('count_down') > 1 %>">
-                                <div onclick="OnClickDown" style="<%=format('position: relative;left: 50;top:379; width: 324; height: 247; background:url(%s);', getIcon(8))%>" name="<%=Eval('index')%>">
+                                <div onclick="OnClickDown" style="<%=format('position: relative;left: 50;top:379; width: 324; height: 247; background:url(%s);', getIcon(8))%>" name="<%=Eval('grade')%>">
                                     <div style="<%=format('position: relative; left: 20;top: 14; width: 283; height: 221; background:url(%s);', getIcon(9))%>"></div>
                                     <div style="<%=format('position: relative; left: 187;top: -36; width: 186; height: 118; background:url(%s);', getIcon(10))%>"></div>
                                     <div style="<%=format('position: relative; left: -35;top: 201; width: 204; height: 68; background:url(%s);', Eval('tips_url_down'))%>"></div>
@@ -191,8 +195,9 @@ end
                 </Columns>
             </pe:gridview>
         </div>
-
+        <!-- 解锁学期包 -->
         <div onclick="ShowPurchase" style="<%=format('position: relative; left: 925; top: -34; width: 502; height: 158; background:url(%s);', getIcon(7))%>"></div>
+        <!-- 关闭 -->
         <div onclick="ClosePage" style="<%=format('position: relative; left: 1587; top: 12; width: 101; height: 102; background:url(%s);', getIcon(2))%>"></div>
 
         <!-- 翻页区域 -->

@@ -48,6 +48,12 @@ CommonFunc.isIOSApproval = function ()
     return (isIOSPlatform or mock_ios) and iosApprovalStatus
 end
 
+CommonFunc.isIOSPlatform = function ()
+    local mock_ios = ParaEngine.GetAppCommandLineByParam("mock_ios", "") == "true"
+    local isIOSPlatform = System.os.GetPlatform() == 'ios'
+    return mock_ios or isIOSPlatform
+end
+
 -- 本地刷新金币缓存和页面
 -- 参数walletChange格式{{amount=0,currency_id=1,},{amount=0,currency_id=2,},}
 -- id=1玩学币,id=2玩学券    amount正数是获得,负数是消耗    可以只有一项{{amount=-1,currency_id=2,},}

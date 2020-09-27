@@ -127,20 +127,28 @@ TeachCourses.grade_list = {
     -- [12] = {},
 }
 
+-- 用来展示教学区单课分页左上角标题
+TeachCourses.grade_matrix = {[1]="一年级",[2]="二年级",[3]="三年级",[4]="四年级",[5]="五年级",[6]="六年级"}
+TeachCourses.semester_matrix = {[1]="(上)",[2]="(下)"}
+
 -- 学课列表
 TeachCourses.subjects = {
-    [1] = {name='语文', title='chinese', index=2, subject_id=1, course = {}, show=false},
-    [2] = {name='数学', title='math', index=3, subject_id=2, course = {}, show=true},
-    [3] = {name='英语', title='english', index=4, subject_id=3, course = {}, show=false},
-    [4] = {name='物理', title='physics', index=5, subject_id=4, course = {}, show=false},
-    [5] = {name='化学', title='chemestry', index=6, subject_id=5, course = {}, show=false},
-    [6] = {name='生物', title='biology', index=7, subject_id=6, course = {}, show=false},
+    [1] = {name='语文', title='chinese', index=1, subject_id=1, course = {}, show=true},
+    [2] = {name='数学', title='math', index=2, subject_id=2, course = {}, show=true},
+    [3] = {name='英语', title='english', index=3, subject_id=3, course = {}, show=true},
+    [4] = {name='物理', title='physics', index=4, subject_id=4, course = {}, show=false},
+    [5] = {name='化学', title='chemestry', index=5, subject_id=5, course = {}, show=false},
+    [6] = {name='生物', title='biology', index=6, subject_id=6, course = {}, show=false},
 }
 
 TeachCourses.params = {
+    -- 解锁学期包
     [1] = {url="Mod/CodePku/cellar/GUI/SmallMap/FastEntrence/TeachCourses/PurchaseSemesterPackage.html",alignment="_lt", left = 0, top = 0, width = 1920 , height = 1080, zorder = 30},
+    -- 解锁课程包
     [2] = {url="Mod/CodePku/cellar/GUI/SmallMap/FastEntrence/TeachCourses/PurchaseCoursesPackage.html",alignment="_lt", left = 0, top = 0, width = 1920 , height = 1080, zorder = 30},
+    -- 单课解锁
     [3] = {url="Mod/CodePku/cellar/GUI/SmallMap/FastEntrence/TeachCourses/PurchaseCourse.html",alignment="_lt", left = 0, top = 0, width = 1920 , height = 1080, zorder = 30},
+    -- 单科分页
     [4] = {url="Mod/CodePku/cellar/GUI/SmallMap/FastEntrence/TeachCourses/TeachCourseware.html",alignment="_lt", left = 0, top = 0, width = 1920 , height = 1080, zorder = 30},
 }
 
@@ -173,9 +181,44 @@ function TeachCourses:GetGradeList(page)
     end)
 end
 
--- todo获取详细课件信息
+-- 获取详细课件信息
 function TeachCourses:GetCoursewares(grade, semester, subject)
-    
+    local path = string.format("/coursewares/entrance/system?grade=%d&semester=%d&subject=%d", grade, semester, subject)
+    request:get(path):next(function(response)
+        if (response.status == 200) then
+            local data = response.data.data
+            local index = 1
+            TeachCourses.subjects[subject].course = {}
+            for i,v in pairs(data) do
+                for j,d in pairs(v.course_wares) do
+                    TeachCourses.subjects[subject].course[index] = d
+                    -- 把课件的封面拿到外层放着
+                    TeachCourses.subjects[subject].course[index].file_url = d.cover_file.file_url
+                    index = index + 1
+                end
+            end
+            self.ui:Refresh(0)
+        end
+    end):catch(function(e)
+        GameLogic.AddBBS("CodeGlobals", e.data.message, 3000, "#FF0000");
+    end)
+end
+
+-- 清空所有课件信息,关闭学科分类页面时使用
+function TeachCourses:CleanAllCoursewares()
+    for k,v in pairs(TeachCourses.subjects) do
+        TeachCourses.subjects[k].course = {}
+    end
+end
+
+-- 获取指定id课件的name和keepworkID
+function TeachCourses:GetCoursewareUniqueness(id)
+    local temp_table = TeachCourses.subjects[TeachCourses.courseware_last_click_index].course
+    for k,v in pairs(temp_table) do
+        if id == v.id then
+            return v.name, v.keepwork_project_id
+        end
+    end
 end
 
 -- 动态获取页码点的相对位置left坐标

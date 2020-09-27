@@ -26,8 +26,8 @@ function AppStats:GetDeviceUUID()
         deviceData.softwareUUID = System.Encoding.guid.uuid()
         GameLogic.GetPlayerController():SaveLocalData("DeviceData", deviceData, true)
     end
-    local machineID = ParaEngine.GetAttributeObject():GetField("MachineID","")
-    return deviceData.softwareUUID .. "-" .. machineID
+    -- local machineID = ParaEngine.GetAttributeObject():GetField("MachineID","")
+    return deviceData.softwareUUID;
 end
 
 -- 新设备首次启动 - 激活量统计

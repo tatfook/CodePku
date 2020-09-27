@@ -10,14 +10,13 @@
 
 TeachCourses = NPL.load("(gl)Mod/CodePku/cellar/GUI/SmallMap/FastEntrence/TeachCourses/TeachCourses.lua");
 local FastEntrence = NPL.load("(gl)Mod/CodePku/cellar/GUI/SmallMap/FastEntrence/FastEntrence.lua")
-local SmallMap = commonlib.gettable("Mod.CodePku.GUI.SmallMap")
 local MainPopup = commonlib.gettable("Mod.CodePku.GUI.MainPopup");
 local page = document:GetPageCtrl()
 
 
-TeachCourses.Courseware_Page_Index = 1
-TeachCourses.Courseware_PerPage_Grade = 8
-
+TeachCourses.Courseware_Page_Index = 1          -- 默认第一页
+TeachCourses.Courseware_PerPage_Grade = 8       -- 每页8个课件
+TeachCourses.courseware_last_click_index = 1    -- 默认展示语文课件
 
 
 -- 获取雪碧图图标
@@ -25,33 +24,135 @@ function getIcon(id)
    return TeachCourses.GetTeachCoursesIconPathStr(id)
 end
 
--- 打开促销包
+-- 分类标签各状态的样式
+local subject_style = {
+    [1] = string.format("position: relative;top: 317; left: 9;width: 236;height: 104;background:url(%s);", getIcon(47)),    -- 语文显示
+    [2] = string.format("position: relative;top: 436; left: 9;width: 236;height: 104;background:url(%s);", getIcon(45)),    -- 数学显示
+    [3] = string.format("position: relative;top: 565; left: 9;width: 236;height: 104;background:url(%s);", getIcon(49)),    -- 英语显示
+}
+
+local subject_under_style = {
+    [1] = string.format("position: relative;top: 330; left: 9;width: 231;height: 91;background:url(%s);", getIcon(48)),     -- 语文隐藏
+    [2] = string.format("position: relative;top: 452; left: 9;width: 231;height: 91;background:url(%s);", getIcon(46)),     -- 数学隐藏
+    [3] = string.format("position: relative;top: 575; left: 9;width: 231;height: 91;background:url(%s);", getIcon(50)),     -- 英语隐藏
+}
+
+-- 分类标签的table，用来遍历实现展示和隐藏
+local show_subject_table = {
+    -- 高亮的标签
+    [1] = {name = "chinese", style = subject_style[1]},
+    [2] = {name = "math", style ="display:none;" .. subject_style[2]},
+    [3] = {name = "english", style ="display:none;" .. subject_style[3]},
+}
+
+local show_subject_under_table = {
+    -- 灰色的标签
+    [1] = {name = "chinese_display", style ="display:none;" .. subject_under_style[1]},
+    [2] = {name = "math_display", style = subject_under_style[2]},
+    [3] = {name = "english_display", style = subject_under_style[3]},
+}
+
+-- 获取分类的style
+function GetStyle(name,highlight)
+    local temp_table = highlight and show_subject_table or show_subject_under_table
+    if temp_table then
+        for k,v in ipairs(temp_table) do
+            if name == v.name then
+                return v.style
+            end
+        end
+    end
+end
+
+-- 点击学科分类
+function ClickSubject(name)
+    local index
+    -- 拦截相同点击
+    if name == TeachCourses.show_subject_name then
+        return
+    end
+    -- 获取当前点击的分类index，暂时只在点击未高亮的分类时进行处理，所以遍历show_subject_under_table，展示未选中的标签，隐藏选中的标签
+    for k,v in pairs(show_subject_under_table) do
+        local selement = "#" .. v.name
+        if name ~= v.name then
+            -- 展示
+            show_subject_under_table[k].style = subject_under_style[k]
+        elseif name == v.name then
+            -- 隐藏
+            index = k
+            TeachCourses.courseware_last_click_index = index
+            show_subject_under_table[k].style = "display:none;" .. subject_under_style[k]
+        end
+    end
+    -- show_subject_table里只展示index的标签
+    for k,v in pairs(show_subject_table) do
+        if k ~= index then
+            -- 隐藏
+            show_subject_table[k].style = "display:none;" .. subject_style[k]
+        elseif k == index then
+            -- 展示
+            show_subject_table[k].style = subject_style[k]
+            TeachCourses.show_subject_name = show_subject_table[k].name
+        end
+    end
+    Page:Refresh(0)
+    -- 请求当前分类课件数据
+    TeachCourses:GetCoursewares(TeachCourses.Clicked_Grade + 1, TeachCourses.Clicked_Semester, index)
+end
+
+-- 获取一页课件
+function GetOnePageCourseware()
+    local temp_table = TeachCourses.subjects[TeachCourses.courseware_last_click_index].course
+    local now_show_table = {}
+    local start_index = 1 + TeachCourses.Courseware_PerPage_Grade * (TeachCourses.Courseware_Page_Index - 1)
+    local end_index = TeachCourses.Courseware_PerPage_Grade * TeachCourses.Courseware_Page_Index
+    end_index = (#temp_table < end_index) and #temp_table or end_index
+    echo("#temp_table")
+    echo(#temp_table)
+    if next(temp_table) then
+        for i=start_index,end_index do
+            table.insert(now_show_table, temp_table[i])
+        end
+        return now_show_table
+    else
+        return {}
+    end
+end
+
+-- 上一页
+function PageUp()
+    if TeachCourses.Courseware_Page_Index > 1 then
+        TeachCourses.Courseware_Page_Index = TeachCourses.Courseware_Page_Index - 1
+        Page:Refresh(0)
+    end
+end
+
+-- 下一页
+function PageDown()
+    TeachCourses.Max_Courseware_Page_Grade = math.ceil(#TeachCourses.subjects[TeachCourses.courseware_last_click_index].course / TeachCourses.Courseware_PerPage_Grade)     -- 最大页码数
+    if TeachCourses.Courseware_Page_Index < TeachCourses.Max_Courseware_Page_Grade then
+        TeachCourses.Courseware_Page_Index = TeachCourses.Courseware_Page_Index + 1
+        Page:Refresh(0)
+    end
+end
+
+
+-- 解锁课程包
 function ShowPurchase()
     TeachCourses:ShowPage(2)
 end
 
-
-
--- 点击上学期
-function OnClickUp(name)
-    if TeachCourses.grade_list[name].count_up > 0 then
-        GoToGrade(name, 1)
-    end
-end
-
--- 点击下学期
-function OnClickDown(name)
-    if TeachCourses.grade_list[name].count_down > 0 then
-        GoToGrade(name, 2)
-    end
-end
-
-
 function ClosePage()
     Page:CloseWindow();
+    -- 清空所有课件信息
+    TeachCourses:CleanAllCoursewares()
 end
 
-
+-- 跳转到课件的世界
+function goWorld(id)
+    local name, keepwork_project_id = TeachCourses:GetCoursewareUniqueness(id)
+    MainPopup:ShowPage("TPpopup", name, keepwork_project_id)
+end
     
 ]]></script>
 
@@ -63,21 +164,48 @@ end
     <!-- 最下层背景 -->
     <div style="<%=format('position: relative; left: 126; top: 98; width: 1779; height: 950; background:url(%s);', TeachCourses.courseware_background_path)%>"></div>
 
+    <!-- todo 隐藏的普通学科分类 -->
+    <div onclick="ClickSubject" name="chinese_display" style="<%= GetStyle('chinese_display') %>"></div>
+    <div onclick="ClickSubject" name="math_display" style="<%= GetStyle('math_display') %>"></div>
+    <div onclick="ClickSubject" name="english_display" style="<%= GetStyle('english_display') %>"></div>
+
     <!-- 最上层背景 -->
     <div style="<%=format('position: relative; left: 209; top: 123; width: 1631; height: 894; background:url(%s);', getIcon(51))%>"></div>
-    <!-- 左上角飘旗 -->
-    <div style="<%=format('position: relative; left: 165; top: 69; width: 298; height: 130; background:url(%s);', getIcon(26))%>">
     
+    <!-- todo 展示的高亮学科分类 -->
+    <div onclick="ClickSubject" name="chinese" style="<%= GetStyle('chinese', 1) %>"></div>
+    <div onclick="ClickSubject" name="math" style="<%= GetStyle('math', 1) %>"></div>
+    <div onclick="ClickSubject" name="english" style="<%= GetStyle('english', 1) %>"></div>
+
+    <!-- 左上角飘旗 -->
+    <div style="<%=format('position: absolute; left: 165; top: 69; width: 298; height: 130; background:url(%s);', getIcon(26))%>">
+        <div style="position: relative; left: 57; top: 30;font-size: 45; font-family: Noto Sans S Chinese Regular;font-weight:bold;color: #ffffff;"><%= TeachCourses.grade_matrix[TeachCourses.Clicked_Grade] %></div>
+        <div style="position: relative; left: 194; top: 62;font-size: 26; font-family: Noto Sans S Chinese Regular;color: #ffffff;"><%= TeachCourses.semester_matrix[TeachCourses.Clicked_Semester] %></div>
+    </div>
+    <!-- 解锁课程包 -->
+    <div onclick="ShowPurchase" style="<%=format('position: absolute; left: 1046; top: 107; width: 502; height: 158; background:url(%s);', getIcon(32))%>"></div>
+    <!-- 关闭按键 -->
+    <div onclick="ClosePage" style="<%=format('position: absolute; left: 1759; top: 101; width: 101; height: 102; background:url(%s);', getIcon(27))%>"></div>
+    
+    <!-- 课件内容 -->
+    <div style="position: relative; width: 1600; height: 700; left: 222; top: 297;">
+        <pe:repeat DataSource="<%=GetOnePageCourseware()%>" >
+            <div style="width: 324; height: 247; float: left; margin-left: 67; margin-bottom: 99;" name="<%=Eval('id')%>" onclick="goWorld">
+                <!-- <div style="position: relative; width:324px; height:80; font-family:PuHuiTi-Bold;text-align: center; line-height: 80; font-size:32px;color:#ffffff; font-weight:bold; background:url(codepku/image/textures/fastentrence_ui/main.png#28 45 340 80);" name="<%=Eval('id')%>" onclick="goWorld"><%=Eval('name')%></div> -->
+                <div style="<%=format('position: relative; width: 324; height: 247;background:url(%s);', getIcon(33))%>"></div>
+                <div style="<%=format('position: relative; left: 16; top:29; width: 290; height: 199;background:url(%s);', Eval('file_url'))%>"></div>
+                <div style="<%=format('position: relative; left: -23;top:-16;width: 321; height: 71;padding-left:21;font-family:alhy;line-height: 71; font-size:26px;color:#9a5d11;background:url(%s);', getIcon(35))%>"><%=Eval('name')%></div>
+            </div>
+        </pe:repeat>
     </div>
 
-
-
-
-
-    <!-- 关闭按键 -->
-    <div onclick="ClosePage" style="<%=format('position: relative; left: 1759; top: 101; width: 101; height: 102; background:url(%s);', getIcon(27))%>"></div>
-
     
+
+    <!-- 翻页区域 -->
+    <div onclick="PageUp" style="<%=format('position: relative; left: 729; top: 907; width: 69; height: 95; background:url(%s);', getIcon(28))%>"></div>
+    <div onclick="PageDown" style="<%=format('position: relative; left: 1266; top: 907; width: 69; height: 95; background:url(%s);', getIcon(29))%>"></div>
+
+    <!-- 页码点 -->
     
 </pe:container>
 </pe:mcml>
