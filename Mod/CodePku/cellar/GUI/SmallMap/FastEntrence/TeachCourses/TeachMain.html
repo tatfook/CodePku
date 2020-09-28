@@ -161,22 +161,28 @@ end
                     </pe:if>
 
                     <pe:if condition="<%= isIOSApproval()%>">
-                        <div style="width: 424; height: 676;">
+                        <div style="width: 424; height: 676;font-family:alhy;text-align:center;line-height:73;font-size: 24;color:#ffffff;">
                             <!-- 上年级 -->
-                            <pe:if condition="<%= Eval('count_up') > 1 %>">
-                                <div onclick="OnClickUp" style="<%=format('position: relative;left: 50;top:50; width: 324; height: 247; background:url(%s);', getIcon(8))%>" name="<%=Eval('grade')%>">
+                            <pe:if condition="<%= Eval('count_up') < 1 %>">
+                                <div onclick="OnClickUp" style="<%=format('display:none;position: relative;left: 50;top:50; width: 324; height: 247; background:url(%s);', getIcon(8))%>" name="<%=Eval('grade')%>">
                                     <div style="<%=format('position: relative; left: 20;top: 14; width: 283; height: 221; background:url(%s);', getIcon(9))%>"></div>
                                     <div style="<%=format('position: relative; left: 187;top: -36; width: 186; height: 118; background:url(%s);', getIcon(10))%>"></div>
                                     <div style="<%=format('position: relative; left: -35;top: 201; width: 204; height: 68; background:url(%s);', Eval('tips_url_up'))%>"></div>
                                 </div>
+                            
+                                <div style="display:none;position: relative;left: 50;top:50; width: 324; height: 247;"></div>
+                                <div style="<%=format('display:none;position: relative; left: 22;top: 143; width: 380; height: 73; background:url(%s);', getIcon(11))%>">敬请期待...</div>
                             </pe:if>
                             <!-- 下年级 -->
-                            <pe:if condition="<%= Eval('count_down') > 1 %>">
-                                <div onclick="OnClickDown" style="<%=format('position: relative;left: 50;top:379; width: 324; height: 247; background:url(%s);', getIcon(8))%>" name="<%=Eval('grade')%>">
+                            <pe:if condition="<%= Eval('count_down') < 1 %>">
+                                <div onclick="OnClickDown" style="<%=format('display:none;position: relative;left: 50;top:379; width: 324; height: 247; background:url(%s);', getIcon(8))%>" name="<%=Eval('grade')%>">
                                     <div style="<%=format('position: relative; left: 20;top: 14; width: 283; height: 221; background:url(%s);', getIcon(9))%>"></div>
                                     <div style="<%=format('position: relative; left: 187;top: -36; width: 186; height: 118; background:url(%s);', getIcon(10))%>"></div>
                                     <div style="<%=format('position: relative; left: -35;top: 201; width: 204; height: 68; background:url(%s);', Eval('tips_url_down'))%>"></div>
                                 </div>
+                            
+                                <div style="display:none;position: relative;left: 50;top:379; width: 324; height: 247;"></div>
+                                <div style="<%=format('display:none;position: relative; left: 22;top: 472; width: 380; height: 73; background:url(%s);', getIcon(11))%>">敬请期待...</div>
                             </pe:if>
                         </div>
                     </pe:if>
