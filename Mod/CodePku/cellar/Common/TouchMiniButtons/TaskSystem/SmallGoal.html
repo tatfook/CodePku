@@ -12,17 +12,16 @@
 <script refresh="false" type="text/npl">
 <![CDATA[
 
-TaskSystem = NPL.load("(gl)Mod/CodePku/cellar/Common/TouchMiniButtons/TaskSystem/TaskSystem.lua")
+NPL.load("(gl)Mod/CodePku/cellar/Common/TouchMiniButtons/TaskSystem/TaskSystem.lua")
+local TaskSystem = commonlib.gettable("Mod.CodePku.celler.TaskSystem")
 
 local ToWhere = commonlib.gettable("Mod.CodePku.GUI.Popup.ToWhere")
+local page = document:GetPageCtrl()
+Mod.CodePku.Store:Set("page/TaskPage", page)
 
-task_table =TaskSystem.goal or {}
+task_table = TaskSystem.goal
 
-TaskSystem:GetTask("1")
-
-reward_table = TaskSystem.goalReward or {}
-
-tableIndex = 1
+reward_table = TaskSystem.goalReward
 
 ---------------------------------------------- 下面处理左侧任务奖励
 function getTagType(index)
@@ -32,12 +31,11 @@ function getTagType(index)
 end
 
 function getFinishType(index)
-    return TaskSystem:GetTaskDeac(task_table[index])
+    return TaskSystem:GetTaskDeac(TaskSystem.goal[index])
 end
 
 function getText(index)
     local index = tonumber(index)
-    tableIndex = index
     local state_table = {"领取", "前往", "未完成", "已完成"}   --按钮的内容
     return state_table[status]
 end
@@ -53,55 +51,39 @@ function getBG(index)
     end
 end
 
-function getRwardBG(index)
-    local index = tonumber(index)
-    local info = task_table[tableIndex]["reward_json"]
-    return info[index]["prop_icon_url"]
-end
-
-function showRewardBg(index)
+function showRewardBg(status)
     local reward_bg = {"343 240 111 51", "347 329 106 52", "345 149 106 52"} -- 顺序为 未完成 可领取 已领取
-    if(reward_table[index]["status"] == 4)then   --奖励已领取
+    if(status == 4)then   --奖励已领取
         return reward_bg[3]
-    elseif(reward_table[index]["status"] == 1)then   --奖励可领取
+    elseif(status == 1)then   --奖励可领取
         return reward_bg[2]
     else
         return reward_bg[1]
     end
-    --return reward_table[index]["reward_json"]["prop_icon"]
 end
 
 function getRwardLeft(index)
     leftLen = {"588","488","388"}
-    local len = #task_table[index]["reward_json"]
+    local len = #TaskSystem.goal[index]["reward_json"]
     return leftLen[len]
-
 end
 
 function getWordWidth(index)
     local width = {"550","460","390"}
-    local len = #task_table[index]["reward_json"]
+    local len = #TaskSystem.goal[index]["reward_json"]
     return width[len]
 end
 
-function getRewardInfo(index)
-    local info = task_table[index]["reward_json"]
-    return info
-end
-
 function HandleTask(taskIndex)
-    echo("--------------HandleTask---------------")
-    echo(task_table[taskIndex])
-    TaskSystem:HandleClickEvent(task_table[taskIndex])
-    Page:Refresh(0)
+    TaskSystem:HandleClickEvent(TaskSystem.goal[taskIndex])
 end
 
 -------------------------------------------- 下面处理右侧累计奖励
-function showFinishedInfo(index)
-    if(reward_table[index]["finish_count_now"] >= reward_table[index]["finish_count"])then
-        return reward_table[index]["finish_count"].."/"..reward_table[index]["finish_count"]
+function showFinishedInfo(finish_count_now, finish_count)
+    if finish_count_now >= finish_count then
+        return finish_count.."/"..finish_count
     else
-        return reward_table[index]["finish_count_now"].."/"..reward_table[index]["finish_count"]
+        return finish_count_now.."/"..finish_count
     end
 end
 
@@ -111,7 +93,7 @@ end
 
 function ClickBigPlan()
     ClosePage()
-    TaskSystem:ShowPage(2)
+    TaskSystem:ShowPage(2,true)
 end
 
 function ClosePage()
@@ -142,8 +124,8 @@ end
     <!-- 计划列表 -->
     <div style="position: relative; width: 928; height: 680; left: 307; top: 297;">
         <pe:gridview name="MyFriend" style=" width: 928; height:680; " 
-            DataSource='<%= task_table %>' CellPadding="10" ItemsPerLine="1" AllowPaging="false" RememberScrollPos="true" RememberLastPage="true" 
-            VerticalScrollBarStep="36" VerticalScrollBarOffsetX="8">
+            DataSource='<%= TaskSystem.goal %>' CellPadding="10" ItemsPerLine="1" AllowPaging="false" RememberScrollPos="true" RememberLastPage="true" 
+            VerticalScrollBarStep="100" VerticalScrollBarOffsetX="8">
             <Columns>
                 <div style="width: 888; height: 178; margin-bottom: 28;">
                     <div style="position: relative; width: 888; height: 141; top: 47; line-height: 141; background: url(codepku/image/textures/tasksystem/main.png#21 252 251 141:12 12 12 12);"></div>
@@ -155,14 +137,14 @@ end
                         <%=getText(index)%>
                     </div>
 
-                    <div style="<%=format('position: relative;width: %d; height: 141; left: 30; top: 90;white-space:pre-wrap; line-height: 38; color:#123655; font-size: 30; font-family: Noto Sans S Chinese Regular;', getWordWidth(index)) %>">
+                    <div style="<%=format('position: relative;width: 360; height: 141; left: 30; top: 90;white-space:pre-wrap; line-height: 38; color:#123655; font-size: 30; font-family: Noto Sans S Chinese Regular;', getWordWidth(index)) %>">
                         <%=Eval('intro')%><%=getFinishType(index)%>
                     </div>
 
-                    <div style="<%= format('position: relative; height: 100; left: %d; top: 68;', getRwardLeft(index)) %>">
-                        <pe:repeat DataSource="<%=getRewardInfo(index)%>">
-                            <div style="float: left;width: 100; height: 100;background:url(codepku/image/textures/common_32bits.png#264 879 126 125);">
-                                <div style="<%= format('position: relative; left: 23;top: 23;width: 54; height: 54;background:url(%s);', getRwardBG(index)) %>"></div>
+                    <div style="<%= format('position: relative; height: 100; left: 388; top: 68;', getRwardLeft(index)) %>">
+                        <pe:repeat DataSource="<%=reward_json%>">
+                            <div style="float:left;width: 100; height: 100;background:url(codepku/image/textures/common_32bits.png#264 879 126 125);">
+                                <div style="<%= format('position: relative; left: 23;top: 23;width: 54; height: 54;background:url(%s);', prop_icon_url) %>"></div>
                                 <div style="width: 100; height: 100;background:url(codepku/image/textures/common_32bits.png#99 873 134 134);"></div>
                                 <div style="position: relative;top:-25;;width: 90; text-align: right; font-size: 18; color: #7996ed; font-family: Noto Sans S Chinese Regular;"><%=Eval('reward_num')%></div>
                             </div>
@@ -181,16 +163,16 @@ end
     <!-- 待办列表 -->
     <div style="position: relative; width: 540; height: 660; left: 1256; top: 310;">
         <pe:gridview name="" style=" width: 540; height:660; " 
-            DataSource='<%=reward_table %>' CellPadding="15" ItemsPerLine="2" AllowPaging="false" RememberScrollPos="true" RememberLastPage="true" 
+            DataSource='<%=TaskSystem.goalReward %>' CellPadding="15" ItemsPerLine="2" AllowPaging="false" RememberScrollPos="true" RememberLastPage="true" 
             VerticalScrollBarStep="36" VerticalScrollBarOffsetX="8">
             <Columns>
                 <div style="width: 190; height: 160;margin-left: 43; margin-top: 34;" onclick="handleReward">
                     <div style="position: relative; width: 189; height: 119; background: url(codepku/image/textures/tasksystem/main.png#25 574 189 119);" name="<%=Eval('index')%>" onclick="handleReward"></div>
-                    <pe:if condition='<%= reward_table[index]["reward_received"] == 1 %>'>
+                    <pe:if condition='<%= TaskSystem.goalReward[index]["reward_received"] == 1 %>'>
                         <div style="position: relative; width: 48; height: 53; left: 23; top: -30; background: url(codepku/image/textures/tasksystem/main.png#243 448 48 53);"></div>
                     </pe:if>
-                    <div style="<%=format('position: relative; width: 106; height: 52; left: 41; top: 35; background: url(codepku/image/textures/tasksystem/main.png#%s);', showRewardBg(index) )%>" name="<%=Eval('index')%>"  onclick="handleReward"></div>
-                    <div style="width: 190; height: 32; margin-top: 128; text-align: center; color: #EEF9E9; line-height: 32; font-size: 32; font-family: PuHuiTi-Bold;"><%=showFinishedInfo(index)%></div>
+                    <div style="<%=format('position: relative; width: 106; height: 52; left: 41; top: 35; background: url(codepku/image/textures/tasksystem/main.png#%s);', showRewardBg(status) )%>" name="<%=Eval('index')%>"  onclick="handleReward"></div>
+                    <div style="width: 190; height: 32; margin-top: 128; text-align: center; color: #EEF9E9; line-height: 32; font-size: 32; font-family: PuHuiTi-Bold;"><%=showFinishedInfo(finish_count_now,finish_count)%></div>
                 </div>
             </Columns>
         </pe:gridview>

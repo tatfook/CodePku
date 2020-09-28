@@ -12,32 +12,19 @@
 <script refresh="false" type="text/npl" src="TouchMain.lua">
 <![CDATA[
 
-TaskSystem = NPL.load("(gl)Mod/CodePku/cellar/Common/TouchMiniButtons/TaskSystem/TaskSystem.lua")
+NPL.load("(gl)Mod/CodePku/cellar/Common/TouchMiniButtons/TaskSystem/TaskSystem.lua")
+local TaskSystem = commonlib.gettable("Mod.CodePku.celler.TaskSystem")
 
 local ToWhere = commonlib.gettable("Mod.CodePku.GUI.Popup.ToWhere")
-
 function ClosePage()
     Page:CloseWindow();
 end
 
 function ClickSamllGoal()
     ClosePage()
-    TaskSystem:ShowPage(1)
+    TaskSystem:ShowPage(1,true)
 end
 
--- reward_received = 表示奖励是否领取
---TaskSystem:GetTask("2")
-task_table = TaskSystem.plan
-tableIndex = 1
-echo("-----------大计划-----------")
-echo(task_table)
-
-reward_table = TaskSystem.reward_table
-
-
-function getTask()
-    return task_table or {}
-end
 
 function getTagType(index)
     local tabType = {"所有","学习","游戏","游览"}
@@ -45,23 +32,7 @@ function getTagType(index)
     return tabType[index]
 end
 
-function getRewardInfo(index)
-    --return TaskSystem:ChangeStrToNum(task_table[index].reward_json)
-    return task_table[index]["reward_json"]
-end
-
-function getRwardBG(reward_type)
-    local index = tonumber(index)
-    --local info = task_table[tableIndex]["reward_json"]
-    local info = TaskSystem:ChangeStrToNum(task_table[tableIndex]["reward_json"])
-    echo("---------getRwardBG-----------")
-    echo(info)
-    echo(info[1])
-    return info[index]["prop_icon_url"]
-end
-
 function getText(index)
-    tableIndex = index
     local state_table = {"领取", "前往", "未完成", ""}   --按钮的内容
     return state_table[status]
 end
@@ -83,11 +54,11 @@ function getBG(index)
 end
 
 function getFinishType(index)
-    return TaskSystem:GetTaskDeac(task_table[index])
+    return TaskSystem:GetTaskDeac(TaskSystem.plan[index])
 end
 
 function HandleTask(taskIndex)
-    TaskSystem:HandleClickEvent(task_table[taskIndex])
+    TaskSystem:HandleClickEvent(TaskSystem.plan[taskIndex])
 end
 
 
@@ -118,8 +89,8 @@ end
 
     <div style="position: relative; width: 1500; height: 680; left: 274; top: 297;">
         <pe:gridview name="" style=" width: 1500; height:680; " 
-            DataSource='<%=getTask()%>' CellPadding="20" ItemsPerLine="3" AllowPaging="false" RememberScrollPos="true" RememberLastPage="true" 
-            VerticalScrollBarStep="36" VerticalScrollBarOffsetX="8">
+            DataSource='<%= TaskSystem.plan %>' CellPadding="20" ItemsPerLine="3" AllowPaging="false" RememberScrollPos="true" RememberLastPage="true" 
+            VerticalScrollBarStep="150" VerticalScrollBarOffsetX="8">
             <Columns>
                 <div style="width: 450; height: 429; margin-bottom: 40; margin-left: 13;">
                     <div style="position: relative; width: 450; height: 400; top: 47; line-height: 141; background: url(codepku/image/textures/tasksystem/main.png#21 252 251 141:12 12 12 12);"></div>
@@ -130,15 +101,17 @@ end
                     <div style="position: relative; height: 141; left: 25; top: 90; line-height: 50; color:#123655; font-size: 34; font-family: Noto Sans S Chinese Regular; float: left;">
                         <%=Eval('intro')%><%=getFinishType(index)%>
                     </div>
-
-                    <div style="<%=format('%s);', getBG(index))%>" name="<%=Eval('index')%>" onclick="HandleTask">
-                        <%=getText(index)%>
-                    </div>
+                    <pe:if condition="<%= course_id_type ~= 0 %>">
+                        <div style="<%=format('%s);', getBG(index))%>" name="<%=Eval('index')%>" onclick="HandleTask">
+                            <%=getText(index)%>
+                        </div>
+                    </pe:if>
+                    
 
                     <div style="position: relative; height: 134; left: 14; top: 190;">
-                        <pe:repeat DataSource="<%=getRewardInfo(index)%>">
+                        <pe:repeat DataSource="<%= reward_json %>">
                             <div style="float: left;width: 134; height: 134; margin-left: 8;">
-                                <div style="<%= format('position: relative; left: 31;top: 31;width: 72; height: 72;background:url(%s);', getRwardBG(reward_type)) %>"></div>
+                                <div style="<%= format('position: relative; left: 31;top: 31;width: 72; height: 72;background:url(%s);', prop_icon_url) %>"></div>
                                 <div style="width: 134; height: 134;background:url(codepku/image/textures/common_32bits.png#99 873 134 134);"></div>
                                 <div style="position: relative;top:-35;;width: 120; text-align: right; font-size: 22; color: #7996ed; font-family: Noto Sans S Chinese Regular;"><%=Eval('reward_num')%></div>
                             </div>

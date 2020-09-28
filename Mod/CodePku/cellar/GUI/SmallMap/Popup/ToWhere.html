@@ -13,10 +13,9 @@
 <![CDATA[
 
 local ToWhere = commonlib.gettable("Mod.CodePku.GUI.Popup.ToWhere")
-local SmallMap = commonlib.gettable("Mod.CodePku.GUI.SmallMap")
 local GameLogic = commonlib.gettable("MyCompany.Aries.Game.GameLogic")
-TaskSystem = NPL.load("(gl)Mod/CodePku/cellar/Common/TouchMiniButtons/TaskSystem/TaskSystem.lua")
-
+NPL.load("(gl)Mod/CodePku/cellar/Common/TouchMiniButtons/TaskSystem/TaskSystem.lua")
+local TaskSystem = commonlib.gettable("Mod.CodePku.celler.TaskSystem")
 
 local name = ToWhere.ToWhereName
 local id = ToWhere.ToWhereId
@@ -31,9 +30,8 @@ end
 
 function CloseAllPage()
     ClosePage()
-    SmallMap:ClosePage()
-    if TaskSystem.Page ~= nil then
-        TaskSystem.Page:CloseWindow();
+    if TaskSystem.Page_ui then
+        TaskSystem.Page_ui:CloseWindow();
     end
 end
 

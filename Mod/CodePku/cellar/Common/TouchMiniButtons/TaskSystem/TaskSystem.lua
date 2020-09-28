@@ -1,5 +1,5 @@
 --[[
-Title: Page
+Title: Page_ui
 Author(s): NieXX
 Date: 2020/9/11
 Desc:
@@ -26,7 +26,7 @@ local ToWhere = commonlib.gettable("Mod.CodePku.GUI.Popup.ToWhere")
 TaskSystem = commonlib.gettable("Mod.CodePku.celler.TaskSystem")
 -- local TaskSystem = NPL.export()
 
-TaskSystem.Page = nil
+TaskSystem.Page_ui = nil
 TaskSystem.nowReward = nil
 TaskSystem.PageIndex = nil
 TaskSystem.acquire_flag = nil --判断奖励是可领取还是其他 1表示可领取
@@ -38,7 +38,7 @@ TaskSystem.plan = {}
 TaskSystem.worldID = {
     [1] = { title = "玩学大厅-大门(北大入口)", id = 1, name = "gate", jumpTo = 1, },
     [2] = { title = "教学区", id = 15855, name = "teach", jumpTo = 2, },
-    [3] = { title = "专题区", id = 15877, name = "topic", jumpTo = 3, },
+    [3] = { title = "专题区", id = 15857, name = "topic", jumpTo = 3, },
     [4] = { title = "竞技区", id = 14312, name = "compete", jumpTo = 4, },
     [5] = { title = "家园区", id = 14293, name = "home", jumpTo = 5, },
     [6] = { title = "单词爱跑酷", id = 12896, name = "parkour", jumpTo = 31, },
@@ -64,6 +64,8 @@ TaskSystem.popup = {
 }
 
 function TaskSystem:GetReward(taskID)
+    echo("-------GetReward------")
+    echo(taskID)
     local request = NPL.load("(gl)Mod/CodePku/api/BaseRequest.lua");
     local response = request:post('/tasks-reward-receive/store',{task_id=taskID},{sync = true})
 	if response.status == 200 then
@@ -71,7 +73,19 @@ function TaskSystem:GetReward(taskID)
         if TaskSystem.popupui then
             TaskSystem.popupui:CloseWindow()
         end
-        TaskSystem:ShowPage(TaskSystem.PageIndex)
+        echo("------------PageIndex----------")
+        echo(TaskSystem.PageIndex)
+
+        TaskSystem.Page_ui:Refresh()
+
+        -- TaskSystem:RefreshMoney()
+        local MainUIButtons = NPL.load("(gl)Mod/CodePku/cellar/Common/TouchMiniButtons/Main.lua");
+        if MainUIButtons.money_window ~= nil then
+            echo("-------------------not nil")
+            MainUIButtons.money_window:CloseWindow()
+            MainUIButtons.money_window = nil
+            MainUIButtons.show_money_ui()
+        end
     else
         GameLogic.AddBBS(nil, L"领取失败", 3000, "255 0 0", 21);
     end
@@ -81,36 +95,25 @@ end
 -- @param flag: 0-day 1-week
 function TaskSystem:GetTask(flag)
     local request = NPL.load("(gl)Mod/CodePku/api/BaseRequest.lua");
-    local response = request:post('/tasks/user-tasks',{type=flag},{sync = true})
-    if response.status == 200 then
+    echo("-----------before-Date---------")
+    echo(os.date("%Y-%m-%d %H:%M:%S"))
+    request:post('/tasks/user-tasks',{type=flag},nil):next(function(response)		
         echo("----------user-tasks------------")
         echo(response.data.data)
         self.task_table = response.data.data or {};
         self.goal = response.data.data.user_tasks_daily_status or {};
         self.goalReward = response.data.data.user_tasks_daily_finished_status or {};
         self.plan = response.data.data.user_tasks_week_status or {};
-	end
-
-    -- 任务奖励表，详细奖励需根据字段来，需改变total_money, type_id
-    -- reward_received = 表示奖励是否领取
-    -- mock数据
-    -- self.goal = {
-    --     ["1"]={ tag_types= 0, intro="分享", reward_received=0, finish_count_now=0, finish_count=1, reward_json = { {reward_type=0, reward_num=888,props_detail={prop_icon="https://scratch-works-staging-1253386414.file.myqcloud.com/game/admin/propIcons/2.png"}}, {reward_type=1, reward_num=1024,props_detail={prop_icon="game/admin/propIcons/11001.png"}}, },  redirect=0, finish_type=3, course_id_type=3,},
-    --     ["2"]={ tag_types= 1, intro="完成任意教学课程", reward_received=0, finish_count_now=5, finish_count=5, reward_json = { {reward_type=0, reward_num=888,props_detail={prop_icon="game/admin/propIcons/11001.png"}}, {reward_type=1, reward_num=1024,props_detail={prop_icon="game/admin/propIcons/11001.png"}}, } , redirect=1, finish_type=1,},
-    --     { tag_types= 1, intro="每日登陆玩学世界", reward_received=1, finish_count_now=5, finish_count=5, reward_json = { {reward_type=0, reward_num=888,props_detail={prop_icon="game/admin/propIcons/11001.png"}}, {reward_type=1, reward_num=1024,props_detail={prop_icon="game/admin/propIcons/11001.png"}}, {reward_type=0, reward_num=888,props_detail={prop_icon="game/admin/propIcons/11001.png"}} } , redirect=2, finish_type=3, course_id_type=0,},
-    --     { tag_types= 1, intro="3", reward_received=0, finish_count_now=0, finish_count=5, reward_json = { {reward_type=0, reward_num=888,props_detail={prop_icon="game/admin/propIcons/11001.png"}}, {reward_type=1, reward_num=1024,props_detail={prop_icon="game/admin/propIcons/11001.png"}}, {reward_type=0, reward_num=888,props_detail={prop_icon="game/admin/propIcons/11001.png"}} } , redirect=3, finish_type=1,},
-    --     { tag_types= 1, intro="4", reward_received=0, finish_count_now=0, finish_count=5, reward_json = { {reward_type=0, reward_num=888,props_detail={prop_icon="game/admin/propIcons/11001.png"}}, {reward_type=1, reward_num=1024,props_detail={prop_icon="game/admin/propIcons/11001.png"}}, {reward_type=0, reward_num=888,props_detail={prop_icon="game/admin/propIcons/11001.png"}} } , redirect=4, },
-    --     { tag_types= 1, intro="家园区", reward_received=0, finish_count_now=0, finish_count=5, reward_json = { {reward_type=0, reward_num=888,props_detail={prop_icon="game/admin/propIcons/11001.png"}}, {reward_type=1, reward_num=1024,props_detail={prop_icon="game/admin/propIcons/11001.png"}}, {reward_type=0, reward_num=888,props_detail={prop_icon="game/admin/propIcons/11001.png"}} } , redirect=5, },
-    --     { tag_types= 1, intro="参与单词爱跑酷", reward_received=0, finish_count_now=0, finish_count=5, reward_json = { {reward_type=0, reward_num=888,props_detail={prop_icon="game/admin/propIcons/11001.png"}}, {reward_type=1, reward_num=1024,props_detail={prop_icon="game/admin/propIcons/11001.png"}}, {reward_type=0, reward_num=888,props_detail={prop_icon="game/admin/propIcons/11001.png"}} } , finish_type=1, redirect=31, },
-    --     { tag_types= 1, intro="32", reward_received=0, finish_count_now=0, finish_count=5, reward_json = { {reward_type=0, reward_num=888,props_detail={prop_icon="game/admin/propIcons/11001.png"}}, {reward_type=1, reward_num=1024,props_detail={prop_icon="game/admin/propIcons/11001.png"}}, {reward_type=0, reward_num=888,props_detail={prop_icon="game/admin/propIcons/11001.png"}} } , redirect=32, },
-    -- }
-
-    -- mock结束
-    self.goal = self:TableSort(self:HandleTaskData(self.goal))
-    self.goalReward = TaskSystem:AwardSort(self:HandleTaskData(self.goalReward))
-    self.plan = self:TableSort(self:HandleTaskData(self.plan))
-    echo(self.goalReward)
-    echo(self.plan)
+        self.goal = self:TableSort(self:HandleTaskData(self.goal))
+        self.goalReward = TaskSystem:AwardSort(self:HandleTaskData(self.goalReward))
+        self.plan = self:TableSort(self:HandleTaskData(self.plan))
+        TaskSystem.Page_ui:Refresh()
+        
+        echo("-----------after-Date---------")
+        echo(os.date("%Y-%m-%d %H:%M:%S"))
+    end):catch(function(e)
+            
+    end);
 end
 
 -- status:  1-任务完成但是未领取 2-任务未完成-前往 3-任务未完成-未完成 4-已领取
@@ -151,8 +154,7 @@ function TaskSystem:ChangeStrToNum(data)
 end
 
 function TaskSystem:updateShareStatus()
-    echo("--------更新之后调用-------")
-    echo(taskID)
+    -- 分享之后调用
     local request = NPL.load("(gl)Mod/CodePku/api/BaseRequest.lua");
     local response = request:get('/tasks/share-tasks',{},{sync = true})
 	if response.status == 200 then
@@ -174,16 +176,18 @@ function TaskSystem:AwardSort(t)
     return t
 end
 
-function TaskSystem:ShowPage(index)
-    if TaskSystem.Page ~= nil then
-        TaskSystem.Page:CloseWindow()
-        TaskSystem.Page = nil
+function TaskSystem:ShowPage(index,flag)
+    if TaskSystem.Page_ui ~= nil then
+        TaskSystem.Page_ui:CloseWindow()
+        TaskSystem.Page_ui = nil
     end
 
     Index = tonumber(index)
     TaskSystem.PageIndex = Index
-    TaskSystem:GetTask(index)
-    TaskSystem.Page = AdaptWindow:QuickWindow(TaskSystem.params[Index])
+    if flag then
+        TaskSystem:GetTask(index)
+    end
+    TaskSystem.Page_ui = AdaptWindow:QuickWindow(TaskSystem.params[Index])
     
 end
 
@@ -249,4 +253,31 @@ function TaskSystem:GetTaskDeac(data)
     else 
         return info..finish_type[2]
     end
+end
+
+function TaskSystem:RefreshMoney(id, num)
+    local MainUIButtons = NPL.load("(gl)Mod/CodePku/cellar/Common/TouchMiniButtons/Main.lua");
+    local id = tonumber(id)
+    local num = tonumber(num)
+    local info = Mod.CodePku.Store:Get('user/info')
+    local wallets = info.user_wallets or {}
+    if #wallets == 0 then
+        table.insert(wallets,{currency_id = id, amount = num})
+    else
+        for _, v in ipairs(wallets) do
+            if v.currency_id == 1 and id == 1 then
+                v.amount = v.amount + num
+            elseif v.currency_id == 2 and id == 2 then
+                v.amount = v.amount + num
+            end
+        end
+    end
+    info.user_wallets = wallets --防止初始化钱包为nil的时候客户端不同步的bug
+    Mod.CodePku.Store:Set('user/info', info)
+    if MainUIButtons.money_window ~= nil then
+        MainUIButtons.money_window:CloseWindow()
+        MainUIButtons.money_window = nil
+        MainUIButtons.show_money_ui()
+    end
+    	
 end
