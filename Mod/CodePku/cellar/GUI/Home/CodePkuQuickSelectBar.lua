@@ -15,11 +15,14 @@ local AdaptWindow = commonlib.gettable("Mod.CodePku.GUI.Window.AdaptWindow")
 local CodePkuQuickSelectBar = commonlib.gettable("Mod.CodePku.GUI.CodePkuQuickSelectBar")
 
 CodePkuQuickSelectBar.ui = nil
-CodePkuQuickSelectBar.imagePath = "codepku/image/textures/bag/bag.png"
+CodePkuQuickSelectBar.static_view_len = 9
+CodePkuQuickSelectBar.customBtnNodes = {}
 
-CodePkuQuickSelectBar.customBtnNodes = {
-    {},{},{},{},{},{},{},{},{}
-}
+for i in range(CodePkuQuickSelectBar.static_view_len) do
+    table.insert(CodePkuQuickSelectBar.customBtnNodes, {["index"]=i,["name"]="quickItem"..tostring(i)})
+end
+
+CodePkuQuickSelectBar.imagePath = "codepku/image/textures/bag/bag.png"
 
 -- 图片url数据table
 CodePkuQuickSelectBar.iconData = {
@@ -48,7 +51,43 @@ CodePkuQuickSelectBar.styleData = {
 
 -- init default value
 function CodePkuQuickSelectBar:OnInit()
-    
+    GameLogic.events:AddEventListener("game_mode_change", CodePkuQuickSelectBar.OnGameModeChanged, CodePkuQuickSelectBar, "CodePkuQuickSelectBar");
+	GameLogic.events:AddEventListener("OnHandToolIndexChanged", CodePkuQuickSelectBar.OnHandToolIndexChanged, QuickSeCodePkuQuickSelectBarlectBar, "CodePkuQuickSelectBar");
+end
+
+function CodePkuQuickSelectBar.Refresh(nDelayTime)
+	if(CodePkuQuickSelectBar.ui) then
+		CodePkuQuickSelectBar.ui:Refresh(nDelayTime or 0.01);
+	end
+end
+
+--[[
+    @desc 游戏模式更改是触发的事件
+    time:2020-09-27 10:06:21
+    return 
+]]
+function CodePkuQuickSelectBar:OnGameModeChanged()
+	if(CodePkuQuickSelectBar.ui) then
+		if(CodePkuQuickSelectBar.ui:IsVisible()) then 
+			if(not GameLogic.GameMode:IsEditor()) then
+				CodePkuQuickSelectBar.ShowPage(false);
+				return;
+			end
+		else
+			if(GameLogic.GameMode:IsEditor()) then
+				CodePkuQuickSelectBar.ShowPage(true);
+				return;
+			end
+		end
+	end
+	CodePkuQuickSelectBar.Refresh();
+end
+
+function CodePkuQuickSelectBar:OnHandToolIndexChanged(event)
+    if(CodePkuQuickSelectBar.ui) then
+        -- todo 按照自己的逻辑修改高亮的框框位置
+		-- local ctl = CodePkuQuickSelectBar.ui:FindControl("handtool_highlight_bg");
+	end
 end
 
 --[[

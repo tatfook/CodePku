@@ -42,6 +42,14 @@ end
     <div name="quickbarbg" style='<%=CPQSB_GetHTMLDivStyle("quickbarbg")%>'>
         <div name="bagbtn" style='<%=CPQSB_GetHTMLDivStyle("bagbtn")%>' onclick="OnbagbtnClicked"></div>
     </div>
+    <pe:gridview style="position: relative; top: 0; left: 173; width: 1350; height: 196;" RememberLastPage="true" name="quickSelectBar"
+        CellPadding="0" ItemsPerLine="9" AllowPaging="false" DefaultNodeHeight="131" pagesize="9" DataSource='<%=CodePkuCustomBtn%>'>
+        <Columns>
+            <div style="width:131;height:131;">
+                <div zorder="-1" style="position:relative;width:131;height:131;background:url()"></div>
+            </div>
+        </Columns>
+    </pe:gridview>
 </pe:container>
 </pe:mcml>
 </body>
