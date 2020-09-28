@@ -21,8 +21,9 @@
             return CommonFunc.isIOSApproval()
         end
 
-        echo("---------isIOSApproval----------")
-        echo(isIOSApproval());
+        function isHuaweiOrIOS()
+            return CommonFunc.isHuaweiApproval() or CommonFunc.isIOSApproval()
+        end
 
         Rebranding = commonlib.gettable("MyCompany.Aries.Creator.Game.Rebranding")
         local GameMainLogin = commonlib.gettable("MyCompany.Aries.Game.MainLogin")
@@ -192,15 +193,16 @@
                 </div>
             </div>
 
-            <pe:if condition = "<%= not isHuaweiApproval()%>" >
+            <pe:if condition = "<%= not isHuaweiOrIOS()%>" >
                 <input type="button"  onclick="login" value='<%= L"登  录"%>'
                     style="position: relative; width: 330; height: 90; left: 502; top: 414; font-size: 36; color: #0E5516; font-family: PuHuiTi-Bold; font-weight: bold; border-radius: 6px; background:url(codepku/image/textures/login/quickLogin.png#391 46 65 94:6 6 6 6);" />
 
                 <input type="button"  onclick="quicklogin" value='<%= L"游客模式"%>'
                     style="position: relative; width: 330; height: 90; left: 110; top: 414; font-size: 36; color: #0E5516; font-family: PuHuiTi-Bold; font-weight: bold; border-radius: 6px; background:url(codepku/image/textures/login/quickLogin.png#276 46 74 94:6 6 6 6);" />
             </pe:if>
-
-            <pe:if condition = "<%= isHuaweiApproval()%>" >
+            
+            <!-- ios和华为审核屏蔽游客登录 -->
+            <pe:if condition = "<%= isHuaweiOrIOS() %>" >
                 <input type="button"  onclick="login" value='<%= L"登  录"%>'
                 style="position: relative; width: 330; height: 90; left: 307; top: 414; font-size: 36; color: #0E5516; font-family: PuHuiTi-Bold; font-weight: bold; border-radius: 6px; background:url(codepku/image/textures/login/quickLogin.png#391 46 65 94:6 6 6 6);" />
             </pe:if>
