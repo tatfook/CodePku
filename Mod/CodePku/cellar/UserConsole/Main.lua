@@ -33,7 +33,16 @@ function UserConsole:ShowPage()
 
     NPL.load("(gl)Mod/CodePku/cellar/Notice/Notice.lua")
     local Notice = commonlib.gettable("Mod.CodePku.celler.Notice")
-    Notice:ShowPage()
+
+    --华为,ios审核版屏蔽公告
+    local huaweiApprovalStatus = Mod.CodePku.BasicConfigTable.huawei_approval_status == 'on'  
+    local isHuawei = ParaEngine.GetAppCommandLineByParam("app_market", "") == 'huawei';
+    local iosApprovalStatus = Mod.CodePku.BasicConfigTable.ios_approval_status == 'on'
+    local mock_ios = ParaEngine.GetAppCommandLineByParam("mock_ios", "") == "true"
+    local isIOS = System.os.GetPlatform() == 'ios';
+    if not (( huaweiApprovalStatus and isHuawei) or (iosApprovalStatus and (isIOS or mock_ios))) then
+        Notice:ShowPage()    
+    end
 
     local params = {
         url = "Mod/CodePku/cellar/UserConsole/StartLearning.html", 
