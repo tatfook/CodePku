@@ -187,6 +187,8 @@ function TeachCourses:GetCoursewares(grade, semester, subject)
     request:get(path):next(function(response)
         if (response.status == 200) then
             local data = response.data.data
+            -- 当前可见所在的课程包信息,用于单课解锁时的课程包信息
+            TeachCourses.coursesPackageinfo = data
             local index = 1
             TeachCourses.subjects[subject].course = {}
 
@@ -243,4 +245,19 @@ function TeachCourses:GetPagePoints(pointsCount, distance, divWidth)
         end
         return points
     end
+end
+
+-- 获取指定年级学期的所有课程包信息
+function TeachCourses:GetCoursesPackage(grade, semester)
+    local grade  = grade + 1
+    local path = string.format("/courses/entrance/package?grade=%d&semester=%d", grade, semester)
+    request:get(path):next(function(response)
+        if (response.status == 200) then
+            -- 指定年级学期的所有课程包信息,用于解锁课程包
+            TeachCourses.allCoursesPackageinfo = response.data.data
+            self.ui:Refresh(0)
+        end
+    end):catch(function(e)
+        GameLogic.AddBBS("CodeGlobals", e.data.message, 3000, "#FF0000");
+    end)
 end

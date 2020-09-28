@@ -103,7 +103,7 @@ end
 -- 获取一页课件
 function GetOnePageCourseware()
     local temp_table = TeachCourses.subjects[TeachCourses.courseware_last_click_index].course
-    local now_show_table = {}
+    now_show_table = {}
     local start_index = 1 + TeachCourses.Courseware_PerPage_Grade * (TeachCourses.Courseware_Page_Index - 1)
     local end_index = TeachCourses.Courseware_PerPage_Grade * TeachCourses.Courseware_Page_Index
     end_index = (#temp_table < end_index) and #temp_table or end_index
@@ -138,6 +138,7 @@ end
 -- 解锁课程包
 function ShowPurchase()
     TeachCourses:ShowPage(2)
+    TeachCourses:GetCoursesPackage(TeachCourses.Clicked_Grade, TeachCourses.Clicked_Semester)
 end
 
 function ClosePage()
@@ -159,7 +160,8 @@ function GetPagenationsPoints()
 end
 
 -- 单课解锁
-function unlock()
+function unlock(index)
+    TeachCourses.singleCourseInfo = now_show_table[index]
     TeachCourses:ShowPage(3)
 end
 
@@ -211,12 +213,12 @@ end
                 <div style="<%=format('position: relative; left: 16; top:29; width: 290; height: 199;background:url(%s);', Eval('file_url'))%>" onclick="goWorld"></div>
                 <!-- 遮罩层 -->
                 <pe:if condition="<%= not (is_free == 1 or owned == 'true') %>">
-                    <div style="<%=format('position: relative; width: 324; height: 247;background:url(%s);', getIcon(38))%>" onclick="unlock">
+                    <div style="<%=format('position: relative; width: 324; height: 247;background:url(%s);', getIcon(38))%>" onclick="unlock" name="<%=Eval('index')%>">
                         <div style="<%=format('position: relative; left: 123; top: 87; width: 75; height: 81;background:url(%s);', getIcon(44))%>"></div>
                         <div style="<%=format('position: relative; left: 146; top: 191; width: 103; height: 53;background:url(%s);', getIcon(42))%>"></div>
                         <div style="position: relative; float: left; text-align: center;left: 246; top: 210; width: 75; height: 24;font-family: alhy;font-size: 22;color: #ffffff;"><%=GetStringPrice(price)%></div>
                     </div>
-                    <div onclick="unlock" style="<%=format('position: relative; left: -23;top:-16;width: 321; height: 71;padding-left:21;font-family:alhy;line-height: 71; font-size:26px;color:#9a5d11;background:url(%s);', getIcon(35))%>"><%=Eval('name')%></div>
+                    <div onclick="unlock" name="<%=Eval('index')%>" style="<%=format('position: relative; left: -23;top:-16;width: 321; height: 71;padding-left:21;font-family:alhy;line-height: 71; font-size:26px;color:#9a5d11;background:url(%s);', getIcon(35))%>"><%=Eval('name')%></div>
                 </pe:if>
                 <!-- 标题 -->
                 <pe:if condition="<%= (is_free == 1 or owned == 'true') %>">
