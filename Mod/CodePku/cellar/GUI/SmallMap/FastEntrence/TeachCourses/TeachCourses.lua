@@ -60,8 +60,8 @@ TeachCourses.icons = {
     [36] = {url = TeachCourses.courseware_icons_path, left=747, top=373, width=121, height=78, desc = '回顾'},
     [37] = {url = TeachCourses.courseware_icons_path, left=942, top=378, width=85, height=79, desc = '点击购买'},
     [38] = {url = TeachCourses.courseware_icons_path, left=1105, top=233, width=311, height=233, desc = '未解锁遮罩'},
-    [39] = {url = TeachCourses.courseware_icons_path, left=1452, top=231, width=70, height=72, desc = '银币'},
-    [40] = {url = TeachCourses.courseware_icons_path, left=1565, top=230, width=70, height=81, desc = '金色玩学币'},
+    [39] = {url = TeachCourses.courseware_icons_path, left=1451, top=229, width=72, height=76, desc = '银币'},
+    [40] = {url = TeachCourses.courseware_icons_path, left=1564, top=229, width=73, height=83, desc = '金色玩学币'},
     [41] = {url = TeachCourses.courseware_icons_path, left=1673, top=248, width=215, height=63, desc = '填货币数量的地方'},
     [42] = {url = TeachCourses.courseware_icons_path, left=1925, top=261, width=103, height=53, desc = '解锁玩学币图片'},
     [43] = {url = TeachCourses.courseware_icons_path, left=1460, top=347, width=91, height=119, desc = '问号'},
@@ -183,22 +183,20 @@ end
 
 -- 获取详细课件信息
 function TeachCourses:GetCoursewares(grade, semester, subject)
-    local path = string.format("/coursewares/entrance/system?grade=%d&semester=%d&subject=%d", grade, semester, subject)
+    local path = string.format("/courses/entrance/system?grade=%d&semester=%d&subject=%d", grade, semester, subject)
     request:get(path):next(function(response)
         if (response.status == 200) then
             local data = response.data.data
             local index = 1
             TeachCourses.subjects[subject].course = {}
-            for i,v in pairs(data) do
-                for j,d in pairs(v.course_wares) do
-                    TeachCourses.subjects[subject].course[index] = d
-                    -- 把课件的封面拿到外层放着
-                    TeachCourses.subjects[subject].course[index].file_url = d.cover_file.file_url
-                    TeachCourses.subjects[subject].course[index].lock_status = true            -- 是否锁定，true锁定，false解锁
-                    TeachCourses.subjects[subject].course[index].price = "x999"            -- 是否锁定，true锁定，false解锁
-                    index = index + 1
-                end
+
+            for j,d in pairs(data.wares) do
+                TeachCourses.subjects[subject].course[index] = d
+                -- 把课件的封面拿到外层放着
+                TeachCourses.subjects[subject].course[index].file_url = d.cover_file.file_url
+                index = index + 1
             end
+
             self.ui:Refresh(0)
         end
     end):catch(function(e)
