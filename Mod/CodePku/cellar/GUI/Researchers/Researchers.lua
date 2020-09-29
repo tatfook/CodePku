@@ -21,6 +21,8 @@ Researchers.PKV1 = "codepku/image/textures/researchers/PKV1.png"    -- 搭建PK�
 Researchers.PKBGV1 = "codepku/image/textures/researchers/PKcontentBGV1.png" -- 搭建PK的紫色小背景
 Researchers.BuildingContentV1 = "codepku/image/textures/researchers/buildingV1.png" -- 家园搭建图片内容
 Researchers.NoticeV1 = "codepku/image/textures/researchers/noticeV1.png"    -- 通知的图片内容
+Researchers.Activity = "codepku/image/textures/researchers/activity.png"    -- 通知的图片内容
+
 
 
 Researchers.contents = {
@@ -29,6 +31,7 @@ Researchers.contents = {
     [3] = "进入家园区",
     [4] = "信息发送",
     [5] = "确认",
+    [6] = "接受挑战",
 }
 
 Researchers.iconData = {
@@ -76,7 +79,15 @@ Researchers.params = {
     [3] = {url="Mod/CodePku/cellar/GUI/Researchers/MsgNotice.html", alignment="_lt", left = 0, top = 0, width = 1920 , height = 1080, zorder = 30,},
 }
 
-function Researchers:ShowPage(id)
+function Researchers:ShowPage(id, url)
+
+    if url == nil then
+        Researchers.link_url = Mod.CodePku.BasicConfigTable.links.main_world_announcement or "https://none.h5.xeknow.com/st/1rEaMCUNU"
+    else
+        local url = tostring(url)
+        Researchers.link_url = url
+    end
+
     local id = tonumber(id)
     if self.ui then
         self.ui = nil
