@@ -173,6 +173,12 @@ function GetStringPrice(price)
     return price
 end
 
+-- 整包解锁提示文字
+function GetPackageContent()
+    return "解锁:整包解锁"
+end
+
+
 ]]></script>
 
 <style type="text/mcss"></style>
@@ -216,8 +222,13 @@ end
                 <pe:if condition="<%= not (is_free == 1 or owned == true) %>">
                     <div style="<%=format('position: relative; width: 324; height: 247;background:url(%s);', getIcon(38))%>" onclick="unlock" name="<%=Eval('index')%>">
                         <div style="<%=format('position: relative; left: 123; top: 87; width: 75; height: 81;background:url(%s);', getIcon(44))%>"></div>
-                        <div style="<%=format('position: relative; left: 146; top: 191; width: 103; height: 53;background:url(%s);', getIcon(42))%>"></div>
-                        <div style="position: relative; float: left; text-align: center;left: 246; top: 210; width: 75; height: 24;font-family: alhy;font-size: 22;color: #ffffff;"><%=GetStringPrice(price)%></div>
+                        <pe:if condition="<%= TeachCourses.coursesPackageinfo.paid_unlock_method == 2 %>">
+                            <div style="<%=format('position: relative; left: 146; top: 191; width: 103; height: 53;background:url(%s);', getIcon(42))%>"></div>
+                            <div style="position: relative; float: left; text-align: center;left: 246; top: 210; width: 75; height: 24;font-family: alhy;font-size: 22;color: #ffffff;"><%=GetStringPrice(price)%></div>
+                        </pe:if>
+                        <pe:if condition="<%= TeachCourses.coursesPackageinfo.paid_unlock_method == 1 %>">
+                            <div style="position: relative; float: right; text-align: right;top: 210; width: 275; left: 30;height: 24;font-family: alhy;font-size: 22;color: #ffffff;"><%=GetPackageContent()%></div>
+                        </pe:if>
                     </div>
                     <div onclick="unlock" name="<%=Eval('index')%>" style="<%=format('position: relative; left: -23;top:-16;width: 321; height: 71;padding-left:21;font-family:alhy;line-height: 71; font-size:26px;color:#9a5d11;background:url(%s);', getIcon(35))%>"><%=Eval('name')%></div>
                 </pe:if>

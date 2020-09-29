@@ -191,7 +191,6 @@ function TeachCourses:GetCoursewares(grade, semester, subject)
             TeachCourses.coursesPackageinfo = data
             local index = 1
             TeachCourses.subjects[subject].course = {}
-
             for j,d in pairs(data.wares) do
                 TeachCourses.subjects[subject].course[index] = d
                 -- 把课件的封面拿到外层放着
