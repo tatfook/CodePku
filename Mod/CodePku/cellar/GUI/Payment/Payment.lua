@@ -17,7 +17,7 @@ local request = NPL.load("(gl)Mod/CodePku/api/BaseRequest.lua");
 local UserInfoPage = NPL.load("(gl)Mod/CodePku/cellar/GUI/UserInfo.lua");
 
 Payment.iconPng = "codepku/image/textures/common_32bits.png"
-Payment.Recharge_send_content = "已推送课程解锁页面到您家长微信~快和爸爸妈妈沟通购买课程吧。"
+Payment.Recharge_send_content = "已推送详情到家长微信~快和爸爸妈妈沟通购买课程吧"
 
 Payment.params = {
     -- 解锁提示页面
@@ -83,7 +83,7 @@ function Payment:PurchaseNotice()
             callbackFunc = function(timer)
                 if Payment.TimerTimes == 0 then
                     Payment.isClickedPurchaseNotice = false
-                    Payment.Recharge_send_content = "已推送课程解锁页面到您家长微信~快和爸爸妈妈沟通购买课程吧。"
+                    Payment.Recharge_send_content = "已推送详情到家长微信~快和爸爸妈妈沟通购买课程吧"
                     Payment:SendNotice()
                     timer:Change(nil, nil)
                 end
