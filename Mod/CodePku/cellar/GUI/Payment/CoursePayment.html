@@ -12,85 +12,30 @@
     <pe:mcml>
 <script refresh="false" type="text/npl" src="Payment.lua"><![CDATA[
 Payment = NPL.load("(gl)Mod/CodePku/cellar/GUI/Payment/Payment.lua");
-local MainUIButtons = NPL.load("(gl)Mod/CodePku/cellar/Common/TouchMiniButtons/Main.lua");
-local TopicCourse = NPL.load("(gl)Mod/CodePku/cellar/GUI/SmallMap/FastEntrence/TopicCourse.lua")
-local UserInfoPage = NPL.load("(gl)Mod/CodePku/cellar/GUI/UserInfo.lua");
 local Eldership = NPL.load("(gl)Mod/CodePku/cellar/GUI/Eldership/Eldership.lua");
+local UserInfoPage = NPL.load("(gl)Mod/CodePku/cellar/GUI/UserInfo.lua");
 local page = document:GetPageCtrl()
 
-Payment.Recharge_content = "玩学券不足是否进行充值?"
--- UserInfoPage.is_bind = 1  -- 1绑定,0未绑定
+Payment.Recharge_content = "玩学券不足,是否通知家长购买玩学券?"
+
 
 function ClosePage()
     Page:CloseWindow();
 end
 
---[[
-    以下为判断玩学币是否充足的逻辑:
-        1.充足,显示解锁按键,点击后实现解锁逻辑
-        2.不足,显示充值按键,点击触发充值事件
-            2.1 已绑定家长,弹窗提示给家长发送信息
-            2.2 未绑定家长,弹窗提示绑定二维码
---]]
 
-function SetButtonValue()
-    return (Payment.UserMoney.wanxuecoin >= Payment.PaymentCourse.unlock_gold) and "解锁" or "充值"
-end
-
-function SetButtonName()
-    return (Payment.UserMoney.wanxuecoin >= Payment.PaymentCourse.unlock_gold) and "unlock" or "recharge"
-end
-
-function ClickUnbindButton(name)
-    local ButtonName = tostring(name)
-    if ButtonName == "unlock" then
-        -- 玩学券充足,调用支付接口,直接解锁,目前只写了更新本地缓存的逻辑,缺少接口
-        -- 更新玩学币
-        local num = Payment.UserMoney.wanxuecoin - Payment.PaymentCourse.unlock_gold
-        local info = Mod.CodePku.Store:Get('user/info');
-        local wallets = info.user_wallets or {};
-        if #wallets == 0 then
-            table.insert(wallets,{currency_id = 2, amount = num})
-        else
-            for _, v in ipairs(wallets) do
-                if v.currency_id == 2 then
-                    v.amount = num
-                end
-            end
-        end
-        info.user_wallets = wallets
-        Mod.CodePku.Store:Set('user/info', info)
-        if MainUIButtons.money_window ~= nil then
-            MainUIButtons.money_window:CloseWindow()
-            MainUIButtons.money_window = nil
-        end
-
-        -- 更新课程锁定状态
-        for k,v in pairs(TopicCourse.page_course) do
-            if v.id == Payment.PaymentCourse.id then
-                v.locked = 1
-            end
-        end
-
-        -- 关闭窗口,刷新页面
-        ClosePage()
-        MainUIButtons.show_money_ui()
-        Payment.TopicCoursePage:Refresh(0)
-    end
-
-    if ButtonName == "recharge" then
-        -- 玩学券不足,根据是否绑定过家长出现不同弹窗
-        if UserInfoPage.is_bind == 1 then
-            -- 绑定过家长,需要在这里向后端发送充值请求,暂未实现
-            ClosePage()
-            Payment:ShowPage("Recharge")
-        end
-        if UserInfoPage.is_bind == 0 then
-            -- 未绑定
-            Payment.from_course_payment_page = 1        -- 标记从哪个页面打开微信绑定页面的flag
-            ClosePage()
-            Eldership:ShowBindPage()
-        end
+function ClickNotify()
+    if System.User.info.user_wechat_id ~= nil then
+        -- 请求推送接口
+        Payment:PurchaseNotice()
+        -- 展示成功通知的页面
+        Payment.Recharge_send_content = "已推送课程解锁页面到您家长微信~快和爸爸妈妈沟通购买课程吧。"
+        Payment:ShowPage("Recharge")
+        Page:CloseWindow()
+    else
+        -- 未绑定弹出家长绑定二维码
+        Eldership:ShowBindPage()
+        Page:CloseWindow()
     end
 end
 
@@ -103,33 +48,18 @@ end
     <!-- 背景图 -->
     <div style="<%=format('position: relative; width: 1153; height: 588;left: 383; top: 238; background:url(%s);', Payment.GetPaymentIconHTMLStr(1))%>"></div>
     <!-- 标题 -->
-    <div style="<%=format('position: relative; width: 410; height: 86;left: 769; top: 241; text-align: center;color: #f36d3d; font-family: Noto Sans S Chinese Regular;font-weight: bold; font-size: 45px;line-height: 86; background:url(%s);', Payment.GetPaymentIconHTMLStr(2))%>">解锁提示</div>
+    <div style="<%=format('position: relative; width: 410; height: 86;left: 769; top: 238; text-align: center;color: #f36d3d; font-family: Noto Sans S Chinese Regular;font-weight: bold; font-size: 45px;line-height: 86; background:url(%s);', Payment.GetPaymentIconHTMLStr(2))%>">解锁提示</div>
     <!-- 取消按钮 -->
     <div onclick="ClosePage" style="<%=format('position: relative; width: 64; height: 74;left: 1453; top: 250; background:url(%s);', Payment.GetPaymentIconHTMLStr(3))%>"></div>
     <!-- 提示文字 -->
     <div style="<%=format('position: relative; width: 960; height: 267;left: 479; top: 361; background:url(%s:10 10 10 10);', Payment.GetPaymentIconHTMLStr(4))%>">
-        <!-- 玩学币充足 -->
-        <pe:if condition="<%= Payment.UserMoney.wanxuecoin >= Payment.PaymentCourse.unlock_gold %>">
-            <div style="position: relative;width: 210;height: 35;left: 296;top: 59;font-family: Noto Sans S Chinese Regular;font-weight: bold; font-size: 36px;line-height: 35;color: #ffffff;">使用玩学券:</div>
-            <div style="<%=format('position: relative;width: 40;height: 40;left: 513;top: 58;background: url(%s);', Payment.GetPaymentIconHTMLStr(5))%>"></div>
-            <div style="position: relative;width: 300;height: 35;left:560;top: 59;font-size: 32;line-height: 35;font-family: Noto Sans S Chinese Regular;color: #FFFFFF;">X<%= Payment.PaymentCourse.unlock_gold %></div>
-
-            <div style="position: relative;width: 210;height: 35;left: 296;top: 125;font-family: Noto Sans S Chinese Regular;font-weight: bold; font-size: 36px;line-height: 35;color: #ffffff;">解锁课程:</div>
-            <div style="position: relative;width: 300;height: 35;left:513;top: 125;font-size: 42;line-height: 35;font-family: PuHuiTi-Bold;color: #ffbb5b;"><%= Payment.PaymentCourse.name %></div>
-
-            <div style="position: relative;width: 210;height: 35;left: 296;top: 191;font-family: Noto Sans S Chinese Regular;font-weight: bold; font-size: 36px;line-height: 35;color: #ffffff;">剩余玩学券:</div>
-            <div style="<%=format('position: relative;width: 40;height: 40;left: 513;top: 191;background: url(%s);', Payment.GetPaymentIconHTMLStr(5))%>"></div>
-            <div style="position: relative;width: 300;height: 35;left:560;top: 191;font-size: 32;line-height: 35;font-family: Noto Sans S Chinese Regular;color: #FFFFFF;">X<%= Payment.UserMoney.wanxuecoin %></div>
-        </pe:if>
         <!-- 玩学币不足 -->
-        <pe:if condition="<%= Payment.UserMoney.wanxuecoin < Payment.PaymentCourse.unlock_gold %>">
-            <div style="position: relative;width: 430;height: 36;left: 275;top: 118;text-align: center;font-size: 36;line-height: 36;font-family: PuHuiTi-Bold;color: #ffffff;"><%= Payment.Recharge_content %></div>
-        </pe:if>
+        <div style="position: relative;width: 430;height: 36;left: 275;top: 118;text-align: center;font-size: 36;line-height: 36;font-family: PuHuiTi-Bold;color: #ffffff;"><%= Payment.Recharge_content %></div>
     </div>
     <!-- 取消按钮 -->
     <div onclick="ClosePage" style="<%=format('position: relative;width:240;height:80;left:639;top:691;text-align:center;font-size:36px;line-height:80;font-family: PuHuiTi-Bold;color: #85262b;background:url(%s:20 20 20 20)', Payment.GetPaymentIconHTMLStr(7))%>">取消</div>
 
-    <div onclick="ClickUnbindButton" name="<%= SetButtonName() %>" style="<%=format('position: relative;width:240;height:80;left:1085;top:691;text-align:center;font-size:36px;line-height:80;font-family: PuHuiTi-Bold;color: #0d5416;background:url(%s:20 20 20 20)', Payment.GetPaymentIconHTMLStr(6))%>"><%= SetButtonValue() %></div>
+    <div onclick="ClickNotify" style="<%=format('position: relative;width:240;height:80;left:1085;top:691;text-align:center;font-size:36px;line-height:80;font-family: PuHuiTi-Bold;color: #0d5416;background:url(%s:20 20 20 20)', Payment.GetPaymentIconHTMLStr(6))%>">联系家长</div>
 
 
 </pe:container>

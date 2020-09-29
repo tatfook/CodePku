@@ -261,3 +261,8 @@ function TeachCourses:GetCoursesPackage(grade, semester)
         GameLogic.AddBBS("CodeGlobals", e.data.message, 3000, "#FF0000");
     end)
 end
+
+
+--[[
+    货币不足时弹出窗口
+--]]

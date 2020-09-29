@@ -185,7 +185,7 @@ function Eldership:ShowBindPage()
 
     params = {
       url="Mod/CodePku/cellar/GUI/Eldership/EldershipBind.html", 
-      alignment="_lt", left = 0, top = 0, width = 1920 , height = 1080, zorder = 30
+      alignment="_lt", left = 0, top = 0, width = 1920 , height = 1080, zorder = 33
     };
     self.ui = AdaptWindow:QuickWindow(params)
 end

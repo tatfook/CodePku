@@ -212,7 +212,7 @@ end
                 <div style="<%=format('position: relative; width: 324; height: 247;background:url(%s);', getIcon(33))%>" name="<%=Eval('id')%>" onclick="goWorld"></div>
                 <div style="<%=format('position: relative; left: 16; top:29; width: 290; height: 199;background:url(%s);', Eval('file_url'))%>" name="<%=Eval('id')%>" onclick="goWorld"></div>
                 <!-- 遮罩层 -->
-                <pe:if condition="<%= not (is_free == 1 or owned == 'true') %>">
+                <pe:if condition="<%= not (is_free == 1 or owned == true) %>">
                     <div style="<%=format('position: relative; width: 324; height: 247;background:url(%s);', getIcon(38))%>" onclick="unlock" name="<%=Eval('index')%>">
                         <div style="<%=format('position: relative; left: 123; top: 87; width: 75; height: 81;background:url(%s);', getIcon(44))%>"></div>
                         <div style="<%=format('position: relative; left: 146; top: 191; width: 103; height: 53;background:url(%s);', getIcon(42))%>"></div>
@@ -221,7 +221,7 @@ end
                     <div onclick="unlock" name="<%=Eval('index')%>" style="<%=format('position: relative; left: -23;top:-16;width: 321; height: 71;padding-left:21;font-family:alhy;line-height: 71; font-size:26px;color:#9a5d11;background:url(%s);', getIcon(35))%>"><%=Eval('name')%></div>
                 </pe:if>
                 <!-- 标题 -->
-                <pe:if condition="<%= (is_free == 1 or owned == 'true') %>">
+                <pe:if condition="<%= (is_free == 1 or owned == true) %>">
                     <div name="<%=Eval('id')%>" onclick="goWorld" style="<%=format('position: relative; left: -23;top:-16;width: 321; height: 71;padding-left:21;font-family:alhy;line-height: 71; font-size:26px;color:#9a5d11;background:url(%s);', getIcon(35))%>"><%=Eval('name')%></div>
                 </pe:if>
             </div>
