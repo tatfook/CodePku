@@ -5,13 +5,7 @@ Date: 2020/9/11
 Desc:
 use the lib:
 functions:
-    Notice:ShowPage()
-    Notice:IsNew(NoticeTime)
-    Notice:GetStatus(flag,time)
-    Notice:GetNoticeList()
-    Notice:HandleNotice(content)
-    Notice:GetArticleByID(id)
-    Notice:HandleTitle(title)
+    TaskSystem:ShowPage()
 ------------------------------------------------------------
 NPL.load("(gl)Mod/CodePku/cellar/Common/TouchMiniButtons/TaskSystem/TaskSystem.lua")
 local TaskSystem = commonlib.gettable("Mod.CodePku.celler.TaskSystem")
@@ -31,7 +25,6 @@ TaskSystem.nowReward = nil
 TaskSystem.PageIndex = nil
 TaskSystem.acquire_flag = nil --判断奖励是可领取还是其他 1表示可领取
 
-TaskSystem.task_table = {}
 TaskSystem.goal = {}
 TaskSystem.goalReward = {}
 TaskSystem.plan = {}
@@ -63,56 +56,90 @@ TaskSystem.popup = {
     },
 }
 
-function TaskSystem:GetReward(taskID)
+function TaskSystem:StaticInit()
+    LOG.std("", "info", "TaskSystem", "StaticInit");
+    self:GetTask(1)
+    self:GetTask(2)
+
+    GameLogic.GetFilters():remove_filter("TaskSystemList", TaskSystem.OnTaskFinished_Callback);
+    GameLogic.GetFilters():add_filter("TaskSystemList", TaskSystem.OnTaskFinished_Callback);
+end
+
+function TaskSystem:OnTaskFinished_Callback(data)
+    -- TODO 处理缓存table,先判断table是否为空
+    -- 小目标 
+    -- TODO 调接口更新后台数据
+    local request = NPL.load("(gl)Mod/CodePku/api/BaseRequest.lua");
+    local response = request:get('/tasks/share-tasks',{},)
+end
+
+function TaskSystem:GetReward(taskID,reward_json)
     echo("-------GetReward------")
     echo(taskID)
     local request = NPL.load("(gl)Mod/CodePku/api/BaseRequest.lua");
-    local response = request:post('/tasks-reward-receive/store',{task_id=taskID},{sync = true})
-	if response.status == 200 then
-        GameLogic.AddBBS(nil, L"领取成功", 3000, "255 0 0", 21);
-        if TaskSystem.popupui then
-            TaskSystem.popupui:CloseWindow()
-        end
-        echo("------------PageIndex----------")
-        echo(TaskSystem.PageIndex)
+    local response = request:post('/tasks-reward-receive/store',{task_id=taskID},nil):next(function(response)
+        if response.status == 200 then
+            GameLogic.AddBBS(nil, L"领取成功", 3000, "255 0 0", 21);
+            if TaskSystem.popupui then
+                TaskSystem.popupui:CloseWindow()
+            end
+            echo("------------PageIndex----------")
+            echo(TaskSystem.PageIndex)
+            TaskSystem:GetTask(TaskSystem.PageIndex)
+            TaskSystem.Page_ui:Refresh()
 
-        TaskSystem.Page_ui:Refresh()
-
-        -- TaskSystem:RefreshMoney()
-        local MainUIButtons = NPL.load("(gl)Mod/CodePku/cellar/Common/TouchMiniButtons/Main.lua");
-        if MainUIButtons.money_window ~= nil then
-            echo("-------------------not nil")
-            MainUIButtons.money_window:CloseWindow()
-            MainUIButtons.money_window = nil
-            MainUIButtons.show_money_ui()
+            for k,v in pairs(reward_json) do
+                echo("---------RefreshMoney----------")
+                echo(TaskSystem.nowReward);
+                echo(v)
+                TaskSystem:RefreshMoney(v.props_id,v.reward_num)
+                local MainUIButtons = NPL.load("(gl)Mod/CodePku/cellar/Common/TouchMiniButtons/Main.lua");
+                if MainUIButtons.money_window ~= nil then
+                    MainUIButtons.money_window:CloseWindow()
+                    MainUIButtons.money_window = nil
+                    MainUIButtons.show_money_ui()
+                end
+            end
+            -- TaskSystem:RefreshMoney()
+            local MainUIButtons = NPL.load("(gl)Mod/CodePku/cellar/Common/TouchMiniButtons/Main.lua");
+            if MainUIButtons.money_window ~= nil then
+                MainUIButtons.money_window:CloseWindow()
+                MainUIButtons.money_window = nil
+                MainUIButtons.show_money_ui()
+            end
+        else
+            GameLogic.AddBBS(nil, L"领取失败", 3000, "255 0 0", 21);
         end
-    else
+    end):catch(function(e)
         GameLogic.AddBBS(nil, L"领取失败", 3000, "255 0 0", 21);
-    end
+    end);
 end
 
 -- Get task list
--- @param flag: 0-day 1-week
+-- @param flag: 1-day 2-week
 function TaskSystem:GetTask(flag)
     local request = NPL.load("(gl)Mod/CodePku/api/BaseRequest.lua");
-    echo("-----------before-Date---------")
-    echo(os.date("%Y-%m-%d %H:%M:%S"))
-    request:post('/tasks/user-tasks',{type=flag},nil):next(function(response)		
+    request:post('/tasks/user-tasks',{type=flag},nil):next(function(response)
         echo("----------user-tasks------------")
         echo(response.data.data)
-        self.task_table = response.data.data or {};
-        self.goal = response.data.data.user_tasks_daily_status or {};
-        self.goalReward = response.data.data.user_tasks_daily_finished_status or {};
-        self.plan = response.data.data.user_tasks_week_status or {};
-        self.goal = self:TableSort(self:HandleTaskData(self.goal))
-        self.goalReward = TaskSystem:AwardSort(self:HandleTaskData(self.goalReward))
-        self.plan = self:TableSort(self:HandleTaskData(self.plan))
-        TaskSystem.Page_ui:Refresh()
-        
-        echo("-----------after-Date---------")
-        echo(os.date("%Y-%m-%d %H:%M:%S"))
+        if flag == 1 then
+            self.goal = response.data.data.user_tasks_daily_status or {}
+            self.goalReward = response.data.data.user_tasks_daily_finished_status or {}
+            self.goal = self:TableSort(self:HandleTaskData(self.goal))
+            self.goalReward = TaskSystem:AwardSort(self:HandleTaskData(self.goalReward))
+        elseif flag == 2 then
+            self.plan = response.data.data.user_tasks_week_status or {}
+            self.plan = self:TableSort(self:HandleTaskData(self.plan))
+        end
+        Mod.CodePku.Store:Set('taskSystem/goal', self.goal)
+        Mod.CodePku.Store:Set('taskSystem/goalReward', self.goalReward)
+        Mod.CodePku.Store:Set('taskSystem/plan', self.plan)
+
+        if TaskSystem.Page_ui then
+            TaskSystem.Page_ui:Refresh()
+        end
     end):catch(function(e)
-            
+        GameLogic.AddBBS(nil, L"任务获取失败，请重试", 3000, "255 0 0", 21);
     end);
 end
 
@@ -124,7 +151,8 @@ function TaskSystem:HandleTaskData(data)
     local index = 1;
     for k, v in pairs(data) do
         if v.finish_count_now < v.finish_count then
-            if v.course_id_type == 3 then
+            if v.course_id_type == 3 or v.course_id_type == 0 then
+            -- if v.course_id_type == 3 then
                 v.status = 3
             else
                 v.status = 2
@@ -202,8 +230,7 @@ function TaskSystem:ShowPopupPage(index, rewardIndex)
         RewardIndex = tonumber(rewardIndex)
         TaskSystem.nowReward = TaskSystem.goalReward[RewardIndex]
         TaskSystem.nowReward["reward_json"] = TaskSystem:ChangeStrToNum(TaskSystem.goalReward[RewardIndex]["reward_json"])
-        echo("--------------------nowReward")
-        echo(TaskSystem.nowReward)
+
         if(TaskSystem.nowReward["acquired"] == 0 and TaskSystem.goalReward["finished_task"] >= TaskSystem.reward_stage[RewardIndex])then --如果奖励未领取且达到领取资格
             TaskSystem.acquire_flag = 1
         else
@@ -222,12 +249,16 @@ function TaskSystem:HandleClickEvent(data)
         return 
     elseif(data["status"] == 1)then   --奖励可领取
         data["reward_received"] = 1
-        TaskSystem:GetReward(data["id"])
-        TaskSystem:GetTask("1")
+        TaskSystem:GetReward(data["id"],data["reward_json"])
     elseif(data["status"] == 2) then  --前往
-        -- 跳转页面，教学课，专题课
-        local info = TaskSystem:GetJumpId(data["redirect"])
-        ToWhere:ShowPage(info.title, info.id)
+        if(data["course_id_type"] == 0 ) then
+            --登录
+            return
+        else
+            -- 跳转页面，教学课，专题课
+            local info = TaskSystem:GetJumpId(data["redirect"])
+            ToWhere:ShowPage(info.title, info.id)
+        end
     else
         return
     end
@@ -256,11 +287,16 @@ function TaskSystem:GetTaskDeac(data)
 end
 
 function TaskSystem:RefreshMoney(id, num)
+    echo("-------TaskSystem id num-------")
+    echo(id)
+    echo(num)
     local MainUIButtons = NPL.load("(gl)Mod/CodePku/cellar/Common/TouchMiniButtons/Main.lua");
     local id = tonumber(id)
     local num = tonumber(num)
     local info = Mod.CodePku.Store:Get('user/info')
     local wallets = info.user_wallets or {}
+    
+    local flag = false
     if #wallets == 0 then
         table.insert(wallets,{currency_id = id, amount = num})
     else
@@ -270,14 +306,14 @@ function TaskSystem:RefreshMoney(id, num)
             elseif v.currency_id == 2 and id == 2 then
                 v.amount = v.amount + num
             end
+            if v.currency_id == id then -- 解决钱包中道具为0时未自增的问题
+                flag = true
+            end
         end
+    end
+    if not flag then
+        table.insert(wallets,{currency_id = id, amount = num})
     end
     info.user_wallets = wallets --防止初始化钱包为nil的时候客户端不同步的bug
     Mod.CodePku.Store:Set('user/info', info)
-    if MainUIButtons.money_window ~= nil then
-        MainUIButtons.money_window:CloseWindow()
-        MainUIButtons.money_window = nil
-        MainUIButtons.show_money_ui()
-    end
-    	
 end

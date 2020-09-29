@@ -34,23 +34,41 @@ end
 
 function getText(index)
     local state_table = {"领取", "前往", "未完成", ""}   --按钮的内容
-    return state_table[status]
+    --if course_id_type == 0 then
+    --    return state_table[3]
+    --else
+        return state_table[status]
+    --end
 end
 
-function getBG(index)
+function getBG(index,course_id_type)
     local index = tonumber(index)
+    -- 按钮的样式 未完成 领取 已完成 前往
     local state_bg_table = {
         "position: relative; width: 160; height: 80; left: 146; top: 340; color: #FEFEFE; line-height: 80; text-align: center; font-size: 36; font-family: Noto Sans S Chinese Regular; font-weight: bold; background: url(codepku/image/textures/tasksystem/main.png#497 226 167 87:15 15 15 15",
         "position: relative; width: 160; height: 80; left: 146; top: 340; color: #FEFEFE; line-height: 80; text-align: center; font-size: 36; font-family: Noto Sans S Chinese Regular; font-weight: bold; background: url(codepku/image/textures/tasksystem/main.png#496 114 166 87:15 15 15 15", 
-        "position: relative; width: 86; height: 86; left: 188; top: 340; background: url(codepku/image/textures/tasksystem/main.png#523 460 92 92)"
-    }     -- 按钮的样式 前往 领取 已完成
-    if status == 4 then
-        return state_bg_table[3]
-    elseif status == 1 then
-        return state_bg_table[2]
-    else
-        return state_bg_table[1]
-    end
+        "position: relative; width: 86; height: 86; left: 188; top: 340; background: url(codepku/image/textures/tasksystem/main.png#523 460 92 92)",
+        "position: relative; width: 160; height: 80; left: 146; top: 340; color: #FEFEFE; line-height: 80; text-align: center; font-size: 36; font-family: Noto Sans S Chinese Regular; font-weight: bold; background: url(codepku/image/textures/tasksystem/main.png#497 591 166 87:15 15 15 15",
+
+    }
+    --if course_id_type == 0 then
+    --    return state_bg_table[1]
+    --else
+        if status == 4 then
+            return state_bg_table[3]
+        elseif status == 1 then
+            return state_bg_table[2]
+        elseif status == 2 then
+            return state_bg_table[4]
+        else
+            return state_bg_table[1]
+        end
+    --end
+end
+
+function getRwardLeft(len)
+    leftLen = {142,68,0}
+    return leftLen[len]
 end
 
 function getFinishType(index)
@@ -101,15 +119,12 @@ end
                     <div style="position: relative; height: 141; left: 25; top: 90; line-height: 50; color:#123655; font-size: 34; font-family: Noto Sans S Chinese Regular; float: left;">
                         <%=Eval('intro')%><%=getFinishType(index)%>
                     </div>
-                    <pe:if condition="<%= course_id_type ~= 0 %>">
-                        <div style="<%=format('%s);', getBG(index))%>" name="<%=Eval('index')%>" onclick="HandleTask">
-                            <%=getText(index)%>
-                        </div>
-                    </pe:if>
-                    
+                    <div style="<%=format('%s);', getBG(index,course_id_type))%>" name="<%=Eval('index')%>" onclick="HandleTask">
+                        <%=getText(index,course_id_type)%>
+                    </div>
 
                     <div style="position: relative; height: 134; left: 14; top: 190;">
-                        <pe:repeat DataSource="<%= reward_json %>">
+                        <pe:repeat DataSource="<%= reward_json %>"  style="<%= format('margin-left:%d;', getRwardLeft(#reward_json)) %>">
                             <div style="float: left;width: 134; height: 134; margin-left: 8;">
                                 <div style="<%= format('position: relative; left: 31;top: 31;width: 72; height: 72;background:url(%s);', prop_icon_url) %>"></div>
                                 <div style="width: 134; height: 134;background:url(codepku/image/textures/common_32bits.png#99 873 134 134);"></div>

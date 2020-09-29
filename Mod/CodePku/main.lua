@@ -479,6 +479,9 @@ function CodePku:init()
     local CodepkuChatChannel = NPL.load("(gl)Mod/CodePku/chat/CodepkuChatChannel.lua");
 	CodepkuChatChannel.StaticInit();
 
+	local TaskSystem = NPL.load("(gl)Mod/CodePku/cellar/Common/TouchMiniButtons/TaskSystem/TaskSystem.lua")
+	TaskSystem.StaticInit();
+
 	NPL.load("(gl)Mod/CodePku/cellar/GUI/CourseLoadTips/CourseLoadTips.lua")
 	local CourseLoadTips = commonlib.gettable("Mod.CodePku.GUI.CourseLoadTips")
 	CourseLoadTips.StaticInit()

@@ -41,11 +41,13 @@ function getText(index)
 end
 
 function getBG(index)
-    local state_bg_table = {"497 226 167 87:15 15 15 15", "496 114 166 87:15 15 15 15", "497 342 166 87:15 15 15 15"}     -- 按钮的样式 前往(未完成) 领取 已完成
+    local state_bg_table = {"497 226 167 87:15 15 15 15", "496 114 166 87:15 15 15 15", "497 342 166 87:15 15 15 15","497 591 166 87:15 15 15 15"}     -- 按钮的样式 未完成 领取 已完成 前往
     if status == 4 then
         return state_bg_table[3]
     elseif status == 1 then
         return state_bg_table[2]
+    elseif status == 2 then
+        return state_bg_table[4]
     else
         return state_bg_table[1]
     end
@@ -60,12 +62,6 @@ function showRewardBg(status)
     else
         return reward_bg[1]
     end
-end
-
-function getRwardLeft(index)
-    leftLen = {"588","488","388"}
-    local len = #TaskSystem.goal[index]["reward_json"]
-    return leftLen[len]
 end
 
 function getWordWidth(index)
@@ -141,7 +137,7 @@ end
                         <%=Eval('intro')%><%=getFinishType(index)%>
                     </div>
 
-                    <div style="<%= format('position: relative; height: 100; left: 388; top: 68;', getRwardLeft(index)) %>">
+                    <div style="position: relative; height: 100; left: 388; top: 68;">
                         <pe:repeat DataSource="<%=reward_json%>">
                             <div style="float:left;width: 100; height: 100;background:url(codepku/image/textures/common_32bits.png#264 879 126 125);">
                                 <div style="<%= format('position: relative; left: 23;top: 23;width: 54; height: 54;background:url(%s);', prop_icon_url) %>"></div>
@@ -166,12 +162,12 @@ end
             DataSource='<%=TaskSystem.goalReward %>' CellPadding="15" ItemsPerLine="2" AllowPaging="false" RememberScrollPos="true" RememberLastPage="true" 
             VerticalScrollBarStep="36" VerticalScrollBarOffsetX="8">
             <Columns>
-                <div style="width: 190; height: 160;margin-left: 43; margin-top: 34;" onclick="handleReward">
-                    <div style="position: relative; width: 189; height: 119; background: url(codepku/image/textures/tasksystem/main.png#25 574 189 119);" name="<%=Eval('index')%>" onclick="handleReward"></div>
+                <div style="width: 190; height: 160;margin-left: 43; margin-top: 34;" name="<%=Eval('index')%>" onclick="handleReward()">
+                    <div style="position: relative; width: 189; height: 119; background: url(codepku/image/textures/tasksystem/main.png#25 574 189 119);" name="<%=Eval('index')%>"></div>
                     <pe:if condition='<%= TaskSystem.goalReward[index]["reward_received"] == 1 %>'>
                         <div style="position: relative; width: 48; height: 53; left: 23; top: -30; background: url(codepku/image/textures/tasksystem/main.png#243 448 48 53);"></div>
                     </pe:if>
-                    <div style="<%=format('position: relative; width: 106; height: 52; left: 41; top: 35; background: url(codepku/image/textures/tasksystem/main.png#%s);', showRewardBg(status) )%>" name="<%=Eval('index')%>"  onclick="handleReward"></div>
+                    <div style="<%=format('position: relative; width: 106; height: 52; left: 41; top: 35; background: url(codepku/image/textures/tasksystem/main.png#%s);', showRewardBg(status) )%>" name="<%=Eval('index')%>"></div>
                     <div style="width: 190; height: 32; margin-top: 128; text-align: center; color: #EEF9E9; line-height: 32; font-size: 32; font-family: PuHuiTi-Bold;"><%=showFinishedInfo(finish_count_now,finish_count)%></div>
                 </div>
             </Columns>

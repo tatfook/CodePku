@@ -14,8 +14,6 @@
 
 TaskSystem = NPL.load("(gl)Mod/CodePku/cellar/Common/TouchMiniButtons/TaskSystem/TaskSystem.lua")
 
-task_table = TaskSystem.task_table  --任务表
-
 reward_table = TaskSystem.reward_table -- 奖励表
 
 acquire_flag = TaskSystem.acquire_flag
@@ -48,16 +46,9 @@ function getRewardInfo()
     return TaskSystem:ChangeStrToNum(nowReward["reward_json"])
 end
 
-function getRwardBG(type)
-    local index = tonumber(index)
-    local info = nowReward["reward_json"]
-    return info[index]["prop_icon_url"]
-end
-
 function handleReward()
     if(nowReward["status"] == 1) then    -- 如果奖励未领取且可领取
-        TaskSystem:GetReward(nowReward["id"])
-        Page:Refresh(0)
+        TaskSystem:GetReward(nowReward["id"],nowReward["reward_json"])
     else
         Page:CloseWindow();
     end
@@ -93,7 +84,7 @@ end
         <div style="float: left;">
             <pe:repeat DataSource="<%=getRewardInfo()%>">
                 <div style="float: left;width: 134; height: 134; margin-left: 33;">
-                    <div style="<%= format('position: relative; left: 31;top: 31;width: 72; height: 72;background:url(%s);', getRwardBG(index)) %>"></div>
+                    <div style="<%= format('position: relative; left: 31;top: 31;width: 72; height: 72;background:url(%s);', prop_icon_url) %>"></div>
                     <div style="width: 134; height: 134;background:url(codepku/image/textures/common_32bits.png#99 873 134 134);"></div>
                     <div style="position: relative;top:-35;;width: 120; text-align: right; font-size: 22; color: #7996ed; font-family: Noto Sans S Chinese Regular;"><%=Eval('reward_num')%></div>
                 </div>
