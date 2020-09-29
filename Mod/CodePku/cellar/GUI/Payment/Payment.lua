@@ -22,17 +22,17 @@ Payment.params = {
     -- 解锁提示页面
     CoursePayment = {
         url="Mod/CodePku/cellar/GUI/Payment/CoursePayment.html", 
-        alignment="_lt", left = 0, top = 0, width = 1920 , height = 1080, zorder = 31
+        alignment="_lt", left = 0, top = 0, width = 1920 , height = 1080, zorder = 32
       },
     -- 充值提示页面
     Recharge = {
         url="Mod/CodePku/cellar/GUI/Payment/Recharge.html", 
-        alignment="_lt", left = 0, top = 0, width = 1920 , height = 1080, zorder = 31
+        alignment="_lt", left = 0, top = 0, width = 1920 , height = 1080, zorder = 32
       },
     -- 家长绑定页面
     Eldership = {
         url="Mod/CodePku/cellar/GUI/Eldership/EldershipBind.html", 
-        alignment="_lt", left = 0, top = 0, width = 1920 , height = 1080, zorder = 31
+        alignment="_lt", left = 0, top = 0, width = 1920 , height = 1080, zorder = 32
     },
 }
 
@@ -66,4 +66,17 @@ end
 function Payment:ShowPage(pagename)
     ToPage = tostring(pagename)
     AdaptWindow:QuickWindow(Payment.params[ToPage])
+end
+
+function Payment:PurchaseNotice()
+    -- todo 发送购买通知
+    local params = {
+        entity_id = Payment.entity_id,
+        entity_type = Payment.entity_type,
+    }
+    request:post('',params):next(function(response)
+        
+    end):catch(function(e)
+        GameLogic.AddBBS("CodeGlobals", e.data.message, 3000, "#FF0000");
+    end);
 end
