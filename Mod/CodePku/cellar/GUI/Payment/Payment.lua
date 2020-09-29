@@ -17,22 +17,23 @@ local request = NPL.load("(gl)Mod/CodePku/api/BaseRequest.lua");
 local UserInfoPage = NPL.load("(gl)Mod/CodePku/cellar/GUI/UserInfo.lua");
 
 Payment.iconPng = "codepku/image/textures/common_32bits.png"
+Payment.Recharge_send_content = "已推送课程解锁页面到您家长微信~快和爸爸妈妈沟通购买课程吧。"
 
 Payment.params = {
     -- 解锁提示页面
     CoursePayment = {
         url="Mod/CodePku/cellar/GUI/Payment/CoursePayment.html", 
-        alignment="_lt", left = 0, top = 0, width = 1920 , height = 1080, zorder = 31
+        alignment="_lt", left = 0, top = 0, width = 1920 , height = 1080, zorder = 32
       },
     -- 充值提示页面
     Recharge = {
         url="Mod/CodePku/cellar/GUI/Payment/Recharge.html", 
-        alignment="_lt", left = 0, top = 0, width = 1920 , height = 1080, zorder = 31
+        alignment="_lt", left = 0, top = 0, width = 1920 , height = 1080, zorder = 33
       },
     -- 家长绑定页面
     Eldership = {
         url="Mod/CodePku/cellar/GUI/Eldership/EldershipBind.html", 
-        alignment="_lt", left = 0, top = 0, width = 1920 , height = 1080, zorder = 31
+        alignment="_lt", left = 0, top = 0, width = 1920 , height = 1080, zorder = 32
     },
 }
 
@@ -66,4 +67,42 @@ end
 function Payment:ShowPage(pagename)
     ToPage = tostring(pagename)
     AdaptWindow:QuickWindow(Payment.params[ToPage])
+end
+
+
+function Payment:PurchaseNotice()
+    if (not Payment.TimerTimes) or (Payment.TimerTimes < 1) then
+        if Payment.isClickedPurchaseNotice then
+            return
+        end
+        Payment:SendNotice()
+        Payment.isClickedPurchaseNotice = true
+        Payment.TimerTimes = 60
+        Payment.Recharge_send_content = "课程解锁申请已推送到您家长微信啦~请勿频繁点击哦"
+        local timer = commonlib.Timer:new({
+            callbackFunc = function(timer)
+                if Payment.TimerTimes == 0 then
+                    Payment.isClickedPurchaseNotice = false
+                    Payment.Recharge_send_content = "已推送课程解锁页面到您家长微信~快和爸爸妈妈沟通购买课程吧。"
+                    Payment:SendNotice()
+                    timer:Change(nil, nil)
+                end
+                Payment.TimerTimes = Payment.TimerTimes - 1
+            end
+        })
+        timer:Change(1000, 1000)
+    end
+end
+
+function Payment:SendNotice()
+    -- todo 发送购买通知
+    local params = {
+        entity_id = Payment.entity_id,
+        entity_type = Payment.entity_type,
+    }
+    request:post('/notices/parent-unlock-course',params):next(function(response)
+
+    end):catch(function(e)
+        GameLogic.AddBBS("CodeGlobals", e.data.message, 3000, "#FF0000");
+    end);
 end

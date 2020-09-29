@@ -1,0 +1,47 @@
+<!-- "Mod/CodePku/cellar/GUI/Money.html" -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>Coin</title>
+    </head>
+    <body>
+        <pe:mcml>
+            <script refresh="false" type="text/npl" src="UserInfo.lua">
+                <![CDATA[
+                    local MainUIButtons = NPL.load("(gl)Mod/CodePku/cellar/Common/TouchMiniButtons/Main.lua");
+                    
+                    function GetMoney()
+                        local info = Mod.CodePku.Store:Get('user/info');
+                        local wallets = info.user_wallets or {};
+                        local money = {goldcoin=0, wanxuecoin=0};
+                        for _, v in ipairs(wallets) do
+                            if v.currency_id == 1 then
+                                money.goldcoin = v.amount;
+                            elseif v.currency_id == 2 then
+                                money.wanxuecoin = v.amount;
+                            end
+                        end
+                        return money;
+                    end
+
+                    -- 根据ID获取图片
+                    TeachCourses = NPL.load("(gl)Mod/CodePku/cellar/GUI/SmallMap/FastEntrence/TeachCourses/TeachCourses.lua");
+                    function getIcon(iconId)
+                        return TeachCourses.GetTeachCoursesIconPathStr(iconId)
+                    end
+                ]]>
+            </script>
+                <div align="right" style="position:relative;float:right;font-size:38px;color:#905e29;text-align:center;font-family: Noto Sans S Chinese Regular; font-weight: bold;">
+                <div style="float:right;margin-right:67px;">
+                    <div style='<%= format("float:left;width:215px;height:63px;background:url(%s);margin-top:17px;padding-top:8px;",getIcon(41)) %>'><%=GetMoney().goldcoin%></div>
+                    <div style='<%= format("float:left;width:74px;height:76px;background:url(%s);margin-top:10px;margin-left:-255px;",getIcon(39)) %>'></div>
+                </div>
+                <div style="float:right;margin-right:113;">
+                    <div style='<%= format("float:left;width:215px;height:63px;background:url(%s);margin-top:17px;padding-top:8px;",getIcon(41)) %>'><%=GetMoney().wanxuecoin%></div>
+                    <div style='<%= format("float:left;width:74px;height:85px;background:url(%s);margin-top:6px;margin-left:-254px;",getIcon(40)) %>'></div>
+                </div>
+            </div>
+        </pe:mcml>
+    </body>
+</html>
