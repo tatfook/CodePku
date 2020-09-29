@@ -60,6 +60,7 @@ function GetAllData()
         for _,v in pairs(TeachCourses.allCoursesPackageinfo) do
             allData[index] = {
                 id = v.id,
+                course_type = 2,
                 type = 2,
                 pack_name = CutLongString(v.name),
                 price = v.package_price,
@@ -152,7 +153,18 @@ end
 function Purchase(name)
     local index = tonumber(name)
     local courseId =  GetCourseInfo(index).id
-    GameLogic.AddBBS("CodeGlobals", tostring(courseId), 1000, "#ff0000")
+    local courseType =  GetCourseInfo(index).course_type
+    local coursePrice =  GetCourseInfo(index).price
+    local ifAford = TeachCourses:JudgeAford(coursePrice)
+    if ifAford then
+        ClosePage()
+        TeachCourses:PurchaseCourse(courseId,courseType,coursePrice)
+    else
+        local Payment = NPL.load("(gl)Mod/CodePku/cellar/GUI/Payment/Payment.lua");
+        Payment.entity_id = courseId
+        Payment.entity_type = courseType
+        Payment:ShowPage("CoursePayment")
+    end
 end
 
 -- 获取最大页码数

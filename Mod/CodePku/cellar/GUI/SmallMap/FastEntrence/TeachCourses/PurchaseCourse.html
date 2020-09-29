@@ -23,6 +23,7 @@ end
 local coursesInfo = {
     [1] = {
         id = TeachCourses.coursesPackageinfo.id,
+        course_type = 2,
         type = 2,
         pack_name = CutLongString(TeachCourses.coursesPackageinfo.name),
         price = TeachCourses.coursesPackageinfo.package_price,
@@ -31,6 +32,7 @@ local coursesInfo = {
     },
     [2] = {
         id = TeachCourses.singleCourseInfo.id,
+        course_type = 1,
         type = 3,
         pack_name = CutLongString(TeachCourses.singleCourseInfo.name),
         price = TeachCourses.singleCourseInfo.price,
@@ -116,7 +118,18 @@ end
 function Purchase(name)
     local index = tonumber(name)
     local courseId =  GetCourseInfo(index).id
-    GameLogic.AddBBS("CodeGlobals", tostring(courseId), 1000, "#ff0000")
+    local courseType =  GetCourseInfo(index).course_type
+    local coursePrice =  GetCourseInfo(index).price
+    local ifAford = TeachCourses:JudgeAford(coursePrice)
+    if ifAford then
+        ClosePage()
+        TeachCourses:PurchaseCourse(courseId,courseType,coursePrice)
+    else
+        local Payment = NPL.load("(gl)Mod/CodePku/cellar/GUI/Payment/Payment.lua");
+        Payment.entity_id = courseId
+        Payment.entity_type = courseType
+        Payment:ShowPage("CoursePayment")
+    end
 end
 
 -- 数据长度

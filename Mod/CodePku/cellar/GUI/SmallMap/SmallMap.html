@@ -14,6 +14,7 @@ local SmallMap = commonlib.gettable("Mod.CodePku.GUI.SmallMap")
 local FastEntrence = NPL.load("(gl)Mod/CodePku/cellar/GUI/SmallMap/FastEntrence/FastEntrence.lua")
 local MainPopup = commonlib.gettable("Mod.CodePku.GUI.MainPopup");
 local TeachCourses = NPL.load("(gl)Mod/CodePku/cellar/GUI/SmallMap/FastEntrence/TeachCourses/TeachCourses.lua");
+local CommonFunc = commonlib.gettable("Mod.CodePku.Common.CommonFunc")
 
 function OnClose()
     Page:CloseWindow();
@@ -23,6 +24,7 @@ function ClickTo(name)
     if name == "teach" then
         TeachCourses.IsCameFromSmallMap = true
         FastEntrence:ShowPage(1)
+        CommonFunc.GetServerMoney(FastEntrence.page)
         OnClose()
     elseif name == "compete" then
         FastEntrence:ShowPage(2)
