@@ -21,7 +21,7 @@ Researchers.PKV1 = "codepku/image/textures/researchers/PKV1.png"    -- 搭建PK�
 Researchers.PKBGV1 = "codepku/image/textures/researchers/PKcontentBGV1.png" -- 搭建PK的紫色小背景
 Researchers.BuildingContentV1 = "codepku/image/textures/researchers/buildingV1.png" -- 家园搭建图片内容
 Researchers.NoticeV1 = "codepku/image/textures/researchers/noticeV1.png"    -- 通知的图片内容
-Researchers.Activity = "codepku/image/textures/researchers/activity.png"    -- 通知的图片内容
+Researchers.Activity = "codepku/image/textures/researchers/activity.png"    -- 黄色确认按钮
 
 
 
