@@ -73,6 +73,7 @@ end
 function MainUIButtons.show_function_ui(flag)	--flag == true,工具栏展开
 	-- 华为渠道屏蔽排行榜
 	MainUIButtons.isHuaweiApproval = CommonFunc.isHuaweiApproval()
+	MainUIButtons.isIOSPlatform = CommonFunc.isIOSPlatform()
 
 	if MainUIButtons.function_window then
 		MainUIButtons.function_window:CloseWindow()
@@ -93,18 +94,34 @@ function MainUIButtons.show_function_ui(flag)	--flag == true,工具栏展开
 			}
 		}
 	else 
-		params = {
-			open = {
-				url="Mod/CodePku/cellar/Common/TouchMiniButtons/MainUIButtons_function.html", 
-				alignment="_rb", left = -678, top = -178, width = 678, height = 178,
-				click_through = true,
-			},
-			close = {
-				url="Mod/CodePku/cellar/Common/TouchMiniButtons/MainUIButtons_function.html", 
-				alignment="_rb", left = -85, top = -178, width = 85, height = 178,
-				click_through = true,
-			}	
-		}	
+		if MainUIButtons.isIOSPlatform then
+			-- 因好友搜索问题，暂时屏蔽ios渠道好友功能
+			params = {
+				open = {
+					url="Mod/CodePku/cellar/Common/TouchMiniButtons/MainUIButtons_function.html", 
+					alignment="_rb", left = -580, top = -178, width = 678, height = 178,
+					click_through = true,
+				},
+				close = {
+					url="Mod/CodePku/cellar/Common/TouchMiniButtons/MainUIButtons_function.html", 
+					alignment="_rb", left = -85, top = -178, width = 85, height = 178,
+					click_through = true,
+				}	
+			}
+		else
+			params = {
+				open = {
+					url="Mod/CodePku/cellar/Common/TouchMiniButtons/MainUIButtons_function.html", 
+					alignment="_rb", left = -678, top = -178, width = 678, height = 178,
+					click_through = true,
+				},
+				close = {
+					url="Mod/CodePku/cellar/Common/TouchMiniButtons/MainUIButtons_function.html", 
+					alignment="_rb", left = -85, top = -178, width = 85, height = 178,
+					click_through = true,
+				}	
+			}
+		end
 	end
 
 	if("close" == flag)then

@@ -11,10 +11,13 @@ local EntityOtherPlayer = commonlib.gettable("Mod.CodePku.Online.Client.EntityOt
 ]]
 NPL.load("Mod/GeneralGameServerMod/Core/Client/EntityOtherPlayer.lua");
 NPL.load("Mod/GeneralGameServerMod/App/Client/AppEntityPlayerHelper.lua");
-
+NPL.load("(gl)Mod/CodePku/cellar/Common/CommonFunc/CommonFunc.lua")
+local CommonFunc = commonlib.gettable("Mod.CodePku.Common.CommonFunc")
 local EntityOtherPlayer = commonlib.inherit(commonlib.gettable("Mod.GeneralGameServerMod.Core.Client.EntityOtherPlayer"), commonlib.gettable("Mod.CodePku.Online.Client.EntityOtherPlayer"));
 
 local moduleName = "Mod.CodePku.Online.Client.EntityOtherPlayer";
+
+EntityOtherPlayer.isIOSPlatform = CommonFunc.isIOSPlatform()
 
 -- 构造函数
 function EntityOtherPlayer:ctor()    
@@ -27,7 +30,13 @@ end
 
 -- 玩家被点击
 function EntityOtherPlayer:OnClick(x,y,z, mouse_button,entity,side)
-    local MainUIButtons = NPL.load("(gl)Mod/CodePku/cellar/Common/TouchMiniButtons/Main.lua");
-    MainUIButtons.show_interact_ui(self)
-    return true;
+    if EntityOtherPlayer.isIOSPlatform then
+        -- 因好友搜索问题，暂时屏蔽ios渠道好友功能
+        return true;
+    else 
+        local MainUIButtons = NPL.load("(gl)Mod/CodePku/cellar/Common/TouchMiniButtons/Main.lua");
+        MainUIButtons.show_interact_ui(self)
+        return true;
+    end
+    
 end

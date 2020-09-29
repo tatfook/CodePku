@@ -33,7 +33,16 @@ function UserConsole:ShowPage()
 
     NPL.load("(gl)Mod/CodePku/cellar/Notice/Notice.lua")
     local Notice = commonlib.gettable("Mod.CodePku.celler.Notice")
-    Notice:ShowPage()
+
+    --华为,ios审核版屏蔽公告
+    local huaweiApprovalStatus = Mod.CodePku.BasicConfigTable.huawei_approval_status == 'on'  
+    local isHuawei = ParaEngine.GetAppCommandLineByParam("app_market", "") == 'huawei';
+    local iosApprovalStatus = Mod.CodePku.BasicConfigTable.ios_approval_status == 'on'
+    local mock_ios = ParaEngine.GetAppCommandLineByParam("mock_ios", "") == "true"
+    local isIOS = System.os.GetPlatform() == 'ios';
+    if not (( huaweiApprovalStatus and isHuawei) or (iosApprovalStatus and (isIOS or mock_ios))) then
+        Notice:ShowPage()    
+    end
 
     local params = {
         url = "Mod/CodePku/cellar/UserConsole/StartLearning.html", 
@@ -70,22 +79,39 @@ function UserConsole:ClosePage()
 
 end
 
-function UserConsole:CourseEntry()    
+function UserConsole:CourseEntry() 
+    NPL.load("(gl)script/apps/Aries/Creator/Game/Commands/CommandManager.lua");
+    local CommandManager = commonlib.gettable("MyCompany.Aries.Game.CommandManager");   
+    local GameLogic = commonlib.gettable("MyCompany.Aries.Game.GameLogic")
     --判断是否是华为审核版
-    -- echo("Mod.CodePku.BasicConfig:")
-    -- echo(Mod.CodePku.BasicConfigTable)
     local huaweiApprovalStatus = Mod.CodePku.BasicConfigTable.huawei_approval_status == 'on'  
     local isHuawei = ParaEngine.GetAppCommandLineByParam("app_market", "") == 'huawei';
     local flymeApprovalStatus = Mod.CodePku.BasicConfigTable.flyme_approval_status == 'on'  
     local isFlyMe = ParaEngine.GetAppCommandLineByParam("app_market", "") == 'flyme';
     local sogouApprovalStatus = Mod.CodePku.BasicConfigTable.sogou_approval_status == 'on'  
     local isSoGou = ParaEngine.GetAppCommandLineByParam("app_market", "") == 'sogou';
+    local iosApprovalStatus = Mod.CodePku.BasicConfigTable.ios_approval_status == 'on'
+    local mock_ios = ParaEngine.GetAppCommandLineByParam("mock_ios", "") == "true"
+    local isIOS = System.os.GetPlatform() == 'ios';
     if isHuawei and huaweiApprovalStatus then 
         self:HandleWorldId(Mod.CodePku.BasicConfigTable.huawei_entry_world_id)
     elseif isFlyMe and flymeApprovalStatus then 
         self:HandleWorldId(Mod.CodePku.BasicConfigTable.flyme_entry_world_id)
     elseif isSoGou and sogouApprovalStatus then 
         self:HandleWorldId(Mod.CodePku.BasicConfigTable.sogou_entry_world_id)
+    elseif isIOS or mock_ios then
+        -- ios渠道审核
+        if iosApprovalStatus then 
+            -- ios审核中
+            -- GameLogic.GetFilters():apply_filters("HideClientUpdaterNotice");
+            self:HandleWorldId(Mod.CodePku.BasicConfigTable.ios_approval_entry_world_id)
+            
+        else
+            -- ios审核通过
+            -- GameLogic.GetFilters():apply_filters("ShowClientUpdaterNotice");
+            CommandManager:Init();
+            CommandManager:RunCommand(string.format("/ggs connect -app=CodePku %s", Mod.CodePku.BasicConfigTable.ios_entry_world_id))
+        end
     else
         if UserConsole.BeginnerGuideFlag then
             self:HandleWorldId(Mod.CodePku.BasicConfigTable.beginner_guide_world_id)  
@@ -101,8 +127,6 @@ function UserConsole:CourseEntry()
                     return false
                 end
 
-                NPL.load("(gl)script/apps/Aries/Creator/Game/Commands/CommandManager.lua");
-                local CommandManager = commonlib.gettable("MyCompany.Aries.Game.CommandManager");
                 CommandManager:Init();
                 CommandManager:RunCommand(string.format("/ggs connect -app=CodePku %s", response.data.keepwork_project_id))                        
             end) 
