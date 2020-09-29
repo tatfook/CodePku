@@ -9,6 +9,7 @@
 <script refresh="false" type="text/npl" src="TeachCourses.lua"><![CDATA[
 TeachCourses = NPL.load("(gl)Mod/CodePku/cellar/GUI/SmallMap/FastEntrence/TeachCourses/TeachCourses.lua");
 local Payment = NPL.load("(gl)Mod/CodePku/cellar/GUI/Payment/Payment.lua");
+TeachCourses.singleUnlockCourses = {}
 
 -- 处理过长名字
 function CutLongString(longString, lenth)
@@ -20,17 +21,22 @@ function CutLongString(longString, lenth)
     end
 end
 
-local coursesInfo = {
-    [1] = {
-        id = TeachCourses.coursesPackageinfo.id,
-        course_type = 2,
-        type = 2,
-        pack_name = CutLongString(TeachCourses.coursesPackageinfo.name),
-        price = TeachCourses.coursesPackageinfo.package_price,
-        original_price = TeachCourses.coursesPackageinfo.package_underline_price,
-        desc = TeachCourses.coursesPackageinfo.description and TeachCourses.coursesPackageinfo.description ~= '' and TeachCourses.coursesPackageinfo.description or TeachCourses.coursesPackageinfo.name,
-    },
-    [2] = {
+function GenCourseInfo()
+    local index = 1
+    if TeachCourses.coursesPackageinfo.package_price and TeachCourses.coursesPackageinfo.package_price > 0 then
+        TeachCourses.singleUnlockCourses[index] = {
+            id = TeachCourses.coursesPackageinfo.id,
+            course_type = 2,
+            type = 2,
+            pack_name = CutLongString(TeachCourses.coursesPackageinfo.name),
+            price = TeachCourses.coursesPackageinfo.package_price,
+            original_price = TeachCourses.coursesPackageinfo.package_underline_price,
+            desc = TeachCourses.coursesPackageinfo.description and TeachCourses.coursesPackageinfo.description ~= '' and TeachCourses.coursesPackageinfo.description or TeachCourses.coursesPackageinfo.name,
+        }
+        index = index + 1
+    end
+
+    TeachCourses.singleUnlockCourses[index] = {
         id = TeachCourses.singleCourseInfo.id,
         course_type = 1,
         type = 3,
@@ -38,8 +44,10 @@ local coursesInfo = {
         price = TeachCourses.singleCourseInfo.price,
         original_price = TeachCourses.singleCourseInfo.origin_price,
         desc = TeachCourses.singleCourseInfo.description and TeachCourses.singleCourseInfo.description ~= '' and TeachCourses.singleCourseInfo.description or TeachCourses.singleCourseInfo.name,
-    },
-}
+    }
+end
+
+GenCourseInfo()
 
 -- 标记显示图片还是介绍
 TeachCourses.courseInfoFlags = {
@@ -75,9 +83,9 @@ TeachCourses.courseIconTypePosition = {
 function GetCourseInfo(index)
     -- 1个课程包和3个共用一套界面,一个课程包占用第二个,index实际上是2,但是返回GetCourseInfo第1条
     if GetCurDataLen() == 1 then
-        return coursesInfo[1]
+        return TeachCourses.singleUnlockCourses[1]
     else
-        return coursesInfo[tonumber(index)]
+        return TeachCourses.singleUnlockCourses[tonumber(index)]
     end
 end
 
@@ -134,7 +142,7 @@ end
 
 -- 数据长度
 function GetCurDataLen()
-    return #coursesInfo
+    return #TeachCourses.singleUnlockCourses
 end
 
 function ClosePage()
@@ -147,7 +155,7 @@ end
 <pe:container alignment="_lt" width="1920" height="1080">
     <div style="position: relative; background-color: #000000dd; width: 1920; height: 1080; color: #ffffff; text-align: left; font-family: alhy; font-weight: bold;">
         <div style="<%= format('position: relative; left: 128; top: 98; width: 1609; height: 916; background:url(%s);', getIcon(69)) %>">
-            <pe:if condition="<%= GetCurDataLen()~=2 %>">
+            <pe:if condition="<%= GetCurDataLen()==1 or GetCurDataLen()==3%>">
                 <pe:if condition="<%= GetCurDataLen() == 3 %>">
                     <!-- 包名 -->
                     <span style="position: relative; left: 228; top: 173; width: 326; height: 28; text-align: center; font-size: 28; font-family: alhy; font-weight: normal;"><%= GetCourseInfo(1).pack_name %></span> 

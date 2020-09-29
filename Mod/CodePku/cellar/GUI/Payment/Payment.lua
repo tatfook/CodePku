@@ -77,7 +77,7 @@ function Payment:PurchaseNotice()
         end
         Payment:SendNotice()
         Payment.isClickedPurchaseNotice = true
-        Payment.TimerTimes = 5
+        Payment.TimerTimes = 60
         Payment.Recharge_send_content = "课程解锁申请已推送到您家长微信啦~请勿频繁点击哦"
         local timer = commonlib.Timer:new({
             callbackFunc = function(timer)
