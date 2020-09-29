@@ -271,9 +271,9 @@ function TeachCourses:PurchaseCourse(id,type,price)
         if (response.status == 200) then
             -- 指定年级学期的所有课程包信息,用于解锁课程包
             GameLogic.AddBBS("CodeGlobals", response.data.message, 3000, "#FF0000");
-            TeachCourses:GetCoursewares(TeachCourses.Clicked_Grade + 1, TeachCourses.Clicked_Semester, TeachCourses.courseware_last_click_index)
             local CommonFunc = commonlib.gettable("Mod.CodePku.Common.CommonFunc")
-            CommonFunc.RefreshLocalMoney({{amount=-price,currency_id=2,},})
+            CommonFunc.RefreshLocalMoney({{amount=-price,currency_id=2,},}, {TeachCourses.TeachMainPage})
+            TeachCourses:GetCoursewares(TeachCourses.Clicked_Grade + 1, TeachCourses.Clicked_Semester, TeachCourses.courseware_last_click_index)
         end
     end):catch(function(e)
         GameLogic.AddBBS("CodeGlobals", e.data.message, 3000, "#FF0000");

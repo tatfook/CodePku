@@ -24,7 +24,7 @@ function ClickTo(name)
     if name == "teach" then
         TeachCourses.IsCameFromSmallMap = true
         FastEntrence:ShowPage(1)
-        CommonFunc.GetServerMoney(FastEntrence.page)
+        CommonFunc.GetServerMoney({FastEntrence.page})
         OnClose()
     elseif name == "compete" then
         FastEntrence:ShowPage(2)

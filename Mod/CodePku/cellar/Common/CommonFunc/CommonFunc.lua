@@ -61,7 +61,7 @@ end
 local CommonFunc = commonlib.gettable("Mod.CodePku.Common.CommonFunc")
 CommonFunc.RefreshLocalMoney({{amount=-100,currency_id=1,},{amount=-1,currency_id=2,},})
 --]]
-CommonFunc.RefreshLocalMoney = function (walletChange)
+CommonFunc.RefreshLocalMoney = function (walletChange, windows)
     if walletChange and type(walletChange) == 'table' then
         local moneyChange = {}
         for _,v in pairs(walletChange) do
@@ -84,6 +84,12 @@ CommonFunc.RefreshLocalMoney = function (walletChange)
         info.user_wallets = user_wallets
         Mod.CodePku.Store:Set('user/info', info)
 
+        if windows then
+            for _,window in pairs(windows) do
+                window:Refresh(0)
+            end
+        end
+
         local MainUIButtons = NPL.load("(gl)Mod/CodePku/cellar/Common/TouchMiniButtons/Main.lua");
         if MainUIButtons.money_window ~= nil then
             MainUIButtons.money_window:CloseWindow()
@@ -94,7 +100,7 @@ CommonFunc.RefreshLocalMoney = function (walletChange)
 end
 
 -- 同步服务器金币到本地缓存
-CommonFunc.GetServerMoney = function (window)
+CommonFunc.GetServerMoney = function (windows)
     local path = "/users/profile"
     local request = NPL.load("(gl)Mod/CodePku/api/BaseRequest.lua");
     request:get(path):next(function(response)
@@ -106,21 +112,22 @@ CommonFunc.GetServerMoney = function (window)
                 user_wallets = {{amount=0,currency_id=1,},{amount=0,currency_id=2,},}
             end
 
-            if user_wallets and next(user_wallets) then
-                local info = System.User.info
-                info.user_wallets = user_wallets
-                Mod.CodePku.Store:Set('user/info', info)
-                if window then
+            local info = System.User.info
+            info.user_wallets = user_wallets
+            Mod.CodePku.Store:Set('user/info', info)
+
+            if windows then
+                for _,window in pairs(windows) do
                     window:Refresh(0)
-                else
-                    local MainUIButtons = NPL.load("(gl)Mod/CodePku/cellar/Common/TouchMiniButtons/Main.lua");
-                    if MainUIButtons.money_window ~= nil then
-                        MainUIButtons.money_window:CloseWindow()
-                        MainUIButtons.money_window = nil
-                    end
-                    MainUIButtons.show_money_ui()
                 end
             end
+
+            local MainUIButtons = NPL.load("(gl)Mod/CodePku/cellar/Common/TouchMiniButtons/Main.lua");
+            if MainUIButtons.money_window ~= nil then
+                MainUIButtons.money_window:CloseWindow()
+                MainUIButtons.money_window = nil
+            end
+            MainUIButtons.show_money_ui()
         end
     end):catch(function(e)
         GameLogic.AddBBS("CodeGlobals", e.data.message, 3000, "#FF0000");
