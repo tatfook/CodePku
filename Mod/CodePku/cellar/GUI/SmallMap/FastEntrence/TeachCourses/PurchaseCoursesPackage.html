@@ -60,6 +60,7 @@ function GetAllData()
         for _,v in pairs(TeachCourses.allCoursesPackageinfo) do
             allData[index] = {
                 id = v.id,
+                course_type = 2,
                 type = 2,
                 pack_name = CutLongString(v.name),
                 price = v.package_price,
@@ -152,6 +153,7 @@ end
 function Purchase(name)
     local index = tonumber(name)
     local courseId =  GetCourseInfo(index).id
+    local courseType =  GetCourseInfo(index).course_type
     GameLogic.AddBBS("CodeGlobals", tostring(courseId), 1000, "#ff0000")
 end
 

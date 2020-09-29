@@ -261,3 +261,19 @@ function TeachCourses:GetCoursesPackage(grade, semester)
         GameLogic.AddBBS("CodeGlobals", e.data.message, 3000, "#FF0000");
     end)
 end
+
+-- 购买指定ID的课程包
+function TeachCourses:PurchaseCourse(id,type)
+    local path = "/user-props/unlock-course"
+    local courseId  = id and tonumber(id)
+    local data = {entity_id=courseId, entity_type=type}
+    request:post(path,data):next(function(response)
+        if (response.status == 200) then
+            -- 指定年级学期的所有课程包信息,用于解锁课程包
+            TeachCourses.allCoursesPackageinfo = response.data.data
+            self.ui:Refresh(0)
+        end
+    end):catch(function(e)
+        GameLogic.AddBBS("CodeGlobals", e.data.message, 3000, "#FF0000");
+    end)
+end

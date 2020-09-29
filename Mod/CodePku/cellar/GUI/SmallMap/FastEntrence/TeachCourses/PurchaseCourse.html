@@ -22,6 +22,7 @@ end
 local coursesInfo = {
     [1] = {
         id = TeachCourses.coursesPackageinfo.id,
+        course_type = 2,
         type = 2,
         pack_name = CutLongString(TeachCourses.coursesPackageinfo.name),
         price = TeachCourses.coursesPackageinfo.package_price,
@@ -30,6 +31,7 @@ local coursesInfo = {
     },
     [2] = {
         id = TeachCourses.singleCourseInfo.id,
+        course_type = 1,
         type = 3,
         pack_name = CutLongString(TeachCourses.singleCourseInfo.name),
         price = TeachCourses.singleCourseInfo.price,
@@ -115,6 +117,7 @@ end
 function Purchase(name)
     local index = tonumber(name)
     local courseId =  GetCourseInfo(index).id
+    local courseType =  GetCourseInfo(index).course_type
     GameLogic.AddBBS("CodeGlobals", tostring(courseId), 1000, "#ff0000")
 end
 
