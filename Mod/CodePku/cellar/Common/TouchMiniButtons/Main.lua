@@ -241,7 +241,7 @@ function MainUIButtons.ShowPage()
 	if not hideAllMenu then
 		if not hideMenu then 
 			MainUIButtons.show_common_ui()
-			MainUIButtons.show_dialog_ui(false)
+			-- MainUIButtons.show_dialog_ui(false)
 			MainUIButtons.show_money_ui()		
 			MainUIButtons.show_function_ui()
 			MainUIButtons.show_account_up_ui()
