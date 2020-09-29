@@ -19,11 +19,12 @@ local page = document:GetPageCtrl()
 Eldership:GetQR()
 
 function ClosePage()
+    Eldership:GetBindStatus()
     Page:CloseWindow();
 end
 
 function Eldership.goback()
-    Page:CloseWindow();
+    ClosePage()
     if Eldership.IsCameFromDeldership == 1 then
         Eldership:ShowPage()
     end
