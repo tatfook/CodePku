@@ -71,7 +71,11 @@ CommonFunc.RefreshLocalMoney = function (walletChange)
         end
 
         local info = System.User.info
-        local user_wallets =  info and info.user_wallets or {{amount=0,currency_id=1,},{amount=0,currency_id=2,},}
+        local user_wallets =  info and info.user_wallets
+        if not (user_wallets and next(user_wallets)) then
+            return
+        end
+
         for _,v in pairs(user_wallets) do
             if moneyChange[v.currency_id] then
                 v.amount = v.amount + moneyChange[v.currency_id]
@@ -98,6 +102,10 @@ CommonFunc.GetServerMoney = function (window)
             -- 指定年级学期的所有课程包信息,用于解锁课程包
             local data = response.data.data
             local user_wallets = data.user_wallets
+            if not (user_wallets and next(user_wallets)) then
+                user_wallets = {{amount=0,currency_id=1,},{amount=0,currency_id=2,},}
+            end
+
             if user_wallets and next(user_wallets) then
                 local info = System.User.info
                 info.user_wallets = user_wallets

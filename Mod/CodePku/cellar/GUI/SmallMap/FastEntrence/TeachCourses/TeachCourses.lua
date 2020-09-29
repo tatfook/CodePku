@@ -199,7 +199,7 @@ function TeachCourses:GetCoursewares(grade, semester, subject)
                 index = index + 1
             end
 
-            self.ui:Refresh(0)
+            TeachCourses.TeachCoursesPage:Refresh(0)
         end
     end):catch(function(e)
         GameLogic.AddBBS("CodeGlobals", e.data.message, 3000, "#FF0000");
@@ -263,17 +263,34 @@ function TeachCourses:GetCoursesPackage(grade, semester)
 end
 
 -- 购买指定ID的课程包
-function TeachCourses:PurchaseCourse(id,type)
+function TeachCourses:PurchaseCourse(id,type,price)
     local path = "/user-props/unlock-course"
     local courseId  = id and tonumber(id)
     local data = {entity_id=courseId, entity_type=type}
     request:post(path,data):next(function(response)
         if (response.status == 200) then
             -- 指定年级学期的所有课程包信息,用于解锁课程包
-            TeachCourses.allCoursesPackageinfo = response.data.data
-            self.ui:Refresh(0)
+            GameLogic.AddBBS("CodeGlobals", response.data.message, 3000, "#FF0000");
+            TeachCourses:GetCoursewares(TeachCourses.Clicked_Grade + 1, TeachCourses.Clicked_Semester, TeachCourses.courseware_last_click_index)
+            local CommonFunc = commonlib.gettable("Mod.CodePku.Common.CommonFunc")
+            CommonFunc.RefreshLocalMoney({{amount=-price,currency_id=2,},})
         end
     end):catch(function(e)
         GameLogic.AddBBS("CodeGlobals", e.data.message, 3000, "#FF0000");
     end)
+end
+
+--判断余额是否足以支付
+function TeachCourses:JudgeAford(price)
+    local info = System.User.info
+    local user_wallets =  info and info.user_wallets
+    for _,v in pairs(user_wallets) do
+        if v.currency_id == 2 then
+            local curMoney = v.amount
+            if curMoney >= price then
+                return true
+            end
+        end
+    end
+    return false
 end

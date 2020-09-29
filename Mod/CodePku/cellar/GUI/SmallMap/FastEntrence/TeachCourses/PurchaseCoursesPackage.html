@@ -154,7 +154,17 @@ function Purchase(name)
     local index = tonumber(name)
     local courseId =  GetCourseInfo(index).id
     local courseType =  GetCourseInfo(index).course_type
-    GameLogic.AddBBS("CodeGlobals", tostring(courseId), 1000, "#ff0000")
+    local coursePrice =  GetCourseInfo(index).price
+    local ifAford = TeachCourses:JudgeAford(coursePrice)
+    if ifAford then
+        ClosePage()
+        TeachCourses:PurchaseCourse(courseId,courseType,coursePrice)
+    else
+        local Payment = NPL.load("(gl)Mod/CodePku/cellar/GUI/Payment/Payment.lua");
+        Payment.entity_id = courseId
+        Payment.entity_type = courseType
+        Payment:ShowPage("CoursePayment")
+    end
 end
 
 -- 获取最大页码数
