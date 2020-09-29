@@ -80,14 +80,15 @@ Researchers.params = {
 }
 
 function Researchers:ShowPage(id, url)
-
+    -- 大门家园区课程跳转url，默认使用大门处的链接
     if url == nil then
         Researchers.link_url = Mod.CodePku.BasicConfigTable.links.main_world_announcement or "https://none.h5.xeknow.com/st/1rEaMCUNU"
     else
         local url = tostring(url)
         Researchers.link_url = url
     end
-
+    -- Q群链接
+    Researchers.QQGroup = "https://jq.qq.com/?_wv=1027&k=Ww1kM012"
     local id = tonumber(id)
     if self.ui then
         self.ui = nil
