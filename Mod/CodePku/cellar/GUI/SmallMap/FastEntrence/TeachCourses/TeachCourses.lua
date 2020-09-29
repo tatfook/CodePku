@@ -270,7 +270,7 @@ function TeachCourses:PurchaseCourse(id,type,price)
     request:post(path,data):next(function(response)
         if (response.status == 200) then
             -- 指定年级学期的所有课程包信息,用于解锁课程包
-            GameLogic.AddBBS("CodeGlobals", response.data.message, 3000, "#FF0000");
+            GameLogic.AddBBS("CodeGlobals", response.data.message, 3000, "#00FF00");
             local CommonFunc = commonlib.gettable("Mod.CodePku.Common.CommonFunc")
             CommonFunc.RefreshLocalMoney({{amount=-price,currency_id=2,},}, {TeachCourses.TeachMainPage})
             TeachCourses:GetCoursewares(TeachCourses.Clicked_Grade + 1, TeachCourses.Clicked_Semester, TeachCourses.courseware_last_click_index)
