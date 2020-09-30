@@ -191,18 +191,26 @@ end
     <!-- 最下层背景 -->
     <div style="<%=format('position: relative; left: 126; top: 98; width: 1779; height: 950; background:url(%s);', TeachCourses.courseware_background_path)%>"></div>
 
-    <!-- todo 隐藏的普通学科分类 -->
-    <pe:repeat DataSource="<%=show_subject_under_table%>">
-        <div onclick="ClickSubject" name="<%= Eval('name') %>" style="<%= Eval('style') %>"></div>
-    </pe:repeat>
-
+    <!-- 隐藏的普通学科分类 -->
+    <div style="position: relative;width: 1920;height: 1080;">
+        <pe:repeat DataSource="<%=show_subject_under_table%>">
+            <div onclick="ClickSubject" name="<%= Eval('name') %>" style="<%= Eval('style') %>"></div>
+        </pe:repeat>
+    </div>
+    <!-- <div onclick="ClickSubject" name="chinese_display" style="<%= show_subject_under_table[1].style %>"></div>
+    <div onclick="ClickSubject" name="math_display" style="<%= show_subject_under_table[2].style %>"></div>
+    <div onclick="ClickSubject" name="english_display" style="<%= show_subject_under_table[3].style %>"></div> -->
     <!-- 最上层背景 -->
     <div style="<%=format('position: relative; left: 209; top: 123; width: 1631; height: 894; background:url(%s);', getIcon(51))%>"></div>
     
-    <!-- todo 展示的高亮学科分类 -->
+    <!-- 展示的高亮学科分类 -->
     <pe:repeat DataSource="<%=show_subject_table%>">
         <div onclick="ClickSubject" name="<%= Eval('name') %>" style="<%= Eval('style') %>"></div>
     </pe:repeat>
+
+    <!-- <div onclick="ClickSubject" name="chinese" style="<%= show_subject_table[1].style %>"></div>
+    <div onclick="ClickSubject" name="math" style="<%= show_subject_table[2].style %>"></div>
+    <div onclick="ClickSubject" name="english" style="<%= show_subject_table[3].style %>"></div> -->
 
     <!-- 左上角飘旗 -->
     <div style="<%=format('position: absolute; left: 165; top: 69; width: 298; height: 130; background:url(%s);', getIcon(26))%>">
