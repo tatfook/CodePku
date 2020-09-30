@@ -17,7 +17,7 @@ TeachCourses.TeachCoursesPage = Page
 
 TeachCourses.Courseware_Page_Index = 1          -- 默认第一页
 TeachCourses.Courseware_PerPage_Grade = 8       -- 每页8个课件
-TeachCourses.courseware_last_click_index = 1    -- 默认展示语文课件
+TeachCourses.courseware_last_click_index = 2    -- 默认展示数学课件
 
 
 -- 获取雪碧图图标
@@ -28,15 +28,15 @@ end
 -- 学科图标（为什么要有这个？因为图标的顺序不对，在这里重新按顺序排序。为什么要把图标和样式分开？因为这里是用图片展示的，所以为了动态展示隐藏，需要把位置和图片分离。）
 -- 以后要加分类怎么办？如果还是用的图片资源就继续用下面的体系，一共6个table，增加index就行。顺序改变的话只需要修改前两个table的顺序，具体用函数实现还是写死都随便。
 local subject_icon = {
-    [1] = {name = "chinese", url = getIcon(47), desc = "语文显示",},
-    [2] = {name = "math", url = getIcon(45), desc = "数学显示",},
-    [3] = {name = "english", url = getIcon(49), desc = "英语显示",},
+    [1] = {name = "math", url = getIcon(45), desc = "数学显示",},
+    -- [2] = {name = "chinese", url = getIcon(47), desc = "语文显示",},
+    -- [3] = {name = "english", url = getIcon(49), desc = "英语显示",},
 }
 
 local subject_under_icon = {
-    [1] = {name = "chinese_display", url = getIcon(48), desc = "语文隐藏",},
-    [2] = {name = "math_display", url = getIcon(46), desc = "数学隐藏",},
-    [3] = {name = "english_display", url = getIcon(50), desc = "英语隐藏",},
+    [1] = {name = "math_display", url = getIcon(46), desc = "数学隐藏",},
+    -- [2] = {name = "chinese_display", url = getIcon(48), desc = "语文隐藏",},
+    -- [3] = {name = "english_display", url = getIcon(50), desc = "英语隐藏",},
 }
 
 -- 分类标签各状态的样式
@@ -56,15 +56,15 @@ local subject_under_style = {
 show_subject_table = {
     -- 高亮的标签
     [1] = {name = subject_icon[1].name, style = string.format(subject_style[1], subject_icon[1].url)},
-    [2] = {name = subject_icon[2].name, style ="display:none;" .. string.format(subject_style[2], subject_icon[2].url)},
-    [3] = {name = subject_icon[3].name, style ="display:none;" .. string.format(subject_style[3], subject_icon[3].url)},
+    -- [2] = {name = subject_icon[2].name, style ="display:none;" .. string.format(subject_style[2], subject_icon[2].url)},
+    -- [3] = {name = subject_icon[3].name, style ="display:none;" .. string.format(subject_style[3], subject_icon[3].url)},
 }
 
 show_subject_under_table = {
     -- 灰色的标签
     [1] = {name = subject_under_icon[1].name, style ="display:none;" .. string.format(subject_under_style[1], subject_under_icon[1].url)},
-    [2] = {name = subject_under_icon[2].name, style = string.format(subject_under_style[2], subject_under_icon[2].url)},
-    [3] = {name = subject_under_icon[3].name, style = string.format(subject_under_style[3], subject_under_icon[3].url)},
+    -- [2] = {name = subject_under_icon[2].name, style = string.format(subject_under_style[2], subject_under_icon[2].url)},
+    -- [3] = {name = subject_under_icon[3].name, style = string.format(subject_under_style[3], subject_under_icon[3].url)},
 }
 
 -- 点击学科分类
@@ -180,6 +180,16 @@ function GetPackageContent()
     return "解锁:整包解锁"
 end
 
+-- 课程包是否显示
+function ShowPurCoursePackage()
+    if TeachCourses.coursesPackageinfo ~= nil then
+        echo("TeachCourses.coursesPackageinfo")
+        echo(TeachCourses.coursesPackageinfo.is_unlock)
+        return TeachCourses.coursesPackageinfo.is_unlock == false
+    else
+        return false
+    end
+end
 
 ]]></script>
 
@@ -218,7 +228,9 @@ end
         <div style="position: relative; left: 194; top: 62;font-size: 26; font-family: Noto Sans S Chinese Regular;color: #ffffff;"><%= TeachCourses.semester_matrix[TeachCourses.Clicked_Semester] %></div>
     </div>
     <!-- 解锁课程包 -->
-    <div onclick="ShowPurchase" style="<%=format('position: absolute; left: 1046; top: 107; width: 502; height: 158; background:url(%s);', getIcon(32))%>"></div>
+    <pe:if condition="<%= ShowPurCoursePackage() %>">
+        <div onclick="ShowPurchase" style="<%=format('position: absolute; left: 1046; top: 107; width: 502; height: 158; background:url(%s);', getIcon(32))%>"></div>
+    </pe:if>
     <!-- 关闭按键 -->
     <div onclick="ClosePage" style="<%=format('position: absolute; left: 1759; top: 101; width: 101; height: 102; background:url(%s);', getIcon(27))%>"></div>
     
