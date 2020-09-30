@@ -183,8 +183,6 @@ end
 -- 课程包是否显示
 function ShowPurCoursePackage()
     if TeachCourses.coursesPackageinfo ~= nil then
-        echo("TeachCourses.coursesPackageinfo")
-        echo(TeachCourses.coursesPackageinfo.is_unlock)
         return TeachCourses.coursesPackageinfo.is_unlock == false
     else
         return false
