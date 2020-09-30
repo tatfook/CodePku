@@ -68,8 +68,9 @@ function ClickDelete(lindex)
 end
 
 function ClickChat(fid)
-    ClosePage()
-    MainSceneUIButtons.show_dialog_ui(true, Channels['friend'], fid)
+    GameLogic.AddBBS(nil, L"功能开发中", 3000, "255 0 0", 21)
+    -- ClosePage()
+    -- MainSceneUIButtons.show_dialog_ui(true, Channels['friend'], fid)
 end
 
 

@@ -17,7 +17,7 @@ TeachCourses.TeachCoursesPage = Page
 
 TeachCourses.Courseware_Page_Index = 1          -- 默认第一页
 TeachCourses.Courseware_PerPage_Grade = 8       -- 每页8个课件
-TeachCourses.courseware_last_click_index = 1    -- 默认展示语文课件
+TeachCourses.courseware_last_click_index = 2    -- 默认展示数学课件
 
 
 -- 获取雪碧图图标
@@ -25,45 +25,47 @@ function getIcon(id)
    return TeachCourses.GetTeachCoursesIconPathStr(id)
 end
 
+-- 学科图标（为什么要有这个？因为图标的顺序不对，在这里重新按顺序排序。为什么要把图标和样式分开？因为这里是用图片展示的，所以为了动态展示隐藏，需要把位置和图片分离。）
+-- 以后要加分类怎么办？如果还是用的图片资源就继续用下面的体系，一共6个table，增加index就行。顺序改变的话只需要修改前两个table的顺序，具体用函数实现还是写死都随便。
+local subject_icon = {
+    [1] = {name = "math", url = getIcon(45), desc = "数学显示",},
+    -- [2] = {name = "chinese", url = getIcon(47), desc = "语文显示",},
+    -- [3] = {name = "english", url = getIcon(49), desc = "英语显示",},
+}
+
+local subject_under_icon = {
+    [1] = {name = "math_display", url = getIcon(46), desc = "数学隐藏",},
+    -- [2] = {name = "chinese_display", url = getIcon(48), desc = "语文隐藏",},
+    -- [3] = {name = "english_display", url = getIcon(50), desc = "英语隐藏",},
+}
+
 -- 分类标签各状态的样式
 local subject_style = {
-    [1] = string.format("position: relative;top: 317; left: 9;width: 236;height: 104;background:url(%s);", getIcon(47)),    -- 语文显示
-    [2] = string.format("position: relative;top: 436; left: 9;width: 236;height: 104;background:url(%s);", getIcon(45)),    -- 数学显示
-    [3] = string.format("position: relative;top: 565; left: 9;width: 236;height: 104;background:url(%s);", getIcon(49)),    -- 英语显示
+    [1] = "position: relative;top: 317; left: 9;width: 236;height: 104;background:url(%s);",    -- 第一行显示
+    [2] = "position: relative;top: 436; left: 9;width: 236;height: 104;background:url(%s);",    -- 第二行显示
+    [3] = "position: relative;top: 565; left: 9;width: 236;height: 104;background:url(%s);",    -- 第三行显示
 }
 
 local subject_under_style = {
-    [1] = string.format("position: relative;top: 330; left: 9;width: 231;height: 91;background:url(%s);", getIcon(48)),     -- 语文隐藏
-    [2] = string.format("position: relative;top: 452; left: 9;width: 231;height: 91;background:url(%s);", getIcon(46)),     -- 数学隐藏
-    [3] = string.format("position: relative;top: 575; left: 9;width: 231;height: 91;background:url(%s);", getIcon(50)),     -- 英语隐藏
+    [1] = "position: relative;top: 330; left: 9;width: 231;height: 91;background:url(%s);",     -- 第一行隐藏
+    [2] = "position: relative;top: 452; left: 9;width: 231;height: 91;background:url(%s);",     -- 第二行隐藏
+    [3] = "position: relative;top: 575; left: 9;width: 231;height: 91;background:url(%s);",     -- 第三行隐藏
 }
 
--- 分类标签的table，用来遍历实现展示和隐藏
-local show_subject_table = {
+-- 分类标签的table，用来遍历实现展示和隐藏(可以用函数来拼接，但是现在分类不多就懒得改了)
+show_subject_table = {
     -- 高亮的标签
-    [1] = {name = "chinese", style = subject_style[1]},
-    [2] = {name = "math", style ="display:none;" .. subject_style[2]},
-    [3] = {name = "english", style ="display:none;" .. subject_style[3]},
+    [1] = {name = subject_icon[1].name, style = string.format(subject_style[1], subject_icon[1].url)},
+    -- [2] = {name = subject_icon[2].name, style ="display:none;" .. string.format(subject_style[2], subject_icon[2].url)},
+    -- [3] = {name = subject_icon[3].name, style ="display:none;" .. string.format(subject_style[3], subject_icon[3].url)},
 }
 
-local show_subject_under_table = {
+show_subject_under_table = {
     -- 灰色的标签
-    [1] = {name = "chinese_display", style ="display:none;" .. subject_under_style[1]},
-    [2] = {name = "math_display", style = subject_under_style[2]},
-    [3] = {name = "english_display", style = subject_under_style[3]},
+    [1] = {name = subject_under_icon[1].name, style ="display:none;" .. string.format(subject_under_style[1], subject_under_icon[1].url)},
+    -- [2] = {name = subject_under_icon[2].name, style = string.format(subject_under_style[2], subject_under_icon[2].url)},
+    -- [3] = {name = subject_under_icon[3].name, style = string.format(subject_under_style[3], subject_under_icon[3].url)},
 }
-
--- 获取分类的style
-function GetStyle(name,highlight)
-    local temp_table = highlight and show_subject_table or show_subject_under_table
-    if temp_table then
-        for k,v in ipairs(temp_table) do
-            if name == v.name then
-                return v.style
-            end
-        end
-    end
-end
 
 -- 点击学科分类
 function ClickSubject(name)
@@ -77,22 +79,22 @@ function ClickSubject(name)
         local selement = "#" .. v.name
         if name ~= v.name then
             -- 展示
-            show_subject_under_table[k].style = subject_under_style[k]
+            show_subject_under_table[k].style = string.format(subject_under_style[k], subject_under_icon[k].url)
         elseif name == v.name then
             -- 隐藏
             index = k
             TeachCourses.courseware_last_click_index = index
-            show_subject_under_table[k].style = "display:none;" .. subject_under_style[k]
+            show_subject_under_table[k].style = "display:none;" .. string.format(subject_under_style[k], subject_under_icon[k].url)
         end
     end
     -- show_subject_table里只展示index的标签
     for k,v in pairs(show_subject_table) do
         if k ~= index then
             -- 隐藏
-            show_subject_table[k].style = "display:none;" .. subject_style[k]
+            show_subject_table[k].style = "display:none;" .. string.format(subject_style[k], subject_icon[k].url)
         elseif k == index then
             -- 展示
-            show_subject_table[k].style = subject_style[k]
+            show_subject_table[k].style = string.format(subject_style[k], subject_icon[k].url)
             TeachCourses.show_subject_name = show_subject_table[k].name
         end
     end
@@ -173,6 +175,20 @@ function GetStringPrice(price)
     return price
 end
 
+-- 整包解锁提示文字
+function GetPackageContent()
+    return "解锁:整包解锁"
+end
+
+-- 课程包是否显示
+function ShowPurCoursePackage()
+    if TeachCourses.coursesPackageinfo ~= nil then
+        return TeachCourses.coursesPackageinfo.is_unlock == false
+    else
+        return false
+    end
+end
+
 ]]></script>
 
 <style type="text/mcss"></style>
@@ -183,18 +199,26 @@ end
     <!-- 最下层背景 -->
     <div style="<%=format('position: relative; left: 126; top: 98; width: 1779; height: 950; background:url(%s);', TeachCourses.courseware_background_path)%>"></div>
 
-    <!-- todo 隐藏的普通学科分类 -->
-    <div onclick="ClickSubject" name="chinese_display" style="<%= GetStyle('chinese_display') %>"></div>
-    <div onclick="ClickSubject" name="math_display" style="<%= GetStyle('math_display') %>"></div>
-    <div onclick="ClickSubject" name="english_display" style="<%= GetStyle('english_display') %>"></div>
-
+    <!-- 隐藏的普通学科分类 -->
+    <div style="position: relative;width: 1920;height: 1080;">
+        <pe:repeat DataSource="<%=show_subject_under_table%>">
+            <div onclick="ClickSubject" name="<%= Eval('name') %>" style="<%= Eval('style') %>"></div>
+        </pe:repeat>
+    </div>
+    <!-- <div onclick="ClickSubject" name="chinese_display" style="<%= show_subject_under_table[1].style %>"></div>
+    <div onclick="ClickSubject" name="math_display" style="<%= show_subject_under_table[2].style %>"></div>
+    <div onclick="ClickSubject" name="english_display" style="<%= show_subject_under_table[3].style %>"></div> -->
     <!-- 最上层背景 -->
     <div style="<%=format('position: relative; left: 209; top: 123; width: 1631; height: 894; background:url(%s);', getIcon(51))%>"></div>
     
-    <!-- todo 展示的高亮学科分类 -->
-    <div onclick="ClickSubject" name="chinese" style="<%= GetStyle('chinese', 1) %>"></div>
-    <div onclick="ClickSubject" name="math" style="<%= GetStyle('math', 1) %>"></div>
-    <div onclick="ClickSubject" name="english" style="<%= GetStyle('english', 1) %>"></div>
+    <!-- 展示的高亮学科分类 -->
+    <pe:repeat DataSource="<%=show_subject_table%>">
+        <div onclick="ClickSubject" name="<%= Eval('name') %>" style="<%= Eval('style') %>"></div>
+    </pe:repeat>
+
+    <!-- <div onclick="ClickSubject" name="chinese" style="<%= show_subject_table[1].style %>"></div>
+    <div onclick="ClickSubject" name="math" style="<%= show_subject_table[2].style %>"></div>
+    <div onclick="ClickSubject" name="english" style="<%= show_subject_table[3].style %>"></div> -->
 
     <!-- 左上角飘旗 -->
     <div style="<%=format('position: absolute; left: 165; top: 69; width: 298; height: 130; background:url(%s);', getIcon(26))%>">
@@ -202,7 +226,9 @@ end
         <div style="position: relative; left: 194; top: 62;font-size: 26; font-family: Noto Sans S Chinese Regular;color: #ffffff;"><%= TeachCourses.semester_matrix[TeachCourses.Clicked_Semester] %></div>
     </div>
     <!-- 解锁课程包 -->
-    <div onclick="ShowPurchase" style="<%=format('position: absolute; left: 1046; top: 107; width: 502; height: 158; background:url(%s);', getIcon(32))%>"></div>
+    <pe:if condition="<%= ShowPurCoursePackage() %>">
+        <div onclick="ShowPurchase" style="<%=format('position: absolute; left: 1046; top: 107; width: 502; height: 158; background:url(%s);', getIcon(32))%>"></div>
+    </pe:if>
     <!-- 关闭按键 -->
     <div onclick="ClosePage" style="<%=format('position: absolute; left: 1759; top: 101; width: 101; height: 102; background:url(%s);', getIcon(27))%>"></div>
     
@@ -216,8 +242,13 @@ end
                 <pe:if condition="<%= not (is_free == 1 or owned == true) %>">
                     <div style="<%=format('position: relative; width: 324; height: 247;background:url(%s);', getIcon(38))%>" onclick="unlock" name="<%=Eval('index')%>">
                         <div style="<%=format('position: relative; left: 123; top: 87; width: 75; height: 81;background:url(%s);', getIcon(44))%>"></div>
-                        <div style="<%=format('position: relative; left: 146; top: 191; width: 103; height: 53;background:url(%s);', getIcon(42))%>"></div>
-                        <div style="position: relative; float: left; text-align: center;left: 246; top: 210; width: 75; height: 24;font-family: alhy;font-size: 22;color: #ffffff;"><%=GetStringPrice(price)%></div>
+                        <pe:if condition="<%= TeachCourses.coursesPackageinfo.paid_unlock_method == 2 %>">
+                            <div style="<%=format('position: relative; left: 146; top: 191; width: 103; height: 53;background:url(%s);', getIcon(42))%>"></div>
+                            <div style="position: relative; float: left; text-align: center;left: 246; top: 210; width: 75; height: 24;font-family: alhy;font-size: 22;color: #ffffff;"><%=GetStringPrice(price)%></div>
+                        </pe:if>
+                        <pe:if condition="<%= TeachCourses.coursesPackageinfo.paid_unlock_method == 1 %>">
+                            <div style="position: relative; float: right; text-align: right;top: 210; width: 275; left: 30;height: 24;font-family: alhy;font-size: 22;color: #ffffff;"><%=GetPackageContent()%></div>
+                        </pe:if>
                     </div>
                     <div onclick="unlock" name="<%=Eval('index')%>" style="<%=format('position: relative; left: -23;top:-16;width: 321; height: 71;padding-left:21;font-family:alhy;line-height: 71; font-size:26px;color:#9a5d11;background:url(%s);', getIcon(35))%>"><%=Eval('name')%></div>
                 </pe:if>

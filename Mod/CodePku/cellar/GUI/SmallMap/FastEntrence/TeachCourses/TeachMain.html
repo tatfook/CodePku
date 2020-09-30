@@ -19,6 +19,7 @@ TeachCourses.TeachMainPage = Page
 TeachCourses.Main_Page_Index = 1
 TeachCourses.Main_PerPage_Grade = 3
 
+
 -- 获取全部年级导图列表
 if not TeachCourses.grade_list[1].grade then
     TeachCourses:GetGradeList(page)
@@ -69,10 +70,10 @@ function GoToGrade(grade, semester)
     TeachCourses.Clicked_Grade = grade
     TeachCourses.Clicked_Semester = semester
     -- 请求课件详情，默认第一次打开为语文
-    TeachCourses.show_subject_name = "chinese"                  -- 对应展示标签的name
-    TeachCourses.show_subject_under_name = "chinese_display"    -- 对应展示标签的下层隐藏标签name
+    TeachCourses.show_subject_name = "math"                  -- 对应展示标签的name
+    TeachCourses.show_subject_under_name = "math_display"    -- 对应展示标签的下层隐藏标签name
     TeachCourses:ShowPage(4)
-    TeachCourses:GetCoursewares(TeachCourses.Clicked_Grade + 1, TeachCourses.Clicked_Semester, 1)             -- 请求默认展示的页面课件详细信息
+    TeachCourses:GetCoursewares(TeachCourses.Clicked_Grade + 1, TeachCourses.Clicked_Semester, 2)             -- 请求默认展示的页面课件详细信息
 end
 
 -- 上一页

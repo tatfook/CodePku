@@ -16,6 +16,7 @@ Path:"Mod/CodePku/cellar/Common/TouchMiniButtons/MainUIButtons_home_window.html"
 <![CDATA[
 NPL.load("(gl)Mod/CodePku/cellar/GUI/Home/HomeManage.lua");
 local HomeManage = commonlib.gettable("Mod.CodePku.Common.HomeManage")
+local Researchers = NPL.load("(gl)Mod/CodePku/cellar/GUI/Researchers/Researchers.lua");
 
 function StartEditWorld()
     LOG.std(nil, "MainUIButtons_home_window", "StartEditWorldBtn", "clicked")
@@ -29,16 +30,23 @@ function SaveAndExitEditWorld()
     Page:Refresh()
 end
 
+function BuildingBoard()
+    local url = Mod.CodePku.BasicConfigTable.links.home_world_announcement or "https://none.h5.xeknow.com/st/5XKdbYHy5"
+    Researchers:ShowPage(1, url)
+end
+
 ]]></script>
 <style type="text/mcss">
 
 </style>
-<pe:container alignment="_lt" width="135" height="155">
+<pe:container alignment="_lt" width="335" height="355" >
+    <!-- 攻略秘籍 -->
+    <div onclick="BuildingBoard" style="position: relative; left: 180;top: 30;width: 169; height: 158;background: url(codepku/image/textures/enter_world_btn/enter_world_btn.png#185 536 169 158);"></div>
     <pe:if condition='<%=GameLogic.GameMode:IsEditor()==false%>'>
-        <div name="StartEditWorldBtn" onclick="StartEditWorld" style="position: relative; width: 135; height: 155; background: url(codepku/image/textures/enter_world_btn/enter_world_btn.png#1384 790 135 155);"></div>
+        <div name="StartEditWorldBtn" onclick="StartEditWorld" style="position: relative; left: 200;top: 220;width: 135; height: 134; background: url(codepku/image/textures/enter_world_btn/enter_world_btn.png#96 330 134 134);"></div>
     </pe:if>
     <pe:if condition='<%=GameLogic.GameMode:IsEditor()==true%>'>
-        <div name="SaveAndExitEditWorldBtn" onclick="SaveAndExitEditWorld" style="position: relative; width: 135; height: 155;background: url(codepku/image/textures/enter_world_btn/enter_world_btn.png#1554 790 135 155);"></div>
+        <div name="SaveAndExitEditWorldBtn" onclick="SaveAndExitEditWorld" style="position: relative; left: 200;top: 220;width: 135; height: 134;background: url(codepku/image/textures/enter_world_btn/enter_world_btn.png#312 330 134 134);"></div>
     </pe:if>
 </pe:container>
 
