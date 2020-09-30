@@ -50,6 +50,7 @@ function CloseAllPage()
     -- 教学区重构了，这里后面改成关闭新的教学区页面
     if TeachCourses.ui ~= nil then
         TeachCourses.ui:CloseWindow()
+        TeachCourses:TurnOffAllPage()
     end
     if FastEntrence ~= nil then
         FastEntrence:ClosePage(2)

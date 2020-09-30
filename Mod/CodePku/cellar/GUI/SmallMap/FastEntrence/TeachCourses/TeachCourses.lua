@@ -152,8 +152,22 @@ TeachCourses.params = {
     [4] = {url="Mod/CodePku/cellar/GUI/SmallMap/FastEntrence/TeachCourses/TeachCourseware.html",alignment="_lt", left = 0, top = 0, width = 1920 , height = 1080, zorder = 30},
 }
 
+TeachCourses.pagePackage = {}
+
 function TeachCourses:ShowPage(id)
+    local page
     self.ui = AdaptWindow:QuickWindow(TeachCourses.params[id])
+    page = self.ui
+    table.insert(TeachCourses.pagePackage, page)
+end
+
+-- 一键关闭所有教学区页面，慎用
+function TeachCourses:TurnOffAllPage()
+    for k,v in pairs(TeachCourses.pagePackage) do
+        if next(v) ~= nil then
+            v:CloseWindow()
+        end
+    end
 end
 
 -- 获取年级列表
@@ -197,8 +211,9 @@ function TeachCourses:GetCoursewares(grade, semester, subject)
                 TeachCourses.subjects[subject].course[index].file_url = d.cover_file.file_url
                 index = index + 1
             end
-
-            TeachCourses.TeachCoursesPage:Refresh(0)
+            if TeachCourses.TeachCoursesPage then
+                TeachCourses.TeachCoursesPage:Refresh(0)
+            end
         end
     end):catch(function(e)
         GameLogic.AddBBS("CodeGlobals", e.data.message, 3000, "#FF0000");
