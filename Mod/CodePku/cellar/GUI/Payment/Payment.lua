@@ -64,9 +64,12 @@ end
 
 -- UserInfoPage.money = {goldcoin=0, wanxuecoin=0} 用户登陆后获取数据库货币数量
 
+Payment.pagePackage = {}
 function Payment:ShowPage(pagename)
+    local page
     ToPage = tostring(pagename)
-    AdaptWindow:QuickWindow(Payment.params[ToPage])
+    page = AdaptWindow:QuickWindow(Payment.params[ToPage])
+    table.insert(Payment.pagePackage, page)
 end
 
 
@@ -105,4 +108,14 @@ function Payment:SendNotice()
     end):catch(function(e)
         GameLogic.AddBBS("CodeGlobals", e.data.message, 3000, "#FF0000");
     end);
+end
+
+
+-- 一键关闭所有教学区页面，慎用
+function Payment:TurnOffAllPage()
+    for k,v in pairs(Payment.pagePackage) do
+        if next(v) ~= nil then
+            v:CloseWindow()
+        end
+    end
 end
