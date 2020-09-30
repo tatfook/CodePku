@@ -22,30 +22,58 @@ function CutLongString(longString, lenth)
 end
 
 function GenCourseInfo()
-    local index = 1
-    if TeachCourses.coursesPackageinfo.paid_unlock_method == 1 and TeachCourses.coursesPackageinfo.package_price and TeachCourses.coursesPackageinfo.package_price > 0 then
-        TeachCourses.singleUnlockCourses[index] = {
-            id = TeachCourses.coursesPackageinfo.id,
-            course_type = 2,
-            type = 2,
-            pack_name = CutLongString(TeachCourses.coursesPackageinfo.name),
-            price = TeachCourses.coursesPackageinfo.package_price,
-            original_price = TeachCourses.coursesPackageinfo.package_underline_price,
-            desc = TeachCourses.coursesPackageinfo.description and TeachCourses.coursesPackageinfo.description ~= '' and TeachCourses.coursesPackageinfo.description or TeachCourses.coursesPackageinfo.name,
-        }
-        index = index + 1
-    end
-    
-    if TeachCourses.coursesPackageinfo.paid_unlock_method == 2 then
-        TeachCourses.singleUnlockCourses[index] = {
-            id = TeachCourses.singleCourseInfo.id,
-            course_type = 1,
-            type = 3,
-            pack_name = CutLongString(TeachCourses.singleCourseInfo.name),
-            price = TeachCourses.singleCourseInfo.price,
-            original_price = TeachCourses.singleCourseInfo.origin_price,
-            desc = TeachCourses.singleCourseInfo.description and TeachCourses.singleCourseInfo.description ~= '' and TeachCourses.singleCourseInfo.description or TeachCourses.singleCourseInfo.name,
-        }
+    if not TeachCourses.judgeCourseInfo then
+        local index = 1
+        if TeachCourses.coursesPackageinfo.paid_unlock_method == 1 and TeachCourses.coursesPackageinfo.package_price and TeachCourses.coursesPackageinfo.package_price > 0 then
+            TeachCourses.singleUnlockCourses[index] = {
+                id = TeachCourses.coursesPackageinfo.id,
+                course_type = 2,
+                type = 2,
+                pack_name = CutLongString(TeachCourses.coursesPackageinfo.name),
+                price = TeachCourses.coursesPackageinfo.package_price,
+                original_price = TeachCourses.coursesPackageinfo.package_underline_price,
+                desc = TeachCourses.coursesPackageinfo.description ~= '' and TeachCourses.coursesPackageinfo.description or TeachCourses.coursesPackageinfo.name,
+            }
+            index = index + 1
+        end
+        
+        if TeachCourses.coursesPackageinfo.paid_unlock_method == 2 then
+            TeachCourses.singleUnlockCourses[index] = {
+                id = TeachCourses.singleCourseInfo.id,
+                course_type = 1,
+                type = 3,
+                pack_name = CutLongString(TeachCourses.singleCourseInfo.name),
+                price = TeachCourses.singleCourseInfo.price,
+                original_price = TeachCourses.singleCourseInfo.origin_price,
+                desc = TeachCourses.singleCourseInfo.description ~= '' and TeachCourses.singleCourseInfo.description or TeachCourses.singleCourseInfo.name,
+            }
+        end
+    else
+        local index = 1
+        if TeachCourses.judgeCourseInfo.paid_unlock_method == 1 and TeachCourses.coursesPackageinfo.package_price and TeachCourses.coursesPackageinfo.package_price > 0 then
+            TeachCourses.singleUnlockCourses[index] = {
+                id = TeachCourses.judgeCourseInfo.package_id,
+                course_type = 2,
+                type = 2,
+                pack_name = CutLongString(TeachCourses.judgeCourseInfo.package_name),
+                price = TeachCourses.judgeCourseInfo.package__price,
+                original_price = TeachCourses.judgeCourseInfo.package_origin_price,
+                desc = TeachCourses.judgeCourseInfo.description ~= '' and TeachCourses.judgeCourseInfo.description or TeachCourses.judgeCourseInfo.package_name,
+            }
+            index = index + 1
+        end
+        
+        if TeachCourses.judgeCourseInfo.paid_unlock_method == 2 then
+            TeachCourses.singleUnlockCourses[index] = {
+                id = TeachCourses.judgeCourseInfo.id,
+                course_type = 1,
+                type = 3,
+                pack_name = CutLongString(TeachCourses.judgeCourseInfo.name),
+                price = TeachCourses.judgeCourseInfo.price,
+                original_price = TeachCourses.judgeCourseInfo.origin_price,
+                desc = TeachCourses.judgeCourseInfo.description ~= '' and TeachCourses.judgeCourseInfo.description or TeachCourses.judgeCourseInfo.name,
+            }
+        end
     end
 end
 

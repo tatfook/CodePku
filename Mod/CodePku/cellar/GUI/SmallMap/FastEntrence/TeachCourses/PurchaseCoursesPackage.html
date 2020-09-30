@@ -65,7 +65,7 @@ function GetAllData()
                 pack_name = CutLongString(v.name),
                 price = v.package_price,
                 original_price = v.package_underline_price,
-                desc = v.description and v.description ~= '' and v.description or v.name,
+                desc = v.description ~= '' and v.description or v.name,
                 cover_url = v.cover_url and v.cover_url ~= '' and v.cover_url or nil,
             }
             index = index + 1 
