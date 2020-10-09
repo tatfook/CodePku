@@ -233,6 +233,7 @@ function UserConsole:HandleWorldId(pid)
                 origin_price = _data.origin_price,
                 price = _data.price,
                 paid_unlock_method = _data.paid_unlock_method,
+                cover_url = _data.cover_url,
     
                 package_id = _data.course.id,
                 package_name = _data.course.name,
@@ -240,6 +241,7 @@ function UserConsole:HandleWorldId(pid)
                 package_cover = _data.course.cover,
                 package_origin_price = _data.course.package_underline_price,
                 package_price = _data.course.package_price,
+                package_cover_url = _data.course.cover_url,
             }
     
             TeachCourses:ShowPage(3)

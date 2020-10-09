@@ -47,7 +47,7 @@ function GenCourseInfo()
                 price = TeachCourses.singleCourseInfo.price,
                 original_price = TeachCourses.singleCourseInfo.origin_price,
                 desc = TeachCourses.singleCourseInfo.description ~= '' and TeachCourses.singleCourseInfo.description or TeachCourses.singleCourseInfo.name,
-                cover_url = TeachCourses.singleCourseInfo.file_url and TeachCourses.singleCourseInfo.file_url ~= '' and TeachCourses.singleCourseInfo.file_url or '',
+                cover_url = TeachCourses.singleCourseInfo.file_url and TeachCourses.singleCourseInfo.file_url ~= '' and TeachCourses.singleCourseInfo.file_url or nil,
             }
         end
     else
@@ -58,9 +58,11 @@ function GenCourseInfo()
                 course_type = 2,
                 type = 2,
                 pack_name = CutLongString(TeachCourses.judgeCourseInfo.package_name),
-                price = TeachCourses.judgeCourseInfo.package__price,
+                price = TeachCourses.judgeCourseInfo.package_price,
                 original_price = TeachCourses.judgeCourseInfo.package_origin_price,
-                desc = TeachCourses.judgeCourseInfo.description ~= '' and TeachCourses.judgeCourseInfo.description or TeachCourses.judgeCourseInfo.package_name,
+                desc = TeachCourses.judgeCourseInfo.package_description ~= '' and TeachCourses.judgeCourseInfo.package_description or TeachCourses.judgeCourseInfo.package_name,
+                cover_url = TeachCourses.judgeCourseInfo.package_cover_url and TeachCourses.judgeCourseInfo.package_cover_url ~= '' and TeachCourses.judgeCourseInfo.package_cover_url or nil,
+
             }
             index = index + 1
         end
@@ -74,6 +76,7 @@ function GenCourseInfo()
                 price = TeachCourses.judgeCourseInfo.price,
                 original_price = TeachCourses.judgeCourseInfo.origin_price,
                 desc = TeachCourses.judgeCourseInfo.description ~= '' and TeachCourses.judgeCourseInfo.description or TeachCourses.judgeCourseInfo.name,
+                cover_url = TeachCourses.judgeCourseInfo.cover_url and TeachCourses.judgeCourseInfo.cover_url ~= '' and TeachCourses.judgeCourseInfo.cover_url or nil,
             }
         end
     end
