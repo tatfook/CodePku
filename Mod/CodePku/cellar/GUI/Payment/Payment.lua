@@ -87,7 +87,6 @@ function Payment:PurchaseNotice()
                 if Payment.TimerTimes == 0 then
                     Payment.isClickedPurchaseNotice = false
                     Payment.Recharge_send_content = "已推送详情到家长微信~快和爸爸妈妈沟通购买课程吧"
-                    Payment:SendNotice()
                     timer:Change(nil, nil)
                 end
                 Payment.TimerTimes = Payment.TimerTimes - 1
