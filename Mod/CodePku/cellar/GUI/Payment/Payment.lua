@@ -19,6 +19,8 @@ local UserInfoPage = NPL.load("(gl)Mod/CodePku/cellar/GUI/UserInfo.lua");
 Payment.iconPng = "codepku/image/textures/common_32bits.png"
 Payment.Recharge_send_content = "已推送详情到家长微信~快和爸爸妈妈沟通购买课程吧"
 
+Payment.TimerTable = {}
+
 Payment.params = {
     -- 解锁提示页面
     CoursePayment = {
@@ -74,26 +76,35 @@ end
 
 
 function Payment:PurchaseNotice()
-    if (not Payment.TimerTimes) or (Payment.TimerTimes < 1) then
-        if Payment.isClickedPurchaseNotice then
-            return
-        end
-        Payment:SendNotice()
-        Payment.isClickedPurchaseNotice = true
-        Payment.TimerTimes = 60
-        Payment.Recharge_send_content = "课程解锁申请已推送到您家长微信啦~请勿频繁点击哦"
-        local timer = commonlib.Timer:new({
-            callbackFunc = function(timer)
-                if Payment.TimerTimes == 0 then
-                    Payment.isClickedPurchaseNotice = false
-                    Payment.Recharge_send_content = "已推送详情到家长微信~快和爸爸妈妈沟通购买课程吧"
-                    timer:Change(nil, nil)
-                end
-                Payment.TimerTimes = Payment.TimerTimes - 1
+    if next(Payment.TimerTable) ~= nil then
+        for k,v in pairs(Payment.TimerTable) do
+            --遍历表，找到已经发送过请求的记录,结尾必须返回，防止进入下面全新请求的逻辑
+            if v.lastClicktype == Payment.entity_type and v.lastClickid == Payment.entity_id then
+                -- 计时器结束时会清空当前表，所以能遍历到记录说明计时器没过期，此时需要直接返回
+                return
             end
-        })
-        timer:Change(1000, 1000)
+        end
     end
+    -- 表中未记录的请求，需要重新发起并加入表中
+    Payment:SendNotice()
+    local temp_table = {}
+    temp_table.lastClicktype = Payment.entity_type
+    temp_table.lastClickid = Payment.entity_id
+    temp_table.TimerTimes = 60
+    temp_table.content = "课程解锁申请已推送到您家长微信啦~请勿频繁点击哦"
+    temp_table.timer = commonlib.Timer:new({
+        callbackFunc = function(timer)
+            if temp_table.TimerTimes == 0 then
+                temp_table.lastClicktype = nil
+                temp_table.lastClickid = nil
+                temp_table.content = nil
+                timer:Change(nil, nil)
+            end
+            temp_table.TimerTimes = temp_table.TimerTimes - 1
+        end
+    })
+    temp_table.timer:Change(1000, 1000)
+    table.insert(Payment.TimerTable, temp_table)
 end
 
 function Payment:SendNotice()
