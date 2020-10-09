@@ -239,7 +239,7 @@ function UserConsole:HandleWorldId(pid)
                 package_description = _data.course.description,
                 package_cover = _data.course.cover,
                 package_origin_price = _data.course.package_underline_price,
-                package__price = _data.course.package_price,
+                package_price = _data.course.package_price,
             }
     
             TeachCourses:ShowPage(3)

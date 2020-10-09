@@ -128,7 +128,7 @@ function GetTypePicInfo(index)
     
     local iconInfoStr  = ''
     if GetCourseInfo(index).cover_url then
-        iconInfoStr = 'left: 77; top: 70; width: 236; height: 190;'
+        iconInfoStr = 'left: 21; top: 51; width: 356; height: 203;'
     else
         iconInfoStr = format('left: %d; top: %d; width: %d; height: %d;', iconInfo.left, iconInfo.top, iconInfo.width, iconInfo.height)
     end
@@ -222,8 +222,11 @@ end
                     <span style="position: relative; left: 228; top: 173; width: 326; height: 28; text-align: center; font-size: 28; font-family: alhy; font-weight: normal;"><%= GetCourseInfo(1).pack_name %></span> 
                     <!-- 课程图片 -->
                     <pe:if condition="<%= not GetInfoFlag(1) %>">
-                        <div onclick="ShowInfo" name="1" style="<%= format('position: relative; left: 192; top: 209; width: 404; height: 323; background:url(%s);', GetTypeIcon(1,1)) %>">
+                        <div onclick="ShowInfo" name="1" style="<%= format('position: relative; left: 192; top: 209; width: 404; height: 323; background:url(%s);', getIcon(59)) %>">
                             <div style="<%= format('position: relative; %s background:url(%s);', GetTypePicInfo(1).iconInfoStr, GetTypeIcon(1,2)) %>"></div>
+                            <pe:if condition="<%= GetCourseInfo(1).type==3 %>">
+                                <div style="<%= format('position: relative; left: 21; top: 49; width: 357; height: 206; background:url(%s);',  getIcon(70)) %>"></div>
+                            </pe:if>
                             <div style="<%= format('position: relative; %s background:url(%s);', GetTypePicInfo(1).tipInfoStr, GetTypeIcon(1,3)) %>"></div>
                         </div>
                         <!-- 感叹号 -->
@@ -233,7 +236,15 @@ end
                     <!-- 课程介绍 -->
                     <pe:if condition="<%= GetInfoFlag(1) %>">
                         <div onclick="ShowInfo" name="1" style="<%= format('position: relative; left: 192; top: 209; width: 404; height: 323; color: #905e29; font-family: alhy; font-weight: normal; background:url(%s);', getIcon(59)) %>">
-                            <span style="position: relative; left: 100; top: 31; font-size: 38; font-family: alhy;">课程包介绍</span>
+                            <pe:if condition="<%= GetCourseInfo(1).type==3 %>">
+                                <span style="position: relative; left: 120; top: 31; font-size: 38; font-family: alhy;">课程介绍</span>
+                            </pe:if>
+                            <pe:if condition="<%= GetCourseInfo(1).type==2 %>">
+                                <span style="position: relative; left: 100; top: 31; font-size: 38; font-family: alhy;">课程包介绍</span>
+                            </pe:if>
+                            <pe:if condition="<%= GetCourseInfo(1).type==1 %>">
+                                <span style="position: relative; left: 100; top: 31; font-size: 38; font-family: alhy;">学期包介绍</span>
+                            </pe:if>
                             <span style="position: relative; left: 70; top: 100; font-size: 22; width: 270; height: 148;"><%= GetCourseInfo(1).desc %></span>
                         </div>
                         <div onclick="ShowInfo" name="1" style="<%= format('position: relative; left: 533; top: 203; width: 55; height: 56; background:url(%s);', getIcon(55)) %>"></div>
@@ -255,15 +266,26 @@ end
                 <!-- 2 -->
                 <span style="position: relative; left: 685 ; top: 173; width: 326; height: 28; text-align: center; font-size: 28; font-family: alhy; font-weight: normal;"><%= GetCourseInfo(2).pack_name %></span> 
                 <pe:if condition="<%= not GetInfoFlag(2) %>">
-                    <div onclick="ShowInfo" name="2" style="<%= format('position: relative; left: 650; top: 209; width: 404; height: 323; background:url(%s);',GetTypeIcon(2,1)) %>">
+                    <div onclick="ShowInfo" name="2" style="<%= format('position: relative; left: 650; top: 209; width: 404; height: 323; background:url(%s);',getIcon(59)) %>">
                         <div style="<%= format('position: relative; %s background:url(%s);', GetTypePicInfo(2).iconInfoStr, GetTypeIcon(2,2)) %>"></div>
+                        <pe:if condition="<%= GetCourseInfo(2).type==3 %>">
+                            <div style="<%= format('position: relative; left: 21; top: 49; width: 357; height: 206; background:url(%s);',  getIcon(70)) %>"></div>
+                        </pe:if>
                         <div style="<%= format('position: relative; %s background:url(%s);', GetTypePicInfo(2).tipInfoStr, GetTypeIcon(2,3)) %>"></div>
                  </div>
                     <div onclick="ShowInfo" name="2" style="<%= format('position: relative; left: 991; top: 203; width: 55; height: 56; background:url(%s);', getIcon(55)) %>"></div>
                 </pe:if>
                 <pe:if condition="<%= GetInfoFlag(2) %>">
                     <div onclick="ShowInfo" name="2" style="<%= format('position: relative; left: 650; top: 209; width: 404; height: 323; color: #905e29; font-family: alhy; font-weight: normal; background:url(%s);', getIcon(59)) %>">
-                        <span style="position: relative; left: 100; top: 31; font-size: 38; font-family: alhy;">课程包介绍</span>
+                        <pe:if condition="<%= GetCourseInfo(2).type==3 %>">
+                            <span style="position: relative; left: 120; top: 31; font-size: 38; font-family: alhy;">课程介绍</span>
+                        </pe:if>
+                        <pe:if condition="<%= GetCourseInfo(2).type==2 %>">
+                            <span style="position: relative; left: 100; top: 31; font-size: 38; font-family: alhy;">课程包介绍</span>
+                        </pe:if>
+                        <pe:if condition="<%= GetCourseInfo(2).type==1 %>">
+                            <span style="position: relative; left: 100; top: 31; font-size: 38; font-family: alhy;">学期包介绍</span>
+                        </pe:if>
                         <span style="position: relative; left: 70; top: 100; font-size: 22; width: 270; height: 148;"><%= GetCourseInfo(2).desc %></span>
                     </div>
                     <div onclick="ShowInfo" name="2" style="<%= format('position: relative; left: 991; top: 203; width: 55; height: 56; background:url(%s);', getIcon(55)) %>"></div>
@@ -283,15 +305,26 @@ end
                     <!-- 3 -->
                     <span style="position: relative; left: 1153; top: 173; width: 326; height: 28; text-align: center; font-size: 28; font-family: alhy; font-weight: normal;"><%= GetCourseInfo(3).pack_name %></span> 
                     <pe:if condition="<%= not GetInfoFlag(3) %>">
-                        <div onclick="ShowInfo" name="3" style="<%= format('position: relative; left: 1117; top: 209; width: 404; height: 323; background:url(%s);', GetTypeIcon(3,1)) %>">
+                        <div onclick="ShowInfo" name="3" style="<%= format('position: relative; left: 1117; top: 209; width: 404; height: 323; background:url(%s);', getIcon(59)) %>">
                             <div style="<%= format('position: relative; %s background:url(%s);', GetTypePicInfo(3).iconInfoStr, GetTypeIcon(3,2)) %>"></div>
+                            <pe:if condition="<%= GetCourseInfo(3).type==3 %>">
+                                <div style="<%= format('position: relative; left: 21; top: 49; width: 357; height: 206; background:url(%s);',  getIcon(70)) %>"></div>
+                            </pe:if>
                             <div style="<%= format('position: relative; %s background:url(%s);', GetTypePicInfo(3).tipInfoStr, GetTypeIcon(3,3)) %>"></div>
                          </div>
                         <div onclick="ShowInfo" name="3" style="<%= format('position: relative; left: 1458; top: 203; width: 55; height: 56; background:url(%s);', getIcon(55)) %>"></div>
                     </pe:if>
                     <pe:if condition="<%= GetInfoFlag(3) %>">
                         <div onclick="ShowInfo" name="3" style="<%= format('position: relative; left: 1117; top: 209; width: 404; height: 323; color: #905e29; font-family: alhy; font-weight: normal; background:url(%s);', getIcon(59)) %>">
-                            <span style="position: relative; left: 100; top: 31; font-size: 38; font-family: alhy;">课程包介绍</span>
+                            <pe:if condition="<%= GetCourseInfo(3).type==3 %>">
+                                <span style="position: relative; left: 120; top: 31; font-size: 38; font-family: alhy;">课程介绍</span>
+                            </pe:if>
+                            <pe:if condition="<%= GetCourseInfo(3).type==2 %>">
+                                <span style="position: relative; left: 100; top: 31; font-size: 38; font-family: alhy;">课程包介绍</span>
+                            </pe:if>
+                            <pe:if condition="<%= GetCourseInfo(3).type==1 %>">
+                                <span style="position: relative; left: 100; top: 31; font-size: 38; font-family: alhy;">学期包介绍</span>
+                            </pe:if>
                             <span style="position: relative; left: 70; top: 100; font-size: 22; width: 270; height: 148;"><%= GetCourseInfo(3).desc %></span>
                         </div>
                         <div onclick="ShowInfo" name="3" style="<%= format('position: relative; left: 1458; top: 203; width: 55; height: 56; background:url(%s);', getIcon(55)) %>"></div>
@@ -314,15 +347,26 @@ end
 
                 <span style="position: relative; left: 464; top: 173; width: 326; height: 28; text-align: center; font-size: 28; font-family: alhy; font-weight: normal;"><%= GetCourseInfo(1).pack_name %></span> 
                 <pe:if condition="<%= not GetInfoFlag(1) %>">
-                    <div onclick="ShowInfo" name="1" style="<%= format('position: relative; left: 428; top: 209; width: 404; height: 323; background:url(%s);', GetTypeIcon(1,1)) %>">
+                    <div onclick="ShowInfo" name="1" style="<%= format('position: relative; left: 428; top: 209; width: 404; height: 323; background:url(%s);', getIcon(59)) %>">
                         <div style="<%= format('position: relative; %s background:url(%s);', GetTypePicInfo(1).iconInfoStr, GetTypeIcon(1,2)) %>"></div>
+                        <pe:if condition="<%= GetCourseInfo(1).type==3 %>">
+                            <div style="<%= format('position: relative; left: 21; top: 49; width: 357; height: 206; background:url(%s);',  getIcon(70)) %>"></div>
+                        </pe:if>
                         <div style="<%= format('position: relative; %s background:url(%s);', GetTypePicInfo(1).tipInfoStr, GetTypeIcon(1,3)) %>"></div>
                     </div>
                     <div onclick="ShowInfo" name="1" style="<%= format('position: relative; left: 769; top: 203; width: 55; height: 56; background:url(%s);', getIcon(55)) %>"></div>
                 </pe:if>
                 <pe:if condition="<%= GetInfoFlag(1) %>">
                     <div onclick="ShowInfo" name="1" style="<%= format('position: relative; left: 428; top: 209; width: 404; height: 323; color: #905e29; font-family: alhy; font-weight: normal; background:url(%s);', getIcon(59)) %>">
-                        <span style="position: relative; left: 100; top: 31; font-size: 38; font-family: alhy;">课程包介绍</span>
+                        <pe:if condition="<%= GetCourseInfo(1).type==3 %>">
+                            <span style="position: relative; left: 120; top: 31; font-size: 38; font-family: alhy;">课程介绍</span>
+                        </pe:if>
+                        <pe:if condition="<%= GetCourseInfo(1).type==2 %>">
+                            <span style="position: relative; left: 100; top: 31; font-size: 38; font-family: alhy;">课程包介绍</span>
+                        </pe:if>
+                        <pe:if condition="<%= GetCourseInfo(1).type==1 %>">
+                            <span style="position: relative; left: 100; top: 31; font-size: 38; font-family: alhy;">学期包介绍</span>
+                        </pe:if>
                         <span style="position: relative; left: 70; top: 100; font-size: 22; width: 270; height: 148;"><%= GetCourseInfo(1).desc %></span>
                     </div>
                     <div onclick="ShowInfo" name="1" style="<%= format('position: relative; left: 769; top: 203; width: 55; height: 56; background:url(%s);', getIcon(55)) %>"></div>
@@ -340,15 +384,26 @@ end
 
                 <span style="position: relative; left: 921 ; top: 173; width: 326; height: 28; text-align: center; font-size: 28; font-family: alhy; font-weight: normal;"><%= GetCourseInfo(2).pack_name %></span> 
                 <pe:if condition="<%= not GetInfoFlag(2) %>">
-                    <div onclick="ShowInfo" name="2" style="<%= format('position: relative; left: 886; top: 209; width: 404; height: 323; background:url(%s);',GetTypeIcon(2,1)) %>">
+                    <div onclick="ShowInfo" name="2" style="<%= format('position: relative; left: 886; top: 209; width: 404; height: 323; background:url(%s);',getIcon(59)) %>">
                         <div style="<%= format('position: relative; %s background:url(%s);', GetTypePicInfo(2).iconInfoStr, GetTypeIcon(2,2)) %>"></div>
+                        <pe:if condition="<%= GetCourseInfo(2).type==3 %>">
+                            <div style="<%= format('position: relative; left: 21; top: 49; width: 357; height: 206; background:url(%s);',  getIcon(70)) %>"></div>
+                        </pe:if>
                         <div style="<%= format('position: relative; %s background:url(%s);', GetTypePicInfo(2).tipInfoStr, GetTypeIcon(2,3)) %>"></div>
                     </div>
                     <div onclick="ShowInfo" name="2" style="<%= format('position: relative; left: 1227; top: 203; width: 55; height: 56; background:url(%s);', getIcon(55)) %>"></div>
                 </pe:if>
                 <pe:if condition="<%= GetInfoFlag(2) %>">
                     <div onclick="ShowInfo" name="2" style="<%= format('position: relative; left: 886; top: 209; width: 404; height: 323; color: #905e29; font-family: alhy; font-weight: normal; background:url(%s);', getIcon(59)) %>">
+                        <pe:if condition="<%= GetCourseInfo(2).type==3 %>">
+                            <span style="position: relative; left: 120; top: 31; font-size: 38; font-family: alhy;">课程介绍</span>
+                        </pe:if>
+                        <pe:if condition="<%= GetCourseInfo(2).type==2 %>">
                             <span style="position: relative; left: 100; top: 31; font-size: 38; font-family: alhy;">课程包介绍</span>
+                        </pe:if>
+                        <pe:if condition="<%= GetCourseInfo(2).type==1 %>">
+                            <span style="position: relative; left: 100; top: 31; font-size: 38; font-family: alhy;">学期包介绍</span>
+                        </pe:if>
                             <span style="position: relative; left: 70; top: 100; font-size: 22; width: 270; height: 148;"><%= GetCourseInfo(2).desc %></span>
                     </div>
                     <div onclick="ShowInfo" name="2" style="<%= format('position: relative; left: 1227; top: 203; width: 55; height: 56; background:url(%s);', getIcon(55)) %>"></div>

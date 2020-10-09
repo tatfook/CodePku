@@ -78,9 +78,10 @@ TeachCourses.icons = {
     [53] = {url = TeachCourses.purchase_icons_path, left=268, top=63, width=69, height=95, desc = '左箭头'},
     [54] = {url = TeachCourses.purchase_icons_path, left=418, top=63, width=69, height=95, desc = '右箭头'},
     [55] = {url = TeachCourses.purchase_icons_path, left=607, top=84, width=55, height=56, desc = '红色感叹号'},
-    [56] = {url = TeachCourses.purchase_icons_path, left=21, top=215, width=399, height=327, desc = '紫色背景三星底座'},
-    [57] = {url = TeachCourses.purchase_icons_path, left=437, top=215, width=399, height=327, desc = '绿色背景二星底座'},
-    [58] = {url = TeachCourses.purchase_icons_path, left=852, top=215, width=399, height=327, desc = '蓝色背景一星底座'},
+    -- 以下三个已废弃，原图已删除
+    -- [56] = {url = TeachCourses.purchase_icons_path, left=21, top=215, width=399, height=327, desc = '紫色背景三星底座'},
+    -- [57] = {url = TeachCourses.purchase_icons_path, left=437, top=215, width=399, height=327, desc = '绿色背景二星底座'},
+    -- [58] = {url = TeachCourses.purchase_icons_path, left=852, top=215, width=399, height=327, desc = '蓝色背景一星底座'},
     [59] = {url = TeachCourses.purchase_icons_path, left=1269, top=215, width=399, height=327, desc = '说明小弹窗'},
     [60] = {url = TeachCourses.purchase_icons_path, left=1345, top=88, width=50, height=53, desc = '一般型号的玩学币'},
     [61] = {url = TeachCourses.purchase_icons_path, left=1497, top=99, width=30, height=33, desc = '小号玩学币'},
@@ -92,6 +93,7 @@ TeachCourses.icons = {
     [67] = {url = TeachCourses.purchase_icons_path, left=1391, top=669, width=211, height=135, desc = '单课tips'},
     [68] = {url = TeachCourses.purchase_icons_path, left=1666, top=698, width=307, height=106, desc = '这里用来放解锁价格'},
     [69] = {url = TeachCourses.purchase_icons_path, left=211, top=981, width=1609, height=916, desc = '课程解锁小黑板'},
+    [70] = {url = TeachCourses.purchase_icons_path, left=72, top=319, width=357, height=206, desc = '单课解锁边缘遮罩'},
 }
 
 
