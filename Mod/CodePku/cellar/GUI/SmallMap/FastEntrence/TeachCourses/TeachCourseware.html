@@ -183,7 +183,7 @@ end
 -- 课程包是否显示
 function ShowPurCoursePackage()
     if TeachCourses.coursesPackageinfo ~= nil then
-        return TeachCourses.coursesPackageinfo.is_unlock == false
+        return TeachCourses.coursesPackageinfo.is_unlock == false and TeachCourses.coursesPackageinfo.paid_unlock_method ~= 2
     else
         return false
     end
