@@ -1,0 +1,445 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+</head>
+<body>
+<pe:mcml>
+<script refresh="false" type="text/npl" src="TeachCourses.lua"><![CDATA[
+TeachCourses = NPL.load("(gl)Mod/CodePku/cellar/GUI/SmallMap/FastEntrence/TeachCourses/TeachCourses.lua");
+
+-- 当前页码
+TeachCourses.curIndexCourses = 1
+
+-- 标记显示图片还是介绍
+TeachCourses.courseInfoFlags = {
+    [1] = false,
+    [2] = false,
+    [3] = false,
+}
+
+-- 不同类型课程包(1=学期包,2=课程包,3=单课)的图片资源
+TeachCourses.courseIconType = {
+    [1] = {[1]=56, [2]=62, [3]=65},
+    [2] = {[1]=57, [2]=63, [3]=66},
+    [3] = {[1]=58, [2]=64, [3]=67},
+}
+
+-- 不同类型课程包(1=学期包,2=课程包,3=单课)的内部图片和标签的位置和大小
+TeachCourses.courseIconTypePosition = {
+    [1] = {
+        [1]={left=71, top=50, width=257, height=206}, 
+        [2]={left=-18, top=189, width=217, height=104}, 
+    },
+    [2] = {
+        [1]={left=77, top=70, width=236, height=190}, 
+        [2]={left=-18, top=186, width=217, height=104}, 
+    },
+    [3] = {
+        [1]={left=71, top=120, width=231, height=123},  
+        [2]={left=-18, top=172, width=207, height=131}, 
+    }
+}
+
+-- 处理过长名字
+function CutLongString(longString, lenth)
+    local lenth = lenth or 11
+    if commonlib.utf8.len(longString) > lenth then
+        return commonlib.utf8.sub(longString,1,lenth-1)..'...'
+    else
+        return longString
+    end
+end
+
+-- 所有数据
+function GetAllData()
+    local allData = {}
+    local index = 1
+    if TeachCourses.allCoursesPackageinfo then
+        for _,v in pairs(TeachCourses.allCoursesPackageinfo) do
+            allData[index] = {
+                id = v.id,
+                course_type = 2,
+                type = 2,
+                pack_name = CutLongString(v.name),
+                price = v.package_price,
+                original_price = v.package_underline_price,
+                desc = v.description ~= '' and v.description or v.name,
+                cover_url = v.cover_url and v.cover_url ~= '' and v.cover_url or nil,
+            }
+            index = index + 1 
+        end
+    end
+    return allData
+end
+
+-- 获取当前页面的数据
+function GetCurPageData()
+    local curPageCoursesInfo = {}
+    if not next(GetAllData()) then
+        return curPageCoursesInfo
+    end
+
+    local startIndex = (TeachCourses.curIndexCourses-1)*3 + 1
+    local endIndex = if_else(TeachCourses.curIndexCourses*3 < #GetAllData(), TeachCourses.curIndexCourses*3, #GetAllData())
+    for i=startIndex,endIndex do
+        local index = i - startIndex + 1
+        curPageCoursesInfo[index] = GetAllData()[i]
+    end
+    return curPageCoursesInfo
+end
+
+-- 当前页数据长度(1-3)
+function GetCurDataLen()
+    return #GetCurPageData()
+end
+
+-- 获取当前页面指定课程的信息
+function GetCourseInfo(index)
+    -- 1个课程包和3个共用一套界面,一个课程包占用第二个,index实际上是2,但是返回GetCourseInfo第1条
+    if GetCurDataLen() == 1 then
+        return GetCurPageData()[1]
+    else
+        return GetCurPageData()[tonumber(index)]
+    end
+end
+
+-- 根据ID获取图片
+function getIcon(iconId)
+    return TeachCourses.GetTeachCoursesIconPathStr(iconId)
+end
+
+-- 根据index获取课程包类型,然后根据不同类型获取图片资源
+function GetTypeIcon(index, iconIndex)
+    if GetCourseInfo(index).cover_url and iconIndex==2  then
+        return GetCourseInfo(index).cover_url
+    else
+        local typeIndex = GetCourseInfo(index)['type']
+        return getIcon(TeachCourses.courseIconType[typeIndex][iconIndex])
+    end
+end
+
+-- 根据index获取课程包类型,然后根据不同类型获取课程包图片和标签的位置和高度
+function GetTypePicInfo(index)
+    local typeId = GetCourseInfo(index)['type']
+    local iconInfo = TeachCourses.courseIconTypePosition[typeId][1]
+    local tipInfo = TeachCourses.courseIconTypePosition[typeId][2]
+    
+    local iconInfoStr  = ''
+    if GetCourseInfo(index).cover_url then
+        iconInfoStr = 'left: 21; top: 51; width: 356; height: 203;'
+    else
+        iconInfoStr = format('left: %d; top: %d; width: %d; height: %d;', iconInfo.left, iconInfo.top, iconInfo.width, iconInfo.height)
+    end
+  
+    local tipInfoStr = format('left: %d; top: %d; width: %d; height: %d;', tipInfo.left, tipInfo.top, tipInfo.width, tipInfo.height)
+    return {iconInfoStr=iconInfoStr,tipInfoStr=tipInfoStr}
+end
+
+-- 显示描述/图片的标记
+function GetInfoFlag(index)
+    return TeachCourses.courseInfoFlags[index]
+end
+
+-- 描述/图片切换
+function ShowInfo(name)
+    local index = tonumber(name)
+    TeachCourses.courseInfoFlags[index] = if_else(GetInfoFlag(index)==true, false, true)
+    Page:Refresh(0)
+end
+
+-- 购买
+function Purchase(name)
+    local index = tonumber(name)
+    local courseId =  GetCourseInfo(index).id
+    local courseType =  GetCourseInfo(index).course_type
+    local coursePrice =  GetCourseInfo(index).price
+    local ifAford = TeachCourses:JudgeAford(coursePrice)
+    if ifAford then
+        ClosePage()
+        TeachCourses:PurchaseCourse(courseId,courseType,coursePrice)
+    else
+        local Payment = NPL.load("(gl)Mod/CodePku/cellar/GUI/Payment/Payment.lua");
+        Payment.entity_id = courseId
+        Payment.entity_type = courseType
+        Payment:ShowPage("CoursePayment")
+    end
+end
+
+-- 获取最大页码数
+function GetMaxPageCount()
+    return math.ceil(#GetAllData()/3)
+end
+
+-- 获取页码点坐标
+function GetPoints()
+    return TeachCourses:GetPagePoints(GetMaxPageCount(), 48, 480)
+end
+
+-- 刷新默认显示图片的状态
+function RefreshInfoFlags()
+    TeachCourses.courseInfoFlags = {
+        [1] = false,
+        [2] = false,
+        [3] = false,
+    }
+end
+
+--上一页
+function PageUp()
+    local pageIndex = if_else(TeachCourses.curIndexCourses>1, TeachCourses.curIndexCourses-1, 1)
+    if pageIndex ~= TeachCourses.curIndexCourses then
+        RefreshInfoFlags()
+        TeachCourses.curIndexCourses = pageIndex
+        Page:Refresh(0)
+    end
+end
+
+--下一页
+function PageDown()
+    local pageIndex = if_else(TeachCourses.curIndexCourses<GetMaxPageCount(), TeachCourses.curIndexCourses+1, GetMaxPageCount())
+    if pageIndex ~= TeachCourses.curIndexCourses then
+        RefreshInfoFlags()
+        TeachCourses.curIndexCourses = pageIndex
+        Page:Refresh(0)
+    end
+end
+
+function ClosePage()
+    Page:CloseWindow()
+end
+
+]]></script>
+
+<style type="text/mcss"></style>
+<pe:container alignment="_lt" width="1920" height="1080">
+    <div style="position: relative; background-color: #000000dd; width: 1920; height: 1080; color: #ffffff; text-align: left; font-family: alhy; font-weight: bold;">
+        <div style="<%= format('position: relative; left: 128; top: 98; width: 1609; height: 916; background:url(%s);', getIcon(69)) %>">
+            <pe:if condition="<%= GetCurDataLen() == 1 or GetCurDataLen() == 3%>">
+                <pe:if condition="<%= GetCurDataLen() == 3 %>">
+                    <!-- 包名 -->
+                    <span style="position: relative; left: 228; top: 173; width: 326; height: 28; text-align: center; font-size: 28; font-family: alhy; font-weight: normal;"><%= GetCourseInfo(1).pack_name %></span> 
+                    <!-- 课程图片 -->
+                    <pe:if condition="<%= not GetInfoFlag(1) %>">
+                        <div onclick="ShowInfo" name="1" style="<%= format('position: relative; left: 192; top: 209; width: 404; height: 323; background:url(%s);', getIcon(59)) %>">
+                            <div style="<%= format('position: relative; %s background:url(%s);', GetTypePicInfo(1).iconInfoStr, GetTypeIcon(1,2)) %>"></div>
+                            <pe:if condition="<%= GetCourseInfo(1).type==3 %>">
+                                <div style="<%= format('position: relative; left: 21; top: 49; width: 357; height: 206; background:url(%s);',  getIcon(70)) %>"></div>
+                            </pe:if>
+                            <div style="<%= format('position: relative; %s background:url(%s);', GetTypePicInfo(1).tipInfoStr, GetTypeIcon(1,3)) %>"></div>
+                        </div>
+                        <!-- 感叹号 -->
+                        <div onclick="ShowInfo" name="1" style="<%= format('position: relative; left: 533; top: 203; width: 55; height: 56; background:url(%s);', getIcon(55)) %>"></div>
+                    </pe:if>
+                    
+                    <!-- 课程介绍 -->
+                    <pe:if condition="<%= GetInfoFlag(1) %>">
+                        <div onclick="ShowInfo" name="1" style="<%= format('position: relative; left: 192; top: 209; width: 404; height: 323; color: #905e29; font-family: alhy; font-weight: normal; background:url(%s);', getIcon(59)) %>">
+                            <pe:if condition="<%= GetCourseInfo(1).type==3 %>">
+                                <span style="position: relative; left: 120; top: 31; font-size: 38; font-family: alhy;">课程介绍</span>
+                            </pe:if>
+                            <pe:if condition="<%= GetCourseInfo(1).type==2 %>">
+                                <span style="position: relative; left: 100; top: 31; font-size: 38; font-family: alhy;">课程包介绍</span>
+                            </pe:if>
+                            <pe:if condition="<%= GetCourseInfo(1).type==1 %>">
+                                <span style="position: relative; left: 100; top: 31; font-size: 38; font-family: alhy;">学期包介绍</span>
+                            </pe:if>
+                            <span style="position: relative; left: 70; top: 100; font-size: 22; width: 270; height: 148;"><%= GetCourseInfo(1).desc %></span>
+                        </div>
+                        <div onclick="ShowInfo" name="1" style="<%= format('position: relative; left: 533; top: 203; width: 55; height: 56; background:url(%s);', getIcon(55)) %>"></div>
+                    </pe:if>
+                    <!-- 购买按钮/价格 -->
+                    <div onclick="Purchase" name="1" style="<%= format('position: relative; left: 236; top: 545; width: 315; height: 103; background:url(%s);', getIcon(68)) %>">
+                        <div style="<%= format('position: relative; left: 60; top: 12; width: 46; height: 53; background:url(%s);', getIcon(60)) %>"></div>
+                        <span style="position: relative; left: 110; top: 15; width: 150; height: 50; font-size: 44; text-align: center; font-weight: bold;"><%= GetCourseInfo(1).price %></span>
+                    </div>
+                    <!-- 原价 -->
+                    <div style="position: relative; left: 389; top: 650; width: 190; height: 23;font-size: 23; font-family: Noto Sans S Chinese Regular; font-weight: normal;">
+                        <span style="position: relative; left: 20; top: -4;">原价：</span>
+                        <div style="<%= format('position: relative; left: 77; top: -7; width: 30; height: 33; background:url(%s);', getIcon(61)) %>"></div>
+                        <span style="position: relative; left: 112; top: -4;"><%= GetCourseInfo(1).original_price %></span>
+                        <div style="position: relative; left: 0; top: 8; width: 190; height: 2; background-color: #ffffff;"></div>
+                    </div>
+                </pe:if>
+                
+                <!-- 2 -->
+                <span style="position: relative; left: 685 ; top: 173; width: 326; height: 28; text-align: center; font-size: 28; font-family: alhy; font-weight: normal;"><%= GetCourseInfo(2).pack_name %></span> 
+                <pe:if condition="<%= not GetInfoFlag(2) %>">
+                    <div onclick="ShowInfo" name="2" style="<%= format('position: relative; left: 650; top: 209; width: 404; height: 323; background:url(%s);',getIcon(59)) %>">
+                        <div style="<%= format('position: relative; %s background:url(%s);', GetTypePicInfo(2).iconInfoStr, GetTypeIcon(2,2)) %>"></div>
+                        <pe:if condition="<%= GetCourseInfo(2).type==3 %>">
+                            <div style="<%= format('position: relative; left: 21; top: 49; width: 357; height: 206; background:url(%s);',  getIcon(70)) %>"></div>
+                        </pe:if>
+                        <div style="<%= format('position: relative; %s background:url(%s);', GetTypePicInfo(2).tipInfoStr, GetTypeIcon(2,3)) %>"></div>
+                 </div>
+                    <div onclick="ShowInfo" name="2" style="<%= format('position: relative; left: 991; top: 203; width: 55; height: 56; background:url(%s);', getIcon(55)) %>"></div>
+                </pe:if>
+                <pe:if condition="<%= GetInfoFlag(2) %>">
+                    <div onclick="ShowInfo" name="2" style="<%= format('position: relative; left: 650; top: 209; width: 404; height: 323; color: #905e29; font-family: alhy; font-weight: normal; background:url(%s);', getIcon(59)) %>">
+                        <pe:if condition="<%= GetCourseInfo(2).type==3 %>">
+                            <span style="position: relative; left: 120; top: 31; font-size: 38; font-family: alhy;">课程介绍</span>
+                        </pe:if>
+                        <pe:if condition="<%= GetCourseInfo(2).type==2 %>">
+                            <span style="position: relative; left: 100; top: 31; font-size: 38; font-family: alhy;">课程包介绍</span>
+                        </pe:if>
+                        <pe:if condition="<%= GetCourseInfo(2).type==1 %>">
+                            <span style="position: relative; left: 100; top: 31; font-size: 38; font-family: alhy;">学期包介绍</span>
+                        </pe:if>
+                        <span style="position: relative; left: 70; top: 100; font-size: 22; width: 270; height: 148;"><%= GetCourseInfo(2).desc %></span>
+                    </div>
+                    <div onclick="ShowInfo" name="2" style="<%= format('position: relative; left: 991; top: 203; width: 55; height: 56; background:url(%s);', getIcon(55)) %>"></div>
+                </pe:if>
+                <div onclick="Purchase" name="2" style="<%= format('position: relative; left: 692; top: 545; width: 315; height: 103; background:url(%s);', getIcon(68)) %>">
+                    <div style="<%= format('position: relative; left: 60; top: 12; width: 46; height: 53; background:url(%s);', getIcon(60)) %>"></div>
+                    <span style="position: relative; left: 110; top: 15; width: 150; height: 50; font-size: 44; text-align: center; font-weight: bold;"><%= GetCourseInfo(2).price %></span>
+                </div>
+                <div style="position: relative; left: 849; top: 650; width: 190; height: 23;font-size: 23; font-family: Noto Sans S Chinese Regular; font-weight: normal;">
+                    <span style="position: relative; left: 20; top: -4;">原价：</span>
+                    <div style="<%= format('position: relative; left: 77; top: -7; width: 30; height: 33; background:url(%s);', getIcon(61)) %>"></div>
+                    <span style="position: relative; left: 112; top: -4;"><%= GetCourseInfo(2).original_price %></span>
+                    <div style="position: relative; left: 0; top: 8; width: 190; height: 2; background-color: #ffffff;"></div>
+                </div>
+
+                <pe:if condition="<%= GetCurDataLen() == 3 %>">
+                    <!-- 3 -->
+                    <span style="position: relative; left: 1153; top: 173; width: 326; height: 28; text-align: center; font-size: 28; font-family: alhy; font-weight: normal;"><%= GetCourseInfo(3).pack_name %></span> 
+                    <pe:if condition="<%= not GetInfoFlag(3) %>">
+                        <div onclick="ShowInfo" name="3" style="<%= format('position: relative; left: 1117; top: 209; width: 404; height: 323; background:url(%s);', getIcon(59)) %>">
+                            <div style="<%= format('position: relative; %s background:url(%s);', GetTypePicInfo(3).iconInfoStr, GetTypeIcon(3,2)) %>"></div>
+                            <pe:if condition="<%= GetCourseInfo(3).type==3 %>">
+                                <div style="<%= format('position: relative; left: 21; top: 49; width: 357; height: 206; background:url(%s);',  getIcon(70)) %>"></div>
+                            </pe:if>
+                            <div style="<%= format('position: relative; %s background:url(%s);', GetTypePicInfo(3).tipInfoStr, GetTypeIcon(3,3)) %>"></div>
+                         </div>
+                        <div onclick="ShowInfo" name="3" style="<%= format('position: relative; left: 1458; top: 203; width: 55; height: 56; background:url(%s);', getIcon(55)) %>"></div>
+                    </pe:if>
+                    <pe:if condition="<%= GetInfoFlag(3) %>">
+                        <div onclick="ShowInfo" name="3" style="<%= format('position: relative; left: 1117; top: 209; width: 404; height: 323; color: #905e29; font-family: alhy; font-weight: normal; background:url(%s);', getIcon(59)) %>">
+                            <pe:if condition="<%= GetCourseInfo(3).type==3 %>">
+                                <span style="position: relative; left: 120; top: 31; font-size: 38; font-family: alhy;">课程介绍</span>
+                            </pe:if>
+                            <pe:if condition="<%= GetCourseInfo(3).type==2 %>">
+                                <span style="position: relative; left: 100; top: 31; font-size: 38; font-family: alhy;">课程包介绍</span>
+                            </pe:if>
+                            <pe:if condition="<%= GetCourseInfo(3).type==1 %>">
+                                <span style="position: relative; left: 100; top: 31; font-size: 38; font-family: alhy;">学期包介绍</span>
+                            </pe:if>
+                            <span style="position: relative; left: 70; top: 100; font-size: 22; width: 270; height: 148;"><%= GetCourseInfo(3).desc %></span>
+                        </div>
+                        <div onclick="ShowInfo" name="3" style="<%= format('position: relative; left: 1458; top: 203; width: 55; height: 56; background:url(%s);', getIcon(55)) %>"></div>
+                    </pe:if>
+                    <div onclick="Purchase" name="3" style="<%= format('position: relative; left: 1161; top: 545; width: 315; height: 103; background:url(%s);', getIcon(68)) %>">
+                        <div style="<%= format('position: relative; left: 60; top: 12; width: 46; height: 53; background:url(%s);', getIcon(60)) %>"></div>
+                        <span style="position: relative; left: 110; top: 15; width: 150; height: 50; font-size: 44; text-align: center; font-weight: bold;"><%= GetCourseInfo(3).price %></span>
+                    </div>
+                    <div style="position: relative; left: 1315; top: 650; width: 190; height: 23;font-size: 23; font-family: Noto Sans S Chinese Regular; font-weight: normal;">
+                        <span style="position: relative; left: 20; top: -4;">原价：</span>
+                        <div style="<%= format('position: relative; left: 77; top: -7; width: 30; height: 33; background:url(%s);', getIcon(61)) %>"></div>
+                        <span style="position: relative; left: 112; top: -4;"><%= GetCourseInfo(3).original_price %></span>
+                        <div style="position: relative; left: 0; top: 8; width: 190; height: 2; background-color: #ffffff;"></div>
+                    </div>
+                </pe:if>
+            </pe:if>
+
+
+            <pe:if condition="<%= GetCurDataLen()==2 %>">
+
+                <span style="position: relative; left: 464; top: 173; width: 326; height: 28; text-align: center; font-size: 28; font-family: alhy; font-weight: normal;"><%= GetCourseInfo(1).pack_name %></span> 
+                <pe:if condition="<%= not GetInfoFlag(1) %>">
+                    <div onclick="ShowInfo" name="1" style="<%= format('position: relative; left: 428; top: 209; width: 404; height: 323; background:url(%s);', getIcon(59)) %>">
+                        <div style="<%= format('position: relative; %s background:url(%s);', GetTypePicInfo(1).iconInfoStr, GetTypeIcon(1,2)) %>"></div>
+                        <pe:if condition="<%= GetCourseInfo(1).type==3 %>">
+                            <div style="<%= format('position: relative; left: 21; top: 49; width: 357; height: 206; background:url(%s);',  getIcon(70)) %>"></div>
+                        </pe:if>
+                        <div style="<%= format('position: relative; %s background:url(%s);', GetTypePicInfo(1).tipInfoStr, GetTypeIcon(1,3)) %>"></div>
+                    </div>
+                    <div onclick="ShowInfo" name="1" style="<%= format('position: relative; left: 769; top: 203; width: 55; height: 56; background:url(%s);', getIcon(55)) %>"></div>
+                </pe:if>
+                <pe:if condition="<%= GetInfoFlag(1) %>">
+                    <div onclick="ShowInfo" name="1" style="<%= format('position: relative; left: 428; top: 209; width: 404; height: 323; color: #905e29; font-family: alhy; font-weight: normal; background:url(%s);', getIcon(59)) %>">
+                        <pe:if condition="<%= GetCourseInfo(1).type==3 %>">
+                            <span style="position: relative; left: 120; top: 31; font-size: 38; font-family: alhy;">课程介绍</span>
+                        </pe:if>
+                        <pe:if condition="<%= GetCourseInfo(1).type==2 %>">
+                            <span style="position: relative; left: 100; top: 31; font-size: 38; font-family: alhy;">课程包介绍</span>
+                        </pe:if>
+                        <pe:if condition="<%= GetCourseInfo(1).type==1 %>">
+                            <span style="position: relative; left: 100; top: 31; font-size: 38; font-family: alhy;">学期包介绍</span>
+                        </pe:if>
+                        <span style="position: relative; left: 70; top: 100; font-size: 22; width: 270; height: 148;"><%= GetCourseInfo(1).desc %></span>
+                    </div>
+                    <div onclick="ShowInfo" name="1" style="<%= format('position: relative; left: 769; top: 203; width: 55; height: 56; background:url(%s);', getIcon(55)) %>"></div>
+                </pe:if>
+                <div onclick="Purchase" name="1" style="<%= format('position: relative; left: 472; top: 545; width: 315; height: 103; background:url(%s);', getIcon(68)) %>">
+                    <div style="<%= format('position: relative; left: 60; top: 12; width: 46; height: 53; background:url(%s);', getIcon(60)) %>"></div>
+                    <span style="position: relative; left: 110; top: 15; width: 150; height: 50; font-size: 44; text-align: center; font-weight: bold;"><%= GetCourseInfo(1).price %></span>
+                </div>
+                <div style="position: relative; left: 625; top: 650; width: 190; height: 23;font-size: 23; font-family: Noto Sans S Chinese Regular; font-weight: normal;">
+                    <span style="position: relative; left: 20; top: -4;">原价：</span>
+                    <div style="<%= format('position: relative; left: 77; top: -7; width: 30; height: 33; background:url(%s);', getIcon(61)) %>"></div>
+                    <span style="position: relative; left: 112; top: -4;"><%= GetCourseInfo(1).original_price %></span>
+                    <div style="position: relative; left: 0; top: 8; width: 190; height: 2; background-color: #ffffff;"></div>
+                </div>
+
+                <span style="position: relative; left: 921 ; top: 173; width: 326; height: 28; text-align: center; font-size: 28; font-family: alhy; font-weight: normal;"><%= GetCourseInfo(2).pack_name %></span> 
+                <pe:if condition="<%= not GetInfoFlag(2) %>">
+                    <div onclick="ShowInfo" name="2" style="<%= format('position: relative; left: 886; top: 209; width: 404; height: 323; background:url(%s);',getIcon(59)) %>">
+                        <div style="<%= format('position: relative; %s background:url(%s);', GetTypePicInfo(2).iconInfoStr, GetTypeIcon(2,2)) %>"></div>
+                        <pe:if condition="<%= GetCourseInfo(2).type==3 %>">
+                            <div style="<%= format('position: relative; left: 21; top: 49; width: 357; height: 206; background:url(%s);',  getIcon(70)) %>"></div>
+                        </pe:if>
+                        <div style="<%= format('position: relative; %s background:url(%s);', GetTypePicInfo(2).tipInfoStr, GetTypeIcon(2,3)) %>"></div>
+                    </div>
+                    <div onclick="ShowInfo" name="2" style="<%= format('position: relative; left: 1227; top: 203; width: 55; height: 56; background:url(%s);', getIcon(55)) %>"></div>
+                </pe:if>
+                <pe:if condition="<%= GetInfoFlag(2) %>">
+                    <div onclick="ShowInfo" name="2" style="<%= format('position: relative; left: 886; top: 209; width: 404; height: 323; color: #905e29; font-family: alhy; font-weight: normal; background:url(%s);', getIcon(59)) %>">
+                        <pe:if condition="<%= GetCourseInfo(2).type==3 %>">
+                            <span style="position: relative; left: 120; top: 31; font-size: 38; font-family: alhy;">课程介绍</span>
+                        </pe:if>
+                        <pe:if condition="<%= GetCourseInfo(2).type==2 %>">
+                            <span style="position: relative; left: 100; top: 31; font-size: 38; font-family: alhy;">课程包介绍</span>
+                        </pe:if>
+                        <pe:if condition="<%= GetCourseInfo(2).type==1 %>">
+                            <span style="position: relative; left: 100; top: 31; font-size: 38; font-family: alhy;">学期包介绍</span>
+                        </pe:if>
+                            <span style="position: relative; left: 70; top: 100; font-size: 22; width: 270; height: 148;"><%= GetCourseInfo(2).desc %></span>
+                    </div>
+                    <div onclick="ShowInfo" name="2" style="<%= format('position: relative; left: 1227; top: 203; width: 55; height: 56; background:url(%s);', getIcon(55)) %>"></div>
+                </pe:if>
+                <div onclick="Purchase" name="2" style="<%= format('position: relative; left: 928; top: 545; width: 315; height: 103; background:url(%s);', getIcon(68)) %>">
+                    <div style="<%= format('position: relative; left: 60; top: 12; width: 46; height: 53; background:url(%s);', getIcon(60)) %>"></div>
+                    <span style="position: relative; left: 110; top: 15; width: 150; height: 50; font-size: 44; text-align: center; font-weight: bold;"><%= GetCourseInfo(2).price %></span>
+                </div>
+                <div style="position: relative; left: 1085; top: 650; width: 190; height: 23;font-size: 23; font-family: Noto Sans S Chinese Regular; font-weight: normal;">
+                    <span style="position: relative; left: 20; top: -4;">原价：</span>
+                    <div style="<%= format('position: relative; left: 77; top: -7; width: 30; height: 33; background:url(%s);', getIcon(61)) %>"></div>
+                    <span style="position: relative; left: 112; top: -4;"><%= GetCourseInfo(2).original_price %></span>
+                    <div style="position: relative; left: 0; top: 8; width: 190; height: 2; background-color: #ffffff;"></div>
+                </div>
+
+            </pe:if>
+
+            <!-- 翻页 -->
+            <div onclick="PageUp" name="up" style="<%= format('position: relative; left: 561; top: 699; width: 69; height: 95; background:url(%s);', getIcon(53)) %>"></div>
+            <div onclick="PageDown" name="down" style="<%= format('position: relative; left: 1098; top: 699; width: 69; height: 95; background:url(%s);', getIcon(54)) %>"></div>
+            <!-- 页码点 -->
+            <div style="position: relative; left: 630; top: 731; width: 468; height: 37;">
+                <pe:repeat DataSource="<%= GetPoints() %>">
+                    <pe:repeatitem>
+                        <div style="<%=format('position: relative; left: %d; top: 0; width: 36; height: 37; background:url(%s);', x, getIcon(6))%>">
+                            <pe:if condition="<%= TeachCourses.curIndexCourses == index %>">
+                                <div style="<%=format('position: relative; left: 6; top: 6; width: 24; height: 24; background:url(%s);', getIcon(5))%>"></div>
+                            </pe:if>
+                        </div>
+                    </pe:repeatitem>
+                </pe:repeat>
+            </div>
+        </div>
+        <div onclick="ClosePage" style="<%= format('position: relative; left: 1618; top: 65; width: 104; height: 105; background:url(%s);', getIcon(52)) %>"></div>
+    </div>
+</pe:container>
+</pe:mcml>
+</body>
+</html>
