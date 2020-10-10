@@ -6,7 +6,7 @@ place: Foshan
 Desc: 
 use the lib:
 ------------------------------------------------------------
-local MainLogin = NPL.load("(gl)Mod/WorldShare/cellar/MainLogin/MainLogin.lua")
+local MainLogin = NPL.load("(gl)Mod/CodePku/cellar/MainLogin/MainLogin.lua")
 ------------------------------------------------------------
 ]]
 local ParaWorldLessons = commonlib.gettable("MyCompany.Aries.Game.MainLogin.ParaWorldLessons")
@@ -424,21 +424,19 @@ function MainLogin:GetVisitorUUID()
     end
 
     local UUIDData = GameLogic.GetPlayerController():LoadLocalData("UUIDData", {}, true)
-    local currentParacraftDir = ParaIO.GetWritablePath()
-    local machineID = UUIDData.machineID or "";
-
-    if not UUIDData.softwareUUID or       
-       not UUIDData.paracraftDir or
-       UUIDData.paracraftDir ~= currentParacraftDir then
-        UUIDData.paracraftDir = ParaIO.GetWritablePath()
-        UUIDData.softwareUUID = getUUID()        
-        GameLogic.GetPlayerController():SaveLocalData("UUIDData", UUIDData, true)
-    end
+    local currentParacraftDir = ParaIO.GetWritablePath()    
     
-
-    -- LOG.std(nil, "MainLogin", "GetDeviceUUID", "UUIDData.softwareUUID = %s , UUIDData.machineID = %s", tostring(UUIDData.softwareUUID), tostring(UUIDData.machineID))
-
-    return UUIDData.softwareUUID .. "-" .. machineID
+    if (UUIDData.softwareUUID and UUIDData.paracraftDir and UUIDData.paracraftDir == currentParacraftDir) then
+        return UUIDData.softwareUUID .. "-" .. UUIDData.machineID or "";
+    else
+        local machineID = ParaEngine.GetAttributeObject():GetField("MachineID","");
+        UUIDData.paracraftDir = ParaIO.GetWritablePath()
+        UUIDData.softwareUUID = "uuid"; --getUUID()        
+        UUIDData.machineID = machineID
+        GameLogic.GetPlayerController():SaveLocalData("UUIDData", UUIDData, true)
+        return UUIDData.softwareUUID .. "-" .. machineID
+    end
+    -- LOG.std(nil, "MainLogin", "GetDeviceUUID", "UUIDData.softwareUUID = %s , UUIDData.machineID = %s", tostring(UUIDData.softwareUUID), tostring(UUIDData.machineID))    
 end
 
 
