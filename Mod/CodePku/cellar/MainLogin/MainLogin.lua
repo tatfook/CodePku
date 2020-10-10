@@ -23,6 +23,7 @@ local MainLogin = NPL.export()
 MainLogin.MainLoginPage = nil
 MainLogin.LoginBGPage = nil
 MainLogin.isPassword = nil
+MainLogin.accountNum = ''  --记录输入的号码,切换登录方式保留
 
 function MainLogin:Show(index)     
     self:CloseLoadingPage()

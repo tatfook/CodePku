@@ -17,22 +17,25 @@ local request = NPL.load("(gl)Mod/CodePku/api/BaseRequest.lua");
 local UserInfoPage = NPL.load("(gl)Mod/CodePku/cellar/GUI/UserInfo.lua");
 
 Payment.iconPng = "codepku/image/textures/common_32bits.png"
+Payment.Recharge_send_content = "已推送详情到家长微信~快和爸爸妈妈沟通购买课程吧"
+
+Payment.TimerTable = {}
 
 Payment.params = {
     -- 解锁提示页面
     CoursePayment = {
         url="Mod/CodePku/cellar/GUI/Payment/CoursePayment.html", 
-        alignment="_lt", left = 0, top = 0, width = 1920 , height = 1080, zorder = 31
+        alignment="_lt", left = 0, top = 0, width = 1920 , height = 1080, zorder = 32
       },
     -- 充值提示页面
     Recharge = {
         url="Mod/CodePku/cellar/GUI/Payment/Recharge.html", 
-        alignment="_lt", left = 0, top = 0, width = 1920 , height = 1080, zorder = 31
+        alignment="_lt", left = 0, top = 0, width = 1920 , height = 1080, zorder = 33
       },
     -- 家长绑定页面
     Eldership = {
         url="Mod/CodePku/cellar/GUI/Eldership/EldershipBind.html", 
-        alignment="_lt", left = 0, top = 0, width = 1920 , height = 1080, zorder = 31
+        alignment="_lt", left = 0, top = 0, width = 1920 , height = 1080, zorder = 32
     },
 }
 
@@ -63,7 +66,66 @@ end
 
 -- UserInfoPage.money = {goldcoin=0, wanxuecoin=0} 用户登陆后获取数据库货币数量
 
+Payment.pagePackage = {}
 function Payment:ShowPage(pagename)
+    local page
     ToPage = tostring(pagename)
-    AdaptWindow:QuickWindow(Payment.params[ToPage])
+    page = AdaptWindow:QuickWindow(Payment.params[ToPage])
+    table.insert(Payment.pagePackage, page)
+end
+
+
+function Payment:PurchaseNotice()
+    if next(Payment.TimerTable) ~= nil then
+        for k,v in pairs(Payment.TimerTable) do
+            --遍历表，找到已经发送过请求的记录,结尾必须返回，防止进入下面全新请求的逻辑
+            if v.lastClicktype == Payment.entity_type and v.lastClickid == Payment.entity_id then
+                -- 计时器结束时会清空当前表，所以能遍历到记录说明计时器没过期，此时需要直接返回
+                return
+            end
+        end
+    end
+    -- 表中未记录的请求，需要重新发起并加入表中
+    Payment:SendNotice()
+    local temp_table = {}
+    temp_table.lastClicktype = Payment.entity_type
+    temp_table.lastClickid = Payment.entity_id
+    temp_table.TimerTimes = 60
+    temp_table.content = "课程解锁申请已推送到您家长微信啦~请勿频繁点击哦"
+    temp_table.timer = commonlib.Timer:new({
+        callbackFunc = function(timer)
+            if temp_table.TimerTimes == 0 then
+                temp_table.lastClicktype = nil
+                temp_table.lastClickid = nil
+                temp_table.content = nil
+                timer:Change(nil, nil)
+            end
+            temp_table.TimerTimes = temp_table.TimerTimes - 1
+        end
+    })
+    temp_table.timer:Change(1000, 1000)
+    table.insert(Payment.TimerTable, temp_table)
+end
+
+function Payment:SendNotice()
+    -- todo 发送购买通知
+    local params = {
+        entity_id = Payment.entity_id,
+        entity_type = Payment.entity_type,
+    }
+    request:post('/notices/parent-unlock-course',params):next(function(response)
+
+    end):catch(function(e)
+        GameLogic.AddBBS("CodeGlobals", e.data.message, 3000, "#FF0000");
+    end);
+end
+
+
+-- 一键关闭所有教学区页面，慎用
+function Payment:TurnOffAllPage()
+    for k,v in pairs(Payment.pagePackage) do
+        if next(v) ~= nil then
+            v:CloseWindow()
+        end
+    end
 end

@@ -1,0 +1,225 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+</head>
+<body>
+<pe:mcml>
+<script refresh="false" type="text/npl" src="TeachCourses.lua"><![CDATA[
+
+TeachCourses = NPL.load("(gl)Mod/CodePku/cellar/GUI/SmallMap/FastEntrence/TeachCourses/TeachCourses.lua");
+local FastEntrence = NPL.load("(gl)Mod/CodePku/cellar/GUI/SmallMap/FastEntrence/FastEntrence.lua")
+local SmallMap = commonlib.gettable("Mod.CodePku.GUI.SmallMap")
+local MainPopup = commonlib.gettable("Mod.CodePku.GUI.MainPopup");
+local page = document:GetPageCtrl()
+TeachCourses.TeachMainPage = Page
+
+
+TeachCourses.Main_Page_Index = 1
+TeachCourses.Main_PerPage_Grade = 3
+
+
+-- 获取全部年级导图列表
+if not TeachCourses.grade_list[1].grade then
+    TeachCourses:GetGradeList(page)
+end
+
+-- 获取雪碧图图标
+function getIcon(id)
+   return TeachCourses.GetTeachCoursesIconPathStr(id)
+end
+
+-- 点击解锁学期包
+function ShowPurchase()
+    TeachCourses:ShowPage(1)
+end
+
+-- 获取一页年级导图列表
+function GetOnePage()
+    local now_grade_list = {}
+    local start_index = 1 + TeachCourses.Main_PerPage_Grade * (TeachCourses.Main_Page_Index - 1)
+    local end_index = TeachCourses.Main_PerPage_Grade * TeachCourses.Main_Page_Index
+    if TeachCourses.grade_list[6].count_up then
+        for i=start_index,end_index do
+            table.insert(now_grade_list, TeachCourses.grade_list[i])
+        end
+        return now_grade_list
+    else
+        return {}
+    end
+end
+
+-- 点击上学期
+function OnClickUp(name)
+    if TeachCourses.grade_list[name].count_up > 0 then
+        GoToGrade(name, 1)
+    end
+end
+
+-- 点击下学期
+function OnClickDown(name)
+    if TeachCourses.grade_list[name].count_down > 0 then
+        GoToGrade(name, 2)
+    end
+end
+
+-- 打开对应年级课件
+function GoToGrade(grade, semester)
+    -- 记录当前选择的年级与学期
+    TeachCourses.Clicked_Grade = grade
+    TeachCourses.Clicked_Semester = semester
+    -- 请求课件详情，默认第一次打开为语文
+    TeachCourses.show_subject_name = "math"                  -- 对应展示标签的name
+    TeachCourses.show_subject_under_name = "math_display"    -- 对应展示标签的下层隐藏标签name
+    TeachCourses:ShowPage(4)
+    TeachCourses:GetCoursewares(TeachCourses.Clicked_Grade + 1, TeachCourses.Clicked_Semester, 2)             -- 请求默认展示的页面课件详细信息
+end
+
+-- 上一页
+function PageUp()
+    if TeachCourses.Main_Page_Index > 1 then
+        TeachCourses.Main_Page_Index = TeachCourses.Main_Page_Index - 1
+        Page:Refresh(0)
+    end
+end
+
+-- 下一页
+function PageDown()
+    TeachCourses.Max_Page_Grade = math.ceil(#TeachCourses.grade_list / TeachCourses.Main_PerPage_Grade)     -- 最大页码数
+    if TeachCourses.Main_Page_Index < TeachCourses.Max_Page_Grade then
+        TeachCourses.Main_Page_Index = TeachCourses.Main_Page_Index + 1
+        Page:Refresh(0)
+    end
+end
+
+
+
+
+
+function ClosePage()
+    Page:CloseWindow();
+    -- 判断是否从小地图进入的
+    if TeachCourses.IsCameFromSmallMap then
+        TeachCourses.IsCameFromSmallMap = false
+        SmallMap:ShowPage()
+    end
+end
+
+
+
+-- 跳转到教学区世界
+function turnToTeach()
+    -- 跳转世界后，本页面就不是从小地图进入，关闭时不需要重新打开小地图
+    TeachCourses.IsCameFromSmallMap = false
+    MainPopup:ShowPage("TPpopup", "教学区", 15855)
+end
+
+-- 判断渠道
+CommonFunc = NPL.load("(gl)Mod/CodePku/cellar/Common/CommonFunc/CommonFunc.lua")
+
+function isIOSApproval()
+    return CommonFunc.isIOSApproval()
+end
+    
+]]></script>
+
+<style type="text/mcss"></style>
+<pe:container alignment="_lt" width="1920" height="1080">
+
+    <div style="<%=format('position: relative; width: 1920; height: 1080; background:url(%s);', TeachCourses.background_path)%>"></div>
+
+    <div style="<%=format('position: relative; left: 87; top: 94; width: 1748; height: 968; background:url(%s);', getIcon(13))%>">
+        <!-- title小学 -->
+        <div style="<%=format('position: relative; left: 73; top: -45; width: 298; height: 130; background:url(%s);', getIcon(1))%>"></div>
+
+        <!-- 年级导图区域 -->
+        <div style="position: relative; width: 1395; height: 790; left: 190; top: 45;">
+            <pe:gridview style="width: 1600; height: 900;left: 50;top: 50;" DataSource='<%= GetOnePage() %>' CellPadding="6" ItemsPerLine="3" AllowPaging="false" RememberScrollPos="true" RememberLastPage="true" VerticalScrollBarStep="36" VerticalScrollBarOffsetX="8">
+                <Columns>
+                    <pe:if condition="<%= not isIOSApproval()%>">
+                        <div style="width: 424; height: 676;font-family:alhy;text-align:center;line-height:73;font-size: 24;color:#ffffff;">
+                            <!-- 上年级 -->
+                            <div onclick="OnClickUp" style="<%=format('position: relative;left: 50;top:50; width: 324; height: 247; background:url(%s);', getIcon(8))%>" name="<%=Eval('grade')%>">
+                                <div style="<%=format('position: relative; left: 20;top: 14; width: 283; height: 221; background:url(%s);', getIcon(9))%>"></div>
+                                <div style="<%=format('position: relative; left: 187;top: -36; width: 186; height: 118; background:url(%s);', getIcon(10))%>"></div>
+                                <div style="<%=format('position: relative; left: -35;top: 201; width: 204; height: 68; background:url(%s);', Eval('tips_url_up'))%>"></div>
+                            </div>
+                            <pe:if condition="<%= Eval('count_up') < 1 %>">
+                                <div style="position: relative;left: 50;top:50; width: 324; height: 247;"></div>
+                                <div style="<%=format('position: relative; left: 22;top: 143; width: 380; height: 73; background:url(%s);', getIcon(11))%>">敬请期待...</div>
+                            </pe:if>
+                            <!-- 下年级 -->
+                            <div onclick="OnClickDown" style="<%=format('position: relative;left: 50;top:379; width: 324; height: 247; background:url(%s);', getIcon(8))%>" name="<%=Eval('grade')%>">
+                                <div style="<%=format('position: relative; left: 20;top: 14; width: 283; height: 221; background:url(%s);', getIcon(9))%>"></div>
+                                <div style="<%=format('position: relative; left: 187;top: -36; width: 186; height: 118; background:url(%s);', getIcon(10))%>"></div>
+                                <div style="<%=format('position: relative; left: -35;top: 201; width: 204; height: 68; background:url(%s);', Eval('tips_url_down'))%>"></div>
+                            </div>
+                            <pe:if condition="<%= Eval('count_down') < 1 %>">
+                                <div style="position: relative;left: 50;top:379; width: 324; height: 247;"></div>
+                                <div style="<%=format('position: relative; left: 22;top: 472; width: 380; height: 73; background:url(%s);', getIcon(11))%>">敬请期待...</div>
+                            </pe:if>
+                        </div>
+                    </pe:if>
+
+                    <pe:if condition="<%= isIOSApproval()%>">
+                        <div style="width: 424; height: 676;font-family:alhy;text-align:center;line-height:73;font-size: 24;color:#ffffff;">
+                            <!-- 上年级 -->
+                            <pe:if condition="<%= Eval('count_up') < 1 %>">
+                                <div onclick="OnClickUp" style="<%=format('display:none;position: relative;left: 50;top:50; width: 324; height: 247; background:url(%s);', getIcon(8))%>" name="<%=Eval('grade')%>">
+                                    <div style="<%=format('position: relative; left: 20;top: 14; width: 283; height: 221; background:url(%s);', getIcon(9))%>"></div>
+                                    <div style="<%=format('position: relative; left: 187;top: -36; width: 186; height: 118; background:url(%s);', getIcon(10))%>"></div>
+                                    <div style="<%=format('position: relative; left: -35;top: 201; width: 204; height: 68; background:url(%s);', Eval('tips_url_up'))%>"></div>
+                                </div>
+                            
+                                <div style="display:none;position: relative;left: 50;top:50; width: 324; height: 247;"></div>
+                                <div style="<%=format('display:none;position: relative; left: 22;top: 143; width: 380; height: 73; background:url(%s);', getIcon(11))%>">敬请期待...</div>
+                            </pe:if>
+                            <!-- 下年级 -->
+                            <pe:if condition="<%= Eval('count_down') < 1 %>">
+                                <div onclick="OnClickDown" style="<%=format('display:none;position: relative;left: 50;top:379; width: 324; height: 247; background:url(%s);', getIcon(8))%>" name="<%=Eval('grade')%>">
+                                    <div style="<%=format('position: relative; left: 20;top: 14; width: 283; height: 221; background:url(%s);', getIcon(9))%>"></div>
+                                    <div style="<%=format('position: relative; left: 187;top: -36; width: 186; height: 118; background:url(%s);', getIcon(10))%>"></div>
+                                    <div style="<%=format('position: relative; left: -35;top: 201; width: 204; height: 68; background:url(%s);', Eval('tips_url_down'))%>"></div>
+                                </div>
+                            
+                                <div style="display:none;position: relative;left: 50;top:379; width: 324; height: 247;"></div>
+                                <div style="<%=format('display:none;position: relative; left: 22;top: 472; width: 380; height: 73; background:url(%s);', getIcon(11))%>">敬请期待...</div>
+                            </pe:if>
+                        </div>
+                    </pe:if>
+
+                </Columns>
+            </pe:gridview>
+        </div>
+        <!-- 解锁学期包 -->
+        <!-- <div onclick="ShowPurchase" style="<%=format('position: relative; left: 925; top: -34; width: 502; height: 158; background:url(%s);', getIcon(7))%>"></div> -->
+        <!-- 关闭 -->
+        <div onclick="ClosePage" style="<%=format('position: relative; left: 1587; top: 12; width: 101; height: 102; background:url(%s);', getIcon(2))%>"></div>
+
+        <!-- 翻页区域 -->
+        <div onclick="PageUp" style="<%=format('position: relative; left: 10; top: 367; width: 111; height: 155; background:url(%s);', getIcon(3))%>"></div>
+        <div onclick="PageDown" style="<%=format('position: relative; left: 1633; top: 369; width: 111; height: 155; background:url(%s);', getIcon(4))%>"></div>
+
+        <!-- 页码点 -->
+        <div style="<%=format('position: relative; left: 833; top: 791; width: 36; height: 37; background:url(%s);', getIcon(6))%>">
+            <pe:if condition="<%= TeachCourses.Main_Page_Index == 1 %>">
+                <div style="<%=format('position: relative; left: 6; top: 6; width: 24; height: 24; background:url(%s);', getIcon(5))%>"></div>
+            </pe:if>
+        </div>
+        <div style="<%=format('position: relative; left: 881; top: 791; width: 36; height: 37; background:url(%s);', getIcon(6))%>">
+            <pe:if condition="<%= TeachCourses.Main_Page_Index == 2 %>">
+                <div style="<%=format('position: relative; left: 6; top: 6; width: 24; height: 24; background:url(%s);', getIcon(5))%>"></div>
+            </pe:if>
+        </div>
+
+    </div>
+
+    <div onclick="turnToTeach" style="<%=format('position: relative; left: 22; top: 860; width: 300; height: 220; background:url(%s);', getIcon(12))%>"></div>
+    
+
+    <iframe src="Mod/CodePku/cellar/GUI/MoneyV2.html"></iframe>
+</pe:container>
+</pe:mcml>
+</body>
+</html>
