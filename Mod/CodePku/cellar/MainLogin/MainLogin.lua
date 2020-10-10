@@ -428,7 +428,8 @@ function MainLogin:GetVisitorUUID()
     local currentParacraftDir = ParaIO.GetWritablePath()    
     
     if (UUIDData.softwareUUID and UUIDData.paracraftDir and UUIDData.paracraftDir == currentParacraftDir) then
-        return UUIDData.softwareUUID .. "-" .. UUIDData.machineID or "";
+        local machineID = UUIDData.machineID or "";
+        return UUIDData.softwareUUID .. "-" .. machineID;
     else
         local machineID = ParaEngine.GetAttributeObject():GetField("MachineID","");
         UUIDData.paracraftDir = ParaIO.GetWritablePath()
