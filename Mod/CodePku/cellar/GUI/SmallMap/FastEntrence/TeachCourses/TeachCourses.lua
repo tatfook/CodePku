@@ -114,26 +114,27 @@ function TeachCourses.GetTeachCoursesIconPathStr(id)
 end
 
 -- 年级列表
+-- @params:int sort_index 实际上并不影响排序，主要是为了定位具体的年级增加的唯一标识，跟index保持一致可以保证请求的课件信息是正确年级的课件
 TeachCourses.grade_list = {
-    [1] = {tips_url_up = TeachCourses.GetTeachCoursesIconPathStr(14), desc_up = '一年级(上)', count_up = 0, tips_url_down = TeachCourses.GetTeachCoursesIconPathStr(15), desc_down = '一年级(下)',count_down = 0,},
-    [2] = {tips_url_up = TeachCourses.GetTeachCoursesIconPathStr(16), desc_up = '二年级(上)', count_up = 0, tips_url_down = TeachCourses.GetTeachCoursesIconPathStr(17), desc_down = '二年级(下)',count_down = 0,},
-    [3] = {tips_url_up = TeachCourses.GetTeachCoursesIconPathStr(18), desc_up = '三年级(上)', count_up = 0, tips_url_down = TeachCourses.GetTeachCoursesIconPathStr(19), desc_down = '三年级(下)',count_down = 0,},
-    [4] = {tips_url_up = TeachCourses.GetTeachCoursesIconPathStr(20), desc_up = '四年级(上)', count_up = 0, tips_url_down = TeachCourses.GetTeachCoursesIconPathStr(21), desc_down = '四年级(下)',count_down = 0,},
-    [5] = {tips_url_up = TeachCourses.GetTeachCoursesIconPathStr(22), desc_up = '五年级(上)', count_up = 0, tips_url_down = TeachCourses.GetTeachCoursesIconPathStr(23), desc_down = '五年级(下)',count_down = 0,},
-    [6] = {tips_url_up = TeachCourses.GetTeachCoursesIconPathStr(24), desc_up = '六年级(上)', count_up = 0, tips_url_down = TeachCourses.GetTeachCoursesIconPathStr(25), desc_down = '六年级(下)',count_down = 0,},
-    -- [7] = {},
-    -- [8] = {},
-    -- [9] = {},
-    -- [10] = {},
-    -- [11] = {},
-    -- [12] = {},
+    [1] = {tips_url = TeachCourses.GetTeachCoursesIconPathStr(14), desc = '一年级(上)', count = 0, cover_url = '', sort_index = 1, },
+    [2] = {tips_url = TeachCourses.GetTeachCoursesIconPathStr(16), desc = '二年级(上)', count = 0, cover_url = '', sort_index = 2, },
+    [3] = {tips_url = TeachCourses.GetTeachCoursesIconPathStr(18), desc = '三年级(上)', count = 0, cover_url = '', sort_index = 3, },
+    [4] = {tips_url = TeachCourses.GetTeachCoursesIconPathStr(20), desc = '四年级(上)', count = 0, cover_url = '', sort_index = 4, },
+    [5] = {tips_url = TeachCourses.GetTeachCoursesIconPathStr(22), desc = '五年级(上)', count = 0, cover_url = '', sort_index = 5, },
+    [6] = {tips_url = TeachCourses.GetTeachCoursesIconPathStr(24), desc = '六年级(上)', count = 0, cover_url = '', sort_index = 6, },
+    [7] = {tips_url = TeachCourses.GetTeachCoursesIconPathStr(15), desc = '一年级(下)', count = 0, cover_url = '', sort_index = 7, },
+    [8] = {tips_url = TeachCourses.GetTeachCoursesIconPathStr(17), desc = '二年级(下)', count = 0, cover_url = '', sort_index = 8, },
+    [9] = {tips_url = TeachCourses.GetTeachCoursesIconPathStr(19), desc = '三年级(下)', count = 0, cover_url = '', sort_index = 9, },
+    [10] = {tips_url = TeachCourses.GetTeachCoursesIconPathStr(21), desc = '四年级(下)', count = 0, cover_url = '', sort_index = 10, },
+    [11] = {tips_url = TeachCourses.GetTeachCoursesIconPathStr(23), desc = '五年级(下)', count = 0, cover_url = '', sort_index = 11, },
+    [12] = {tips_url = TeachCourses.GetTeachCoursesIconPathStr(25), desc = '六年级(下)', count = 0, cover_url = '', sort_index = 12, },
 }
 
 -- 用来展示教学区单课分页左上角标题
 TeachCourses.grade_matrix = {[1]="一年级",[2]="二年级",[3]="三年级",[4]="四年级",[5]="五年级",[6]="六年级"}
 TeachCourses.semester_matrix = {[1]="(上)",[2]="(下)"}
 
--- 学课列表
+-- 学科列表
 TeachCourses.subjects = {
     [1] = {name='语文', title='chinese', index=1, subject_id=1, course = {}, show=true},
     [2] = {name='数学', title='math', index=2, subject_id=2, course = {}, show=true},
@@ -179,15 +180,20 @@ function TeachCourses:GetGradeList(page)
             -- 组装年级导图数据
             local data = response.data.data
             for _,v in pairs(data) do
-                local index = v.grade - 1
+                local grade = v.grade - 1
                 local semester = v.semester
+                local index
                 if semester == 1 then
-                    TeachCourses.grade_list[index].count_up = v.count
+                    index = grade
+                elseif semester == 2 then
+                    -- 下学期的index是从7开始，比年级grade大6
+                    index = grade + 6
                 end
-                if semester == 2 then
-                    TeachCourses.grade_list[index].count_down = v.count
-                end
-                TeachCourses.grade_list[index].grade = index
+                -- 数据放进对应的年级
+                TeachCourses.grade_list[index].count = v.count
+                TeachCourses.grade_list[index].grade = grade
+                TeachCourses.grade_list[index].semester = semester
+                TeachCourses.grade_list[index].cover_url = TeachCourses.GetTeachCoursesIconPathStr(9)   -- 暂时是使用默认的图片，等资源更新后替换，需要后台再添加一个字段
             end
             -- 拼完数据刷新页面展示数据
             page:Refresh(0)
