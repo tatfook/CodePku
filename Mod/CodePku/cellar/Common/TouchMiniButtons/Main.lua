@@ -41,7 +41,7 @@ function MainUIButtons.show_common_ui(flag)
 	if MainUIButtons.isIOSApproval then
 		open_width = 643
 	else
-		open_width = 904
+		open_width = 1104
 	end
 	local open_height = 178
 	local close_width = 82
