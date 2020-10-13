@@ -6,7 +6,7 @@ place: Foshan
 Desc: 
 use the lib:
 ------------------------------------------------------------
-local MainLogin = NPL.load("(gl)Mod/WorldShare/cellar/MainLogin/MainLogin.lua")
+local MainLogin = NPL.load("(gl)Mod/CodePku/cellar/MainLogin/MainLogin.lua")
 ------------------------------------------------------------
 ]]
 local ParaWorldLessons = commonlib.gettable("MyCompany.Aries.Game.MainLogin.ParaWorldLessons")
@@ -23,6 +23,7 @@ local MainLogin = NPL.export()
 MainLogin.MainLoginPage = nil
 MainLogin.LoginBGPage = nil
 MainLogin.isPassword = nil
+MainLogin.accountNum = ''  --记录输入的号码,切换登录方式保留
 
 function MainLogin:Show(index)     
     self:CloseLoadingPage()
@@ -424,21 +425,25 @@ function MainLogin:GetVisitorUUID()
     end
 
     local UUIDData = GameLogic.GetPlayerController():LoadLocalData("UUIDData", {}, true)
-    local currentParacraftDir = ParaIO.GetWritablePath()
-    local machineID = UUIDData.machineID or "";
-
-    if not UUIDData.softwareUUID or       
-       not UUIDData.paracraftDir or
-       UUIDData.paracraftDir ~= currentParacraftDir then
-        UUIDData.paracraftDir = ParaIO.GetWritablePath()
-        UUIDData.softwareUUID = getUUID()        
-        GameLogic.GetPlayerController():SaveLocalData("UUIDData", UUIDData, true)
-    end
+    local currentParacraftDir = ParaIO.GetWritablePath()    
     
+    if (UUIDData.softwareUUID and UUIDData.paracraftDir and UUIDData.paracraftDir == currentParacraftDir) then
+        local machineID = UUIDData.machineID or "";
+        local visitorUUId = UUIDData.softwareUUID .. "-" .. machineID;
+        if visitorUUId ~= 'uuid-' then 
+            return visitorUUId;
+        end
+    end
 
-    -- LOG.std(nil, "MainLogin", "GetDeviceUUID", "UUIDData.softwareUUID = %s , UUIDData.machineID = %s", tostring(UUIDData.softwareUUID), tostring(UUIDData.machineID))
+    local machineID = ParaEngine.GetAttributeObject():GetField("MachineID", getUUID() .. "-" .. os.time());
+    UUIDData.paracraftDir = ParaIO.GetWritablePath()
+    UUIDData.softwareUUID = "uuid-";
 
+    UUIDData.machineID = machineID
+    GameLogic.GetPlayerController():SaveLocalData("UUIDData", UUIDData, true)
     return UUIDData.softwareUUID .. "-" .. machineID
+    
+    -- LOG.std(nil, "MainLogin", "GetDeviceUUID", "UUIDData.softwareUUID = %s , UUIDData.machineID = %s", tostring(UUIDData.softwareUUID), tostring(UUIDData.machineID))    
 end
 
 

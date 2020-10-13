@@ -1,7 +1,4 @@
-<!-- 
-    解锁课程弹窗
-    2020/9/16:取消专题课付费解锁，本页面做废弃处理
--->
+<!-- 消息推送弹窗 -->
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -12,14 +9,23 @@
     <pe:mcml>
 <script refresh="false" type="text/npl" src="Payment.lua"><![CDATA[
 Payment = NPL.load("(gl)Mod/CodePku/cellar/GUI/Payment/Payment.lua");
-local page = document:GetPageCtrl()
-
-Payment.Recharge_send_content = "已发送信息至家长微信，提前与家长协商可更快获得玩学券。"
 
 function ClosePage()
-    Page:CloseWindow();
+    Payment:TurnOffAllPage()
 end
 
+function ShowContent()
+    if next(Payment.TimerTable) ~= nil then
+        for k,v in pairs(Payment.TimerTable) do
+            if v.lastClicktype == Payment.entity_type and v.lastClickid == Payment.entity_id then
+                -- 计时器结束时会清空当前表，所以能遍历到记录说明计时器没过期，此时返回保存好的展示文本
+                return v.content
+            end
+        end
+    end
+    -- 遍历没找到记录，返回默认提示文本
+    return Payment.Recharge_send_content
+end
 
 
 
@@ -27,20 +33,19 @@ end
 
 </script>
 
-<pe:container alignment="_lt" width="1920" height="1080" style="background-color: #00000094;">
+<pe:container alignment="_lt" width="1920" height="1080">
     <!-- 背景图 -->
-    <div style="<%=format('position: relative; width: 1153; height: 588;left: 383; top: 240; background:url(%s);', Payment.GetPaymentIconHTMLStr(1))%>"></div>
+    <div style="<%=format('position: relative; width: 1153; height: 588;left: 383; top: 238; background:url(%s);', Payment.GetPaymentIconHTMLStr(1))%>"></div>
     <!-- 标题 -->
-    <div style="<%=format('position: relative; width: 410; height: 86;left: 769; top: 243; text-align: center;color: #f36d3d; font-family: Noto Sans S Chinese Regular;font-weight: bold; font-size: 45px;line-height: 86; background:url(%s);', Payment.GetPaymentIconHTMLStr(2))%>">解锁提示</div>
+    <div style="<%=format('position: relative; width: 410; height: 86;left: 769; top: 238; text-align: center;color: #f36d3d; font-family: Noto Sans S Chinese Regular;font-weight: bold; font-size: 45px;line-height: 86; background:url(%s);', Payment.GetPaymentIconHTMLStr(2))%>">解锁提示</div>
     <!-- 取消按钮 -->
     <div onclick="ClosePage" style="<%=format('position: relative; width: 64; height: 74;left: 1453; top: 250; background:url(%s);', Payment.GetPaymentIconHTMLStr(3))%>"></div>
     <!-- 提示文字 -->
-    <div style="<%=format('position: relative; width: 960; height: 267;left: 495; top: 361; background:url(%s:10 10 10 10);', Payment.GetPaymentIconHTMLStr(4))%>">
-        <div style="position: relative;width: 780;height: 124;left: 89;top: 78;text-align: center;font-size: 36;line-height: 62;font-family: Noto Sans S Chinese Regular;font-weight: bold;color: #ffffff;"><%= Payment.Recharge_send_content %></div>
+    <div style="<%=format('position: relative; width: 960; height: 267;left: 479; top: 361; background:url(%s:10 10 10 10);', Payment.GetPaymentIconHTMLStr(4))%>">
+        <div style="position: relative;height: 124;top: 78;text-align: center;font-size: 36;font-family: Noto Sans S Chinese Regular;font-weight: bold;color: #ffffff;"><%= ShowContent() %></div>
     </div>
     <!-- 确认按钮 -->
     <div onclick="ClosePage" style="<%=format('position: relative;width:240;height:80;left:839;top:691;text-align:center;font-size:36px;line-height:80;font-family: PuHuiTi-Bold;color: #0d5416;background:url(%s:20 20 20 20)', Payment.GetPaymentIconHTMLStr(6))%>">知道啦</div>
-
 
 </pe:container>
 

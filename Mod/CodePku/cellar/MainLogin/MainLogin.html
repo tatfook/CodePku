@@ -27,7 +27,7 @@
 
         Rebranding = commonlib.gettable("MyCompany.Aries.Creator.Game.Rebranding")
         local GameMainLogin = commonlib.gettable("MyCompany.Aries.Game.MainLogin")
-        local MainLogin = NPL.load("./MainLogin.lua")
+        MainLogin = NPL.load("./MainLogin.lua")
         local CodePkuServiceSession = NPL.load("(gl)Mod/CodePku/service/CodePkuService/Session.lua")
 
         local page = document:GetPageCtrl()
@@ -139,6 +139,9 @@
         MainLogin.login_method_index = 1;
 
         function OnChangeLoginMethod()
+            local accountNum = Page:GetValue('account')
+            MainLogin.accountNum = accountNum  --记录输入的号码,切换登录方式保留
+
             Page:CloseWindow()
             MainLogin:Show(2)
             --MainLogin.login_method_index = if_else(MainLogin.login_method_index == 2, 1, 2);
@@ -158,13 +161,13 @@
 
     <pe:container alignment="_lt" width="100%" height="100%" style="padding-top: 60px;">
         <div align="center" style="width: 384px; height: 161px; background:url(codepku/image/textures/login/main.png#1170 54 384 161)"></div>
-        <div align="center" style="width: 944px; height: 709px; margin-top: 17px; background:url(codepku/image/textures/login/login_backboard_new.png)">
+        <div align="center" style="width: 944px; height: 709px; margin-top: 17px; padding-top: 40px; background:url(codepku/image/textures/login/login_backboard_new.png)">
 
-            <div style="position: relative; width: 410; height: 86; left: 267; line-height: 86; font-size: 45; font-weight: bold; font-family: PuHuiTi-Bold; color: #F46D3D; text-align: center; background:url(codepku/image/textures/login/quickLogin.png#444 205 434 86);">验证码登录</div>
+            <div style="position: relative; width: 410; height: 86; left: 267; top: -40; line-height: 86; font-size: 45; font-weight: bold; font-family: PuHuiTi-Bold; color: #F46D3D; text-align: center; background:url(codepku/image/textures/login/quickLogin.png#444 205 434 86);">短信登录</div>
 
-            <div style="position: relative; width: 722; height: 88; left: 111; top: 151; font-family: Noto Sans S Chinese Regular-Regular;
+            <div style="position: relative; width: 722; height: 88; left: 111; top: 151; font-family: Noto Sans S Chinese Regular;
                 font-size: 32px; font-weight: normal; font-stretch: normal; line-height: 40px; letter-spacing: 0px; color: #ffffff; background:url(codepku/image/textures/login/main.png#1011 271 88 88:10 10 10 10)">
-                <input type="text" MoveViewWhenAttachWithIME="true" name="account" EmptyText='<%= L"请输入手机号码" %>' style="position: relative;left: 139px; width: 583; height: 88; background: #000000;"/>
+                <input type="text" MoveViewWhenAttachWithIME="true" name="account" onchange="OnAccountChange" value="<%= MainLogin.accountNum %>" EmptyText='<%= L"请输入手机号码" %>' style="position: relative;left: 139px; width: 583; height: 88; background: #000000;"/>
                 <div style="position: relative; left: 93px; top: 41px; width: 16px; height: 8px;background: url(codepku/image/textures/login/quickLogin.png#751 82 16 8);"></div>
                 <input type="button" name="numberChoose" onclick="OnNumberChooseBtnClicked" value='<%= L"+86"%>' style="position: relative; width: 101px; height: 88px; background: #000000;"/>
             </div>
@@ -193,7 +196,7 @@
                 </div>
             </div>
 
-            <pe:if condition = "<%= not isHuaweiOrIOS()%>" >
+            <pe:if condition = "<%= not isHuaweiApproval()%>" >
                 <input type="button"  onclick="login" value='<%= L"登  录"%>'
                     style="position: relative; width: 330; height: 90; left: 502; top: 414; font-size: 36; color: #0E5516; font-family: PuHuiTi-Bold; font-weight: bold; border-radius: 6px; background:url(codepku/image/textures/login/quickLogin.png#391 46 65 94:6 6 6 6);" />
 
@@ -201,8 +204,8 @@
                     style="position: relative; width: 330; height: 90; left: 110; top: 414; font-size: 36; color: #0E5516; font-family: PuHuiTi-Bold; font-weight: bold; border-radius: 6px; background:url(codepku/image/textures/login/quickLogin.png#276 46 74 94:6 6 6 6);" />
             </pe:if>
             
-            <!-- ios和华为审核屏蔽游客登录 -->
-            <pe:if condition = "<%= isHuaweiOrIOS() %>" >
+            <!-- 华为审核屏蔽游客登录 -->
+            <pe:if condition = "<%= isHuaweiApproval() %>" >
                 <input type="button"  onclick="login" value='<%= L"登  录"%>'
                 style="position: relative; width: 330; height: 90; left: 307; top: 414; font-size: 36; color: #0E5516; font-family: PuHuiTi-Bold; font-weight: bold; border-radius: 6px; background:url(codepku/image/textures/login/quickLogin.png#391 46 65 94:6 6 6 6);" />
             </pe:if>
@@ -213,7 +216,7 @@
                 style="position: relative; width: 32; height: 32; left: 111; top: 535; " />
 
 
-            <div style="position: relative; left: 148; top: 540; font-size: 22; font-family: Noto Sans S Chinese Regular; color: #FFFFFF;" onclick="show_user_agreement()">
+            <div style="position: relative; left: 148; top: 540; font-size: 22; font-family: PuHuiTi-Bold; color: #FFFFFF;" onclick="show_user_agreement()">
                 <%= L"我已详细阅读并同意" %>
                 <span style="color:#FFF868;"><%= L"《隐私政策》" %></span>
             </div>
@@ -223,7 +226,7 @@
                 <input name="btn_ToggleMethod" style="position: relative; left: 712; top: 532; font-size: 28; text-align: left; font-family: Noto Sans S Chinese Regular; color: #005BFF; font-weight: bold; background: #00000000;" type="button" value='<%= L"密码登录"%>'  onclick="OnChangeLoginMethod"/>
             </pe:if>
 
-            <pe:if condition = "<%= not isIOSApproval() %>">
+            <!-- <pe:if condition = "<%= not isIOSApproval() %>">
                 <div onclick="QQLogin" style="position: relative; width: 75px; height: 74px; left: 301; top: 591;background:url(codepku/image/textures/login/quickLogin.png#190 211 75 74);">
 
                 </div>
@@ -231,7 +234,7 @@
                 <div onclick="WeChatLogin" style="position: relative; width: 75px; height: 74px; left: 559; top: 591;background:url(codepku/image/textures/login/quickLogin.png#319 211 75 74);">
     
                 </div>
-            </pe:if>
+            </pe:if> -->
 
             
         </div>

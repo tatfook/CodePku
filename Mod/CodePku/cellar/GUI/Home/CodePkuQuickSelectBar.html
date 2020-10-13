@@ -1,0 +1,56 @@
+<!-- 
+Author: zouren
+Date: 2020-09-24 11:32:27
+Des: codepku custom quickselectbar
+Path:"Mod/CodePku/cellar/GUI/Home/CodePkuQuickSelectBar.html"
+-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+</head>
+
+<body>
+<pe:mcml>
+<script refresh="false" type="text/npl" src="CodePkuQuickSelectBar.lua">
+<![CDATA[
+NPL.load("(gl)Mod/CodePku/cellar/GUI/Home/CodePkuQuickSelectBar.lua")
+local CodePkuQuickSelectBar = commonlib.gettable("Mod.CodePku.GUI.CodePkuQuickSelectBar")
+
+function CPQSB_GetHTMLDivStyle(divName)
+    return CodePkuQuickSelectBar:GetHTMLDivStyle(divName)
+end
+
+function OnbagbtnClicked()
+    return
+end
+
+function CodePkuCustomBtn(index)
+    if(not index) then
+        return #(CodePkuQuickSelectBar.customBtnNodes);
+    else
+        return CodePkuQuickSelectBar.customBtnNodes[index];
+    end
+end
+
+]]></script>
+<style type="text/mcss">
+
+</style>
+<pe:container ClickThrough="true" alignment="_lt" width="1523" height="196">
+    <div name="quickbarbg" style='<%=CPQSB_GetHTMLDivStyle("quickbarbg")%>'>
+        <div name="bagbtn" style='<%=CPQSB_GetHTMLDivStyle("bagbtn")%>' onclick="OnbagbtnClicked"></div>
+    </div>
+    <pe:gridview style="position: relative; top: 0; left: 173; width: 1350; height: 196;" RememberLastPage="true" name="quickSelectBar"
+        CellPadding="0" ItemsPerLine="9" AllowPaging="false" DefaultNodeHeight="131" pagesize="9" DataSource='<%=CodePkuCustomBtn%>'>
+        <Columns>
+            <div style="width:131;height:131;">
+                <div zorder="-1" style="position:relative;width:131;height:131;background:url()"></div>
+            </div>
+        </Columns>
+    </pe:gridview>
+</pe:container>
+</pe:mcml>
+</body>
+</html>

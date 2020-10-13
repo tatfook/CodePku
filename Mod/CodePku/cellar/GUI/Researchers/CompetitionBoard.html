@@ -19,25 +19,29 @@ function ClosePage()
     Page:CloseWindow();
 end
 
-function StartLearning()
+function GoHome()
     Page:CloseWindow();
     NPL.load("(gl)Mod/CodePku/cellar/GUI/Home/HomeManage.lua")
     local HomeManage = commonlib.gettable("Mod.CodePku.Common.HomeManage")
     HomeManage:GetHomeWorld()
 end
 
+function ClickQQGroup()
+    GameLogic.RunCommand(string.format("/open %s", Researchers.QQGroup))
+end
+
 ]]>
 </script>
 <pe:container alignment="_lt" width="1920" height="1080" style="background-color: #0000008f;">
 
-
-    <div style="<%=format('position: relative;left:213;top:61;width:1494;height:964;background:url(%s)', Researchers.PKV1)%>">
-
+    <!-- 背景 -->
+    <div style="<%=format('position: relative;left:160;top:61;width:1547;height:964;background:url(%s)', Researchers.PKV1)%>">
+        <!-- 白色叉叉 -->
         <div onclick="ClosePage" style="<%=format('position: relative;left:1385;top:70;width:68;height:78;background:url(%s)', GetIcon(3))%>"></div>
-
-        <div style="<%=format('position: relative;left:236;top:678;width:175;height:175;background:url(%s)', GetIcon(5))%>"></div>
-
-        <div onclick="StartLearning" style="<%=format('position: relative;left:926;top:715;width:289;height:100;text-align:center;font-family:PuHuiTi-Bold;color:#2E566E;font-size:42;line-height:100;background:url(%s)', GetIcon(4))%>"><%= Researchers.contents[3] %></div>
+        <!-- 黄色按键 -->
+        <div onclick="ClickQQGroup" style="<%=format('position: relative;left:381;top:715;width:289;height:100;text-align:center;font-family:PuHuiTi-Bold;color:#6D3D2C;font-size:42;line-height:100;background:url(%s)', Researchers.Activity)%>"><%= Researchers.contents[6] %></div>
+        <!-- 蓝色按键 -->
+        <div onclick="GoHome" style="<%=format('position: relative;left:926;top:715;width:289;height:100;text-align:center;font-family:PuHuiTi-Bold;color:#2E566E;font-size:42;line-height:100;background:url(%s)', GetIcon(4))%>"><%= Researchers.contents[3] %></div>
 
     </div>
 

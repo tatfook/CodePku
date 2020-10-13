@@ -190,7 +190,7 @@ end
 function MainUIButtons.show_home_window_ui()
 	local params = {
 		url = "Mod/CodePku/cellar/Common/TouchMiniButtons/MainUIButtons_home_window.html",
-		alignment = "_lt", left = 1600, top = 493, width = 135, height = 155,
+		alignment = "_lt", left = 1390, top = 293, width = 335, height = 355,
 	}
 
 	local isHome = HomeManage:IsMyHome()
@@ -241,7 +241,7 @@ function MainUIButtons.ShowPage()
 	if not hideAllMenu then
 		if not hideMenu then 
 			MainUIButtons.show_common_ui()
-			MainUIButtons.show_dialog_ui(false)
+			-- MainUIButtons.show_dialog_ui(false)
 			MainUIButtons.show_money_ui()		
 			MainUIButtons.show_function_ui()
 			MainUIButtons.show_account_up_ui()

@@ -230,6 +230,35 @@ function UserConsole:HandleWorldId(pid)
             return false
         end
 
+        --
+        local _data = response.data
+        if not _data.owned then
+            local TeachCourses = NPL.load("(gl)Mod/CodePku/cellar/GUI/SmallMap/FastEntrence/TeachCourses/TeachCourses.lua")
+            TeachCourses.judgeCourseInfo = {
+                id = _data.id,
+                name = _data.name,
+                description = _data.description,
+                is_free = _data.is_free,
+                owned = _data.owned,
+                origin_price = _data.origin_price,
+                price = _data.price,
+                paid_unlock_method = _data.paid_unlock_method,
+                cover_url = _data.cover_url,
+    
+                package_id = _data.course.id,
+                package_name = _data.course.name,
+                package_description = _data.course.description,
+                package_cover = _data.course.cover,
+                package_origin_price = _data.course.package_underline_price,
+                package_price = _data.course.package_price,
+                package_cover_url = _data.course.cover_url,
+            }
+    
+            TeachCourses:ShowPage(3)
+            return
+        end
+        --
+
         local world = RemoteWorld.LoadFromHref(url, "self")
         LoadWorld(world, 'auto')    
     end)

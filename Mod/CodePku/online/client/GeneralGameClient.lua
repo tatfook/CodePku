@@ -38,6 +38,11 @@ function GeneralGameClient:AddAssetsWhiteList()
     self.GetAssetsWhiteList().AddAsset("character/CC/02human/paperman/xiaolong.x");
     self.GetAssetsWhiteList().AddAsset("character/CC/02human/paperman/zaizai.x");
     self.GetAssetsWhiteList().AddAsset("character/CC/02human/paperman/nuannuan.x");
+    self.GetAssetsWhiteList().AddAsset("character/v3/Npc/Hashiqi/Hashiqi.x");
+    self.GetAssetsWhiteList().AddAsset("character/CC/03animals/frog/frog.x");
+    self.GetAssetsWhiteList().AddAsset("character/v5/10mobs/HaqiTown/Alexander/Alexander.x");
+    self.GetAssetsWhiteList().AddAsset("character/v5/02animals/Panda/Panda.x");
+    self.GetAssetsWhiteList().AddAsset("character/v6/02animals/Yangtuo/Yangtuo.x");
 end
 
 -- 获取主玩家类

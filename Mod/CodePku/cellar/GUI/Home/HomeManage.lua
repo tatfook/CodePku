@@ -127,6 +127,11 @@ function HomeManage:InternetLoadWorld(world, refreshMode, onDownloadCompleted)
                 ParaIO.CreateDirectory(userHomeDir)
                 log("users home dir created\n");
             end
+            -- 如果原世界文件夹存在  删除掉重新解压
+            if(ParaIO.DoesFileExist(worldDir)) then
+                commonlib.Files.DeleteFolder(worldDir)
+                log("users old home dir delete\n");
+            end
             LOG.std(nil, "world", "zipFile", "dirName = %s", dirName)
             LOG.std(nil, "world", "zipFile", "userHomeDir = %s", userHomeDir)
             LOG.std(nil, "world", "zipFile", "worldDir = %s", worldDir)

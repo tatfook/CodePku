@@ -148,6 +148,7 @@ function Eldership:Unbind()
   local path = '/users/unbind'
   request:put(path):next(function(response)
     if (response.status == 200) then
+      commonlib.setfield("System.User.info.user_wechat_id", nil)    -- 设置system缓存里用户的微信绑定信息
       GameLogic.AddBBS("CodeGlobals", L"解绑成功", 3000, "#00FF00");
       commonlib.setfield("System.User.info.user_wechat_id", nil)    -- 设置system缓存里用户的微信绑定信息
     end
@@ -184,7 +185,7 @@ function Eldership:ShowBindPage()
 
     params = {
       url="Mod/CodePku/cellar/GUI/Eldership/EldershipBind.html", 
-      alignment="_lt", left = 0, top = 0, width = 1920 , height = 1080, zorder = 30
+      alignment="_lt", left = 0, top = 0, width = 1920 , height = 1080, zorder = 33
     };
     self.ui = AdaptWindow:QuickWindow(params)
 end
