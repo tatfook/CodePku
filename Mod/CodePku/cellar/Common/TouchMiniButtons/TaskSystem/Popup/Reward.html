@@ -24,8 +24,6 @@ function ClosePage()
     Page:CloseWindow();
 end
 
-rewardNum_table = {{1},{2},{3}}
-
 function getText()
     if(nowReward["status"] == 1)then
         return "领取"
@@ -36,9 +34,9 @@ end
 
 function getBG()
     if(nowReward["status"] == 1)then
-        return "694 582 207 87:15 15 15 15"
+        return "590 216 133 57:12 12 12 12"
     else
-        return "694 450 207 87:15 15 15 15"
+        return "1177 219 127 51:12 12 12 12"
     end
 end
 
@@ -48,7 +46,7 @@ end
 
 function handleReward()
     if(nowReward["status"] == 1) then    -- 如果奖励未领取且可领取
-        TaskSystem:GetReward(nowReward["id"],nowReward["reward_json"])
+        TaskSystem:GetReward(nowReward["id"],nowReward["reward_json"], "goalReward")
     else
         Page:CloseWindow();
     end
@@ -66,16 +64,16 @@ end
 </script>
 
 <pe:container alignment="_lt" width="1920" height="1080" >
-    <div style="position: relative;width: 1920;height:1080;background-color: #00000099;" onclick="ClosePage"></div>
+    <div style="position: relative;width: 1920;height:1080;background-color: #00000077;" onclick="ClosePage"></div>
     <div style="position: relative; width: 952; height: 528; left: 484; top: 278; background: url(codepku/image/textures/tasksystem/reward_bg.png);"></div>
 
     <!-- <div style="position: relative; width: 1158; height: 588; left: 406; top: 219; background:url(codepku/image/textures/commonpopup/main.png#99 275 1158 588);"></div> -->
 
-    <div style="position: relative; width: 410; height: 89; left: 755; top: 283; font-size: 46; line-height: 89; color: #F46D3D; font-family: Noto Sans S Chinese;font-weight: bold; text-align: center; background: url(codepku/image/textures/common_32bits.png#1277 377 410 87);">
+    <div style="position: relative; width: 410; height: 97; left: 755; top: 278; font-size: 46; line-height: 97; color: #F46D3D; font-family: Noto Sans S Chinese Regular; font-weight: bold; text-align: center; background: url(codepku/image/textures/common_32bits.png#1277 377 410 87);">
         奖励信息
     </div>
 
-    <div style="position: relative; width: 66; height: 76; left: 1335; top: 287; background: url(codepku/image/textures/tasksystem/main.png#897 111 64 74);" onclick="ClosePage"></div>
+    <div style="position: relative; width: 66; height: 76; left: 1335; top: 287; background: url(codepku/image/textures/tasksystem/main.png#454 214 68 78);" onclick="ClosePage"></div>
 
     <div style="position: relative; width: 952; height: 134; left: 484; top: 460;">
 
@@ -91,7 +89,9 @@ end
             </pe:repeat>
         </div>
     </div>
-    <div style="<%=format('position: relative; width: 200; height: 80; left: 860; top: 660; color: #FEFEFE; line-height: 80; text-align: center; font-size: 36; font-family: Noto Sans S Chinese Regular; font-weight: bold; background: url(codepku/image/textures/tasksystem/main.png#%s);', getBG())%>" onclick="handleReward"><%=getText()%></div>
+    <div style="<%=format('position: relative; width: 127; height: 51; left: 890; top: 660; color: #FEFEFE; line-height: 80; text-align: center; font-size: 36; font-family: Noto Sans S Chinese Regular; font-weight: bold; background: url(codepku/image/textures/tasksystem/main.png#%s);', getBG())%>" onclick="handleReward">
+        <!-- <%=getText()%> -->
+    </div>
     
 </pe:container>
 </pe:mcml>
