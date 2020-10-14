@@ -6,8 +6,9 @@ Desc:分享内容至手机其它app，目前限制为只分享图片，本质是
 Example:
 -----------------------------------------------
 local ShareApp = NPL.load("(gl)Mod/CodePku/cellar/GUI/Share/ShareApp.lua");
-ShareApp.fire(id, page)
-@params: page 选传参数，需要当前页面刷新时传入当前页page
+ShareApp:fire(id, page)         不需要弹窗时使用该函数
+ShareApp:ShowPage(id, page)     需要弹窗时使用该函数
+@params: page 选传参数，可以不传，当需要当前页面刷新时传入当前页page
 id 后台会根据id返回图片url
 id=1    主界面
 id=2    课程结算
@@ -81,7 +82,7 @@ function ShareApp:ShareLogic()
     Share:fire("image", {
         image = ShareApp.poster_url,
         title = "分享海报"
-     }, {
+    }, {
         onStart = function(e)
             -- 开始分享
             ShareApp.bShare = false
@@ -102,7 +103,7 @@ function ShareApp:ShareLogic()
             GameLogic.AddBBS("CodeGlobals", L"取消分享", 3000, "#FF0000");
             ShareApp.bShare = false
         end
-     })
+    })
 end
 
 -- 分享(如果有单独的分享弹窗时，使用该函数)
@@ -129,7 +130,7 @@ function ShareApp:fire(id, page)
             GameLogic.AddBBS("CodeGlobals", e.data.message, 3000, "#FF0000");
         end);
     elseif ShareApp.poster_id == id then
-        -- 防止点击过快图片url还没获取到就开始分享
+        -- 防止点击过快图片url还没获取到就开始分享,一般也用不到这个拦截，以防万一
         if not ShareApp.poster_url then
             return
         end
@@ -142,9 +143,20 @@ function ShareApp:ShowPage(id, page)
     if id and page then
         ShareApp:GetPoster(id, page)
     end
-    local params = {
-        url = "Mod/CodePku/cellar/GUI/Share/ShareApp.html",
-        alignment="_lt", left = 0, top = 0, width = 1920 , height = 1080, zorder = 30,
-    }
-    AdaptWindow:QuickWindow(params)
+    -- 判断登陆设备，pc端和手机端展示不同的页面
+    if System.os.IsMobilePlatform() then
+        -- 手机端展示页面
+        local params = {
+            url = "Mod/CodePku/cellar/GUI/Share/ShareApp.html",
+            alignment="_lt", left = 0, top = 0, width = 1920 , height = 1080, zorder = 30,
+        }
+        AdaptWindow:QuickWindow(params)
+    else
+        -- pc端展示页面
+        local params = {
+            url = "Mod/CodePku/cellar/GUI/Share/SharePC.html",
+            alignment="_lt", left = 0, top = 0, width = 1920 , height = 1080, zorder = 30,
+        }
+        AdaptWindow:QuickWindow(params)
+    end
 end
