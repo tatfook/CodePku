@@ -7,7 +7,7 @@ Example:
 -----------------------------------------------
 local ShareApp = NPL.load("(gl)Mod/CodePku/cellar/GUI/Share/ShareApp.lua");
 ShareApp:fire(id, page)         不需要弹窗时使用该函数
-ShareApp:ShowPage(id, page)     需要弹窗时使用该函数
+ShareApp:ShowPage(id, page)     需要弹窗时使用该函数,会根据设备和场景判断是否有弹窗
 @params: page 选传参数，可以不传，当需要当前页面刷新时传入当前页page
 id 后台会根据id返回图片url
 id=1    主界面
@@ -34,6 +34,8 @@ local AdaptWindow = commonlib.gettable("Mod.CodePku.GUI.Window.AdaptWindow")
 local Share = NPL.load("(gl)Mod/CodePkuCommon/util/Share.lua")
 
 ShareApp.icons_path = "codepku/image/textures/share_app/shareapp.png"    -- 雪碧图
+ShareApp.pcpopup_path = "codepku/image/textures/share_app/pcpopup.png"    -- PC端展示弹窗
+ShareApp.pccancel_path = "codepku/image/textures/share_app/pccancel.png"    -- PC端取消按钮
 
 ShareApp.icons = {
     [1] = {url = ShareApp.icons_path, left=107, top=110, width=101, height=102, desc = '红叉'},
@@ -106,7 +108,7 @@ function ShareApp:ShareLogic()
     })
 end
 
--- 分享(如果有单独的分享弹窗时，使用该函数)
+-- 分享
 function ShareApp:fire(id, page)
     -- 防止开启多个分享界面
     if ShareApp.bShare then
@@ -130,33 +132,49 @@ function ShareApp:fire(id, page)
             GameLogic.AddBBS("CodeGlobals", e.data.message, 3000, "#FF0000");
         end);
     elseif ShareApp.poster_id == id then
-        -- 防止点击过快图片url还没获取到就开始分享,一般也用不到这个拦截，以防万一
+        -- 无弹窗分享时需要先获取图片资源
         if not ShareApp.poster_url then
-            return
+            ShareApp:GetPoster(id, page)
         end
         ShareApp:ShareLogic()
     end
 end
 
--- 展示主界面弹窗
+-- 通用分享函数。手机端主界面分享会有弹窗，其它地方调用直接走分享逻辑。PC端调用展示PC端专属分享页面。
 function ShareApp:ShowPage(id, page)
     if id and page then
         ShareApp:GetPoster(id, page)
     end
+    ShareApp.poster_id = id
     -- 判断登陆设备，pc端和手机端展示不同的页面
     if System.os.IsMobilePlatform() then
         -- 手机端展示页面
-        local params = {
-            url = "Mod/CodePku/cellar/GUI/Share/ShareApp.html",
-            alignment="_lt", left = 0, top = 0, width = 1920 , height = 1080, zorder = 30,
-        }
-        AdaptWindow:QuickWindow(params)
+        if id == 1 then
+            -- 主界面分享，有弹窗
+            local params = {
+                url = "Mod/CodePku/cellar/GUI/Share/ShareApp.html",
+                alignment="_lt", left = 0, top = 0, width = 1920 , height = 1080, zorder = 30,
+            }
+            if self.ui then
+                self.ui:CloseWindow()
+                self.ui = nil
+            end
+            self.ui = AdaptWindow:QuickWindow(params)
+        else
+            -- 其它界面分享，无弹窗
+            ShareApp:fire(id, page)
+        end
+
     else
         -- pc端展示页面
         local params = {
             url = "Mod/CodePku/cellar/GUI/Share/SharePC.html",
             alignment="_lt", left = 0, top = 0, width = 1920 , height = 1080, zorder = 30,
         }
-        AdaptWindow:QuickWindow(params)
+        if self.ui then
+            self.ui:CloseWindow()
+            self.ui = nil
+        end
+        self.ui = AdaptWindow:QuickWindow(params)
     end
 end

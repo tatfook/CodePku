@@ -9,39 +9,18 @@
 <pe:mcml>
 <script refresh="false" type="text/npl" src="ShareApp.lua"><![CDATA[
 ShareApp = NPL.load("(gl)Mod/CodePku/cellar/GUI/Share/ShareApp.lua")
-local page = document:GetPageCtrl()
-
-ShareApp:GetPoster(1, page)
-
-function ClickShare()
-    -- 数字1对应主界面海报
-    ShareApp:fire(1)
-end
 
 function OnclickClose()
     Page:CloseWindow()
 end
 
-function GetIcon(id)
-    return ShareApp.GetIconPathStr(id)
-end
-
-function GetUrl()
-    return ShareApp.poster_url or ""
-end
-
 ]]>
 </script>
-<pe:container alignment="_lt" width="1920" height="1080" style="background-color: #00000083;">
+<pe:container alignment="_lt" width="1920" height="1080" style="background-color: #000000bd;">
     <!-- 背景 -->
-    <div style="<%=format('position: relative; left: 322; top: 66; width: 1423; height: 852; background:url(%s);', GetIcon(3))%>">
-        <!-- 海报 -->
-        <div style="<%=format('position: relative; left: 253; top: 172; width: 865; height: 486; background:url(%s);', GetUrl())%>"></div>
-    </div>
+    <div style="<%=format('position: relative; left: 373; top: 267; width: 1056; height: 523; background:url(%s);', ShareApp.pcpopup_path)%>"></div>
     <!-- 关闭 -->
-    <div onclick="OnclickClose" style="<%=format('position: relative; left: 1569; top: 96; width: 101; height: 102; background:url(%s);', GetIcon(1))%>"></div>
-    <!-- 分享按钮 -->
-    <div onclick="ClickShare" style="<%=format('position: relative; left: 822; top: 798; width: 395; height: 193; background:url(%s);', GetIcon(2))%>"></div>
+    <div onclick="OnclickClose" style="<%=format('position: relative; left: 1344; top: 278; width: 83; height: 91; background:url(%s);', ShareApp.pccancel_path)%>"></div>
 
 </pe:container>
 </pe:mcml>

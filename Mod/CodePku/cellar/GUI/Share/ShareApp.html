@@ -11,11 +11,11 @@
 ShareApp = NPL.load("(gl)Mod/CodePku/cellar/GUI/Share/ShareApp.lua")
 local page = document:GetPageCtrl()
 
-ShareApp:GetPoster(1, page)
+ShareApp:GetPoster(ShareApp.poster_id, page)
 
 function ClickShare()
     -- 数字1对应主界面海报
-    ShareApp:fire(1)
+    ShareApp:fire(ShareApp.poster_id)
 end
 
 function OnclickClose()
