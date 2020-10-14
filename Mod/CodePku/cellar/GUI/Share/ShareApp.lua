@@ -92,16 +92,13 @@ function ShareApp:ShareLogic()
         onResult = function(e)
             -- 分享结果
             ShareApp.bShare = false
-            GameLogic.AddBBS("CodeGlobals", L"分享成功", 3000, "#00FF00");
         end,
         onError = function(e)
             -- 分享失败
-            GameLogic.AddBBS("CodeGlobals", L"分享失败", 3000, "#FF0000");
             ShareApp.bShare = false
         end,
         onCancel = function(e)
             -- 取消分享
-            GameLogic.AddBBS("CodeGlobals", L"取消分享", 3000, "#FF0000");
             ShareApp.bShare = false
         end
     })
