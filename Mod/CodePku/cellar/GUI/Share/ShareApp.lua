@@ -91,7 +91,6 @@ function ShareApp:ShareLogic()
         end,
         onResult = function(e)
             -- 分享结果
-            GameLogic.GetFilters():apply_filters("TaskSystemList", {type = "share"});   -- 分享后，触发任务系统计数
             ShareApp.bShare = false
             GameLogic.AddBBS("CodeGlobals", L"分享成功", 3000, "#00FF00");
         end,
@@ -115,7 +114,7 @@ function ShareApp:fire(id, page)
         return
     end
     -- 避免重复分享或者不同的分享页分享了同一个图片，这里需要单独处理，看传入的id跟上一次的id是否相同，不同就重新获取图片
-    if ShareApp.poster_id ~= id then
+    if ShareApp.poster_id == nil or ShareApp.poster_id ~= id then
         ShareApp.poster_id = id
         ShareApp.bShare = true
         local path = string.format("/posters/show?type=%d", id)
