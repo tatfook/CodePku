@@ -78,20 +78,13 @@ function TaskSystem:StaticInit()
     GameLogic.GetFilters():add_filter(
         "TaskSystemList",
         function (data)
-            echo("-----------------OnTaskFinished_Callback-----------------")
-            echo(data)
             -- data["type"] 0-login 1-学习 2-游戏 3-分享 4-小目标奖励  
             NPL.load("(gl)Mod/CodePku/cellar/Common/TouchMiniButtons/TaskSystem/TaskSystem.lua")
             local TaskSystem = commonlib.gettable("Mod.CodePku.Common.TaskSystem")
             local id = 0;
             if data then
-                echo("----------TaskSystemList---before------")
-                echo(TaskSystem.goal)
-                echo(TaskSystem.goalReward)
-                echo(TaskSystem.plan)
                 -- 处理缓存table
                 if data["type"] == "login" then
-                    echo("--------login-------")
                     -- 登录：小目标-1 大计划-13
                     -- 登录不更新本地缓存数据，因为是先给后台发送登录信号，然后才拉取的任务列表 --
                     -- TaskSystem.goal = TaskSystem:handleFinishCountNow(TaskSystem.goal, TaskSystem:FindTaskByID(1, 1), 1)
@@ -99,19 +92,16 @@ function TaskSystem:StaticInit()
 
                     TaskSystem:UpdateTaskDetail({ids = "1, 13"})
                 elseif data["type"] == "share" then
-                    echo("--------share-------")
                     -- 分享：小目标-7 大计划-18
                     TaskSystem.goal = TaskSystem:handleFinishCountNow(TaskSystem.goal, TaskSystem:FindTaskByID(7, 1), 1)
                     TaskSystem.plan = TaskSystem:handleFinishCountNow(TaskSystem.plan, TaskSystem:FindTaskByID(18, 3), 3)
                     TaskSystem:UpdateTaskDetail({ids = "7, 18"})
                 elseif data["type"] == "home" then
-                    echo("--------home-------")
                     -- 前往家园区：小目标-6 
                     TaskSystem.goal = TaskSystem:handleFinishCountNow(TaskSystem.goal,TaskSystem:FindTaskByID(6, 1), 1)
                     TaskSystem:UpdateTaskDetail({ids = "6"})
                 elseif data["type"] == "course" then
-                    echo("--------course-------")
-                    -- 任意课程(专题区)：小目标-19
+                    -- 任意课程：小目标-19
                     TaskSystem.goal = TaskSystem:handleFinishCountNow(TaskSystem.goal,TaskSystem:FindTaskByID(19, 1), 1)
                     if data["category"] == 2 then
                         -- 任意课程(专题区)：大计划-15
@@ -123,26 +113,21 @@ function TaskSystem:StaticInit()
                         TaskSystem:UpdateTaskDetail({ids = "19, 14"})
                     end
                 elseif data["type"] == "game" then
-                    echo("--------game-------")
-                    echo(data["courseware_id"])
                     -- 任意游戏：小目标-20
                     TaskSystem.goal = TaskSystem:handleFinishCountNow(TaskSystem.goal,TaskSystem:FindTaskByID(20, 1), 1)
                     -- [TODO 区分release和dev的id]，目前相同
                     if data["courseware_id"] == 9 then
-                        echo("--------跑酷：大计划-------")
                         -- 跑酷：大计划-16
                         -- 跑酷courseware_id：DEV-9 RELEASE-9
                         TaskSystem.plan = TaskSystem:handleFinishCountNow(TaskSystem.plan,TaskSystem:FindTaskByID(16, 3), 3)
                         TaskSystem:UpdateTaskDetail({ids = "20, 16"})
                     elseif data["courseware_id"] == 10 then
-                        echo("--------华夏：大计划-------")
                         -- 华夏：大计划-17
                         -- 跑酷courseware_id：DEV-10 RELEASE-10
                         TaskSystem.plan = TaskSystem:handleFinishCountNow(TaskSystem.plan,TaskSystem:FindTaskByID(17, 3), 3)
                         TaskSystem:UpdateTaskDetail({ids = "20, 17"})
                     end
                 elseif data["type"] == "goalReward" then
-                    echo("--------goalReward-------")
                     -- 小目标奖励，每次领取小目标奖励时触发
                     -- local ids = {}
                     local ids = ""
@@ -154,10 +139,6 @@ function TaskSystem:StaticInit()
                     TaskSystem.goalReward = TaskSystem:AwardSort(TaskSystem:HandleTaskData(TaskSystem.goalReward))
                     TaskSystem:UpdateTaskDetail({ids=ids})
                 end
-                echo("----------TaskSystemList---after--------")
-                echo(TaskSystem.goal)
-                echo(TaskSystem.goalReward)
-                echo(TaskSystem.plan)
             end
         end
     );
@@ -166,8 +147,6 @@ end
 -- 更新后台数据
 -- @param data eg:{ids="1, 20"}
 function TaskSystem:UpdateTaskDetail(data)
-    echo("-----------UpdateTaskDetail------------")
-    echo(data)
     local request = NPL.load("(gl)Mod/CodePku/api/BaseRequest.lua");
     local response = request:post('/tasks/up-tasks', data, nil);
 end
@@ -227,8 +206,6 @@ end
 -- 领取奖励
 -- @param "goal" | "goalReward" | "plan"
 function TaskSystem:GetReward(taskID,reward_json, type)
-    echo("-------GetReward------")
-    echo(taskID)
     local request = NPL.load("(gl)Mod/CodePku/api/BaseRequest.lua");
     local response = request:post('/tasks-reward-receive/store',{task_id=taskID},nil):next(function(response)
         if response.status == 200 then
@@ -248,13 +225,11 @@ function TaskSystem:GetReward(taskID,reward_json, type)
                 GameLogic.GetFilters():apply_filters("TaskSystemList", {type = "goalReward"}); -- 领取奖励后，触发任务系统计数
             end
             if TaskSystem.Page_ui then
-                TaskSystem.Page_ui:Refresh(0.01)
+                TaskSystem.Page_ui:Refresh(0)
             end
 
             -- 刷新右上角金币界面
             for k,v in pairs(reward_json) do
-                echo("---------RefreshMoney----------")
-                echo(TaskSystem.nowReward);
                 TaskSystem:RefreshMoney(v.props_id,v.reward_num)
                 local MainUIButtons = NPL.load("(gl)Mod/CodePku/cellar/Common/TouchMiniButtons/Main.lua");
                 if MainUIButtons.money_window ~= nil then
@@ -275,9 +250,6 @@ end
 function TaskSystem:GetTask()
     local request = NPL.load("(gl)Mod/CodePku/api/BaseRequest.lua");
     request:post('/tasks/user-tasks',{},nil):next(function(response)
-    -- request:post('/tasks/user-tasks', nil, nil):next(function(response)
-        echo("----------user-tasks------------")
-        echo(response.data.data)
         self.goal = (response and response.data and response.data.data and response.data.data.user_tasks_daily_status) or {}
         self.goalReward = response and response.data and response.data.data and response.data.data.user_tasks_daily_finished_status or {}
         self.goal = self:TableSort(self:HandleTaskData(self.goal))
@@ -386,8 +358,6 @@ end
 
 -- 处理任务
 function TaskSystem:HandleClickEvent(data,type)
-    echo("-------HandleClickEvent--------")
-    echo(data)
     if(data["status"] == 4)then   --奖励已领取
         return 
     elseif(data["status"] == 1)then   --奖励可领取
@@ -433,7 +403,6 @@ end
 
 -- 领取奖励后更新道具列表
 function TaskSystem:RefreshMoney(id, num)
-    echo("-------TaskSystem id num-------")
     local MainUIButtons = NPL.load("(gl)Mod/CodePku/cellar/Common/TouchMiniButtons/Main.lua");
     local id = tonumber(id)
     local num = tonumber(num)
