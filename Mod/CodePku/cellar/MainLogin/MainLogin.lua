@@ -430,7 +430,7 @@ function MainLogin:GetVisitorUUID()
     if (UUIDData.softwareUUID and UUIDData.paracraftDir and UUIDData.paracraftDir == currentParacraftDir) then
         local machineID = UUIDData.machineID or "";
         local visitorUUId = UUIDData.softwareUUID .. "-" .. machineID;
-        if visitorUUId ~= 'uuid-' or visitorUUId ~= 'uuid--' then 
+        if visitorUUId ~= 'uuid-' and visitorUUId ~= 'uuid--' then 
             return visitorUUId;
         end
     end
