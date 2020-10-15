@@ -68,7 +68,7 @@ function ShareApp:GetPoster(id, page)
         -- 拿到返回值，根据返回值拼接share参数
         local data = response.data.data
         ShareApp.bShare = false
-        ShareApp.poster_url = data.img_url
+        ShareApp.poster_url = data.img_url or data.default_url
         if page then
             page:Refresh(0)
         end
@@ -118,7 +118,7 @@ function ShareApp:fire(id, page)
         request:get(path):next(function(response)
             -- 拿到返回值，根据返回值拼接share参数
             local data = response.data.data
-            ShareApp.poster_url = data.img_url
+            ShareApp.poster_url = data.img_url or data.default_url
             -- 拿到图片开始分享
             ShareApp:ShareLogic()
             if page then
