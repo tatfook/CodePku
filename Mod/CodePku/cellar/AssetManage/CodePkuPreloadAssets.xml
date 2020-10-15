@@ -1,4 +1,4 @@
-<asserts>
+<assets>
     <textures name="gameStart">
         <item>codepku/image/textures/commonpopup/backboard.png</item>
         <item>codepku/image/textures/fastentrence_map/backboard.png</item>
@@ -28,4 +28,4 @@
         <item>codepku/image/textures/fastentrence_map/topic2.png</item>
         <item>codepku/image/textures/fastentrence_map/billboard2.png</item>
     </textures>
-</asserts>
+</assets>

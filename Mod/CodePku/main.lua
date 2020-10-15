@@ -126,9 +126,9 @@ function CodePku:init()
 	self:BasicConfig()
 
 	-- 预加载图片
-	NPL.load("(gl)Mod/CodePku/cellar/AssertManage/CodePkuAssertPreloader.lua")
-	local CodePkuAssertPreloader = commonlib.gettable("Mod.CodePku.AssertManage.CodePkuAssertPreloader")
-	CodePkuAssertPreloader.getSingleTon():PreloadAssert()
+	NPL.load("(gl)Mod/CodePku/cellar/AssetManage/CodePkuAssetPreloader.lua")
+	local CodePkuAssetPreloader = commonlib.gettable("Mod.CodePku.AssetManage.CodePkuAssetPreloader")
+	CodePkuAssetPreloader.getSingleTon():PreloadAsset()
 	-- NPL.activate("(gl)Mod/CodePku/cellar/AssertManage/CodePkuAssertPreloader.lua")
 
 	GameLogic.GetFilters():add_filter(

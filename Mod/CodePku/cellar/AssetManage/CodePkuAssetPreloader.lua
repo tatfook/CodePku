@@ -1,27 +1,27 @@
 --[[
 Author:zouren
 Date: 2020-10-10 15:50:41
-Des: 资源预加载 防止后期游戏卡顿 使用paracraft原生了AssertPreloader来实现
+Des: 资源预加载 防止后期游戏卡顿 使用paracraft原生了AssetPreloader来实现
 use the lib:
 ------------------------------------
-NPL.load("(gl)Mod/CodePku/cellar/AssertManage/CodePkuAssertPreloader.lua")
-local CodePkuAssertPreloader = commonlib.gettable("Mod.CodePku.AssertManage.CodePkuAssertPreloader")
-CodePkuAssertPreloader.getSingleTon():PreloadAssert()
+NPL.load("(gl)Mod/CodePku/cellar/AssetManage/CodePkuAssetPreloader.lua")
+local CodePkuAssetPreloader = commonlib.gettable("Mod.CodePku.AssetManage.CodePkuAssetPreloader")
+CodePkuAssetPreloader.getSingleTon():PreloadAsset()
 
-NPL.activate("(gl)Mod/CodePku/cellar/AssertManage/CodePkuAssertPreloader.lua")
+NPL.activate("(gl)Mod/CodePku/cellar/AssetManage/CodePkuAssetPreloader.lua")
 -----------------------------------
 ]]--
 NPL.load("(gl)script/ide/AssetPreloader.lua")
-local CodePkuAssertPreloader = commonlib.inherit(nil, commonlib.gettable("Mod.CodePku.AssertManage.CodePkuAssertPreloader"))
+local CodePkuAssetPreloader = commonlib.inherit(nil, commonlib.gettable("Mod.CodePku.AssetManage.CodePkuAssetPreloader"))
 
-function CodePkuAssertPreloader:ctor()
+function CodePkuAssetPreloader:ctor()
 end
 
 -- 单例模式
 local newInstance
-function CodePkuAssertPreloader.getSingleTon()
+function CodePkuAssetPreloader.getSingleTon()
     if (not newInstance) then
-        newInstance = CodePkuAssertPreloader:new():init()
+        newInstance = CodePkuAssetPreloader:new():init()
     end
     return newInstance
 end
@@ -31,8 +31,8 @@ end
     time:2020-10-12 11:25:12
     return 
 ]]
-function CodePkuAssertPreloader:init()
-    self.xmlFile = "Mod/CodePku/cellar/AssertManage/CodePkuPreloadAsserts.xml"
+function CodePkuAssetPreloader:init()
+    self.xmlFile = "Mod/CodePku/cellar/AssetManage/CodePkuPreloadAssets.xml"
 
     self.loader = commonlib.AssetPreloader:new({
         callbackFunc = function(nItemsLeft, loader)
@@ -46,7 +46,7 @@ function CodePkuAssertPreloader:init()
     local xmlRoot = ParaXML.LuaXML_ParseFile(self.xmlFile)
 
     self.textureList = {}
-    for node in commonlib.XPath.eachNode(xmlRoot, "//asserts/textures") do
+    for node in commonlib.XPath.eachNode(xmlRoot, "//assets/textures") do
         if node.attr and node.attr.name == "gameStart" then
             for itemNode in commonlib.XPath.eachNode(node, "/item") do
                 -- echo(itemNode[1])
@@ -63,8 +63,8 @@ end
     time:2020-10-12 09:25:12
     return 
 ]]
-function CodePkuAssertPreloader:PreloadAssert()
-    LOG.std(nil, "CodePkuAssertPreloader", "PreloadAssert", "Enter")
+function CodePkuAssetPreloader:PreloadAsset()
+    LOG.std(nil, "CodePkuAssetPreloader", "PreloadAsset", "Enter")
     GameLogic.options:EnableAsyncAssetLoader(true)
     self:AddTextures()
     
@@ -76,7 +76,7 @@ end
     time:2020-10-12 09:26:49
     return 
 ]]
-function CodePkuAssertPreloader:AddTextures()
+function CodePkuAssetPreloader:AddTextures()
     for _i,_v in pairs(self.textureList) do
         echo(_v)
         self.loader:AddAssets(ParaAsset.LoadTexture("",_v,1))
@@ -84,7 +84,7 @@ function CodePkuAssertPreloader:AddTextures()
 end
 
 local function activate()
-    CodePkuAssertPreloader.getSingleTon():PreloadAssert()
+    CodePkuAssetPreloader.getSingleTon():PreloadAsset()
 end
 
 NPL.this(activate)
