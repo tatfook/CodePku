@@ -222,7 +222,6 @@ function TaskSystem:GetReward(taskID,reward_json, type)
                 TaskSystem.goalReward = TaskSystem:handleReceived(TaskSystem.goalReward,TaskSystem:FindTaskByID(taskID, 2), 2)
             elseif type == "plan" then
                 TaskSystem.plan = TaskSystem:handleReceived(TaskSystem.plan,TaskSystem:FindTaskByID(taskID, 3), 3)
-                GameLogic.GetFilters():apply_filters("TaskSystemList", {type = "goalReward"}); -- 领取奖励后，触发任务系统计数
             end
             if TaskSystem.Page_ui then
                 TaskSystem.Page_ui:Refresh(0)
