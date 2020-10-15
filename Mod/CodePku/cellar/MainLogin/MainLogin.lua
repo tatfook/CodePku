@@ -430,14 +430,17 @@ function MainLogin:GetVisitorUUID()
     if (UUIDData.softwareUUID and UUIDData.paracraftDir and UUIDData.paracraftDir == currentParacraftDir) then
         local machineID = UUIDData.machineID or "";
         local visitorUUId = UUIDData.softwareUUID .. "-" .. machineID;
-        if visitorUUId ~= 'uuid-' then 
+        if visitorUUId ~= 'uuid-' and visitorUUId ~= 'uuid--' then 
             return visitorUUId;
         end
     end
 
-    local machineID = ParaEngine.GetAttributeObject():GetField("MachineID", getUUID() .. "-" .. os.time());
+    local machineID = ParaEngine.GetAttributeObject():GetField("MachineID", "");
+    if not machineID or machineID == '' then
+        machineID = getUUID().. '-' .. os.time()
+    end
     UUIDData.paracraftDir = ParaIO.GetWritablePath()
-    UUIDData.softwareUUID = "uuid-";
+    UUIDData.softwareUUID = "uuid";
 
     UUIDData.machineID = machineID
     GameLogic.GetPlayerController():SaveLocalData("UUIDData", UUIDData, true)
