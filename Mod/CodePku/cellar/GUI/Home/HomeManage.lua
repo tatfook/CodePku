@@ -81,7 +81,7 @@ function HomeManage:GetHomeWorld()
                 return false
             end
         end
-
+        GameLogic.GetFilters():apply_filters("TaskSystemList", {type = "home"}); -- 进入家园区后，触发任务系统计数
         local world = RemoteWorld.LoadFromHref(url, "self")
         LoadWorld(world, 'auto')
     end)

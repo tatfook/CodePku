@@ -132,6 +132,16 @@ function UserConsole:CourseEntry()
             end) 
         end
     end
+            
+
+    local GameLogic = commonlib.gettable("MyCompany.Aries.Game.GameLogic")
+    GameLogic.GetFilters():apply_filters("TaskSystemList", {type = "login"});-- 登录之后，触发任务系统计数
+
+    -- 登录之后，获取任务数据
+    NPL.load("(gl)Mod/CodePku/cellar/Common/TouchMiniButtons/TaskSystem/TaskSystem.lua")
+    local TaskSystem = commonlib.gettable("Mod.CodePku.Common.TaskSystem")
+    TaskSystem:GetTask();
+
 end
 
 function UserConsole:Logout()
