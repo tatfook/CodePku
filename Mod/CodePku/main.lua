@@ -487,6 +487,7 @@ function CodePku:init()
     local CodepkuChatChannel = NPL.load("(gl)Mod/CodePku/chat/CodepkuChatChannel.lua");
 	CodepkuChatChannel.StaticInit();
 
+
 	NPL.load("(gl)Mod/CodePku/cellar/GUI/CourseLoadTips/CourseLoadTips.lua")
 	local CourseLoadTips = commonlib.gettable("Mod.CodePku.GUI.CourseLoadTips")
 	CourseLoadTips.StaticInit()
@@ -495,6 +496,11 @@ function CodePku:init()
 	NPL.load("(gl)Mod/CodePku/cellar/GUI/Home/HomeManage.lua");
 	local HomeManage = commonlib.gettable("Mod.CodePku.Common.HomeManage")
 	HomeManage:OnInit()
+
+	-- 初始化任务系统
+	NPL.load("(gl)Mod/CodePku/cellar/Common/TouchMiniButtons/TaskSystem/TaskSystem.lua")
+	local TaskSystem = commonlib.gettable("Mod.CodePku.Common.TaskSystem")
+	TaskSystem:StaticInit();
 
 	GameLogic.GetFilters():add_filter(
 		"DesktopMenuPage.ShowPage",
