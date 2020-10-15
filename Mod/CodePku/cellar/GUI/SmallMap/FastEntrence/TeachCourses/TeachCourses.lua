@@ -12,6 +12,7 @@ TeachCourses:ShowPage();
 local TeachCourses = NPL.export();
 local AdaptWindow = commonlib.gettable("Mod.CodePku.GUI.Window.AdaptWindow")
 local request = NPL.load("(gl)Mod/CodePku/api/BaseRequest.lua");
+local teachImageData = NPL.load("(gl)Mod/CodePku/cellar/imageLuaTable/teachImageData.lua")      -- 年级封面
 
 TeachCourses.main_icons_path = "codepku/image/textures/smallmap/teach/mainicons.png"       -- 年级导图雪碧图
 TeachCourses.courseware_icons_path = "codepku/image/textures/smallmap/teach/coursewareicons.png"         -- 单科分页雪碧图
@@ -19,15 +20,7 @@ TeachCourses.purchase_icons_path = "codepku/image/textures/smallmap/teach/purcha
 TeachCourses.background_path = "codepku/image/textures/smallmap/teach/background.png"        -- 小山坡背景图
 TeachCourses.courseware_background_path = "codepku/image/textures/smallmap/teach/coursewarebackground.png"         -- 单科分页背景图
 
--- 年级封面
-TeachCourses.grade_covers = {
-    [1] = "codepku/image/textures/smallmap/teach/class_1.png",
-    [2] = "codepku/image/textures/smallmap/teach/class_2.png",
-    [3] = "codepku/image/textures/smallmap/teach/class_3.png",
-    [4] = "codepku/image/textures/smallmap/teach/class_4.png",
-    [5] = "codepku/image/textures/smallmap/teach/class_5.png",
-    [6] = "codepku/image/textures/smallmap/teach/class_6.png",
-}
+
 
 TeachCourses.icons = {
     -- 年级导图图标
@@ -126,18 +119,18 @@ end
 -- 年级列表
 -- @params:int sort_index 实际上并不影响排序，主要是为了定位具体的年级增加的唯一标识，跟index保持一致可以保证请求的课件信息是正确年级的课件
 TeachCourses.grade_list = {
-    [1] = {tips_url = TeachCourses.GetTeachCoursesIconPathStr(14), desc = '一年级(上)', count = 0, cover_url = TeachCourses.grade_covers[1], sort_index = 1, },
-    [2] = {tips_url = TeachCourses.GetTeachCoursesIconPathStr(16), desc = '二年级(上)', count = 0, cover_url = TeachCourses.grade_covers[2], sort_index = 2, },
-    [3] = {tips_url = TeachCourses.GetTeachCoursesIconPathStr(18), desc = '三年级(上)', count = 0, cover_url = TeachCourses.grade_covers[3], sort_index = 3, },
-    [4] = {tips_url = TeachCourses.GetTeachCoursesIconPathStr(20), desc = '四年级(上)', count = 0, cover_url = TeachCourses.grade_covers[4], sort_index = 4, },
-    [5] = {tips_url = TeachCourses.GetTeachCoursesIconPathStr(22), desc = '五年级(上)', count = 0, cover_url = TeachCourses.grade_covers[5], sort_index = 5, },
-    [6] = {tips_url = TeachCourses.GetTeachCoursesIconPathStr(24), desc = '六年级(上)', count = 0, cover_url = TeachCourses.grade_covers[6], sort_index = 6, },
-    [7] = {tips_url = TeachCourses.GetTeachCoursesIconPathStr(15), desc = '一年级(下)', count = 0, cover_url = TeachCourses.grade_covers[1], sort_index = 7, },
-    [8] = {tips_url = TeachCourses.GetTeachCoursesIconPathStr(17), desc = '二年级(下)', count = 0, cover_url = TeachCourses.grade_covers[2], sort_index = 8, },
-    [9] = {tips_url = TeachCourses.GetTeachCoursesIconPathStr(19), desc = '三年级(下)', count = 0, cover_url = TeachCourses.grade_covers[3], sort_index = 9, },
-    [10] = {tips_url = TeachCourses.GetTeachCoursesIconPathStr(21), desc = '四年级(下)', count = 0, cover_url = TeachCourses.grade_covers[4], sort_index = 10, },
-    [11] = {tips_url = TeachCourses.GetTeachCoursesIconPathStr(23), desc = '五年级(下)', count = 0, cover_url = TeachCourses.grade_covers[5], sort_index = 11, },
-    [12] = {tips_url = TeachCourses.GetTeachCoursesIconPathStr(25), desc = '六年级(下)', count = 0, cover_url = TeachCourses.grade_covers[6], sort_index = 12, },
+    [1] = {tips_url = TeachCourses.GetTeachCoursesIconPathStr(14), desc = '一年级(上)', count = 0, cover_url = teachImageData:GetIconUrl("class_1.png"), sort_index = 1, },
+    [2] = {tips_url = TeachCourses.GetTeachCoursesIconPathStr(16), desc = '二年级(上)', count = 0, cover_url = teachImageData:GetIconUrl("class_2.png"), sort_index = 2, },
+    [3] = {tips_url = TeachCourses.GetTeachCoursesIconPathStr(18), desc = '三年级(上)', count = 0, cover_url = teachImageData:GetIconUrl("class_3.png"), sort_index = 3, },
+    [4] = {tips_url = TeachCourses.GetTeachCoursesIconPathStr(20), desc = '四年级(上)', count = 0, cover_url = teachImageData:GetIconUrl("class_4.png"), sort_index = 4, },
+    [5] = {tips_url = TeachCourses.GetTeachCoursesIconPathStr(22), desc = '五年级(上)', count = 0, cover_url = teachImageData:GetIconUrl("class_5.png"), sort_index = 5, },
+    [6] = {tips_url = TeachCourses.GetTeachCoursesIconPathStr(24), desc = '六年级(上)', count = 0, cover_url = teachImageData:GetIconUrl("class_6.png"), sort_index = 6, },
+    [7] = {tips_url = TeachCourses.GetTeachCoursesIconPathStr(15), desc = '一年级(下)', count = 0, cover_url = teachImageData:GetIconUrl("class_1.png"), sort_index = 7, },
+    [8] = {tips_url = TeachCourses.GetTeachCoursesIconPathStr(17), desc = '二年级(下)', count = 0, cover_url = teachImageData:GetIconUrl("class_2.png"), sort_index = 8, },
+    [9] = {tips_url = TeachCourses.GetTeachCoursesIconPathStr(19), desc = '三年级(下)', count = 0, cover_url = teachImageData:GetIconUrl("class_3.png"), sort_index = 9, },
+    [10] = {tips_url = TeachCourses.GetTeachCoursesIconPathStr(21), desc = '四年级(下)', count = 0, cover_url = teachImageData:GetIconUrl("class_4.png"), sort_index = 10, },
+    [11] = {tips_url = TeachCourses.GetTeachCoursesIconPathStr(23), desc = '五年级(下)', count = 0, cover_url = teachImageData:GetIconUrl("class_5.png"), sort_index = 11, },
+    [12] = {tips_url = TeachCourses.GetTeachCoursesIconPathStr(25), desc = '六年级(下)', count = 0, cover_url = teachImageData:GetIconUrl("class_6.png"), sort_index = 12, },
 }
 
 -- 用来展示教学区单课分页左上角标题
