@@ -126,7 +126,8 @@ end
                         <div style="width: 424; height: 338;font-family:alhy;text-align:center;line-height:73;font-size: 24;color:#ffffff;">
                             <!-- 年级 -->
                             <div onclick="OnClickSemester" style="<%=format('position: relative;left: 50;top:50; width: 324; height: 247; background:url(%s);', getIcon(8))%>" name="<%=Eval('sort_index')%>">
-                                <div style="<%=format('position: relative; left: 20;top: 14; width: 283; height: 221; background:url(%s);', getIcon(9))%>"></div>
+                                <!-- 年级封面 -->
+                                <div style="<%=format('position: relative; left: 20;top: 14; width: 283; height: 221; background:url(%s);', Eval('cover_url'))%>"></div>
                                 <div style="<%=format('position: relative; left: 187;top: -36; width: 186; height: 118; background:url(%s);', getIcon(10))%>"></div>
                                 <div style="<%=format('position: relative; left: -35;top: 201; width: 204; height: 68; background:url(%s);', Eval('tips_url'))%>"></div>
                             </div>
