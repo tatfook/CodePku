@@ -105,6 +105,7 @@ function ShareApp:ShareLogic(url)
 end
 
 -- 分享
+-- todo 本来重复分享同一个海报做了处理的，判断相同海报就不请求后台，直接分享。但是不知道为什么分享出去的海报为默认的海报，所以改成现在这样。后面有时间再来优化处理。
 function ShareApp:fire(id, page)
     -- 防止开启多个分享界面
     if ShareApp.bShare then
