@@ -84,14 +84,14 @@ function RankPage.GetGameItem(id, range)
             l['name'] = data[i].user.nickname
             l['score'] = data[i].score
             l['rank'] = i
-            l['game_id'] = data[i].game.id
+            l['game_id'] = data[i].game_id
             table.insert(list, l)
         end
         if data[i].current_user == 1 then
             local l = {}
             l['name'] = data[i].user.nickname
             l['score'] = data[i].score
-            l['game_id'] = data[i].game.id
+            l['game_id'] = data[i].game_id
             if data[i].is_top_n then
                 l['rank'] = i
             else

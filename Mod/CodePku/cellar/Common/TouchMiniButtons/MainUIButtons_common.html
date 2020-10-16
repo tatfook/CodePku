@@ -16,6 +16,8 @@ local MainPopup = commonlib.gettable("Mod.CodePku.GUI.MainPopup")
 local Feedback = NPL.load("(gl)Mod/CodePku/cellar/GUI/Feedback/Feedback.lua");
 local Eldership = NPL.load("(gl)Mod/CodePku/cellar/GUI/Eldership/Eldership.lua");
 local MainUIButtons = NPL.load("(gl)Mod/CodePku/cellar/Common/TouchMiniButtons/Main.lua");
+local ShareApp = NPL.load("(gl)Mod/CodePku/cellar/GUI/Share/ShareApp.lua");
+
 is_open = MainUIButtons.open_common
 
 function ClickClose() 
@@ -59,6 +61,11 @@ end
 function ClickEldership()
     Eldership:ShowPage()
 end
+
+function ClickShareApp()
+    ShareApp:ShowPage(1)
+end
+
 local CommonFunc = commonlib.gettable("Mod.CodePku.Common.CommonFunc")
 
 isIOSApproval = CommonFunc.isIOSApproval()
@@ -73,19 +80,20 @@ isIOSApproval = CommonFunc.isIOSApproval()
             <div style="position: relative; width: 561; height: 178; background: url(codepku/image/textures/main_ui/main.png#46 495 200 54:20 20 20 20);"></div>
         </pe:if>
         <pe:if condition = "<%= not isIOSApproval%>" >
-            <div style="position: relative; width: 824; height: 178; background: url(codepku/image/textures/main_ui/main.png#46 495 200 54:20 20 20 20);"></div>
+            <div style="position: relative; width: 944; height: 178; background: url(codepku/image/textures/main_ui/main.png#46 495 200 54:20 20 20 20);"></div>
         </pe:if>
         <div style="position: relative; width: 108; height: 134; left: 40; top: 10; background: url(codepku/image/textures/main_ui/main.png#38 314 108 134);" onclick="ClickSamllMap"></div>
         <div style="position: relative; width: 90; height: 120; left: 185; top: 22; background: url(codepku/image/textures/main_ui/main.png#165 175 90 120);" onclick="ClickAntiJamming"></div>
         <div style="position: relative; width: 101; height: 135; left: 302; top: 9; background: url(codepku/image/textures/main_ui/main.png#160 313 101 135);" onclick="ClickCommunity"></div>
         <div style="position: relative; width: 74; height: 129; left: 445; top: 13; background: url(codepku/image/textures/main_ui/main.png#811 322 74 129);" onclick="ClickFeedback"></div>
+        <div style="position: relative; width: 96; height: 128; left: 820; top: 17; background: url(codepku/image/textures/main_ui/main.png#839 480 96 132);" onclick="ClickShareApp"></div>
         <pe:if condition = "<%= isIOSApproval%>" >
             <div style="position: relative; width: 82; height: 178; left: 561; transform: rotate(180deg); transform-origin: 41px 89px; background: url(codepku/image/textures/main_ui/main.png#915 14 82 178);" onclick="ClickClose"></div>
         </pe:if>
         <pe:if condition = "<%= not isIOSApproval%>" >
             <div style="position: relative; width: 106; height: 138; left: 561; top: 10; background: url(codepku/image/textures/main_ui/main.png#285 480 106 138);" onclick="ClickQQGroup"></div>
-            <div style="position: relative; width: 102; height: 127; left: 690; top: 17; background: url(codepku/image/textures/eldership/eldership.png#40 44 107 129);" onclick="ClickEldership"></div>
-            <div style="position: relative; width: 82; height: 178; left: 822; transform: rotate(180deg); transform-origin: 41px 89px; background: url(codepku/image/textures/main_ui/main.png#915 14 82 178);" onclick="ClickClose"></div>
+            <div style="position: relative; width: 102; height: 127; left: 700; top: 17; background: url(codepku/image/textures/eldership/eldership.png#40 44 107 129);" onclick="ClickEldership"></div>
+            <div style="position: relative; width: 82; height: 178; left: 942; transform: rotate(180deg); transform-origin: 41px 89px; background: url(codepku/image/textures/main_ui/main.png#915 14 82 178);" onclick="ClickClose"></div>
         </pe:if>
     </pe:if>
     <pe:if condition="<%=is_open ~= true%>">
