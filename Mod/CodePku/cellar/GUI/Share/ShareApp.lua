@@ -49,11 +49,11 @@ function ShareApp.GetIconPathStr(id)
     id = tonumber(id)
     path = path .. ShareApp.icons[id].url
     if ShareApp.icons[id].left then
-      path = path..'#'
-      path = path..tostring(ShareApp.icons[id].left)
-      path = path..' '..tostring(ShareApp.icons[id].top)
-      path = path..' '..tostring(ShareApp.icons[id].width)
-      path = path..' '..tostring(ShareApp.icons[id].height)
+        path = path..'#'
+        path = path..tostring(ShareApp.icons[id].left)
+        path = path..' '..tostring(ShareApp.icons[id].top)
+        path = path..' '..tostring(ShareApp.icons[id].width)
+        path = path..' '..tostring(ShareApp.icons[id].height)
     end
     LOG.std(nil, "ShareApp", "GetIconPathStr", "path = %s", path)
     return path
@@ -79,10 +79,10 @@ function ShareApp:GetPoster(id, page)
 end
 
 -- 分享主逻辑
-function ShareApp:ShareLogic()
+function ShareApp:ShareLogic(url)
     ShareApp.bShare = true
     Share:fire("image", {
-        image = ShareApp.poster_url,
+        image = url,
         title = "分享海报"
     }, {
         onStart = function(e)
@@ -105,35 +105,27 @@ function ShareApp:ShareLogic()
 end
 
 -- 分享
+-- todo 本来重复分享同一个海报做了处理的，判断相同海报就不请求后台，直接分享。但是不知道为什么分享出去的海报为默认的海报，所以改成现在这样。后面有时间再来优化处理。
 function ShareApp:fire(id, page)
     -- 防止开启多个分享界面
     if ShareApp.bShare then
         return
     end
-    -- 避免重复分享或者不同的分享页分享了同一个图片，这里需要单独处理，看传入的id跟上一次的id是否相同，不同就重新获取图片
-    if ShareApp.poster_id == nil or ShareApp.poster_id ~= id then
-        ShareApp.poster_id = id
-        ShareApp.bShare = true
-        local path = string.format("/posters/show?type=%d", id)
-        request:get(path):next(function(response)
-            -- 拿到返回值，根据返回值拼接share参数
-            local data = response.data.data
-            ShareApp.poster_url = data.img_url or data.default_url
-            -- 拿到图片开始分享
-            ShareApp:ShareLogic()
-            if page then
-                page:Refresh(0)
-            end
-        end):catch(function(e)
-            GameLogic.AddBBS("CodeGlobals", e.data.message, 3000, "#FF0000");
-        end);
-    elseif ShareApp.poster_id == id then
-        -- 无弹窗分享时需要先获取图片资源
-        if not ShareApp.poster_url then
-            ShareApp:GetPoster(id, page)
+    ShareApp.poster_id = id
+    ShareApp.bShare = true
+    local path = string.format("/posters/show?type=%d", id)
+    request:get(path):next(function(response)
+        -- 拿到返回值，根据返回值拼接share参数
+        local data = response.data.data
+        ShareApp.poster_url = data.img_url or data.default_url
+        -- 拿到图片开始分享
+        ShareApp:ShareLogic(ShareApp.poster_url)
+        if page then
+            page:Refresh(0)
         end
-        ShareApp:ShareLogic()
-    end
+    end):catch(function(e)
+        GameLogic.AddBBS("CodeGlobals", e.data.message, 3000, "#FF0000");
+    end);
 end
 
 -- 通用分享函数。手机端主界面分享会有弹窗，其它地方调用直接走分享逻辑。PC端调用展示PC端专属分享页面。
@@ -142,6 +134,7 @@ function ShareApp:ShowPage(id, page)
         ShareApp:GetPoster(id, page)
     end
     ShareApp.poster_id = id
+    ShareApp.bShare = false
     -- 判断登陆设备，pc端和手机端展示不同的页面
     if System.os.IsMobilePlatform() then
         -- 手机端展示页面
