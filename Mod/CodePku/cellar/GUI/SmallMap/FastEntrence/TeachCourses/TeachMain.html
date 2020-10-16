@@ -169,16 +169,19 @@ end
         <div onclick="PageDown" style="<%=format('position: relative; left: 1633; top: 369; width: 111; height: 155; background:url(%s);', getIcon(4))%>"></div>
 
         <!-- 页码点 -->
-        <div style="<%=format('position: relative; left: 833; top: 791; width: 36; height: 37; background:url(%s);', getIcon(6))%>">
-            <pe:if condition="<%= TeachCourses.Main_Page_Index == 1 %>">
-                <div style="<%=format('position: relative; left: 6; top: 6; width: 24; height: 24; background:url(%s);', getIcon(5))%>"></div>
-            </pe:if>
-        </div>
-        <div style="<%=format('position: relative; left: 881; top: 791; width: 36; height: 37; background:url(%s);', getIcon(6))%>">
-            <pe:if condition="<%= TeachCourses.Main_Page_Index == 2 %>">
-                <div style="<%=format('position: relative; left: 6; top: 6; width: 24; height: 24; background:url(%s);', getIcon(5))%>"></div>
-            </pe:if>
-        </div>
+        <pe:if condition="<%= TeachCourses.Main_Page_Index == 1 %>">
+            <div style="<%=format('position: relative; left: 826; top: 784; width: 50; height: 50; background:url(%s);', getIcon(6))%>">
+                <div style="<%=format('position: relative; left: 8; top: 8; width: 35; height: 35; background:url(%s);', getIcon(5))%>"></div>
+            </div>
+            <div style="<%=format('position: relative; left: 881; top: 791; width: 36; height: 37; background:url(%s);', getIcon(6))%>"></div>
+        </pe:if>
+
+        <pe:if condition="<%= TeachCourses.Main_Page_Index == 2 %>">
+            <div style="<%=format('position: relative; left: 833; top: 791; width: 36; height: 37; background:url(%s);', getIcon(6))%>"></div>
+            <div style="<%=format('position: relative; left: 874; top: 784; width: 50; height: 50; background:url(%s);', getIcon(6))%>">
+                <div style="<%=format('position: relative; left: 8; top: 8; width: 35; height: 35; background:url(%s);', getIcon(5))%>"></div>
+            </div>
+        </pe:if>
         
     </div>
 
