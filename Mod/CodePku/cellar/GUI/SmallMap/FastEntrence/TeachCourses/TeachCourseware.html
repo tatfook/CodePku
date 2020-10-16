@@ -267,11 +267,14 @@ end
     <!-- 页码点 -->
     <div style="position: relative;left: 798;top: 938;width: 468;height: 37;">
         <pe:repeat DataSource="<%=GetPagenationsPoints()%>">
-            <div style="<%=format('position: relative; left:%s; width: 36; height: 37; background:url(%s);', Eval('x'), getIcon(31))%>">
-                <pe:if condition="<%= TeachCourses.Courseware_Page_Index == Eval('index') %>">
-                    <div style="<%=format('position: relative; left:6; top:6;width: 24; height: 24; background:url(%s);', getIcon(30))%>"></div>
-                </pe:if>
-            </div>
+            <pe:if condition="<%= TeachCourses.Courseware_Page_Index == Eval('index') %>">
+                <div style="<%=format('position: relative; left:%s; top:-5; width: 50; height: 50; background:url(%s);', Eval('x')-7, getIcon(31))%>">
+                    <div style="<%=format('position: relative; left:8; top:8;width: 35; height: 35; background:url(%s);', getIcon(30))%>"></div>
+                </div>
+            </pe:if>
+            <pe:if condition="<%= TeachCourses.Courseware_Page_Index ~= Eval('index') %>">
+                <div style="<%=format('position: relative; left:%s; width: 36; height: 37; background:url(%s);', Eval('x'), getIcon(31))%>"></div>
+            </pe:if>
         </pe:repeat>
     </div>
     <iframe src="Mod/CodePku/cellar/GUI/MoneyV2.html"></iframe>
