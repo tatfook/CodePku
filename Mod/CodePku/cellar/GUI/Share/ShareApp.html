@@ -1,0 +1,52 @@
+<!-- "script/apps/Aries/Creator/Game/Areas/EscFramePage.html" -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+</head>
+<body>
+<pe:mcml>
+<script refresh="false" type="text/npl" src="ShareApp.lua"><![CDATA[
+ShareApp = NPL.load("(gl)Mod/CodePku/cellar/GUI/Share/ShareApp.lua")
+local page = document:GetPageCtrl()
+
+ShareApp:GetPoster(ShareApp.poster_id, page)
+
+function ClickShare()
+    -- 数字1对应主界面海报
+    ShareApp:fire(ShareApp.poster_id)
+end
+
+function OnclickClose()
+    Page:CloseWindow()
+end
+
+function GetIcon(id)
+    return ShareApp.GetIconPathStr(id)
+end
+
+function GetUrl()
+    return ShareApp.poster_url or ""
+end
+
+]]>
+</script>
+<pe:container alignment="_lt" width="1920" height="1080" style="background-color: #00000083;">
+    <!-- 背景 -->
+    <div style="<%=format('position: relative; left: 322; top: 66; width: 1423; height: 852; background:url(%s);', GetIcon(3))%>">
+        <!-- 海报 -->
+        <div style="<%=format('position: relative; left: 253; top: 172; width: 865; height: 486; background:url(%s);', GetUrl())%>"></div>
+    </div>
+    <!-- 关闭 -->
+    <div onclick="OnclickClose" style="<%=format('position: relative; left: 1569; top: 96; width: 101; height: 102; background:url(%s);', GetIcon(1))%>"></div>
+    <!-- 分享按钮 -->
+    <div onclick="ClickShare" style="<%=format('position: relative; left: 822; top: 798; width: 395; height: 193; background:url(%s);', GetIcon(2))%>"></div>
+    
+
+
+</pe:container>
+</pe:mcml>
+</body>
+</html>
+ 
