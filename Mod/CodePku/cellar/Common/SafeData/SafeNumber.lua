@@ -27,8 +27,7 @@ function SafeNumber:init(_value)
         LOG.std(nil, "error", "SafeData", "Type Error");
         return
     end
-    setmetatable(self, getmetatable(SafeNumber))
-    self.setValue(_value)
+    self:setValue(_value)
     return self
 end
 
@@ -88,9 +87,8 @@ function SafeNumber:revertData()
 end
 
 -- 设置元表和元方法  重载运算符   由于lua原生问题，不同数据类型比较永远不相等 所以==重载会有问题
-local _mt  = rawget(SafeNumber, "__metatable") or {__index = SafeNumber._super}
-setmetatable(SafeNumber, _mt)
-
+local _mt  = {__index = SafeNumber}
+SafeNumber.__metatable = _mt
 --[[
     @desc 
     time:2020-10-16 12:57:03
@@ -107,7 +105,7 @@ function _mt.__add(_lValue ,_rValue)
         _rValue:checkDataAndRevert()
         _rValue = _rValue.data
     end
-    return classMeta:new():init(_lValue + _rValue)
+    return SafeNumber:new():init(_lValue + _rValue)
 end
 
 --[[
