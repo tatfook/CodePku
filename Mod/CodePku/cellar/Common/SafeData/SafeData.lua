@@ -8,29 +8,8 @@ NPL.load("(gl)Mod/CodePku/cellar/Common/SafeData/SafeData.lua")
 local SafeData = commonlib.gettable("Mod.CodePku.SafeData")
 -----------------------------------
 ]]--
-local SafeData = commonlib.inherit(nil, commonlib.gettable("Mod.CodePku.SafeData"))
+NPL.load("(gl)script/ide/System/Core/ToolBase.lua")
+local SafeData = commonlib.inherit(commonlib.gettable("System.Core.ToolBase"), commonlib.gettable("Mod.CodePku.SafeData"))
 
-function SafeData:ctor()
-    self.key = "codepku"
-end
 
-function SafeData:setSafeData()
-end
-
-function SafeData:checkDataAndRevert()
-end
-
-function SafeData:revertData()
-end
-
---[[
-    @desc 
-    time:2020-10-16 12:57:03
-    @_value1: 
-    @_value2:
-    return 
-]]
-function SafeData.__add(Lhs ,Rls)
-    
-end
 

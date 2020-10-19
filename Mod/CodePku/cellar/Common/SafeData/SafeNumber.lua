@@ -6,17 +6,40 @@ use the lib:
 ------------------------------------
 NPL.load("(gl)Mod/CodePku/cellar/Common/SafeData/SafeNumber.lua")
 local SafeNumber = commonlib.gettable("Mod.CodePku.SafeNumber")
+
+local testData = SafeNumber:new():init(100)
 -----------------------------------
 ]]--
 NPL.load("(gl)Mod/CodePku/cellar/Common/SafeData/SafeData.lua")
-local SafeNumber = commonlib.inherit(commonlib.gettable("Mod.CodePku.SafeData"), commonlib.gettable("Mod.CodePku.SafeNumber"))
+local SafeNumber = commonlib.inherit(commonlib.gettable("System.Core.SafeData"), commonlib.gettable("Mod.CodePku.SafeNumber"))
 
-function SafeNumber:ctor(_value)
+function SafeNumber:ctor()
+end
+
+--[[
+    @desc 
+    time:2020-10-18 19:09:27
+    @_value:
+    return 
+]]
+function SafeNumber:init(_value)
     if type(_value) ~= "number" then
         LOG.std(nil, "error", "SafeData", "Type Error");
         return
     end
-    self.data = _value
+    setmetatable(self, getmetatable(SafeNumber))
+    self.setValue(_value)
+    return self
+end
+
+--[[
+    @desc 
+    time:2020-10-19 10:31:33
+    @_value:
+    return 
+]]
+function SafeNumber:setValue(_value)
+	self.data = _value
     self:setSafeData()
 end
 
@@ -62,4 +85,75 @@ function SafeNumber:revertData()
         table.insert(charList, string.char(string.sub(self.safeData, index, index+1)))
     end
     self.data = table.concat(charList)
+end
+
+-- 设置元表和元方法  重载运算符   由于lua原生问题，不同数据类型比较永远不相等 所以==重载会有问题
+local _mt  = rawget(SafeNumber, "__metatable") or {__index = SafeNumber._super}
+setmetatable(SafeNumber, _mt)
+
+--[[
+    @desc 
+    time:2020-10-16 12:57:03
+    @_lValue: 
+    @_rValue:
+    return 
+]]
+function _mt.__add(_lValue ,_rValue)
+    if type(_lValue) == "table" and _lValue:isa(SafeNumber) then
+        _lValue:checkDataAndRevert()
+        _lValue = _lValue.data
+    end
+    if type(_rValue) == "table" and _rValue:isa(SafeNumber) then
+        _rValue:checkDataAndRevert()
+        _rValue = _rValue.data
+    end
+    return classMeta:new():init(_lValue + _rValue)
+end
+
+--[[
+    @desc 
+    time:2020-10-19 10:30:42
+    @_lValue: 
+    @_rValue:
+    return 
+]]
+function _mt:__sub(_lValue ,_rValue)
+    if type(_lValue) == "table" and _lValue:isa(SafeNumber) then
+        _lValue:checkDataAndRevert()
+        _lValue = _lValue.data
+    end
+    if type(_rValue) == "table" and _rValue:isa(SafeNumber) then
+        _rValue:checkDataAndRevert()
+        _rValue = _rValue.data
+    end
+    return SafeNumber:new():init(_lValue - _rValue)
+end
+
+--[[
+    @desc 
+    time:2020-10-19 10:30:42
+    @_lValue: 
+    @_rValue:
+    return 
+]]
+function _mt:__div(_lValue ,_rValue)
+    if type(_lValue) == "table" and _lValue:isa(SafeNumber) then
+        _lValue:checkDataAndRevert()
+        _lValue = _lValue.data
+    end
+    if type(_rValue) == "table" and _rValue:isa(SafeNumber) then
+        _rValue:checkDataAndRevert()
+        _rValue = _rValue.data
+    end
+    return SafeNumber:new():init(_lValue / _rValue)
+end
+
+--[[
+    @desc 
+    time:2020-10-18 15:13:26
+    return 
+]]
+function _mt.__tostring(_value)
+    _value:checkDataAndRevert()
+    return tostring(_value.data)
 end
