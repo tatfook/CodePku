@@ -16,6 +16,11 @@ local CommonFunc = commonlib.gettable("Mod.CodePku.Common.CommonFunc")
 CommonFunc = commonlib.gettable("Mod.CodePku.Common.CommonFunc");
 NPL.load("(gl)script/ide/System/os/os.lua");
 
+
+CommonFunc.ConfigCodingKeys = {
+    [1] = '!F-gH.nKAhPC94fa', -- ApiService.saveScore
+}
+
 -- local CommonFunc = NPL.export();
 
 

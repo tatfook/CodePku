@@ -63,7 +63,7 @@ function TopicCourse:ShowPage(index)
         enable_esc_key = true,
         --bShow = bShow,
         click_through = false, 
-        zorder = 20,
+        zorder = 22,
         --directPosition = true,
         alignment = "_ct",
         x = -1920/2,

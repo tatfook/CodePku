@@ -130,7 +130,7 @@ FastEntrence.params = {
     },
     {
         url="Mod/CodePku/cellar/GUI/SmallMap/FastEntrence/TopicEntrence.html",
-        alignment="_ct", left = -960, top = -540, width = 1920, height = 1080,zorder =20
+        alignment="_ct", left = -960, top = -540, width = 1920, height = 1080,zorder =21
     }
 }
 
