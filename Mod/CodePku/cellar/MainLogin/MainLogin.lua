@@ -24,6 +24,7 @@ MainLogin.MainLoginPage = nil
 MainLogin.LoginBGPage = nil
 MainLogin.isPassword = nil
 MainLogin.accountNum = ''  --记录输入的号码,切换登录方式保留
+MainLogin.check = GameLogic.GetPlayerController():LoadLocalData('privacyPolicyState',false,true);  --记录复选框状态
 
 function MainLogin:Show(index)     
     self:CloseLoadingPage()
@@ -252,6 +253,7 @@ function MainLogin:LoginAction(methodIndex)
                     Mod.CodePku.MsgBox:Close()
                     return false
                 end
+                GameLogic.GetPlayerController():SaveLocalData('privacyPolicyState',true,true)
                 CodePkuServiceSession:LoginResponse(response, err, HandleLogined)
             end
         )
@@ -264,6 +266,7 @@ function MainLogin:LoginAction(methodIndex)
                     Mod.CodePku.MsgBox:Close()
                     return false
                 end
+                GameLogic.GetPlayerController():SaveLocalData('privacyPolicyState',true,true)
                 CodePkuServiceSession:LoginResponse(response, err, HandleLogined)
             end
         )
@@ -276,6 +279,7 @@ function MainLogin:LoginAction(methodIndex)
                     Mod.CodePku.MsgBox:Close()
                     return false
                 end
+                GameLogic.GetPlayerController():SaveLocalData('privacyPolicyState',true,true)
                 CodePkuServiceSession:LoginResponse(response, err, HandleLogined)
             end
         )
@@ -531,6 +535,28 @@ function MainLogin:ShowUserAgreementModal()
         AdaptWindow:QuickWindow(params)
 
     -- Mod.CodePku.Utils.ShowWindow(568, 368, "Mod/CodePku/cellar/UserAgreement/UserAgreement.html", "UserAgreement")
+end
+
+function MainLogin:ShowPrivacyAgreementModal()	
+
+    local params = {
+        url = "Mod/CodePku/cellar/UserAgreement/PrivacyPolicy.html",
+        name = "PrivacyAgreement", 
+        DestroyOnClose = true,
+        allowDrag = false,
+        enable_esc_key = true,
+        -- bShow = bShow,
+        click_through = false, 
+        zorder = 30,
+        directPosition = true,
+        alignment = "_ct",
+        x = -1920/2,
+        y = -1080/2,
+        width = 1920,
+        height = 1080,
+        };
+        AdaptWindow:QuickWindow(params)
+
 end
 
 function MainLogin:ShowLoadingPage()

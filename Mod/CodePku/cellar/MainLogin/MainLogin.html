@@ -10,7 +10,9 @@
     <script type="text/npl" refresh="false"><![CDATA[
         NPL.load("(gl)script/apps/Aries/Creator/Game/Login/Rebranding.lua")
         local Config = NPL.load("(gl)Mod/CodePku/config/Config.lua")
-
+        privacyPolicyState = GameLogic.GetPlayerController():LoadLocalData('privacyPolicyState',false,true);
+        echo("------------privacyPolicyState")
+        echo(privacyPolicyState)
         NPL.load("(gl)Mod/CodePku/cellar/Common/CommonFunc/CommonFunc.lua")
         local CommonFunc = commonlib.gettable("Mod.CodePku.Common.CommonFunc")
         function isHuaweiApproval()
@@ -41,6 +43,10 @@
 
         function login()
             MainLogin:LoginAction(1)
+        end
+        
+        function unchecklogin()
+            GameLogic.AddBBS(nil, L"请同意用户协议", 3000, "255 0 0", 21)
         end
 
         function quicklogin()
@@ -132,6 +138,33 @@
             MainLogin:ShowUserAgreementModal()
         end
 
+        function show_privacy_agreement()
+            MainLogin:ShowPrivacyAgreementModal()
+        end
+
+        check = MainLogin.check
+        function clickCheckBox(value)
+            echo("--check")
+
+            local agree = Page:GetNode("agree"):GetControl():isChecked();
+            --echo("value")
+            --echo(value)
+            echo("agree")
+            echo(agree)
+
+            if agree then 
+                MainLogin.check = true;
+            else
+                MainLogin.check = false
+            end
+            echo("MainLogin.check")
+            echo(MainLogin.check)
+            
+            --Page:Refresh(0)
+
+        end
+
+
         function GetMethodIndex()
             return MainLogin.login_method_index; -- 1: captcha 2: password
         end
@@ -196,29 +229,60 @@
                 </div>
             </div>
 
-            <pe:if condition = "<%= not isHuaweiApproval()%>" >
-                <input type="button"  onclick="login" value='<%= L"登  录"%>'
-                    style="position: relative; width: 330; height: 90; left: 502; top: 414; font-size: 36; color: #0E5516; font-family: PuHuiTi-Bold; font-weight: bold; border-radius: 6px; background:url(codepku/image/textures/login/quickLogin.png#391 46 65 94:6 6 6 6);" />
+            <!-- 勾选同意政策 -->
+            <pe:if condition = "<%= MainLogin.check %>" >
+                <pe:if condition = "<%= not isHuaweiApproval()%>" >
+                    <input type="button"  onclick="login" value='<%= L"登  录"%>'
+                        style="position: relative; width: 330; height: 90; left: 502; top: 414; font-size: 36; color: #0E5516; font-family: PuHuiTi-Bold; font-weight: bold; border-radius: 6px; background:url(codepku/image/textures/login/quickLogin.png#391 46 65 94:6 6 6 6);" />
 
-                <input type="button"  onclick="quicklogin" value='<%= L"游客模式"%>'
-                    style="position: relative; width: 330; height: 90; left: 110; top: 414; font-size: 36; color: #0E5516; font-family: PuHuiTi-Bold; font-weight: bold; border-radius: 6px; background:url(codepku/image/textures/login/quickLogin.png#276 46 74 94:6 6 6 6);" />
-            </pe:if>
+                    <input type="button"  onclick="quicklogin" value='<%= L"游客模式"%>'
+                        style="position: relative; width: 330; height: 90; left: 110; top: 414; font-size: 36; color: #0E5516; font-family: PuHuiTi-Bold; font-weight: bold; border-radius: 6px; background:url(codepku/image/textures/login/quickLogin.png#276 46 74 94:6 6 6 6);" />
+                </pe:if>
+                
+                <!-- 华为审核屏蔽游客登录 -->
+                <pe:if condition = "<%= isHuaweiApproval() %>" >
+                    <input type="button"  onclick="login" value='<%= L"登  录"%>'
+                    style="position: relative; width: 330; height: 90; left: 307; top: 414; font-size: 36; color: #0E5516; font-family: PuHuiTi-Bold; font-weight: bold; border-radius: 6px; background:url(codepku/image/textures/login/quickLogin.png#391 46 65 94:6 6 6 6);" />
+                </pe:if> 
+                
+            </pe:if> 
             
-            <!-- 华为审核屏蔽游客登录 -->
-            <pe:if condition = "<%= isHuaweiApproval() %>" >
-                <input type="button"  onclick="login" value='<%= L"登  录"%>'
-                style="position: relative; width: 330; height: 90; left: 307; top: 414; font-size: 36; color: #0E5516; font-family: PuHuiTi-Bold; font-weight: bold; border-radius: 6px; background:url(codepku/image/textures/login/quickLogin.png#391 46 65 94:6 6 6 6);" />
-            </pe:if>
+            <!-- 未勾选同意政策 -->
+            <pe:if condition = "<%= not MainLogin.check %>" >
+                <pe:if condition = "<%= not isHuaweiApproval()%>" >
+                    <input type="button"  onclick="unchecklogin" value='<%= L"登  录"%>'
+                        style="position: relative; width: 330; height: 90; left: 502; top: 414; font-size: 36; color: #ffffff; font-family: PuHuiTi-Bold; font-weight: bold; border-radius: 6px; background:url(codepku/image/textures/login/quickLogin.png#809 45 76 96:6 6 6 6);" />
+
+                    <input type="button"  onclick="unchecklogin" value='<%= L"游客模式"%>'
+                        style="position: relative; width: 330; height: 90; left: 110; top: 414; font-size: 36; color: #ffffff; font-family: PuHuiTi-Bold; font-weight: bold; border-radius: 6px; background:url(codepku/image/textures/login/quickLogin.png#809 45 76 96:6 6 6 6);" />
+                </pe:if>
+                
+                <!-- 华为审核屏蔽游客登录 -->
+                <pe:if condition = "<%= isHuaweiApproval() %>" >
+                    <input type="button"  onclick="login" value='<%= L"登  录"%>'
+                        style="position: relative; width: 330; height: 90; left: 307; top: 414; font-size: 36; color: #ffffff; font-family: PuHuiTi-Bold; font-weight: bold; border-radius: 6px; background:url(codepku/image/textures/login/quickLogin.png#809 45 74 96:6 6 6 6);" />
+                </pe:if> 
+            </pe:if> 
+
 
             <div style="position: relative; width: 32; height: 32; left: 111; top: 535; background:url(codepku/image/textures/login/main.png#1638 314 33 33);"></div>
 
-            <input type="checkbox" name="agree" checked="checked" UncheckedBG="codepku/image/textures/login/main.png#1638 314 33 33" CheckedBG="codepku/image/textures/login/main.png#708 299 32 32"
-                style="position: relative; width: 32; height: 32; left: 111; top: 535; " />
+            <pe:if condition = "<%= MainLogin.check %>" >
+                <input type="checkbox" name="agree" checked="checked" UncheckedBG="codepku/image/textures/login/main.png#1638 314 33 33" CheckedBG="codepku/image/textures/login/main.png#708 299 32 32" onclick="clickCheckBox()"
+                    style="position: relative; width: 32; height: 32; left: 111; top: 535; " />
+            </pe:if>
+            <pe:if condition = "<%= not MainLogin.check %>" >
+                <input type="checkbox" name="agree" checked="unchecked" UncheckedBG="codepku/image/textures/login/main.png#1638 314 33 33" CheckedBG="codepku/image/textures/login/main.png#708 299 32 32" onclick="clickCheckBox()"
+                    style="position: relative; width: 32; height: 32; left: 111; top: 535; " />
+            </pe:if>
+            
 
 
-            <div style="position: relative; left: 148; top: 540; font-size: 22; font-family: PuHuiTi-Bold; color: #FFFFFF;" onclick="show_user_agreement()">
+            <div style="position: relative; left: 148; top: 540; font-size: 22; font-family: PuHuiTi-Bold; color: #FFFFFF;">
                 <%= L"我已详细阅读并同意" %>
-                <span style="color:#FFF868;"><%= L"《隐私政策》" %></span>
+                <span style="color:#FFF868;" onclick="show_user_agreement()"><%= L"《用户协议》" %></span>
+                <%= L"和" %>
+                <span style="color:#FFF868;" onclick="show_privacy_agreement()"><%= L"《隐私政策》" %></span>
             </div>
 
 
@@ -239,6 +303,8 @@
             
         </div>
     </pe:container>
+
+
 </pe:mcml>
 </body>
 </html>
