@@ -27,5 +27,10 @@
         <item>codepku/image/textures/codepku/image/textures/commonpopup/backboard.png</item>
         <item>codepku/image/textures/fastentrence_map/topic2.png</item>
         <item>codepku/image/textures/fastentrence_map/billboard2.png</item>
+
+        <item>codepku/image/textures/tasksystem/learningplanbot.png</item>
+        <item>codepku/image/textures/tasksystem/bot.png</item>
+        <item>codepku/image/textures/tasksystem/main.png</item>
+        <item>codepku/image/textures/tasksystem/reward_bg.png</item>
     </textures>
 </assets>
