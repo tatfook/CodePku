@@ -1,0 +1,36 @@
+<assets>
+    <textures name="gameStart">
+        <item>codepku/image/textures/commonpopup/backboard.png</item>
+        <item>codepku/image/textures/fastentrence_map/backboard.png</item>
+        <item>codepku/image/textures/common_32bits.png</item>
+        <item>codepku/image/textures/fastentrence_map/main2.png</item>
+
+        <item>codepku/image/textures/notice_system/bg_32bits.png</item>
+        <item>codepku/image/textures/notice_system/content_32bits.png</item>
+        <item>codepku/image/textures/commonpopup/main.png</item>
+        <item>codepku/image/textures/notice_system/detail_32bits.png</item>
+        <item>codepku/image/textures/login/quickLogin.png</item>
+        <item>codepku/image/textures/login/main.png</item>
+
+        <item>codepku/image/textures/smallmap/teach/mainicons.png</item>
+        <item>codepku/image/textures/smallmap/teach/coursewareicons.png</item>
+        <item>codepku/image/textures/smallmap/teach/purchaseicons.png</item>
+        <item>codepku/image/textures/smallmap/teach/background.png</item>
+        <item>codepku/image/textures/smallmap/teach/coursewarebackground.png</item>
+
+        <item>codepku/image/textures/subjects/subjects.png</item>
+        <item>codepku/image/textures/rank/rank_32bits.png</item>
+        <item>codepku/image/textures/fastentrence/rank/bg_rank_basic.png</item>
+
+        <item>codepku/image/textures/fastentrence_ui/bg.png</item>
+        <item>codepku/image/textures/fastentrence_ui/fastentrence_32bits.png</item>
+        <item>codepku/image/textures/codepku/image/textures/commonpopup/backboard.png</item>
+        <item>codepku/image/textures/fastentrence_map/topic2.png</item>
+        <item>codepku/image/textures/fastentrence_map/billboard2.png</item>
+
+        <item>codepku/image/textures/tasksystem/learningplanbot.png</item>
+        <item>codepku/image/textures/tasksystem/bot.png</item>
+        <item>codepku/image/textures/tasksystem/main.png</item>
+        <item>codepku/image/textures/tasksystem/reward_bg.png</item>
+    </textures>
+</assets>

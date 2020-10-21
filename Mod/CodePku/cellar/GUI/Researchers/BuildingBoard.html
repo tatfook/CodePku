@@ -9,6 +9,9 @@
 <pe:mcml>
 <script refresh="false" type="text/npl" src="Researchers.lua"><![CDATA[
 Researchers = NPL.load("(gl)Mod/CodePku/cellar/GUI/Researchers/Researchers.lua")
+NPL.load("(gl)Mod/CodePku/cellar/Common/CommonFunc/CommonFunc.lua")
+local CommonFunc = commonlib.gettable("Mod.CodePku.Common.CommonFunc")
+
 local UserInfoPage = NPL.load("(gl)Mod/CodePku/cellar/GUI/UserInfo.lua");
 local Eldership = NPL.load("(gl)Mod/CodePku/cellar/GUI/Eldership/Eldership.lua");
 local page = document:GetPageCtrl()
@@ -22,7 +25,8 @@ function GetIcon(id)
 end
 
 function StartLearning()
-    GameLogic.RunCommand(string.format("/open %s", Researchers.link_url))
+    -- GameLogic.RunCommand(string.format("/open %s", Researchers.link_url))
+    CommonFunc.OpenUrl(Researchers.link_url, true, 'portrait')
     Page:CloseWindow()
 end
 
