@@ -76,7 +76,7 @@ end
 -- ios
 function Device:getMemory()
     if isAndroid then
-        local ret = LuaJavaBridge.callJavaStaticMethod("plugin/CodePKU/Device", "getMemory", "()Ljava/lang/String;",{});
+        local ret = LuaJavaBridge.callJavaStaticMethod("plugin/Codepku/Device", "getMemory", "()Ljava/lang/String;",{});
         if(type(ret.result) == "string") then
             ret.result = commonlib.Json.Decode(ret.result);
         end
@@ -91,7 +91,7 @@ end
 -- android
 function Device:getAppVersion()
     if isAndroid then
-        local ret = LuaJavaBridge.callJavaStaticMethod("plugin/CodePKU/Device", "getAppVersion", "()Ljava/lang/String;",{});
+        local ret = LuaJavaBridge.callJavaStaticMethod("plugin/Codepku/Device", "getAppVersion", "()Ljava/lang/String;",{});
         return ret.result;
     elseif isIOS then
 
@@ -103,7 +103,7 @@ end
 -- android
 function Device:getAndroidVersion()
     if isAndroid then
-        local ret = LuaJavaBridge.callJavaStaticMethod("plugin/CodePKU/Device", "getAndroidVersion", "()Ljava/lang/String;",{});
+        local ret = LuaJavaBridge.callJavaStaticMethod("plugin/Codepku/Device", "getAndroidVersion", "()Ljava/lang/String;",{});
         return ret.result;
     end
 end
@@ -113,7 +113,7 @@ end
 -- android
 function Device:getAndroidSDK()
     if isAndroid then
-        local ret = LuaJavaBridge.callJavaStaticMethod("plugin/CodePKU/Device", "getSDK", "()I",{});
+        local ret = LuaJavaBridge.callJavaStaticMethod("plugin/Codepku/Device", "getSDK", "()I",{});
         return ret.result;
     end
 end
@@ -123,7 +123,7 @@ end
 -- android
 function Device:getFubgerprint()
     if isAndroid then
-        local ret = LuaJavaBridge.callJavaStaticMethod("plugin/CodePKU/Device", "getFubgerprint", "()Ljava/lang/String;",{});
+        local ret = LuaJavaBridge.callJavaStaticMethod("plugin/Codepku/Device", "getFubgerprint", "()Ljava/lang/String;",{});
         return ret.result;
     end
 end
@@ -133,7 +133,7 @@ end
 -- android
 function Device:getDevice()
     if isAndroid then
-        local ret = LuaJavaBridge.callJavaStaticMethod("plugin/CodePKU/Device", "getDevice", "()Ljava/lang/String;",{});
+        local ret = LuaJavaBridge.callJavaStaticMethod("plugin/Codepku/Device", "getDevice", "()Ljava/lang/String;",{});
         return ret.result;
     end
 end
@@ -143,7 +143,7 @@ end
 -- android
 function Device:getBoard()
     if isAndroid then
-        local ret = LuaJavaBridge.callJavaStaticMethod("plugin/CodePKU/Device", "getBoard", "()Ljava/lang/String;",{});
+        local ret = LuaJavaBridge.callJavaStaticMethod("plugin/Codepku/Device", "getBoard", "()Ljava/lang/String;",{});
         return ret.result;
     end
 end
@@ -153,7 +153,7 @@ end
 -- android
 function Device:getModel()
     if isAndroid then
-        local ret = LuaJavaBridge.callJavaStaticMethod("plugin/CodePKU/Device", "getModel", "()Ljava/lang/String;",{});
+        local ret = LuaJavaBridge.callJavaStaticMethod("plugin/Codepku/Device", "getModel", "()Ljava/lang/String;",{});
         return ret.result;
     end
 end
@@ -163,7 +163,7 @@ end
 -- android
 function Device:getBrand()
     if isAndroid then
-        local ret = LuaJavaBridge.callJavaStaticMethod("plugin/CodePKU/Device", "getBrand", "()Ljava/lang/String;",{});
+        local ret = LuaJavaBridge.callJavaStaticMethod("plugin/Codepku/Device", "getBrand", "()Ljava/lang/String;",{});
         return ret.result;
     end
 end
@@ -173,7 +173,7 @@ end
 -- android
 function Device:getProduct()
     if isAndroid then
-        local ret = LuaJavaBridge.callJavaStaticMethod("plugin/CodePKU/Device", "getProduct", "()Ljava/lang/String;",{});
+        local ret = LuaJavaBridge.callJavaStaticMethod("plugin/Codepku/Device", "getProduct", "()Ljava/lang/String;",{});
         return ret.result;
     end
 end
@@ -183,7 +183,7 @@ end
 -- android
 function Device:getManufacturer()
     if isAndroid then
-        local ret = LuaJavaBridge.callJavaStaticMethod("plugin/CodePKU/Device", "getManufacturer", "()Ljava/lang/String;",{});
+        local ret = LuaJavaBridge.callJavaStaticMethod("plugin/Codepku/Device", "getManufacturer", "()Ljava/lang/String;",{});
         return ret.result;
     end
 end
