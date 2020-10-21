@@ -12,7 +12,7 @@ MainPopup.LocationId = nil
 MainPopup.params={
     TPpopup = {
         url="Mod/CodePku/cellar/GUI/MainPopup/TPpopup.html",
-        alignment="_ct", left = -960, top = -540, width = 1920, height = 1080,zorder =30
+        alignment="_ct", left = -960, top = -540, width = 1920, height = 1080,zorder =31
     },
     AntiJam = {
         url="Mod/CodePku/cellar/GUI/MainPopup/AntiJam.html",

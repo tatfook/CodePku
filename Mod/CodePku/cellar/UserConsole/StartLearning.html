@@ -14,8 +14,39 @@
                 local page = document:GetPageCtrl()
                 Mod.CodePku.Store:Set("page/StartLearning", page)
 
+                NPL.load("(gl)Mod/CodePku/cellar/Notice/Notice.lua")
+                local Notice = commonlib.gettable("Mod.CodePku.celler.Notice")
+
+                CommonFunc = NPL.load("(gl)Mod/CodePku/cellar/Common/CommonFunc/CommonFunc.lua")
+
+                function isHuaweiApproval()
+                    return CommonFunc.isHuaweiApproval()
+                end
+
+                function isIOSApproval()
+                    return CommonFunc.isIOSApproval()
+                end
+
+                function isHuaweiOrIOS()
+                    return CommonFunc.isHuaweiApproval() or CommonFunc.isIOSApproval()
+                end
+
                 function startLearning()
-                    UserConsole:CourseEntry()
+                    -- 新手老手选择界面
+                    local userId = Mod.CodePku.Store:Get('user/userId')
+                    local guideUid = tostring(userId)..'beginnerGuideState'
+                    local beginnerGuideState = GameLogic.GetPlayerController():LoadLocalData(guideUid,false,true);
+                
+                    if isHuaweiApproval() or isIOSApproval() then 
+                        UserConsole:CourseEntry()  
+                    else
+                        if not beginnerGuideState then
+                            Page:CloseWindow()
+                            UserConsole:ShowBeginnerPage()
+                        else
+                            UserConsole:CourseEntry()  
+                        end
+                    end
                 end
 
                 function currentUserName()
@@ -33,8 +64,18 @@
                     UserConsole:Logout()
                 end
 
+                list = Notice:GetNoticeList()
+
+                function ClickNotice()
+                    Notice:ShowPage()
+                end
+
                 function ClickCommunity()
                     ParaGlobal.ShellExecute("open", L"http://kids.wanxueshijie.com/", "", "", 1)
+                end
+
+                function ClickQQGroup()
+                    ParaGlobal.ShellExecute("open", Mod.CodePku.BasicConfigTable.qq_group_link, "", "", 1)
                 end
             ]]></script>
             <style type="text/mcss">
@@ -54,7 +95,7 @@
                     <%= currentUserName().."，欢迎进入玩学世界" %> 
                 </div>
 
-                <div style="position: relative; width: 602; height: 88; left: 659; top: 474; background:url(codepku/image/textures/login/main.png#56 270 602 88);"></div>
+                <div onclick="startLearning()" style="position: relative; width: 602; height: 88; left: 659; top: 474; background:url(codepku/image/textures/login/main.png#56 270 602 88);"></div>
 
                 <!-- <pe:container alignment="_rt" ClickThrough="true" style="position:relative;background:;">
                     <input type="button" name="logout" value='' class="logout" onclick="logout()" style="margin: 2px 2px 0 0" />
@@ -63,9 +104,23 @@
                 <pe:container alignment="_rt" ClickThrough="true" style="position:relative;background:;">
                     <div name="community" class="community" style="margin: 2px 2px 0 0" onclick="ClickCommunity"></div>
                 </pe:container> -->
-
-                <div style="position: relative; width: 76; height: 119; left: 1790; top: 38; background:url(codepku/image/textures/login/main.png#1392 255 76 119);" onclick="logout"></div>
-                <div style="position: relative; width: 79; height: 119; left: 1787; top: 180; background:url(codepku/image/textures/login/main.png#1256 255 79 119);" onclick="ClickCommunity"></div>
+                <!-- ios审核：屏蔽公告，社区，Q群 -->
+                <!-- 华为审核：屏蔽公告，社区，Q群 -->
+                <div style="position: relative; width: 114; height: 134; left: 1775; top: 40; background:url(codepku/image/textures/main_ui/main.png#702 481 114 134);" onclick="logout"></div>
+                <pe:if condition = "<%= #list > 0 %>">
+                    <pe:if condition = "<%= not isHuaweiOrIOS()%>" >
+                        <div style="position: relative; width: 102; height: 125; left: 1781; top: 200; background:url(codepku/image/textures/main_ui/main.png#420 490 102 125);" onclick="ClickNotice"></div>
+                        <div style="position: relative; width: 101; height: 135; left: 1781; top: 360; background:url(codepku/image/textures/main_ui/main.png#160 313 101 135);" onclick="ClickCommunity"></div>
+                        <div style="position: relative; width: 106; height: 138; left: 1779; top: 520 ; background:url(codepku/image/textures/main_ui/main.png#285 480 106 138);" onclick="ClickQQGroup"></div>
+                    </pe:if>
+                </pe:if>
+                <pe:if condition = "<%= #list == 0 %>">
+                    <pe:if condition = "<%= not isHuaweiOrIOS()%>" >
+                        <div style="position: relative; width: 101; height: 135; left: 1781; top: 200; background:url(codepku/image/textures/main_ui/main.png#160 313 101 135);" onclick="ClickCommunity"></div>
+                        <div style="position: relative; width: 106; height: 138; left: 1779; top: 360 ; background:url(codepku/image/textures/main_ui/main.png#285 480 106 138);" onclick="ClickQQGroup"></div>
+                    </pe:if>
+                </pe:if>
+                
 
                 <!-- <pe:if condition="<%= System.os.IsMobilePlatform() %>">
                         <pe:container alignment="_ctt" ClickThrough="true" style="position:relative;width:372px;margin-top:247.2px;height:42.6px;background:codepku/image/textures/login/mainlogin_32bits.png# 1000 1649 620 72);">

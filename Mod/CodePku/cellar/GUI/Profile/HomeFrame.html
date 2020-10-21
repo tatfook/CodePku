@@ -56,12 +56,19 @@ function Undefinde()
 end
 
 function OnClickHome()
-    if (System.Codepku and System.Codepku.Coursewares and System.Codepku.Coursewares.keepwork_project_id ~= HomeWorldId) then
-        GameLogic.RunCommand(string.format('/loadworld %d', HomeWorldId));
-    else
-        GameLogic.RunCommand("/tip -duration 1500 您已位于家园")
-    end
-    ClosePage();
+    -- if (System.Codepku and System.Codepku.Coursewares and System.Codepku.Coursewares.keepwork_project_id ~= HomeWorldId) then
+    -- if not System.Codepku.isHome then
+    --    GameLogic.RunCommand(string.format('/loadworld %d', HomeWorldId));
+    -- else
+    --    GameLogic.RunCommand("/tip -duration 1500 您已位于家园")
+    -- end
+    -- ClosePage();
+end
+
+CommonFunc = NPL.load("(gl)Mod/CodePku/cellar/Common/CommonFunc/CommonFunc.lua")
+
+function isIOSApproval()
+    return CommonFunc.isIOSApproval()
 end
 
 ]]>   
@@ -69,7 +76,7 @@ end
 <style type="text/mcss">
 </style>
     <!-- 昵称、ID、性别、点赞数 -->
-    <div align="right" style='<%=format("osition:relative;margin-right:120px;width:1393px;height:100px;font-size:24px;background:url(%s#1823 1196 102 102:13 13 13 13);font-weight:bold;", Eval("ProfilePng")) %>'>
+    <div align="right" style='<%=format("margin-right:120px;width:1393px;height:100px;font-size:24px;background:url(%s#1823 1196 102 102:13 13 13 13);font-weight:bold;", Eval("ProfilePng")) %>'>
         <!-- <div style='<%=format("margin-left:407px;width:1393px;height:100px;font-size:24px;background:url(%s#1823 1196 102 102:13 13 13 13);font-weight:bold;", Eval("ProfilePng")) %>'> -->
         <div style='<%=format("float:left;margin-left:-41px;margin-top:-27px;width:482px;height:156px;font-size:30px;font-family:Noto Sans S Chinese Regular;font-weight:bold;color:#B35D0A;background:url(%s#1233 951 482 156);", Eval("ProfilePng")) %>'>
             <div style='<%=format("position:relative;width:86px;height:87px;margin-top:35px;margin-left:60px;background:url(%s);", UserInfoPage.avatar or (Eval("ProfilePng").."#1794 560 86 87")) %>'></div>
@@ -90,17 +97,20 @@ end
         <!-- hide for now cert./vip-->
         <!-- <div style='<%=format("float:left;width:53px;height:54px;margin-top:23px;margin-left:23px;background:url(%s#448 82 53 54);", Eval("ProfilePng")) %>'></div>
         <div style='<%=format("float:left;width:54px;height:54px;margin-top:23px;margin-left:23px;background:url(%s#384 82 54 54);", Eval("ProfilePng")) %>'></div> -->
-        <div align="right" style="position:relative;margin-top:-129px;margin-right:120px;color:#16439F;">
-            <div style="float:left;text-align:center;width:120px;" onclick="Undefinde">
-                <div align="center" style='<%=format("width:48px;height:35px;margin-top:17px;background:url(%s#247 88 54 41);", Eval("ProfilePng")) %>'></div>
-                <div style="position:relative;margin-top:-1px;"><%=xueshidian%></div>
+        <pe:if condition = "<%= not isIOSApproval()%>" >
+            <div align="right" style="position:relative;margin-top:-129px;margin-right:120px;color:#16439F;">
+                <div style="float:left;text-align:center;width:120px;" onclick="Undefinde">
+                    <div align="center" style='<%=format("width:48px;height:35px;margin-top:17px;background:url(%s#247 88 54 41);", Eval("ProfilePng")) %>'></div>
+                    <div style="position:relative;margin-top:-1px;"><%=xueshidian%></div>
+                </div>
+                <div style="float:left;width:3px;height:62px;background-color:#16439F;margin-top:16px;"></div>
+                <div style="float:left;text-align:center;width:120px;" onclick="Undefinde">
+                    <div align="center" style='<%=format("width:37px;height:37px;margin-top:17px;background:url(%s#146 86 43 43);", Eval("ProfilePng")) %>'></div>
+                    <div style="position:relative;margin-top:-1px;"><%=dianzan%></div>
+                </div>
             </div>
-            <div style="float:left;width:3px;height:62px;background-color:#16439F;margin-top:16px;"></div>
-            <div style="float:left;text-align:center;width:120px;" onclick="Undefinde">
-                <div align="center" style='<%=format("width:37px;height:37px;margin-top:17px;background:url(%s#146 86 43 43);", Eval("ProfilePng")) %>'></div>
-                <div style="position:relative;margin-top:-1px;"><%=dianzan%></div>
-            </div>
-        </div>
+        </pe:if>
+        
     </div>
     <!-- hide for now -->
     <!-- <div align="right" style="position:relative;margin-top:520px;margin-right:950px;">

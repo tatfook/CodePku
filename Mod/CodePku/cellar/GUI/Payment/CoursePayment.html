@@ -1,0 +1,65 @@
+<!-- 玩学币不足弹窗 -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+</head>
+<body>
+    <pe:mcml>
+<script refresh="false" type="text/npl" src="Payment.lua"><![CDATA[
+Payment = NPL.load("(gl)Mod/CodePku/cellar/GUI/Payment/Payment.lua");
+local Eldership = NPL.load("(gl)Mod/CodePku/cellar/GUI/Eldership/Eldership.lua");
+local UserInfoPage = NPL.load("(gl)Mod/CodePku/cellar/GUI/UserInfo.lua");
+local page = document:GetPageCtrl()
+
+Payment.Recharge_content = "玩学券不足,是否通知家长购买玩学券?"
+
+
+function ClosePage()
+    Page:CloseWindow();
+end
+
+
+function ClickNotify()
+    if System.User.info.user_wechat_id ~= nil then
+        -- 请求推送接口
+        Payment:ShowPage("Recharge")
+        Payment:PurchaseNotice()
+        -- Page:CloseWindow()
+    else
+        -- 未绑定弹出家长绑定二维码
+        Eldership:ShowBindPage()
+        Page:CloseWindow()
+    end
+end
+
+
+]]>
+
+</script>
+
+<pe:container alignment="_lt" width="1920" height="1080" style="background-color: #00000094;">
+    <!-- 背景图 -->
+    <div style="<%=format('position: relative; width: 1153; height: 588;left: 383; top: 238; background:url(%s);', Payment.GetPaymentIconHTMLStr(1))%>"></div>
+    <!-- 标题 -->
+    <div style="<%=format('position: relative; width: 410; height: 86;left: 769; top: 238; text-align: center;color: #f36d3d; font-family: Noto Sans S Chinese Regular;font-weight: bold; font-size: 45px;line-height: 86; background:url(%s);', Payment.GetPaymentIconHTMLStr(2))%>">解锁提示</div>
+    <!-- 取消按钮 -->
+    <div onclick="ClosePage" style="<%=format('position: relative; width: 64; height: 74;left: 1453; top: 250; background:url(%s);', Payment.GetPaymentIconHTMLStr(3))%>"></div>
+    <!-- 提示文字 -->
+    <div style="<%=format('position: relative; width: 960; height: 267;left: 479; top: 361; background:url(%s:10 10 10 10);', Payment.GetPaymentIconHTMLStr(4))%>">
+        <!-- 玩学币不足 -->
+        <div style="position: relative;height: 36;top: 100;text-align: center;font-size: 36;font-family: PuHuiTi-Bold;color: #ffffff;"><%= Payment.Recharge_content %></div>
+    </div>
+    <!-- 取消按钮 -->
+    <div onclick="ClosePage" style="<%=format('position: relative;width:240;height:80;left:639;top:691;text-align:center;font-size:36px;line-height:80;font-family: PuHuiTi-Bold;color: #85262b;background:url(%s:20 20 20 20)', Payment.GetPaymentIconHTMLStr(7))%>">取消</div>
+
+    <div onclick="ClickNotify" style="<%=format('position: relative;width:240;height:80;left:1085;top:691;text-align:center;font-size:36px;line-height:80;font-family: PuHuiTi-Bold;color: #0d5416;background:url(%s:20 20 20 20)', Payment.GetPaymentIconHTMLStr(6))%>">联系家长</div>
+
+
+</pe:container>
+
+</pe:mcml>
+</body>
+</html>
+ 

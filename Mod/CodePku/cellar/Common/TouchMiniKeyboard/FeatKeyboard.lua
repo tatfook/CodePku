@@ -95,7 +95,7 @@ function FeatKeyboard:getJumpBtn()
         _guihelper.SetUIColor(button, self.colors.normal);
         button.enabled = true;
         button.zorder = self.zorder;
-        button:SetScript("onclick", function()
+        button:SetScript("ontouch", function()
             Keyboard:SendKeyEvent("keyDownEvent", DIK_SCANCODE.DIK_SPACE);
             _guihelper.SetUIColor(button, self.colors.pressed);
 

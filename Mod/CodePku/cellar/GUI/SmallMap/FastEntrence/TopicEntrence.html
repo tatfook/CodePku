@@ -1,0 +1,58 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" >
+<head>
+<title>2020.05.27</title>
+</head>
+<body> 
+<pe:mcml>
+<script type="text/npl" refresh="false"><![CDATA[
+
+    local TopicCourse = NPL.load("(gl)Mod/CodePku/cellar/GUI/SmallMap/FastEntrence/TopicCourse.lua")
+    local FastEntrence = NPL.load("(gl)Mod/CodePku/cellar/GUI/SmallMap/FastEntrence/FastEntrence.lua")
+    local SmallMap = commonlib.gettable("Mod.CodePku.GUI.SmallMap")
+    local MainPopup = commonlib.gettable("Mod.CodePku.GUI.MainPopup");
+
+    function ClickTopic(name)
+        TopicCourse:ShowPage(name)
+    end
+        
+    function ClosePage()
+        Page:CloseWindow();
+    end
+    
+    function onClose()
+        ClosePage()
+    end
+
+    function turnToTopic()
+        MainPopup:ShowPage("TPpopup", "专题区", 15857)
+    end
+    
+]]></script>
+
+<style type="text/mcss"></style>
+<pe:container alignment="_lt" width="1920" height="1080">
+    
+    <div style="position: relative; width: 1920; height: 1080; background:url(codepku/image/textures/commonpopup/backboard.png)"></div>
+
+    <div style="position: relative; width: 1920; height: 1059; background:url(codepku/image/textures/fastentrence_map/topic2.png);"></div>
+    <div style="position: relative; width: 1920; height: 85; background:url(codepku/image/textures/fastentrence_map/main2.png#147 1029 340 80);"></div>
+
+    <div style="position: relative; width: 410; height: 83; left: 760.5; top: 2; text-align: center; font-family: PuHuiTi-Bold; color: #D85D0B; font-size: 70; line-height: 83; background:url(codepku/image/textures/common_32bits.png#1277 377 410 87);">地图</div>
+
+    <div style="position: relative; width: 221; height: 125; background:url(codepku/image/textures/common_32bits.png#251 49 208 127);" onclick="onClose"></div>
+
+    <div style="position: relative; width: 226; height: 157; left: 654; top: 727; background:url(codepku/image/textures/fastentrence_map/billboard2.png#134 282 226 157);" name="1" onclick="ClickTopic"></div>
+    <div style="position: relative; width: 226; height: 158; left: 1212; top: 727; background:url(codepku/image/textures/fastentrence_map/billboard2.png#453 284 226 158);" name="2" onclick="ClickTopic"></div>
+    <div style="position: relative; width: 226; height: 157; left: 1599; top: 727; background:url(codepku/image/textures/fastentrence_map/billboard2.png#736 292 226 157);" name="3" onclick="ClickTopic"></div>
+
+    <div style="position: relative; width: 230; height: 157; left: 1331; top: 301; background:url(codepku/image/textures/fastentrence_map/billboard2.png#148 77 226 158);" name="10" onclick="ClickTopic"></div>
+    <div style="position: relative; width: 226; height: 158; left: 786; top: 301; background:url(codepku/image/textures/fastentrence_map/billboard2.png#459 77 226 158);" name="12" onclick="ClickTopic"></div>
+    <div style="position: relative; width: 226; height: 158; left: 296; top: 301; background:url(codepku/image/textures/fastentrence_map/billboard2.png#736 77 230 157);" name="13" onclick="ClickTopic"></div>
+
+    <div onclick="turnToTopic" style="position: relative; width: 426; height: 231; left: 21; top: 815; background:url(codepku/image/textures/fastentrence_map/billboard2.png#625 506 426 231);"></div>
+
+</pe:container>
+</pe:mcml>
+</body>
+</html>

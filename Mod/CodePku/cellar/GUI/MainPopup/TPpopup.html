@@ -12,11 +12,11 @@
 <script refresh="false" type="text/npl" src="MainPopup.lua">
 <![CDATA[
 local MainPopup = commonlib.gettable("Mod.CodePku.GUI.MainPopup");
-local SystemEntrencePage = commonlib.gettable("Mod.CodePku.SystemEntrencePage");
-local TopicEntrencePage = commonlib.gettable("Mod.CodePku.TopicEntrencePage");
-local CompeteEntrencePage = commonlib.gettable("Mod.CodePku.CompeteEntrencePage");
-local MainEntrencePage = commonlib.gettable("Mod.CodePku.MainEntrencePage")
 local GameLogic = commonlib.gettable("MyCompany.Aries.Game.GameLogic");
+local FastEntrence = NPL.load("(gl)Mod/CodePku/cellar/GUI/SmallMap/FastEntrence/FastEntrence.lua")
+local TopicCourse = NPL.load("(gl)Mod/CodePku/cellar/GUI/SmallMap/FastEntrence/TopicCourse.lua")
+local SmallMap = commonlib.gettable("Mod.CodePku.GUI.SmallMap")
+local TeachCourses = NPL.load("(gl)Mod/CodePku/cellar/GUI/SmallMap/FastEntrence/TeachCourses/TeachCourses.lua");
 
 
 local world_name = MainPopup.TP_Location   
@@ -26,7 +26,7 @@ function getName()
     return world_name
 end
 
-function closew()
+function ClosePage()
     Page:CloseWindow();
 end
 
@@ -44,32 +44,49 @@ function CloseAllPage()
     if MainEntrencePage ~= nil then
         MainEntrencePage:ClosePage()
     end
+    if SmallMap ~= nil then
+        SmallMap:ClosePage()
+    end
+    -- 教学区重构了，这里后面改成关闭新的教学区页面
+    if TeachCourses.ui ~= nil then
+        TeachCourses.ui:CloseWindow()
+        TeachCourses:TurnOffAllPage()
+    end
+    if FastEntrence ~= nil then
+        FastEntrence:ClosePage(2)
+    end
+    if TopicCourse ~= nil then
+        TopicCourse:ClosePage()
+    end
 end
 
 function turnToWorld()
     CloseAllPage()
-    print("--------------------------"..world_id)
-    GameLogic.RunCommand(string.format("/loadworld %d", tonumber(world_id)));
-    --GameLogic.RunCommand(string.format('/connectCodePku %d', tonumber(world_id)));
+    if (world_id == 1 or world_id == 14312) then
+        GameLogic.RunCommand(string.format('/connectCodePku %d', tonumber(world_id)));
+    else
+        GameLogic.RunCommand(string.format("/loadworld %d", tonumber(world_id)));
+    end
 end
 
 ]]>
 </script>
 <pe:container alignment="_lt" width="1920" height="1080">
 
-    <div style="position: relative; width: 1158; height: 588; left: 406; top: 219; background:url(codepku/image/textures/commonpopup/main.png#99 275 1158 588);"></div>
+    <div style="position: relative; width: 1158; height: 588; left: 381; top: 246; background:url(codepku/image/textures/commonpopup/main.png#99 275 1158 588);"></div>
 
-    <div style="position: relative; width: 434; height: 115; left: 768; top: 206; text-align: center; font-family: PuHuiTi-Bold; color: #F46D3D; font-size: 45px; line-height: 115px; background:url(codepku/image/textures/commonpopup/main.png#1265 363 434 115);">
+    <div style="position: relative; width: 410; height: 86; left: 754; top: 247; text-align: center; font-family: Noto Sans S Chinese Regular; color: #F46D3D; font-size: 45px; line-height: 86; background:url(codepku/image/textures/common_32bits.png#1277 377 410 87);">
         传送提示
     </div>
 
-    <div style="position: relative; width: 960; height: 233; left: 505; top: 372; background:url(codepku/image/textures/commonpopup/main.png#1404 292 40 40 : 10 10 10 10);">
-        <span style="position: relative; left: 188; color:#ffffff; font-family: Noto Sans S Chinese Regular; line-height: 233; font-weight: bold; font-size: 36px;">是否离开当前地图，前往 <span style="color: #ffac11;"><%=getName()%></span> ？</span>
+    <div style="position: relative; width: 960; height: 267; left: 480; top: 365; background:url(codepku/image/textures/commonpopup/main.png#1404 292 40 40 : 10 10 10 10);">
+        <div style="position: relative; width: 960; top: 39; color:#ffffff; text-align: center; font-family: Noto Sans S Chinese Regular; font-weight: bold; font-size: 36px;">是否离开当前地图，前往：</div>
+        <div style="position: relative; width: 960; top: 130; text-align: center; color: #FFBB5C; font-size: 60; font-family: PuHuiTi-Bold;"><%=getName()%></div> 
     </div>
 
-    <div style="position: relative; width: 240; height: 80; left: 650; top: 668; font-size: 36px; font-weight: bold; font-family: PuHuiTi-Bold; line-height: 80; text-align: center; color: #85272B; background:url(codepku/image/textures/commonpopup/main.png#1305 740 86 86 : 9 9 9 9);" onclick="closew">取消</div>
+    <div style="position: relative; width: 240; height: 80; left: 608; top: 688.9; font-size: 36px; font-weight: bolder; font-family: NotoSansHans-Bold; line-height: 80; text-align: center; color: #85272B; background:url(codepku/image/textures/commonpopup/main.png#1305 740 86 86 : 9 9 9 9);" onclick="ClosePage">取消</div>
 
-    <div style="position: relative; width: 240; height: 80; left: 1096; top: 668; font-size: 36px; font-weight: bold; font-family: PuHuiTi-Bold; line-height: 80; text-align: center; color: #0E5516; background:url(codepku/image/textures/commonpopup/main.png#1404 740 86 86 : 9 9 9 9);" onclick="turnToWorld">确认</div>
+    <div style="position: relative; width: 240; height: 80; left: 1054; top: 688.9; font-size: 36px; font-weight: bold; font-family: NotoSansHans-Bold; line-height: 80; text-align: center; color: #0E5516; background:url(codepku/image/textures/commonpopup/main.png#1404 740 86 86 : 9 9 9 9);" onclick="turnToWorld">确认</div>
 
 </div>
 </pe:container>

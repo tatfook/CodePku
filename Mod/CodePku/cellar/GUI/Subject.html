@@ -50,7 +50,9 @@
             <pe:repeat DataSource="<%=GetSubjectList()%>" style="padding-left:38px;">
                 <!-- <pe:repeatitem> -->
                     <div style="float:left;margin-left:14px;margin-bottom:23px;width:813px;height:178px;margin-left:14px;padding-top:36px;padding-right:46px;background:url(codepku/image/textures/profile_32bits.png#72 1669 813 178)">
-                        <div style='<%=format("float:left;margin-left:43px;width:104px;height:106px;background:url(%s)", Eval("icon"))%>'></div>
+                        <div style="float:left;margin-left:43px;width:104px;height:106px;background:url(codepku/image/textures/subjects/subjects.png#27 37 104 106)">
+                            <div style='<%=format("float:left;margin-left:10px;margin-top:10px;width:84px;height:86px;background:url(%s)", Eval("icon"))%>'></div>
+                        </div>
                         <div style="float:left;margin-left:14px;">
                             <div style="float:left;width:343px;height:61px;line-height:61px;padding-left:14px;background:url(codepku/image/textures/profile_32bits.png#1279 593 343 61)"><%=Eval("chname")%></div>
                             <div align="right" style="position:relative;margin-top:-49px;"><%=Eval("level")%></div>

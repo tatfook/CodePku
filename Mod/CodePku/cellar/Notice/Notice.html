@@ -1,0 +1,117 @@
+<!-- "script/apps/Aries/Creator/Game/Areas/EscFramePage.html" -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+</head>
+<body>
+<pe:mcml>
+    <script type="text/npl" refresh="false"><![CDATA[
+        local page = document:GetPageCtrl()
+        NPL.load("(gl)Mod/CodePku/cellar/Notice/Notice.lua")
+        local Notice = commonlib.gettable("Mod.CodePku.celler.Notice")
+
+        function OnClose()
+            Page:CloseWindow()
+        end
+
+        notice_data = Notice.noticeList
+        value = notice_data[1]
+        current_id = value.id
+        content = Notice:HandleNotice(value.game_announcement_content)
+        
+        --获取状态标签 火热，限时 > 新 > 无
+        function getStatus(flag, publish_time)
+            return Notice:GetStatus(flag, publish_time)
+        end
+
+        function OnClickNotice(name)
+            current_id = name;
+            value = Notice:GetArticleByID(name)
+            content = Notice:HandleNotice(value.game_announcement_content)
+            Page:Refresh(0)
+        end
+
+        function OnClickMistake()
+            
+        end
+
+        -- 跳转链接
+        function GoToUrl(name)
+            echo(name)
+            ParaGlobal.ShellExecute("open", name, "", "", 1)
+        end
+    ]]>
+    </script>
+    <style type="text/mcss">
+    </style>
+
+    <pe:container alignment="_lt" width="1920" height="1080">
+        <input type="checkbox" name="agree" checked="checked" UncheckedBG="codepku/image/textures/login/main.png#1638 314 33 33" CheckedBG="codepku/image/textures/login/main.png#708 299 32 32"
+                style="position: relative; width: 32; height: 32; left: 111; top: 535; " />
+        <div style="position: relative;width: 1920;height:1080;background-color: #00000099;" onclick="OnClose"></div>
+       <div style="position: relative;top:85;width:1494;height:910;left: 213;"  onclick="OnClickMistake"></div>
+            <div style="position: relative;top:85;width:1494;height:910;left: 213;background:url(codepku/image/textures/notice_system/bg_32bits.png);">
+                <div style="position: relative;left: 491; width: 511; height: 108; line-height: 108; font-size: 57; font-weight: bold; font-family: PuHuiTi-Bold; color: #F46D3D; text-align: center; background:url(codepku/image/textures/login/quickLogin.png#444 205 434 86);">公告</div>
+                <div style="position: relative;left: 1382; top: 15; width:68; height: 78; background:url(codepku/image/textures/commonpopup/main.png#110 73 68 78);" onclick="OnClose"></div>
+                <!-- 公告标题列表 -->
+                <pe:treeview style="position: relative;top:110; left:4;width: 431; height: 794;padding-bottom: 20;" id="notice_title" name='notice_title' DefaultNodeHeight = "110" ItemsPerLine="1" AllowPaging="false" RememberScrollPos="true" RememberLastPage="false" VerticalScrollBarStep="40">
+                    <pe:repeat DataSource="<%=notice_data%>">
+                        <pe:repeatitem>
+                            <!-- 未选中 -->
+                            <pe:if condition="<%= Eval('id') ~= current_id %>">
+                                <div style="width:431;height:136">
+                                    <div style="<%=format('overflow: hidden;white-space:nowrap;text-overflow:ellipsis;width: 370;height:110;margin-left:25;top:22;font-size:42;line-height: 110;color: #0e3565;font-family: PuHuiTi-Bold; text-align: center;background:url(codepku/image/textures/notice_system/detail_32bits.png#529 157 370 110)', (Eval('index')-1)*132+28)%>" name="<%=Eval('id')%>" onclick="OnClickNotice"><%=Notice:HandleTitle(Eval('title'))%></div>
+                                    <div style="<%= getStatus(Eval('flag'),Eval('publish_time')) %>"></div>
+                                </div>
+                            </pe:if>
+                            <!-- 选中 -->
+                            <pe:if condition="<%= Eval('id') == current_id %>">
+                                <div style="margin-top:0;width:431;height:136">
+                                    <div style="position:relative;width: 382;height:118;margin-left:19;margin-top:18;font-size:42;line-height: 110;background:url(codepku/image/textures/notice_system/detail_32bits.png#527 292 382 118)"></div>
+                                    <div style="<%=format('width: 370;height:110;margin-left:25;top:22;font-size:42;line-height: 110;color: #0e3565;font-family: PuHuiTi-Bold; text-align: center;background:url(codepku/image/textures/notice_system/detail_32bits.png#529 157 370 110)', (Eval('index')-1)*132+28)%>" name="<%=Eval('id')%>" onclick="OnClickNotice"><%=Notice:HandleTitle(Eval('title'))%></div>
+                                    <div style="<%= getStatus(Eval('flag'),Eval('publish_time')) %>"></div>
+                                </div>
+                            </pe:if>
+                        </pe:repeatitem>
+                    </pe:repeat>
+                </pe:treeview>
+
+                <!-- 公告内容 -->
+                <div style="position: relative;left:437;top:129;width: 1033; height: 756;background:url(codepku/image/textures/notice_system/content_32bits.png);">
+                    <div style="height:92;width:1033;line-height: 92;font-weight: bold;font-size: 42; font-family: PuHuiTi-Bold;color:white;text-align: center;"><%=value.title%></div>
+                    <div style="text-indent:50;padding: 25;margin-top: 20;margin-left: 22;height:619;width:980;line-height: 56;font-weight: bold;font-size: 36; font-family: PuHuiTi-Bold;color:#0e69cd;background:url(codepku/image/textures/notice_system/detail_32bits.png#293 480 164 103:10 10 10 10);">
+                        <!-- 方案1：默认一段 -->
+                        <!-- <span style="float: left;height:59;width: 72;"></span> -->
+                        <!-- <%=value.game_announcement_content%> -->
+
+                        <!-- 方案2：分段处理 -->
+                        <pe:treeview style="height:470;width:940;padding: 20;" name='messages' DefaultNodeHeight = "110" ItemsPerLine="1" AllowPaging="false" RememberScrollPos="true" RememberLastPage="false" VerticalScrollBarStep="40">
+                            <pe:repeat DataSource="<%=content%>">
+                                <pe:repeatitem>
+                                    <div style="line-height: 56;font-size: 36; font-family: Noto Sans S Chinese Regular ;color:#0e69cd;">
+                                        <span style="float: left;height:59;width: 72;"></span>
+                                        <%=Eval('pContent')%>
+                                    </div>
+                                </pe:repeatitem>
+                            </pe:repeat>
+                        </pe:treeview>
+                        <p style="margin-top: 30;padding-right: 30;line-height: 56;font-size: 36; font-family: Noto Sans S Chinese Regular ;color:#0e69cd;text-align: right;"><%=value.author%></p> 
+
+                        <!-- 方案3：testarea处理，存在问题：背景图片无法正常显示，内容点击后消失 -->
+                        <!-- <textarea
+                            rows="10"
+                            value="<%=value.game_announcement_content%>"
+                            LineWrap="true"
+                            disabled="disabled"
+                            AlwaysShowCurLineBackground="false"
+                            style="width:940;height:470;line-height: 56;font-weight: bold;font-size: 36; font-family: PuHuiTi-Bold;color:#0e69cd;background-color:#a6eeff;border-radius: 10px;"
+                        ></textarea> -->
+                    </div>
+                </div>
+            </div>
+    </pe:container>
+</pe:mcml>
+</body>
+</html>

@@ -13,9 +13,9 @@
 <![CDATA[
 
 local ToWhere = commonlib.gettable("Mod.CodePku.GUI.Popup.ToWhere")
-local SmallMap = commonlib.gettable("Mod.CodePku.GUI.SmallMap")
 local GameLogic = commonlib.gettable("MyCompany.Aries.Game.GameLogic")
-
+NPL.load("(gl)Mod/CodePku/cellar/Common/TouchMiniButtons/TaskSystem/TaskSystem.lua")
+local TaskSystem = commonlib.gettable("Mod.CodePku.Common.TaskSystem")
 
 local name = ToWhere.ToWhereName
 local id = ToWhere.ToWhereId
@@ -30,13 +30,15 @@ end
 
 function CloseAllPage()
     ClosePage()
-    SmallMap:ClosePage()
+    if TaskSystem.Page_ui then
+        TaskSystem.Page_ui:CloseWindow();
+    end
 end
 
 function turnTo()
     CloseAllPage()
     local _id = tonumber(id)
-    if (_id) == 1 then
+    if (_id == 1 or _id == 14312) then
         GameLogic.RunCommand(string.format('/connectCodePku %d', _id));
     else
         GameLogic.RunCommand(string.format('/loadworld %d', _id));
@@ -46,22 +48,22 @@ end
 ]]>
 </script>
 <pe:container alignment="_lt" width="1920" height="1080">
+    <div style="position: relative;width: 1920;height:1080;background-color: #00000099;" onclick="ClosePage"></div>
+    <div style="position: relative; width: 1158; height: 588; left: 381; top: 219; background:url(codepku/image/textures/commonpopup/main.png#99 275 1158 588);"></div>
 
-    <div style="position: relative; width: 1158; height: 588; left: 406; top: 219; background:url(codepku/image/textures/commonpopup/main.png#99 275 1158 588);"></div>
-
-    <div style="position: relative; width: 434; height: 115; left: 768; top: 206; text-align: center; font-family: PuHuiTi-Bold; color: #F46D3D; font-size: 45px; line-height: 115px; background:url(codepku/image/textures/commonpopup/main.png#1265 363 434 115);">
+    <div style="position: relative; width: 410; height: 108; left: 755; top: 210; text-align: center; font-family: Noto Sans S Chinese Regular; color: #F46D3D; font-size: 45px; line-height: 108; background:url(codepku/image/textures/commonpopup/main.png#1265 363 434 115);">
         传送提示
     </div>
 
-    <div style="position: relative; width: 960; height: 233; left: 505; top: 372; background:url(codepku/image/textures/commonpopup/main.png#1404 292 40 40 : 10 10 10 10);">
-        <span style="position: relative; left: 188; color:#ffffff; font-family: Noto Sans S Chinese Regular; line-height: 233; font-weight: bold; font-size: 36px;">是否离开当前地图，前往 <span style="color: #ffac11;"><%=getName()%></span> ？</span>
+    <div style="position: relative; width: 960; height: 267; left: 463.5; top: 358.9; background:url(codepku/image/textures/commonpopup/main.png#1404 292 40 40 : 10 10 10 10);">
+        <div style="position: relative; width: 960; top: 39; color:#ffffff; text-align: center; font-family: Noto Sans S Chinese Regular; font-weight: bold; font-size: 36px;">是否离开当前地图，前往：</div>
+        <div style="position: relative; width: 960; top: 133; text-align: center; color: #FFBB5C; font-size: 60; font-family: PuHuiTi-Bold;"><%=getName()%></div> 
     </div>
 
-    <div style="position: relative; width: 240; height: 80; left: 650; top: 668; font-size: 36px; font-weight: bolder; font-family: NotoSansHans-Bold; line-height: 80; text-align: center; color: #85272B; background:url(codepku/image/textures/commonpopup/main.png#1305 740 86 86 : 9 9 9 9);" onclick="ClosePage">取消</div>
+    <div style="position: relative; width: 240; height: 80; left: 608; top: 688.9; font-size: 36px; font-weight: bolder; font-family: NotoSansHans-Bold; line-height: 80; text-align: center; color: #85272B; background:url(codepku/image/textures/commonpopup/main.png#1305 740 86 86 : 9 9 9 9);" onclick="ClosePage">取消</div>
 
-    <div style="position: relative; width: 240; height: 80; left: 1096; top: 668; font-size: 36px; font-weight: bold; font-family: NotoSansHans-Bold; line-height: 80; text-align: center; color: #0E5516; background:url(codepku/image/textures/commonpopup/main.png#1404 740 86 86 : 9 9 9 9);" onclick="turnTo">确认</div>
+    <div style="position: relative; width: 240; height: 80; left: 1054; top: 688.9; font-size: 36px; font-weight: bold; font-family: NotoSansHans-Bold; line-height: 80; text-align: center; color: #0E5516; background:url(codepku/image/textures/commonpopup/main.png#1404 740 86 86 : 9 9 9 9);" onclick="turnTo">确认</div>
 
-</div>
 </pe:container>
 </pe:mcml>
 </body>

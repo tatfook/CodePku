@@ -6,7 +6,7 @@ place: Foshan
 Desc: 
 use the lib:
 ------------------------------------------------------------
-local SessionsData = NPL.load("(gl)Mod/WorldShare/database/SessionDatas.lua")
+local SessionsData = NPL.load("(gl)Mod/CodePku/database/SessionsData.lua")
 ------------------------------------------------------------
 ]] local Utils = NPL.load("(gl)Mod/CodePku/helper/Utils.lua")
 local Store = NPL.load("(gl)Mod/CodePku/store/Store.lua")
@@ -111,6 +111,33 @@ function SessionsData:SaveSession(session)
             text = session.account,
             session = session
         }
+    end
+
+    GameLogic.GetPlayerController():SaveLocalData("sessions", sessionsData, true)
+end
+
+function SessionsData:ChangeVisitorToUser( account )
+    if not account then
+        return false
+    end
+
+    account = string.lower(account)
+
+    local sessionsData = self:GetSessions()
+    -- 空字符串是为那天的紧急版本上线买单  以后时间久了可以直接去了
+    if sessionsData.selectedUser == "quickLogin" or sessionsData.selectedUser == "" then
+    -- if sessionsData.selectedUser == "quickLogin" then
+        sessionsData.selectedUser = account
+    else
+        return false
+    end
+
+    for key, item in ipairs(sessionsData.allUsers) do
+        if item.value == "quickLogin" or item.value == "" then
+            item.session.account = account
+            item.value = account
+            item.text = account
+        end
     end
 
     GameLogic.GetPlayerController():SaveLocalData("sessions", sessionsData, true)
