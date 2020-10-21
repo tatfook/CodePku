@@ -138,3 +138,78 @@ CommonFunc.GetServerMoney = function (windows)
         GameLogic.AddBBS("CodeGlobals", e.data.message, 3000, "#FF0000");
     end)
 end
+
+CommonFunc.OpenUrl = function (url, withToken, screenOrientation)                
+    local function stringifyPrimitive(v)
+        return tostring(v)
+    end
+      
+    local function urlencode(str)
+        if str then
+            str = string.gsub(str, '\n', '\r\n')
+            str = string.gsub(str, '([^%w-_.~])', function(c)
+            return string.format('%%%02X', byte(c))
+            end)
+        end
+        return str
+    end
+      
+    local function stringify(params, sep, eq)
+        if not sep then sep = '&' end
+        if not eq then eq = '=' end
+        if type(params) == "table" then
+            local fields = {}
+            for key,value in pairs(params) do
+            local keyString = urlencode(stringifyPrimitive(key)) .. eq
+            if type(value) == "table" then
+                for _, v in ipairs(value) do
+                table.insert(fields, keyString .. urlencode(stringifyPrimitive(v)))
+                end
+            else
+                table.insert(fields, keyString .. urlencode(stringifyPrimitive(value)))
+            end
+            end
+            return table.concat(fields, sep)
+        end
+        return ''
+    end
+    
+    local function tableLength(t)
+        local leng=0
+        for k, v in pairs(t) do
+          leng=leng+1
+        end
+        return leng;
+    end
+
+    NPL.load("(gl)script/ide/socket/url.lua");    
+    
+    local UrlLib = commonlib.gettable("commonlib.socket.url");    
+    local parsedUrl = UrlLib.parse(url);    
+
+    local queryParams = {};
+    if withToken then
+        local token = Mod.CodePku.Store:Get("user/token");
+        queryParams.token = token;
+    end
+    
+    local currentOs = System.os.GetPlatform();    
+    if currentOs == 'android' and screenOrientation == 'portrait' then         
+        queryParams.screenOrientation = 'portrait';        
+    end
+
+    if tableLength(queryParams) > 0 then
+        if parsedUrl.query then
+            parsedUrl.query = parsedUrl.query .. "&" .. stringify(queryParams)
+        else
+            parsedUrl.query = stringify(queryParams)
+        end
+    end
+
+    url = UrlLib.build(parsedUrl)
+    if currentOs == 'android' then
+        Map3DSystem.App.Commands.Call("File.WebBrowser", url)        
+    else
+        GameLogic.RunCommand(string.format("/open %s", url))
+    end
+end
