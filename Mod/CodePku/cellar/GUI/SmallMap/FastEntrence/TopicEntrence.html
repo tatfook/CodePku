@@ -13,7 +13,6 @@
     local MainPopup = commonlib.gettable("Mod.CodePku.GUI.MainPopup");
 
     function ClickTopic(name)
-        ClosePage()
         TopicCourse:ShowPage(name)
     end
         
@@ -23,7 +22,6 @@
     
     function onClose()
         ClosePage()
-        SmallMap:ShowPage()
     end
 
     function turnToTopic()

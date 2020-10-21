@@ -15,10 +15,8 @@ local MainPopup = commonlib.gettable("Mod.CodePku.GUI.MainPopup");
 local page = document:GetPageCtrl()
 TeachCourses.TeachMainPage = Page
 
-
 TeachCourses.Main_Page_Index = 1
-TeachCourses.Main_PerPage_Grade = 3
-
+TeachCourses.Main_PerPage_Grade = 6
 
 -- 获取全部年级导图列表
 if not TeachCourses.grade_list[1].grade then
@@ -40,7 +38,7 @@ function GetOnePage()
     local now_grade_list = {}
     local start_index = 1 + TeachCourses.Main_PerPage_Grade * (TeachCourses.Main_Page_Index - 1)
     local end_index = TeachCourses.Main_PerPage_Grade * TeachCourses.Main_Page_Index
-    if TeachCourses.grade_list[6].count_up then
+    if TeachCourses.grade_list[1].count then
         for i=start_index,end_index do
             table.insert(now_grade_list, TeachCourses.grade_list[i])
         end
@@ -50,17 +48,10 @@ function GetOnePage()
     end
 end
 
--- 点击上学期
-function OnClickUp(name)
-    if TeachCourses.grade_list[name].count_up > 0 then
-        GoToGrade(name, 1)
-    end
-end
-
--- 点击下学期
-function OnClickDown(name)
-    if TeachCourses.grade_list[name].count_down > 0 then
-        GoToGrade(name, 2)
+-- 点击学期
+function OnClickSemester(name)
+    if TeachCourses.grade_list[name].count > 0 then
+        GoToGrade(TeachCourses.grade_list[name].grade, TeachCourses.grade_list[name].semester)
     end
 end
 
@@ -93,10 +84,6 @@ function PageDown()
     end
 end
 
-
-
-
-
 function ClosePage()
     Page:CloseWindow();
     -- 判断是否从小地图进入的
@@ -105,8 +92,6 @@ function ClosePage()
         SmallMap:ShowPage()
     end
 end
-
-
 
 -- 跳转到教学区世界
 function turnToTeach()
@@ -138,55 +123,37 @@ end
             <pe:gridview style="width: 1600; height: 900;left: 50;top: 50;" DataSource='<%= GetOnePage() %>' CellPadding="6" ItemsPerLine="3" AllowPaging="false" RememberScrollPos="true" RememberLastPage="true" VerticalScrollBarStep="36" VerticalScrollBarOffsetX="8">
                 <Columns>
                     <pe:if condition="<%= not isIOSApproval()%>">
-                        <div style="width: 424; height: 676;font-family:alhy;text-align:center;line-height:73;font-size: 24;color:#ffffff;">
-                            <!-- 上年级 -->
-                            <div onclick="OnClickUp" style="<%=format('position: relative;left: 50;top:50; width: 324; height: 247; background:url(%s);', getIcon(8))%>" name="<%=Eval('grade')%>">
-                                <div style="<%=format('position: relative; left: 20;top: 14; width: 283; height: 221; background:url(%s);', getIcon(9))%>"></div>
+                        <div style="width: 424; height: 338;font-family:alhy;text-align:center;line-height:73;font-size: 24;color:#ffffff;">
+                            <!-- 年级 -->
+                            <div onclick="OnClickSemester" style="<%=format('position: relative;left: 50;top:50; width: 324; height: 247; background:url(%s);', getIcon(8))%>" name="<%=Eval('sort_index')%>">
+                                <!-- 年级封面 -->
+                                <div style="<%=format('position: relative; left: 20;top: 14; width: 283; height: 221; background:url(%s);', Eval('cover_url'))%>"></div>
                                 <div style="<%=format('position: relative; left: 187;top: -36; width: 186; height: 118; background:url(%s);', getIcon(10))%>"></div>
-                                <div style="<%=format('position: relative; left: -35;top: 201; width: 204; height: 68; background:url(%s);', Eval('tips_url_up'))%>"></div>
+                                <div style="<%=format('position: relative; left: -35;top: 201; width: 204; height: 68; background:url(%s);', Eval('tips_url'))%>"></div>
                             </div>
-                            <pe:if condition="<%= Eval('count_up') < 1 %>">
+                            <pe:if condition="<%= Eval('count') < 1 %>">
                                 <div style="position: relative;left: 50;top:50; width: 324; height: 247;"></div>
                                 <div style="<%=format('position: relative; left: 22;top: 143; width: 380; height: 73; background:url(%s);', getIcon(11))%>">敬请期待...</div>
-                            </pe:if>
-                            <!-- 下年级 -->
-                            <div onclick="OnClickDown" style="<%=format('position: relative;left: 50;top:379; width: 324; height: 247; background:url(%s);', getIcon(8))%>" name="<%=Eval('grade')%>">
-                                <div style="<%=format('position: relative; left: 20;top: 14; width: 283; height: 221; background:url(%s);', getIcon(9))%>"></div>
-                                <div style="<%=format('position: relative; left: 187;top: -36; width: 186; height: 118; background:url(%s);', getIcon(10))%>"></div>
-                                <div style="<%=format('position: relative; left: -35;top: 201; width: 204; height: 68; background:url(%s);', Eval('tips_url_down'))%>"></div>
-                            </div>
-                            <pe:if condition="<%= Eval('count_down') < 1 %>">
-                                <div style="position: relative;left: 50;top:379; width: 324; height: 247;"></div>
-                                <div style="<%=format('position: relative; left: 22;top: 472; width: 380; height: 73; background:url(%s);', getIcon(11))%>">敬请期待...</div>
                             </pe:if>
                         </div>
                     </pe:if>
 
                     <pe:if condition="<%= isIOSApproval()%>">
-                        <div style="width: 424; height: 676;font-family:alhy;text-align:center;line-height:73;font-size: 24;color:#ffffff;">
-                            <!-- 上年级 -->
-                            <pe:if condition="<%= Eval('count_up') < 1 %>">
-                                <div onclick="OnClickUp" style="<%=format('display:none;position: relative;left: 50;top:50; width: 324; height: 247; background:url(%s);', getIcon(8))%>" name="<%=Eval('grade')%>">
+                        <!-- 这里做的比较简单粗暴，没课就不显示，会导致第二页图片位置有些微偏移，暂时未做处理 -->
+                        <pe:if condition="<%= Eval('count') > 0 %>">
+                            <div style="width: 424; height: 338;font-family:alhy;text-align:center;line-height:73;font-size: 24;color:#ffffff;">
+                                <!-- 年级 -->
+                                <div onclick="OnClickSemester" style="<%=format('position: relative;left: 50;top:50; width: 324; height: 247; background:url(%s);', getIcon(8))%>" name="<%=Eval('sort_index')%>">
                                     <div style="<%=format('position: relative; left: 20;top: 14; width: 283; height: 221; background:url(%s);', getIcon(9))%>"></div>
                                     <div style="<%=format('position: relative; left: 187;top: -36; width: 186; height: 118; background:url(%s);', getIcon(10))%>"></div>
-                                    <div style="<%=format('position: relative; left: -35;top: 201; width: 204; height: 68; background:url(%s);', Eval('tips_url_up'))%>"></div>
+                                    <div style="<%=format('position: relative; left: -35;top: 201; width: 204; height: 68; background:url(%s);', Eval('tips_url'))%>"></div>
                                 </div>
-                            
-                                <div style="display:none;position: relative;left: 50;top:50; width: 324; height: 247;"></div>
-                                <div style="<%=format('display:none;position: relative; left: 22;top: 143; width: 380; height: 73; background:url(%s);', getIcon(11))%>">敬请期待...</div>
-                            </pe:if>
-                            <!-- 下年级 -->
-                            <pe:if condition="<%= Eval('count_down') < 1 %>">
-                                <div onclick="OnClickDown" style="<%=format('display:none;position: relative;left: 50;top:379; width: 324; height: 247; background:url(%s);', getIcon(8))%>" name="<%=Eval('grade')%>">
-                                    <div style="<%=format('position: relative; left: 20;top: 14; width: 283; height: 221; background:url(%s);', getIcon(9))%>"></div>
-                                    <div style="<%=format('position: relative; left: 187;top: -36; width: 186; height: 118; background:url(%s);', getIcon(10))%>"></div>
-                                    <div style="<%=format('position: relative; left: -35;top: 201; width: 204; height: 68; background:url(%s);', Eval('tips_url_down'))%>"></div>
-                                </div>
-                            
-                                <div style="display:none;position: relative;left: 50;top:379; width: 324; height: 247;"></div>
-                                <div style="<%=format('display:none;position: relative; left: 22;top: 472; width: 380; height: 73; background:url(%s);', getIcon(11))%>">敬请期待...</div>
-                            </pe:if>
-                        </div>
+                                <pe:if condition="<%= Eval('count') < 1 %>">
+                                    <div style="position: relative;left: 50;top:50; width: 324; height: 247;"></div>
+                                    <div style="<%=format('position: relative; left: 22;top: 143; width: 380; height: 73; background:url(%s);', getIcon(11))%>">敬请期待...</div>
+                                </pe:if>
+                            </div>
+                        </pe:if>
                     </pe:if>
 
                 </Columns>
@@ -202,22 +169,24 @@ end
         <div onclick="PageDown" style="<%=format('position: relative; left: 1633; top: 369; width: 111; height: 155; background:url(%s);', getIcon(4))%>"></div>
 
         <!-- 页码点 -->
-        <div style="<%=format('position: relative; left: 833; top: 791; width: 36; height: 37; background:url(%s);', getIcon(6))%>">
-            <pe:if condition="<%= TeachCourses.Main_Page_Index == 1 %>">
-                <div style="<%=format('position: relative; left: 6; top: 6; width: 24; height: 24; background:url(%s);', getIcon(5))%>"></div>
-            </pe:if>
-        </div>
-        <div style="<%=format('position: relative; left: 881; top: 791; width: 36; height: 37; background:url(%s);', getIcon(6))%>">
-            <pe:if condition="<%= TeachCourses.Main_Page_Index == 2 %>">
-                <div style="<%=format('position: relative; left: 6; top: 6; width: 24; height: 24; background:url(%s);', getIcon(5))%>"></div>
-            </pe:if>
-        </div>
+        <pe:if condition="<%= TeachCourses.Main_Page_Index == 1 %>">
+            <div style="<%=format('position: relative; left: 826; top: 784; width: 50; height: 50; background:url(%s);', getIcon(6))%>">
+                <div style="<%=format('position: relative; left: 8; top: 8; width: 35; height: 35; background:url(%s);', getIcon(5))%>"></div>
+            </div>
+            <div style="<%=format('position: relative; left: 881; top: 791; width: 36; height: 37; background:url(%s);', getIcon(6))%>"></div>
+        </pe:if>
 
+        <pe:if condition="<%= TeachCourses.Main_Page_Index == 2 %>">
+            <div style="<%=format('position: relative; left: 833; top: 791; width: 36; height: 37; background:url(%s);', getIcon(6))%>"></div>
+            <div style="<%=format('position: relative; left: 874; top: 784; width: 50; height: 50; background:url(%s);', getIcon(6))%>">
+                <div style="<%=format('position: relative; left: 8; top: 8; width: 35; height: 35; background:url(%s);', getIcon(5))%>"></div>
+            </div>
+        </pe:if>
+        
     </div>
 
     <div onclick="turnToTeach" style="<%=format('position: relative; left: 22; top: 860; width: 300; height: 220; background:url(%s);', getIcon(12))%>"></div>
     
-
     <iframe src="Mod/CodePku/cellar/GUI/MoneyV2.html"></iframe>
 </pe:container>
 </pe:mcml>

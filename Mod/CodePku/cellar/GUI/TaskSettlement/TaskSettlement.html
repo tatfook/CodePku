@@ -8,8 +8,13 @@
 <body>
 <pe:mcml>
 <script refresh="false" type="text/npl"><![CDATA[
-
 TaskSettlement = NPL.load("(gl)Mod/CodePku/cellar/GUI/TaskSettlement/TaskSettlement.lua")
+local ShareApp = NPL.load("(gl)Mod/CodePku/cellar/GUI/Share/ShareApp.lua");
+
+function TaskSettlement.Share()
+    TaskSettlement.ClosePage()
+    ShareApp:ShowPage(2)
+end
 
 function TaskSettlement.ClosePage()
     Page:CloseWindow();
@@ -23,7 +28,7 @@ end
 <pe:container alignment="_lt" width="1920" height="1080">
     <div style="position:absolute;left:218;top:97;width:1494;height:910;text-align:center;font-family:Noto Sans S Chinese Regular; font-weight:bold;background:url(codepku/image/textures/task_settlement/task_settlement.png#53 69 1494 910);">
         <div style="position:absolute;left:499;top:0;width:511;height:108;color:#F3693B;font-size:57;line-height:108;background:url(codepku/image/textures/task_settlement/task_settlement.png#97 1024 511 108);">课程结算</div>
-        <div onclick="TaskSettlement.ClosePage" style="position:absolute;left:1385;top:16;width:68;height:78;background:url(codepku/image/textures/common_32bits.png#110 73 68 78);"></div>
+        <!-- <div onclick="TaskSettlement.ClosePage" style="position:absolute;left:1385;top:16;width:68;height:78;background:url(codepku/image/textures/common_32bits.png#110 73 68 78);"></div> -->
 
         <div style="position:absolute;left:192;top:121;width:1142;height:202;color:#ffffff;;">
             <!-- 升级特效 -->
@@ -96,7 +101,8 @@ end
             </pe:gridview>
         </div>
  
-        <div onclick="TaskSettlement.ClosePage" style="position:absolute;left:627;top:776;width:240;height:80;color:#0D5416;font-size:36;line-height:80;background:url(codepku/image/textures/common_32bits.png#1405 741 84 84:6 6 6 6);">确定</div>
+        <div onclick="TaskSettlement.ClosePage" style="position:absolute;left:327;top:776;width:240;height:80;color:#0D5416;font-size:36;line-height:80;background:url(codepku/image/textures/common_32bits.png#1405 741 84 84:6 6 6 6);">确定</div>
+        <div onclick="TaskSettlement.Share" style="position:absolute;left:927;top:776;width:240;height:80;color:#0D5416;font-size:36;line-height:80;background:url(codepku/image/textures/common_32bits.png#1405 741 84 84:6 6 6 6);">炫耀一下</div>
     </div>
 </pe:container>
 
