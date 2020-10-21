@@ -24,6 +24,7 @@ MainLogin.MainLoginPage = nil
 MainLogin.LoginBGPage = nil
 MainLogin.isPassword = nil
 MainLogin.accountNum = ''  --记录输入的号码,切换登录方式保留
+MainLogin.verifyCode = ''  --记录输入的验证码,切换登录方式保留
 MainLogin.check = GameLogic.GetPlayerController():LoadLocalData('privacyPolicyState',false,true);  --记录复选框状态
 
 function MainLogin:Show(index)     
@@ -202,7 +203,7 @@ function MainLogin:LoginAction(methodIndex)
     end
 
     if not agree_val then
-        GameLogic.AddBBS(nil, L"请同意用户协议", 3000, "255 0 0", 21)
+        GameLogic.AddBBS(nil, L"为了保证您的个人隐私和隐私安全，还请仔细阅读并同意用户服务协议和隐私政策", 3000, "255 0 0", 21)
         return false
     end
 
@@ -254,6 +255,7 @@ function MainLogin:LoginAction(methodIndex)
                     return false
                 end
                 GameLogic.GetPlayerController():SaveLocalData('privacyPolicyState',true,true)
+                MainLogin.verifyCode = ''
                 CodePkuServiceSession:LoginResponse(response, err, HandleLogined)
             end
         )
@@ -267,6 +269,7 @@ function MainLogin:LoginAction(methodIndex)
                     return false
                 end
                 GameLogic.GetPlayerController():SaveLocalData('privacyPolicyState',true,true)
+                MainLogin.verifyCode = ''
                 CodePkuServiceSession:LoginResponse(response, err, HandleLogined)
             end
         )
@@ -280,6 +283,7 @@ function MainLogin:LoginAction(methodIndex)
                     return false
                 end
                 GameLogic.GetPlayerController():SaveLocalData('privacyPolicyState',true,true)
+                MainLogin.verifyCode = ''
                 CodePkuServiceSession:LoginResponse(response, err, HandleLogined)
             end
         )

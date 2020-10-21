@@ -10,9 +10,7 @@
     <script type="text/npl" refresh="false"><![CDATA[
         NPL.load("(gl)script/apps/Aries/Creator/Game/Login/Rebranding.lua")
         local Config = NPL.load("(gl)Mod/CodePku/config/Config.lua")
-        privacyPolicyState = GameLogic.GetPlayerController():LoadLocalData('privacyPolicyState',false,true);
-        echo("------------privacyPolicyState")
-        echo(privacyPolicyState)
+
         NPL.load("(gl)Mod/CodePku/cellar/Common/CommonFunc/CommonFunc.lua")
         local CommonFunc = commonlib.gettable("Mod.CodePku.Common.CommonFunc")
         function isHuaweiApproval()
@@ -46,7 +44,7 @@
         end
         
         function unchecklogin()
-            GameLogic.AddBBS(nil, L"请同意用户协议", 3000, "255 0 0", 21)
+            GameLogic.AddBBS(nil, L"为了保证您的个人隐私和隐私安全，还请仔细阅读并同意用户服务协议和隐私政策", 3000, "255 0 0", 21)
         end
 
         function quicklogin()
@@ -144,24 +142,12 @@
 
         check = MainLogin.check
         function clickCheckBox(value)
-            echo("--check")
-
-            local agree = Page:GetNode("agree"):GetControl():isChecked();
-            --echo("value")
-            --echo(value)
-            echo("agree")
-            echo(agree)
-
-            if agree then 
-                MainLogin.check = true;
+            if value then 
+                MainLogin.check = false;
             else
-                MainLogin.check = false
+                MainLogin.check = true
             end
-            echo("MainLogin.check")
-            echo(MainLogin.check)
-            
-            --Page:Refresh(0)
-
+            Page:Refresh(0)
         end
 
 
@@ -174,12 +160,29 @@
         function OnChangeLoginMethod()
             local accountNum = Page:GetValue('account')
             MainLogin.accountNum = accountNum  --记录输入的号码,切换登录方式保留
-
+            MainLogin.verifyCode = ""
             Page:CloseWindow()
             MainLogin:Show(2)
             --MainLogin.login_method_index = if_else(MainLogin.login_method_index == 2, 1, 2);
             --page:SetValue("btn_ToggleMethod", if_else(MainLogin.login_method_index == 2, '验证码登录', '密码登录'));
             --page:Refresh(0);
+        end
+
+        function OnAccountChange(value)
+            MainLogin.accountNum = Page:GetValue('account')
+        end
+        
+        function OnVerifyChange(value)
+            MainLogin.verifyCode = Page:GetValue('verify_code')
+        end
+
+        function getChecked()
+            local privacyPolicyState = GameLogic.GetPlayerController():LoadLocalData('privacyPolicyState',false,true);
+            if MainLogin.check then
+                return "checked"
+            else
+                return "uncheked"
+            end
         end
 
         -- 为以后的扩展留下接口，可以弄多个手机区域码
@@ -212,7 +215,7 @@
                 <div name="verifyCodeDiv" style="position: relative; width: 722; height: 88; left: 111; top: 293;">
 
                     <div style="position: relative; width: 722; height: 88; font-size: 32; color:#FFFFFF; font-family: Noto Sans S Chinese Regular; background:url(codepku/image/textures/login/main.png#1011 271 88 88:10 10 10 10);">
-                        <input type="text" MoveViewWhenAttachWithIME="true" name="verify_code" EmptyText='<%= L"请输入验证码" %>' style="position: relative; width: 672; height: 88; left: 25; line-height: 88; background: #000000;" />
+                        <input type="text" MoveViewWhenAttachWithIME="true" name="verify_code" onchange="OnVerifyChange" value="<%= MainLogin.verifyCode %>"  EmptyText='<%= L"请输入验证码" %>' style="position: relative; width: 672; height: 88; left: 25; line-height: 88; background: #000000;" />
                     </div>
 
                     <input type="button" name="get_mobile_code_text" onclick="get_mobile_code()"
@@ -267,20 +270,12 @@
 
             <div style="position: relative; width: 32; height: 32; left: 111; top: 535; background:url(codepku/image/textures/login/main.png#1638 314 33 33);"></div>
 
-            <pe:if condition = "<%= MainLogin.check %>" >
-                <input type="checkbox" name="agree" checked="checked" UncheckedBG="codepku/image/textures/login/main.png#1638 314 33 33" CheckedBG="codepku/image/textures/login/main.png#708 299 32 32" onclick="clickCheckBox()"
-                    style="position: relative; width: 32; height: 32; left: 111; top: 535; " />
-            </pe:if>
-            <pe:if condition = "<%= not MainLogin.check %>" >
-                <input type="checkbox" name="agree" checked="unchecked" UncheckedBG="codepku/image/textures/login/main.png#1638 314 33 33" CheckedBG="codepku/image/textures/login/main.png#708 299 32 32" onclick="clickCheckBox()"
-                    style="position: relative; width: 32; height: 32; left: 111; top: 535; " />
-            </pe:if>
-            
-
+            <input type="checkbox" name="agree" checked="<%= getChecked()%>" UncheckedBG="codepku/image/textures/login/main.png#1638 314 33 33" CheckedBG="codepku/image/textures/login/main.png#708 299 32 32" onclick="clickCheckBox()"
+                style="position: relative; width: 32; height: 32; left: 111; top: 535; " />
 
             <div style="position: relative; left: 148; top: 540; font-size: 22; font-family: PuHuiTi-Bold; color: #FFFFFF;">
                 <%= L"我已详细阅读并同意" %>
-                <span style="color:#FFF868;" onclick="show_user_agreement()"><%= L"《用户协议》" %></span>
+                <span style="color:#FFF868;" onclick="show_user_agreement()"><%= L"《用户服务协议》" %></span>
                 <%= L"和" %>
                 <span style="color:#FFF868;" onclick="show_privacy_agreement()"><%= L"《隐私政策》" %></span>
             </div>
