@@ -61,12 +61,13 @@ end
 
 -- 本地使用或者获得金币后, 刷新金币本地缓存和页面
 -- 参数walletChange格式{{amount=0,currency_id=1,},{amount=0,currency_id=2,},}
+-- 参数bshow是否显示金币页面
 -- id=1玩学币,id=2玩学券    amount正数是获得,负数是消耗    可以只有一项{{amount=-1,currency_id=2,},}
 --[[eg:
 local CommonFunc = commonlib.gettable("Mod.CodePku.Common.CommonFunc")
 CommonFunc.RefreshLocalMoney({{amount=-100,currency_id=1,},{amount=-1,currency_id=2,},})
 --]]
-CommonFunc.RefreshLocalMoney = function (walletChange, windows)
+CommonFunc.RefreshLocalMoney = function (walletChange, windows, bshow)
     if walletChange and type(walletChange) == 'table' then
         local moneyChange = {}
         for _,v in pairs(walletChange) do
@@ -95,12 +96,14 @@ CommonFunc.RefreshLocalMoney = function (walletChange, windows)
             end
         end
 
-        local MainUIButtons = NPL.load("(gl)Mod/CodePku/cellar/Common/TouchMiniButtons/Main.lua");
-        if MainUIButtons.money_window ~= nil then
-            MainUIButtons.money_window:CloseWindow()
-            MainUIButtons.money_window = nil
+        if bshow then
+            local MainUIButtons = NPL.load("(gl)Mod/CodePku/cellar/Common/TouchMiniButtons/Main.lua");
+            if MainUIButtons.money_window ~= nil then
+                MainUIButtons.money_window:CloseWindow()
+                MainUIButtons.money_window = nil
+            end
+            MainUIButtons.show_money_ui()
         end
-        MainUIButtons.show_money_ui()
     end
 end
 
