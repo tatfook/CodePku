@@ -508,6 +508,11 @@ function CodePku:init()
 	local TaskSystem = commonlib.gettable("Mod.CodePku.Common.TaskSystem")
 	TaskSystem:StaticInit();
 
+	-- 初始化定时清理内存
+	NPL.load("(gl)Mod/CodePku/cellar/GUI/MemoryOpt/MemoryOpt.lua")
+	local MemoryOpt = commonlib.gettable("Mod.CodePku.GUI.MemoryOpt")
+	MemoryOpt:StaticInit();
+
 	GameLogic.GetFilters():add_filter(
 		"DesktopMenuPage.ShowPage",
 		function(bShow)
