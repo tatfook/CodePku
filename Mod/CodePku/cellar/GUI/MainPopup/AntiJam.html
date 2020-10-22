@@ -24,6 +24,10 @@ end
 
 function turnToWorld()
     ClosePage();
+    local EntityManager = commonlib.gettable("MyCompany.Aries.Game.EntityManager");
+    local player = EntityManager.GetFocus();
+    player:MountEntity(nil);
+
     NPL.load("(gl)Mod/CodePku/cellar/GUI/Home/HomeManage.lua")
     local HomeManage = commonlib.gettable("Mod.CodePku.Common.HomeManage")
     if HomeManage:IsMyHome() then
