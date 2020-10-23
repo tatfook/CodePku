@@ -131,7 +131,7 @@ end
 -- 获取设备名称
 -- support devices：
 -- android
-function Device:getDevice()
+function Device:getDevice(callback)
     if isAndroid then
         local ret = LuaJavaBridge.callJavaStaticMethod("plugin/Codepku/Device", "getDevice", "()Ljava/lang/String;",{});
         return ret.result;
