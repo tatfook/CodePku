@@ -148,7 +148,7 @@ function CodePku:init()
 			if System.Codepku.isLoadingHome then
 				LOG.std(nil, "info", "codepku", "add_filter OnWorldUnloaded")
 				commonlib.setfield("System.Codepku.Coursewares", nil)
-			end
+			end			
 		end
 	)
 
