@@ -128,7 +128,7 @@ function CodePku:init()
 	-- 预加载图片
 	NPL.load("(gl)Mod/CodePku/cellar/AssetManage/CodePkuAssetPreloader.lua")
 	local CodePkuAssetPreloader = commonlib.gettable("Mod.CodePku.AssetManage.CodePkuAssetPreloader")
-	CodePkuAssetPreloader.getSingleTon():PreloadAsset()
+	-- CodePkuAssetPreloader.getSingleTon():PreloadAsset()
 	-- NPL.activate("(gl)Mod/CodePku/cellar/AssertManage/CodePkuAssertPreloader.lua")
 
 	GameLogic.GetFilters():add_filter(
@@ -419,7 +419,8 @@ function CodePku:init()
 		function(bRestart)
 			local Desktop = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop")
 			local dialog = {
-				text = L "确定要退出当前世界么？",
+				-- 同时存在text和callback会走messagebox的逻辑，界面重构需要弹出自己的页面，注释一个即可
+				-- text = L "确定要退出当前世界么？",
 				callback = function(res)
 					Desktop.is_exiting = false
 					if (res and res == _guihelper.DialogResult.OK) then
@@ -430,6 +431,9 @@ function CodePku:init()
 				end,
 				messageBoxButton = _guihelper.MessageBoxButtons.OKCancel
 			}
+			-- 展示自己的退出页面
+			local ExitPage = NPL.load("(gl)Mod/CodePku/cellar/Areas/ExitPage.lua");
+			ExitPage:ShowPage();
 			return dialog
 		end
 	)

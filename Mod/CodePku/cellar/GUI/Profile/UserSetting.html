@@ -1,0 +1,84 @@
+<!-- "script/apps/Aries/Creator/Game/Areas/EscFramePage.html" -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>个人中心</title>
+</head>
+<body>
+    <pe:mcml>
+<script refresh="false" type="text/npl" src="UserInfo.lua"><![CDATA[
+UserInfoPage = NPL.load("(gl)Mod/CodePku/cellar/GUI/UserInfo.lua");
+
+NPL.load("(gl)Mod/CodePku/cellar/GUI/Profile/EditName.lua");
+local EditNamePage = commonlib.gettable("Mod.CodePku.EditNamePage")
+local SubjectPage = commonlib.gettable("Mod.CodePku.SubjectPage")
+
+CommonPng = "codepku/image/textures/common_32bits.png";
+ProfilePng = "codepku/image/textures/profile_32bits.png";
+
+xueshidian = 0
+fensi = 0
+dianzan = 0
+
+function ClosePage()
+    Page:CloseWindow()
+end
+
+function ShowEditName()
+    EditNamePage:ShowPage();
+end
+
+function SwitchAccount()
+    -- 弹出二次确认弹窗
+    local AdaptWindow = commonlib.gettable("Mod.CodePku.GUI.Window.AdaptWindow")
+    local params = {
+        url="Mod/CodePku/cellar/Areas/UserExitPopup.html",
+        alignment="_lt", left = 0, top = 0, width = 1920 , height = 1080, zorder = 1001,
+    };
+    AdaptWindow:QuickWindow(params)
+end
+
+-- 改名
+function ShowEdit()
+    local EditNamePage = commonlib.gettable("Mod.CodePku.EditNamePage")
+    EditNamePage:ShowPage()
+end
+
+-- tpye  1 通用；2 ESC专用
+function GetIcons(type, index)
+    return UserInfoPage:GetIcon(type, index)
+end
+
+]]>   
+</script>
+<style type="text/mcss"></style>
+
+<pe:container alignment="_lt" width="1920" height="1080" style="background-color: #00000070;">
+    <!-- 背景 -->
+    <div style="<%=format('position: relative; left: 297; top: 73; width: 1316;height: 940;background:url(%s);', GetIcons(2, 'esc_frame_bot_ground.png'))%>"></div>
+    <!-- 头像 -->
+    <div style="<%=format('position: relative; left: 852; top: 214; width: 256;height: 256;background:url(%s);', GetIcons(2, 'esc_frame_bot_head.png'))%>"></div>
+    <div style="<%=format('position: relative; left: 852; top: 214; width: 256;height: 256;background:url(%s);', GetIcons(1, 'btn_head.png'))%>"></div>
+    <!-- 关闭 -->
+    <div onclick="ClosePage" style="<%=format('position: relative; left: 1502; top: 57; width: 77;height: 123;background:url(%s);', GetIcons(1, 'comm_btn_close.png'))%>"></div>
+
+
+    
+    <!-- 昵称 -->
+    <div style="position:relative;left: 200;top:200;width: 300;height: 132;line-height:132px;font-size: 32;font-family: zkklt;color: #000000;background-color: #ffffff;"><%= UserInfoPage.name %></div>
+    <!-- 切换账号 -->
+    <div onclick="SwitchAccount" style="position:relative;left: 200;top:400;width: 300;height: 132;line-height:132px;font-size: 32;font-family: zkklt;color: #000000;background-color: #ffffff;">切换账号</div>
+
+    <!-- 测试，直接改名 -->
+    <div onclick="ShowEdit" style="position:relative;left: 200;top:600;width: 300;height: 132;line-height:132px;font-size: 32;font-family: zkklt;color: #000000;background-color: #ffffff;">改名</div>
+</pe:container>
+
+
+
+
+    
+</pe:mcml>
+</body>
+</html>
+ 

@@ -1,0 +1,64 @@
+<!-- "script/apps/Aries/Creator/Game/Areas/EscFramePage.html" -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+</head>
+<body>
+    <pe:mcml>
+<script refresh="false" type="text/npl" src="ExitPage.lua"><![CDATA[
+
+NPL.load("(gl)script/apps/Aries/Creator/Game/GameDesktop.lua");
+local Desktop = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop");
+local ExitPage = NPL.load("(gl)Mod/CodePku/cellar/Areas/ExitPage.lua");
+
+local page = document:GetPageCtrl()
+
+
+
+function ClosePage()
+    Page:CloseWindow();
+    Desktop.is_exiting = false
+end
+
+-- tpye  1 通用；2 ESC专用
+function GetIcons(type, index)
+    return ExitPage:GetIcon(type, index)
+end
+
+function ClickExit()
+    Desktop.ForceExit(true)
+end
+
+function ClickCancel()
+    ClosePage()
+end
+
+]]>
+
+</script>
+<pe:container alignment="_lt" width="1920" height="1080" style="background-color: #00000079;">
+
+<!-- 背景 -->
+<div style="<%=format('position: relative; left: 624; top: 251; width: 723;height: 412;background:url(%s);', GetIcons(1, 'common_bot_tooltip1.png'))%>">
+    <!-- title -->
+    <div style="position: relative;left: 251;top: 30;font-family: zkklt;font-size: 56;color: #4f402e;">提示</div>
+    <!-- content -->
+    <div style="position: relative;left: 105;top: 134;width: 428;height: 109;line-height: 109;text-align: center;font-family: zkklt;font-size: 38;color: #675947;">是否退出游戏</div>
+    <!-- 取消 -->
+    <div onclick="ClickCancel" style="<%=format('position: relative; left: 74; top: 319; width: 146;height: 65;background:url(%s);', GetIcons(1, 'common_btn_red02.png'))%>">
+        <div style="<%=format('position: relative; left: 22; top: 9; width: 100;height: 48;background:url(%s);', GetIcons(1, 'common_btn_cancel.png'))%>"></div>
+    </div>
+    <!-- 确认 -->
+    <div onclick="ClickExit" style="<%=format('position: relative; left: 409; top: 319; width: 146;height: 65;background:url(%s);', GetIcons(1, 'common_btn_green02.png'))%>">
+        <div style="<%=format('position: relative; left: 22; top: 9; width: 100;height: 48;background:url(%s);', GetIcons(1, 'common_btn_confirm.png'))%>"></div>
+    </div>
+</div>
+
+
+</pe:container>
+</pe:mcml>
+</body>
+</html>
+ 

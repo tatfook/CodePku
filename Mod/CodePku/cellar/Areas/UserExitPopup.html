@@ -1,0 +1,52 @@
+<!-- "script/apps/Aries/Creator/Game/Areas/EscFramePage.html" -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+</head>
+<body>
+    <pe:mcml>
+<script refresh="false" type="text/npl" src="ExitPage.lua"><![CDATA[
+
+
+local page = document:GetPageCtrl()
+
+
+
+function ClosePage()
+    Page:CloseWindow();
+end
+
+
+
+function ClickExit()
+    NPL.load("(gl)script/apps/Aries/Creator/Game/GameDesktop.lua");
+    local Desktop = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop");
+    Desktop.ForceExit(true)
+    local UserConsole = NPL.load('(gl)Mod/CodePku/cellar/UserConsole/Main.lua')
+    UserConsole:Logout()
+end
+
+function ClickCancel()
+    ClosePage()
+end
+
+]]>
+
+</script>
+
+
+
+<pe:container alignment="_lt" width="1920" height="1080" style="background-color: #00000079;">
+
+<div style="width: 300;height: 100;left: 300;top: 100;background-color: #00ff00;font-size: 32;font-family: zkklt;">是否切换账号，退出登录</div>
+<div onclick="ClickExit" style="width: 300;height: 100;left: 300;top: 300;background-color: #00ff00;font-size: 32;font-family: zkklt;">确定</div>
+<div onclick="ClickCancel" style="width: 300;height: 100;left: 300;top: 600;background-color: #ff0000;font-size: 32;font-family: zkklt;">取消</div>
+
+
+</pe:container>
+</pe:mcml>
+</body>
+</html>
+ 

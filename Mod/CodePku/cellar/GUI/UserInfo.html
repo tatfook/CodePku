@@ -266,10 +266,21 @@ function GetIdentity()
     return UserInfoPage.isSelf;
 end
 
-local CommonFunc = commonlib.gettable("Mod.CodePku.Common.CommonFunc")
 function isHuaweiApproval()
+    local CommonFunc = commonlib.gettable("Mod.CodePku.Common.CommonFunc")
     return CommonFunc.isHuaweiApproval()
 end
+
+-- 获取图标
+function GetIcons(type, index)
+    return UserInfoPage:GetIcon(type, index)
+end
+
+-- 展示设置弹窗
+function SettingPopup()
+    UserInfoPage:ShowSettingPopup()
+end
+
 ]]>   
 </script>
 <style type="text/mcss">
@@ -343,6 +354,10 @@ end
                 <div style = "width:145; height:85; font-size: 40px; line-height: 85px; background:url(codepku/image/textures/userinfo/options/zhengli.png);" onclick="sort_backpack"></div>
             </div>
         </pe:if>
+        <!-- 设置 -->
+        <div onclick="SettingPopup" style="<%=format('position: relative; left: 40; top: 850; width: 146;height: 65;background:url(%s);', GetIcons(1, 'common_btn_yellow02.png'))%>">
+            <div style="line-height: 65;color:#B35D0A;font-size:45px;font-weight:bold;font-family:Noto Sans S Chinese Regular;text-align:center;position:relative;">设置</div>
+        </div>
 
         <!-- 角色展示区 note: 放在其它tag后面 -->
         <div style='<%=format("position:absolute;margin-left:235px;margin-top:298px;width:727px;height:653px;background:url(%s#410 490 750 653);", Eval("ProfilePng")) %>'>
