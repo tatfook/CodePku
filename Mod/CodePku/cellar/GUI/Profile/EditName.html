@@ -7,43 +7,64 @@
 </head>
 <body>
     <pe:mcml>
-<script refresh="false" type="text/npl" src="UserInfo.lua"><![CDATA[
-NPL.load("(gl)Mod/CodePku/cellar/GUI/Profile/EditShare.lua");
-EditSharePage = commonlib.gettable("Mod.CodePku.EditSharePage")
-
-EditSharePage.OnInit();
-
+<script refresh="false" type="text/npl" src="EditName.lua"><![CDATA[
+UserInfoPage = NPL.load("(gl)Mod/CodePku/cellar/GUI/UserInfo.lua");
+EditNamePage = NPL.load("(gl)Mod/CodePku/cellar/GUI/Profile/EditName.lua")
 local page = document:GetPageCtrl()
 
+EditNamePage.ErrorContent = ""
+
+-- 要关闭两个window，所以用特殊的方法
 function OnClose()
-    Page:CloseWindow();
+    EditNamePage.new_nickname = nil
+    EditNamePage:OnCancelBtnClicked()
 end
 
-function OnConfirm()
-    GameLogic.RunCommand("/goto,home")
+-- 获取图片,tpye  1 通用；2 ESC专用
+function GetIcons(type, index)
+    return EditNamePage:GetIconPath(type, index)
+end
+
+function ClickCancel()
+    OnClose()
+end
+
+function GetUserName()
+    return EditNamePage.new_nickname or UserInfoPage.name
 end
 
 function OnSubmit()
-   Page:CloseWindow();
+    EditNamePage.new_nickname = Page:GetValue("new_nickname")
+    EditNamePage:ChangeNickname(EditNamePage.new_nickname)
 end
+
 ]]>   
 
 </script>
+<pe:container alignment="_lt" width="723" height="412" style="">
 
-<pe:aries_window2 alignment="_ct" style="font-size:50px;font-weight:bold;color:#ffffff;font-family:Noto Sans S Chinese Regular;" title="修改名字">
-    <!-- todo: textarea style/css doesn't work -->
-    <textarea
-        align="center"
-        EmptyText=""
-        lineWrap="true"
-        AlwaysShowCurLineBackground="false"
-        style="color:#ffffff;margin-top:34px;font-size:36px;padding:30px;width:960px;height:233px;background:url(codepku/image/textures/common_32bits.png#1315 292 40 40:19 19 19 19)"
-    ></textarea>
-    <div align="center" style="margin-top:64px;font-size:36px;">
-        <input type="button" name="Cancel" value='<%=L"取消" %>' onclick="OnClose" style="color:#85272B;width:246px;height:86px;background:url(codepku/image/textures/common_32bits.png#1305 740 86 86:14 14 14 14);"/>
-        <input type="button" name="OK" value='<%=L"提交" %>' onclick="OnSubmit" style="color:#0E5516;width:246px;height:86px;background:url(codepku/image/textures/common_32bits.png#1404 740 86 86:14 14 14 14);margin-left:200px;"/>
+<!-- 背景 -->
+<div style="<%=format('position: relative;width: 723;height: 412;background:url(%s);', GetIcons(1, 'common_bot_tooltip1.png'))%>">
+    <!-- title -->
+    <div style="position: relative;left: 191;top: 30;font-family: zkklt;font-size: 56;color: #4f402e;">设置昵称</div>
+    <!-- 错误提示区域 -->
+    <div style="position: relative;left: 60;top: 90;width: 500;height: 40;font-family: zkklt;font-size: 28;text-align: center;line-height: 40;color: #ff0000;"><%= EditNamePage.ErrorContent %></div>
+    <!-- 修改昵称区域 -->
+    <div style="<%=format('position: relative;left: 105;top: 134;width: 428;height: 109;font-family: zkklt;font-size: 38;color: #4f402e;background:url(%s);', GetIcons(2, 'esc_frame_bot_428_109.png'))%>">
+        <!-- <input type="text" MoveViewWhenAttachWithIME="true" name="account" EmptyText='<%= L"请输入手机号码" %>' style="position: relative;left: 170px;top: 20; width: 583; height: 42; font-family: zkklt;font-size: 36;line-height: 42;color: #803011;background: #000000;"/> -->
+        <input type="text" MoveViewWhenAttachWithIME="true" value="<%= GetUserName() %>" name="new_nickname" EmptyText='<%= L"请输入新昵称" %>' style="position: relative;left: 48;top: 30; width: 340; height: 42; font-family: zkklt;font-size: 36;line-height: 42;color: #4f402e;background: #000000;"/>
     </div>
-</pe:aries_window2>
+    <!-- 取消 -->
+    <div onclick="ClickCancel" style="<%=format('position: relative; left: 74; top: 319; width: 146;height: 65;background:url(%s);', GetIcons(1, 'common_btn_red02.png'))%>">
+        <div style="<%=format('position: relative; left: 22; top: 9; width: 100;height: 48;background:url(%s);', GetIcons(1, 'common_btn_cancel.png'))%>"></div>
+    </div>
+    <!-- 确认 -->
+    <div onclick="OnSubmit" style="<%=format('position: relative; left: 409; top: 319; width: 146;height: 65;background:url(%s);', GetIcons(1, 'common_btn_green02.png'))%>">
+        <div style="<%=format('position: relative; left: 22; top: 9; width: 100;height: 48;background:url(%s);', GetIcons(1, 'common_btn_confirm.png'))%>"></div>
+    </div>
+</div>
+
+</pe:container>
 
 </pe:mcml>
 </body>

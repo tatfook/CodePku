@@ -14,6 +14,8 @@ NPL.load("(gl)Mod/CodePku/cellar/GUI/Profile/EditName.lua");
 local EditNamePage = commonlib.gettable("Mod.CodePku.EditNamePage")
 local SubjectPage = commonlib.gettable("Mod.CodePku.SubjectPage")
 
+local page = document:GetPageCtrl()
+
 CommonPng = "codepku/image/textures/common_32bits.png";
 ProfilePng = "codepku/image/textures/profile_32bits.png";
 
@@ -29,6 +31,7 @@ function ShowEditName()
     EditNamePage:ShowPage();
 end
 
+-- 切换账号
 function SwitchAccount()
     -- 弹出二次确认弹窗
     local AdaptWindow = commonlib.gettable("Mod.CodePku.GUI.Window.AdaptWindow")
@@ -41,8 +44,20 @@ end
 
 -- 改名
 function ShowEdit()
-    local EditNamePage = commonlib.gettable("Mod.CodePku.EditNamePage")
-    EditNamePage:ShowPage()
+    -- 判断游客
+    local isVisitor = commonlib.getfield("System.User.isVisitor")
+    if (isVisitor) then
+        -- 游客
+        NPL.load("(gl)Mod/CodePku/cellar/GUI/AccountUp/AccountUpTips.lua")
+        local AccountUpTips = commonlib.gettable("Mod.CodePku.AccountUpTips")
+        AccountUpTips:ShowEditNameTips()
+        return
+    else
+        -- 非游客
+        local EditNamePage = NPL.load("(gl)Mod/CodePku/cellar/GUI/Profile/EditName.lua");
+        EditNamePage:ShowPage();
+        return
+    end
 end
 
 -- tpye  1 通用；2 ESC专用
@@ -58,20 +73,43 @@ end
     <!-- 背景 -->
     <div style="<%=format('position: relative; left: 297; top: 73; width: 1316;height: 940;background:url(%s);', GetIcons(2, 'esc_frame_bot_ground.png'))%>"></div>
     <!-- 头像 -->
-    <div style="<%=format('position: relative; left: 852; top: 214; width: 256;height: 256;background:url(%s);', GetIcons(2, 'esc_frame_bot_head.png'))%>"></div>
-    <div style="<%=format('position: relative; left: 852; top: 214; width: 256;height: 256;background:url(%s);', GetIcons(1, 'btn_head.png'))%>"></div>
+    <div style="<%=format('position: relative; left: 852; top: 214; width: 256;height: 256;background:url(%s);', GetIcons(2, 'esc_frame_bot_head.png'))%>">
+        <div style="<%=format('position: relative; left: 8; top: 9; width: 238;height: 228;background:url(%s);', GetIcons(1, 'btn_head.png'))%>"></div>
+    </div>
+    <!-- 昵称 -->
+    <div style="<%=format('position: relative; left: 767; top: 547; width: 406;height: 83;background:url(%s);', GetIcons(2, 'esc_frame_bot_406_83.png'))%>">
+        <!-- 用户昵称区域 -->
+        <div style="position:relative;left: 114;top:20;width: 270;height: 40;line-height:40;font-size: 36;font-family: zkklt;text-align: center;color: #803011;"><%= UserInfoPage.name %></div>
+    </div>
+    <div style="<%=format('position: relative; left: 735; top: 528; width: 118;height: 79;background:url(%s);font-size:36;font-family: zkklt;color: #803011;line-height:79;padding-left:12;', GetIcons(2, 'esc_frame_bot_tape.png'))%>">昵称</div>
+    
+    <!-- 修改昵称按钮 -->
+    <div onclick="ShowEdit" style="<%=format('position: relative; left: 1184; top: 552; width: 55;height: 75;background:url(%s);', GetIcons(2, 'esc_frame_arrow_pen01.png'))%>"></div>
+
+    <!-- 性别 -->
+    <div style="<%=format('position: relative; left: 767; top: 711; width: 406;height: 83;background:url(%s);', GetIcons(2, 'esc_frame_bot_406_83.png'))%>">
+        <!-- 用户性别区域 -->
+        <pe:if condition='<%= UserInfoPage.gender == 1 or UserInfoPage.gender == 0 %>'>
+            <div style="position:relative;left: 195;top:20;width: 270;height: 40;line-height:40;font-size: 36;font-family: zkklt;color: #803011;">
+                <span style="color: #ffffff;">男</span>/女
+            </div>
+        </pe:if>
+        <pe:if condition='<%= UserInfoPage.gender == 2 %>'>
+            <div style="position:relative;left: 195;top:20;width: 270;height: 40;line-height:40;font-size: 36;font-family: zkklt;color: #803011;">
+                男/<span style="color: #ffffff;">女</span>
+            </div>
+        </pe:if>
+    </div>
+    <div style="<%=format('position: relative; left: 735; top: 693; width: 118;height: 79;background:url(%s);font-size:36;font-family: zkklt;color: #803011;line-height:79;padding-left:12;', GetIcons(2, 'esc_frame_bot_tape.png'))%>">性别</div>
+    
+    <!-- 切换账号 -->
+    <div onclick="SwitchAccount" style="<%=format('position: relative; left: 834; top: 889; width: 238;height: 81;background:url(%s);', GetIcons(1, 'common_btn_green01.png'))%>">
+        <div style="<%=format('position: relative; left: 41; top: 19; width: 159;height: 32;background:url(%s);', GetIcons(2, 'esc_frame_btn_switch.png'))%>"></div>
+    </div>
+
     <!-- 关闭 -->
     <div onclick="ClosePage" style="<%=format('position: relative; left: 1502; top: 57; width: 77;height: 123;background:url(%s);', GetIcons(1, 'comm_btn_close.png'))%>"></div>
 
-
-    
-    <!-- 昵称 -->
-    <div style="position:relative;left: 200;top:200;width: 300;height: 132;line-height:132px;font-size: 32;font-family: zkklt;color: #000000;background-color: #ffffff;"><%= UserInfoPage.name %></div>
-    <!-- 切换账号 -->
-    <div onclick="SwitchAccount" style="position:relative;left: 200;top:400;width: 300;height: 132;line-height:132px;font-size: 32;font-family: zkklt;color: #000000;background-color: #ffffff;">切换账号</div>
-
-    <!-- 测试，直接改名 -->
-    <div onclick="ShowEdit" style="position:relative;left: 200;top:600;width: 300;height: 132;line-height:132px;font-size: 32;font-family: zkklt;color: #000000;background-color: #ffffff;">改名</div>
 </pe:container>
 
 

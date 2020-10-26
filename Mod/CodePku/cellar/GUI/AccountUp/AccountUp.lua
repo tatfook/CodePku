@@ -13,11 +13,22 @@ local CodePkuServiceSession = NPL.load("(gl)Mod/CodePku/service/CodePkuService/S
 local CodePkuService = NPL.load("(gl)Mod/CodePku/service/CodePkuService.lua")
 local Config = NPL.load("(gl)Mod/CodePku/config/Config.lua")
 local Feedback = NPL.load("(gl)Mod/CodePku/cellar/GUI/Feedback/Feedback.lua");
+local escFrameImageData = NPL.load("(gl)Mod/CodePku/cellar/imageLuaTable/escFrameImageData.lua")
+local common1ImageData = NPL.load("(gl)Mod/CodePku/cellar/imageLuaTable/common1ImageData.lua")
 
 local AdaptWindow = commonlib.gettable("Mod.CodePku.GUI.Window.AdaptWindow");
 local AccountUp = commonlib.gettable("Mod.CodePku.AccountUp")
 
 AccountUp.ui = nil
+
+-- 获取图片 tpye  1 通用；2 游客升级
+function AccountUp:GetIconPath(type, index)
+    if type == 1 then
+        return common1ImageData:GetIconUrl(index)
+    elseif type == 2 then
+        return escFrameImageData:GetIconUrl(index)
+    end
+end
 
 function AccountUp.OnSureBtnCLicked(page)
     LOG.std(nil, "AccountUp", "OnSureBtnCLicked", "Enter")
@@ -152,7 +163,7 @@ function AccountUp.ShowPage()
     if not Feedback.BG then
         BGparams = {
           url="Mod/CodePku/cellar/GUI/Feedback/EmptyPage.html",
-          alignment="_lt", left = 0, top = 0, width = 1920 , height = 1080, zorder = 21
+          alignment="_lt", left = 0, top = 0, width = 1920 , height = 1080, zorder = 31
         }
         Feedback.BG = AdaptWindow:QuickWindow(BGparams)
     end
@@ -165,9 +176,9 @@ function AccountUp.ShowPage()
         alignment="_ct",
         left = -483,
         top = -285,
-        width = 945,
-        height = 615,
-        zorder = 30,
+        width = 936,
+        height = 721,
+        zorder = 32,
     }
     if AccountUp.ui then
         AccountUp.ui:CloseWindow()

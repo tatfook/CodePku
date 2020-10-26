@@ -213,5 +213,5 @@ function UserInfoPage:ShowSettingPopup()
         url="Mod/CodePku/cellar/GUI/Profile/UserSetting.html",
         alignment="_lt", left = 0, top = 0, width = 1920 , height = 1080, zorder = 30
     };
-    AdaptWindow:QuickWindow(params)
+    UserInfoPage.ShowSettingPopupUI = AdaptWindow:QuickWindow(params)
 end
