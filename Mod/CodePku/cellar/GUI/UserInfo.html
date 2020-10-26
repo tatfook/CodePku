@@ -355,9 +355,12 @@ end
             </div>
         </pe:if>
         <!-- 设置 -->
-        <div onclick="SettingPopup" style="<%=format('position: relative; left: 40; top: 850; width: 146;height: 65;background:url(%s);', GetIcons(1, 'common_btn_yellow02.png'))%>">
-            <div style="line-height: 65;color:#B35D0A;font-size:45px;font-weight:bold;font-family:Noto Sans S Chinese Regular;text-align:center;position:relative;">设置</div>
-        </div>
+        <pe:if condition='<%= UserInfoPage.isSelf %>'>
+            <div onclick="SettingPopup" style="<%=format('position: relative; left: 40; top: 850; width: 146;height: 65;background:url(%s);', GetIcons(1, 'common_btn_yellow02.png'))%>">
+                <div style="line-height: 65;color:#B35D0A;font-size:45px;font-weight:bold;font-family:Noto Sans S Chinese Regular;text-align:center;position:relative;">设置</div>
+            </div> 
+        </pe:if>
+        
 
         <!-- 角色展示区 note: 放在其它tag后面 -->
         <div style='<%=format("position:absolute;margin-left:235px;margin-top:298px;width:727px;height:653px;background:url(%s#410 490 750 653);", Eval("ProfilePng")) %>'>
