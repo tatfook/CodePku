@@ -89,16 +89,10 @@ end
     <!-- 性别 -->
     <div style="<%=format('position: relative; left: 767; top: 711; width: 406;height: 83;background:url(%s);', GetIcons(2, 'esc_frame_bot_406_83.png'))%>">
         <!-- 用户性别区域 -->
-        <pe:if condition='<%= UserInfoPage.gender == 1 or UserInfoPage.gender == 0 %>'>
-            <div style="position:relative;left: 195;top:20;width: 270;height: 40;line-height:40;font-size: 36;font-family: zkklt;color: #803011;">
-                <span style="color: #ffffff;">男</span>/女
-            </div>
-        </pe:if>
-        <pe:if condition='<%= UserInfoPage.gender == 2 %>'>
-            <div style="position:relative;left: 195;top:20;width: 270;height: 40;line-height:40;font-size: 36;font-family: zkklt;color: #803011;">
-                男/<span style="color: #ffffff;">女</span>
-            </div>
-        </pe:if>
+        <div style="position:relative;left: 230;top:20;width: 270;height: 40;line-height:40;font-size: 36;font-family: zkklt;color: #ffffff;">
+            <pe:if condition='<%= UserInfoPage.gender == 1 or UserInfoPage.gender == 0 %>'>男</pe:if>
+            <pe:if condition='<%= UserInfoPage.gender == 2 %>'>女</pe:if>
+        </div>
     </div>
     <div style="<%=format('position: relative; left: 735; top: 693; width: 118;height: 79;background:url(%s);font-size:36;font-family: zkklt;color: #803011;line-height:79;padding-left:12;', GetIcons(2, 'esc_frame_bot_tape.png'))%>">性别</div>
     

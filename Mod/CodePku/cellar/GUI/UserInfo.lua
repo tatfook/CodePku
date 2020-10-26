@@ -191,7 +191,7 @@ function UserInfoPage:ShowPage(PageIndex, bShow, id, mainasset)
 end
 
 function UserInfoPage:InitWindow()
-    AdaptWindow:QuickWindow({url="Mod/CodePku/cellar/GUI/UserInfo.html", 
+    UserInfoPage.MainUI = AdaptWindow:QuickWindow({url="Mod/CodePku/cellar/GUI/UserInfo.html", 
     alignment="_fi", left = 0, top = 0, width = 0, height = 0,zorder =20
 })
 end

@@ -10,6 +10,10 @@ local UserInfoPage = NPL.load("(gl)Mod/CodePku/cellar/GUI/UserInfo.lua");
 local common1ImageData = NPL.load("(gl)Mod/CodePku/cellar/imageLuaTable/common1ImageData.lua")
 local escFrameImageData = NPL.load("(gl)Mod/CodePku/cellar/imageLuaTable/escFrameImageData.lua")
 
+-- 导Editbox是为了改EmptyText的文本颜色，后面帕拉卡如果添加了对应的属性可以改掉这里的代码
+NPL.load("(gl)script/ide/System/Windows/Controls/EditBox.lua");
+local EditBox = commonlib.gettable("System.Windows.Controls.EditBox");
+
 local EditNamePage = NPL.export();
 
 
@@ -29,14 +33,18 @@ function EditNamePage:OnCancelBtnClicked()
 		EditNamePage.BG:CloseWindow()
 		EditNamePage.BG = nil
 	end
-		if EditNamePage.ui then
+	if EditNamePage.ui then
 		EditNamePage.ui:CloseWindow()
 		EditNamePage.ui = nil
 	end
+	-- 关闭页面之后要还原为默认的，避免影响其它页面
+	EditBox:Property({"EmptyTextColor", "#888888", auto=true})
 end
 
 -- 两个window是为了适配IOS虚拟键盘无法失去焦点,同时关闭页面需要特殊处理，两个window都要关掉
 function EditNamePage:ShowPage()
+	-- 打开之前先设置input标签的EmptyText文本颜色
+	EditBox:Property({"EmptyTextColor", "#a35229", auto=true})
 	if not EditNamePage.BG then
 		local BGparams = {
 		url="Mod/CodePku/cellar/GUI/Profile/EditNameEmptyPage.html",
@@ -95,6 +103,7 @@ function EditNamePage:ChangeNickname(new_nickname)
 			EditNamePage.CallingServer = false
 			EditNamePage:OnCancelBtnClicked()
 			UserInfoPage.ShowSettingPopupUI:Refresh(0)
+			UserInfoPage.MainUI:Refresh(0)
 		end
 	end):catch(function(e)
 		if e.data.message then

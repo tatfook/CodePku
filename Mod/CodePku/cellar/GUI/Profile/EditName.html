@@ -51,7 +51,6 @@ end
     <div style="position: relative;left: 60;top: 90;width: 500;height: 40;font-family: zkklt;font-size: 28;text-align: center;line-height: 40;color: #ff0000;"><%= EditNamePage.ErrorContent %></div>
     <!-- 修改昵称区域 -->
     <div style="<%=format('position: relative;left: 105;top: 134;width: 428;height: 109;font-family: zkklt;font-size: 38;color: #4f402e;background:url(%s);', GetIcons(2, 'esc_frame_bot_428_109.png'))%>">
-        <!-- <input type="text" MoveViewWhenAttachWithIME="true" name="account" EmptyText='<%= L"请输入手机号码" %>' style="position: relative;left: 170px;top: 20; width: 583; height: 42; font-family: zkklt;font-size: 36;line-height: 42;color: #803011;background: #000000;"/> -->
         <input type="text" MoveViewWhenAttachWithIME="true" value="<%= GetUserName() %>" name="new_nickname" EmptyText='<%= L"请输入新昵称" %>' style="position: relative;left: 48;top: 30; width: 340; height: 42; font-family: zkklt;font-size: 36;line-height: 42;color: #4f402e;background: #000000;"/>
     </div>
     <!-- 取消 -->

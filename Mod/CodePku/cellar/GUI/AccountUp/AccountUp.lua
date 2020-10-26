@@ -16,6 +16,10 @@ local Feedback = NPL.load("(gl)Mod/CodePku/cellar/GUI/Feedback/Feedback.lua");
 local escFrameImageData = NPL.load("(gl)Mod/CodePku/cellar/imageLuaTable/escFrameImageData.lua")
 local common1ImageData = NPL.load("(gl)Mod/CodePku/cellar/imageLuaTable/common1ImageData.lua")
 
+-- 导Editbox是为了改EmptyText的文本颜色，后面帕拉卡如果添加了对应的属性可以改掉这里的代码
+NPL.load("(gl)script/ide/System/Windows/Controls/EditBox.lua");
+local EditBox = commonlib.gettable("System.Windows.Controls.EditBox");
+
 local AdaptWindow = commonlib.gettable("Mod.CodePku.GUI.Window.AdaptWindow");
 local AccountUp = commonlib.gettable("Mod.CodePku.AccountUp")
 
@@ -157,9 +161,13 @@ function AccountUp.OnCancelBtnClicked()
     if AccountUp.ui then
         AccountUp.ui:CloseWindow()
     end
+    -- 关闭页面之后要还原为默认的，避免影响其它页面
+    EditBox:Property({"EmptyTextColor", "#888888", auto=true})
 end
 
 function AccountUp.ShowPage()
+    -- 打开之前先设置input标签的EmptyText文本颜色
+    EditBox:Property({"EmptyTextColor", "#a35229", auto=true})
     if not Feedback.BG then
         BGparams = {
           url="Mod/CodePku/cellar/GUI/Feedback/EmptyPage.html",
