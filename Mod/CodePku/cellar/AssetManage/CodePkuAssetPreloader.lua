@@ -46,16 +46,28 @@ function CodePkuAssetPreloader:init()
     local xmlRoot = ParaXML.LuaXML_ParseFile(self.xmlFile)
 
     self.textureList = {}
+    self.whiteList = {}
     for node in commonlib.XPath.eachNode(xmlRoot, "//assets/textures") do
         if node.attr and node.attr.name == "gameStart" then
             for itemNode in commonlib.XPath.eachNode(node, "/item") do
                 -- echo(itemNode[1])
                 table.insert(self.textureList, itemNode[1])
+                self.whiteList[itemNode[1]] = true
             end
         end
     end
     
     return self
+end
+
+--[[
+    @desc 
+    time:2020-10-23 17:18:45
+    @_image:
+    return 
+]]
+function CodePkuAssetPreloader:IsInWhiteList(_image)
+	return self.whiteList[_image]
 end
 
 --[[

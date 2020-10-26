@@ -46,12 +46,13 @@ function MemoryOpt.OnMemoryClear()
                     local decodeData = commonlib.Json.Decode(pData);
                     rate = decodeData.ram_memory_free/decodeData.ram_memory_total;
                     echo(rate); 
+                    local memory = DeviceInstance:getMemory(getMemory);
+                    echo(memory)
+                    if rate < 0.3 then
+                        -- MemoryOpt.Clear()
+                    end
                 end
-                local memory = DeviceInstance:getMemory(getMemory);
-                echo(memory)
-                if rate < 0.3 then
-                    -- MemoryOpt.Clear()
-                end
+                
             end
             echo("rate="..rate)
         end
@@ -60,13 +61,18 @@ function MemoryOpt.OnMemoryClear()
 end
 
 function MemoryOpt.Clear()
+    -- 测试
     local before_count = collectgarbage("count");
 	collectgarbage("collect");
 	local after_count = collectgarbage("count");
 	echo("before_count="..before_count)
     echo("after_count="..after_count)
-    local memory = DeviceInstance:getMemory();
-    echo("rate1="..memory.available_memory/memory.total_memory)
+    if isAndroid or isIOS then
+        local memory = DeviceInstance:getMemory();
+        echo("rate1="..memory.available_memory/memory.total_memory)
+    end
+    -- 测试end
+
     local assetManager = ParaEngine.GetAttributeObject():GetChild("AssetManager");
     local paraXManager = assetManager:GetChild("ParaXManager");
     for i=1, paraXManager:GetChildCount(0) do
@@ -107,6 +113,11 @@ function MemoryOpt.Clear()
             end
         end
     end
-    local memory2 = DeviceInstance:getMemory();
-    echo("rate2="..memory2.available_memory/memory2.total_memory)
+
+    -- 测试
+    if isAndroid or isIOS then
+        local memory2 = DeviceInstance:getMemory();
+        echo("rate2="..memory2.available_memory/memory2.total_memory)
+    end
+    -- 测试end
 end
