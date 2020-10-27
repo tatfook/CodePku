@@ -14,12 +14,40 @@ NPL.load("(gl)script/ide/UIAnim/UIAnimManager.lua")
 local branchImageData = NPL.load("(gl)Mod/CodePku/cellar/imageLuaTable/branchImageData.lua")
 local common1ImageData = NPL.load("(gl)Mod/CodePku/cellar/imageLuaTable/common1ImageData.lua")
 
-local BranchData = commonlib.gettable("Mod.CodePku.GUI.BranchData")
 local AdaptWindow = commonlib.gettable("Mod.CodePku.GUI.Window.AdaptWindow")
 local ChooseBranch = commonlib.gettable("Mod.CodePku.GUI.ChooseBranch")
 
 ChooseBranch.ui = nil
 
+ChooseBranch.branchStateTable = {
+    {["index"] = 1, ["nameId"] = 1},
+    {["index"] = 2, ["nameId"] = 2},
+    {["index"] = 3, ["nameId"] = 3},
+    {["index"] = 4, ["nameId"] = 4},
+    {["index"] = 5, ["nameId"] = 5},
+    {["index"] = 6, ["nameId"] = 6},
+    {["index"] = 7, ["nameId"] = 7},
+    {["index"] = 8, ["nameId"] = 8},
+    {["index"] = 9, ["nameId"] = 9},
+    {["index"] = 10, ["nameId"] = 10},
+}
+
+ChooseBranch.currChooseBranch = 5
+
+ChooseBranch.branchNameTalbe = {
+    "甲子","乙丑","丙寅","丁卯","戊辰",
+    "已巳","庚午","辛未","壬申","癸酉",
+    "甲戌","乙亥","丙子","丁丑","戊寅",
+    "已卯","庚辰","辛巳","壬午","癸未",
+    "甲申","乙酉","丙戌","丁亥","戊子",
+    "己丑","庚寅","辛卯","壬辰","癸巳",
+    "甲午","乙未","丙申","丁酉","戊戌",
+    "已亥","庚子","辛丑","壬寅","癸卯",
+    "甲辰","乙巳","丙午","丁未","戊申",
+    "已酉","庚戌","辛亥","壬子","癸丑",
+    "甲寅","乙卯","丙辰","丁巳","戊午",
+    "已未","庚申","辛酉","壬戌","癸亥",
+}
 
 ChooseBranch.HTMLStyleData = {
     [1] = { ["desc"] = "背景图片", ["position"] = "absolute", ["left"] = 624, ["top"] = 18, ["width"] = 699, ["height"] = 1000, ["background"] = "url("..branchImageData:GetIconUrl("branch_boot_01.png")..")",},
@@ -32,18 +60,13 @@ ChooseBranch.HTMLStyleData = {
     [8] = { ["desc"] = "流畅图标", ["position"] = "relative", ["left"] = 467, ["top"] = 186, ["width"] = 52, ["height"] = 52, ["background"] = "url("..branchImageData:GetIconUrl("branch_icon_g.png")..")",},
     [9] = { ["desc"] = "流畅文字", ["position"] = "relative", ["left"] = 539, ["top"] = 194, ["width"] = 104, ["height"] = 52, ["color"] = "#9e6c5e", ["font-family"] = "zkklt", ["font-size"] = "40px",},
     [10] = { ["desc"] = "标题文字", ["position"] = "relative", ["left"] = 210, ["top"] = 31, ["width"] = 400, ["height"] = 120, ["color"] = "#9e6c5e", ["font-family"] = "zkklt", ["font-size"] = "65px",},
-    [11] = { ["desc"] = "滚动区域", ["position"] = "relative", ["left"] = 90, ["top"] = 256, ["width"] = 514, ["height"] = 670, ["background-color"] = "#00000010",},
-    -- [11] = { ["desc"] = "滚动区域", ["position"] = "relative", ["left"] = 90, ["top"] = 256, ["width"] = 514, ["height"] = 670,},
-    [12] = { ["desc"] = "分线栏背景(未选择)", ["position"] = "relative", ["width"] = 515, ["height"] = 106,["background"] = "url("..branchImageData:GetIconUrl("branch_boot_g.png")..")",},
-    [13] = { ["desc"] = "分线栏背景(选中)", ["position"] = "relative", ["width"] = 515, ["height"] = 107,["background"] = "url("..branchImageData:GetIconUrl("branch_boot_w.png")..")",},
-    [14] = { ["desc"] = "分线栏状态标签", ["position"] = "relative", ["left"] = 90, ["top"] = 256, ["width"] = 514, ["height"] = 670,["background"] = "url("..branchImageData:GetIconUrl("branch_boot_01.png")..")",},
-    [15] = { ["desc"] = "分线栏文字",  ["position"] = "relative", ["left"] = 210, ["top"] = 31, ["width"] = 400, ["height"] = 120, ["color"] = "#9e6c5e", ["font-family"] = "zkklt", ["font-size"] = "50px",},
+    [11] = { ["desc"] = "滚动区域", ["position"] = "relative", ["left"] = 90, ["top"] = 256, ["width"] = 514, ["height"] = 670,},
+    [12] = { ["desc"] = "分线栏背景(未选择)", ["width"] = 515, ["height"] = 106,["background"] = "url("..branchImageData:GetIconUrl("branch_boot_g.png")..")",},
+    [13] = { ["desc"] = "分线栏背景(选中)", ["width"] = 515, ["height"] = 107,["background"] = "url("..branchImageData:GetIconUrl("branch_boot_w.png")..")",},
+    [14] = { ["desc"] = "分线栏状态标签", ["position"] = "relative", ["left"] = 24, ["top"] = 30, ["width"] = 52, ["height"] = 52,["background"] = "url("..branchImageData:GetIconUrl("branch_icon_g.png")..")",},
+    [15] = { ["desc"] = "分线栏文字",  ["position"] = "relative", ["left"] = 109, ["top"] = 32, ["width"] = 400, ["height"] = 60, ["color"] = "#813010", ["font-family"] = "zkklt", ["font-size"] = "48",},
+    [16] = { ["desc"] = "切换分线按钮文字",  ["position"] = "relative", ["left"] = 49, ["top"] = 26, ["width"] = 199, ["height"] = 41,["background"] = "url("..branchImageData:GetIconUrl("branch_icon_g_mat.png")..")",},
 }
-
--- init default value
-function ChooseBranch:OnInit()
-    
-end
 
 function ChooseBranch:GetHTMLStyleStr(index)
     local htmlTable = ChooseBranch.HTMLStyleData[index]
@@ -56,8 +79,13 @@ function ChooseBranch:GetHTMLStyleStr(index)
     return styleStr
 end
 
-function ChooseBranch:PlayAnim()
+function ChooseBranch:changeBranch(index)
+    ChooseBranch.currChooseBranch = index
+    -- ChooseBranch:ShowPage(true)
+end
 
+function ChooseBranch:getBranchName(nameId)
+    return ChooseBranch.branchNameTalbe[nameId]
 end
 
 -- 当且仅当bShow为false时为关闭页面

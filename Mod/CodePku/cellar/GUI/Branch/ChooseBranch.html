@@ -13,10 +13,11 @@ Path:"Mod/CodePku/cellar/GUI/Branch/ChooseBranch.html"
 
 <body>
 <pe:mcml>
-<script refresh="false" type="text/npl" src="ChooseBranch.lua">
-<![CDATA[
+<script refresh="false" type="text/npl" src="ChooseBranch.lua"><![CDATA[
 NPL.load("(gl)Mod/CodePku/cellar/GUI/Branch/ChooseBranch.lua")
-local ChooseBranch = commonlib.gettable("Mod.CodePku.GUI.ChooseBranch")
+ChooseBranch = commonlib.gettable("Mod.CodePku.GUI.ChooseBranch")
+
+branchStateTable = ChooseBranch.branchStateTable
 
 function GetStyleStr(index)
     return ChooseBranch:GetHTMLStyleStr(index)
@@ -39,21 +40,21 @@ function OnClose()
     Page:CloseWindow()
 end
 
-function GetBranchData(index)
-    return {{["isSelected"] = false}}
+function ChangeBranch(name)
+    local index = tonumber(name)
+    ChooseBranch:changeBranch(index)
+    Page:Refresh(0.01)
 end
 
-function ChangeBranch()
-
+function GetBranchName(nameId)
+    return ChooseBranch:getBranchName(nameId)
 end
-
 
 ]]></script>
 <style type="text/mcss">
 
 </style>
 <pe:container alignment="_lt" width="1920" height="1080">
-    <pe:div onclick="OnClose" style="position: absolute;top: 0;left: 0; width: 1920; height: 1080; background-color: #00000080;"></pe:div>
     <pe:div name="branch_bg" style="<%=GetStyleStr(1)%>">
         <pe:div onclick="PlayAnim" style="<%=GetStyleStr(4)%>"></pe:div>
         <pe:div style="<%=GetStyleStr(6)%>"></pe:div>
@@ -63,29 +64,32 @@ end
         <pe:div style="<%=GetStyleStr(9)%>"><%=L"流畅"%></pe:div>
         <pe:div style="<%=GetStyleStr(10)%>"><%=L"选择分线"%></pe:div>
 
-        
-        <pe:div style="<%=GetStyleStr(11)%>">
-            <pe:gridview DataSource="<%=GetBranchData()%>" CellPadding="32" ItemsPerLine="1">
-                <Columns>
-                    <pe:if condition="<%=Eval('isSelected') == true%">>
-                        <pe:div style="<%=GetStyleStr(13)">
-                            <pe:div ClickThrough="true" style="<%=GetStyleStr(14)"></pe:div>
-                            <pe:div ClickThrough="true" style="<%=GetStyleStr(15)"></pe:div>
-                        </pe:div>
-                    </pe:if>
-                    <pe:if condition="<%=Eval('isSelected') ~= true%">>
-                        <pe:div onclick="ChangeBranch" style="<%=GetStyleStr(12)">
-                            <pe:div ClickThrough="true" style="<%=GetStyleStr(14)"></pe:div>
-                            <pe:div ClickThrough="true" style="<%=GetStyleStr(15)"></pe:div>
-                        </pe:div>
-                    </pe:if>
-                </Columns>
-            </pe:gridview>
-        </pe:div>
+        <pe:gridview style="<%=GetStyleStr(11)%>"
+            DataSource='<%= branchStateTable %>' CellPadding="0" ItemsPerLine="1" RememberScrollPos="true"
+            VerticalScrollBarStep="25" VerticalScrollBarOffsetX="8" DefaultNodeHeight="107">
+            <Columns>
+                <pe:if condition="<%= Eval('index') ~= ChooseBranch.currChooseBranch %>">
+                    <div name='<%=Eval("index")%>' onclick="ChangeBranch" style="<%=GetStyleStr(12)%>">
+                        <div style="<%=GetStyleStr(15)%>"><%= GetBranchName(Eval('nameId')) %></div>
+                        <div style="<%=GetStyleStr(14)%>"></div>
+                    </div>
+                </pe:if>
+                <pe:if condition="<%= Eval('index') == ChooseBranch.currChooseBranch %>">
+                    <div style="<%=GetStyleStr(13)%>">
+                        <div style="<%=GetStyleStr(15)%>"><%= GetBranchName(Eval('nameId')) %></div>
+                        <div style="<%=GetStyleStr(14)%>"></div>
+                    </div>
+                </pe:if>
+            </Columns>
+        </pe:gridview>
+    
     </pe:div>
     
     <pe:div name="exitBtn" onclick="OnClose" style="<%=GetStyleStr(2)%>"></pe:div>
-    <pe:div name="chooseBranchBtn" onclick="OnClose" style="<%=GetStyleStr(3)%>"></pe:div>
+    <pe:div name="chooseBranchBtn" onclick="OnClose" style="<%=GetStyleStr(3)%>">
+        <pe:div style="<%=GetStyleStr(16)%>"></pe:div>
+    </pe:div>
+
 </pe:container>
 </pe:mcml>
 </body>
