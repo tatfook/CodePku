@@ -183,7 +183,7 @@ function AccountUp.ShowPage()
         enable_esc_key = true,
         alignment="_ct",
         left = -483,
-        top = -285,
+        top = -360,
         width = 936,
         height = 721,
         zorder = 32,

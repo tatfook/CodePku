@@ -66,7 +66,7 @@ function AccountUpTips:ShowEditNameTips()
         enable_esc_key = true,
         alignment="_ct",
         left = -960,
-        top = -540,
+        top = -510,
         width = 1920,
         height = 1080,
         zorder = 31,
