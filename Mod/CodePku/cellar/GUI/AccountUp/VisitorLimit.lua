@@ -8,7 +8,20 @@ local params = {
     title = "标题",
     content = "提示内容",
 }
-VisitorLimit:CheckStatus(params);
+VisitorLimit:CheckStatus(params);       |return true or false like isVisitor
+
+代码方块内精品课权限通知推荐用法：
+    local isVisitor = commonlib.getfield("System.User.isVisitor")
+    if isVisitor then
+        local VisitorLimit = NPL.load("(gl)Mod/CodePku/cellar/GUI/AccountUp/VisitorLimit.lua");
+        local params = {
+            title = "标题",
+            content = "提示内容",
+        }
+        VisitorLimit:CheckStatus(params);
+    else
+        cmd("/connectCodePku 世界ID")
+    end
 -----------------------------------------------
 ]]
 
