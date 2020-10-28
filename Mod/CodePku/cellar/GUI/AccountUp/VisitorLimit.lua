@@ -45,6 +45,10 @@ end
 
 -- 权限提醒弹窗
 function VisitorLimit:ShowVisitorLimitPage()
+    if VisitorLimit.PageShowed then
+        return
+    end
+    VisitorLimit.PageShowed = true
     local params = {
         url="Mod/CodePku/cellar/GUI/AccountUp/VisitorLimit.html",
         alignment="_lt", left = 0, top = 0, width = 1920 , height = 1080, zorder = 31

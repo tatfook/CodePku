@@ -25,6 +25,16 @@ function StartEditWorld()
 end
 
 function SaveAndExitEditWorld()
+    local isVisitor = commonlib.getfield("System.User.isVisitor")
+    if isVisitor then
+        local VisitorLimit = NPL.load("(gl)Mod/CodePku/cellar/GUI/AccountUp/VisitorLimit.lua");
+        local params = {
+            title = "权限提醒",
+            content = "你还没注册哦，等下搭建完了保存不了哦！快去注册来和玩仔一决高下吧！",
+        }
+        VisitorLimit:CheckStatus(params);
+        return
+    end
     LOG.std(nil, "MainUIButtons_home_window", "SaveAndExitEditWorldBtn", "clicked")
     HomeManage:SaveHome()
     Page:Refresh()
