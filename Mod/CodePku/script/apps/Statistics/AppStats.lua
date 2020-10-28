@@ -22,11 +22,12 @@ function AppStats:GetDeviceUUID()
     if not deviceData.softwareUUID or
        not deviceData.paracraftDir or
        deviceData.paracraftDir ~= currentParacraftDir then
+        
         deviceData.paracraftDir = ParaIO.GetWritablePath()
-        deviceData.softwareUUID = System.Encoding.guid.uuid()
+        deviceData.softwareUUID = System.Encoding.guid.uuid() .. '-' .. os.time();
         GameLogic.GetPlayerController():SaveLocalData("DeviceData", deviceData, true)
     end
-    -- local machineID = ParaEngine.GetAttributeObject():GetField("MachineID","")
+    
     return deviceData.softwareUUID;
 end
 

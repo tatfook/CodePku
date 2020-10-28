@@ -83,6 +83,15 @@ function HomeManage:GetHomeWorld()
         end
         GameLogic.GetFilters():apply_filters("TaskSystemList", {type = "home"}); -- 进入家园区后，触发任务系统计数
         local world = RemoteWorld.LoadFromHref(url, "self")
+        local myHouseId = (response.data.my_house and response.data.my_house.id) or 0;
+        local templateKpId = (response.data.default_house and response.data.default_house.keepwork_project_id) or 0;
+        
+        commonlib.setfield("System.Codepku.MyHouse", {
+            id = myHouseId,
+            template_kp_id = templateKpId
+        });
+        echo("set System.Codepku.MyHouse: ")
+        echo(System.Codepku.MyHouse)
         LoadWorld(world, 'auto')
     end)
 end
@@ -169,7 +178,10 @@ function HomeManage:UploadHomeWorld(zipfile)
     end
     local zipFileName = zipfile:match("[%w%s_]*.zip$")
     
-    local function uploadSucceed(data, err)        
+    local function uploadSucceed(data, err)     
+        echo(data)
+        local houseId = (data and data.data and data.data.id) or 0;
+        commonlib.setfield("System.Codepku.MyHouse.id", houseId);
         GameLogic.AddBBS("CodeGlobals", L"世界上传成功", 3000, "#00FF00");
     end
     local function uploadFailed(data, err)        

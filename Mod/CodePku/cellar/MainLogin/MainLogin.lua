@@ -166,7 +166,7 @@ function MainLogin:LoginAction(methodIndex)
         return false
     end
 
-    local visitor_id = MainLogin:GetVisitorUUID()
+    local visitor_id = MainLogin:CurrentVisitorId()
     local app_market = ParaEngine.GetAppCommandLineByParam("app_market", nil)
     local account = MainLoginPage:GetValue("account")
     
@@ -452,11 +452,23 @@ function MainLogin:GetVisitorUUID()
 
     UUIDData.machineID = machineID
     GameLogic.GetPlayerController():SaveLocalData("UUIDData", UUIDData, true)
-    return UUIDData.softwareUUID .. "-" .. machineID
-    
+    return UUIDData.softwareUUID .. "-" .. machineID    
     -- LOG.std(nil, "MainLogin", "GetDeviceUUID", "UUIDData.softwareUUID = %s , UUIDData.machineID = %s", tostring(UUIDData.softwareUUID), tostring(UUIDData.machineID))    
 end
 
+function MainLogin:CurrentVisitorId()
+    local UUIDData = GameLogic.GetPlayerController():LoadLocalData("UUIDData", {}, true)
+    local currentParacraftDir = ParaIO.GetWritablePath()    
+    
+    if (UUIDData.softwareUUID and UUIDData.paracraftDir and UUIDData.paracraftDir == currentParacraftDir) then
+        local machineID = UUIDData.machineID or "";
+        local visitorUUId = UUIDData.softwareUUID .. "-" .. machineID;
+        if visitorUUId ~= 'uuid-' and visitorUUId ~= 'uuid--' then 
+            return visitorUUId;
+        end
+    end
+    return nil;
+end
 
 function MainLogin:getMobileCode()
     local MainLoginPage = Mod.CodePku.Store:Get("page/MainLogin")
