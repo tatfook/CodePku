@@ -100,6 +100,11 @@ function EditNamePage:ChangeNickname(new_nickname)
 			commonlib.setfield("System.User.nickName", result)
 			UserInfoPage.name = new_nickname
 			GameLogic.AddBBS("CodeGlobals", L"设置新昵称成功", 3000, "#00FF00");
+			local msg = {
+				action = "UpdateNickName",
+				nickname = UserInfoPage.name,
+			}
+			GameLogic.GetFilters():apply_filters("ggs", msg);
 			EditNamePage.CallingServer = false
 			EditNamePage:OnCancelBtnClicked()
 			UserInfoPage.ShowSettingPopupUI:Refresh(0)
