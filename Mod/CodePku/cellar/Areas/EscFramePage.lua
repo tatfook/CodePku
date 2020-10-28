@@ -1,40 +1,21 @@
 local AdaptWindow = commonlib.gettable("Mod.CodePku.GUI.Window.AdaptWindow")
-
-local EscFramePage = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.EscFramePage");
-
 local CodePkuEscFramePage = NPL.export()
+local escFrameImageData = NPL.load("(gl)Mod/CodePku/cellar/imageLuaTable/escFrameImageData.lua")
+local common1ImageData = NPL.load("(gl)Mod/CodePku/cellar/imageLuaTable/common1ImageData.lua")
+
+
+function CodePkuEscFramePage:GetIcon(type, index)
+    if type == 1 then
+        return common1ImageData:GetIconUrl(index)
+    elseif type == 2 then
+        return escFrameImageData:GetIconUrl(index)
+    end
+end
 
 function CodePkuEscFramePage:ShowPage(bShow)
-    NPL.load("(gl)script/apps/Aries/Creator/Game/Areas/DesktopMenuPage.lua");
-    local DesktopMenuPage = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop.DesktopMenuPage");
-            
-    local bActivateMenu = true;
-    if(bShow ~= false) then
-        if(page and page:IsVisible()) then
-            bActivateMenu = false;
-        end
-        DesktopMenuPage.ActivateMenu(bActivateMenu);
-    end
-    EscFramePage.bForceHide = bShow == false;
     local params = {
-        -- url = "Mod/CodePku/cellar/Areas/EscFramePage.html", 
-        -- name = "EscFramePage.ShowPage", 
-        -- DestroyOnClose = true,
-        -- allowDrag = false,
-        -- enable_esc_key = true,
-        -- click_through = false, 
-        -- zorder = 20,
-        -- alignment = "_ct",
-        -- x = -1920/2,
-        -- y = -1080/2,
-        -- width = 1920,
-        -- height = 1080,
-        -- style = CommonCtrl.WindowFrame.ContainerStyle,
-        -- app_key = MyCompany.Aries.Creator.Game.Desktop.App.app_key, 
-        -- directPosition = true,
-        -- bToggleShowHide=true, 
         url = "Mod/CodePku/cellar/Areas/EscFramePage.html", 
-        name = "EscFramePage.ShowPage", 
+        name = "EscFramePage.ShowPage",
         isShowTitleBar = false,
         DestroyOnClose = true,
         bToggleShowHide=true, 
@@ -43,27 +24,19 @@ function CodePkuEscFramePage:ShowPage(bShow)
         enable_esc_key = true,
         bShow = bShow,
         click_through = false, 
-        zorder = -1,
+        zorder = 1000,
         app_key = MyCompany.Aries.Creator.Game.Desktop.App.app_key, 
         directPosition = true,
-        align = "_ct",
-        x = -600/2,
-        y = -374/2,
+        align = "_lt",
+        x = 0,
+        y = 0,
         width = 1920,
         height = 1080,
-            -- x = -600/2,
-            -- y = -374/2,
-            -- width = 600,
-            -- height = 374,
-        };
-    -- local window = AdaptWindow:QuickWindow(params)
-
-    System.App.Commands.Call("File.MCMLWindowFrame", params);
-    if(bShow ~= false) then
-        params._page.OnClose = function()
-            if(not EscFramePage.bForceHide) then
-                DesktopMenuPage.ActivateMenu(false);
-            end
-        end;
+    };
+    if CodePkuEscFramePage.window then
+        CodePkuEscFramePage.window:CloseWindow()
+        CodePkuEscFramePage.window = nil
+    else
+        CodePkuEscFramePage.window = AdaptWindow:QuickWindow(params)
     end
 end

@@ -163,14 +163,14 @@ CommonFunc.OpenUrl = function (url, withToken, screenOrientation)
         if type(params) == "table" then
             local fields = {}
             for key,value in pairs(params) do
-            local keyString = urlencode(stringifyPrimitive(key)) .. eq
-            if type(value) == "table" then
-                for _, v in ipairs(value) do
-                table.insert(fields, keyString .. urlencode(stringifyPrimitive(v)))
+                local keyString = urlencode(stringifyPrimitive(key)) .. eq
+                if type(value) == "table" then
+                    for _, v in ipairs(value) do
+                    table.insert(fields, keyString .. urlencode(stringifyPrimitive(v)))
+                    end
+                else
+                    table.insert(fields, keyString .. urlencode(stringifyPrimitive(value)))
                 end
-            else
-                table.insert(fields, keyString .. urlencode(stringifyPrimitive(value)))
-            end
             end
             return table.concat(fields, sep)
         end
