@@ -61,20 +61,24 @@
                 end
 
                 function logout()
+                    GameLogic.GetFilters():apply_filters("ClickStatistics", {type = "login_switch"}); -- 点击切换账号，触发操作数据统计计数
                     UserConsole:Logout()
                 end
 
                 list = Notice:GetNoticeList()
 
                 function ClickNotice()
+                    GameLogic.GetFilters():apply_filters("ClickStatistics", {type = "login_Notice"}); -- 点击公告，触发操作数据统计计数
                     Notice:ShowPage()
                 end
 
                 function ClickCommunity()
+                    GameLogic.GetFilters():apply_filters("ClickStatistics", {type = "login_community"}); -- 点击社区，触发操作数据统计计数
                     ParaGlobal.ShellExecute("open", L"http://kids.wanxueshijie.com/", "", "", 1)
                 end
 
                 function ClickQQGroup()
+                    GameLogic.GetFilters():apply_filters("ClickStatistics", {type = "login_qq"}); -- 点击Q群，触发操作数据统计计数
                     ParaGlobal.ShellExecute("open", Mod.CodePku.BasicConfigTable.qq_group_link, "", "", 1)
                 end
             ]]></script>

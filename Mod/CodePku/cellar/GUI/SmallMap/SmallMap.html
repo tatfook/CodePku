@@ -22,18 +22,23 @@ end
 
 function ClickTo(name)
     if name == "teach" then
+        GameLogic.GetFilters():apply_filters("ClickStatistics", {type = "map_teaching"}); -- 点击教学区，触发操作数据统计计数
         TeachCourses.IsCameFromSmallMap = true
         FastEntrence:ShowPage(1)
         CommonFunc.GetServerMoney({FastEntrence.page})
         OnClose()
     elseif name == "compete" then
+        GameLogic.GetFilters():apply_filters("ClickStatistics", {type = "map_sports"}); -- 点击竞技区，触发操作数据统计计数
         FastEntrence:ShowPage(2)
         OnClose()
     elseif name == "topic" then
+        GameLogic.GetFilters():apply_filters("ClickStatistics", {type = "map_special"}); -- 点击专题区，触发操作数据统计计数
         FastEntrence:ShowPage(3)
     elseif name == "building" then
+        GameLogic.GetFilters():apply_filters("ClickStatistics", {type = "map_home"}); -- 点击家园区，触发操作数据统计计数
         MainPopup:ShowPage("TPpopup", "家园区", 14293)
     elseif name == "main" then
+        GameLogic.GetFilters():apply_filters("ClickStatistics", {type = "map_hall"}); -- 点击大厅，触发操作数据统计计数
         MainPopup:ShowPage("TPpopup", "玩学大厅-大门", 1)
     end
 end
