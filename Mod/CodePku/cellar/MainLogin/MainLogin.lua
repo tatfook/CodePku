@@ -166,7 +166,6 @@ function MainLogin:LoginAction(methodIndex)
         return false
     end
 
-    local visitor_id = MainLogin:CurrentVisitorId()
     local app_market = ParaEngine.GetAppCommandLineByParam("app_market", nil)
     local account = MainLoginPage:GetValue("account")
     
@@ -244,6 +243,7 @@ function MainLogin:LoginAction(methodIndex)
     end
 
     if (methodIndex == 1) then
+        local currentVisitorId = MainLogin:CurrentVisitorId()
         CodePkuServiceSession:Login(
             account,
             verifyCode,
@@ -274,6 +274,7 @@ function MainLogin:LoginAction(methodIndex)
             end
         )
     elseif (methodIndex == 3) then
+        local visitor_id = MainLogin:GetVisitorUUID();
         CodePkuServiceSession:QuickLogin(
             visitor_id,
             app_market,
