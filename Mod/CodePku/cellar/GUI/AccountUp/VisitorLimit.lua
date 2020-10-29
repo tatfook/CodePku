@@ -17,6 +17,7 @@ VisitorLimit:CheckStatus(params);       |return true or false like isVisitor
         local params = {
             title = "标题",
             content = "提示内容",
+            source = 1(int，代表从不同的入口调用，不参与数据统计就不传)
         }
         VisitorLimit:CheckStatus(params);
     else
@@ -47,7 +48,7 @@ function VisitorLimit:CheckStatus(params)
         -- 是游客
         VisitorLimit.PageTitle = (params or {}).title or "提示"
         VisitorLimit.PageContent = (params or {}).content or "你现在是游客账号，暂不支持该操作，是否立即升级账号？"
-
+        VisitorLimit.source = (params or {}).source
         VisitorLimit:ShowVisitorLimitPage()
         return true
     else
@@ -67,4 +68,11 @@ function VisitorLimit:ShowVisitorLimitPage()
         alignment="_lt", left = 0, top = 0, width = 1920 , height = 1080, zorder = 31
     };
     VisitorLimit.ui = AdaptWindow:QuickWindow(params)
+end
+
+-- 预设数据销毁，避免下次开启传入错误参数
+function VisitorLimit:destroy()
+    VisitorLimit.PageTitle = nil
+    VisitorLimit.PageContent = nil
+    VisitorLimit.source = nil
 end
