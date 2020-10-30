@@ -14,6 +14,9 @@
 
     AccountUp.isClickedGetPhoneCaptcha = false
 
+    local VisitorLimit = NPL.load("(gl)Mod/CodePku/cellar/GUI/AccountUp/VisitorLimit.lua");
+    
+
     -- 获取图片 tpye  1 通用；2 ESC专用
     function GetIcons(type, index)
         return AccountUp:GetIconPath(type, index)
@@ -21,10 +24,12 @@
 
     function OnSureBtnClicked()
         AccountUp.OnSureBtnCLicked(Page)
+        VisitorLimit:destroy()
     end
 
     function OnCancelBtnClicked()
         AccountUp.OnCancelBtnClicked()
+        VisitorLimit:destroy()
     end
 
     function OnGetMobileCodeBtnClicked() 

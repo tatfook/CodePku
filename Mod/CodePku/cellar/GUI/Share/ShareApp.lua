@@ -32,31 +32,17 @@ local ShareApp = NPL.export();
 local request = NPL.load("(gl)Mod/CodePku/api/BaseRequest.lua")
 local AdaptWindow = commonlib.gettable("Mod.CodePku.GUI.Window.AdaptWindow")
 local Share = NPL.load("(gl)Mod/CodePkuCommon/util/Share.lua")
+local shareImageData = NPL.load("(gl)Mod/CodePku/cellar/imageLuaTable/shareImageData.lua")
 
-ShareApp.icons_path = "codepku/image/textures/share_app/shareapp.png"    -- 雪碧图
+
 ShareApp.pcpopup_path = "codepku/image/textures/share_app/pcpopup.png"    -- PC端展示弹窗
 ShareApp.pccancel_path = "codepku/image/textures/share_app/pccancel.png"    -- PC端取消按钮
 
-ShareApp.icons = {
-    [1] = {url = ShareApp.icons_path, left=107, top=110, width=101, height=102, desc = '红叉'},
-    [2] = {url = ShareApp.icons_path, left=365, top=66, width=395, height=193, desc = '分享按钮'},
-    [3] = {url = ShareApp.icons_path, left=101, top=365, width=1423, height=852, desc = '背景'},
-}
+
 
 -- 获取对应图标
-function ShareApp.GetIconPathStr(id)
-    local path=""
-    id = tonumber(id)
-    path = path .. ShareApp.icons[id].url
-    if ShareApp.icons[id].left then
-      path = path..'#'
-      path = path..tostring(ShareApp.icons[id].left)
-      path = path..' '..tostring(ShareApp.icons[id].top)
-      path = path..' '..tostring(ShareApp.icons[id].width)
-      path = path..' '..tostring(ShareApp.icons[id].height)
-    end
-    LOG.std(nil, "ShareApp", "GetIconPathStr", "path = %s", path)
-    return path
+function ShareApp.GetIconPathStr(index)
+    return shareImageData:GetIconUrl(index)
 end
 
 -- 获取海报
