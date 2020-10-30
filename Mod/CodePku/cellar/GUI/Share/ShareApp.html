@@ -23,8 +23,8 @@ function OnclickClose()
     Page:CloseWindow()
 end
 
-function GetIcon(id)
-    return ShareApp.GetIconPathStr(id)
+function GetIcon(index)
+    return ShareApp.GetIconPathStr(index)
 end
 
 function GetUrl()
@@ -35,14 +35,15 @@ end
 </script>
 <pe:container alignment="_lt" width="1920" height="1080" style="background-color: #00000083;">
     <!-- 背景 -->
-    <div style="<%=format('position: relative; left: 322; top: 66; width: 1423; height: 852; background:url(%s);', GetIcon(3))%>">
+    <div style="<%=format('position: relative; left: 42; top: 0; width: 1816; height: 1072; background:url(%s);', GetIcon('sharebot.png'))%>">
         <!-- 海报 -->
-        <div style="<%=format('position: relative; left: 253; top: 172; width: 865; height: 486; background:url(%s);', GetUrl())%>"></div>
+        <div style="<%=format('position: relative; left: 270; top: 113; width: 1378; height: 767; background:url(%s);', GetUrl())%>"></div>
     </div>
     <!-- 关闭 -->
-    <div onclick="OnclickClose" style="<%=format('position: relative; left: 1569; top: 96; width: 101; height: 102; background:url(%s);', GetIcon(1))%>"></div>
+    <div style="<%=format('position: relative; left: 1637; top: 16; width: 278; height: 175; background:url(%s);', GetIcon('tape.png'))%>"></div>
+    <div onclick="OnclickClose" style="<%=format('position: relative; left: 1741; top: 19; width: 101; height: 102; background:url(%s);', GetIcon('share_x.png'))%>"></div>
     <!-- 分享按钮 -->
-    <div onclick="ClickShare" style="<%=format('position: relative; left: 822; top: 798; width: 395; height: 193; background:url(%s);', GetIcon(2))%>"></div>
+    <div onclick="ClickShare" style="<%=format('position: relative; left: 779; top: 882; width: 395; height: 193; background:url(%s);', GetIcon('share_btn.png'))%>"></div>
     
 
 
