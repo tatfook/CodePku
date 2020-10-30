@@ -12,6 +12,7 @@ TaskSettlement = NPL.load("(gl)Mod/CodePku/cellar/GUI/TaskSettlement/TaskSettlem
 local ShareApp = NPL.load("(gl)Mod/CodePku/cellar/GUI/Share/ShareApp.lua");
 
 function TaskSettlement.Share()
+    GameLogic.GetFilters():apply_filters("ClickStatistics", {type = 43}); -- 教学区确认分享，触发操作数据统计计数
     TaskSettlement.ClosePage()
     ShareApp:ShowPage(2)
 end

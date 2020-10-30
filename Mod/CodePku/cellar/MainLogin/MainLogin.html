@@ -40,7 +40,7 @@
         end
 
         function login()
-            GameLogic.GetFilters():apply_filters("ClickStatistics", {type = "login_signin"}); -- 点击登录，触发操作数据统计计数
+            GameLogic.GetFilters():apply_filters("ClickStatistics", {type = 3}); -- 点击登录，触发操作数据统计计数
             MainLogin:LoginAction(1)
         end
         
@@ -50,7 +50,7 @@
 
         function quicklogin()
             LOG.std(nile, "MainLogin.html", "quickLogin", "Enter")
-            GameLogic.GetFilters():apply_filters("ClickStatistics", {type = "login_tourist"}); -- 点击游客登录，触发操作数据统计计数
+            GameLogic.GetFilters():apply_filters("ClickStatistics", {type = 2}); -- 点击游客登录，触发操作数据统计计数
             MainLogin:LoginAction(3)
         end
 
@@ -65,7 +65,7 @@
         local isClickedGetPhoneCaptcha = false
 
         function get_mobile_code()   
-            GameLogic.GetFilters():apply_filters("ClickStatistics", {type = "login_code"}); -- 点击登录页获取验证码，触发操作数据统计计数
+            GameLogic.GetFilters():apply_filters("ClickStatistics", {type = 1}); -- 点击登录页获取验证码，触发操作数据统计计数
             if #page:GetValue("account") ~= 11 then
                 GameLogic.AddBBS(nil, L"手机号码位数不对", 3000, "255 0 0", 21)
                 return false
@@ -149,7 +149,7 @@
                 MainLogin.check = false;
             else
                 MainLogin.check = true
-                GameLogic.GetFilters():apply_filters("ClickStatistics", {type = "login_agree"}); -- 点击服务协议同意选项，触发操作数据统计计数
+                GameLogic.GetFilters():apply_filters("ClickStatistics", {type = 4}); -- 点击服务协议同意选项，触发操作数据统计计数
             end
             Page:Refresh(0)
         end
@@ -162,7 +162,7 @@
         MainLogin.login_method_index = 1;
 
         function OnChangeLoginMethod()
-            GameLogic.GetFilters():apply_filters("ClickStatistics", {type = "login_password"}); -- 点击密码登录，触发操作数据统计计数
+            GameLogic.GetFilters():apply_filters("ClickStatistics", {type = 5}); -- 点击密码登录，触发操作数据统计计数
             local accountNum = Page:GetValue('account')
             MainLogin.accountNum = accountNum  --记录输入的号码,切换登录方式保留
             MainLogin.verifyCode = ""

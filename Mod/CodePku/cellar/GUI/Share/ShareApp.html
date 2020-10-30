@@ -14,6 +14,7 @@ local page = document:GetPageCtrl()
 ShareApp:GetPoster(ShareApp.poster_id, page)
 
 function ClickShare()
+    GameLogic.GetFilters():apply_filters("ClickStatistics", {type = 76}); -- 点击首页确认分享，触发操作数据统计计数
     -- 数字1对应主界面海报
     ShareApp:fire(ShareApp.poster_id)
 end

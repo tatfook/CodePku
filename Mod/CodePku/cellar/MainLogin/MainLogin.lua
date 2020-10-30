@@ -55,7 +55,6 @@ function MainLogin:Show(index)
                     if PWDInfo and PWDInfo.account then
                         SessionsData:RemoveSession(PWDInfo.account)
                     end
-                    echo("-----MainLogin1-----")
                     local params = {url = "Mod/CodePku/cellar/MainLogin/MainLogin.html", 
                         name = "MainLogin", 
                         isShowTitleBar = false,
@@ -80,7 +79,6 @@ function MainLogin:Show(index)
         else
             IsPassword = 1
         end
-        echo("-----MainLogin2-----")
         local params = {
             [1] = {url = "Mod/CodePku/cellar/MainLogin/MainLogin.html", 
                     name = "MainLogin", 

@@ -24,7 +24,7 @@ local AdaptWindow = commonlib.gettable("Mod.CodePku.GUI.Window.AdaptWindow");
 local AccountUp = commonlib.gettable("Mod.CodePku.AccountUp")
 
 AccountUp.ui = nil
-
+AccountUp.track_scene = 0
 -- 获取图片 tpye  1 通用；2 游客升级
 function AccountUp:GetIconPath(type, index)
     if type == 1 then
@@ -36,6 +36,7 @@ end
 
 function AccountUp.OnSureBtnCLicked(page)
     LOG.std(nil, "AccountUp", "OnSureBtnCLicked", "Enter")
+    GameLogic.GetFilters():apply_filters("ClickStatistics", AccountUp.GetStaticsData(3)); -- 点击确定升级，触发操作数据统计计数
     if not AccountUp.mobileToken then
         GameLogic.AddBBS(nil, L"请先获取验证码", 3000, "255 0 0", 21)
     end
@@ -87,6 +88,44 @@ function AccountUp.OnSureBtnCLicked(page)
             GameLogic.AddBBS("CodeGlobals", response.data.message, 3000, "#00FF00");
         end		
     end)
+end
+
+--[[
+    @param flag 1弹出页面 | 2下次升级 | 3这次升级 
+    track_scene： 1主界面呼出 | 2改名升级 | 3精品课程升级 | 4家园升级
+]]
+function AccountUp.GetStaticsData(flag)
+    if flag == 1 then
+        if AccountUp.track_scene == 1 then
+            return {type = 29}
+        elseif AccountUp.track_scene == 2 then
+            return {type = 38}
+        elseif AccountUp.track_scene == 3 then
+            return {type = 32}
+        elseif AccountUp.track_scene == 4 then
+            return {type = 35}
+        end
+    elseif flag == 2 then
+        if AccountUp.track_scene == 1 then
+            return {type = 31}
+        elseif AccountUp.track_scene == 2 then
+            return {type = 40}
+        elseif AccountUp.track_scene == 3 then
+            return {type = 34}
+        elseif AccountUp.track_scene == 4 then
+            return {type = 37}
+        end
+    elseif flag == 3 then
+        if AccountUp.track_scene == 1 then
+            return {type = 30}
+        elseif AccountUp.track_scene == 2 then
+            return {type = 39}
+        elseif AccountUp.track_scene == 3 then
+            return {type = 33}
+        elseif AccountUp.track_scene == 4 then
+            return {type = 36}
+        end
+    end
 end
 
 -- 获取手机验证码
@@ -153,6 +192,7 @@ function AccountUp.GetMobileCode( page )
 end
 
 function AccountUp.OnCancelBtnClicked()
+    GameLogic.GetFilters():apply_filters("ClickStatistics", AccountUp.GetStaticsData(2)); -- 点击取消升级，触发操作数据统计计数
     -- 关闭遮罩window
     if Feedback.BG then
         Feedback.BG:CloseWindow()
@@ -165,7 +205,13 @@ function AccountUp.OnCancelBtnClicked()
     EditBox:Property({"EmptyTextColor", "#888888", auto=true})
 end
 
-function AccountUp.ShowPage()
+--[[
+    @param track_scene: 1主界面呼出 | 2改名升级 | 3精品课程升级 | 4家园升级
+]]
+function AccountUp.ShowPage(track_scene)
+    AccountUp.track_scene = track_scene
+    GameLogic.GetFilters():apply_filters("ClickStatistics", AccountUp.GetStaticsData(1)); -- 打开升级页面，触发操作数据统计计数
+
     -- 打开之前先设置input标签的EmptyText文本颜色
     EditBox:Property({"EmptyTextColor", "#a35229", auto=true})
     if not Feedback.BG then
