@@ -10,9 +10,10 @@ local EntityMainPlayer = commonlib.gettable("Mod.CodePku.Online.Client.EntityMai
 -------------------------------------------------------
 ]]
 
+NPL.load("Mod/CodePku/online/client/EntityPlayerHelper.lua");
+local AppEntityPlayerHelper = commonlib.gettable("Mod.CodePku.Online.Client.EntityPlayerHelper");
+
 NPL.load("Mod/GeneralGameServerMod/Core/Client/EntityMainPlayer.lua");
-NPL.load("Mod/GeneralGameServerMod/App/Client/AppEntityPlayerHelper.lua");
-local EntityPlayerHelper = commonlib.gettable("Mod.GeneralGameServerMod.App.Client.AppEntityPlayerHelper");
 local EntityMainPlayer = commonlib.inherit(commonlib.gettable("Mod.GeneralGameServerMod.Core.Client.EntityMainPlayer"), commonlib.gettable('Mod.CodePku.Online.Client.EntityMainPlayer'))
 
 -- 获取玩家同步信息的频率  33 = 1s   tick = 30fps
@@ -24,14 +25,14 @@ end
 
 
 -- 构造函数
-function EntityMainPlayer:ctor()
-    self.EntityPlayerHelper = EntityPlayerHelper:new():Init(self, true);
+function EntityMainPlayer:ctor()    
+    self.appEntityPlayerHelper = AppEntityPlayerHelper:new():Init(self, true);
 
     GameLogic.GetFilters():add_filter("ggs", function(msg)
         if (type(msg) == "table" and msg.action == "UpdateUserInfo") then
             local userinfo = msg.userinfo;
-            self:SetSuperPlayerInfo({userinfo = userinfo});
-            self.EntityPlayerHelper:SetHeadOnDisplay();
+            self:SetSuperPlayerInfo({userinfo = userinfo});      
+            self.appEntityPlayerHelper:SetHeadOnDisplay();      
         end
         return msg;
     end);
@@ -39,7 +40,7 @@ end
 
 -- 设置玩家信息
 function EntityMainPlayer:SetPlayerInfo(playerInfo)
-    self.EntityPlayerHelper:SetPlayerInfo(playerInfo);
+    self.appEntityPlayerHelper:SetPlayerInfo(playerInfo);
 end
 
 -- 设置父类玩家信息

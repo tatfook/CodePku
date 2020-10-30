@@ -12,6 +12,7 @@ function GeneralGameClient:ctor()
 
     GameLogic.GetFilters():add_filter("ggs", function(msg)
         if (type(msg) == "table" and msg.action == "UpdateNickName") then
+            self.userinfo.username = msg.nickname;
             self.userinfo.nickname = msg.nickname;
         end
         return msg;

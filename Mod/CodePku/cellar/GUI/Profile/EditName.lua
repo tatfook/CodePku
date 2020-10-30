@@ -102,7 +102,7 @@ function EditNamePage:ChangeNickname(new_nickname)
 			UserInfoPage.name = new_nickname
 
 			GameLogic.GetFilters():apply_filters("ggs", {action = "UpdateNickName", nickname = new_nickname});
-			GameLogic.GetFilters():apply_filters("ggs", {action = "UpdateUserInfo", userinfo = {nickname = new_nickname}});
+			GameLogic.GetFilters():apply_filters("ggs", {action = "UpdateUserInfo", userinfo = {username = new_nickname,nickname = new_nickname}});
 
 			GameLogic.AddBBS("CodeGlobals", L"设置新昵称成功", 3000, "#00FF00");
 			-- local msg = {
