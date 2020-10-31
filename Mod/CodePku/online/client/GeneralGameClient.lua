@@ -1,7 +1,10 @@
 NPL.load("Mod/GeneralGameServerMod/Core/Client/GeneralGameClient.lua");
 NPL.load("Mod/CodePku/online/client/EntityOtherPlayer.lua");
 NPL.load("Mod/CodePku/online/client/EntityMainPlayer.lua");
+NPL.load("Mod/CodePku/online/client/NetClientHandler.lua");
 
+local NetClientHandler = commonlib.gettable("Mod.CodePku.Online.Client.NetClientHandler");
+local Packets = commonlib.gettable("Mod.GeneralGameServerMod.Core.Common.Packets");
 local EntityMainPlayer = commonlib.gettable("Mod.CodePku.Online.Client.EntityMainPlayer");
 local EntityOtherPlayer = commonlib.gettable("Mod.CodePku.Online.Client.EntityOtherPlayer");
 local GeneralGameClient = commonlib.inherit(commonlib.gettable("Mod.GeneralGameServerMod.Core.Client.GeneralGameClient"), commonlib.gettable("Mod.CodePku.Online.Client.GeneralGameClient"));
@@ -45,6 +48,19 @@ function GeneralGameClient:AddAssetsWhiteList()
     self.GetAssetsWhiteList().AddAsset("character/v6/02animals/Yangtuo/Yangtuo.x");
 end
 
+function GeneralGameClient:Debug(action, cmd_text)
+    action = string.lower(action or "");
+    local netHandler = self:GetWorldNetHandler();
+    if (not netHandler) then return end
+
+    if (action == "codepku") then
+        -- GameLogic.AddBBS(nil, L"测试ggs", 3000, "255 0 0", 21)
+        netHandler:AddToSendQueue(Packets.PacketGeneral:new():Init({action = "CodePKU", data = { cmd = "WorldInfo"}}));
+    else
+        self._super.Debug(self, action, cmd_text)
+    end
+end
+
 -- 获取主玩家类
 function GeneralGameClient:GetEntityMainPlayerClass()
     return EntityMainPlayer;
@@ -69,6 +85,11 @@ end
 -- 获取当前世界类型
 function GeneralGameClient:GetWorldType()
     return "World";
+end
+
+-- 获取网络处理类
+function GeneralGameClient:GetNetClientHandlerClass()
+    return NetClientHandler;
 end
 
 -- 初始化成单列模式
