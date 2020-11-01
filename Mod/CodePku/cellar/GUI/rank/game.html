@@ -22,6 +22,7 @@ RankPage.left_navig = {
 RankPage.game_navig = {
     [1] = {title = "单词爱跑酷", name = "parkour", game_id = 22,},
     [2] = {title = "华夏游学记", name = "monopoly", game_id = 7,},
+    [3] = {title = "站到最后", name = "standtoend", game_id = 273,},
 }
 RankPage.top_navig = {
     [1] = {title = "世 界", name = "world", index = 1},
@@ -100,6 +101,8 @@ function GetPosition()
         return '1293 273 130 120'
     elseif RankPage.left_navig_last_clicked == 2 then
         return '1130 278 130 120'
+    elseif RankPage.left_navig_last_clicked == 3 then
+        return '1293 278 130 120'
     end
 end
 
