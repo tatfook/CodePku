@@ -110,6 +110,7 @@ function ShareApp:GetStatisticData(id, e, flag)
             elseif platform == "WEIXIN_CIRCLE" then
                 data = {type = 83}
             end
+            GameLogic.GetFilters():apply_filters("ClickStatistics", data); -- 分享成功前，触发操作数据统计计数
         elseif id == 2 then --教学区
             if platform == "QQ" then
                 data = {type = 44}
@@ -120,6 +121,7 @@ function ShareApp:GetStatisticData(id, e, flag)
             elseif platform == "WEIXIN_CIRCLE" then
                 data = {type = 50}
             end
+            GameLogic.GetFilters():apply_filters("ClickStatistics", data); -- 分享成功前，触发操作数据统计计数
         elseif id == 111 or id == 113 or id == 114 then--单词爱跑酷结束弹出框
             if platform == "QQ" then
                 data = {type = 55}
@@ -130,6 +132,7 @@ function ShareApp:GetStatisticData(id, e, flag)
             elseif platform == "WEIXIN_CIRCLE" then
                 data = {type = 61}
             end
+            GameLogic.GetFilters():apply_filters("ClickStatistics", data); -- 分享成功前，触发操作数据统计计数
         elseif id == 121 or id == 123 or id == 124 then --游学记结束弹出框
             if platform == "QQ" then
                 data = {type = 66}
@@ -140,8 +143,8 @@ function ShareApp:GetStatisticData(id, e, flag)
             elseif platform == "WEIXIN_CIRCLE" then
                 data = {type = 72}
             end
+            GameLogic.GetFilters():apply_filters("ClickStatistics", data); -- 分享成功前，触发操作数据统计计数
         end
-        GameLogic.GetFilters():apply_filters("ClickStatistics", data); -- 分享成功前，触发操作数据统计计数
     elseif flag == 2 then
         local data = {}
         local data2 = {}
@@ -157,6 +160,8 @@ function ShareApp:GetStatisticData(id, e, flag)
             elseif platform == "WEIXIN_CIRCLE" then
                 data = {type = 84}
             end
+            GameLogic.GetFilters():apply_filters("ClickStatistics", data); -- 分享成功，触发操作数据统计计数
+            GameLogic.GetFilters():apply_filters("ClickStatistics", data2); -- 记录成功分享至某个平台的次数，触发操作数据统计计数
         elseif id == 2 then --教学区
             data2 = {type = 42}
             if platform == "QQ" then
@@ -168,6 +173,8 @@ function ShareApp:GetStatisticData(id, e, flag)
             elseif platform == "WEIXIN_CIRCLE" then
                 data = {type = 51}
             end
+            GameLogic.GetFilters():apply_filters("ClickStatistics", data); -- 分享成功，触发操作数据统计计数
+            GameLogic.GetFilters():apply_filters("ClickStatistics", data2); -- 记录成功分享至某个平台的次数，触发操作数据统计计数
         elseif id == 111 or id == 113 or id == 114 then--单词爱跑酷结束弹出框
             data2 = {type = 53}
             if platform == "QQ" then
@@ -179,6 +186,8 @@ function ShareApp:GetStatisticData(id, e, flag)
             elseif platform == "WEIXIN_CIRCLE" then
                 data = {type = 62}
             end
+            GameLogic.GetFilters():apply_filters("ClickStatistics", data); -- 分享成功，触发操作数据统计计数
+            GameLogic.GetFilters():apply_filters("ClickStatistics", data2); -- 记录成功分享至某个平台的次数，触发操作数据统计计数
         elseif id == 121 or id == 123 or id == 124 then --游学记结束弹出框
             data2 = {type = 64}
             if platform == "QQ" then
@@ -190,10 +199,9 @@ function ShareApp:GetStatisticData(id, e, flag)
             elseif platform == "WEIXIN_CIRCLE" then
                 data = {type = 73}
             end
+            GameLogic.GetFilters():apply_filters("ClickStatistics", data); -- 分享成功，触发操作数据统计计数
+            GameLogic.GetFilters():apply_filters("ClickStatistics", data2); -- 记录成功分享至某个平台的次数，触发操作数据统计计数
         end
-
-        GameLogic.GetFilters():apply_filters("ClickStatistics", data); -- 分享成功，触发操作数据统计计数
-        GameLogic.GetFilters():apply_filters("ClickStatistics", data2); -- 记录成功分享至某个平台的次数，触发操作数据统计计数
     end
 end
 

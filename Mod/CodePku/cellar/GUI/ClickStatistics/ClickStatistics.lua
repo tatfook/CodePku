@@ -34,6 +34,7 @@ ClickStatistics.ClickInfo={
     [9] = {track_id= 8, track_scene =0, track_type=0, }, --点击社区
     [10] = {track_id= 9, track_scene =0, track_type=0, }, --点击QQ群
 
+    -- 顶部功能键栏
     [11] = {track_id= 10, track_scene=9, track_type=0, }, --点击主界面地图
     [12] = {track_id= 11, track_scene=9, track_type=0, }, --点击主界面防卡死
     [13] = {track_id= 12, track_scene=9, track_type=0, }, --点击主界面社区
@@ -42,12 +43,14 @@ ClickStatistics.ClickInfo={
     [16] = {track_id= 15, track_scene=9, track_type=0, }, --点击主界面我的家长
     [17] = {track_id= 16, track_scene=9, track_type=0, }, --点击弹出主界面点击分享（弃用,改用[74]）
 
+    -- 底部功能键栏
     [18] = {track_id= 17, track_scene=8, track_type=0, }, --点击主界面角色详情
     [19] = {track_id= 18, track_scene=8, track_type=0, }, --点击主界面好友
     [20] = {track_id= 19, track_scene=8, track_type=0, }, --点击主界面排行榜
     [21] = {track_id= 20, track_scene=8, track_type=0, }, --点击主界面签到
     [22] = {track_id= 21, track_scene=8, track_type=0, }, --点击主界面任务
-    [23] = {track_id= 22, track_scene=8, track_type=0, }, --点击主弹出界面升级账号 (弃用)
+
+    [23] = {track_id= 22, track_scene=8, track_type=0, }, --点击主弹出界面升级账号 (弃用，改用[29])
 
     [24] = {track_id= 23, track_scene=2, track_type=0, }, --点击地图教学区
     [25] = {track_id= 24, track_scene=2, track_type=0, },--点击地图专题区
@@ -137,7 +140,10 @@ function ClickStatistics:StaticInit()
                 echo("----------------data----------------")
                 echo(data)
                 echo(ClickStatistics.ClickInfo[data.type])
-                local param = ClickStatistics.ClickInfo[data.type]
+                local param = {}
+                if ClickStatistics.ClickInfo[data.type] then
+                    param = ClickStatistics.ClickInfo[data.type]
+                end
                 if System.Codepku then
                     if HomeManage:IsMyHome() then
                         param.keepwork_id = 0

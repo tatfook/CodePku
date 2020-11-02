@@ -11,7 +11,6 @@
 <script refresh="false" type="text/npl" ><![CDATA[
     function OnUpBtnClicked()
         LOG.std(nil, "MainUIButtons_account_up", "OnUpBtnClicked", "Enter")
-        GameLogic.GetFilters():apply_filters("ClickStatistics", {type = 29}); -- 点击升级账号，触发操作数据统计计数
         NPL.load("(gl)Mod/CodePku/cellar/GUI/AccountUp/AccountUp.lua")
         local AccountUp = commonlib.gettable("Mod.CodePku.AccountUp")
         AccountUp.ShowPage(1)
