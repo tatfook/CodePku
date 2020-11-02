@@ -61,6 +61,12 @@ function ClickTask()
     TaskSystem:ShowPage(1,true)
 end
 
+-- 校园
+function ClickSchoolyard()
+    local Schoolyard = NPL.load("(gl)Mod/CodePku/cellar/GUI/Schoolyard/Schoolyard.lua")
+    Schoolyard:ShowPage()
+end
+
 local SignInPage = commonlib.gettable("Mod.CodePku.GUI.SignInPage")
 function ClickSignin()
     SignInPage:ShowPage()
@@ -82,31 +88,32 @@ end
 <pe:container alignment="_rb" width="100%" height="100%">
     <pe:if condition='<%= is_open %>'>
         <div style="position: relative; width: 82; height: 178; left: 2; background: url(codepku/image/textures/main_ui/main.png#915 14 82 178);" onclick="ClickClose"></div>
-        <div style="position: relative; width: 736; height: 178; left: 82; background: url(codepku/image/textures/main_ui/main.png#46 495 200 54:20 20 20 20); " >
-            <div style="position: relative; width: 103; height: 127; left: 45; top: 27; background: url(codepku/image/textures/main_ui/main.png#148 25 107 131);" onclick="ClickUserInfo"></div>
+        <div style="position: relative; width: 896; height: 178; left: 82; background: url(codepku/image/textures/main_ui/main.png#46 495 200 54:20 20 20 20); " >
+            <div style="position: relative; width: 103; height: 127; left: 45; top: 27; background-color: #ffffff;" onclick="ClickSchoolyard"></div>
+            <div style="position: relative; width: 103; height: 127; left: 185; top: 27; background: url(codepku/image/textures/main_ui/main.png#148 25 107 131);" onclick="ClickUserInfo"></div>
             <pe:if condition = "<%= not isIOSPlatform() %>" >
-                <div style="position: relative; width: 93; height: 134; left: 197; top: 20; background: url(codepku/image/textures/main_ui/main.png#285 18 97 138);" onclick="ClickFriend"></div>
+                <div style="position: relative; width: 93; height: 134; left: 337; top: 20; background: url(codepku/image/textures/main_ui/main.png#285 18 97 138);" onclick="ClickFriend"></div>
                 <pe:if condition = "<%= not isHuaweiApproval()%>" >
-                    <div style="position: relative; width: 80; height: 134; left: 335; top: 20; background: url(codepku/image/textures/main_ui/main.png#416 18 84 138);" onclick="ClickRank"></div>
-                    <div style="position: relative; width: 97; height: 137; left: 466; top: 18; background: url(codepku/image/textures/main_ui/main.png#557 478 97 137);" onclick="ClickSignin"></div>
-                    <div style="position: relative; width: 112; height: 133; left: 606; top: 24; background: url(codepku/image/textures/main_ui/main.png#34 645 112 133);" onclick="ClickTask"></div>
+                    <div style="position: relative; width: 80; height: 134; left: 475; top: 20; background: url(codepku/image/textures/main_ui/main.png#416 18 84 138);" onclick="ClickRank"></div>
+                    <div style="position: relative; width: 97; height: 137; left: 606; top: 18; background: url(codepku/image/textures/main_ui/main.png#557 478 97 137);" onclick="ClickSignin"></div>
+                    <div style="position: relative; width: 112; height: 133; left: 746; top: 24; background: url(codepku/image/textures/main_ui/main.png#34 645 112 133);" onclick="ClickTask"></div>
                 </pe:if>
                 <pe:if condition = "<%= isHuaweiApproval()%>" >
-                    <div style="position: relative; width: 97; height: 137; left: 335; top: 18; background: url(codepku/image/textures/main_ui/main.png#557 478 97 137);" onclick="ClickSignin"></div>
-                    <div style="position: relative; width: 112; height: 133; left: 475; top: 24; background: url(codepku/image/textures/main_ui/main.png#34 645 112 133);" onclick="ClickTask"></div>
+                    <div style="position: relative; width: 97; height: 137; left: 475; top: 18; background: url(codepku/image/textures/main_ui/main.png#557 478 97 137);" onclick="ClickSignin"></div>
+                    <div style="position: relative; width: 112; height: 133; left: 615; top: 24; background: url(codepku/image/textures/main_ui/main.png#34 645 112 133);" onclick="ClickTask"></div>
                 </pe:if>
             </pe:if>
        
             <!-- 因好友搜索问题，暂时屏蔽ios渠道好友功能 -->
             <pe:if condition = "<%= isIOSPlatform() %>" >
                 <pe:if condition = "<%= not isHuaweiApproval()%>" >
-                    <div style="position: relative; width: 80; height: 134; left: 197; top: 20; background: url(codepku/image/textures/main_ui/main.png#416 18 84 138);" onclick="ClickRank"></div>
-                    <div style="position: relative; width: 97; height: 137; left: 335; top: 18; background: url(codepku/image/textures/main_ui/main.png#557 478 97 137);" onclick="ClickSignin"></div>
-                    <div style="position: relative; width: 112; height: 133; left: 475; top: 24; background: url(codepku/image/textures/main_ui/main.png#34 645 112 133);" onclick="ClickTask"></div>
+                    <div style="position: relative; width: 80; height: 134; left: 337; top: 20; background: url(codepku/image/textures/main_ui/main.png#416 18 84 138);" onclick="ClickRank"></div>
+                    <div style="position: relative; width: 97; height: 137; left: 475; top: 18; background: url(codepku/image/textures/main_ui/main.png#557 478 97 137);" onclick="ClickSignin"></div>
+                    <div style="position: relative; width: 112; height: 133; left: 615; top: 24; background: url(codepku/image/textures/main_ui/main.png#34 645 112 133);" onclick="ClickTask"></div>
                 </pe:if>
                 <pe:if condition = "<%= isHuaweiApproval()%>" >
-                    <div style="position: relative; width: 97; height: 137; left: 197; top: 18; background: url(codepku/image/textures/main_ui/main.png#557 478 97 137);" onclick="ClickSignin"></div>
-                    <div style="position: relative; width: 112; height: 133; left: 337; top: 24; background: url(codepku/image/textures/main_ui/main.png#34 645 112 133);" onclick="ClickTask"></div>
+                    <div style="position: relative; width: 97; height: 137; left: 337; top: 18; background: url(codepku/image/textures/main_ui/main.png#557 478 97 137);" onclick="ClickSignin"></div>
+                    <div style="position: relative; width: 112; height: 133; left: 477; top: 24; background: url(codepku/image/textures/main_ui/main.png#34 645 112 133);" onclick="ClickTask"></div>
                 </pe:if>
             </pe:if>
                 

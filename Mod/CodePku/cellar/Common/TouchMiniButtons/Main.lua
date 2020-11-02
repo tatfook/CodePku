@@ -39,7 +39,7 @@ function MainUIButtons.show_common_ui(flag)
 	-- ios渠道屏蔽Q群
 	local open_width = 0
 	if MainUIButtons.isIOSApproval then
-		open_width = 643
+		open_width = 773
 	else
 		open_width = 1104
 	end
@@ -84,7 +84,7 @@ function MainUIButtons.show_function_ui(flag)	--flag == true,工具栏展开
 		params = {
 			open = {
 				url="Mod/CodePku/cellar/Common/TouchMiniButtons/MainUIButtons_function.html", 
-				alignment="_rb", left = -687, top = -178, width = 817, height = 178,
+				alignment="_rb", left = -840, top = -178, width = 817, height = 178,
 				click_through = true,
 			},
 			close = {
@@ -99,7 +99,7 @@ function MainUIButtons.show_function_ui(flag)	--flag == true,工具栏展开
 			params = {
 				open = {
 					url="Mod/CodePku/cellar/Common/TouchMiniButtons/MainUIButtons_function.html", 
-					alignment="_rb", left = -720, top = -178, width = 818, height = 178,
+					alignment="_rb", left = -860, top = -178, width = 818, height = 178,
 					click_through = true,
 				},
 				close = {
@@ -112,7 +112,7 @@ function MainUIButtons.show_function_ui(flag)	--flag == true,工具栏展开
 			params = {
 				open = {
 					url="Mod/CodePku/cellar/Common/TouchMiniButtons/MainUIButtons_function.html", 
-					alignment="_rb", left = -818, top = -178, width = 948, height = 178,
+					alignment="_rb", left = -970, top = -178, width = 948, height = 178,
 					click_through = true,
 				},
 				close = {
