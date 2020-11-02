@@ -66,6 +66,53 @@ function GeneralGameClient:Debug(action, cmd_text)
     end
 end
 
+-- 加载世界
+function GeneralGameClient:LoadWorld(opts, loadworld)
+    -- 初始化
+    self:Init();
+    
+    -- 覆盖默认选项
+    local options = self:SetOptions(opts);
+    -- 设定世界ID 优先取当前世界ID  其次用默认世界ID
+    local curWorldId = System and System.Codepku and System.Codepku.Coursewares and System.Codepku.Coursewares.keepwork_project_id
+
+    -- 确定世界ID
+    options.worldId = tostring(opts.worldId or curWorldId or options.defaultWorldId);
+    options.username = options.username or self:GetUserInfo().username;
+    options.ip = opts.ip;            -- ip port 每次重写
+    options.port = options.port;     -- 以便动态获取
+  
+    -- 打印选项值
+    GGS.INFO(options);
+    -- only reload world if world id does not match
+    echo("options.worldId:"..tostring(options.worldId))
+    echo("curWorldId:"..tostring(curWorldId))
+    local isReloadWorld = tostring(options.worldId) ~= tostring(curWorldId)
+    echo("isReloadWorld:"..tostring(isReloadWorld))
+    -- 退出旧世界
+    if (self:GetWorld()) then 
+        -- 不同世界或者未登录则重新进入世界
+        echo("IsDevEnv:"..tostring(IsDevEnv))
+        echo("self:GetWorld():IsLogin():"..tostring(self:GetWorld():IsLogin()))
+        echo("self:GetWorld():GetWorldId():"..tostring(self:GetWorld():GetWorldId()))
+        echo("options.worldId:"..tostring(options.worldId))
+        if (IsDevEnv or (not self:GetWorld():IsLogin()) or self:GetWorld():GetWorldId() ~= options.worldId) then
+            -- 退出旧世界
+            echo("exitworld")
+            self:GetWorld():OnExit()
+        end
+    end
+
+    -- 标识替换, 其它方式loadworld不替换
+    self.IsReplaceWorld = true
+    
+    if isReloadWorld then
+        self:ReplaceWorld(opts)
+    else
+        self:OnWorldLoaded()
+    end
+end
+
 -- 获取主玩家类
 function GeneralGameClient:GetEntityMainPlayerClass()
     return EntityMainPlayer;

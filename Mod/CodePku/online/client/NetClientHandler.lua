@@ -31,6 +31,7 @@ function NetClientHandler:handleGeneral(packetGeneral)
         local cmd = packetGeneral.data.cmd;
         local worldInfo = packetGeneral.data.worldInfo;
         GGS.INFO(cmd, worldInfo);
+        commonlib.setfield("System.Codepku.branch.worldInfo", worldInfo)
     else
         self._super.handleGeneral(self, packetGeneral)
     end

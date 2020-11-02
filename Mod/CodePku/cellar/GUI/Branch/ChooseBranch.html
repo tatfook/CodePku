@@ -46,6 +46,10 @@ function ChangeBranch(name)
     Page:Refresh(0.01)
 end
 
+function test()
+    ChooseBranch:GetBranchStateData()
+end
+
 function GetBranchName(nameId)
     return ChooseBranch:getBranchName(nameId)
 end
@@ -56,7 +60,7 @@ end
 </style>
 <pe:container alignment="_lt" width="1920" height="1080">
     <pe:div name="branch_bg" style="<%=GetStyleStr(1)%>">
-        <pe:div onclick="PlayAnim" style="<%=GetStyleStr(4)%>"></pe:div>
+        <pe:div onclick="test" style="<%=GetStyleStr(4)%>"></pe:div>
         <pe:div style="<%=GetStyleStr(6)%>"></pe:div>
         <pe:div style="<%=GetStyleStr(8)%>"></pe:div>
         <pe:div style="<%=GetStyleStr(5)%>"><%=L"爆满"%></pe:div>

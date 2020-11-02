@@ -19,18 +19,7 @@ local ChooseBranch = commonlib.gettable("Mod.CodePku.GUI.ChooseBranch")
 
 ChooseBranch.ui = nil
 
-ChooseBranch.branchStateTable = {
-    {["index"] = 1, ["nameId"] = 1},
-    {["index"] = 2, ["nameId"] = 2},
-    {["index"] = 3, ["nameId"] = 3},
-    {["index"] = 4, ["nameId"] = 4},
-    {["index"] = 5, ["nameId"] = 5},
-    {["index"] = 6, ["nameId"] = 6},
-    {["index"] = 7, ["nameId"] = 7},
-    {["index"] = 8, ["nameId"] = 8},
-    {["index"] = 9, ["nameId"] = 9},
-    {["index"] = 10, ["nameId"] = 10},
-}
+ChooseBranch.branchStateTable = {}
 
 ChooseBranch.currChooseBranch = 5
 
@@ -67,6 +56,49 @@ ChooseBranch.HTMLStyleData = {
     [15] = { ["desc"] = "分线栏文字",  ["position"] = "relative", ["left"] = 109, ["top"] = 32, ["width"] = 400, ["height"] = 60, ["color"] = "#813010", ["font-family"] = "zkklt", ["font-size"] = "48",},
     [16] = { ["desc"] = "切换分线按钮文字",  ["position"] = "relative", ["left"] = 49, ["top"] = 26, ["width"] = 199, ["height"] = 41,["background"] = "url("..branchImageData:GetIconUrl("branch_icon_g_mat.png")..")",},
 }
+
+function ChooseBranch:StaticInit()
+    LOG.std("", "info", "ChooseBranch", "StaticInit");
+    GameLogic:Connect("WorldLoaded", ChooseBranch, ChooseBranch.OnWorldLoaded, "UniqueConnection");
+    GameLogic:Connect("WorldUnloaded", ChooseBranch, ChooseBranch.OnWorldUnloaded, "UniqueConnection");
+end
+
+function ChooseBranch.OnWorldLoaded()
+    --todo  设置界面刷新 
+    ChooseBranch.branchStateTable = {}
+    local getDataTimer = commonlib.Timer:new({callbackFunc = function(timer)
+        commonlib.log({"ontimer", timer.id, timer.delta, timer.lastTick})
+        ChooseBranch:GetBranchStateData()
+        if #ChooseBranch.branchStateTable > 0 then
+            getDataTimer:Change()
+        end
+    end})
+
+    getDataTimer:Change(0, 1000)
+
+end
+
+function ChooseBranch.OnWorldUnloaded()
+    ChooseBranch.branchStateTable = {}
+end
+
+function ChooseBranch:GetBranchStateData()
+    -- todo   一堆逻辑要写
+    ChooseBranch.branchStateTable = {}
+    local currWorldId = System and System.Codepku and System.Codepku.Coursewares and System.Codepku.Coursewares.keepwork_project_id
+    local currWorldName = System and System.Codepku and System.Codepku.Coursewares and System.Codepku.Coursewares.name
+    GameLogic.RunCommand("/ggs debug codepku")
+    if System.Codepku and System.Codepku.branch and System.Codepku.branch.worldInfo then
+        local worlds = System.Codepku.branch.worldInfo.worlds
+        for key,value in pairs(worlds) do
+            local refInfo = {}
+            for each in string.gmatch(key, "%d+") do
+                table.insert( refInfo, each )
+            end
+            table.insert( ChooseBranch.branchStateTable, {["nameId"] = tonumber(refInfo[2]), ["index"] = tonumber(refInfo[2])} )
+        end
+    end
+end
 
 function ChooseBranch:GetHTMLStyleStr(index)
     local htmlTable = ChooseBranch.HTMLStyleData[index]
