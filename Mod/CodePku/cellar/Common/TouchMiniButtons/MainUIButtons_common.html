@@ -35,6 +35,7 @@ function ClickCommonButton()
 end
 
 function ClickAntiJamming()
+    GameLogic.GetFilters():apply_filters("ClickStatistics", {type = 12}); -- 点击防卡死，触发操作数据统计计数
     MainPopup:ShowPage('AntiJam')
 end
 
@@ -43,26 +44,32 @@ function ClickMainEntrence()
 end
 
 function ClickSamllMap()
+    GameLogic.GetFilters():apply_filters("ClickStatistics", {type = 11}); -- 点击地图，触发操作数据统计计数
     SmallMap:ShowPage("TPpoput")
 end
 
 function ClickCommunity()
+    GameLogic.GetFilters():apply_filters("ClickStatistics", {type = 13}); -- 点击社区，触发操作数据统计计数
     GameLogic.RunCommand("/open http://kids.wanxueshijie.com/")
 end
 
 function ClickQQGroup()
+    GameLogic.GetFilters():apply_filters("ClickStatistics", {type = 15}); -- 点击Q群，触发操作数据统计计数
     GameLogic.RunCommand(string.format("/open %s", Mod.CodePku.BasicConfigTable.qq_group_link))
 end
 
 function ClickFeedback()
+    GameLogic.GetFilters():apply_filters("ClickStatistics", {type = 14}); -- 点击反馈，触发操作数据统计计数
     Feedback:ShowPage()
 end
 
 function ClickEldership()
+    GameLogic.GetFilters():apply_filters("ClickStatistics", {type = 16}); -- 点击我的家长，触发操作数据统计计数
     Eldership:ShowPage()
 end
 
 function ClickShareApp()
+    GameLogic.GetFilters():apply_filters("ClickStatistics", {type = 74}); -- 点击分享，触发操作数据统计计数
     ShareApp:ShowPage(1)
 end
 
@@ -77,7 +84,7 @@ isIOSApproval = CommonFunc.isIOSApproval()
 <pe:container alignment="_lt" width="100%" height="100%">
     <pe:if condition="<%=is_open == true%>">
         <pe:if condition = "<%= isIOSApproval%>" >
-            <div style="position: relative; width: 561; height: 178; background: url(codepku/image/textures/main_ui/main.png#46 495 200 54:20 20 20 20);"></div>
+            <div style="position: relative; width: 691; height: 178; background: url(codepku/image/textures/main_ui/main.png#46 495 200 54:20 20 20 20);"></div>
         </pe:if>
         <pe:if condition = "<%= not isIOSApproval%>" >
             <div style="position: relative; width: 944; height: 178; background: url(codepku/image/textures/main_ui/main.png#46 495 200 54:20 20 20 20);"></div>
@@ -86,13 +93,15 @@ isIOSApproval = CommonFunc.isIOSApproval()
         <div style="position: relative; width: 90; height: 120; left: 185; top: 22; background: url(codepku/image/textures/main_ui/main.png#165 175 90 120);" onclick="ClickAntiJamming"></div>
         <div style="position: relative; width: 101; height: 135; left: 302; top: 9; background: url(codepku/image/textures/main_ui/main.png#160 313 101 135);" onclick="ClickCommunity"></div>
         <div style="position: relative; width: 74; height: 129; left: 445; top: 13; background: url(codepku/image/textures/main_ui/main.png#811 322 74 129);" onclick="ClickFeedback"></div>
-        <div style="position: relative; width: 97; height: 130; left: 820; top: 17; background: url(codepku/image/textures/main_ui/main.png#184 649 97 130);" onclick="ClickShareApp"></div>
+        
         <pe:if condition = "<%= isIOSApproval%>" >
-            <div style="position: relative; width: 82; height: 178; left: 561; transform: rotate(180deg); transform-origin: 41px 89px; background: url(codepku/image/textures/main_ui/main.png#915 14 82 178);" onclick="ClickClose"></div>
+            <div style="position: relative; width: 97; height: 130; left: 560; top: 17; background: url(codepku/image/textures/main_ui/main.png#184 649 97 130);" onclick="ClickShareApp"></div>
+            <div style="position: relative; width: 82; height: 178; left: 691; transform: rotate(180deg); transform-origin: 41px 89px; background: url(codepku/image/textures/main_ui/main.png#915 14 82 178);" onclick="ClickClose"></div>
         </pe:if>
         <pe:if condition = "<%= not isIOSApproval%>" >
             <div style="position: relative; width: 106; height: 138; left: 561; top: 10; background: url(codepku/image/textures/main_ui/main.png#285 480 106 138);" onclick="ClickQQGroup"></div>
             <div style="position: relative; width: 102; height: 127; left: 700; top: 17; background: url(codepku/image/textures/eldership/eldership.png#40 44 107 129);" onclick="ClickEldership"></div>
+            <div style="position: relative; width: 97; height: 130; left: 820; top: 17; background: url(codepku/image/textures/main_ui/main.png#184 649 97 130);" onclick="ClickShareApp"></div>
             <div style="position: relative; width: 82; height: 178; left: 942; transform: rotate(180deg); transform-origin: 41px 89px; background: url(codepku/image/textures/main_ui/main.png#915 14 82 178);" onclick="ClickClose"></div>
         </pe:if>
     </pe:if>

@@ -39,7 +39,7 @@ function MainUIButtons.show_common_ui(flag)
 	-- ios渠道屏蔽Q群
 	local open_width = 0
 	if MainUIButtons.isIOSApproval then
-		open_width = 643
+		open_width = 773
 	else
 		open_width = 1104
 	end
