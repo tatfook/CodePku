@@ -35,6 +35,7 @@ function ClickCommonButton()
 end
 
 function ClickAntiJamming()
+    GameLogic.GetFilters():apply_filters("ClickStatistics", {type = 12}); -- 点击防卡死，触发操作数据统计计数
     MainPopup:ShowPage('AntiJam')
 end
 
@@ -43,26 +44,32 @@ function ClickMainEntrence()
 end
 
 function ClickSamllMap()
+    GameLogic.GetFilters():apply_filters("ClickStatistics", {type = 11}); -- 点击地图，触发操作数据统计计数
     SmallMap:ShowPage("TPpoput")
 end
 
 function ClickCommunity()
+    GameLogic.GetFilters():apply_filters("ClickStatistics", {type = 13}); -- 点击社区，触发操作数据统计计数
     GameLogic.RunCommand("/open http://kids.wanxueshijie.com/")
 end
 
 function ClickQQGroup()
+    GameLogic.GetFilters():apply_filters("ClickStatistics", {type = 15}); -- 点击Q群，触发操作数据统计计数
     GameLogic.RunCommand(string.format("/open %s", Mod.CodePku.BasicConfigTable.qq_group_link))
 end
 
 function ClickFeedback()
+    GameLogic.GetFilters():apply_filters("ClickStatistics", {type = 14}); -- 点击反馈，触发操作数据统计计数
     Feedback:ShowPage()
 end
 
 function ClickEldership()
+    GameLogic.GetFilters():apply_filters("ClickStatistics", {type = 16}); -- 点击我的家长，触发操作数据统计计数
     Eldership:ShowPage()
 end
 
 function ClickShareApp()
+    GameLogic.GetFilters():apply_filters("ClickStatistics", {type = 74}); -- 点击分享，触发操作数据统计计数
     ShareApp:ShowPage(1)
 end
 
