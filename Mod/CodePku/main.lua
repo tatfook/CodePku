@@ -586,6 +586,9 @@ function CodePku:init()
 					event:accept()
 				end
 			elseif event.keyname == "DIK_F1" then
+				NPL.load("(gl)Mod/CodePku/cellar/GUI/Branch/ChooseBranch.lua")
+				local ChooseBranch = commonlib.gettable("Mod.CodePku.GUI.ChooseBranch")
+				ChooseBranch:ShowPage()
 				event:accept()
 			elseif event.keyname == "DIK_F4" then
 				event:accept()

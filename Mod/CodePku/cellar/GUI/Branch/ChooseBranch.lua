@@ -64,18 +64,20 @@ function ChooseBranch:StaticInit()
 end
 
 function ChooseBranch.OnWorldLoaded()
-    --todo  设置界面刷新 
-    ChooseBranch.branchStateTable = {}
+    -- 清空原始分线数据缓存
+    ChooseBranch.branchStateTable = nil
+    commonlib.setfield(System.Codepku.branch.worldInfo, nil)
+
+    -- 拉去分支数据的计时器
     local getDataTimer = commonlib.Timer:new({callbackFunc = function(timer)
         commonlib.log({"ontimer", timer.id, timer.delta, timer.lastTick})
         ChooseBranch:GetBranchStateData()
-        if #ChooseBranch.branchStateTable > 0 then
+        if ChooseBranch.branchStateTable then
             getDataTimer:Change()
         end
     end})
 
     getDataTimer:Change(0, 1000)
-
 end
 
 function ChooseBranch.OnWorldUnloaded()
@@ -84,18 +86,34 @@ end
 
 function ChooseBranch:GetBranchStateData()
     -- todo   一堆逻辑要写
-    ChooseBranch.branchStateTable = {}
     local currWorldId = System and System.Codepku and System.Codepku.Coursewares and System.Codepku.Coursewares.keepwork_project_id
     local currWorldName = System and System.Codepku and System.Codepku.Coursewares and System.Codepku.Coursewares.name
     GameLogic.RunCommand("/ggs debug codepku")
     if System.Codepku and System.Codepku.branch and System.Codepku.branch.worldInfo then
+        -- 当前所在世界的worldkey  用来判定当前ggs的服务器数据
+        -- todo 记得这个数据来判定当前世界的分支数据
+        local worldKey = System.Codepku.branch.worldKey
+        ChooseBranch.branchStateTable = {}
         local worlds = System.Codepku.branch.worldInfo.worlds
         for key,value in pairs(worlds) do
             local refInfo = {}
             for each in string.gmatch(key, "%d+") do
                 table.insert( refInfo, each )
             end
-            table.insert( ChooseBranch.branchStateTable, {["nameId"] = tonumber(refInfo[2]), ["index"] = tonumber(refInfo[2])} )
+            local worldId = tonumber(refInfo[1])
+            local worldName = tonumber(refInfo[2])
+            local branchId = tonumber(refInfo[3])
+            local playerNum = value
+            if worldId == currWorldId then
+                table.insert( ChooseBranch.branchStateTable,
+                    {   
+                        ["worldId"] = tonumber(worldId),
+                        ["worldName"] = tonumber(worldName),
+                        ["branchId"] = tonumber(branchId),
+                        ["playerNum"] = tonumber(playerNum)
+                    } 
+                )
+            end
         end
     end
 end

@@ -50,8 +50,8 @@ function test()
     ChooseBranch:GetBranchStateData()
 end
 
-function GetBranchName(nameId)
-    return ChooseBranch:getBranchName(nameId)
+function GetBranchName(branchId)
+    return ChooseBranch:getBranchName(branchId)
 end
 
 ]]></script>
@@ -74,13 +74,13 @@ end
             <Columns>
                 <pe:if condition="<%= Eval('index') ~= ChooseBranch.currChooseBranch %>">
                     <div name='<%=Eval("index")%>' onclick="ChangeBranch" style="<%=GetStyleStr(12)%>">
-                        <div style="<%=GetStyleStr(15)%>"><%= GetBranchName(Eval('nameId')) %></div>
+                        <div style="<%=GetStyleStr(15)%>"><%= GetBranchName(Eval('branchId')) %></div>
                         <div style="<%=GetStyleStr(14)%>"></div>
                     </div>
                 </pe:if>
                 <pe:if condition="<%= Eval('index') == ChooseBranch.currChooseBranch %>">
                     <div style="<%=GetStyleStr(13)%>">
-                        <div style="<%=GetStyleStr(15)%>"><%= GetBranchName(Eval('nameId')) %></div>
+                        <div style="<%=GetStyleStr(15)%>"><%= GetBranchName(Eval('branchId')) %></div>
                         <div style="<%=GetStyleStr(14)%>"></div>
                     </div>
                 </pe:if>
