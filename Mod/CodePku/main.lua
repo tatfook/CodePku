@@ -522,6 +522,11 @@ function CodePku:init()
 	local TaskSystem = commonlib.gettable("Mod.CodePku.Common.TaskSystem")
 	TaskSystem:StaticInit();
 
+	-- 初始化玩家操作数据统计
+	NPL.load("(gl)Mod/CodePku/cellar/GUI/ClickStatistics/ClickStatistics.lua")
+	local ClickStatistics = commonlib.gettable("Mod.CodePku.GUI.ClickStatistics")
+	ClickStatistics:StaticInit();
+
 	GameLogic.GetFilters():add_filter(
 		"DesktopMenuPage.ShowPage",
 		function(bShow)
