@@ -137,9 +137,6 @@ function ClickStatistics:StaticInit()
         "ClickStatistics",
         function (data)
             if data then
-                echo("----------------data----------------")
-                echo(data)
-                echo(ClickStatistics.ClickInfo[data.type])
                 local param = {}
                 if ClickStatistics.ClickInfo[data.type] then
                     param = ClickStatistics.ClickInfo[data.type]
@@ -150,13 +147,11 @@ function ClickStatistics:StaticInit()
                     else
                         if System.Codepku and System.Codepku.Coursewares then
                             param.keepwork_id = System.Codepku.Coursewares.keepwork_project_id
-                            echo("System.Codepku.Coursewares.keepwork_project_id--------------------"..System.Codepku.Coursewares.keepwork_project_id)
                         end
                     end
                 else
                     param.keepwork_id = 0
                 end
-                echo(param)
                 ClickStatistics:UpdateClickStatistics(param)
             end
         end
@@ -173,7 +168,6 @@ end
 ]]
 function ClickStatistics:UpdateClickStatistics(data)
     request:post('/users/track', data, nil):next(function(response)
-        echo(response)
     end):catch(function(e)
     end);
 end

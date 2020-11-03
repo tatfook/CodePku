@@ -15,7 +15,8 @@ local Config = NPL.load("(gl)Mod/CodePku/config/Config.lua")
 local Feedback = NPL.load("(gl)Mod/CodePku/cellar/GUI/Feedback/Feedback.lua");
 local escFrameImageData = NPL.load("(gl)Mod/CodePku/cellar/imageLuaTable/escFrameImageData.lua")
 local common1ImageData = NPL.load("(gl)Mod/CodePku/cellar/imageLuaTable/common1ImageData.lua")
-
+NPL.load("(gl)Mod/CodePku/cellar/GUI/Home/HomeManage.lua")
+HomeManage = commonlib.gettable("Mod.CodePku.Common.HomeManage")
 -- 导Editbox是为了改EmptyText的文本颜色，后面帕拉卡如果添加了对应的属性可以改掉这里的代码
 NPL.load("(gl)script/ide/System/Windows/Controls/EditBox.lua");
 local EditBox = commonlib.gettable("System.Windows.Controls.EditBox");
@@ -51,6 +52,29 @@ function AccountUp.OnSureBtnCLicked(page)
         verify_code = verify_code,
         mobile_token = AccountUp.mobileToken,
     }
+    -- 升级账号加场景字段，触发操作数据统计计数
+    -- track_scene： 1主界面呼出 | 2改名升级 | 3精品课程升级 | 4家园升级
+    if AccountUp.track_scene == 1 then 
+        data.track_scene = 1
+    elseif AccountUp.track_scene == 2 then
+        data.track_scene = 4
+    elseif AccountUp.track_scene == 3 then
+        data.track_scene = 3
+    elseif AccountUp.track_scene == 4 then
+        data.track_scene = 10
+    end
+    -- 升级账号加世界id字段，触发操作数据统计计数
+    if System.Codepku then
+        if HomeManage:IsMyHome() then
+            data.keepwork_id = 0
+        else
+            if System.Codepku and System.Codepku.Coursewares then
+                data.keepwork_id = System.Codepku.Coursewares.keepwork_project_id
+            end
+        end
+    else
+        data.keepwork_id = 0
+    end
     LOG.std(nil, "AccountUp", "OnSureBtnCLicked", "account = %s， verify_code = %s mobile_token = %s", tostring(account), tostring(verify_code), tostring(AccountUp.mobileToken))
     request:patch('/users/mobile', data):next(function(response)
 		if (response.status == 200 and response.data.code == 200) then
