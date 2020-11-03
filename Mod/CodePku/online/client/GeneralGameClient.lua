@@ -71,6 +71,9 @@ function GeneralGameClient:LoadWorld(opts, loadworld)
     -- 初始化
     self:Init();
     
+    local worldName = opts and opts.worldName
+    local oldWorldName = self:GetOptions().worldName
+
     -- 覆盖默认选项
     local options = self:SetOptions(opts);
     -- 设定世界ID 优先取当前世界ID  其次用默认世界ID
@@ -96,7 +99,7 @@ function GeneralGameClient:LoadWorld(opts, loadworld)
         echo("self:GetWorld():IsLogin():"..tostring(self:GetWorld():IsLogin()))
         echo("self:GetWorld():GetWorldId():"..tostring(self:GetWorld():GetWorldId()))
         echo("options.worldId:"..tostring(options.worldId))
-        if (IsDevEnv or (not self:GetWorld():IsLogin()) or self:GetWorld():GetWorldId() ~= options.worldId) then
+        if (IsDevEnv or (not self:GetWorld():IsLogin()) or self:GetWorld():GetWorldId() ~= options.worldId or worldName ~= oldWorldName) then
             -- 退出旧世界
             echo("exitworld")
             self:GetWorld():OnExit()
