@@ -3,25 +3,33 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>我的校园-成员</title>
+    <title></title>
 </head>
 <body>
     <pe:mcml>
 <script refresh="false" type="text/npl" src="Schoolyard.lua"><![CDATA[
-
 local Schoolyard = NPL.load("(gl)Mod/CodePku/cellar/GUI/Schoolyard/Schoolyard.lua");
-
+local page = document:GetPageCtrl()
 
 function ClosePage()
-    Schoolyard.main_ui:CloseWindow()
+    if Schoolyard.join_page then
+        Schoolyard.join_page:CloseWindow()
+        Schoolyard.join_page = nil
+    end
 end
 
-]]>   
-</script>
-<style type="text/mcss">
-</style>
 
-    <div onclick="ClosePage" style="width: 1500;height: 900;background-color: #f3f709a4;"></div>
+
+]]>
+</script>
+
+<pe:container alignment="_lt" width="100%" height="100%">
+
+<div onclick="ClosePage" style="position: relative;left: 500;top: 200;width: 1000;height: 700;background-color:#00fcc5">
+
+</div>
+
+</pe:container>
 
 </pe:mcml>
 </body>

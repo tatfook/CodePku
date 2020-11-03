@@ -136,6 +136,7 @@ function UserConsole:CourseEntry()
 
     local GameLogic = commonlib.gettable("MyCompany.Aries.Game.GameLogic")
     GameLogic.GetFilters():apply_filters("TaskSystemList", {type = "login"});-- 登录之后，触发任务系统计数
+    GameLogic.GetFilters():apply_filters("Schoolyard.IncreaseVitality", {type = "login"});-- 登录之后，触发活跃度系统
 
     -- 登录之后，获取任务数据
     NPL.load("(gl)Mod/CodePku/cellar/Common/TouchMiniButtons/TaskSystem/TaskSystem.lua")
@@ -180,6 +181,9 @@ function UserConsole:HandleWorldId(pid)
         HomeManage:GetHomeWorld()
         return
     end
+
+    -- 关闭家园区计时器
+    GameLogic.GetFilters():apply_filters("Schoolyard.IncreaseVitality", {type = "home", time = "close"});   -- 未进入家园，家园区计时器如果存在，则需要关闭
 
     local function LoadWorld(world, refreshMode)
         if world then

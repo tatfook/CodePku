@@ -3,26 +3,50 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>我的校园</title>
+    <title>我的校园-首页</title>
 </head>
 <body>
     <pe:mcml>
 <script refresh="false" type="text/npl" src="Schoolyard.lua"><![CDATA[
 
-local Schoolyard = NPL.load("(gl)Mod/CodePku/cellar/GUI/Schoolyard/Schoolyard.lua");
+Schoolyard = NPL.load("(gl)Mod/CodePku/cellar/GUI/Schoolyard/Schoolyard.lua");
+UserInfoPage = NPL.load("(gl)Mod/CodePku/cellar/GUI/UserInfo.lua");
 
+-- 初始化学校信息
+Schoolyard:GetMySchoolyard()
 
 function ClosePage()
     Schoolyard.main_ui:CloseWindow()
 end
 
-]]>   
+function ChangeSchoolyard()
+    Schoolyard:ShowJoinPage()
+end
+
+]]>
 </script>
 <style type="text/mcss">
 </style>
-
-    <div onclick="ClosePage" style="width: 1500;height: 900;background-color: #09f729a4;"></div>
-
+    <div onclick="ClosePage" style="width: 1500;height: 900;background-color: #09f729a4;">
+        <div style="position: relative;left: 50;top: 50;width: 600;height: 300;background-color: #4200f8;">
+            <div style="<%=format('position: relative;left:10;top:10;width: 257;height: 257;background:url(%s);', Schoolyard.schoolyard_avatar)%>"></div>
+            <div style="position: relative;left: 300;top: 10;width: 300;height: 100;background-color: #000000;font-family: zkklt;font-size: 36;color: #ffffff;"><%= Schoolyard.schoolyard_name %></div>
+            <div style="position: relative;left: 300;top: 150;width: 300;height: 100;background-color: #000000;font-family: zkklt;font-size: 36;color: #ffffff;"><%= Schoolyard.schoolyard_address %></div>
+        </div>
+        <div style="position: relative;left: 50;top: 600;width: 600;height: 200;background-color: #4200f8;">
+            <div style="<%=format('position: relative;left:10;top:10;width: 150;height: 150;background:url(%s);', Schoolyard.schoolyard_avatar)%>"></div>
+            <div style="position: relative;left: 300;top: 10;width: 300;height: 60;background-color: #000000;font-family: zkklt;font-size: 36;color: #ffffff;"><%= System.User.info.nickname %></div>
+            <div style="position: relative;left: 300;top: 100;width: 300;height: 60;background-color: #000000;font-family: zkklt;font-size: 36;color: #ffffff;"><%= System.User.info.no %></div>
+        </div>
+        <div style="position: relative;left: 800;top: 50;width: 600;height: 760;background-color: #4200f8;">
+            <div style="position: relative;left: 100;top: 10;width: 400;height: 60;background-color: #000000;font-family: zkklt;font-size: 36;color: #ffffff;">学校信息</div>
+            <div style="position: relative;left: 100;top: 110;width: 400;height: 60;background-color: #000000;font-family: zkklt;font-size: 36;color: #ffffff;"><%= "学校人数：" .. tostring(Schoolyard.number_of_people) %></div>
+            <div style="position: relative;left: 100;top: 210;width: 400;height: 60;background-color: #000000;font-family: zkklt;font-size: 36;color: #ffffff;"><%= "周活跃度：" .. tostring(Schoolyard.schoolyard_vitality) %></div>
+            <div style="position: relative;left: 100;top: 310;width: 400;height: 60;background-color: #000000;font-family: zkklt;font-size: 36;color: #ffffff;"><%= "周活跃排行：" .. tostring(Schoolyard.week_rank) %></div>
+            <div style="position: relative;left: 100;top: 410;width: 400;height: 60;background-color: #000000;font-family: zkklt;font-size: 36;color: #ffffff;"><%= "总活跃排行：" .. tostring(Schoolyard.total_rank) %></div>
+            <input type="button" name="变更学校" value="变更学校" style="position: relative;left: 200;top: 610;width: 200;height: 60;background-color: #000000;font-family: zkklt;font-size: 36;color: #ffffff;" onclick="ChangeSchoolyard"/>
+        </div>
+    </div>
 </pe:mcml>
 </body>
 </html>

@@ -218,10 +218,12 @@ function TaskSystem:GetReward(taskID,reward_json, type)
             if type == "goal" then
                 TaskSystem.goal = TaskSystem:handleReceived(TaskSystem.goal,TaskSystem:FindTaskByID(taskID, 1), 1)
                 GameLogic.GetFilters():apply_filters("TaskSystemList", {type = "goalReward"}); -- 领取奖励后，触发任务系统计数
+                GameLogic.GetFilters():apply_filters("Schoolyard.IncreaseVitality", {type = "smalltarget"}); -- 领取奖励后，触发活跃度系统，小目标
             elseif type == "goalReward" then
                 TaskSystem.goalReward = TaskSystem:handleReceived(TaskSystem.goalReward,TaskSystem:FindTaskByID(taskID, 2), 2)
             elseif type == "plan" then
                 TaskSystem.plan = TaskSystem:handleReceived(TaskSystem.plan,TaskSystem:FindTaskByID(taskID, 3), 3)
+                GameLogic.GetFilters():apply_filters("Schoolyard.IncreaseVitality", {type = "bigplan"}); -- 领取奖励后，触发活跃度系统，大计划
             end
             if TaskSystem.Page_ui then
                 TaskSystem.Page_ui:Refresh(0)

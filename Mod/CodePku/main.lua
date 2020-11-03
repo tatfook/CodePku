@@ -152,6 +152,16 @@ function CodePku:init()
 		end
 	)
 
+	-- 活跃度
+	GameLogic.GetFilters():add_filter(
+		"Schoolyard.IncreaseVitality",
+		function(params)
+			local Schoolyard = NPL.load("(gl)Mod/CodePku/cellar/GUI/Schoolyard/Schoolyard.lua");
+			Schoolyard:AddVitality(params)
+			LOG.std(nil, "info", "CodePku", "add_filter Schoolyard.IncreaseVitality")
+		end
+	)
+
 	GameLogic.GetFilters():add_filter(
 		"BaseContextMousePressEvent",
 		function (backValue, event)

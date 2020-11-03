@@ -7,12 +7,15 @@
 </head>
 <body>
     <pe:mcml>
-<script refresh="false" type="text/npl" src="Feedback.lua"><![CDATA[
+<script refresh="false" type="text/npl" src="Schoolyard.lua"><![CDATA[
 local Schoolyard = NPL.load("(gl)Mod/CodePku/cellar/GUI/Schoolyard/Schoolyard.lua");
 local page = document:GetPageCtrl()
 
 function ClosePage()
-    Page:CloseWindow()
+    if Schoolyard.main_ui then
+        Schoolyard.main_ui:CloseWindow()
+        Schoolyard.main_ui = nil
+    end
 end
 
 -- 返回标签table
@@ -20,7 +23,7 @@ function GetTabs()
     return Schoolyard.tabs
 end
 
--- 选中的标签
+-- 返回选中的标签
 function GetTabsSelectIndex()
     return Schoolyard.tabs_select_index
 end
@@ -43,11 +46,11 @@ end
     <iframe name="money" src="Mod/CodePku/cellar/GUI/Money.html" style="position:absolute;top:0;"></iframe>
 
 
-    <div style="font-size:45px;font-weight:bold;font-family:Noto Sans S Chinese Regular;text-align:center;position:relative;top:122;">
+    <div style="position:relative;top:122;font-size:45px;font-weight:bold;font-family:Noto Sans S Chinese Regular;text-align:center;">
         <pe:repeat DataSource="<%=GetTabs()%>">
             <pe:repeatitem>
                 <pe:if condition='<%=GetTabsSelectIndex() == Eval("index") %>'>
-                    <input type="button" name='<%= Eval("index")%>' value='<%=Eval("title")%>' style='width:261px;height:96px;margin-left:27px;padding-bottom:20px;background:url(codepku/image/textures/common_32bits.png#1648 196 261 96);' onclick="OnChoose"/>
+                    <input type="button" name='<%= Eval("index")%>' value='<%=Eval("title")%>' style='width:261px;height:94px;margin-left:27px;padding-bottom:20px;background:url(codepku/image/textures/common_32bits.png#1648 196 261 96);' onclick="OnChoose"/>
                 </pe:if>
                 <pe:if condition='<%=GetTabsSelectIndex() ~= Eval("index") %>'>
                     <input type="button" name='<%= Eval("index")%>' value='<%=Eval("title")%>' style='width:244px;height:94px;background:url(codepku/image/textures/common_32bits.png#1294 66  134 94: 36 30 30 32);' onclick="OnChoose"/>
