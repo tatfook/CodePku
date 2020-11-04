@@ -79,7 +79,7 @@ function GeneralGameClient:LoadWorld(opts, loadworld)
     -- 退出旧世界
     if (self:GetWorld()) then 
         -- 不同世界或者未登录则重新进入世界
-        if (IsDevEnv or (not self:GetWorld():IsLogin()) or self:GetWorld():GetWorldId() ~= options.worldId or worldName ~= oldWorldName) then
+        if (self:GetWorld():GetWorldId() == options.worldId and worldName == oldWorldName) or (not self:GetWorld():IsLogin()) then
             -- 退出旧世界
             echo("exitworld")
             self:GetWorld():OnExit()
