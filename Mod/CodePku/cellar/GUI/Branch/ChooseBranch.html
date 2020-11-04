@@ -40,14 +40,15 @@ function OnClose()
     Page:CloseWindow()
 end
 
-function ChangeBranch(name)
-    local index = tonumber(name)
-    ChooseBranch:changeBranch(index)
-    Page:Refresh(0.01)
+function OnChooseBranchBtnClicked()
+    ChooseBranch:changeBranch()
+    OnClose()
 end
 
-function test()
-    ChooseBranch:GetBranchStateData()
+function ChangeBranch(name)
+    local branchId = tonumber(name)
+    ChooseBranch:changeCurrBranch(branchId)
+    Page:Refresh(0.01)
 end
 
 function GetBranchName(branchId)
@@ -60,7 +61,7 @@ end
 </style>
 <pe:container alignment="_lt" width="1920" height="1080">
     <pe:div name="branch_bg" style="<%=GetStyleStr(1)%>">
-        <pe:div onclick="test" style="<%=GetStyleStr(4)%>"></pe:div>
+        <pe:div style="<%=GetStyleStr(4)%>"></pe:div>
         <pe:div style="<%=GetStyleStr(6)%>"></pe:div>
         <pe:div style="<%=GetStyleStr(8)%>"></pe:div>
         <pe:div style="<%=GetStyleStr(5)%>"><%=L"爆满"%></pe:div>
@@ -72,13 +73,13 @@ end
             DataSource='<%= branchStateTable %>' CellPadding="0" ItemsPerLine="1" RememberScrollPos="true"
             VerticalScrollBarStep="25" VerticalScrollBarOffsetX="8" DefaultNodeHeight="107">
             <Columns>
-                <pe:if condition="<%= Eval('index') ~= ChooseBranch.currChooseBranch %>">
-                    <div name='<%=Eval("index")%>' onclick="ChangeBranch" style="<%=GetStyleStr(12)%>">
+                <pe:if condition="<%= Eval('branchId') ~= ChooseBranch.currChooseBranch %>">
+                    <div name='<%=Eval("branchId")%>' onclick="ChangeBranch" style="<%=GetStyleStr(12)%>">
                         <div style="<%=GetStyleStr(15)%>"><%= GetBranchName(Eval('branchId')) %></div>
                         <div style="<%=GetStyleStr(14)%>"></div>
                     </div>
                 </pe:if>
-                <pe:if condition="<%= Eval('index') == ChooseBranch.currChooseBranch %>">
+                <pe:if condition="<%= Eval('branchId') == ChooseBranch.currChooseBranch %>">
                     <div style="<%=GetStyleStr(13)%>">
                         <div style="<%=GetStyleStr(15)%>"><%= GetBranchName(Eval('branchId')) %></div>
                         <div style="<%=GetStyleStr(14)%>"></div>
@@ -90,7 +91,7 @@ end
     </pe:div>
     
     <pe:div name="exitBtn" onclick="OnClose" style="<%=GetStyleStr(2)%>"></pe:div>
-    <pe:div name="chooseBranchBtn" onclick="OnClose" style="<%=GetStyleStr(3)%>">
+    <pe:div name="chooseBranchBtn" onclick="OnChooseBranchBtnClicked" style="<%=GetStyleStr(3)%>">
         <pe:div style="<%=GetStyleStr(16)%>"></pe:div>
     </pe:div>
 

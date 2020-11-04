@@ -512,6 +512,10 @@ function CodePku:init()
 	local TaskSystem = commonlib.gettable("Mod.CodePku.Common.TaskSystem")
 	TaskSystem:StaticInit();
 
+	NPL.load("(gl)Mod/CodePku/cellar/GUI/Branch/ChooseBranch.lua")
+	local ChooseBranch = commonlib.gettable("Mod.CodePku.GUI.ChooseBranch")
+	ChooseBranch:StaticInit()
+
 	GameLogic.GetFilters():add_filter(
 		"DesktopMenuPage.ShowPage",
 		function(bShow)

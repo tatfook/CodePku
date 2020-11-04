@@ -53,19 +53,6 @@ function GeneralGameClient:AddAssetsWhiteList()
     self.GetAssetsWhiteList().AddAsset("character/v5/02animals/FireBon/FireBon.x");
 end
 
-function GeneralGameClient:Debug(action, cmd_text)
-    action = string.lower(action or "");
-    local netHandler = self:GetWorldNetHandler();
-    if (not netHandler) then return end
-
-    if (action == "codepku") then
-        -- GameLogic.AddBBS(nil, L"测试ggs", 3000, "255 0 0", 21)
-        netHandler:AddToSendQueue(Packets.PacketGeneral:new():Init({action = "CodePKU", data = { cmd = "WorldInfo"}}));
-    else
-        self._super.Debug(self, action, cmd_text)
-    end
-end
-
 -- 加载世界
 function GeneralGameClient:LoadWorld(opts, loadworld)
     -- 初始化
@@ -88,17 +75,10 @@ function GeneralGameClient:LoadWorld(opts, loadworld)
     -- 打印选项值
     GGS.INFO(options);
     -- only reload world if world id does not match
-    echo("options.worldId:"..tostring(options.worldId))
-    echo("curWorldId:"..tostring(curWorldId))
     local isReloadWorld = tostring(options.worldId) ~= tostring(curWorldId)
-    echo("isReloadWorld:"..tostring(isReloadWorld))
     -- 退出旧世界
     if (self:GetWorld()) then 
         -- 不同世界或者未登录则重新进入世界
-        echo("IsDevEnv:"..tostring(IsDevEnv))
-        echo("self:GetWorld():IsLogin():"..tostring(self:GetWorld():IsLogin()))
-        echo("self:GetWorld():GetWorldId():"..tostring(self:GetWorld():GetWorldId()))
-        echo("options.worldId:"..tostring(options.worldId))
         if (IsDevEnv or (not self:GetWorld():IsLogin()) or self:GetWorld():GetWorldId() ~= options.worldId or worldName ~= oldWorldName) then
             -- 退出旧世界
             echo("exitworld")
@@ -116,6 +96,29 @@ function GeneralGameClient:LoadWorld(opts, loadworld)
     end
 end
 
+function GeneralGameClient:OnWorldLoaded() 
+    -- 是否需要替换世界
+    if (not self.IsReplaceWorld) then return end
+    self.IsReplaceWorld = false;
+
+    -- 更新当前世界ID
+    local GeneralGameWorldClass = self:GetGeneralGameWorldClass() or GeneralGameWorld;
+    self:SetWorld(GeneralGameWorldClass:new():Init(self));
+    GameLogic.ReplaceWorld(self:GetWorld());
+    GameLogic.options:SetCanJumpInAir(self:IsCanFly());  -- 设置是否可以飞行
+    -- 登录世界
+    local options = self:GetOptions();
+    -- 设置世界类型
+    options.worldType = self:GetWorldType();  
+    -- if (IsDevEnv) then options.worldType = "ParaWorld" end
+
+    if (options.ip and options.port) then
+        self:GetWorld():Login(options);
+    else
+        self:ConnectControlServer(options); -- 连接控制器服务, 获取世界服务
+    end
+end
+
 -- 获取主玩家类
 function GeneralGameClient:GetEntityMainPlayerClass()
     return EntityMainPlayer;
@@ -124,6 +127,11 @@ end
 -- 获取其它玩家类
 function GeneralGameClient:GetEntityOtherPlayerClass()
     return EntityOtherPlayer;
+end
+
+-- 是否可以飞行
+function GeneralGameClient:IsCanFly()
+    return false;
 end
 
 -- 获取当前认证用户信息

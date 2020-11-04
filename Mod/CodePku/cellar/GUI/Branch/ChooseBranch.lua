@@ -21,7 +21,7 @@ ChooseBranch.ui = nil
 
 ChooseBranch.branchStateTable = {}
 
-ChooseBranch.currChooseBranch = 5
+ChooseBranch.currChooseBranch = 1
 
 ChooseBranch.branchNameTalbe = {
     "甲子","乙丑","丙寅","丁卯","戊辰",
@@ -64,57 +64,93 @@ function ChooseBranch:StaticInit()
 end
 
 function ChooseBranch.OnWorldLoaded()
-    -- 清空原始分线数据缓存
-    ChooseBranch.branchStateTable = nil
-    commonlib.setfield(System.Codepku.branch.worldInfo, nil)
+    -- 向GGS服务器请求数据
+    GameLogic.RunCommand("/wanxueshijie worldInfo")
 
-    -- 拉去分支数据的计时器
-    local getDataTimer = commonlib.Timer:new({callbackFunc = function(timer)
+    -- 处理数据的计时器  因为GGS是异步获取的数据  这里弄个计时器看是否获取到了数据
+    ChooseBranch.timerNum = 0
+    ChooseBranch.dealDataTimer = commonlib.Timer:new({callbackFunc = function(timer)
         commonlib.log({"ontimer", timer.id, timer.delta, timer.lastTick})
-        ChooseBranch:GetBranchStateData()
-        if ChooseBranch.branchStateTable then
-            getDataTimer:Change()
+        ChooseBranch.timerNum = ChooseBranch.timerNum + 1
+        if ChooseBranch.timerNum > 10 and ChooseBranch.dealDataTimer then
+            --拉取10次后还是没有获取数据就直接终止，当前世界没有分线
+            ChooseBranch.dealDataTimer:Change()
+            return
+        end
+        ChooseBranch:DealBranchStateData()
+        if ChooseBranch.timerNum == 3 then
+            GameLogic.RunCommand("/wanxueshijie worldInfo")
+        end
+        if ChooseBranch.branchStateTable and ChooseBranch.dealDataTimer then
+            if #ChooseBranch.branchStateTable then
+                -- todo show mainUI button
+                ChooseBranch:ShowPage()
+            end
+            ChooseBranch.dealDataTimer:Change()
         end
     end})
 
-    getDataTimer:Change(0, 1000)
+    ChooseBranch.dealDataTimer:Change(0, 1000)
 end
 
 function ChooseBranch.OnWorldUnloaded()
-    ChooseBranch.branchStateTable = {}
+    if ChooseBranch.dealDataTimer then
+        ChooseBranch.dealDataTimer:Change()
+        ChooseBranch.dealDataTimer = nil
+    end
+
+    -- 清空原始分线数据缓存
+    ChooseBranch.branchStateTable = nil
+    ChooseBranch.currBranchData = nil
+    commonlib.setfield("System.Codepku.branch", nil)
 end
 
-function ChooseBranch:GetBranchStateData()
+function ChooseBranch:DealBranchStateData()
     -- todo   一堆逻辑要写
-    local currWorldId = System and System.Codepku and System.Codepku.Coursewares and System.Codepku.Coursewares.keepwork_project_id
     local currWorldName = System and System.Codepku and System.Codepku.Coursewares and System.Codepku.Coursewares.name
-    GameLogic.RunCommand("/ggs debug codepku")
     if System.Codepku and System.Codepku.branch and System.Codepku.branch.worldInfo then
         -- 当前所在世界的worldkey  用来判定当前ggs的服务器数据
         -- todo 记得这个数据来判定当前世界的分支数据
-        local worldKey = System.Codepku.branch.worldKey
+        ChooseBranch.currBranchData = {}
         ChooseBranch.branchStateTable = {}
-        local worlds = System.Codepku.branch.worldInfo.worlds
-        for key,value in pairs(worlds) do
+
+        local currWorld = System.Codepku.branch.currWorld
+        local worldKey = currWorld and currWorld.worldKey
+        local currInfo = {}
+        for each in string.gmatch(worldKey, "%d+") do
+            table.insert( currInfo, each )
+        end
+        ChooseBranch.currBranchData["worldId"] = tonumber(currInfo[1])
+        ChooseBranch.currBranchData["worldName"] = currInfo[2]
+        ChooseBranch.currBranchData["branchId"] = tonumber(currInfo[3])
+        ChooseBranch.currBranchData["currWorldName"] = currWorldName
+
+        ChooseBranch.currChooseBranch = tonumber(ChooseBranch.currBranchData["branchId"])
+
+
+        local worldInfo = System.Codepku.branch.worldInfo
+        for key,value in pairs(worldInfo) do
             local refInfo = {}
             for each in string.gmatch(key, "%d+") do
                 table.insert( refInfo, each )
             end
             local worldId = tonumber(refInfo[1])
-            local worldName = tonumber(refInfo[2])
+            local worldName = refInfo[2]
             local branchId = tonumber(refInfo[3])
             local playerNum = value
-            if worldId == currWorldId then
+            if worldId == tonumber(ChooseBranch.currBranchData["worldId"]) and worldName == ChooseBranch.currBranchData["worldName"] then
                 table.insert( ChooseBranch.branchStateTable,
                     {   
                         ["worldId"] = tonumber(worldId),
-                        ["worldName"] = tonumber(worldName),
+                        ["worldName"] = worldName,
                         ["branchId"] = tonumber(branchId),
                         ["playerNum"] = tonumber(playerNum)
                     } 
                 )
             end
         end
+    else
+        
     end
 end
 
@@ -129,13 +165,25 @@ function ChooseBranch:GetHTMLStyleStr(index)
     return styleStr
 end
 
-function ChooseBranch:changeBranch(index)
-    ChooseBranch.currChooseBranch = index
-    -- ChooseBranch:ShowPage(true)
+function ChooseBranch:changeCurrBranch(branchId)
+    ChooseBranch.currChooseBranch = branchId
+end
+
+function ChooseBranch:changeBranch()
+    for i,j in ipairs(ChooseBranch.branchStateTable) do
+        if ChooseBranch.currChooseBranch == j["branchId"] then
+            GameLogic.RunCommand(string.format("/connectCodePku -no=%d %d %s", j["branchId"], j["worldId"], j["worldName"]))
+            break
+        end
+    end
 end
 
 function ChooseBranch:getBranchName(nameId)
-    return ChooseBranch.branchNameTalbe[nameId]
+    local showName = ChooseBranch.currBranchData["currWorldName"].."-"..ChooseBranch.branchNameTalbe[nameId]
+    if commonlib.utf8.len(showName) > 7 then
+        showName = commonlib.utf8.sub(showName, 1, 3).."...-"..ChooseBranch.branchNameTalbe[nameId]
+    end
+    return showName
 end
 
 -- 当且仅当bShow为false时为关闭页面

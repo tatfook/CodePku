@@ -26,11 +26,19 @@ end
 
 function NetClientHandler:handleGeneral(packetGeneral)
     local action = packetGeneral.action;
-    if (action == "CodePKU") then 
+    if (action == "WanXueShiJie") then 
         local cmd = packetGeneral.data.cmd;
-        local worldInfo = packetGeneral.data.worldInfo;
-        GGS.INFO(cmd, worldInfo);
-        commonlib.setfield("System.Codepku.branch.worldInfo", worldInfo)
+        GGS.INFO(packetGeneral);
+
+        if cmd == "WorldInfo" then
+            local worldInfo = packetGeneral.data.data.worlds;
+            local currWorld = packetGeneral.data.data.current;
+            commonlib.setfield("System.Codepku.branch.worldInfo", worldInfo)
+            commonlib.setfield("System.Codepku.branch.currWorld", currWorld)
+        elseif cmd == "WorldKey" then
+            local currWorld = packetGeneral.data.data;
+            commonlib.setfield("System.Codepku.branch.currWorld", currWorld)
+        end
     else
         self._super.handleGeneral(self, packetGeneral)
     end
