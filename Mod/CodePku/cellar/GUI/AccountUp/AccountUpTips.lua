@@ -22,7 +22,7 @@ function AccountUpTips.OnSureBtnClicked(  )
     end
     NPL.load("(gl)Mod/CodePku/cellar/GUI/AccountUp/AccountUp.lua")
     local AccountUp = commonlib.gettable("Mod.CodePku.AccountUp")
-    AccountUp.ShowPage()
+    AccountUp.ShowPage(2)
 end
 
 function AccountUpTips.OnCancelBtnClicked(  )

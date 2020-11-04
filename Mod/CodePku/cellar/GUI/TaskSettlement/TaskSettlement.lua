@@ -325,6 +325,7 @@ function TaskSettlement:ShowPage(data, ifEnd)
 end
 
 function TaskSettlement:Show()
+    GameLogic.GetFilters():apply_filters("ClickStatistics", {type = 41}); -- 教学区弹出分享框次数，触发操作数据统计计数
     local params = {
         url = "Mod/CodePku/cellar/GUI/TaskSettlement/TaskSettlement.html",
         alignment = "_ct",
