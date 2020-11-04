@@ -36,8 +36,12 @@ function Schoolyard:DigitalProcessing(vitality)
 end
 
 -- todo增加活跃度
-function Schoolyard:AddVitality(type)
-    
+function Schoolyard:AddVitality(params)
+    echo("asgfhsdthwstrhjtr")
+    echo(params.type)
+    if params.type == "home" and params.time then
+        echo(params.time)
+    end
 end
 
 -- 查询我的学校

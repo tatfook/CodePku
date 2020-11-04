@@ -35,16 +35,17 @@ end
         </div>
         <div style="position: relative;left: 50;top: 600;width: 600;height: 200;background-color: #4200f8;">
             <div style="<%=format('position: relative;left:10;top:10;width: 150;height: 150;background:url(%s);', Schoolyard.schoolyard_avatar)%>"></div>
-            <div style="position: relative;left: 300;top: 10;width: 300;height: 60;background-color: #000000;font-family: zkklt;font-size: 36;color: #ffffff;"><%= System.User.info.nickname %></div>
+            <div style="position: relative;left: 300;top: 10;width: 300;height: 60;background-color: #000000;font-family: zkklt;font-size: 36;color: #ffffff;"><%= System.User.nickName %></div>
             <div style="position: relative;left: 300;top: 100;width: 300;height: 60;background-color: #000000;font-family: zkklt;font-size: 36;color: #ffffff;"><%= System.User.info.no %></div>
         </div>
         <div style="position: relative;left: 800;top: 50;width: 600;height: 760;background-color: #4200f8;">
             <div style="position: relative;left: 100;top: 10;width: 400;height: 60;background-color: #000000;font-family: zkklt;font-size: 36;color: #ffffff;">学校信息</div>
-            <div style="position: relative;left: 100;top: 110;width: 400;height: 60;background-color: #000000;font-family: zkklt;font-size: 36;color: #ffffff;"><%= "学校人数：" .. tostring(Schoolyard.number_of_people) %></div>
-            <div style="position: relative;left: 100;top: 210;width: 400;height: 60;background-color: #000000;font-family: zkklt;font-size: 36;color: #ffffff;"><%= "周活跃度：" .. tostring(Schoolyard.schoolyard_vitality) %></div>
-            <div style="position: relative;left: 100;top: 310;width: 400;height: 60;background-color: #000000;font-family: zkklt;font-size: 36;color: #ffffff;"><%= "周活跃排行：" .. tostring(Schoolyard.week_rank) %></div>
-            <div style="position: relative;left: 100;top: 410;width: 400;height: 60;background-color: #000000;font-family: zkklt;font-size: 36;color: #ffffff;"><%= "总活跃排行：" .. tostring(Schoolyard.total_rank) %></div>
-            <input type="button" name="变更学校" value="变更学校" style="position: relative;left: 200;top: 610;width: 200;height: 60;background-color: #000000;font-family: zkklt;font-size: 36;color: #ffffff;" onclick="ChangeSchoolyard"/>
+            <div style="position: relative;left: 100;top: 110;width: 400;height: 60;background-color: #000000;font-family: zkklt;font-size: 36;color: #ffffff;"><%= "学校等级：" .. tostring(Schoolyard.schoolyard_level) %></div>
+            <div style="position: relative;left: 100;top: 210;width: 400;height: 60;background-color: #000000;font-family: zkklt;font-size: 36;color: #ffffff;"><%= "学校人数：" .. tostring(Schoolyard.number_of_people) %></div>
+            <div style="position: relative;left: 100;top: 310;width: 400;height: 60;background-color: #000000;font-family: zkklt;font-size: 36;color: #ffffff;"><%= "周活跃度：" .. tostring(Schoolyard.schoolyard_vitality) %></div>
+            <div style="position: relative;left: 100;top: 410;width: 400;height: 60;background-color: #000000;font-family: zkklt;font-size: 36;color: #ffffff;"><%= "周活跃排行：" .. tostring(Schoolyard.week_rank) %></div>
+            <div style="position: relative;left: 100;top: 510;width: 400;height: 60;background-color: #000000;font-family: zkklt;font-size: 36;color: #ffffff;"><%= "总活跃排行：" .. tostring(Schoolyard.total_rank) %></div>
+            <input type="button" name="变更学校" value="变更学校" style="position: relative;left: 200;top: 650;width: 200;height: 60;background-color: #000000;font-family: zkklt;font-size: 36;color: #ffffff;" onclick="ChangeSchoolyard"/>
         </div>
     </div>
 </pe:mcml>
