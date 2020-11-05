@@ -18,15 +18,46 @@ function ClosePage()
     end
 end
 
+-- 搜索
+function OnSearch()
+    local search_name = page:GetValue("search_name")
+    search_name = tostring(search_name)
+    GameLogic.AddBBS("CodeGlobals", search_name, 3000, "#FF0000");
+end
 
+-- 选择省市区学校
+function OnSelect(name)
+    GameLogic.AddBBS("CodeGlobals", name, 3000, "#FF0000");
+end
 
 ]]>
 </script>
 
 <pe:container alignment="_lt" width="100%" height="100%">
 
-<div onclick="ClosePage" style="position: relative;left: 500;top: 200;width: 1000;height: 700;background-color:#00fcc5">
-    <input type="text">
+<div style="position: relative;left: 500;top: 200;width: 1000;height: 700;background-color:#007e11">
+    <div onclick="ClosePage" style="position: relative;left: 850;top: 20;width: 100;height: 100;background-color:#ff0000;font-family: zkklt;font-size: 36;color: #ffffff;">关闭</div>
+
+    <!-- 搜索筛选 -->
+    <div style="position: relative;left: 60;top: 60;width: 400;height: 150;background-color:#4200f8">
+        <div style="position: relative;left: 20;top: 10;width: 260;height: 60;background-color:#000000;font-family: zkklt;font-size: 36;color: #ffffff;">搜索筛选</div>
+        <input type="text" name="search_name" value=""  EmptyText='<%= L"请输入学校" %>' style="position: relative;left: 20;top: 80;width: 260;height: 60;background-color:#000000;font-family: zkklt;font-size: 36;color: #ffffff;" />
+        <input type="button" onclick="OnSearch" value="<%= L'搜索' %>" style="position: relative;left: 300;top: 80;width: 60;height: 60;background-color:#000000;font-family: zkklt;font-size: 24;color: #ffffff;" />
+    </div>
+
+    <!-- 条件筛选 -->
+    <div style="position: relative;left: 60;top: 250;width: 400;height: 400;background-color:#4200f8">
+        <div onclick="OnSelect" name="province" style="position: relative;left: 20;top: 10;width: 260;height: 60;background-color:#000000;font-family: zkklt;font-size: 36;color: #ffffff;">省</div>
+        <div onclick="OnSelect" name="city" style="position: relative;left: 20;top: 90;width: 260;height: 60;background-color:#000000;font-family: zkklt;font-size: 36;color: #ffffff;">市</div>
+        <div onclick="OnSelect" name="area" style="position: relative;left: 20;top: 170;width: 260;height: 60;background-color:#000000;font-family: zkklt;font-size: 36;color: #ffffff;">区</div>
+        <div onclick="OnSelect" name="school" style="position: relative;left: 20;top: 250;width: 260;height: 60;background-color:#000000;font-family: zkklt;font-size: 36;color: #ffffff;">学校</div>
+    </div>
+
+    <!-- 筛选结果 -->
+    <div style="position: relative;left: 500;top: 130;width: 400;height: 520;background-color:#4200f8">
+    
+    </div>
+
 </div>
 
 </pe:container>

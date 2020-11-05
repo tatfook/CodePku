@@ -35,12 +35,50 @@ function Schoolyard:DigitalProcessing(vitality)
     return result
 end
 
+-- 上线状态数值处理|return str
+function Schoolyard:TimeProcessing(time_statu)
+    local result
+    result = time_statu
+    return result
+end
+
 -- todo增加活跃度
 function Schoolyard:AddVitality(params)
-    echo("asgfhsdthwstrhjtr")
+    --[[
+        @params:
+        登陆{type = "login"}
+        上课{type = "course",courseware_id = courseware_id,category = System.Codepku.Coursewares and System.Codepku.Coursewares.course.category}
+        游戏{type = "game", courseware_id = courseware_id}
+        家园{type = "home", time = "start\close"}
+        小目标{type = "smalltarget"}
+        大计划{type = "bigplan"}
+    ]]
+
+    echo("when the man trigger the vitality filter")
     echo(params.type)
     if params.type == "home" and params.time then
         echo(params.time)
+        if params.time == "close" then
+            -- 关闭计时器
+        elseif params.time == "start" then
+            -- 开启计时器
+            Schoolyard.duration_timer = commonlib.Timer:new({
+                callbackFunc = function(timer)
+                    if Schoolyard.TimerTimes == 15 then
+                        GameLogic.AddBBS("CodeGlobals", L"关闭计时器", 3000, "#FF0000");
+                        Schoolyard.TimerTimes = nil
+                        LOG.std("", "info", "Schoolyard", "timer close");
+                        timer:Change()
+                    end
+                    if not Schoolyard.TimerTimes then
+                        Schoolyard.TimerTimes = 0
+                        LOG.std("", "info", "Schoolyard", "timer init");
+                    end
+                    Schoolyard.TimerTimes = Schoolyard.TimerTimes + 1
+                end
+            })
+            Schoolyard.duration_timer:Change(0, 1000)
+        end
     end
 end
 
@@ -54,6 +92,26 @@ function Schoolyard:GetMySchoolyard()
     Schoolyard.number_of_people = 1234
     Schoolyard.week_rank = 1
     Schoolyard.total_rank = 1
+end
+
+-- 我的校园成员
+function Schoolyard:GetMembers()
+    Schoolyard.my_members = {
+        {},
+        {},
+        {},
+        {},
+        {},
+        {},
+        {},
+        {},
+        {},
+        {},
+        {},
+        {},
+        {},
+        {},
+    }
 end
 
 -- 展示我的校园页面
