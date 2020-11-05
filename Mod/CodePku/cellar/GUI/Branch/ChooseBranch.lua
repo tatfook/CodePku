@@ -24,18 +24,18 @@ ChooseBranch.branchStateTable = {}
 ChooseBranch.currChooseBranch = 1
 
 ChooseBranch.branchNameTalbe = {
-    "甲子","乙丑","丙寅","丁卯","戊辰",
-    "已巳","庚午","辛未","壬申","癸酉",
-    "甲戌","乙亥","丙子","丁丑","戊寅",
-    "已卯","庚辰","辛巳","壬午","癸未",
-    "甲申","乙酉","丙戌","丁亥","戊子",
-    "己丑","庚寅","辛卯","壬辰","癸巳",
-    "甲午","乙未","丙申","丁酉","戊戌",
-    "已亥","庚子","辛丑","壬寅","癸卯",
-    "甲辰","乙巳","丙午","丁未","戊申",
-    "已酉","庚戌","辛亥","壬子","癸丑",
-    "甲寅","乙卯","丙辰","丁巳","戊午",
-    "已未","庚申","辛酉","壬戌","癸亥",
+    "甲子线","乙丑线","丙寅线","丁卯线","戊辰线",
+    "已巳线","庚午线","辛未线","壬申线","癸酉线",
+    "甲戌线","乙亥线","丙子线","丁丑线","戊寅线",
+    "已卯线","庚辰线","辛巳线","壬午线","癸未线",
+    "甲申线","乙酉线","丙戌线","丁亥线","戊子线",
+    "己丑线","庚寅线","辛卯线","壬辰线","癸巳线",
+    "甲午线","乙未线","丙申线","丁酉线","戊戌线",
+    "已亥线","庚子线","辛丑线","壬寅线","癸卯线",
+    "甲辰线","乙巳线","丙午线","丁未线","戊申线",
+    "已酉线","庚戌线","辛亥线","壬子线","癸丑线",
+    "甲寅线","乙卯线","丙辰线","丁巳线","戊午线",
+    "已未线","庚申线","辛酉线","壬戌线","癸亥线",
 }
 
 ChooseBranch.HTMLStyleData = {
@@ -137,14 +137,16 @@ function ChooseBranch:DealBranchStateData()
             local worldId = tonumber(refInfo[1])
             local worldName = refInfo[2]
             local branchId = tonumber(refInfo[3])
-            local playerNum = value
-            if worldId == tonumber(ChooseBranch.currBranchData["worldId"]) and worldName == ChooseBranch.currBranchData["worldName"] then
+            local playerNum = value and tonumber(value.online_client_count)
+            local maxPlayerNum = value and tonumber(value.max_client_count)
+            if worldId == tonumber(ChooseBranch.currBranchData["worldId"]) and worldName == ChooseBranch.currBranchData["worldName"] and playerNum > 0 then
                 table.insert( ChooseBranch.branchStateTable,
                     {   
                         ["worldId"] = tonumber(worldId),
                         ["worldName"] = worldName,
                         ["branchId"] = tonumber(branchId),
-                        ["playerNum"] = tonumber(playerNum)
+                        ["playerNum"] = tonumber(playerNum),
+                        ["maxPlayerNum"] = tonumber(maxPlayerNum),
                     } 
                 )
             end
