@@ -96,29 +96,6 @@ function GeneralGameClient:LoadWorld(opts, loadworld)
     end
 end
 
-function GeneralGameClient:OnWorldLoaded() 
-    -- 是否需要替换世界
-    if (not self.IsReplaceWorld) then return end
-    self.IsReplaceWorld = false;
-
-    -- 更新当前世界ID
-    local GeneralGameWorldClass = self:GetGeneralGameWorldClass() or GeneralGameWorld;
-    self:SetWorld(GeneralGameWorldClass:new():Init(self));
-    GameLogic.ReplaceWorld(self:GetWorld());
-    GameLogic.options:SetCanJumpInAir(self:IsCanFly());  -- 设置是否可以飞行
-    -- 登录世界
-    local options = self:GetOptions();
-    -- 设置世界类型
-    options.worldType = self:GetWorldType();  
-    -- if (IsDevEnv) then options.worldType = "ParaWorld" end
-
-    if (options.ip and options.port) then
-        self:GetWorld():Login(options);
-    else
-        self:ConnectControlServer(options); -- 连接控制器服务, 获取世界服务
-    end
-end
-
 -- 获取主玩家类
 function GeneralGameClient:GetEntityMainPlayerClass()
     return EntityMainPlayer;
