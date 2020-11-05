@@ -12,6 +12,7 @@ function GeneralGameClient:ctor()
 
     GameLogic.GetFilters():add_filter("ggs", function(msg)
         if (type(msg) == "table" and msg.action == "UpdateNickName") then
+            self.userinfo.username = msg.nickname;
             self.userinfo.nickname = msg.nickname;
         end
         return msg;
@@ -43,6 +44,11 @@ function GeneralGameClient:AddAssetsWhiteList()
     self.GetAssetsWhiteList().AddAsset("character/v5/10mobs/HaqiTown/Alexander/Alexander.x");
     self.GetAssetsWhiteList().AddAsset("character/v5/02animals/Panda/Panda.x");
     self.GetAssetsWhiteList().AddAsset("character/v6/02animals/Yangtuo/Yangtuo.x");
+        
+    self.GetAssetsWhiteList().AddAsset("character/v3/GameNpc/FCSQ2/FCSQ.x");
+    self.GetAssetsWhiteList().AddAsset("character/v3/GameNpc/ZZYH/ZZYH.x");
+    self.GetAssetsWhiteList().AddAsset("character/v3/GameNpc/GTCK/GTCK.x");
+    self.GetAssetsWhiteList().AddAsset("character/v5/02animals/FireBon/FireBon.x");
 end
 
 -- 获取主玩家类
