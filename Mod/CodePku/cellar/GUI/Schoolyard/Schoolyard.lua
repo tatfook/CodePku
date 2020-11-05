@@ -83,7 +83,7 @@ function Schoolyard:AddVitality(params)
 end
 
 -- 查询我的学校
-function Schoolyard:GetMySchoolyard()
+function Schoolyard:GetMySchoolyardInfo()
     Schoolyard.schoolyard_avatar = "https://cdn.codepku.com//img/default_avatar/0714/20180714163534.png"    -- 学校头像
     Schoolyard.schoolyard_name = "宾夕法尼亚小学"
     Schoolyard.schoolyard_address = "费城"
@@ -92,6 +92,24 @@ function Schoolyard:GetMySchoolyard()
     Schoolyard.number_of_people = 1234
     Schoolyard.week_rank = 1
     Schoolyard.total_rank = 1
+end
+
+-- 搜索学校
+function Schoolyard:GetSearchSchoolResult(page)
+    Schoolyard.search_result = {
+        {name = "宾夕法尼亚小学", no = 1,},
+        {name = "宾夕法尼亚小学", no = 2,},
+        {name = "宾夕法尼亚小学", no = 3,},
+        {name = "宾夕法尼亚小学", no = 4,},
+        {name = "宾夕法尼亚小学", no = 5,},
+        {name = "宾夕法尼亚小学", no = 6,},
+        {name = "宾夕法尼亚小学", no = 7,},
+        {name = "宾夕法尼亚小学", no = 8,},
+        {name = "宾夕法尼亚小学", no = 9,},
+        {name = "宾夕法尼亚小学", no = 10,},
+        {name = "宾夕法尼亚小学", no = 11,},
+    }
+    page:Refresh(0)
 end
 
 -- 我的校园成员

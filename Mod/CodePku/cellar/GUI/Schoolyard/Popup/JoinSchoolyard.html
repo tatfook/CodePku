@@ -23,11 +23,23 @@ function OnSearch()
     local search_name = page:GetValue("search_name")
     search_name = tostring(search_name)
     GameLogic.AddBBS("CodeGlobals", search_name, 3000, "#FF0000");
+    Schoolyard:GetSearchSchoolResult(page)
 end
 
 -- 选择省市区学校
 function OnSelect(name)
     GameLogic.AddBBS("CodeGlobals", name, 3000, "#FF0000");
+end
+
+-- 搜索结果
+function GetSearchResult()
+    return Schoolyard.search_result
+end
+
+-- 选中学校
+function OnChoose(name)
+    GameLogic.AddBBS("CodeGlobals", tostring(name), 3000, "#FF0000");
+
 end
 
 ]]>
@@ -55,7 +67,13 @@ end
 
     <!-- 筛选结果 -->
     <div style="position: relative;left: 500;top: 130;width: 400;height: 520;background-color:#4200f8">
-    
+        <pe:treeview style="position: relative;left: 10;top: 100;height:400;width:380;background-color: #00ffea;" name='messages' DefaultNodeHeight = "80" ItemsPerLine="1" AllowPaging="false" RememberScrollPos="true" RememberLastPage="false" VerticalScrollBarStep="20">
+            <pe:repeat DataSource="<%= GetSearchResult() %>">
+                <pe:repeatitem>
+                    <div onclick="OnChoose" name="<%= Eval('no') %>" style="width: 300;height: 40;top:5;left:5;margin-bottom: 5;background-color:#000000;font-family: zkklt;font-size: 36;color: #ffffff;"><%= Eval('name') %></div>
+                </pe:repeatitem>
+            </pe:repeat>
+        </pe:treeview>
     </div>
 
 </div>
