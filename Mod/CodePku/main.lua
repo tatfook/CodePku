@@ -132,6 +132,28 @@ function CodePku:init()
 	-- NPL.activate("(gl)Mod/CodePku/cellar/AssertManage/CodePkuAssertPreloader.lua")
 
 	GameLogic.GetFilters():add_filter(
+		"Player.LoadRemoteData",
+		function(default_return, name, default_value)
+			if(System.User.id) then
+				name = NPL.EncodeURLQuery(name, {"name", System.User.id})
+			end
+			local value = GameLogic.GetPlayerController():LoadLocalData(name, default_value, true)
+			return value;
+		end
+	)
+
+	GameLogic.GetFilters():add_filter(
+		"Player.SaveRemoteData",
+		function(default_return, name, value, bDeferSave)
+			if(System.User.id) then
+				name = NPL.EncodeURLQuery(name, {"name", System.User.id})
+			end
+			local result = GameLogic.GetPlayerController():SaveLocalData(name, value, true, bDeferSave)
+			return result
+		end
+	)
+
+	GameLogic.GetFilters():add_filter(
 		"ShowLoginModePage",
 		function()
 			MainLogin:Show()

@@ -96,10 +96,20 @@ function EditNamePage:ChangeNickname(new_nickname)
 	EditNamePage.CallingServer = true
 	request:put('/users/profile',params):next(function(response)
 		if response.status == 200 then
-			commonlib.setfield("System.User.username", result)
-			commonlib.setfield("System.User.nickName", result)
+			commonlib.setfield("System.User.username", new_nickname)
+			commonlib.setfield("System.User.nickName", new_nickname)
+			Mod.CodePku.Store:Set("user/random_name", new_nickname)
 			UserInfoPage.name = new_nickname
+
+			GameLogic.GetFilters():apply_filters("ggs", {action = "UpdateNickName", nickname = new_nickname});
+			GameLogic.GetFilters():apply_filters("ggs", {action = "UpdateUserInfo", userinfo = {username = new_nickname,nickname = new_nickname}});
+
 			GameLogic.AddBBS("CodeGlobals", L"设置新昵称成功", 3000, "#00FF00");
+			-- local msg = {
+			-- 	action = "UpdateNickName",
+			-- 	nickname = UserInfoPage.name,
+			-- }
+			-- GameLogic.GetFilters():apply_filters("ggs", msg);
 			EditNamePage.CallingServer = false
 			EditNamePage:OnCancelBtnClicked()
 			UserInfoPage.ShowSettingPopupUI:Refresh(0)
