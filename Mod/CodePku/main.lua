@@ -126,6 +126,7 @@ function CodePku:init()
 	self:BasicConfig()
 
 	-- 预加载图片
+	CodePkuDownloadWorld:ShowPrestrainPage()
 	NPL.load("(gl)Mod/CodePku/cellar/AssetManage/CodePkuAssetPreloader.lua")
 	local CodePkuAssetPreloader = commonlib.gettable("Mod.CodePku.AssetManage.CodePkuAssetPreloader")
 	CodePkuAssetPreloader.getSingleTon():PreloadAsset()

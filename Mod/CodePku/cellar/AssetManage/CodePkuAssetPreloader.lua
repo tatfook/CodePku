@@ -38,6 +38,8 @@ function CodePkuAssetPreloader:init()
         callbackFunc = function(nItemsLeft, loader)
             log(nItemsLeft.." assets remaining\n")
             if(nItemsLeft <= 0) then
+                local DownloadWorld = commonlib.gettable("MyCompany.Aries.Game.MainLogin.DownloadWorld")
+                DownloadWorld.Close()
                 log("all finished \n")
             end
         end
