@@ -61,7 +61,7 @@ function NetClientHandler:Login()
         worldId = options.worldId,
         worldName = options.worldName,
         worldType = options.worldType,
-        worldKey = options.worldId..(options.worldName or "1")..(options.no or "1"),
+        worldKey = options.worldId.."_"..(options.worldName or "1").."_"..(options.no or "1"),
         options = {
             isSyncBlock = options.isSyncBlock,
             isSyncForceBlock = options.isSyncForceBlock,
