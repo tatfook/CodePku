@@ -95,7 +95,7 @@ function Schoolyard:GetMySchoolyardInfo()
 end
 
 -- 搜索学校
-function Schoolyard:GetSearchSchoolResult(page)
+function Schoolyard:GetSearchSchoolResult(search_name, page)
     Schoolyard.search_result = {
         {name = "宾夕法尼亚小学", no = 1,},
         {name = "宾夕法尼亚小学", no = 2,},
@@ -109,7 +109,9 @@ function Schoolyard:GetSearchSchoolResult(page)
         {name = "宾夕法尼亚小学", no = 10,},
         {name = "宾夕法尼亚小学", no = 11,},
     }
-    page:Refresh(0)
+    if page then
+        page:Refresh(0)
+    end
 end
 
 -- 我的校园成员
