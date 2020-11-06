@@ -11,17 +11,22 @@
 local Schoolyard = NPL.load("(gl)Mod/CodePku/cellar/GUI/Schoolyard/Schoolyard.lua");
 local page = document:GetPageCtrl()
 
+-- 页面内的变量，存放用户输入的搜索内容，关闭页面会清除
+search_content = ""
+
 function ClosePage()
     if Schoolyard.join_page then
         Schoolyard.join_page:CloseWindow()
         Schoolyard.join_page = nil
     end
+    Schoolyard.search_result = nil
 end
 
 -- 搜索
 function OnSearch()
     local search_name = page:GetValue("search_name")
     search_name = tostring(search_name)
+    search_content = search_name
     GameLogic.AddBBS("CodeGlobals", search_name, 3000, "#FF0000");
     Schoolyard:GetSearchSchoolResult(page)
 end
@@ -53,7 +58,7 @@ end
     <!-- 搜索筛选 -->
     <div style="position: relative;left: 60;top: 60;width: 400;height: 150;background-color:#4200f8">
         <div style="position: relative;left: 20;top: 10;width: 260;height: 60;background-color:#000000;font-family: zkklt;font-size: 36;color: #ffffff;">搜索筛选</div>
-        <input type="text" name="search_name" value=""  EmptyText='<%= L"请输入学校" %>' style="position: relative;left: 20;top: 80;width: 260;height: 60;background-color:#000000;font-family: zkklt;font-size: 36;color: #ffffff;" />
+        <input type="text" name="search_name" value="<%= search_content %>"  EmptyText='<%= L"请输入学校" %>' style="position: relative;left: 20;top: 80;width: 260;height: 60;background-color:#000000;font-family: zkklt;font-size: 36;color: #ffffff;" />
         <input type="button" onclick="OnSearch" value="<%= L'搜索' %>" style="position: relative;left: 300;top: 80;width: 60;height: 60;background-color:#000000;font-family: zkklt;font-size: 24;color: #ffffff;" />
     </div>
 
