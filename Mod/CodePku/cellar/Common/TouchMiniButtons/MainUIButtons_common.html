@@ -83,7 +83,6 @@ function ClickChooseFun(name)
     if (name == "ClickEldership") then 
         GameLogic.GetFilters():apply_filters("ClickStatistics", {type = 16}); -- 点击我的家长，触发操作数据统计计数
         Eldership:ShowPage()
-    UIAnimManager.PlayDirectUIAnimation(block);
     elseif(name == "ClickSamllMap") then 
         SmallMap:ShowPage("TPpoput")    
     elseif(name == "ClickAntiJamming") then 
