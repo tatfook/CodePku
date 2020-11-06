@@ -31,8 +31,12 @@ function ClickExit()
     if System.os.IsMobilePlatform() then
         echo("手机退出")
         local App = NPL.load("(gl)Mod/CodePku/util/App.lua");
-        local AppInstance = App.newInstance();
-        AppInstance:closeApp()
+        if App then
+            local AppInstance = App.newInstance();
+            AppInstance:closeApp()
+        else
+            Desktop.ForceExit()
+        end
     else
         echo("电脑退出")
         Desktop.ForceExit()
