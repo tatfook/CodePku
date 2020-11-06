@@ -13,6 +13,7 @@ NPL.activate("(gl)Mod/CodePku/cellar/AssetManage/CodePkuAssetPreloader.lua")
 ]]--
 NPL.load("(gl)script/ide/AssetPreloader.lua")
 local CodePkuAssetPreloader = commonlib.inherit(nil, commonlib.gettable("Mod.CodePku.AssetManage.CodePkuAssetPreloader"))
+local DownloadWorld = commonlib.gettable("MyCompany.Aries.Game.MainLogin.DownloadWorld")
 
 function CodePkuAssetPreloader:ctor()
 end
@@ -37,8 +38,11 @@ function CodePkuAssetPreloader:init()
     self.loader = commonlib.AssetPreloader:new({
         callbackFunc = function(nItemsLeft, loader)
             log(nItemsLeft.." assets remaining\n")
+            if not DownloadWorld.nItemsTotal then
+                DownloadWorld.nItemsTotal = nItemsLeft
+            end
+            DownloadWorld.nItemsDone = DownloadWorld.nItemsTotal - nItemsLeft
             if(nItemsLeft <= 0) then
-                local DownloadWorld = commonlib.gettable("MyCompany.Aries.Game.MainLogin.DownloadWorld")
                 DownloadWorld.Close()
                 log("all finished \n")
             end
