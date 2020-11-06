@@ -28,7 +28,15 @@ function GetIcons(type, index)
 end
 
 function ClickExit()
-    Desktop.ForceExit()
+    if System.os.IsMobilePlatform() then
+        echo("手机退出")
+        local App = NPL.load("(gl)Mod/CodePku/util/App.lua");
+        local AppInstance = App.newInstance();
+        AppInstance:closeApp()
+    else
+        echo("电脑退出")
+        Desktop.ForceExit()
+    end
 end
 
 function ClickCancel()
@@ -45,7 +53,7 @@ end
     <!-- title -->
     <div style="position: relative;left: 251;top: 30;font-family: zkklt;font-size: 56;color: #4f402e;">提示</div>
     <!-- content -->
-    <div style="position: relative;left: 105;top: 134;width: 428;height: 109;line-height: 109;text-align: center;font-family: zkklt;font-size: 38;color: #675947;">是否退出游戏</div>
+    <div style="position: relative;left: 105;top: 134;width: 428;height: 109;line-height: 109;text-align: center;font-family: zkklt;font-size: 38;color: #675947;">是否退出《玩学世界》</div>
     <!-- 取消 -->
     <div onclick="ClickCancel" style="<%=format('position: relative; left: 74; top: 319; width: 146;height: 65;background:url(%s);', GetIcons(1, 'common_btn_red02.png'))%>">
         <div style="<%=format('position: relative; left: 22; top: 9; width: 100;height: 48;background:url(%s);', GetIcons(1, 'common_btn_cancel.png'))%>"></div>
