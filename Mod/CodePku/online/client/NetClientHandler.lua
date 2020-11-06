@@ -35,6 +35,14 @@ function NetClientHandler:handleGeneral(packetGeneral)
             local currWorld = packetGeneral.data.data.current;
             commonlib.setfield("System.Codepku.branch.worldInfo", worldInfo)
             commonlib.setfield("System.Codepku.branch.currWorld", currWorld)
+            -- 如果分线界面开启着  直接刷新分线数据和界面
+            NPL.load("(gl)Mod/CodePku/cellar/GUI/Branch/ChooseBranch.lua")
+            local ChooseBranch = commonlib.gettable("Mod.CodePku.GUI.ChooseBranch")
+            if ChooseBranch.ui then
+                ChooseBranch:DealBranchStateData()
+                ChooseBranch.ui:Refresh()
+            end
+
         elseif cmd == "WorldKey" then
             local currWorld = packetGeneral.data.data;
             commonlib.setfield("System.Codepku.branch.currWorld", currWorld)
@@ -53,12 +61,12 @@ function NetClientHandler:Login()
         worldId = options.worldId,
         worldName = options.worldName,
         worldType = options.worldType,
+        worldKey = options.worldId..(options.worldName or "1")..(options.no or "1"),
         options = {
             isSyncBlock = options.isSyncBlock,
             isSyncForceBlock = options.isSyncForceBlock,
             isSyncCmd = options.isSyncCmd,
             areaSize = options.areaSize,
-            no = options.no or "1"
         }
     }));
 end

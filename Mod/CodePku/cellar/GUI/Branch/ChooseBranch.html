@@ -38,6 +38,9 @@ end
 
 function OnClose()
     Page:CloseWindow()
+    if ChooseBranch.ui then
+        ChooseBranch.ui = nil
+    end
 end
 
 function OnChooseBranchBtnClicked()

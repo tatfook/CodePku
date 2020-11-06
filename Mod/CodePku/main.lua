@@ -534,6 +534,7 @@ function CodePku:init()
 	local TaskSystem = commonlib.gettable("Mod.CodePku.Common.TaskSystem")
 	TaskSystem:StaticInit();
 
+	-- 初始化分线系统
 	NPL.load("(gl)Mod/CodePku/cellar/GUI/Branch/ChooseBranch.lua")
 	local ChooseBranch = commonlib.gettable("Mod.CodePku.GUI.ChooseBranch")
 	ChooseBranch:StaticInit()

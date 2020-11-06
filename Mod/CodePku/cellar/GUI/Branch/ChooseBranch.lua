@@ -52,15 +52,22 @@ ChooseBranch.HTMLStyleData = {
     [11] = { ["desc"] = "滚动区域", ["position"] = "relative", ["left"] = 90, ["top"] = 256, ["width"] = 514, ["height"] = 670,},
     [12] = { ["desc"] = "分线栏背景(未选择)", ["width"] = 515, ["height"] = 106,["background"] = "url("..branchImageData:GetIconUrl("branch_boot_g.png")..")",},
     [13] = { ["desc"] = "分线栏背景(选中)", ["width"] = 515, ["height"] = 107,["background"] = "url("..branchImageData:GetIconUrl("branch_boot_w.png")..")",},
-    [14] = { ["desc"] = "分线栏状态标签", ["position"] = "relative", ["left"] = 24, ["top"] = 30, ["width"] = 52, ["height"] = 52,["background"] = "url("..branchImageData:GetIconUrl("branch_icon_g.png")..")",},
+    [14] = { ["desc"] = "分线栏状态标签()", ["position"] = "relative", ["left"] = 24, ["top"] = 30, ["width"] = 52, ["height"] = 52,["background"] = "url("..branchImageData:GetIconUrl("branch_icon_g.png")..")",},
     [15] = { ["desc"] = "分线栏文字",  ["position"] = "relative", ["left"] = 109, ["top"] = 32, ["width"] = 400, ["height"] = 60, ["color"] = "#813010", ["font-family"] = "zkklt", ["font-size"] = "48",},
     [16] = { ["desc"] = "切换分线按钮文字",  ["position"] = "relative", ["left"] = 49, ["top"] = 26, ["width"] = 199, ["height"] = 41,["background"] = "url("..branchImageData:GetIconUrl("branch_icon_g_mat.png")..")",},
+    [17] = { ["desc"] = "分线栏状态标签()", ["position"] = "relative", ["left"] = 24, ["top"] = 30, ["width"] = 52, ["height"] = 52,["background"] = "url("..branchImageData:GetIconUrl("branch_icon_g.png")..")",},
+    [18] = { ["desc"] = "分线栏状态标签()", ["position"] = "relative", ["left"] = 24, ["top"] = 30, ["width"] = 52, ["height"] = 52,["background"] = "url("..branchImageData:GetIconUrl("branch_icon_g.png")..")",},
 }
 
 function ChooseBranch:StaticInit()
     LOG.std("", "info", "ChooseBranch", "StaticInit");
+    -- 拉取服务器数据
     GameLogic:Connect("WorldLoaded", ChooseBranch, ChooseBranch.OnWorldLoaded, "UniqueConnection");
     GameLogic:Connect("WorldUnloaded", ChooseBranch, ChooseBranch.OnWorldUnloaded, "UniqueConnection");
+end
+
+function ChooseBranch:GetBranchStateIcon(branchId, ip, port)
+	
 end
 
 function ChooseBranch.OnWorldLoaded()
@@ -147,12 +154,13 @@ function ChooseBranch:DealBranchStateData()
                         ["branchId"] = tonumber(branchId),
                         ["playerNum"] = tonumber(playerNum),
                         ["maxPlayerNum"] = tonumber(maxPlayerNum),
+                        ["serverId"] = tonumber(1),
+                        ["ip"] = "127.0.0.1",
+                        ["port"] = 9900,
                     } 
                 )
             end
-        end
-    else
-        
+        end        
     end
 end
 
