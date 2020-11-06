@@ -18,7 +18,7 @@ local request = NPL.load("(gl)Mod/CodePku/api/BaseRequest.lua");
 
 --[[
     track_id 行为ID 
-    track_scene 行为场景，0-登录页 1-主界面 2-地图 3-精品课程 4-改名 5-课程结算 6-跑酷 7-游学记 8-底部功能键栏 9-顶部功能键栏 10-家园区
+    track_scene 行为场景，0-登录页 1-主界面 2-地图 3-精品课程 4-改名 5-课程结算 6-跑酷 7-游学记 8-底部功能键栏 9-顶部功能键栏 10-家园区 11-站到最后
     track_type 行为类型，0点击 1分享
     keepwork_id 当前世界ID，没有ID则为0
 ]]
@@ -127,6 +127,18 @@ ClickStatistics.ClickInfo={
     [82] = {track_id= 35, track_scene=9, track_type=1, }, --微信分享成功
     [83] = {track_id= 36, track_scene=9, track_type=0, }, --朋友圈
     [84] = {track_id= 36, track_scene=9, track_type=1, }, --朋友圈分享成功
+    -- 站到最后
+    [85] = {track_id= 31, track_scene=11, track_type=0, }, --弹出海报弹框
+    [86] = {track_id= 31, track_scene=11, track_type=1, }, --分享成功
+    [87] = {track_id= 32, track_scene=11, track_type=0, }, --确认分享
+    [88] = {track_id= 33, track_scene=11, track_type=0, }, --QQ
+    [89] = {track_id= 33, track_scene=11, track_type=1, }, --QQ分享成功
+    [90] = {track_id= 34, track_scene=11, track_type=0, }, --QQ空间
+    [91] = {track_id= 34, track_scene=11, track_type=1, }, --QQ空间分享成功
+    [92] = {track_id= 35, track_scene=11, track_type=0, }, --微信
+    [93] = {track_id= 35, track_scene=11, track_type=1, }, --微信分享成功
+    [94] = {track_id= 36, track_scene=11, track_type=0, }, --朋友圈
+    [95] = {track_id= 36, track_scene=11, track_type=1, }, --朋友圈分享成功
 }
 
 function ClickStatistics:StaticInit()

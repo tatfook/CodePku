@@ -149,6 +149,17 @@ function ShareApp:GetStatisticData(id, e, flag)
                 data = {type = 72}
             end
             GameLogic.GetFilters():apply_filters("ClickStatistics", data); -- 分享成功前，触发操作数据统计计数
+        elseif id == 131 or id == 133 or id == 134 then --站到最后结束弹出框
+            if platform == "QQ" then
+                data = {type = 88}
+            elseif platform == "QZONE" then
+                data = {type = 90}
+            elseif platform == "WEIXIN" then
+                data = {type = 92}
+            elseif platform == "WEIXIN_CIRCLE" then
+                data = {type = 94}
+            end
+            GameLogic.GetFilters():apply_filters("ClickStatistics", data); -- 分享成功前，触发操作数据统计计数
         end
     elseif flag == 2 then
         local data = {}
@@ -203,6 +214,19 @@ function ShareApp:GetStatisticData(id, e, flag)
                 data = {type = 71}
             elseif platform == "WEIXIN_CIRCLE" then
                 data = {type = 73}
+            end
+            GameLogic.GetFilters():apply_filters("ClickStatistics", data); -- 分享成功，触发操作数据统计计数
+            GameLogic.GetFilters():apply_filters("ClickStatistics", data2); -- 记录成功分享至某个平台的次数，触发操作数据统计计数
+        elseif id == 131 or id == 132 or id == 134 then --站到最后弹出框
+            data2 = {type = 86}
+            if platform == "QQ" then
+                data = {type = 89}
+            elseif platform == "QZONE" then
+                data = {type = 91}
+            elseif platform == "WEIXIN" then
+                data = {type = 93}
+            elseif platform == "WEIXIN_CIRCLE" then
+                data = {type = 95}
             end
             GameLogic.GetFilters():apply_filters("ClickStatistics", data); -- 分享成功，触发操作数据统计计数
             GameLogic.GetFilters():apply_filters("ClickStatistics", data2); -- 记录成功分享至某个平台的次数，触发操作数据统计计数
