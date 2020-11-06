@@ -10,7 +10,11 @@
             <script refresh="false" type="text/npl" src="UserInfo.lua">
                 <![CDATA[
                     local MainUIButtons = NPL.load("(gl)Mod/CodePku/cellar/Common/TouchMiniButtons/Main.lua");
-                    
+                    local mainFrameImageData = NPL.load("(gl)Mod/CodePku/cellar/imageLuaTable/mainFrameImageData.lua")
+                    backgroundUrl = mainFrameImageData:GetIconUrl('main_icon_coin_3.png')
+                    goldcoinUrl = mainFrameImageData:GetIconUrl('main_icon_coin_1.png')
+                    wanxuecoinUrl = mainFrameImageData:GetIconUrl('main_icon_coin_2.png')
+
                     function GetMoney()
                         local info = Mod.CodePku.Store:Get('user/info');
                         local wallets = info.user_wallets or {};
@@ -26,15 +30,11 @@
                     end
                 ]]>
             </script>
-                <div align="right" style="position:relative;float:right;font-size:28px;color:#ffffff;text-align:center;font-weight:bold;">
-                <div style="float:right;margin-right:58px;">
-                    <div style="float:left;width:196px;height:50px;background:url(codepku/image/textures/profile_32bits.png#1032 75 200 54);margin-top:16px;padding-top:8px;"><%=GetMoney().goldcoin%></div>
-                    <div style="float:left;width:67px;height:65px;background:url(codepku/image/textures/common_32bits.png#913 41 73 71);margin-top:9px;margin-left:-219px;"></div>
-                </div>
-                <div style="float:right;margin-right:100px;">
-                    <div style="float:left;width:196px;height:50px;background:url(codepku/image/textures/profile_32bits.png#1032 75 200 54);margin-top:16px;padding-top:8px;"><%=GetMoney().wanxuecoin%></div>
-                    <div style="float:left;width:71px;height:71px;background:url(codepku/image/textures/common_32bits.png#913 136 77 78);margin-top:6px;margin-left:-225px;"></div>
-                </div>
+            <div style="font-size:40;color:#6F473C;line-height:50;text-align:center;font-weight:bold;">
+                <div style="<%=format('position:relative;width:210;height:57;top:11;left:47;background:url(%s);',backgroundUrl)%>"><%=GetMoney().goldcoin%></div>
+                <div style="<%=format('position:relative;width:74;height:76;top:4;background:url(%s);',goldcoinUrl)%>"></div>
+                <div style="<%=format('position:relative;width:210;height:57;top:11;left:336;background:url(%s);',backgroundUrl)%>"><%=GetMoney().wanxuecoin%></div>
+                <div style="<%=format('position:relative;width:74;height:85;top:0;left:291;background:url(%s);',wanxuecoinUrl)%>"></div>
             </div>
         </pe:mcml>
     </body>

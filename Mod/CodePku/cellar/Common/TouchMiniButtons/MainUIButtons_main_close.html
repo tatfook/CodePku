@@ -1,0 +1,31 @@
+<!-- "Mod/CodePku/cellar/Common/TouchMiniButtons/MainUIButtons_common.html" -->
+<!-- 首页按钮-我的家长，地图，脱离卡点，账号升级，切换分线 -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" >
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+</head>
+
+<body>
+<pe:mcml>
+<script refresh="false" type="text/npl" src="MainSceneUIButtons.lua"><![CDATA[
+local MainUIButtons = NPL.load("(gl)Mod/CodePku/cellar/Common/TouchMiniButtons/Main.lua");
+local mainFrameImageData = NPL.load("(gl)Mod/CodePku/cellar/imageLuaTable/mainFrameImageData.lua")
+main_icon_clos = mainFrameImageData:GetIconUrl('main_icon_clos.png')
+
+function ClickOpen()
+    Page:CloseWindow()
+    MainUIButtons.show_main_open_ui()
+end
+
+]]></script>
+<style type="text/mcss">
+
+</style>
+<pe:container alignment="_lt" width="100%" height="100%">
+    <div style="<%=format('width:264;height:36;background:url(%s);',main_icon_clos)%>" onclick="ClickOpen"></div>
+</pe:container>
+</pe:mcml> 
+</body>
+</html>

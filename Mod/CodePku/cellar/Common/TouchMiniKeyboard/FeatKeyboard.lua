@@ -119,7 +119,7 @@ function FeatKeyboard:getFBtn()
 
     local button = ParaUI.GetUIObject(name);
 
-    local left = Design:adapterWidth(1722);
+    local left = Design:adapterWidth(1656);
     local top = Design:adapterHeight(606);
     local width = Design:adapterWidth(100);
     local height = Design:adapterWidth(100);
@@ -163,7 +163,7 @@ function FeatKeyboard:getXBtn()
 
     local button = ParaUI.GetUIObject(name);
 
-    local left = Design:adapterWidth(1722);
+    local left = Design:adapterWidth(1656);
     local top = Design:adapterHeight(441);
     local width = Design:adapterWidth(100);
     local height = Design:adapterWidth(100);
@@ -207,8 +207,8 @@ function FeatKeyboard:getShiftBtn()
 
     local button = ParaUI.GetUIObject(name);
 
-    local left = Design:adapterWidth(1722);
-    local top = Design:adapterHeight(141);
+    local left = Design:adapterWidth(1656);
+    local top = Design:adapterHeight(290);
     local width = Design:adapterWidth(100);
     local height = Design:adapterWidth(100);
 
@@ -283,7 +283,7 @@ function FeatKeyboard:getZoomBtn()
                 "button",
                 buttonName,
                 self.align,
-                Design:adapterWidth(25),
+                Design:adapterWidth(100),
                 Design:adapterHeight(50),
                 Design:adapterWidth(100),
                 Design:adapterWidth(100)
