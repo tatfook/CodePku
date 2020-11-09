@@ -227,8 +227,8 @@ function ChooseBranch:DealBranchStateData()
                 end
             end
         end
-        echo("======zr=====")
-        echo(ChooseBranch.branchStateTable)
+        -- echo("======zr=====")
+        -- echo(ChooseBranch.branchStateTable)
     end
 end
 
@@ -243,12 +243,19 @@ function ChooseBranch:GetHTMLStyleStr(index)
     return styleStr
 end
 
-function ChooseBranch:changeCurrBranch(branchId, serverId)
-    ChooseBranch.currChooseBranch = branchId
-    ChooseBranch.currChooseServer = serverId
+function ChooseBranch:changeCurrBranch(name)
+    local refInfo = {}
+    for each in string.gmatch(name, "%d+") do
+        table.insert( refInfo, each )
+    end
+    ChooseBranch.currChooseBranch = tonumber(refInfo[1])
+    ChooseBranch.currChooseServer = tonumber(refInfo[2])
 end
 
 function ChooseBranch:changeBranch()
+    -- echo("ChooseBranch:changeBranch enter")
+    -- echo(ChooseBranch.currChooseBranch)
+    -- echo(ChooseBranch.currChooseServer)
     for i,j in ipairs(ChooseBranch.branchStateTable) do
         if ChooseBranch.currChooseBranch == j["branchId"] and ChooseBranch.currChooseServer == j["serverId"] then
             GameLogic.RunCommand(string.format("/connectCodePku -no=%d -host=%s -port=%s %d %s", j["branchId"], j["ip"], j["port"], j["worldId"], j["worldName"]))

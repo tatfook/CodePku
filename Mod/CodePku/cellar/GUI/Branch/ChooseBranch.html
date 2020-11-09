@@ -48,9 +48,8 @@ function OnChooseBranchBtnClicked()
     OnClose()
 end
 
-function ChangeBranch(name, id)
-    local branchId = tonumber(name)
-    ChooseBranch:changeCurrBranch(branchId)
+function ChangeBranch(name)
+    ChooseBranch:changeCurrBranch(name)
     Page:Refresh(0.01)
 end
 
@@ -85,9 +84,9 @@ end
             DataSource='<%= branchStateTable %>' CellPadding="0" ItemsPerLine="1" RememberScrollPos="true"
             VerticalScrollBarStep="25" VerticalScrollBarOffsetX="8" DefaultNodeHeight="140">
             <Columns>
-                <pe:if condition="<%= Eval('branchId') ~= ChooseBranch.currChooseBranch %>">
+                <pe:if condition="<%= Eval('branchId') ~= ChooseBranch.currChooseBranch or Eval('serverId') ~= ChooseBranch.currChooseServer %>">
                     <div style="<%=GetStyleStr(21)%>">
-                        <div name='<%=Eval("branchId")%>' id='<%= Eval("serverId") %>' onclick="ChangeBranch" style="<%=GetStyleStr(12)%>">
+                        <div name='<%=string.format("%s__%s",Eval("branchId"),Eval("serverId"))%>'  onclick="ChangeBranch" style="<%=GetStyleStr(12)%>">
                             <div style="<%=GetStyleStr(15)%>"><%= GetBranchName(Eval('branchId')) %></div>
                             <div style="<%=GetStyleStr(14)%>"></div>
                         </div>
@@ -96,7 +95,7 @@ end
                         </div>
                     </div>
                 </pe:if>
-                <pe:if condition="<%= Eval('branchId') == ChooseBranch.currChooseBranch %>">
+                <pe:if condition="<%= Eval('branchId') == ChooseBranch.currChooseBranch and Eval('serverId') == ChooseBranch.currChooseServer %>">
                     <div style="<%=GetStyleStr(21)%>">
                         <div style="<%=GetStyleStr(13)%>">
                             <div style="<%=GetStyleStr(15)%>"><%= GetBranchName(Eval('branchId')) %></div>
