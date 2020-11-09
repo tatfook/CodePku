@@ -13,7 +13,15 @@
 local MainUIButtons = NPL.load("(gl)Mod/CodePku/cellar/Common/TouchMiniButtons/Main.lua");
 local mainFrameImageData = NPL.load("(gl)Mod/CodePku/cellar/imageLuaTable/mainFrameImageData.lua")
 main_icon_clos = mainFrameImageData:GetIconUrl('main_icon_clos.png')
-
+if System.os.IsMobilePlatform() then
+    main_icon_clos = mainFrameImageData:GetIconUrl('main_icon_clos_p.png')
+    main_icon_clos_width = 340
+    main_icon_clos_height = 49
+else
+    main_icon_clos = mainFrameImageData:GetIconUrl('main_icon_clos.png')
+    main_icon_clos_width = 264
+    main_icon_clos_height = 36
+end
 function ClickOpen()
     Page:CloseWindow()
     MainUIButtons.show_main_open_ui()
@@ -24,7 +32,7 @@ end
 
 </style>
 <pe:container alignment="_lt" width="100%" height="100%">
-    <div style="<%=format('width:264;height:36;background:url(%s);',main_icon_clos)%>" onclick="ClickOpen"></div>
+    <div style="<%=format('width:%d;height:%d;background:url(%s);',main_icon_clos_width,main_icon_clos_height,main_icon_clos)%>" onclick="ClickOpen"></div>
 </pe:container>
 </pe:mcml> 
 </body>

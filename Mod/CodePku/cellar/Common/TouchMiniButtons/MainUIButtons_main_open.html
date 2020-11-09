@@ -15,7 +15,16 @@ local MainPopup = commonlib.gettable("Mod.CodePku.GUI.MainPopup")
 local Feedback = NPL.load("(gl)Mod/CodePku/cellar/GUI/Feedback/Feedback.lua");
 local MainUIButtons = NPL.load("(gl)Mod/CodePku/cellar/Common/TouchMiniButtons/Main.lua");
 local mainFrameImageData = NPL.load("(gl)Mod/CodePku/cellar/imageLuaTable/mainFrameImageData.lua")
-main_icon_open = mainFrameImageData:GetIconUrl('main_icon_open.png')
+main_icon_open = ""
+if System.os.IsMobilePlatform() then
+    main_icon_open = mainFrameImageData:GetIconUrl('main_icon_open_p.png')
+    main_icon_open_width = 688
+    main_icon_open_height = 241
+else
+    main_icon_open = mainFrameImageData:GetIconUrl('main_icon_open.png')
+    main_icon_open_width = 530
+    main_icon_open_height = 176
+end
 
 main_open = MainUIButtons.main_open
 function ClickChooseFun(name)
@@ -43,7 +52,7 @@ end
 
 </style>
 <pe:container alignment="_lt" width="100%" height="100%">
-    <div style="<%=format('position:relative;width:530;height:176;top:0;left:0;background:url(%s);',main_icon_open)%>" onclick="ClickClose"></div>
+    <div style="<%=format('position:relative;width:%d;height:%d;top:0;left:0;background:url(%s);',main_icon_open_width,main_icon_open_height,main_icon_open)%>" onclick="ClickClose"></div>
     <pe:repeat DataSource="<%=main_open%>" style="">
         <pe:repeatitem style="float:left;">
             <pe:if condition="<%=Eval('bShow') == true%>">

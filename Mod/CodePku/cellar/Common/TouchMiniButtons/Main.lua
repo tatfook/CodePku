@@ -76,10 +76,16 @@ MainUIButtons.dialog_right = {
 	[7]={url=mainFrameImageData:GetIconUrl("main_icon_dressup.png"),top=20,width=85,height=86,left=14,name="ClickChange",bShow=false,},
 }
 
-MainUIButtons.main_open = {
+MainUIButtons.main_open_pc = {
 	[1]={url=mainFrameImageData:GetIconUrl("main_icon_3.png"),top=9,width=122,height=109,left=22,name="ClickSamllMap",bShow=true,},
 	[2]={url=mainFrameImageData:GetIconUrl("main_icon_2.png"),top=11,width=164,height=107,left=41,name="ClickAntiJamming",bShow=true,},
 	[3]={url=mainFrameImageData:GetIconUrl("main_icon_1.png"),top=6,width=100,height=111,left=53,name="ClickFeedback",bShow=true,},
+}
+
+MainUIButtons.main_open_mobile = {
+	[1]={url=mainFrameImageData:GetIconUrl("main_icon_3_p.png"),top=20,width=157,height=147,left=53,name="ClickSamllMap",bShow=true,},
+	[2]={url=mainFrameImageData:GetIconUrl("main_icon_2_p.png"),top=20,width=213,height=145,left=36,name="ClickAntiJamming",bShow=true,},
+	[3]={url=mainFrameImageData:GetIconUrl("main_icon_1_p.png"),top=20,width=129,height=151,left=36,name="ClickFeedback",bShow=true,},
 }
 
 MainUIButtons.activity = {
@@ -133,20 +139,49 @@ end
 
 -- 竞技区，教学区顶部导航-开启
 function MainUIButtons:show_main_open_ui()
-	local open_width = MainUIButtons:getWidth(MainUIButtons.main_open, 0)
+	if MainUIButtons.main_open_window then
+		MainUIButtons.main_open_window:CloseWindow()
+		MainUIButtons.main_open_window = nil
+	end
+	local open_heght = 250
+	local open_width = 688
+	if System.os.IsMobilePlatform() then
+		MainUIButtons.main_open = MainUIButtons.main_open_mobile
+	else
+		open_heght = 176
+		open_width = 530
+		MainUIButtons.main_open = MainUIButtons.main_open_pc
+	end
 	local open_left = 1920*0.5 - open_width*0.5
 	local params = {
 		url="Mod/CodePku/cellar/Common/TouchMiniButtons/MainUIButtons_main_open.html", 
-		alignment="_lt", left = open_left, top = 0, width = open_width, height = 176, click_through = true,
+		alignment="_lt", left = open_left, top = 0, width = open_width, height = open_heght, click_through = true,
 	}
 	MainUIButtons.main_open_window = AdaptWindow:QuickWindow(params)
+	MainUIButtons.CloseNav()
 end
 
 -- 竞技区，教学区顶部导航-关闭
 function MainUIButtons:show_main_close_ui()
+	if MainUIButtons.main_close_window then
+		MainUIButtons.main_close_window:CloseWindow()
+		MainUIButtons.main_close_window = nil
+	end
+	local open_heght = 0
+	local open_width = 0
+	local open_left = 0
+	if System.os.IsMobilePlatform() then
+		open_heght = 49
+		open_width = 340
+		open_left = 790
+	else
+		open_heght = 36
+		open_width = 264
+		open_left = 828
+	end
 	local params = {
 		url="Mod/CodePku/cellar/Common/TouchMiniButtons/MainUIButtons_main_close.html", 
-		alignment="_lt", left = 842, top = 0, width = 264, height = 36, click_through = true,
+		alignment="_lt", left = open_left, top = 0, width = open_width, height = open_heght, click_through = true,
 	}
 	MainUIButtons.main_close_window = AdaptWindow:QuickWindow(params)
 end
@@ -381,7 +416,7 @@ function MainUIButtons.ShowPage()
 		else
 			-- 竞技，教学区按钮
 			MainUIButtons:show_main_open_ui()
-			MainUIButtons.CloseNav()
+			-- MainUIButtons.CloseNav()
 		end
 	end
 	--进入家园区初始化时隐藏目录
@@ -397,6 +432,9 @@ function MainUIButtons.ShowPage()
 end
 
 function MainUIButtons.CloseNav()
+	if MainUIButtons.mytimer then
+		MainUIButtons.mytimer:Change()
+	end
 	MainUIButtons.mytimer = commonlib.Timer:new(
 		{
 			callbackFunc = function(timer)
