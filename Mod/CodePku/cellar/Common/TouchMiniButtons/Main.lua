@@ -20,6 +20,7 @@ local MainUIButtons = NPL.export();
 
 MainUIButtons.hasshown = false
 MainUIButtons.is_dialog_open = true
+MainUIButtons.main_close_window_height = 80
 
 MainUIButtons.common_window = nil
 MainUIButtons.function_window = nil
@@ -172,10 +173,12 @@ function MainUIButtons:show_main_close_ui()
 	local open_left = 0
 	if System.os.IsMobilePlatform() then
 		open_heght = 49
+		open_heght = MainUIButtons.main_close_window_height
 		open_width = 340
 		open_left = 790
 	else
-		open_heght = 36
+		-- open_heght = 36
+		open_heght = MainUIButtons.main_close_window_height
 		open_width = 264
 		open_left = 828
 	end
