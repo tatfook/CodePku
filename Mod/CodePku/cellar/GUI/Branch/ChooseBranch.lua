@@ -11,6 +11,8 @@ ChooseBranch:ShowPage()
 ]]--
 NPL.load("(gl)Mod/CodePku/cellar/GUI/Branch/BranchData.lua")
 NPL.load("(gl)script/ide/UIAnim/UIAnimManager.lua")
+
+local request = NPL.load("(gl)Mod/CodePku/api/BaseRequest.lua")
 local branchImageData = NPL.load("(gl)Mod/CodePku/cellar/imageLuaTable/branchImageData.lua")
 local common1ImageData = NPL.load("(gl)Mod/CodePku/cellar/imageLuaTable/common1ImageData.lua")
 
@@ -22,6 +24,7 @@ ChooseBranch.ui = nil
 ChooseBranch.branchStateTable = {}
 
 ChooseBranch.currChooseBranch = 1
+ChooseBranch.currChooseServer = 2
 
 ChooseBranch.branchNameTalbe = {
     "甲子线","乙丑线","丙寅线","丁卯线","戊辰线",
@@ -49,25 +52,82 @@ ChooseBranch.HTMLStyleData = {
     [8] = { ["desc"] = "流畅图标", ["position"] = "relative", ["left"] = 467, ["top"] = 186, ["width"] = 52, ["height"] = 52, ["background"] = "url("..branchImageData:GetIconUrl("branch_icon_g.png")..")",},
     [9] = { ["desc"] = "流畅文字", ["position"] = "relative", ["left"] = 539, ["top"] = 194, ["width"] = 104, ["height"] = 52, ["color"] = "#9e6c5e", ["font-family"] = "zkklt", ["font-size"] = "40px",},
     [10] = { ["desc"] = "标题文字", ["position"] = "relative", ["left"] = 210, ["top"] = 31, ["width"] = 400, ["height"] = 120, ["color"] = "#9e6c5e", ["font-family"] = "zkklt", ["font-size"] = "65px",},
-    [11] = { ["desc"] = "滚动区域", ["position"] = "relative", ["left"] = 90, ["top"] = 256, ["width"] = 514, ["height"] = 670,},
-    [12] = { ["desc"] = "分线栏背景(未选择)", ["width"] = 515, ["height"] = 106,["background"] = "url("..branchImageData:GetIconUrl("branch_boot_g.png")..")",},
-    [13] = { ["desc"] = "分线栏背景(选中)", ["width"] = 515, ["height"] = 107,["background"] = "url("..branchImageData:GetIconUrl("branch_boot_w.png")..")",},
-    [14] = { ["desc"] = "分线栏状态标签()", ["position"] = "relative", ["left"] = 24, ["top"] = 30, ["width"] = 52, ["height"] = 52,["background"] = "url("..branchImageData:GetIconUrl("branch_icon_g.png")..")",},
+    [11] = { ["desc"] = "滚动区域", ["position"] = "relative", ["left"] = 80, ["top"] = 256, ["width"] = 535, ["height"] = 670,},
+    [12] = { ["desc"] = "分线栏背景(未选择)", ["width"] = 515, ["height"] = 106, ["top"] = 30,["background"] = "url("..branchImageData:GetIconUrl("branch_boot_g.png")..")",},
+    [13] = { ["desc"] = "分线栏背景(选中)", ["width"] = 515, ["height"] = 107, ["top"] = 30,["background"] = "url("..branchImageData:GetIconUrl("branch_boot_w.png")..")",},
+    [14] = { ["desc"] = "分线栏状态标签(流畅)", ["position"] = "relative", ["left"] = 24, ["top"] = 30, ["width"] = 52, ["height"] = 52,["background"] = "url("..branchImageData:GetIconUrl("branch_icon_g.png")..")",},
     [15] = { ["desc"] = "分线栏文字",  ["position"] = "relative", ["left"] = 109, ["top"] = 32, ["width"] = 400, ["height"] = 60, ["color"] = "#813010", ["font-family"] = "zkklt", ["font-size"] = "48",},
     [16] = { ["desc"] = "切换分线按钮文字",  ["position"] = "relative", ["left"] = 49, ["top"] = 26, ["width"] = 199, ["height"] = 41,["background"] = "url("..branchImageData:GetIconUrl("branch_icon_g_mat.png")..")",},
-    [17] = { ["desc"] = "分线栏状态标签()", ["position"] = "relative", ["left"] = 24, ["top"] = 30, ["width"] = 52, ["height"] = 52,["background"] = "url("..branchImageData:GetIconUrl("branch_icon_g.png")..")",},
-    [18] = { ["desc"] = "分线栏状态标签()", ["position"] = "relative", ["left"] = 24, ["top"] = 30, ["width"] = 52, ["height"] = 52,["background"] = "url("..branchImageData:GetIconUrl("branch_icon_g.png")..")",},
+    [17] = { ["desc"] = "分线栏状态标签(繁忙)", ["position"] = "relative", ["left"] = 24, ["top"] = 30, ["width"] = 52, ["height"] = 52,["background"] = "url("..branchImageData:GetIconUrl("branch_icon_y.png")..")",},
+    [18] = { ["desc"] = "分线栏状态标签(爆满)", ["position"] = "relative", ["left"] = 24, ["top"] = 30, ["width"] = 52, ["height"] = 52,["background"] = "url("..branchImageData:GetIconUrl("branch_icon_r.png")..")",},
+    [19] = { ["desc"] = "服务器标签背景", ["position"] = "relative", ["left"] = 394, ["top"] = -90, ["width"] = 143, ["height"] = 38,["background"] = "url("..branchImageData:GetIconUrl("branch_boot_f.png")..")",},
+    [20] = { ["desc"] = "服务器标签文字", ["position"] = "relative", ["left"] = 19, ["top"] = 5, ["width"] = 125, ["height"] = 38, ["color"] = "#813010", ["font-family"] = "zkklt", ["font-size"] = "30",},
+    [21] = { ["desc"] = "滚动栏item大小", ["width"] = 535, ["height"] = 140,},
 }
 
 function ChooseBranch:StaticInit()
     LOG.std("", "info", "ChooseBranch", "StaticInit");
-    -- 拉取服务器数据
+
     GameLogic:Connect("WorldLoaded", ChooseBranch, ChooseBranch.OnWorldLoaded, "UniqueConnection");
     GameLogic:Connect("WorldUnloaded", ChooseBranch, ChooseBranch.OnWorldUnloaded, "UniqueConnection");
 end
 
-function ChooseBranch:GetBranchStateIcon(branchId, ip, port)
-	
+function ChooseBranch:GetServerData()
+    --todo
+    request:get("/online/servers?type=2", nil, nil):next(function (response)
+        --body
+        if response and response.data and response.data.code == 200 then
+            ChooseBranch.serverData = {}
+            local data = response.data.data
+            for i,j in pairs(data) do
+                local server = {}
+                server.ip = j.host
+                server.port = j.port
+                server.id = j.id
+                server.type = j.type
+                server.name = j.name
+                server.status = j.status
+                if j.type == 2 then
+                    ChooseBranch.serverData[j.id] = server
+                end
+            end
+            -- echo("===zr===")
+            -- echo("ChooseBranch.serverData:")
+            -- echo(ChooseBranch.serverData)
+        end
+    end):catch(function (e)
+        --body
+    end)
+end
+
+function ChooseBranch:GetBranchStateIconHTML(branchId, ip, port)
+    local serverId = ChooseBranch:GetServerId(ip, port)
+    
+    for k,v in ChooseBranch.branchStateTable do
+        if v["serverId"] == serverId and v["branchId"] == branchId then
+            local percentage = v["playerNum"] / v["maxPlayerNum"]
+            if percentage < 0.25 then
+                return ChooseBranch:GetHTMLStyleStr(14)
+            elseif percentage < 0.75 then
+                return ChooseBranch:GetHTMLStyleStr(17)
+            else
+                return ChooseBranch:GetHTMLStyleStr(18)
+            end
+        end
+    end
+end
+
+function ChooseBranch:GetServerId(ip, port)
+    --todo
+    for k,v in pairs(ChooseBranch.serverData) do
+        if v.ip == tostring(ip) and v.port == tostring(port) then
+            return v.id
+        end
+    end
+end
+
+function ChooseBranch:GetServerName(serverId)
+	return "服务器"..tostring(serverId)
 end
 
 function ChooseBranch.OnWorldLoaded()
@@ -115,7 +175,7 @@ end
 function ChooseBranch:DealBranchStateData()
     -- todo   一堆逻辑要写
     local currWorldName = System and System.Codepku and System.Codepku.Coursewares and System.Codepku.Coursewares.name
-    if System.Codepku and System.Codepku.branch and System.Codepku.branch.worldInfo then
+    if System.Codepku and System.Codepku.branch and System.Codepku.branch.worldInfo and System.Codepku.branch.currWorld and System.Codepku.branch.currServer then
         -- 当前所在世界的worldkey  用来判定当前ggs的服务器数据
         -- todo 记得这个数据来判定当前世界的分支数据
         ChooseBranch.currBranchData = {}
@@ -131,36 +191,44 @@ function ChooseBranch:DealBranchStateData()
         ChooseBranch.currBranchData["worldName"] = currInfo[2]
         ChooseBranch.currBranchData["branchId"] = tonumber(currInfo[3])
         ChooseBranch.currBranchData["currWorldName"] = currWorldName
+        ChooseBranch.currBranchData["serverId"] = ChooseBranch:GetServerId(System.Codepku.branch.currServer["outerIp"], System.Codepku.branch.currServer["outerPort"])
+        ChooseBranch.currBranchData["ip"] = System.Codepku.branch.currServer["outerIp"]
+        ChooseBranch.currBranchData["port"] = System.Codepku.branch.currServer["outerPort"]
 
         ChooseBranch.currChooseBranch = tonumber(ChooseBranch.currBranchData["branchId"])
+        ChooseBranch.currChooseServer = tonumber(ChooseBranch.currBranchData["serverId"])
 
 
         local worldInfo = System.Codepku.branch.worldInfo
         for key,value in pairs(worldInfo) do
-            local refInfo = {}
-            for each in string.gmatch(key, "%d+") do
-                table.insert( refInfo, each )
+            for k,v in pairs(value.worlds) do
+                local refInfo = {}
+                for each in string.gmatch(k, "%d+") do
+                    table.insert( refInfo, each )
+                end
+                local worldId = tonumber(refInfo[1])
+                local worldName = refInfo[2]
+                local branchId = tonumber(refInfo[3])
+                local playerNum = v and tonumber(v.online_client_count)
+                local maxPlayerNum = v and tonumber(v.max_client_count)
+                if worldId == tonumber(ChooseBranch.currBranchData["worldId"]) and worldName == ChooseBranch.currBranchData["worldName"] and playerNum > 0 then
+                    table.insert( ChooseBranch.branchStateTable,
+                        {   
+                            ["worldId"] = tonumber(worldId),
+                            ["worldName"] = worldName,
+                            ["branchId"] = tonumber(branchId),
+                            ["playerNum"] = tonumber(playerNum),
+                            ["maxPlayerNum"] = tonumber(maxPlayerNum),
+                            ["serverId"] = ChooseBranch:GetServerId(value["outerIp"], value["outerPort"]),
+                            ["ip"] = value["outerIp"],
+                            ["port"] = value["outerPort"],
+                        } 
+                    )
+                end
             end
-            local worldId = tonumber(refInfo[1])
-            local worldName = refInfo[2]
-            local branchId = tonumber(refInfo[3])
-            local playerNum = value and tonumber(value.online_client_count)
-            local maxPlayerNum = value and tonumber(value.max_client_count)
-            if worldId == tonumber(ChooseBranch.currBranchData["worldId"]) and worldName == ChooseBranch.currBranchData["worldName"] and playerNum > 0 then
-                table.insert( ChooseBranch.branchStateTable,
-                    {   
-                        ["worldId"] = tonumber(worldId),
-                        ["worldName"] = worldName,
-                        ["branchId"] = tonumber(branchId),
-                        ["playerNum"] = tonumber(playerNum),
-                        ["maxPlayerNum"] = tonumber(maxPlayerNum),
-                        ["serverId"] = tonumber(1),
-                        ["ip"] = "127.0.0.1",
-                        ["port"] = 9900,
-                    } 
-                )
-            end
-        end        
+        end
+        echo("======zr=====")
+        echo(ChooseBranch.branchStateTable)
     end
 end
 
@@ -175,14 +243,15 @@ function ChooseBranch:GetHTMLStyleStr(index)
     return styleStr
 end
 
-function ChooseBranch:changeCurrBranch(branchId)
+function ChooseBranch:changeCurrBranch(branchId, serverId)
     ChooseBranch.currChooseBranch = branchId
+    ChooseBranch.currChooseServer = serverId
 end
 
 function ChooseBranch:changeBranch()
     for i,j in ipairs(ChooseBranch.branchStateTable) do
-        if ChooseBranch.currChooseBranch == j["branchId"] then
-            GameLogic.RunCommand(string.format("/connectCodePku -no=%d %d %s", j["branchId"], j["worldId"], j["worldName"]))
+        if ChooseBranch.currChooseBranch == j["branchId"] and ChooseBranch.currChooseServer == j["serverId"] then
+            GameLogic.RunCommand(string.format("/connectCodePku -no=%d -host=%s -port=%s %d %s", j["branchId"], j["ip"], j["port"], j["worldId"], j["worldName"]))
             break
         end
     end
@@ -199,6 +268,9 @@ end
 -- 当且仅当bShow为false时为关闭页面
 function ChooseBranch:ShowPage(bShow)
     --body
+    -- 点开界面的时候拉取一遍最新的数据，先显示老数据界面，等待数据回调刷新界面
+    GameLogic.RunCommand("/wanxueshijie worldInfo")
+
     if ChooseBranch.ui then
         ChooseBranch.ui:CloseWindow()
         ChooseBranch.ui = nil

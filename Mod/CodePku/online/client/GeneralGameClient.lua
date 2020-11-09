@@ -61,6 +61,7 @@ function GeneralGameClient:LoadWorld(opts, loadworld)
     
     local worldName = opts and opts.worldName
     local oldWorldName = self:GetOptions().worldName
+    opts.worldKey =(opts.worldId or "1").."_"..(opts.worldName or "1").."_"..(opts.no or "1")
 
     -- 覆盖默认选项
     local options = self:SetOptions(opts);
