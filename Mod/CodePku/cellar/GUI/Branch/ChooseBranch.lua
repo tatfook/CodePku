@@ -103,7 +103,7 @@ end
 function ChooseBranch:GetBranchStateIconHTML(branchId, ip, port)
     local serverId = ChooseBranch:GetServerId(ip, port)
     
-    for k,v in ChooseBranch.branchStateTable do
+    for k,v in pairs(ChooseBranch.branchStateTable) do
         if v["serverId"] == serverId and v["branchId"] == branchId then
             local percentage = v["playerNum"] / v["maxPlayerNum"]
             if percentage < 0.25 then
@@ -219,6 +219,7 @@ function ChooseBranch:DealBranchStateData()
                             ["branchId"] = tonumber(branchId),
                             ["playerNum"] = tonumber(playerNum),
                             ["maxPlayerNum"] = tonumber(maxPlayerNum),
+                            -- ["maxPlayerNum"] = 4,
                             ["serverId"] = ChooseBranch:GetServerId(value["outerIp"], value["outerPort"]),
                             ["ip"] = value["outerIp"],
                             ["port"] = value["outerPort"],
@@ -227,9 +228,9 @@ function ChooseBranch:DealBranchStateData()
                 end
             end
         end
-        -- echo("======zr=====")
-        -- echo(ChooseBranch.branchStateTable)
-    end
+    --     echo("======zr=====")
+    --     echo(ChooseBranch.branchStateTable)
+    -- end
 end
 
 function ChooseBranch:GetHTMLStyleStr(index)

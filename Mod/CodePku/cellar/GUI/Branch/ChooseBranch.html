@@ -88,7 +88,8 @@ end
                     <div style="<%=GetStyleStr(21)%>">
                         <div name='<%=string.format("%s__%s",Eval("branchId"),Eval("serverId"))%>'  onclick="ChangeBranch" style="<%=GetStyleStr(12)%>">
                             <div style="<%=GetStyleStr(15)%>"><%= GetBranchName(Eval('branchId')) %></div>
-                            <div style="<%=GetStyleStr(14)%>"></div>
+                            <!-- <div style="<%=GetStyleStr(14)%>"></div> -->
+                            <div style="<%=GetBranchStateIconHTML(Eval('branchId'), Eval('ip'), Eval('port'))%>"></div>
                         </div>
                         <div style="<%=GetStyleStr(19)%>">
                             <div style="<%=GetStyleStr(20)%>"><%= GetServerName(Eval('serverId')) %></div>
@@ -99,7 +100,8 @@ end
                     <div style="<%=GetStyleStr(21)%>">
                         <div style="<%=GetStyleStr(13)%>">
                             <div style="<%=GetStyleStr(15)%>"><%= GetBranchName(Eval('branchId')) %></div>
-                            <div style="<%=GetStyleStr(14)%>"></div>
+                            <!-- <div style="<%=GetStyleStr(14)%>"></div> -->
+                            <div style="<%=GetBranchStateIconHTML(Eval('branchId'), Eval('ip'), Eval('port'))%>"></div>
                         </div>
                         <div style="<%=GetStyleStr(19)%>">
                             <div style="<%=GetStyleStr(20)%>"><%= GetServerName(Eval('serverId')) %></div>
