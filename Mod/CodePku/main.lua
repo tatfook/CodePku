@@ -125,10 +125,7 @@ function CodePku:init()
 
 	self:BasicConfig()
 
-	-- 预加载图片
-	NPL.load("(gl)Mod/CodePku/cellar/AssetManage/CodePkuAssetPreloader.lua")
-	local CodePkuAssetPreloader = commonlib.gettable("Mod.CodePku.AssetManage.CodePkuAssetPreloader")
-	CodePkuAssetPreloader.getSingleTon():PreloadAsset()
+
 	-- NPL.activate("(gl)Mod/CodePku/cellar/AssertManage/CodePkuAssertPreloader.lua")
 
 	GameLogic.GetFilters():add_filter(
@@ -269,6 +266,11 @@ function CodePku:init()
 	GameLogic.GetFilters():add_filter(
 		"ShowLoginBackgroundPage",
 		function(bShow, bShowCopyRight, bShowLogo, bShowBg)
+			-- 预加载图片
+			CodePkuDownloadWorld:ShowPrestrainPage()
+			NPL.load("(gl)Mod/CodePku/cellar/AssetManage/CodePkuAssetPreloader.lua")
+			local CodePkuAssetPreloader = commonlib.gettable("Mod.CodePku.AssetManage.CodePkuAssetPreloader")
+			CodePkuAssetPreloader.getSingleTon():PreloadAsset()
 			LOG.std(nil, "info", "codepku", "add_filter ShowLoginBackgroundPage")
 			MainLogin:ShowLoadingPage()
 			MainLogin:ShowLoginBackgroundPage()

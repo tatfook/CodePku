@@ -62,6 +62,12 @@ end
 
 function turnToWorld()
     CloseAllPage()
+    if MainPopup.fromTeachCourse then
+        MainPopup.fromTeachCourse = false
+        GameLogic.RunCommand(string.format('/connectCodePku %d', tonumber(world_id)));
+        return
+    end
+
     if (world_id == 1 or world_id == 14312) then
         GameLogic.RunCommand(string.format('/connectCodePku %d', tonumber(world_id)));
     else
