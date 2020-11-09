@@ -75,7 +75,7 @@ function GeneralGameClient:LoadWorld(opts, loadworld)
     options.port = options.port;     -- 以便动态获取
   
     -- 打印选项值
-    GGS.INFO(options);
+    -- GGS.INFO(options);
     -- only reload world if world id does not match
     local isReloadWorld = tostring(options.worldId) ~= tostring(curWorldId)
     -- 退出旧世界
