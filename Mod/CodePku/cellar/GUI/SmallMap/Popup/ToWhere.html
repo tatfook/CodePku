@@ -38,7 +38,7 @@ end
 function turnTo()
     CloseAllPage()
     local _id = tonumber(id)
-    if (_id == 1 or _id == 14312) then
+    if (_id == 1 or _id == 14312 or _id == 25161) then
         GameLogic.RunCommand(string.format('/connectCodePku %d', _id));
     else
         GameLogic.RunCommand(string.format('/loadworld %d', _id));
