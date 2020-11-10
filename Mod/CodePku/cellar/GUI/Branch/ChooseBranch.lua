@@ -25,6 +25,7 @@ ChooseBranch.branchStateTable = {}
 
 ChooseBranch.currChooseBranch = 1
 ChooseBranch.currChooseServer = 2
+ChooseBranch.bJumpBranch = false
 
 ChooseBranch.branchNameTalbe = {
     "甲子线","乙丑线","丙寅线","丁卯线","戊辰线",
@@ -134,6 +135,10 @@ function ChooseBranch.OnWorldLoaded()
     -- 向GGS服务器请求数据
     GameLogic.RunCommand("/wanxueshijie worldInfo")
 
+    if ChooseBranch.bJumpBranch then
+        ChooseBranch.bJumpBranch = false
+    end
+
     -- 处理数据的计时器  因为GGS是异步获取的数据  这里弄个计时器看是否获取到了数据
     ChooseBranch.timerNum = 0
     ChooseBranch.dealDataTimer = commonlib.Timer:new({callbackFunc = function(timer)
@@ -219,7 +224,7 @@ function ChooseBranch:DealBranchStateData()
                             ["branchId"] = tonumber(branchId),
                             ["playerNum"] = tonumber(playerNum),
                             ["maxPlayerNum"] = tonumber(maxPlayerNum),
-                            -- ["maxPlayerNum"] = 4,
+                            -- ["maxPlayerNum"] = 5,
                             ["serverId"] = ChooseBranch:GetServerId(value["outerIp"], value["outerPort"]),
                             ["ip"] = value["outerIp"],
                             ["port"] = value["outerPort"],
@@ -228,8 +233,8 @@ function ChooseBranch:DealBranchStateData()
                 end
             end
         end
-    --     echo("======zr=====")
-    --     echo(ChooseBranch.branchStateTable)
+        echo("======zr=====")
+        echo(ChooseBranch.branchStateTable)
     end
 end
 
@@ -259,6 +264,7 @@ function ChooseBranch:changeBranch()
     -- echo(ChooseBranch.currChooseServer)
     for i,j in ipairs(ChooseBranch.branchStateTable) do
         if ChooseBranch.currChooseBranch == j["branchId"] and ChooseBranch.currChooseServer == j["serverId"] then
+            ChooseBranch.bJumpBranch = true
             GameLogic.RunCommand(string.format("/connectCodePku -no=%d -host=%s -port=%s %d %s", j["branchId"], j["ip"], j["port"], j["worldId"], j["worldName"]))
             break
         end

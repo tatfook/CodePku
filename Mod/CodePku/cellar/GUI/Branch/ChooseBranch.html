@@ -17,8 +17,6 @@ Path:"Mod/CodePku/cellar/GUI/Branch/ChooseBranch.html"
 NPL.load("(gl)Mod/CodePku/cellar/GUI/Branch/ChooseBranch.lua")
 ChooseBranch = commonlib.gettable("Mod.CodePku.GUI.ChooseBranch")
 
-branchStateTable = ChooseBranch.branchStateTable
-
 function GetStyleStr(index)
     return ChooseBranch:GetHTMLStyleStr(index)
 end
@@ -81,7 +79,7 @@ end
         <pe:div style="<%=GetStyleStr(10)%>"><%=L"选择分线"%></pe:div>
 
         <pe:gridview style="<%=GetStyleStr(11)%>"
-            DataSource='<%= branchStateTable %>' CellPadding="0" ItemsPerLine="1" RememberScrollPos="true"
+            DataSource='<%= ChooseBranch.branchStateTable %>' CellPadding="0" ItemsPerLine="1" RememberScrollPos="true"
             VerticalScrollBarStep="25" VerticalScrollBarOffsetX="8" DefaultNodeHeight="140">
             <Columns>
                 <pe:if condition="<%= Eval('branchId') ~= ChooseBranch.currChooseBranch or Eval('serverId') ~= ChooseBranch.currChooseServer %>">
