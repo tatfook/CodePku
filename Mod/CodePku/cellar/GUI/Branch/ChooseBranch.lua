@@ -230,7 +230,7 @@ function ChooseBranch:DealBranchStateData()
         end
     --     echo("======zr=====")
     --     echo(ChooseBranch.branchStateTable)
-    -- end
+    end
 end
 
 function ChooseBranch:GetHTMLStyleStr(index)
