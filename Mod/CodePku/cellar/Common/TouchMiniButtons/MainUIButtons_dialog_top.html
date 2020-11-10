@@ -1,0 +1,59 @@
+<!-- "Mod/CodePku/cellar/Common/TouchMiniButtons/MainUIButtons_common.html" -->
+<!-- 首页按钮-反馈，通知，排行，Q群，社区，邮箱，分享 -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" >
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+</head>
+
+<body>
+<pe:mcml>
+<script refresh="false" type="text/npl" src="MainSceneUIButtons.lua"><![CDATA[
+local MainUIButtons = NPL.load("(gl)Mod/CodePku/cellar/Common/TouchMiniButtons/Main.lua");
+local Feedback = NPL.load("(gl)Mod/CodePku/cellar/GUI/Feedback/Feedback.lua");
+NPL.load("(gl)Mod/CodePku/cellar/GUI/rank/RankPage.lua")
+RankPage = commonlib.gettable("Mod.CodePku.RankPage");
+
+
+dialog_top = MainUIButtons.dialog_top
+function ClickChooseFun(name)
+    if (name == "ClickFeedback") then 
+        GameLogic.GetFilters():apply_filters("ClickStatistics", {type = 14}); -- 点击反馈，触发操作数据统计计数
+        Feedback:ShowPage()
+    elseif(name == "ClickNotice") then 
+          
+    elseif(name == "ClickRank") then 
+        GameLogic.GetFilters():apply_filters("ClickStatistics", {type = 20}); -- 点击排行榜，触发操作数据统计计数
+        RankPage:ShowPage(1)
+    elseif(name == "ClickQQGroup") then 
+        GameLogic.GetFilters():apply_filters("ClickStatistics", {type = 15}); -- 点击Q群，触发操作数据统计计数
+        GameLogic.RunCommand(string.format("/open %s", Mod.CodePku.BasicConfigTable.qq_group_link))
+    elseif(name == "ClickCommunity") then 
+        GameLogic.GetFilters():apply_filters("ClickStatistics", {type = 13}); -- 点击社区，触发操作数据统计计数
+        GameLogic.RunCommand("/open http://kids.wanxueshijie.com/")
+    elseif(name == "ClickEmail") then 
+        
+    elseif(name == "ClickShareApp") then 
+        
+    else
+        GameLogic.AddBBS("CodeGlobals", L"功能开发中", 3000, "#ff0000");
+    end
+end
+
+]]></script>
+<style type="text/mcss">
+
+</style>
+<pe:container alignment="_lt" width="100%" height="100%">
+    <pe:repeat DataSource="<%=dialog_top%>" style="">
+        <pe:repeatitem style="float:left;">
+            <pe:if condition="<%=Eval('bShow') == true%>">
+                <div style="<%=format('margin-left:%d;width:%d;height:%d;top: %d;background: url(%s);',Eval('left'),Eval('width'),Eval('height'),Eval('top'),Eval('url'))%>" name="<%=Eval('name')%>" onclick="ClickChooseFun"></div>
+            </pe:if>          
+        </pe:repeatitem>
+    </pe:repeat>
+</pe:container>
+</pe:mcml> 
+</body>
+</html>
