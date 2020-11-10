@@ -28,7 +28,7 @@ function NetClientHandler:handleGeneral(packetGeneral)
     local action = packetGeneral.action;
     if (action == "WanXueShiJie") then 
         local cmd = packetGeneral.data.cmd;
-        GGS.INFO(packetGeneral);
+        -- GGS.INFO(packetGeneral);
 
         if cmd == "WorldInfo" then
             local worldInfo = packetGeneral.data.servers;

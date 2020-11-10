@@ -19,12 +19,12 @@ local TouchController = commonlib.gettable("MyCompany.Aries.Game.GUI.TouchContro
 local MainUIButtons = NPL.export();
 
 MainUIButtons.hasshown = false
-MainUIButtons.is_dialog_open = true
+MainUIButtons.is_category_open = true
 MainUIButtons.main_close_window_height = 80
 
 MainUIButtons.common_window = nil
 MainUIButtons.function_window = nil
-MainUIButtons.dialog_window = nil
+MainUIButtons.category_window = nil
 MainUIButtons.money_window = nil
 MainUIButtons.open_function = nil
 MainUIButtons.open_common = nil
@@ -57,7 +57,7 @@ MainUIButtons.middle_buttons = {
 	[2]={url=mainFrameImageData:GetIconUrl("main_icon_home.png"),top=20,width=93,height=134,name="ClickFriend",bShow=true,},
 }
 
-MainUIButtons.dialog_top = {
+MainUIButtons.category_top = {
 	[1]={url=mainFrameImageData:GetIconUrl("main_icon_feedback.png"),top=4,width=74,height=100,left=0,name="ClickFeedback",bShow=true,},
 	[2]={url=mainFrameImageData:GetIconUrl("main_icon_notice.png"),top=8,width=74,height=95,left=47,name="ClickNotice",bShow=false,},
 	[3]={url=mainFrameImageData:GetIconUrl("main_icon_ranking.png"),top=7,width=73,height=96,left=47,name="ClickRank",bShow=true,},
@@ -67,7 +67,7 @@ MainUIButtons.dialog_top = {
 	[7]={url=mainFrameImageData:GetIconUrl("main_icon_shareit.png"),top=8,width=87,height=95,left=41,name="ClickShareApp",bShow=false,},
 }
 
-MainUIButtons.dialog_right = {
+MainUIButtons.category_right = {
 	[1]={url=mainFrameImageData:GetIconUrl("main_icon_information.png"),top=0,width=81,height=99,left=15,name="ClickUserInfo",bShow=true,},
 	[2]={url=mainFrameImageData:GetIconUrl("main_icon_backpack.png"),top=20,width=90,height=99,left=6,name="ClickBag",bShow=false,},
 	[3]={url=mainFrameImageData:GetIconUrl("main_icon_achievement.png"),top=19,width=83,height=89,left=11,name="ClickAchievement",bShow=false,},
@@ -118,14 +118,14 @@ function MainUIButtons:getWidth(array, flag)
 	return width;
 end
 
-function MainUIButtons:ClickOpenDialog()
+function MainUIButtons:ClickOpenCategory()
 	-- 点击布
-	MainUIButtons:show_dialog(true)
+	MainUIButtons:show_category(true)
 end
 
-function MainUIButtons:ClickCloseDialog()
+function MainUIButtons:ClickCloseCategory()
 	-- 点击锤头
-	MainUIButtons:show_dialog(false)
+	MainUIButtons:show_category(false)
 end
 
 -- 限时活动页
@@ -201,71 +201,71 @@ end
 --[[
 	@param flag true打开目录/false关闭目录
 ]]
-function MainUIButtons:show_dialog(flag)
+function MainUIButtons:show_category(flag)
 	if flag then
-		MainUIButtons.is_dialog_open = true
-		if MainUIButtons.dialog_close_window ~= nil then
-			MainUIButtons.dialog_close_window:CloseWindow()
-			MainUIButtons.dialog_close_window = nil
+		MainUIButtons.is_category_open = true
+		if MainUIButtons.category_close_window ~= nil then
+			MainUIButtons.category_close_window:CloseWindow()
+			MainUIButtons.category_close_window = nil
 		end
-		MainUIButtons:show_dialog_open_ui()
-		MainUIButtons:show_dialog_top_ui()
-		MainUIButtons:show_dialog_right_ui()
+		MainUIButtons:show_category_open_ui()
+		MainUIButtons:show_category_top_ui()
+		MainUIButtons:show_category_right_ui()
 	else
-		MainUIButtons.is_dialog_open = false
-		if MainUIButtons.dialog_top_window ~= nil then
-			MainUIButtons.dialog_top_window:CloseWindow()
-			MainUIButtons.dialog_top_window = nil
+		MainUIButtons.is_category_open = false
+		if MainUIButtons.category_top_window ~= nil then
+			MainUIButtons.category_top_window:CloseWindow()
+			MainUIButtons.category_top_window = nil
 		end
-		if MainUIButtons.dialog_right_window ~= nil then
-			MainUIButtons.dialog_right_window:CloseWindow()
-			MainUIButtons.dialog_right_window = nil
+		if MainUIButtons.category_right_window ~= nil then
+			MainUIButtons.category_right_window:CloseWindow()
+			MainUIButtons.category_right_window = nil
 		end
-		if MainUIButtons.dialog_open_window ~= nil then
-			MainUIButtons.dialog_open_window:CloseWindow()
-			MainUIButtons.dialog_open_window = nil
+		if MainUIButtons.category_open_window ~= nil then
+			MainUIButtons.category_open_window:CloseWindow()
+			MainUIButtons.category_open_window = nil
 		end
-		MainUIButtons:show_dialog_close_ui()
+		MainUIButtons:show_category_close_ui()
 	end
 end
 
 -- 锤头
-function MainUIButtons:show_dialog_open_ui()
+function MainUIButtons:show_category_open_ui()
 	local params = {
-		url="Mod/CodePku/cellar/Common/TouchMiniButtons/MainUIButtons_dialog_open.html", 
+		url="Mod/CodePku/cellar/Common/TouchMiniButtons/MainUIButtons_category_open.html", 
 		alignment="_lt", left = 1807, top = 153, width = 80, height = 80, click_through = true,
 	}
-	MainUIButtons.dialog_open_window = AdaptWindow:QuickWindow(params)
+	MainUIButtons.category_open_window = AdaptWindow:QuickWindow(params)
 end
 
 -- 布
-function MainUIButtons:show_dialog_close_ui()
+function MainUIButtons:show_category_close_ui()
 	local params = {
-		url="Mod/CodePku/cellar/Common/TouchMiniButtons/MainUIButtons_dialog_close.html", 
+		url="Mod/CodePku/cellar/Common/TouchMiniButtons/MainUIButtons_category_close.html", 
 		alignment="_lt", left = 1807, top = 153, width = 80, height = 80, click_through = true,
 	}
-	MainUIButtons.dialog_close_window = AdaptWindow:QuickWindow(params)
+	MainUIButtons.category_close_window = AdaptWindow:QuickWindow(params)
 end
 
 -- 右上横向目录
-function MainUIButtons:show_dialog_top_ui()
-	local open_width = MainUIButtons:getWidth(MainUIButtons.dialog_top, 0)
+function MainUIButtons:show_category_top_ui()
+	local open_width = MainUIButtons:getWidth(MainUIButtons.category_top, 0)
 	local open_left = 1920 - open_width - 113 - 20
 	local params = {
-		url="Mod/CodePku/cellar/Common/TouchMiniButtons/MainUIButtons_dialog_top.html", 
+		url="Mod/CodePku/cellar/Common/TouchMiniButtons/MainUIButtons_category_top.html", 
 		alignment="_lt", left = open_left, top = 140, width = open_width, height = 110, click_through = true,
 	}
-	MainUIButtons.dialog_top_window = AdaptWindow:QuickWindow(params)
+	MainUIButtons.category_top_window = AdaptWindow:QuickWindow(params)
 end
 
 -- 右侧垂直目录
-function MainUIButtons:show_dialog_right_ui()
-	local open_height = MainUIButtons:getWidth(MainUIButtons.dialog_right, 1)
+function MainUIButtons:show_category_right_ui()
+	local open_height = MainUIButtons:getWidth(MainUIButtons.category_right, 1)
 	local params = {
-		url="Mod/CodePku/cellar/Common/TouchMiniButtons/MainUIButtons_dialog_right.html", 
+		url="Mod/CodePku/cellar/Common/TouchMiniButtons/MainUIButtons_category_right.html", 
 		alignment="_lt", left = 1790, top = 267, width = 100, height = open_height, click_through = true,
 	}
-	MainUIButtons.dialog_right_window = AdaptWindow:QuickWindow(params)
+	MainUIButtons.category_right_window = AdaptWindow:QuickWindow(params)
 end
 
 -- 左上横向目录
@@ -278,6 +278,12 @@ function MainUIButtons:show_common_ui()
 	local isVisitor = commonlib.getfield("System.User.isVisitor")
 	if isVisitor then
 		MainUIButtons.top_buttons[4]["bShow"] = true
+	end
+	local bShowBranch = commonlib.getfield("System.Codepku.branch")
+	if bShowBranch then
+		MainUIButtons.top_buttons[5]["bShow"] = true
+	else
+		MainUIButtons.top_buttons[5]["bShow"] = false
 	end
 	local open_width = MainUIButtons:getWidth(MainUIButtons.top_buttons, 0)
 	local open_height = 110
@@ -361,21 +367,21 @@ function MainUIButtons.JudgeNil()
 		MainUIButtons.avatar_window:CloseWindow()
 		MainUIButtons.avatar_window = nil
 	end
-	if MainUIButtons.dialog_open_window ~= nil then
-		MainUIButtons.dialog_open_window:CloseWindow()
-		MainUIButtons.dialog_open_window = nil
+	if MainUIButtons.category_open_window ~= nil then
+		MainUIButtons.category_open_window:CloseWindow()
+		MainUIButtons.category_open_window = nil
 	end
-	if MainUIButtons.dialog_close_window ~= nil then
-		MainUIButtons.dialog_close_window:CloseWindow()
-		MainUIButtons.dialog_close_window = nil
+	if MainUIButtons.category_close_window ~= nil then
+		MainUIButtons.category_close_window:CloseWindow()
+		MainUIButtons.category_close_window = nil
 	end
-	if MainUIButtons.dialog_top_window ~= nil then
-		MainUIButtons.dialog_top_window:CloseWindow()
-		MainUIButtons.dialog_top_window = nil
+	if MainUIButtons.category_top_window ~= nil then
+		MainUIButtons.category_top_window:CloseWindow()
+		MainUIButtons.category_top_window = nil
 	end
-	if MainUIButtons.dialog_right_window ~= nil then
-		MainUIButtons.dialog_right_window:CloseWindow()
-		MainUIButtons.dialog_right_window = nil
+	if MainUIButtons.category_right_window ~= nil then
+		MainUIButtons.category_right_window:CloseWindow()
+		MainUIButtons.category_right_window = nil
 	end
 	if MainUIButtons.common_window ~= nil then
 		MainUIButtons.common_window:CloseWindow()
@@ -415,7 +421,7 @@ function MainUIButtons.ShowPage()
 
 			MainUIButtons:show_common_left_ui()
 			MainUIButtons:show_avatar_ui()
-			MainUIButtons:show_dialog(true)		
+			MainUIButtons:show_category(true)		
 		else
 			-- 竞技，教学区按钮
 			MainUIButtons:show_main_open_ui()
@@ -429,7 +435,7 @@ function MainUIButtons.ShowPage()
 			MainUIButtons:show_home_window_ui()
 
 		else 
-			MainUIButtons:show_dialog(false)
+			MainUIButtons:show_category(false)
 		end
 	end
 end

@@ -154,9 +154,10 @@ function ChooseBranch.OnWorldLoaded()
             GameLogic.RunCommand("/wanxueshijie worldInfo")
         end
         if ChooseBranch.branchStateTable and ChooseBranch.dealDataTimer then
-            if #ChooseBranch.branchStateTable then
+            if #ChooseBranch.branchStateTable > 1 then
                 -- todo show mainUI button
-                ChooseBranch:ShowPage()
+                local MainUIButtons = NPL.load("(gl)Mod/CodePku/cellar/Common/TouchMiniButtons/Main.lua")
+                MainUIButtons.ShowPage()
             end
             ChooseBranch.dealDataTimer:Change()
         end
@@ -282,6 +283,11 @@ end
 -- 当且仅当bShow为false时为关闭页面
 function ChooseBranch:ShowPage(bShow)
     --body
+    -- 清空原始分线数据缓存
+    ChooseBranch.branchStateTable = nil
+    ChooseBranch.currBranchData = nil
+    commonlib.setfield("System.Codepku.branch", nil)
+
     -- 点开界面的时候拉取一遍最新的数据，先显示老数据界面，等待数据回调刷新界面
     GameLogic.RunCommand("/wanxueshijie worldInfo")
 
