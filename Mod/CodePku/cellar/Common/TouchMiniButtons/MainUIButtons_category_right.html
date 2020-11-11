@@ -15,6 +15,7 @@ NPL.load("(gl)Mod/CodePku/cellar/GUI/rank/RankPage.lua")
 local UserInfoPage = NPL.load("(gl)Mod/CodePku/cellar/GUI/UserInfo.lua");
 UserInfoPage.OnInit();
 local FriendUI = NPL.load("(gl)Mod/CodePku/cellar/GUI/Friend/FriendUI.lua");
+local CodePkuEscFramePage = NPL.load("(gl)Mod/CodePku/cellar/Areas/EscFramePage.lua")
 
 category_right = MainUIButtons.category_right
 function ClickChooseFun(name)
@@ -31,7 +32,7 @@ function ClickChooseFun(name)
         GameLogic.GetFilters():apply_filters("ClickStatistics", {type = 19}); -- 点击好友，触发操作数据统计计数
         FriendUI:ShowPage(1)
     elseif(name == "ClickSetting") then 
-        UserInfoPage:ShowSettingPopup()
+        CodePkuEscFramePage:ShowPage(true)
     elseif(name == "ClickChange") then 
         
     else
