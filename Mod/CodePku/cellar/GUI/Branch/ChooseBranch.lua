@@ -25,7 +25,6 @@ ChooseBranch.branchStateTable = {}
 
 ChooseBranch.currChooseBranch = 1
 ChooseBranch.currChooseServer = 2
-ChooseBranch.bJumpBranch = false
 
 ChooseBranch.branchNameTalbe = {
     "甲子线","乙丑线","丙寅线","丁卯线","戊辰线",
@@ -135,10 +134,6 @@ function ChooseBranch.OnWorldLoaded()
     -- 向GGS服务器请求数据
     GameLogic.RunCommand("/wanxueshijie worldInfo")
 
-    if ChooseBranch.bJumpBranch then
-        ChooseBranch.bJumpBranch = false
-    end
-
     -- 处理数据的计时器  因为GGS是异步获取的数据  这里弄个计时器看是否获取到了数据
     ChooseBranch.timerNum = 0
     ChooseBranch.dealDataTimer = commonlib.Timer:new({callbackFunc = function(timer)
@@ -155,7 +150,6 @@ function ChooseBranch.OnWorldLoaded()
         end
         if ChooseBranch.branchStateTable and ChooseBranch.dealDataTimer then
             if #ChooseBranch.branchStateTable > 1 then
-                -- todo show mainUI button
                 local MainUIButtons = NPL.load("(gl)Mod/CodePku/cellar/Common/TouchMiniButtons/Main.lua")
                 MainUIButtons.ShowPage()
             end
@@ -265,19 +259,34 @@ function ChooseBranch:changeBranch()
     -- echo(ChooseBranch.currChooseServer)
     for i,j in ipairs(ChooseBranch.branchStateTable) do
         if ChooseBranch.currChooseBranch == j["branchId"] and ChooseBranch.currChooseServer == j["serverId"] then
-            ChooseBranch.bJumpBranch = true
+            if j["playerNum"] >= j["maxPlayerNum"] then
+                GameLogic.AddBBS(nil, L"你选择的服务器已满", 3000, "255 0 0")
+                break
+            end
+            ChooseBranch.jumpToWorldKey = tostring(j["worldId"] or "1").."_"..tostring(j["worldName"] or "1").."_"..tostring(j["branchId"] or "1")
             GameLogic.RunCommand(string.format("/connectCodePku -no=%d -host=%s -port=%s %d %s", j["branchId"], j["ip"], j["port"], j["worldId"], j["worldName"]))
             break
         end
     end
 end
 
-function ChooseBranch:getBranchName(nameId)
-    local showName = ChooseBranch.currBranchData["currWorldName"].."-"..ChooseBranch.branchNameTalbe[nameId]
+function ChooseBranch:getBranchName(branchId)
+    if not branchId then
+        return "未知世界"
+    end
+    local showName = ChooseBranch.currBranchData["currWorldName"].."-"..ChooseBranch.branchNameTalbe[branchId]
     if commonlib.utf8.len(showName) > 7 then
-        showName = commonlib.utf8.sub(showName, 1, 3).."...-"..ChooseBranch.branchNameTalbe[nameId]
+        showName = commonlib.utf8.sub(showName, 1, 3).."...-"..ChooseBranch.branchNameTalbe[branchId]
     end
     return showName
+end
+
+function ChooseBranch:getBranchNameByWorldKey(worldKey)
+    local refInfo = {}
+    for each in string.gmatch(k, "%d+") do
+        table.insert( refInfo, each )
+    end
+    return ChooseBranch:getBranchName(refInfo[3])
 end
 
 -- 当且仅当bShow为false时为关闭页面
@@ -287,9 +296,6 @@ function ChooseBranch:ShowPage(bShow)
     ChooseBranch.branchStateTable = nil
     ChooseBranch.currBranchData = nil
     commonlib.setfield("System.Codepku.branch", nil)
-
-    -- 点开界面的时候拉取一遍最新的数据，先显示老数据界面，等待数据回调刷新界面
-    GameLogic.RunCommand("/wanxueshijie worldInfo")
 
     if ChooseBranch.ui then
         ChooseBranch.ui:CloseWindow()
@@ -310,4 +316,8 @@ function ChooseBranch:ShowPage(bShow)
     }
 
     ChooseBranch.ui = AdaptWindow:QuickWindow(params)
+
+    -- 点开界面的时候拉取一遍最新的数据，先显示老数据界面，等待数据回调刷新界面
+    GameLogic.RunCommand("/wanxueshijie worldInfo")
+
 end
