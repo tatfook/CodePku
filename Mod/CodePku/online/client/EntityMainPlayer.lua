@@ -17,10 +17,20 @@ NPL.load("Mod/GeneralGameServerMod/Core/Client/EntityMainPlayer.lua");
 local EntityMainPlayer = commonlib.inherit(commonlib.gettable("Mod.GeneralGameServerMod.Core.Client.EntityMainPlayer"), commonlib.gettable('Mod.CodePku.Online.Client.EntityMainPlayer'))
 
 -- 获取玩家同步信息的频率  33 = 1s   tick = 30fps
+-- 该值决定同步包的间隔时长
 function EntityMainPlayer:GetMotionSyncTickCount()
     local count = tonumber(Mod.CodePku.BasicConfigTable.ggs_motion_sync_tick_count or 10);
     -- LOG.std("CodePku", "info", "EntityMainPlayer:GetMotionSyncTickCount", count)
     return count;
+end
+
+-- 获取玩家位置同步的帧距离, 移动多长距离记为1帧, 或理解为小于该值没有移动
+-- 该值决定单次同步帧的数量, 若为0, 不丢帧, 若为无穷大则丢弃两次同步间的中间帧, 若指定值, 则同步指定间隔的关键帧
+function EntityMainPlayer:GetMotionMinDistance()
+    -- 为零玩家一直处于运动状态  若此是频率为1, 则帧同步同本地完全一致
+    local distance = tonumber(Mod.CodePku.BasicConfigTable.ggs_motion_min_distance or 0.01);
+    -- LOG.std("CodePku", "info", "EntityMainPlayer:GetMotionMinDistance", distance)
+    return distance;
 end
 
 
