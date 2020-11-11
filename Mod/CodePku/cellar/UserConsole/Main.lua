@@ -143,6 +143,10 @@ function UserConsole:CourseEntry()
     local TaskSystem = commonlib.gettable("Mod.CodePku.Common.TaskSystem")
     TaskSystem:GetTask();
 
+    -- 登陆之后，获取地址树
+    local Schoolyard = NPL.load("(gl)Mod/CodePku/cellar/GUI/Schoolyard/Schoolyard.lua");
+    Schoolyard:GetAreasTree()
+
 end
 
 function UserConsole:Logout()

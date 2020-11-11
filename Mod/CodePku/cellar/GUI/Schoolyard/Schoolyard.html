@@ -18,6 +18,11 @@ function ClosePage()
     end
 end
 
+-- 获取图片
+function GetIcon(index)
+    return Schoolyard:GetImagePath(index)
+end
+
 -- 返回标签table
 function GetTabs()
     return Schoolyard.tabs
@@ -39,39 +44,48 @@ end
 
 <pe:container alignment="_lt" width="100%" height="100%">
 
-<div style="width: 1920;height: 1080;background-color:#000000">
-    <div height="100%" style="position: relative;top:0;left:0;bottom:0;width:230px;background-color:#94E3FE"></div>
-    <input type="button" name="close" onclick="ClosePage" style="position:relative;float:left;width:208px;height:127px;background:url(codepku/image/textures/common_32bits.png#251 49 208 127);"/>
-    <div style="position:relative;left:132px;top:0;width:441px;height:102px;background:url(codepku/image/textures/common_32bits.png#463 63 441 100);padding-top:4px;padding-left:80;font-family:PuHuiTi-Bold;font-size:70px;color:#d85d0b;">我的校园</div>
-    <iframe name="money" src="Mod/CodePku/cellar/GUI/Money.html" style="position:absolute;top:0;"></iframe>
+<div style="<%=format('width: 1920;height: 1080;background:url(%s);', GetIcon('schoolyard_bg.png'))%>">
 
+    <input type="button" name="close" onclick="ClosePage" style="<%=format('position:relative;left:1822;top: 0;width:77;height:106;background:url(%s);', GetIcon('schoolyard_school_x.png'))%>"/>
+    
+    <iframe name="money" src="Mod/CodePku/cellar/GUI/MoneyV2.html" style="position:absolute;margin-right:112px;"></iframe>
 
-    <div style="position:relative;top:122;font-size:45px;font-weight:bold;font-family:Noto Sans S Chinese Regular;text-align:center;">
+    <div style="<%=format('position:relative;left:92;top: 112;width:1348;height:898;background:url(%s);', GetIcon('schoolyard_bot.png'))%>"></div>
+
+    <div style="position:relative;left: 63;top:297;font-size:52px;font-family:alhy;text-align:center;">
         <pe:repeat DataSource="<%=GetTabs()%>">
             <pe:repeatitem>
                 <pe:if condition='<%=GetTabsSelectIndex() == Eval("index") %>'>
-                    <input type="button" name='<%= Eval("index")%>' value='<%=Eval("title")%>' style='width:261px;height:94px;margin-left:27px;padding-bottom:20px;background:url(codepku/image/textures/common_32bits.png#1648 196 261 96);' onclick="OnChoose"/>
+                    <input type="button" name='<%= Eval("index")%>' value='<%=Eval("title")%>' style="<%=format('font-size:56px;width:247;height:142;margin-bottom: 5;padding-bottom: 15;color:#ffffff;background:url(%s);', GetIcon('schoolyard_tag_pitchon_b.png'))%>" onclick="OnChoose"/>
                 </pe:if>
                 <pe:if condition='<%=GetTabsSelectIndex() ~= Eval("index") %>'>
-                    <input type="button" name='<%= Eval("index")%>' value='<%=Eval("title")%>' style='width:244px;height:94px;background:url(codepku/image/textures/common_32bits.png#1294 66  134 94: 36 30 30 32);' onclick="OnChoose"/>
+                    <input type="button" name='<%= Eval("index")%>' value='<%=Eval("title")%>' style="<%=format('width:247;height:142;margin-bottom: 5;padding-bottom: 15;color:#5f401e;background:url(%s);', GetIcon('schoolyard_tagpitchon__y.png'))%>" onclick="OnChoose"/>
                 </pe:if>
             </pe:repeatitem>
         </pe:repeat>
     </div>
+    <div style="position:relative;left: 63;top:265;">
+        <pe:repeat DataSource="<%=GetTabs()%>">
+            <pe:repeatitem>
+                <div style="<%=format('left:102;width:32;height:68;margin-bottom: 79;background:url(%s);', GetIcon('schoolyard_tag_knot.png'))%>"></div>
+            </pe:repeatitem>
+        </pe:repeat>
+    </div>
+    
 
     <!-- 首页 -->
     <pe:if condition='<%= GetTabsSelectIndex() == 1 %>'>
-        <iframe name="SchoolyardMainFrame" src="Mod/CodePku/cellar/GUI/Schoolyard/SchoolyardMainFrame.html" style="position: relative;left:300px;top: 110;"></iframe>
+        <iframe name="SchoolyardMainFrame" src="Mod/CodePku/cellar/GUI/Schoolyard/SchoolyardMainFrame.html" style="position: relative;left:320px;top: 110;"></iframe>
     </pe:if>
 
     <!-- 成员 -->
     <pe:if condition='<%= GetTabsSelectIndex() == 2 %>'>
-        <iframe name="SchoolyardMainFrame" src="Mod/CodePku/cellar/GUI/Schoolyard/SchoolyardMembersFrame.html" style="position: relative;left:300px;top: 110;"></iframe>
+        <iframe name="SchoolyardMainFrame" src="Mod/CodePku/cellar/GUI/Schoolyard/SchoolyardMembersFrame.html" style="position: relative;left:320px;top: 110;"></iframe>
     </pe:if>
 
     <!-- 动态 -->
     <pe:if condition='<%= GetTabsSelectIndex() == 3 %>'>
-        <iframe name="SchoolyardMainFrame" src="Mod/CodePku/cellar/GUI/Schoolyard/SchoolyardTrendsFrame.html" style="position: relative;left:300px;top: 110;"></iframe>
+        <iframe name="SchoolyardMainFrame" src="Mod/CodePku/cellar/GUI/Schoolyard/SchoolyardTrendsFrame.html" style="position: relative;left:320px;top: 110;"></iframe>
     </pe:if>
 
 </div>
