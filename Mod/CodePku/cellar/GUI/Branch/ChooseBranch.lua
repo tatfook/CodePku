@@ -283,7 +283,7 @@ end
 
 function ChooseBranch:getBranchNameByWorldKey(worldKey)
     local refInfo = {}
-    for each in string.gmatch(k, "%d+") do
+    for each in string.gmatch(worldKey, "%d+") do
         table.insert( refInfo, each )
     end
     return ChooseBranch:getBranchName(refInfo[3])
