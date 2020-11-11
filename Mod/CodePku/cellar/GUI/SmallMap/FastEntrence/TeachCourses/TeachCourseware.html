@@ -153,6 +153,7 @@ end
 -- 跳转到课件的世界
 function goWorld(id)
     local name, keepwork_project_id = TeachCourses:GetCoursewareUniqueness(id)
+    MainPopup.fromTeachCourse = true
     MainPopup:ShowPage("TPpopup", name, keepwork_project_id)
 end
 
