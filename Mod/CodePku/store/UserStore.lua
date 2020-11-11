@@ -43,21 +43,6 @@ function UserStore:Action()
             commonlib.setfield("System.User.isVisitor", self.isvisitor)
             commonlib.setfield("System.User.info", user)
 
-            -- if Config.defaultEnv ~= Config.env.DEV then
-                GameLogic.GetFilters():add_filter(
-                    "HandleGlobalKeyByRETURN",
-                    function()
-                        return user.is_employee == 0;
-                    end
-                );
-            
-                GameLogic.GetFilters():add_filter(
-                    "HandleGlobalKeyBySLASH",
-                    function()
-                        return user.is_employee == 0;
-                    end
-                );
-            -- end
         end,
         SetPlayerController = function(playerController)
             self.playerController = playerController
