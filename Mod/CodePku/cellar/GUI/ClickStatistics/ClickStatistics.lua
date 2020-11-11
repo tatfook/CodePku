@@ -18,7 +18,7 @@ local request = NPL.load("(gl)Mod/CodePku/api/BaseRequest.lua");
 
 --[[
     track_id 行为ID 
-    track_scene 行为场景，0-登录页 1-主界面 2-地图 3-精品课程 4-改名 5-课程结算 6-跑酷 7-游学记 8-底部功能键栏 9-顶部功能键栏 10-家园区 11-站到最后
+    track_scene 行为场景，0-登录页 1-主界面 2-地图 3-精品课程 4-改名 5-课程结算 6-跑酷 7-游学记 8-底部功能键栏 9-顶部功能键栏 10-家园区 11-站到最后 12-家园体验世界
     track_type 行为类型，0点击 1分享
     keepwork_id 当前世界ID，没有ID则为0
 ]]
@@ -150,8 +150,12 @@ function ClickStatistics:StaticInit()
         function (data)
             if data then
                 local param = {}
-                if ClickStatistics.ClickInfo[data.type] then
-                    param = ClickStatistics.ClickInfo[data.type]
+                if data.type then
+                    if ClickStatistics.ClickInfo[data.type] then
+                        param = ClickStatistics.ClickInfo[data.type]
+                    end
+                else
+                    param = data
                 end
                 if System.Codepku then
                     if HomeManage:IsMyHome() then
