@@ -73,7 +73,7 @@ MainUIButtons.dialog_right = {
 	[3]={url=mainFrameImageData:GetIconUrl("main_icon_achievement.png"),top=19,width=83,height=89,left=11,name="ClickAchievement",bShow=false,},
 	[4]={url=mainFrameImageData:GetIconUrl("main_icon_title.png"),top=19,width=68,height=109,left=18,name="ClickTitle",bShow=false,},
 	[5]={url=mainFrameImageData:GetIconUrl("main_icon_buddy.png"),top=19,width=75,height=98,left=15,name="ClickFriend",bShow=true,},
-	[6]={url=mainFrameImageData:GetIconUrl("main_icon_setup.png"),top=18,width=78,height=91,left=22,name="ClickSetting",bShow=false,},
+	[6]={url=mainFrameImageData:GetIconUrl("main_icon_setup.png"),top=18,width=78,height=91,left=22,name="ClickSetting",bShow=true,},
 	[7]={url=mainFrameImageData:GetIconUrl("main_icon_dressup.png"),top=20,width=85,height=86,left=14,name="ClickChange",bShow=false,},
 }
 
