@@ -1,0 +1,80 @@
+<!-- "script/apps/Aries/Creator/Game/Areas/EscFramePage.html" -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+</head>
+<body>
+    <pe:mcml>
+<script refresh="false" type="text/npl" src="ExitPage.lua"><![CDATA[
+
+local page = document:GetPageCtrl()
+NPL.load("(gl)Mod/CodePku/cellar/Areas/ChooseOperationMode.lua")
+local ChooseOperationMode = commonlib.gettable("Mod.CodePku.cellar.Areas.ChooseOperationMode")
+local escFrameImageData = NPL.load("(gl)Mod/CodePku/cellar/imageLuaTable/escFrameImageData.lua")
+local common1ImageData = NPL.load("(gl)Mod/CodePku/cellar/imageLuaTable/common1ImageData.lua")
+
+esc_frame_bot_floor = escFrameImageData:GetIconUrl("esc_frame_bot_floor.png")
+esc_frame_thumbtac = escFrameImageData:GetIconUrl("esc_frame_thumbtac.png")
+esc_frame_btn_408_85 = escFrameImageData:GetIconUrl("esc_frame_btn_408_85.png")
+esc_frame_btn_408_85n = escFrameImageData:GetIconUrl("esc_frame_btn_408_85n.png")
+esc_frame_r = escFrameImageData:GetIconUrl("esc_frame_r.png")
+comm_btn_close = common1ImageData:GetIconUrl("comm_btn_close.png")
+esc_frame__btn_green03 = escFrameImageData:GetIconUrl("esc_frame__btn_green03.png")
+
+isShow = ChooseOperationMode.isShow
+
+
+function ClosePage()
+    Page:CloseWindow();
+end
+
+function ClickCancel()
+    ClosePage()
+end
+
+function OnClickButton(name,mcmlNode)
+    if(name=="wheel") then
+        ChooseOperationMode:ChangeOperationMode(0)
+    elseif(name=="keyboard") then
+        ChooseOperationMode:ChangeOperationMode(1)
+    end
+end
+
+function Confirm()
+    ChooseOperationMode:Confirm()
+end
+
+]]>
+
+</script>
+<pe:container alignment="_lt" width="1920" height="1080" style="">
+<!-- 背景 -->
+<div style="<%=format('position: relative; left: 520; top: 180; width: 936;height: 721;background:url(%s);', esc_frame_bot_floor)%>">
+    <!-- title -->
+    <div style="position: relative;left: 0;top: 0;width: 936;height:80 ;text-align:center; line-height:80 ; font-family: zkklt;font-size: 48;color: #9e6c5e;">切换操作方式</div>
+    <!-- 功能区域 -->
+    <pe:if condition='<%= isShow %>'>
+        <div onclick="OnClickButton" name="wheel" style="<%=format('position: relative; left: 232; top: 202; width: 408;height: 85;font-size:36;line-height:85;font-family:zkklt;color:#803011;text-align:center;background:url(%s);',esc_frame_btn_408_85)%>">方向轮盘</div>
+        <div onclick="OnClickButton" name="keyboard" style="<%=format('position: relative; left: 232; top: 359; width: 408;height: 85;font-size:36;line-height:85;font-family:zkklt;color:#803011;text-align:center;background:url(%s);', esc_frame_btn_408_85n)%>">方向键盘</div>
+        <div style="<%=format('position: relative; left: 652; top: 362; width: 76;height: 76;font-size:36;line-height:85;font-family:zkklt;color:#803011;text-align:center;background:url(%s);', esc_frame_r)%>"></div> 
+    </pe:if>
+    <pe:if condition='<%= not isShow %>'>
+        <div onclick="OnClickButton" name="wheel" style="<%=format('position: relative; left: 232; top: 202; width: 408;height: 85;font-size:36;line-height:85;font-family:zkklt;color:#803011;text-align:center;background:url(%s);',esc_frame_btn_408_85n)%>">方向轮盘</div>
+        <div onclick="OnClickButton" name="keyboard" style="<%=format('position: relative; left: 232; top: 359; width: 408;height: 85;font-size:36;line-height:85;font-family:zkklt;color:#803011;text-align:center;background:url(%s);', esc_frame_btn_408_85)%>">方向键盘</div>
+        <div style="<%=format('position: relative; left: 652; top: 209; width: 76;height: 76;font-size:36;line-height:85;font-family:zkklt;color:#803011;text-align:center;background:url(%s);', esc_frame_r)%>"></div>
+    </pe:if>
+</div>
+
+<div style="<%=format('position:relative;left:715;top:363;width:81;height:226;background: url(%s)', esc_frame_thumbtac)%>"></div>
+<!-- 关闭 -->
+<div onclick="ClosePage" style="<%=format('position: relative; left: 1331; top: 156; width: 77;height: 123;background:url(%s);', comm_btn_close)%>"></div>
+<!-- 确定 -->
+<div onclick="Confirm" style="<%=format('position: relative; left: 836; top: 834; width: 238;height: 81;text-align:center; line-height:81 ; font-family: zkklt;font-size: 48;color: #ffffff;background:url(%s);', esc_frame__btn_green03)%>">确定</div>
+
+</pe:container>
+</pe:mcml>
+</body>
+</html>
+ 
