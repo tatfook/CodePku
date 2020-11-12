@@ -128,8 +128,8 @@ function TouchVirtualKeyboardIcon:SetPosition(left, top, width)
 	self.width = Design:adapterWidth(100);
 	self.height = Design:adapterWidth(100);
 
-	self.top = Design:adapterHeight(141);
-	self.left = Design:adapterWidth(100);
+	self.top = Design:adapterHeight(241);
+	self.left = Design:adapterWidth(170);
 
 	local bLastVisible = self:isVisible();
 	self:CreateWindow();
