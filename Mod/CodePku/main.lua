@@ -593,10 +593,32 @@ function CodePku:init()
 	)
 
 	GameLogic.GetFilters():add_filter(
+		"HandleGlobalKeyByRETURN",
+		function()
+			local isEmployee = System.User and System.User.info and System.User.info.is_employee;
+			if isEmployee and tonumber(isEmployee) == 1 or (HomeManage:IsMyHome() and GameLogic.GameMode:IsEditor()) then
+				return false
+			end
+			return true
+		end
+	);
+
+	GameLogic.GetFilters():add_filter(
+		"HandleGlobalKeyBySLASH",
+		function()
+			local isEmployee = System.User and System.User.info and System.User.info.is_employee;
+			if isEmployee and tonumber(isEmployee) == 1 or (HomeManage:IsMyHome() and GameLogic.GameMode:IsEditor()) then
+				return false
+			end
+			return true
+		end
+	);
+
+	GameLogic.GetFilters():add_filter(
 		"KeyPressEvent",
 		function(callbackVal, event)
 			local isEmployee = System.User and System.User.info and System.User.info.is_employee;
-			if isEmployee and tonumber(isEmployee) == 1 then
+			if isEmployee and tonumber(isEmployee) == 1 or (HomeManage:IsMyHome() and GameLogic.GameMode:IsEditor()) then
 				return true
 			end
 
