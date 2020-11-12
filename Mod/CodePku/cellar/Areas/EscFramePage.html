@@ -15,7 +15,8 @@ local AccountSettingPage = NPL.load("(gl)Mod/CodePku/cellar/Areas/AccountSetting
 NPL.load("(gl)Mod/CodePku/cellar/GUI/Home/HomeManage.lua")
 local HomeManage = commonlib.gettable("Mod.CodePku.Common.HomeManage")
 local CodePkuEscFramePage = NPL.load("(gl)Mod/CodePku/cellar/Areas/EscFramePage.lua")
-
+NPL.load("(gl)Mod/CodePku/cellar/Areas/ChooseOperationMode.lua")
+local ChooseOperationMode = commonlib.gettable("Mod.CodePku.cellar.Areas.ChooseOperationMode")
 
 function ClosePage()
     if CodePkuEscFramePage.window then
@@ -69,6 +70,11 @@ function OnLogout()
     ExitPage:ShowPage();
 end
 
+-- 切换操作方式
+function OnChangeMethod()
+    ChooseOperationMode:ShowPage()
+end
+
 function OnClickButton(name,mcmlNode)
     ClosePage();
     if(name=="systemSetting") then
@@ -79,6 +85,8 @@ function OnClickButton(name,mcmlNode)
         OnLeave();
     elseif(name=="logout") then
         OnLogout()
+    elseif(name=="changeMethod") then
+        OnChangeMethod()
     end
 end
 
@@ -90,10 +98,19 @@ end
     <!-- title -->
     <div style="position: relative;left: 362;top: 14;font-family: zkklt;font-size: 48;color: #9e6c5e;">系统设置</div>
     <!-- 功能区域 -->
-    <div onclick="OnClickButton" name="systemSetting" style="<%=format('position: relative; left: 261; top: 192; width: 408;height: 85;font-size:36;line-height:85;font-family:zkklt;color:#803011;text-align:center;background:url(%s);', GetIcons(2, 'esc_frame_btn_408_85.png'))%>">系统设定</div>
-    <div onclick="OnClickButton" name="accountSetting" style="<%=format('position: relative; left: 261; top: 303; width: 408;height: 85;font-size:36;line-height:85;font-family:zkklt;color:#803011;text-align:center;background:url(%s);', GetIcons(2, 'esc_frame_btn_408_85.png'))%>">账号设置</div>
-    <div onclick="OnClickButton" name="exitWorld" style="<%=format('position: relative; left: 261; top: 414; width: 408;height: 85;font-size:36;line-height:85;font-family:zkklt;color:#803011;text-align:center;background:url(%s);', GetIcons(2, 'esc_frame_btn_408_85.png'))%>">返回大厅</div>
-    <div onclick="OnClickButton" name="logout" style="<%=format('position: relative; left: 261; top: 525; width: 408;height: 85;font-size:36;line-height:85;font-family:zkklt;color:#803011;text-align:center;background:url(%s);', GetIcons(2, 'esc_frame_btn_408_85.png'))%>">退出《玩学世界》</div>
+    <pe:if condition='<%= System.os.IsMobilePlatform() %>'>
+        <div onclick="OnClickButton" name="changeMethod" style="<%=format('position: relative; left: 261; top: 142; width: 408;height: 85;font-size:36;line-height:85;font-family:zkklt;color:#803011;text-align:center;background:url(%s);', GetIcons(2, 'esc_frame_btn_408_85.png'))%>">切换操作方式</div>
+        <div onclick="OnClickButton" name="systemSetting" style="<%=format('position: relative; left: 261; top: 252; width: 408;height: 85;font-size:36;line-height:85;font-family:zkklt;color:#803011;text-align:center;background:url(%s);', GetIcons(2, 'esc_frame_btn_408_85.png'))%>">系统设定</div>
+        <div onclick="OnClickButton" name="accountSetting" style="<%=format('position: relative; left: 261; top: 363; width: 408;height: 85;font-size:36;line-height:85;font-family:zkklt;color:#803011;text-align:center;background:url(%s);', GetIcons(2, 'esc_frame_btn_408_85.png'))%>">账号设置</div>
+        <div onclick="OnClickButton" name="exitWorld" style="<%=format('position: relative; left: 261; top: 484; width: 408;height: 85;font-size:36;line-height:85;font-family:zkklt;color:#803011;text-align:center;background:url(%s);', GetIcons(2, 'esc_frame_btn_408_85.png'))%>">返回大厅</div>
+        <div onclick="OnClickButton" name="logout" style="<%=format('position: relative; left: 261; top: 595; width: 408;height: 85;font-size:36;line-height:85;font-family:zkklt;color:#803011;text-align:center;background:url(%s);', GetIcons(2, 'esc_frame_btn_408_85.png'))%>">退出《玩学世界》</div>
+    </pe:if> -->
+    <pe:if condition='<%= not System.os.IsMobilePlatform() %>'>
+        <div onclick="OnClickButton" name="systemSetting" style="<%=format('position: relative; left: 261; top: 192; width: 408;height: 85;font-size:36;line-height:85;font-family:zkklt;color:#803011;text-align:center;background:url(%s);', GetIcons(2, 'esc_frame_btn_408_85.png'))%>">系统设定</div>
+        <div onclick="OnClickButton" name="accountSetting" style="<%=format('position: relative; left: 261; top: 303; width: 408;height: 85;font-size:36;line-height:85;font-family:zkklt;color:#803011;text-align:center;background:url(%s);', GetIcons(2, 'esc_frame_btn_408_85.png'))%>">账号设置</div>
+        <div onclick="OnClickButton" name="exitWorld" style="<%=format('position: relative; left: 261; top: 414; width: 408;height: 85;font-size:36;line-height:85;font-family:zkklt;color:#803011;text-align:center;background:url(%s);', GetIcons(2, 'esc_frame_btn_408_85.png'))%>">返回大厅</div>
+        <div onclick="OnClickButton" name="logout" style="<%=format('position: relative; left: 261; top: 525; width: 408;height: 85;font-size:36;line-height:85;font-family:zkklt;color:#803011;text-align:center;background:url(%s);', GetIcons(2, 'esc_frame_btn_408_85.png'))%>">退出《玩学世界》</div>
+    </pe:if>
 </div>
 <!-- 关闭 -->
 <div onclick="ClosePage" style="<%=format('position: relative; left: 1331; top: 156; width: 77;height: 123;background:url(%s);', GetIcons(1, 'comm_btn_close.png'))%>"></div>
