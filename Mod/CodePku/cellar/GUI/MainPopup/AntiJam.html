@@ -42,7 +42,8 @@ function turnToWorld()
         if System.Codepku.Coursewares.keepwork_project_id == 25161 then
             if MainPopup.STEWindow then MainPopup.STEWindow:CloseWindow() end
             MainPopup.signedUp = false
-            GameLogic.RunCommand("/connectCodePku 14312") --站到最后防卡死回到竞技区
+            GameLogic.RunCommand("/home") --站到最后防卡死
+            MainPopup.Pre()
         else
             GameLogic.RunCommand("/loadworld " .. tostring(System.Codepku.Coursewares.keepwork_project_id))        
         end
