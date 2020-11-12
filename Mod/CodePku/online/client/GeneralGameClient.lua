@@ -61,7 +61,7 @@ function GeneralGameClient:LoadWorld(opts, loadworld)
     
     local worldName = opts and opts.worldName
     local oldWorldName = self:GetOptions().worldName
-    opts.worldKey =(opts.worldId or "1").."_"..(opts.worldName or "1").."_"..(opts.no or "1")
+    -- opts.worldKey =(opts.worldId or "1").."_"..(opts.worldName or "1").."_"..(opts.no or "1")
 
     -- 覆盖默认选项
     local options = self:SetOptions(opts);
@@ -73,12 +73,14 @@ function GeneralGameClient:LoadWorld(opts, loadworld)
     options.worldName = tostring(options.worleName ~= "" and options.worldName or 1)
     options.username = options.username or self:GetUserInfo().username;
     options.ip = opts.ip;            -- ip port 每次重写
-    options.port = options.port;     -- 以便动态获取
+    options.port = opts.port;     -- 以便动态获取
+    options.worldKey = opts.worldKey or ((opts.worldId or "1").."_"..(opts.worldName or "1").."_"..(opts.no or "1")) -- worldKey每次重写
+    options.reload = opts.reload    -- 每次重写是否重新加载世界
   
     -- 打印选项值
     -- GGS.INFO(options);
     -- only reload world if world id does not match
-    local isReloadWorld = tostring(options.worldId) ~= tostring(curWorldId)
+    local isReloadWorld = tostring(options.worldId) ~= tostring(curWorldId) or options.reload
     -- 退出旧世界
     if (self:GetWorld()) then 
         -- 不同世界或者未登录则重新进入世界
