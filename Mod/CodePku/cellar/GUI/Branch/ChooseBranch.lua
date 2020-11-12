@@ -26,20 +26,21 @@ ChooseBranch.branchStateTable = {}
 ChooseBranch.currChooseBranch = 1
 ChooseBranch.currChooseServer = 2
 
-ChooseBranch.branchNameTalbe = {
-    "甲子线","乙丑线","丙寅线","丁卯线","戊辰线",
-    "已巳线","庚午线","辛未线","壬申线","癸酉线",
-    "甲戌线","乙亥线","丙子线","丁丑线","戊寅线",
-    "已卯线","庚辰线","辛巳线","壬午线","癸未线",
-    "甲申线","乙酉线","丙戌线","丁亥线","戊子线",
-    "己丑线","庚寅线","辛卯线","壬辰线","癸巳线",
-    "甲午线","乙未线","丙申线","丁酉线","戊戌线",
-    "已亥线","庚子线","辛丑线","壬寅线","癸卯线",
-    "甲辰线","乙巳线","丙午线","丁未线","戊申线",
-    "已酉线","庚戌线","辛亥线","壬子线","癸丑线",
-    "甲寅线","乙卯线","丙辰线","丁巳线","戊午线",
-    "已未线","庚申线","辛酉线","壬戌线","癸亥线",
-}
+-- 弃用了
+-- ChooseBranch.branchNameTalbe = {
+--     "甲子线","乙丑线","丙寅线","丁卯线","戊辰线",
+--     "已巳线","庚午线","辛未线","壬申线","癸酉线",
+--     "甲戌线","乙亥线","丙子线","丁丑线","戊寅线",
+--     "已卯线","庚辰线","辛巳线","壬午线","癸未线",
+--     "甲申线","乙酉线","丙戌线","丁亥线","戊子线",
+--     "己丑线","庚寅线","辛卯线","壬辰线","癸巳线",
+--     "甲午线","乙未线","丙申线","丁酉线","戊戌线",
+--     "已亥线","庚子线","辛丑线","壬寅线","癸卯线",
+--     "甲辰线","乙巳线","丙午线","丁未线","戊申线",
+--     "已酉线","庚戌线","辛亥线","壬子线","癸丑线",
+--     "甲寅线","乙卯线","丙辰线","丁巳线","戊午线",
+--     "已未线","庚申线","辛酉线","壬戌线","癸亥线",
+-- }
 
 ChooseBranch.HTMLStyleData = {
     [1] = { ["desc"] = "背景图片", ["position"] = "absolute", ["left"] = 624, ["top"] = 18, ["width"] = 699, ["height"] = 1000, ["background"] = "url("..branchImageData:GetIconUrl("branch_boot_01.png")..")",},
@@ -53,10 +54,10 @@ ChooseBranch.HTMLStyleData = {
     [9] = { ["desc"] = "流畅文字", ["position"] = "relative", ["left"] = 539, ["top"] = 194, ["width"] = 104, ["height"] = 52, ["color"] = "#9e6c5e", ["font-family"] = "zkklt", ["font-size"] = "40px",},
     [10] = { ["desc"] = "标题文字", ["position"] = "relative", ["left"] = 210, ["top"] = 31, ["width"] = 400, ["height"] = 120, ["color"] = "#9e6c5e", ["font-family"] = "zkklt", ["font-size"] = "65px",},
     [11] = { ["desc"] = "滚动区域", ["position"] = "relative", ["left"] = 80, ["top"] = 256, ["width"] = 535, ["height"] = 670,},
-    [12] = { ["desc"] = "分线栏背景(未选择)", ["width"] = 515, ["height"] = 106, ["top"] = 30,["background"] = "url("..branchImageData:GetIconUrl("branch_boot_g.png")..")",},
-    [13] = { ["desc"] = "分线栏背景(选中)", ["width"] = 515, ["height"] = 107, ["top"] = 30,["background"] = "url("..branchImageData:GetIconUrl("branch_boot_w.png")..")",},
+    [12] = { ["desc"] = "分线栏背景(未选择)", ["width"] = 535, ["height"] = 106, ["top"] = 30,["background"] = "url("..branchImageData:GetIconUrl("branch_boot_g.png")..")",},
+    [13] = { ["desc"] = "分线栏背景(选中)", ["width"] = 535, ["height"] = 107, ["top"] = 30,["background"] = "url("..branchImageData:GetIconUrl("branch_boot_w.png")..")",},
     [14] = { ["desc"] = "分线栏状态标签(流畅)", ["position"] = "relative", ["left"] = 24, ["top"] = 30, ["width"] = 52, ["height"] = 52,["background"] = "url("..branchImageData:GetIconUrl("branch_icon_g.png")..")",},
-    [15] = { ["desc"] = "分线栏文字",  ["position"] = "relative", ["left"] = 109, ["top"] = 32, ["width"] = 400, ["height"] = 60, ["color"] = "#813010", ["font-family"] = "zkklt", ["font-size"] = "48",},
+    [15] = { ["desc"] = "分线栏文字",  ["position"] = "relative", ["left"] = 80, ["top"] = 32, ["width"] = 440, ["height"] = 60, ["color"] = "#813010", ["font-family"] = "zkklt", ["font-size"] = "48",},
     [16] = { ["desc"] = "切换分线按钮文字",  ["position"] = "relative", ["left"] = 49, ["top"] = 26, ["width"] = 199, ["height"] = 41,["background"] = "url("..branchImageData:GetIconUrl("branch_icon_g_mat.png")..")",},
     [17] = { ["desc"] = "分线栏状态标签(繁忙)", ["position"] = "relative", ["left"] = 24, ["top"] = 30, ["width"] = 52, ["height"] = 52,["background"] = "url("..branchImageData:GetIconUrl("branch_icon_y.png")..")",},
     [18] = { ["desc"] = "分线栏状态标签(爆满)", ["position"] = "relative", ["left"] = 24, ["top"] = 30, ["width"] = 52, ["height"] = 52,["background"] = "url("..branchImageData:GetIconUrl("branch_icon_r.png")..")",},
@@ -228,8 +229,10 @@ function ChooseBranch:DealBranchStateData()
                 end
             end
         end
-        echo("======zr=====")
-        echo(ChooseBranch.branchStateTable)
+        if ChooseBranch.jumpToWorldKey and ChooseBranch.jumpToWorldKey ~= System.Codepku.branch.currWorld.worldKey then
+            ChooseBranch.jumpToWorldKey = nil
+            GameLogic.AddBBS(nil, string.format("你选择的分线已满，你已进入%s", ChooseBranch:getBranchNameByWorldKey(System.Codepku.branch.currWorld.worldKey)), 3000, "255 0 0")
+        end
     end
 end
 
@@ -264,19 +267,24 @@ function ChooseBranch:changeBranch()
                 break
             end
             ChooseBranch.jumpToWorldKey = tostring(j["worldId"] or "1").."_"..tostring(j["worldName"] or "1").."_"..tostring(j["branchId"] or "1")
-            GameLogic.RunCommand(string.format("/connectCodePku -no=%d -host=%s -port=%s %d %s", j["branchId"], j["ip"], j["port"], j["worldId"], j["worldName"]))
+            GameLogic.RunCommand(string.format("/connectCodePku -manual=1 -no=%d -host=%s -port=%s %d %s", j["branchId"], j["ip"], j["port"], j["worldId"], j["worldName"]))
             break
         end
     end
 end
 
-function ChooseBranch:getBranchName(branchId)
-    if not branchId then
+function ChooseBranch:getBranchName(branchId, serverId)
+    if not branchId or not serverId then
         return "未知世界"
     end
-    local showName = ChooseBranch.currBranchData["currWorldName"].."-"..ChooseBranch.branchNameTalbe[branchId]
-    if commonlib.utf8.len(showName) > 7 then
-        showName = commonlib.utf8.sub(showName, 1, 3).."...-"..ChooseBranch.branchNameTalbe[branchId]
+    local branchName = string.format("%03s",tostring(branchId))
+    local serverName = string.format("%03s",tostring(serverId + 100))
+    -- local serverName = (string.format("%0.1f",tostring(serverId)):gsub("%.",""))
+    -- local showName = ChooseBranch.currBranchData["currWorldName"].."-"..ChooseBranch.branchNameTalbe[branchId]
+    local showName = ChooseBranch.currBranchData["currWorldName"].."-"..serverName..branchName.."线"
+    if commonlib.utf8.len(ChooseBranch.currBranchData["currWorldName"]) > 3 then
+        -- showName = commonlib.utf8.sub(showName, 1, 3).."...-"..ChooseBranch.branchNameTalbe[branchId]
+        showName = commonlib.utf8.sub(ChooseBranch.currBranchData["currWorldName"], 1, 3).."...-"..serverName..branchName.."线"
     end
     return showName
 end
@@ -286,7 +294,7 @@ function ChooseBranch:getBranchNameByWorldKey(worldKey)
     for each in string.gmatch(worldKey, "%d+") do
         table.insert( refInfo, each )
     end
-    return ChooseBranch:getBranchName(refInfo[3])
+    return ChooseBranch:getBranchName(refInfo[3], ChooseBranch.currChooseServer)
 end
 
 -- 当且仅当bShow为false时为关闭页面

@@ -76,6 +76,7 @@ function GeneralGameClient:LoadWorld(opts, loadworld)
     options.port = opts.port;     -- 以便动态获取
     options.worldKey = opts.worldKey or ((options.worldId or "1").."_"..(options.worldName or "1").."_"..(options.no or "1")) -- worldKey每次重写
     options.reload = opts.reload    -- 每次重写是否重新加载世界
+    options.manual = opts.manual  -- 每次重写是否主动切换世界 
   
     -- 打印选项值
     -- GGS.INFO(options);
