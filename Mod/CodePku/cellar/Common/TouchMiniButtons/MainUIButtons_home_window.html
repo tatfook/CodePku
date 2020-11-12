@@ -16,14 +16,15 @@ Path:"Mod/CodePku/cellar/Common/TouchMiniButtons/MainUIButtons_home_window.html"
 <![CDATA[
 NPL.load("(gl)Mod/CodePku/cellar/GUI/Home/HomeManage.lua");
 local HomeManage = commonlib.gettable("Mod.CodePku.Common.HomeManage")
-local MainUIButtons = NPL.load("(gl)Mod/CodePku/cellar/Common/TouchMiniButtons/Main.lua");
 local Researchers = NPL.load("(gl)Mod/CodePku/cellar/GUI/Researchers/Researchers.lua");
+local mainFrameImageData = NPL.load("(gl)Mod/CodePku/cellar/imageLuaTable/mainFrameImageData.lua")
+main_icon_raiders_1 = mainFrameImageData:GetIconUrl("main_icon_raiders_1.png")
+main_icon_operating_2 = mainFrameImageData:GetIconUrl("main_icon_operating_2.png")
+main_icon_operating_3 = mainFrameImageData:GetIconUrl("main_icon_operating_3.png")
 
 function StartEditWorld()
     LOG.std(nil, "MainUIButtons_home_window", "StartEditWorldBtn", "clicked")
     HomeManage:ChangeGameMode()
-    MainUIButtons.JudgeNil()
-    MainUIButtons:show_home_window_ui()
     Page:Refresh()
 end
 
@@ -41,7 +42,6 @@ function SaveAndExitEditWorld()
     end
     LOG.std(nil, "MainUIButtons_home_window", "SaveAndExitEditWorldBtn", "clicked")
     HomeManage:SaveHome()
-    MainUIButtons.ShowPage()
     Page:Refresh()
 end
 
@@ -57,14 +57,14 @@ end
 <style type="text/mcss">
 
 </style>
-<pe:container alignment="_lt" width="100%" height="100%" >
+<pe:container alignment="_lt" width="335" height="355" >
     <!-- 攻略秘籍 -->
-    <div onclick="BuildingBoard" style="position: relative; left: 100;top: 30;width: 169; height: 158;background: url(codepku/image/textures/enter_world_btn/enter_world_btn.png#185 536 169 158);"></div>
+    <div onclick="BuildingBoard" style="<%=format('position: relative; left: 0;top: 0;width: 129; height: 152;background: url(%s);', main_icon_raiders_1)%>"></div>
     <pe:if condition='<%=GameLogic.GameMode:IsEditor()==false%>'>
-        <div name="StartEditWorldBtn" onclick="StartEditWorld" style="position: relative; left: 100;top: 220;width: 135; height: 134; background: url(codepku/image/textures/enter_world_btn/enter_world_btn.png#96 330 134 134);"></div>
+        <div name="StartEditWorldBtn" onclick="StartEditWorld" style="<%=format('position: relative; left: 7;top: 191;width: 134; height: 134; background: url(%s);', main_icon_operating_3)%>"></div>
     </pe:if>
     <pe:if condition='<%=GameLogic.GameMode:IsEditor()==true%>'>
-        <div name="SaveAndExitEditWorldBtn" onclick="SaveAndExitEditWorld" style="position: relative; left: 100;top: 220;width: 135; height: 134;background: url(codepku/image/textures/enter_world_btn/enter_world_btn.png#312 330 134 134);"></div>
+        <div name="SaveAndExitEditWorldBtn" onclick="SaveAndExitEditWorld" style="<%=format('position: relative; left: 7;top: 191;width: 134; height: 134;background: url(%s);', main_icon_operating_2)%>"></div>
     </pe:if>
 </pe:container>
 

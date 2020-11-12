@@ -24,6 +24,7 @@ local Keyboard = commonlib.gettable("System.Windows.Keyboard");
 local TouchSession = commonlib.gettable("MyCompany.Aries.Game.Common.TouchSession")
 local Screen = commonlib.gettable("System.Windows.Screen");
 local Design = NPL.load("(gl)Mod/CodePku/util/Design.lua");
+local mainFrameImageData = NPL.load("(gl)Mod/CodePku/cellar/imageLuaTable/mainFrameImageData.lua")
 
 local TouchVirtualKeyboardIcon = commonlib.inherit(commonlib.gettable("System.Core.ToolBase"), commonlib.gettable("Mod.CodePku.Common.TouchMiniKeyboard.TouchVirtualKeyboardIcon"));
 TouchVirtualKeyboardIcon:Property("Name", "TouchVirtualKeyboardIcon");
@@ -58,6 +59,21 @@ end
 -- try show the singleton
 function TouchVirtualKeyboardIcon.ShowSingleton(bSHow)
 	NPL.load("(gl)script/ide/timer.lua");
+
+	if bSHow then
+		if System.Codepku then
+			if not HomeManage:IsMyHome() then
+				if System.Codepku and System.Codepku.Coursewares then
+					local category = System.Codepku.Coursewares.category;
+					if category == 8 then
+						bSHow = false
+					end
+				end
+			end
+		end
+	end
+	echo("TouchVirtualKeyboardIcon.ShowSingleton(bSHow)")
+	echo(bSHow)
 	local mytimer = commonlib.Timer:new({callbackFunc = function(timer)
 		if(Screen:GetWidth() > 0) then
 			timer:Change();
@@ -68,6 +84,7 @@ function TouchVirtualKeyboardIcon.ShowSingleton(bSHow)
 				local self = TouchVirtualKeyboardIcon.GetSingleton();
 				self:SetPosition();
 				self:GetKeyBoard():SetPosition(math.floor(self.left+self.width + self.width * 0.2));
+				-- self:GetKeyBoard():SetPosition(100);
 			end);
 		end
 	end})
@@ -120,16 +137,12 @@ end
 -- @param width: if width is not specified, use 1/3 height of the screen
 function TouchVirtualKeyboardIcon:SetPosition(left, top, width)
 	--width = width or math.floor(Screen:GetHeight() / 12)
-	--self.width = width;
-	--self.left = math.floor(left or width * 0.2);
-	--self.top = math.floor(top or width*1.5);
-	--self.height = width;
 
-	self.width = Design:adapterWidth(100);
-	self.height = Design:adapterWidth(100);
+	self.width = Design:adapterWidth(94);
+	self.height = Design:adapterWidth(94);
 
-	self.top = Design:adapterHeight(241);
-	self.left = Design:adapterWidth(170);
+	self.top = Design:adapterHeight(776);
+	self.left = Design:adapterWidth(1260);
 
 	local bLastVisible = self:isVisible();
 	self:CreateWindow();
@@ -149,7 +162,7 @@ function TouchVirtualKeyboardIcon:GetUIControl()
 	
 	if(not _parent:IsValid()) then
 		_parent = ParaUI.CreateUIObject("container",self.name, self.alignment,self.left,self.top,self.width,self.height);
-		_parent.background = "codepku/image/textures/keyboard/keyboard_btn.png";
+		_parent.background = mainFrameImageData:GetIconUrl("main_icon_jianpan.png");
 		_guihelper.SetUIColor(_parent, self.color.normal);
 		_parent:AttachToRoot();
 		_parent.zorder = self.zorder;
@@ -245,7 +258,8 @@ function TouchVirtualKeyboardIcon:GetKeyBoard()
 	if(not self.keyboard) then
 		NPL.load("./TouchVirtualKeyboard.lua");
 		local TouchVirtualKeyboard = commonlib.gettable("Mod.CodePku.Common.TouchMiniKeyboard.TouchVirtualKeyboard");
-		self.keyboard = TouchVirtualKeyboard:new():Init("TouchVirtualKeyboard", math.floor(self.left+self.width + self.width * 0.2));
+		-- self.keyboard = TouchVirtualKeyboard:new():Init("TouchVirtualKeyboard", math.floor(self.left+self.width + self.width * 0.2));
+		self.keyboard = TouchVirtualKeyboard:new():Init("TouchVirtualKeyboard", 200);
 		self.keyboard:SetTransparency(self.default_transparency);
 		self.keyboard:Connect("hidden", self, function()
 			--self:SetText(self.text);

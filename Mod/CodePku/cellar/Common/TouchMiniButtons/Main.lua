@@ -189,8 +189,12 @@ function MainUIButtons:show_main_close_ui()
 	MainUIButtons.main_close_window = AdaptWindow:QuickWindow(params)
 end
 
--- 头像，等级
+-- 头像，等级N
 function MainUIButtons:show_avatar_ui()
+	if MainUIButtons.avatar_window then
+		MainUIButtons.avatar_window:CloseWindow()
+		MainUIButtons.avatar_window = nil
+	end
 	local params = {
 		url="Mod/CodePku/cellar/Common/TouchMiniButtons/MainUIButtons_avatar.html", 
 		alignment="_lt", left = 0, top = 0, width = 200, height = 220, click_through = true,
@@ -337,7 +341,7 @@ end
 function MainUIButtons.show_home_window_ui()
 	local params = {
 		url = "Mod/CodePku/cellar/Common/TouchMiniButtons/MainUIButtons_home_window.html",
-		alignment = "_lt", left = 1390, top = 293, width = 335, height = 355,
+		alignment = "_lt", left = 1592, top = 233, width = 335, height = 355,
 	}
 
 	local isHome = HomeManage:IsMyHome()
@@ -427,7 +431,7 @@ function MainUIButtons.ShowPage()
 		if GameLogic.GameMode:IsEditor() then
 			MainUIButtons.JudgeNil()
 			MainUIButtons:show_home_window_ui()
-
+			MainUIButtons:show_main_open_ui()
 		else 
 			MainUIButtons:show_dialog(false)
 		end
