@@ -151,8 +151,8 @@ function ChooseBranch.OnWorldLoaded()
         end
         if ChooseBranch.branchStateTable and ChooseBranch.dealDataTimer then
             if #ChooseBranch.branchStateTable > 1 then
-                local MainUIButtons = NPL.load("(gl)Mod/CodePku/cellar/Common/TouchMiniButtons/Main.lua")
-                MainUIButtons.ShowPage()
+                -- local MainUIButtons = NPL.load("(gl)Mod/CodePku/cellar/Common/TouchMiniButtons/Main.lua")
+                -- MainUIButtons.ShowPage()
             end
             ChooseBranch.dealDataTimer:Change()
         end
@@ -263,7 +263,7 @@ function ChooseBranch:changeBranch()
     for i,j in ipairs(ChooseBranch.branchStateTable) do
         if ChooseBranch.currChooseBranch == j["branchId"] and ChooseBranch.currChooseServer == j["serverId"] then
             if j["playerNum"] >= j["maxPlayerNum"] then
-                GameLogic.AddBBS(nil, L"你选择的服务器已满", 3000, "255 0 0")
+                GameLogic.AddBBS(nil, L"你选择的世界分线已满", 3000, "255 0 0")
                 break
             end
             ChooseBranch.jumpToWorldKey = tostring(j["worldId"] or "1").."_"..tostring(j["worldName"] or "1").."_"..tostring(j["branchId"] or "1")

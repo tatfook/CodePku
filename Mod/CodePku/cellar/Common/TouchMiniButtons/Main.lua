@@ -49,7 +49,7 @@ MainUIButtons.top_buttons = {
 	[2]={url=mainFrameImageData:GetIconUrl("main_icon_map.png"),top=27,width=104,height=107,left=22,name="ClickSamllMap",bShow=true,},
 	[3]={url=mainFrameImageData:GetIconUrl("main_icon_detach.png"),top=36,width=122,height=98,left=22,name="ClickAntiJamming",bShow=true,},
 	[4]={url=mainFrameImageData:GetIconUrl("main_icon_upgrade.png"),top=33,width=122,height=102,left=23,name="ClickUpBtn",bShow=false,},
-	[5]={url=mainFrameImageData:GetIconUrl("main_icon_switch.png"),top=32,width=122,height=102,left=23,name="ClickChangeBranch",bShow=false,},
+	[5]={url=mainFrameImageData:GetIconUrl("main_icon_switch.png"),top=32,width=122,height=102,left=23,name="ClickChangeBranch",bShow=true,},
 }
 
 MainUIButtons.middle_buttons = {
@@ -279,12 +279,12 @@ function MainUIButtons:show_common_ui()
 	if isVisitor then
 		MainUIButtons.top_buttons[4]["bShow"] = true
 	end
-	local bShowBranch = commonlib.getfield("System.Codepku.branch")
-	if bShowBranch then
-		MainUIButtons.top_buttons[5]["bShow"] = true
-	else
-		MainUIButtons.top_buttons[5]["bShow"] = false
-	end
+	-- local bShowBranch = commonlib.getfield("System.Codepku.branch")
+	-- if bShowBranch then
+	-- 	MainUIButtons.top_buttons[5]["bShow"] = true
+	-- else
+	-- 	MainUIButtons.top_buttons[5]["bShow"] = false
+	-- end
 	local open_width = MainUIButtons:getWidth(MainUIButtons.top_buttons, 0)
 	local open_height = 110
 
