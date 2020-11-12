@@ -74,7 +74,7 @@ function GeneralGameClient:LoadWorld(opts, loadworld)
     options.username = options.username or self:GetUserInfo().username;
     options.ip = opts.ip;            -- ip port 每次重写
     options.port = opts.port;     -- 以便动态获取
-    options.worldKey = opts.worldKey or ((opts.worldId or "1").."_"..(opts.worldName or "1").."_"..(opts.no or "1")) -- worldKey每次重写
+    options.worldKey = opts.worldKey or ((options.worldId or "1").."_"..(options.worldName or "1").."_"..(options.no or "1")) -- worldKey每次重写
     options.reload = opts.reload    -- 每次重写是否重新加载世界
   
     -- 打印选项值
