@@ -21,8 +21,14 @@ Schoolyard.tabs = {
     [3] = {name = "trends", title = "动态"},
 }
 
-Schoolyard.joined_schoolyard = false
+Schoolyard.joined_schoolyard = false    -- 标记用户是否已经加入学校
 
+-- 选择省市区
+-- 省市县学校初始，用户选择后用下面的变量来接收
+Schoolyard.selected_province = nil
+Schoolyard.selected_city = nil
+Schoolyard.selected_area = nil
+Schoolyard.selected_school = nil
 
 -- 返回图片path
 function Schoolyard:GetImagePath(index)
@@ -189,13 +195,6 @@ function Schoolyard:GetMembers()
     }
 end
 
--- 选择省市区
--- 省市县学校初始，用户选择后用下面的变量来接收
-Schoolyard.selected_province = nil
-Schoolyard.selected_city = nil
-Schoolyard.selected_area = nil
-Schoolyard.selected_school = nil
-
 -- 展示我的校园页面
 function Schoolyard:ShowPage()
     if self.main_ui then
@@ -251,9 +250,29 @@ function Schoolyard:JoinPageSpecialClose()
     end
 end
 
+-- 加入学校
+function Schoolyard:JoinSchoolyard(id)
+    -- todo 二次确认弹窗
+    local id = tonumber(id)
+    local params = {
+        school_id = id
+    }
+    request:post('/schools/join', params):next(function(response)
+        Schoolyard:JoinPageSpecialClose()
+        Schoolyard.search_result = nil
+        Schoolyard.selected_province = nil
+        Schoolyard.selected_city = nil
+        Schoolyard.selected_area = nil
+        Schoolyard.selected_school = nil
+        Schoolyard:GetMySchoolyardInfo(Schoolyard.main_ui)
+        LOG.std(nil, "succeed", "Schoolyard", "JoinSchoolyard")
+    end):catch(function(e)
+        LOG.std(nil, "error", "Schoolyard", "JoinSchoolyard")
+    end);
+end
+
 -- 退出学校
 function Schoolyard:ExitSchoolyard()
-    -- todo 二次确认弹窗
     request:delete('/schools/exit'):next(function(response)
         LOG.std(nil, "succeed", "Schoolyard", "ExitSchoolyard")
     end):catch(function(e)
@@ -272,4 +291,23 @@ function Schoolyard:ShowSelectPage()
         alignment="_lt", left = 0, top = 0, width = 1920 , height = 1080, zorder = 23
     };
     self.select_page = AdaptWindow:QuickWindow(params)
+end
+
+-- 二次确认弹窗
+function Schoolyard:ShowPopupBox(data)
+    if self.popup_box then
+        self.popup_box:CloseWindow()
+        self.popup_box = nil
+    end
+    Schoolyard.box_msg = {
+        title = data.title or "提示",
+        content = data.content or "请选择是否继续",
+        page = data.page,
+        func = data.func,
+    }
+    local params = {
+        url="Mod/CodePku/cellar/GUI/Schoolyard/Popup/SchoolyardPopupBox.html",
+        alignment="_lt", left = 0, top = 0, width = 1920 , height = 1080, zorder = 23
+    };
+    self.popup_box = AdaptWindow:QuickWindow(params)
 end

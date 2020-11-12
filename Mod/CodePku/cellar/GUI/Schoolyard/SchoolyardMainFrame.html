@@ -18,17 +18,24 @@ function GetIcon(index)
     return Schoolyard:GetImagePath(index)
 end
 
--- 加入学校
+-- 搜索学校弹窗
 function JoinSchoolyard()
     Schoolyard:ShowJoinPage()
 end
 
 -- 离开学校
 function LeaveSchool()
-    GameLogic.AddBBS("CodeGlobals", L"离开学校", 3000, "#FF0000");
-    Schoolyard.joined_schoolyard = false
-    Schoolyard:ExitSchoolyard()
-    Page:Refresh(0)
+    local params = {
+        title = "退出学校",
+        content = "是否退出" .. Schoolyard.schoolyard_name,
+        func = function ()
+                Schoolyard.joined_schoolyard = false
+                Schoolyard:ExitSchoolyard()
+                Schoolyard.main_ui:Refresh(0)
+            end,
+        page = page,
+    }
+    Schoolyard:ShowPopupBox(params)
 end
 
 ]]>

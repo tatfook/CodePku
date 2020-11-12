@@ -31,6 +31,7 @@ end
 
 -- 搜索
 function OnSearch()
+    selected_school_index = nil
     local search_name = page:GetValue("search_name")
     search_name = tostring(search_name)
     search_content = search_name
@@ -69,14 +70,27 @@ end
 
 -- 选中学校
 function OnChoose(name)
-    GameLogic.AddBBS("CodeGlobals", tostring(name), 3000, "#FF0000");
-    selected_school_index = name
+    selected_school_index = tonumber(name)
+    local school_name = Schoolyard.search_result[selected_school_index].name
+    GameLogic.AddBBS("CodeGlobals", school_name, 3000, "#FF0000");
     page:Refresh(0)
 end
 
--- 保存学校
-function SaveChooseSchool()
-    GameLogic.AddBBS("CodeGlobals", L"保存", 3000, "#FF0000");
+-- 加入学校
+function JoinChooseSchool()
+    if selected_school_index and Schoolyard.search_result[selected_school_index] then
+        local params = {
+            title = "确认",
+            content = "是否确认加入学校：" .. Schoolyard.search_result[selected_school_index].name,
+            func = function ()
+                    Schoolyard:JoinSchoolyard(Schoolyard.search_result[selected_school_index].id)
+                end,
+            page = page,
+        }
+        Schoolyard:ShowPopupBox(params)
+    else
+        GameLogic.AddBBS("CodeGlobals", L"请选择要加入的学校", 3000, "#FF0000");
+    end
 end
 
 -- 登记学校
@@ -131,12 +145,12 @@ end
                 <pe:repeat DataSource="<%= GetSearchResult() %>">
                     <pe:repeatitem>
                         <!-- 选中的 -->
-                        <pe:if condition='<%= selected_school_index == Eval("id") %>'>
-                            <div onclick="OnChoose" name="<%= Eval('id') %>" style="<%=format('width: 408;height: 85;margin-bottom: 5;font-family: zkklt;font-size: 36;color: #7e2f12;background:url(%s);', GetIcon('schoolyard_screening_results_02.png'))%>"><%= Eval('name') %></div>
+                        <pe:if condition='<%= selected_school_index == Eval("index") %>'>
+                            <div onclick="OnChoose" name="<%= Eval('index') %>" style="<%=format('width: 408;height: 85;margin-bottom: 5;font-family: zkklt;font-size: 36;color: #7e2f12;background:url(%s);', GetIcon('schoolyard_screening_results_02.png'))%>"><%= Eval('name') %></div>
                         </pe:if>
                         <!-- 未选中的 -->
-                        <pe:if condition='<%= selected_school_index ~= Eval("id") %>'>
-                            <div onclick="OnChoose" name="<%= Eval('id') %>" style="<%=format('width: 408;height: 85;margin-bottom: 5;font-family: zkklt;font-size: 36;color: #7e2f12;background:url(%s);', GetIcon('schoolyard_screening_results_01.png'))%>"><%= Eval('name') %></div>
+                        <pe:if condition='<%= selected_school_index ~= Eval("index") %>'>
+                            <div onclick="OnChoose" name="<%= Eval('index') %>" style="<%=format('width: 408;height: 85;margin-bottom: 5;font-family: zkklt;font-size: 36;color: #7e2f12;background:url(%s);', GetIcon('schoolyard_screening_results_01.png'))%>"><%= Eval('name') %></div>
                         </pe:if>
                     </pe:repeatitem>
                 </pe:repeat>
@@ -148,8 +162,10 @@ end
         </pe:if>
     </div>
 
-    <!-- 保存 -->
-    <div onclick="SaveChooseSchool" style="position: relative;left: 380;top: 920;width: 200;height: 60;background-color:#00ff00;font-family: zkklt;font-size: 36;color: #000000;">保存</div>
+    <!-- 加入 -->
+    <div onclick="JoinChooseSchool" style="<%=format('position: relative;left:219;top: 732;width: 263;height: 89;background:url(%s);', GetIcon('schoolyard_btn_r.png'))%>">
+        <div style="<%=format('position: relative;left:54;top: 18;width: 159;height: 39;background:url(%s);', GetIcon('schoolyard_btn_in.png'))%>"></div>
+    </div>
 
     <!-- 登记学校 -->
     <div onclick="RegisterSchool" style="position: relative;left: 800;top: 920;width: 200;height: 60;background-color:#00ff00;font-family: zkklt;font-size: 36;color: #000000;">登记学校</div>
