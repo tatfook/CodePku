@@ -42,10 +42,11 @@ function SaveAndExitEditWorld()
 end
 
 function BuildingBoard()
+    GameLogic.GetFilters():apply_filters("ClickStatistics", {track_id= 46, track_scene =10, track_type=0, }) -- 点击秘籍，触发操作系统数据
     -- local url = Mod.CodePku.BasicConfigTable.links.home_world_announcement or "https://none.h5.xeknow.com/st/5XKdbYHy5"
-    -- Researchers:ShowPage(1, url)
     local url = "https://www.codepku.com/activity?slug=phly1605089446MP06"
     CommonFunc.OpenUrl(url, true, 'portrait')
+
 end
 
 ]]></script>
