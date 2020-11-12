@@ -14,11 +14,6 @@ local page = document:GetPageCtrl()
 -- 页面内的变量，存放用户输入的搜索内容，关闭页面会清除
 search_content = ""
 
--- 先拿到所有省份
-Schoolyard:GetSelectLocation("province")
-echo("Schoolyard.location_table")
-echo(Schoolyard.location_table)
-
 
 function ClosePage()
     Schoolyard:JoinPageSpecialClose()
@@ -56,8 +51,8 @@ end
 -- 选择省市区学校
 function OnSelect(name)
     GameLogic.AddBBS("CodeGlobals", name, 3000, "#FF0000");
-    Schoolyard.selected_province = "123456789123"
-    page:Refresh(0)
+    -- Schoolyard.selected_province = "123456789123"
+    -- page:Refresh(0)
     -- 3级弹窗
     -- Schoolyard:ShowSelectPage()
 end
@@ -132,16 +127,16 @@ end
     <div style="position: relative;left: 745;top: 203;width: 460;height: 531;background-color:#4200f8">
         <pe:if condition='<%= HaveResult() %>'>
         <!-- 查询到了学校 -->
-            <pe:treeview style="position: relative;width: 430;height: 531;background-color: #00ffea;" name='messages' DefaultNodeHeight = "80" ItemsPerLine="1" AllowPaging="false" RememberScrollPos="true" RememberLastPage="false" VerticalScrollBarStep="20">
+            <pe:treeview style="position: relative;width: 430;height: 531;background-color: #00ffea;" name='messages' DefaultNodeHeight = "80" ItemsPerLine="1" AllowPaging="false" RememberScrollPos="true" RememberLastPage="false" VerticalScrollBarStep="40">
                 <pe:repeat DataSource="<%= GetSearchResult() %>">
                     <pe:repeatitem>
                         <!-- 选中的 -->
-                        <pe:if condition='<%= selected_school_index == Eval("no") %>'>
-                            <div onclick="OnChoose" name="<%= Eval('no') %>" style="<%=format('width: 408;height: 85;margin-bottom: 5;font-family: zkklt;font-size: 36;color: #7e2f12;background:url(%s);', GetIcon('schoolyard_screening_results_02.png'))%>"><%= Eval('name') %></div>
+                        <pe:if condition='<%= selected_school_index == Eval("id") %>'>
+                            <div onclick="OnChoose" name="<%= Eval('id') %>" style="<%=format('width: 408;height: 85;margin-bottom: 5;font-family: zkklt;font-size: 36;color: #7e2f12;background:url(%s);', GetIcon('schoolyard_screening_results_02.png'))%>"><%= Eval('name') %></div>
                         </pe:if>
                         <!-- 未选中的 -->
-                        <pe:if condition='<%= selected_school_index ~= Eval("no") %>'>
-                            <div onclick="OnChoose" name="<%= Eval('no') %>" style="<%=format('width: 408;height: 85;margin-bottom: 5;font-family: zkklt;font-size: 36;color: #7e2f12;background:url(%s);', GetIcon('schoolyard_screening_results_01.png'))%>"><%= Eval('name') %></div>
+                        <pe:if condition='<%= selected_school_index ~= Eval("id") %>'>
+                            <div onclick="OnChoose" name="<%= Eval('id') %>" style="<%=format('width: 408;height: 85;margin-bottom: 5;font-family: zkklt;font-size: 36;color: #7e2f12;background:url(%s);', GetIcon('schoolyard_screening_results_01.png'))%>"><%= Eval('name') %></div>
                         </pe:if>
                     </pe:repeatitem>
                 </pe:repeat>

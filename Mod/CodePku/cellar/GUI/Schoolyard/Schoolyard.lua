@@ -21,8 +21,8 @@ Schoolyard.tabs = {
     [3] = {name = "trends", title = "动态"},
 }
 
--- 存放省市区学校
-Schoolyard.location_table = {}
+Schoolyard.joined_schoolyard = false
+
 
 -- 返回图片path
 function Schoolyard:GetImagePath(index)
@@ -101,6 +101,29 @@ function Schoolyard:AddVitality(params)
     end
 end
 
+-- 根据区码获取名称
+function Schoolyard:GetNameByCode(province_code, city_code, district_code)
+    local province, city, district = nil, nil, nil
+    if Schoolyard.AreasTreeData then
+        for _, province_table in pairs(Schoolyard.AreasTreeData) do
+            if province_table.code == province_code then
+                province = province_table.name
+                for _, city_table in pairs(province_table.children) do
+                    if city_table.code == city_code then
+                        city = city_table.name
+                        for _, district_table in pairs(city_table.children) do
+                            if district_table.code == district_code then
+                                district = district_table.name
+                                return province, city, district
+                            end
+                        end
+                    end
+                end
+            end
+        end
+    end
+end
+
 -- 查询我的学校
 function Schoolyard:GetMySchoolyardInfo(page)
     request:get('/schools/mime'):next(function(response)
@@ -108,55 +131,42 @@ function Schoolyard:GetMySchoolyardInfo(page)
         if not next(data) then
             Schoolyard.joined_schoolyard = false
         else
-            local province, city, district
+            local province, city, district = Schoolyard:GetNameByCode(data.province_code, data.city_code, data.district_code)
             Schoolyard.joined_schoolyard = true     -- 是否已经有组织了
             Schoolyard.schoolyard_avatar = "https://cdn.codepku.com//img/default_avatar/0714/20180714163534.png"    -- 学校头像
             Schoolyard.week_rank = data.weekly_activity        -- 学校周活跃排行
             Schoolyard.total_rank = data.total_activity       -- 学校总活跃排行
             Schoolyard.schoolyard_name = data.name       -- 学校名字
-            -- todo 拼接学校地址
-            Schoolyard.schoolyard_address = province .. city .. district .. data.name      -- 学校位置
-
-
+            Schoolyard.schoolyard_address = (province .. city .. district .. data.name) or "未知"      -- 学校位置
             Schoolyard.schoolyard_level = "Lv.999"        -- 学校等级
             Schoolyard.schoolyard_vitality = 123123123      -- 学校周活跃度
             Schoolyard.number_of_people = 1234      -- 学校人数
 
             page:Refresh(0)
         end
-        
     end):catch(function(e)
         LOG.std(nil, "error", "Schoolyard", "GetMySchoolyardInfo")
     end);
-
-
 end
 
 -- 搜索学校
 function Schoolyard:GetSearchSchoolResult(params, page)
-    Schoolyard.search_result = {
-        {name = "宾夕法尼亚小学", no = 1,},
-        {name = "宾夕法尼亚小学", no = 2,},
-        {name = "宾夕法尼亚小学", no = 3,},
-        {name = "宾夕法尼亚小学", no = 4,},
-        {name = "宾夕法尼亚小学", no = 5,},
-        {name = "宾夕法尼亚小学", no = 6,},
-        {name = "宾夕法尼亚小学", no = 7,},
-        {name = "宾夕法尼亚小学", no = 8,},
-        {name = "宾夕法尼亚小学", no = 9,},
-        {name = "宾夕法尼亚小学", no = 10,},
-        {name = "宾夕法尼亚小学", no = 11,},
-    }
-    if page then
-        page:Refresh(0)
-    end
+    
+    local path = "/schools?keyword&province_code=230000&city_code&district_code&page=1&per_page=50&category=1"
+    request:get(path):next(function(response)
+        local data = response.data.data
+        Schoolyard.search_result = data
+        if page then
+            page:Refresh(0)
+        end
+    end):catch(function(e)
+        LOG.std(nil, "error", "Schoolyard", "GetSearchSchoolResult")
+    end);
 end
 
 -- 筛选学校
 function Schoolyard:GetSelectLocation(param, page)
-    if param == "province" then
-        Schoolyard.location_table["province"] = {"北京", "上海", "广州"}
-    end
+
 end
 
 -- 我的校园成员
@@ -199,6 +209,7 @@ function Schoolyard:ShowPage()
         alignment="_lt", left = 0, top = 0, width = 1920 , height = 1080, zorder = 20
     };
     self.main_ui = AdaptWindow:QuickWindow(params)
+    -- 获取我的校园信息
     Schoolyard:GetMySchoolyardInfo(self.main_ui)
 end
 
@@ -238,6 +249,16 @@ function Schoolyard:JoinPageSpecialClose()
         self.join_page:CloseWindow()
         self.join_page = nil
     end
+end
+
+-- 退出学校
+function Schoolyard:ExitSchoolyard()
+    -- todo 二次确认弹窗
+    request:delete('/schools/exit'):next(function(response)
+        LOG.std(nil, "succeed", "Schoolyard", "ExitSchoolyard")
+    end):catch(function(e)
+        LOG.std(nil, "error", "Schoolyard", "ExitSchoolyard")
+    end);
 end
 
 -- 筛选弹窗
