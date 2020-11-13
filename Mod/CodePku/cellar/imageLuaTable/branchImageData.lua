@@ -8,12 +8,13 @@ local branchImageData = NPL.export()
 local imageTable = {
 	["frames"] = {
 		["branch_boot_01.png"] = { ["url"] = "codepku/image/textures/UI/branch/branch.png", ["left"] = 2, ["top"] = 2, ["width"] = 699, ["height"] = 1000,},
+		["branch_boot_f.png"] = { ["url"] = "codepku/image/textures/UI/branch/branch.png", ["left"] = 704, ["top"] = 46, ["width"] = 143, ["height"] = 38,},
 		["branch_boot_g.png"] = { ["url"] = "codepku/image/textures/UI/branch/branch.png", ["left"] = 2, ["top"] = 1115, ["width"] = 515, ["height"] = 106,},
 		["branch_boot_w.png"] = { ["url"] = "codepku/image/textures/UI/branch/branch.png", ["left"] = 2, ["top"] = 1005, ["width"] = 515, ["height"] = 107,},
 		["branch_icon_g.png"] = { ["url"] = "codepku/image/textures/UI/branch/branch.png", ["left"] = 906, ["top"] = 2, ["width"] = 52, ["height"] = 52,},
 		["branch_icon_g_mat.png"] = { ["url"] = "codepku/image/textures/UI/branch/branch.png", ["left"] = 704, ["top"] = 2, ["width"] = 199, ["height"] = 41,},
 		["branch_icon_r.png"] = { ["url"] = "codepku/image/textures/UI/branch/branch.png", ["left"] = 961, ["top"] = 2, ["width"] = 52, ["height"] = 52,},
-		["branch_icon_y.png"] = { ["url"] = "codepku/image/textures/UI/branch/branch.png", ["left"] = 704, ["top"] = 46, ["width"] = 52, ["height"] = 52,},
+		["branch_icon_y.png"] = { ["url"] = "codepku/image/textures/UI/branch/branch.png", ["left"] = 850, ["top"] = 46, ["width"] = 52, ["height"] = 52,},
 	},
 }
 
