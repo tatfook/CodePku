@@ -14,6 +14,7 @@ Online:init();
 NPL.load("(gl)Mod/GeneralGameServerMod/main.lua"); 
 NPL.load("(gl)Mod/CodePku/online/client/GeneralGameClient.lua");
 NPL.load("Mod/GeneralGameServerMod/Core/Common/Log.lua");
+local Config = NPL.load("(gl)Mod/CodePku/online/client/Config.lua");
 
 local GeneralGameServerMod = commonlib.gettable("Mod.GeneralGameServerMod");
 local GeneralGameClient = commonlib.gettable("Mod.CodePku.Online.Client.GeneralGameClient");
@@ -21,6 +22,35 @@ local Online = commonlib.gettable("Mod.CodePku.Online");
 local Commands = commonlib.gettable("MyCompany.Aries.Game.Commands");
 local CmdParser = commonlib.gettable("MyCompany.Aries.Game.CmdParser")
 local Packets = commonlib.gettable("Mod.GeneralGameServerMod.Core.Common.Packets")
+
+function ParseOption(cmd_text)
+	local value, cmd_text_remain = cmd_text:match("^%s*%-([%w_]+%S+)%s*(.*)$");
+	if(value) then
+		return value, cmd_text_remain;
+	end
+	return nil, cmd_text;
+end
+
+function ParseOptions(cmd_text)
+	local options = {};
+	local option, cmd_text_remain = nil, cmd_text;
+	while(cmd_text_remain) do
+		option, cmd_text_remain = ParseOption(cmd_text_remain);
+		if(option) then
+			key, value = option:match("([%w_]+)=?(%S*)");
+			if (value == "true" or key == option) then 
+				options[key] = true;
+			elseif (value == "false") then 
+				options[key] = false;
+			else
+				options[key] = value;
+			end
+		else
+			break;
+		end
+	end
+	return options, cmd_text_remain;
+end
 
 function Online:Init()
 	GeneralGameServerMod:RegisterClientClass("CodePku", GeneralGameClient);
@@ -40,7 +70,14 @@ connectCodePku 145                    # 联机进入世界ID为145的世界
 connectCodePku 145 parallel           # 联机进入世界ID为145的平行世界 parallel
 ]], 
 		handler = function(cmd_name, cmd_text, cmd_params, fromEntity)		
-            local ggsCmd = string.format("/ggs connect -app=CodePku %s", cmd_text);
+			local ggsCmd = string.format("/ggs connect -app=CodePku %s", cmd_text);
+
+			local options, cmd_text = ParseOptions(cmd_text);	
+			echo("serverIp")
+			echo((options.serverIp and options.serverIp ~= "") and options.serverIp or Config.defaultOnlineServer.host);
+			GeneralGameClient:GetOptions().serverIp = (options.serverIp and options.serverIp ~= "") and options.serverIp or Config.defaultOnlineServer.host;
+			GeneralGameClient:GetOptions().serverPort = (options.serverPort and options.serverPort ~= "") and options.serverPort or Config.defaultOnlineServer.port;
+			
             GameLogic.RunCommand(string.format("/ggs connect -app=CodePku %s", cmd_text));
 		end,
 	}
