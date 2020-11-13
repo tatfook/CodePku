@@ -28,6 +28,7 @@ local HomeManage = commonlib.gettable("Mod.CodePku.Common.HomeManage")
 function HomeManage:OnInit()
     LOG.std("", "info", "HomeManage", "OnInit");
     GameLogic:Connect("WorldLoaded", HomeManage, HomeManage.OnWorldLoaded, "UniqueConnection");
+    GameLogic:Connect("WorldUnloaded", HomeManage, HomeManage.OnWorldUnloaded, "UniqueConnection");
 end
 
 function HomeManage:OnWorldLoaded()
@@ -40,6 +41,14 @@ function HomeManage:OnWorldLoaded()
     end
     --判定结束后将正在进入家园区判定变量设置为false
     System.Codepku.isLoadingHome = false
+end
+
+function HomeManage:OnWorldUnloaded()
+    -- 这里因为只能在世界加载完成之前，所以只能用isLoadingHome来判断
+    if System.Codepku.isLoadingHome then
+        LOG.std(nil, "info", "codepku", "HomeManage OnWorldUnloaded")
+        commonlib.setfield("System.Codepku.Coursewares", nil)
+    end	
 end
 
 -- 判断是否在自己的家园
