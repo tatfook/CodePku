@@ -76,7 +76,12 @@ function RankPage.GetGameItem(id, range)
     end
     local list = {}
     local mylist = {}
-    local response = request:get('/game-scores/ranks?game_name='..id..param,nil,{sync = true})
+    
+    --TODO 临时用game_id 图标暂用星星未换game.html:105
+    local url = '/game-scores/ranks?game_name='..id..param
+
+    local response = request:get(url,nil,{sync = true})
+
     local data = response.data.data
     for i = 1, #data do
         if data[i].is_top_n then

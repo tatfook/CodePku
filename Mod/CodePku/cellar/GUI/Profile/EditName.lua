@@ -9,6 +9,7 @@ local UserInfoPage = NPL.load("(gl)Mod/CodePku/cellar/GUI/UserInfo.lua");
 
 local common1ImageData = NPL.load("(gl)Mod/CodePku/cellar/imageLuaTable/common1ImageData.lua")
 local escFrameImageData = NPL.load("(gl)Mod/CodePku/cellar/imageLuaTable/escFrameImageData.lua")
+local MainUIButtons = NPL.load("(gl)Mod/CodePku/cellar/Common/TouchMiniButtons/Main.lua");
 
 -- 导Editbox是为了改EmptyText的文本颜色，后面帕拉卡如果添加了对应的属性可以改掉这里的代码
 NPL.load("(gl)script/ide/System/Windows/Controls/EditBox.lua");
@@ -114,6 +115,9 @@ function EditNamePage:ChangeNickname(new_nickname)
 			EditNamePage:OnCancelBtnClicked()
 			UserInfoPage.ShowSettingPopupUI:Refresh(0)
 			UserInfoPage.MainUI:Refresh(0)
+			-- echo(MainUIButtons.avatar_window)
+			--MainUIButtons.avatar_window:Refresh(0)
+			MainUIButtons:show_avatar_ui()
 		end
 	end):catch(function(e)
 		if e.data.message then

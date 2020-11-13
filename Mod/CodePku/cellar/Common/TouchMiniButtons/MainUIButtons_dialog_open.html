@@ -11,15 +11,17 @@
 <![CDATA[
 local MainUIButtons = NPL.load("(gl)Mod/CodePku/cellar/Common/TouchMiniButtons/Main.lua");
 local mainFrameImageData = NPL.load("(gl)Mod/CodePku/cellar/imageLuaTable/mainFrameImageData.lua")
-closeUrl = mainFrameImageData:GetIconUrl('main_icon_expand_2.png')    -- 布
-function ClickOpen() 
-    MainUIButtons:ClickOpenDialog()
+openUrl = mainFrameImageData:GetIconUrl('main_icon_expand_1.png')    -- 锤头
+
+function ClickClose()
+    MainUIButtons:ClickCloseDialog()
 end
 ]]></script>
 <style type="text/mcss">
 </style>
 <pe:container alignment="_lt" width="335" height="355" >
-    <div style="<%=format('position:relative;width:80; height:80; left:0; background: url(%s);',closeUrl)%>" onclick="ClickOpen"></div>
+    <div style="<%=format('position:relative;width:80; height:80; left:0; background: url(%s);',openUrl)%>" onclick="ClickClose"></div>
+</pe:container>
 </pe:mcml>
 </body>
 </html>
