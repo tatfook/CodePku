@@ -156,7 +156,22 @@ end
 -- 搜索学校
 function Schoolyard:GetSearchSchoolResult(params, page)
     -- todo 根据正确的传入参数进行查询
-    local path = "/schools?keyword&province_code=230000&city_code&district_code&page=1&per_page=50&category=1"
+    local path = "/schools?page=1&per_page=50"
+    if params.search_province then
+        path = path .. "&province_code=" .. tostring(params.search_province)
+    end
+    if params.search_city then
+        path = path .. "&city_code=" .. tostring(params.search_city)
+    end
+    if params.search_area then
+        path = path .. "&district_code=" .. tostring(params.search_area)
+    end
+    if params.search_school then
+        path = path .. "&category=" .. tostring(params.search_school)
+    end
+    if params.search_name then
+        path = path .. "&keyword=" .. tostring(params.search_name)
+    end
     request:get(path):next(function(response)
         local data = response.data.data
         if next(data) == nil then
