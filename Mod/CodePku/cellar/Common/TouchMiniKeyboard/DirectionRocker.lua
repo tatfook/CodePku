@@ -34,7 +34,7 @@ DirectionRocker.colors = { normal = "#ffffff", pressed = "#888888" };
 DirectionRocker.outterRadius = Design:adapterWidth(222);-- 最外圈半径
 DirectionRocker.middleRadius = Design:adapterWidth(147);-- 中间圈半径 TODO
 DirectionRocker.innerRadius = 67; -- 可拖动块的半径
-DirectionRocker.containerLeft = Design:adapterWidth(222)
+DirectionRocker.containerLeft = Design:adapterWidth(150)
 DirectionRocker.containerTop = Screen:GetHeight() - Design:adapterWidth(479)
 -- DirectionRocker.containerTop = Design:adapterWidth(601)
 -- DirectionRocker.originX = Design:adapterWidth(100) + DirectionRocker.outterRadius;
