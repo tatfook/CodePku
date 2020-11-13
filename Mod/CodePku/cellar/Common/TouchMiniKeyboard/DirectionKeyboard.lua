@@ -18,6 +18,7 @@ local Design = NPL.load("(gl)Mod/CodePku/util/Design.lua");
 
 local DirectionKeyboard = commonlib.inherit(commonlib.gettable("System.Core.ToolBase"),
     commonlib.gettable("Mod.CodePku.Common.TouchMiniKeyboard.DirectionKeyboard"));
+local mainFrameImageData = NPL.load("(gl)Mod/CodePku/cellar/imageLuaTable/mainFrameImageData.lua")
 
 DirectionKeyboard.name = "DIRECTION_KEYBOARD";
 DirectionKeyboard.clickRate = 500;
@@ -29,7 +30,8 @@ DirectionKeyboard.colors = { normal = "#ffffff", pressed = "#888888" };
 DirectionKeyboard.defaultKeyLayout = {
     {
         name = "up",
-        background = "codepku/image/textures/keyboard/up_btn.png",
+        -- background = "codepku/image/textures/keyboard/up_btn.png",
+        background = mainFrameImageData:GetIconUrl("main_icon_up.png"),
         left = 100,
         top = 0,
         width = 100,
@@ -38,7 +40,8 @@ DirectionKeyboard.defaultKeyLayout = {
     },
     {
         name = "down",
-        background = "codepku/image/textures/keyboard/down_btn.png",
+        -- background = "codepku/image/textures/keyboard/down_btn.png",
+        background = mainFrameImageData:GetIconUrl("main_icon_down.png"),
         left = 100,
         top = 200,
         width = 100,
@@ -47,7 +50,8 @@ DirectionKeyboard.defaultKeyLayout = {
     },
     {
         name = "left",
-        background = "codepku/image/textures/keyboard/left_btn.png",
+        -- background = "codepku/image/textures/keyboard/left_btn.png",
+        background = mainFrameImageData:GetIconUrl("main_icon_left.png"),
         left = 0,
         top = 100,
         width = 100,
@@ -56,7 +60,8 @@ DirectionKeyboard.defaultKeyLayout = {
     },
     {
         name = "right",
-        background = "codepku/image/textures/keyboard/right_btn.png",
+        -- background = "codepku/image/textures/keyboard/right_btn.png",
+        background = mainFrameImageData:GetIconUrl("main_icon_right.png"),
         left = 200,
         top = 100,
         width = 100,
@@ -65,7 +70,8 @@ DirectionKeyboard.defaultKeyLayout = {
     },
     {
         name = "center",
-        background = "codepku/image/textures/keyboard/center_btn.png",
+        -- background = "codepku/image/textures/keyboard/center_btn.png",
+        background = mainFrameImageData:GetIconUrl("main_icon_middle.png"),
         left = 105,
         top = 105,
         width = 90,
