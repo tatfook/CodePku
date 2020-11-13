@@ -58,7 +58,14 @@ function App:init()
             NPL.call("LuaJavaBridge.cpp", {});
         end
     elseif isIOS then
-
+        -- lua层绑定OC的DeviceMessage类
+        echo("App.regNplEngineeBridge.start");
+        if LuaObjcBridge == nil then
+            NPL.call("LuaObjcBridge.cpp", {});
+        end
+        local args = { luaPath = "(gl)Mod/CodePku/util/App.lua" };
+        local ok, ret = LuaObjcBridge.callStaticMethod("App", "registerLuaCall", args);
+        echo("App.regNplEngineeBridge.end");
     end
 
     return self;
@@ -73,7 +80,9 @@ function App:closeApp()
         local ret = LuaJavaBridge.callJavaStaticMethod("plugin/Codepku/App", "closeApp", "()V",{});
         return ret.result;
     elseif isIOS then
-
+        -- 调用OC: Class:App Method:closeApp
+        local args = {};
+        local ok, ret = LuaObjcBridge.callStaticMethod("App", "closeApp", args);
     end
 end
 
