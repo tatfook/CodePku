@@ -1,0 +1,79 @@
+<!-- "script/apps/Aries/Creator/Game/Areas/EscFramePage.html" -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+</head>
+<body>
+    <pe:mcml>
+<script refresh="false" type="text/npl" src="Schoolyard.lua"><![CDATA[
+Schoolyard = NPL.load("(gl)Mod/CodePku/cellar/GUI/Schoolyard/Schoolyard.lua");
+local page = document:GetPageCtrl()
+
+-- 获取图片
+function GetIcon(index)
+    return Schoolyard:GetImagePath(index)
+end
+
+function CancleSelect()
+
+end
+
+function Close()
+    page:CloseWindow()
+    CancleSelect()
+    Schoolyard.select_page_show_table = nil
+end
+
+-- 选中
+function OnChoose(name)
+    selected_area_index = name
+    if Schoolyard.last_select_kind == "province" then
+        Schoolyard.selected_province.code = Schoolyard.select_page_show_table[selected_area_index].code
+        Schoolyard.selected_province.name = Schoolyard.select_page_show_table[selected_area_index].name
+        Schoolyard.selected_city = {}
+        Schoolyard.selected_area = {}
+    elseif Schoolyard.last_select_kind == "city" then
+        Schoolyard.selected_city.code = Schoolyard.select_page_show_table[selected_area_index].code
+        Schoolyard.selected_city.name = Schoolyard.select_page_show_table[selected_area_index].name
+        Schoolyard.selected_area = {}
+    elseif Schoolyard.last_select_kind == "area" then
+        Schoolyard.selected_area.code = Schoolyard.select_page_show_table[selected_area_index].code
+        Schoolyard.selected_area.name = Schoolyard.select_page_show_table[selected_area_index].name
+    elseif Schoolyard.last_select_kind == "school" then
+        Schoolyard.selected_school.category = Schoolyard.select_page_show_table[selected_area_index].category
+        Schoolyard.selected_school.name = Schoolyard.select_page_show_table[selected_area_index].name
+    end
+    page:CloseWindow()
+    Schoolyard.join_page:Refresh(0)
+    Schoolyard.select_page_show_table = nil
+end
+
+
+]]>
+</script>
+<pe:container alignment="_lt" width="1920" height="1080" style="background-color: #00000082;">
+
+<div onclick="Close" style="position: relative;left: 479;top: 333;width: 500;height: 600;background-color: #000000;">
+    <pe:treeview style="position: relative;width: 430;height: 531;background-color: #00ffea;" name='messages' DefaultNodeHeight = "80" ItemsPerLine="1" AllowPaging="false" RememberScrollPos="true" RememberLastPage="false" VerticalScrollBarStep="40">
+        <pe:repeat DataSource="<%= Schoolyard.select_page_show_table %>">
+            <pe:repeatitem>
+                <!-- 选中的 -->
+                <pe:if condition='<%= selected_area_index == Eval("index") %>'>
+                    <div onclick="OnChoose" name="<%= Eval('index') %>" style="<%=format('width: 408;height: 85;margin-bottom: 5;font-family: zkklt;font-size: 36;color: #7e2f12;background:url(%s);', GetIcon('schoolyard_screening_results_02.png'))%>"><%= Eval('name') %></div>
+                </pe:if>
+                <!-- 未选中的 -->
+                <pe:if condition='<%= selected_area_index ~= Eval("index") %>'>
+                    <div onclick="OnChoose" name="<%= Eval('index') %>" style="<%=format('width: 408;height: 85;margin-bottom: 5;font-family: zkklt;font-size: 36;color: #7e2f12;background:url(%s);', GetIcon('schoolyard_screening_results_01.png'))%>"><%= Eval('name') %></div>
+                </pe:if>
+            </pe:repeatitem>
+        </pe:repeat>
+    </pe:treeview>
+</div>
+
+</pe:container>
+</pe:mcml>
+</body>
+</html>
+ 

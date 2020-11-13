@@ -25,10 +25,10 @@ Schoolyard.joined_schoolyard = false    -- 标记用户是否已经加入学校
 
 -- 选择省市区
 -- 省市县学校初始，用户选择后用下面的变量来接收
-Schoolyard.selected_province = nil
-Schoolyard.selected_city = nil
-Schoolyard.selected_area = nil
-Schoolyard.selected_school = nil
+Schoolyard.selected_province = {}
+Schoolyard.selected_city = {}
+Schoolyard.selected_area = {}
+Schoolyard.selected_school = {}
 
 -- 返回图片path
 function Schoolyard:GetImagePath(index)
@@ -39,8 +39,6 @@ end
 function Schoolyard:GetAreasTree()
     request:get('/areas'):next(function(response)
         Schoolyard.AreasTreeData = response.data.data
-        echo("Schoolyard.AreasTreeData[1].name")
-        echo(Schoolyard.AreasTreeData[1].name)
     end):catch(function(e)
         LOG.std(nil, "error", "Schoolyard", "GetAreasTree")
     end);
@@ -157,10 +155,13 @@ end
 
 -- 搜索学校
 function Schoolyard:GetSearchSchoolResult(params, page)
-    
+    -- todo 根据正确的传入参数进行查询
     local path = "/schools?keyword&province_code=230000&city_code&district_code&page=1&per_page=50&category=1"
     request:get(path):next(function(response)
         local data = response.data.data
+        if next(data) == nil then
+            GameLogic.AddBBS("CodeGlobals", L"未搜索到该学校，请输入更精确的搜索内容，或手动筛选！", 3000, "#FF0000")
+        end
         Schoolyard.search_result = data
         if page then
             page:Refresh(0)
@@ -170,9 +171,60 @@ function Schoolyard:GetSearchSchoolResult(params, page)
     end);
 end
 
--- 筛选学校
-function Schoolyard:GetSelectLocation(param, page)
+-- 获取筛选弹窗展示数据
+function Schoolyard:GetSelectLocation(name, page)
+    if not name then
+        return
+    end
+    Schoolyard.last_select_kind = name
+    if name == "school" then
+        -- 学校
+        Schoolyard.select_page_show_table = {
+            {category = 1, name = "小学",},
+            {category = 2, name = "中学",},
+        }
+        return
+    end
 
+    if name == "province" then
+        -- 省
+        Schoolyard.select_page_table_province = Schoolyard.AreasTreeData
+        Schoolyard.select_page_show_table = Schoolyard.select_page_table_province
+        return
+    elseif name == "city" then
+        -- 市
+        if not Schoolyard.selected_province.code then
+            Schoolyard.select_page_show_table = {}
+            return
+        end
+        for k,v in pairs(Schoolyard.select_page_table_province) do
+            if Schoolyard.selected_province.code == v.code then
+                Schoolyard.select_page_table_city = v.children
+                Schoolyard.select_page_show_table = Schoolyard.select_page_table_city
+                return
+            end
+        end
+    elseif name == "area" then
+        -- 区
+        if not Schoolyard.selected_city.code then
+            Schoolyard.select_page_show_table = {}
+            return
+        end
+        for k,v in pairs(Schoolyard.select_page_table_city) do
+            if Schoolyard.selected_city.code == v.code then
+                Schoolyard.select_page_table_area = v.children
+                Schoolyard.select_page_show_table = Schoolyard.select_page_table_area
+                return
+            end
+        end
+    else
+        Schoolyard.select_page_show_table = {}
+        return
+    end
+    -- 逻辑基本不会走到这里，反正先放这里
+    if page then
+        page:Refresh(0)
+    end
 end
 
 -- 我的校园成员
@@ -248,11 +300,11 @@ function Schoolyard:JoinPageSpecialClose()
         self.join_page:CloseWindow()
         self.join_page = nil
     end
+    Schoolyard.search_content = nil
 end
 
 -- 加入学校
 function Schoolyard:JoinSchoolyard(id)
-    -- todo 二次确认弹窗
     local id = tonumber(id)
     local params = {
         school_id = id
@@ -260,11 +312,13 @@ function Schoolyard:JoinSchoolyard(id)
     request:post('/schools/join', params):next(function(response)
         Schoolyard:JoinPageSpecialClose()
         Schoolyard.search_result = nil
-        Schoolyard.selected_province = nil
-        Schoolyard.selected_city = nil
-        Schoolyard.selected_area = nil
-        Schoolyard.selected_school = nil
+        Schoolyard.selected_province = {}
+        Schoolyard.selected_city = {}
+        Schoolyard.selected_area = {}
+        Schoolyard.selected_school = {}
         Schoolyard:GetMySchoolyardInfo(Schoolyard.main_ui)
+        local content = "恭喜您！成功加入" .. Schoolyard.schoolyard_name
+        GameLogic.AddBBS("CodeGlobals", content, 3000, "#00FF00");
         LOG.std(nil, "succeed", "Schoolyard", "JoinSchoolyard")
     end):catch(function(e)
         LOG.std(nil, "error", "Schoolyard", "JoinSchoolyard")
@@ -281,7 +335,7 @@ function Schoolyard:ExitSchoolyard()
 end
 
 -- 筛选弹窗
-function Schoolyard:ShowSelectPage()
+function Schoolyard:ShowSelectPage(name)
     if self.select_page then
         self.select_page:CloseWindow()
         self.select_page = nil
@@ -290,6 +344,7 @@ function Schoolyard:ShowSelectPage()
         url="Mod/CodePku/cellar/GUI/Schoolyard/Popup/SelectLocation.html",
         alignment="_lt", left = 0, top = 0, width = 1920 , height = 1080, zorder = 23
     };
+    Schoolyard:GetSelectLocation(name)
     self.select_page = AdaptWindow:QuickWindow(params)
 end
 
