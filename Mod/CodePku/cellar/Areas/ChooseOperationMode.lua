@@ -15,7 +15,7 @@ local ChooseOperationMode = commonlib.gettable("Mod.CodePku.cellar.Areas.ChooseO
 local AdaptWindow = commonlib.gettable("Mod.CodePku.GUI.Window.AdaptWindow")
 local TouchMiniKeyboard = GameLogic.GetFilters():apply_filters("TouchMiniKeyboard");
 
-ChooseOperationMode.isShow = GameLogic.GetPlayerController():LoadLocalData('isDirectionKeyboard',true,true);
+ChooseOperationMode.isShow = GameLogic.GetPlayerController():LoadLocalData('isDirectionKeyboard',false,true);
 
 --[[
     @param type 0-方向轮盘 1-方向键盘
@@ -44,7 +44,7 @@ end
 
 function ChooseOperationMode:ShowPage()
     if ChooseOperationMode.page then
-		ChooseOperationMode.page:CloseWindow()
+        ChooseOperationMode.page:CloseWindow()
 		ChooseOperationMode.page = nil
 	end
     local params = {

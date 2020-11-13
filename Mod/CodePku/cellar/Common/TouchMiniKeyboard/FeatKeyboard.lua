@@ -65,12 +65,20 @@ function FeatKeyboard:show(show, jumpBtnShow, fBtnShow, xBtnShow, shiftBtnShow, 
     local chatBtn = self:getChatBtn();
 
     show = not not show;
-    -- jumpBtn.visible = show;
-    -- fBtn.visible = show;
-    -- xBtn.visible = show;
-    -- shiftBtn.visible = show;
-    -- zoomBtn.visible = show;
-    -- chatBtn.visible = show;
+
+    jumpBtn.visible = false;
+    fBtn.visible = false;
+    xBtn.visible = false;
+    shiftBtn.visible = false;
+    -- zoomBtn.visible = false;
+    chatBtn.visible = false;
+
+    ParaUI.GetUIObject("jump").visible = false;
+    ParaUI.GetUIObject("FLY").visible = false;
+    ParaUI.GetUIObject("XBtn").visible = false;
+    ParaUI.GetUIObject("ShiftBtn").visible = false;
+    ParaUI.GetUIObject("Chat").visible = false;
+
     if show then
         jumpBtn.visible = jumpBtnShow;
         fBtn.visible = fBtnShow;
@@ -78,6 +86,13 @@ function FeatKeyboard:show(show, jumpBtnShow, fBtnShow, xBtnShow, shiftBtnShow, 
         shiftBtn.visible = shiftBtnShow;
         -- zoomBtn.visible = zoomBtnShow;
         chatBtn.visible = chatBtnShow;
+        -- ParaUI.GetUIObject
+
+        ParaUI.GetUIObject("jump").visible = jumpBtnShow;
+        ParaUI.GetUIObject("FLY").visible = fBtnShow;
+        ParaUI.GetUIObject("XBtn").visible = xBtnShow;
+        ParaUI.GetUIObject("ShiftBtn").visible = shiftBtnShow;
+        ParaUI.GetUIObject("Chat").visible = chatBtnShow;
     end
 end
 
@@ -128,7 +143,7 @@ end
 
 --创建 F 按钮
 function FeatKeyboard:getFBtn()
-    local name = "F";
+    local name = "FLY";
 
     local button = ParaUI.GetUIObject(name);
 
@@ -172,7 +187,7 @@ end
 
 --创建 X 按钮
 function FeatKeyboard:getXBtn()
-    local name = "X";
+    local name = "XBtn";
 
     local button = ParaUI.GetUIObject(name);
 
@@ -216,7 +231,7 @@ end
 
 --创建 X 按钮
 function FeatKeyboard:getShiftBtn()
-    local name = "Shift";
+    local name = "ShiftBtn";
 
     local button = ParaUI.GetUIObject(name);
 

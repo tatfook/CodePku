@@ -10,6 +10,8 @@
             <script refresh="false" type="text/npl" src="UserInfo.lua">
                 <![CDATA[
                     local MainUIButtons = NPL.load("(gl)Mod/CodePku/cellar/Common/TouchMiniButtons/Main.lua");
+                    local UserInfoPage = NPL.load("(gl)Mod/CodePku/cellar/GUI/UserInfo.lua");
+                    UserInfoPage.OnInit();
                     local mainFrameImageData = NPL.load("(gl)Mod/CodePku/cellar/imageLuaTable/mainFrameImageData.lua")
                     lt_avatar = MainUIButtons.lt_avatar 
                     main_icon_Avatar_1 = mainFrameImageData:GetIconUrl('main_icon_avatar_1.png')
@@ -17,28 +19,67 @@
                     main_icon_Avatar_3 = mainFrameImageData:GetIconUrl('main_icon_avatar_3.png')
                     main_icon_Avatar_4 = mainFrameImageData:GetIconUrl('main_icon_avatar_4.png')
 
-                    local info = Mod.CodePku.Store:Get('user/info');
-                    data = {}
-                    data.name = info.nickname or info.no
-                    if info.self_level == nil then
-                        data.self_level = {}
-                        data.self_level.current_exp = 0
-                        data.self_level.current_level = 1
-                        data.self_level.next_exp = 0
-                    else
-                        data.self_level = info.self_level
-                        data.self_level.current_level = info.self_level.current_level
+                    function clickInfo()
+                        GameLogic.GetFilters():apply_filters("ClickStatistics", {type = 18}); -- 点击角色详情，触发操作数据统计计数
+                        UserInfoPage:ShowPage()
                     end
 
+                    flag = MainUIButtons.flag
+                    local info = Mod.CodePku.Store:Get('user/info');
+                    showData = {}
+                    id = info.id 
+
+                    showData.name = info.nickname or info.no
+                    if info.self_level == nil then
+                        showData.self_level = {}
+                        showData.self_level.current_exp = 0
+                        showData.self_level.current_level = 1
+                        showData.self_level.next_exp = 0
+                    else
+                        showData.self_level = info.self_level
+                        showData.self_level.current_level = info.self_level.current_level
+                    end
+
+                    if System.User.nickName then 
+                        showData.name = System.User.nickName
+                    end
+
+                    if flag then
+                        local request = NPL.load("(gl)Mod/CodePku/api/BaseRequest.lua");
+                        local path = '/users/profile';
+                        request:get(path):next(function(response)
+                            if (response.status == 200) then
+                                Mod.CodePku.Store:Set('user/info', response.data.data)
+                                local data = response.data.data;
+                                showData.name = data.nickname or data.no
+                                showData.id = data.id
+                                if data.self_level == nil then
+                                    showData.self_level = {}
+                                    showData.self_level.current_exp = 0
+                                    showData.self_level.current_level = 1
+                                    showData.self_level.next_exp = 0
+                                else
+                                    showData.self_level = data.self_level
+                                end
+                                Page:CloseWindow()
+                                MainUIButtons.flag = false
+                                if MainUIButtons.avatar_window then
+                                    MainUIButtons:show_avatar_ui()
+                                end
+                            end
+                        end):catch(function(e)
+                            echo("ERROR: catched at SubjectPage.GetUserInfo")
+                            GameLogic.AddBBS("CodeGlobals", e.data.message or L"获取用户信息失败", 3000, "#00FF00");
+                        end);
+                    end
                 ]]>
             </script>
-                <div style="text-align:center;font-weight:bold;">
-                    <div style="<%=format('position:relative;width:174;height:174;top:4;left:23;background:url(%s);',main_icon_Avatar_3)%>"></div>
-                    <div style="<%=format('position:relative;width:123;height:126;top:42;left:52;background:url(%s);',main_icon_Avatar_2)%>"></div>
-                    <div style="<%=format('color:white;font-size:38;line-height:76;position:relative;width:80;height:80;top:0;left:0;background:url(%s);',main_icon_Avatar_1)%>"><%=data.self_level.current_level%></div>
-                    <div style="<%=format('color:white;font-size:23;line-height:52;position:relative;width:189;height:52;top:160;left:10;background:url(%s);',main_icon_Avatar_4)%>"><%=data.name%></div>
-                </div>
-            </div>
+                <pe:container alignment="_lt" width="100%" height="100%">
+                    <div onclick="clickInfo" style="<%=format('position:relative;width:174;height:174;top:4;left:23;background:url(%s);',main_icon_Avatar_3)%>"></div>
+                    <div onclick="clickInfo" style="<%=format('position:relative;width:123;height:126;top:42;left:52;background:url(%s);',main_icon_Avatar_2)%>"></div>
+                    <div onclick="clickInfo" style="<%=format('text-align:center;font-weight:bold;color:white;font-size:38;line-height:76;position:relative;width:80;height:80;top:0;left:0;background:url(%s);',main_icon_Avatar_1)%>"><%=showData.self_level.current_level%></div>
+                    <div onclick="clickInfo" style="<%=format('text-align:center;font-weight:bold;color:white;font-size:23;line-height:52;position:relative;width:189;height:52;top:160;left:10;background:url(%s);',main_icon_Avatar_4)%>"><%=showData.name%></div>
+                </pe:container>
         </pe:mcml>
     </body>
 </html>

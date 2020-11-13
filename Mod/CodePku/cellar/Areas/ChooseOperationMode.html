@@ -28,6 +28,7 @@ isShow = ChooseOperationMode.isShow
 
 function ClosePage()
     Page:CloseWindow();
+    ChooseOperationMode.isShow = GameLogic.GetPlayerController():LoadLocalData('isDirectionKeyboard',false,true);
 end
 
 function ClickCancel()

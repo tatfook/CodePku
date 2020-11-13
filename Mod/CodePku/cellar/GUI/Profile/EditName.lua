@@ -115,8 +115,9 @@ function EditNamePage:ChangeNickname(new_nickname)
 			EditNamePage:OnCancelBtnClicked()
 			UserInfoPage.ShowSettingPopupUI:Refresh(0)
 			UserInfoPage.MainUI:Refresh(0)
-			MainUIButtons.avatar_window:Refresh(0)
-			-- MainUIButtons:show_avatar_ui()
+			-- echo(MainUIButtons.avatar_window)
+			--MainUIButtons.avatar_window:Refresh(0)
+			MainUIButtons:show_avatar_ui()
 		end
 	end):catch(function(e)
 		if e.data.message then
