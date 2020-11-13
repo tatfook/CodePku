@@ -12,15 +12,15 @@ local TouchVirtualKeyboardIcon = commonlib.gettable("Mod.CodePku.Common.TouchMin
 local TouchMiniKeyboard = NPL.export();
 
 function TouchMiniKeyboard:show(show)
-    local isShow = GameLogic.GetPlayerController():LoadLocalData('isDirectionKeyboard',false,true);
-    if isShow then
-        DirectionKeyboard.getSingleton():show(show);
-        DirectionRocker.getSingleton():show(not show);
-    else
-        DirectionKeyboard.getSingleton():show(not show);
-        DirectionRocker.getSingleton():show(show);
-    end
     if show then
+        local isShow = GameLogic.GetPlayerController():LoadLocalData('isDirectionKeyboard',false,true);
+        if isShow then
+            DirectionKeyboard.getSingleton():show(show);
+            DirectionRocker.getSingleton():show(not show);
+        else
+            DirectionKeyboard.getSingleton():show(not show);
+            DirectionRocker.getSingleton():show(show);
+        end
         GameLogic.RunCommand("/show keyboard");
         if System.Codepku then
             if System.Codepku.isLoadingHome then
@@ -60,15 +60,15 @@ end
 
 function TouchMiniKeyboard.CheckShow(show,isDirectionKeyboard )
     -- GameLogic.GetPlayerController():SaveLocalData('isDirectionKeyboard',true,true)
-    local isShow = GameLogic.GetPlayerController():LoadLocalData('isDirectionKeyboard',false,true);
-    if isShow then
-        DirectionKeyboard.getSingleton():show(show);
-        DirectionRocker.getSingleton():show(not show);
-    else
-        DirectionKeyboard.getSingleton():show(not show);
-        DirectionRocker.getSingleton():show(show);
-    end
     if show then
+        local isShow = GameLogic.GetPlayerController():LoadLocalData('isDirectionKeyboard',false,true);
+        if isShow then
+            DirectionKeyboard.getSingleton():show(show);
+            DirectionRocker.getSingleton():show(not show);
+        else
+            DirectionKeyboard.getSingleton():show(not show);
+            DirectionRocker.getSingleton():show(show);
+        end
         GameLogic.RunCommand("/show keyboard");
         if System.Codepku then
             if System.Codepku.isLoadingHome then
