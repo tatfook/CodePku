@@ -18,6 +18,7 @@ local TouchController = commonlib.gettable("MyCompany.Aries.Game.GUI.TouchContro
 -- MainUIButtons = commonlib.gettable("Mod.CodePku.Common.TouchMiniButtons")
 local MainUIButtons = NPL.export();
 
+MainUIButtons.flag = true
 MainUIButtons.hasshown = false
 MainUIButtons.is_dialog_open = true
 MainUIButtons.main_close_window_height = 80
@@ -31,6 +32,7 @@ MainUIButtons.open_common = nil
 MainUIButtons.account_up = nil
 MainUIButtons.user_asset = nil
 MainUIButtons.home_window = nil
+MainUIButtons.showData = {}
 MainUIButtons.lt_avatar = {
 	[1]={url=mainFrameImageData:GetIconUrl("main_icon_avatar_1.png"),top=30,width=88,height=116,name="main_icon_Avatar_1",bShow=true,},
 	[2]={url=mainFrameImageData:GetIconUrl("main_icon_avatar_2.png"),top=30,width=88,height=116,name="main_icon_Avatar_2",bShow=true,},
@@ -282,6 +284,8 @@ function MainUIButtons:show_common_ui()
 	local isVisitor = commonlib.getfield("System.User.isVisitor")
 	if isVisitor then
 		MainUIButtons.top_buttons[4]["bShow"] = true
+	else
+		MainUIButtons.top_buttons[4]["bShow"] = false
 	end
 	local open_width = MainUIButtons:getWidth(MainUIButtons.top_buttons, 0)
 	local open_height = 110
@@ -362,6 +366,7 @@ function MainUIButtons.JudgeNil()
 		MainUIButtons.main_close_window = nil
 	end
 	if MainUIButtons.avatar_window ~= nil then
+		MainUIButtons.flag = true
 		MainUIButtons.avatar_window:CloseWindow()
 		MainUIButtons.avatar_window = nil
 	end
@@ -433,6 +438,9 @@ function MainUIButtons.ShowPage()
 			MainUIButtons:show_home_window_ui()
 			MainUIButtons:show_main_open_ui()
 		else 
+			if MainUIButtons.mytimer then
+				MainUIButtons.mytimer:Change()
+			end
 			MainUIButtons:show_dialog(false)
 		end
 	end

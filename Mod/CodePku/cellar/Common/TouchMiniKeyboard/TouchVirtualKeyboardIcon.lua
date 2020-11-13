@@ -72,20 +72,20 @@ function TouchVirtualKeyboardIcon.ShowSingleton(bSHow)
 			end
 		end
 	end
-	echo("TouchVirtualKeyboardIcon.ShowSingleton(bSHow)")
-	echo(bSHow)
 	local mytimer = commonlib.Timer:new({callbackFunc = function(timer)
 		if(Screen:GetWidth() > 0) then
 			timer:Change();
 			TouchVirtualKeyboardIcon.GetSingleton():Show(bSHow);
 
-			Screen:Connect("sizeChanged", function(width, height)
-				LOG.std(nil, "info", "TouchVirtualKeyboardIcon", "adjust position %d, %d", width, height);
-				local self = TouchVirtualKeyboardIcon.GetSingleton();
-				self:SetPosition();
-				self:GetKeyBoard():SetPosition(math.floor(self.left+self.width + self.width * 0.2));
-				-- self:GetKeyBoard():SetPosition(100);
-			end);
+			if bSHow then
+				Screen:Connect("sizeChanged", function(width, height)
+					LOG.std(nil, "info", "TouchVirtualKeyboardIcon", "adjust position %d, %d", width, height);
+					local self = TouchVirtualKeyboardIcon.GetSingleton();
+					self:SetPosition();
+					self:GetKeyBoard():SetPosition(math.floor(self.left+self.width + self.width * 0.2));
+					-- self:GetKeyBoard():SetPosition(100);
+				end);
+			end
 		end
 	end})
 	mytimer:Change(100,300);
