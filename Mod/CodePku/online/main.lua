@@ -71,14 +71,15 @@ connectCodePku 145 parallel           # 联机进入世界ID为145的平行世�
 ]], 
 		handler = function(cmd_name, cmd_text, cmd_params, fromEntity)		
 			local ggsCmd = string.format("/ggs connect -app=CodePku %s", cmd_text);
+			local oriCmd_text = cmd_text
 
 			local options, cmd_text = ParseOptions(cmd_text);	
-			echo("serverIp")
-			echo((options.serverIp and options.serverIp ~= "") and options.serverIp or Config.defaultOnlineServer.host);
+			-- echo("serverIp")
+			-- echo((options.serverIp and options.serverIp ~= "") and options.serverIp or Config.defaultOnlineServer.host);
 			GeneralGameClient:GetOptions().serverIp = (options.serverIp and options.serverIp ~= "") and options.serverIp or Config.defaultOnlineServer.host;
 			GeneralGameClient:GetOptions().serverPort = (options.serverPort and options.serverPort ~= "") and options.serverPort or Config.defaultOnlineServer.port;
 			
-            GameLogic.RunCommand(string.format("/ggs connect -app=CodePku %s", cmd_text));
+            GameLogic.RunCommand(string.format("/ggs connect -app=CodePku %s", oriCmd_text));
 		end,
 	}
 
