@@ -216,3 +216,7 @@ CommonFunc.OpenUrl = function (url, withToken, screenOrientation)
         GameLogic.RunCommand(string.format("/open %s", url))
     end
 end
+
+CommonFunc.ConnectStandToEnd = function ()
+    GameLogic.RunCommand("/connectCodePku -serverIp=106.53.135.151 -serverPort=9900 25161")
+end

@@ -39,7 +39,14 @@ function turnToWorld()
     elseif System.Codepku.Coursewares.course_category == 2 then
         GameLogic.RunCommand("/loadworld 15857")    
     elseif System.Codepku.Coursewares.course_category == 3 then
-        GameLogic.RunCommand("/loadworld " .. tostring(System.Codepku.Coursewares.keepwork_project_id))        
+        if System.Codepku.Coursewares.keepwork_project_id == 25161 then
+            if MainPopup.STEWindow then MainPopup.STEWindow:CloseWindow() end
+            MainPopup.signedUp = false
+            GameLogic.RunCommand("/home") --站到最后防卡死
+            MainPopup.Pre()
+        else
+            GameLogic.RunCommand("/loadworld " .. tostring(System.Codepku.Coursewares.keepwork_project_id))        
+        end
     elseif System.Codepku.Coursewares.course_category ==4 then        
         GameLogic.RunCommand("/home")
     end

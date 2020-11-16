@@ -1,0 +1,50 @@
+<!-- "Mod/CodePku/cellar/Common/TouchMiniButtons/MainUIButtons_common.html" -->
+<!-- 首页按钮-每日签到，任务计划，日历 -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" >
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+</head>
+
+<body>
+<pe:mcml>
+<script refresh="false" type="text/npl" src="MainSceneUIButtons.lua"><![CDATA[
+local MainUIButtons = NPL.load("(gl)Mod/CodePku/cellar/Common/TouchMiniButtons/Main.lua");
+local SignInPage = commonlib.gettable("Mod.CodePku.GUI.SignInPage")
+local ShareApp = NPL.load("(gl)Mod/CodePku/cellar/GUI/Share/ShareApp.lua");
+NPL.load("(gl)Mod/CodePku/cellar/Common/TouchMiniButtons/TaskSystem/TaskSystem.lua")
+local TaskSystem = commonlib.gettable("Mod.CodePku.Common.TaskSystem")
+
+left_buttons = MainUIButtons.left_buttons
+function ClickChooseFun(name)
+    if (name == "ClickSignin") then 
+        GameLogic.GetFilters():apply_filters("ClickStatistics", {type = 21}); -- 点击签到，触发操作数据统计计数
+        SignInPage:ShowPage()
+    elseif(name == "ClickTask") then 
+        GameLogic.GetFilters():apply_filters("ClickStatistics", {type = 22}); -- 点击任务系统，触发操作数据统计计数
+        TaskSystem:ShowPage(1,true)    
+    elseif(name == "ClickShareApp") then 
+        GameLogic.GetFilters():apply_filters("ClickStatistics", {type = 74}); -- 点击分享，触发操作数据统计计数
+        ShareApp:ShowPage(1)
+    else
+        GameLogic.AddBBS("CodeGlobals", L"功能开发中", 3000, "#ff0000");
+    end
+end
+
+]]></script>
+<style type="text/mcss">
+
+</style>
+<pe:container alignment="_lt" width="100%" height="100%">
+    <pe:repeat DataSource="<%=left_buttons%>" style="">
+        <pe:repeatitem style="">
+            <pe:if condition="<%=Eval('bShow') == true%>">
+                <div style="<%=format('margin-left:%d;width:%d;height:%d;margin-top: %d;background: url(%s);',Eval('left'),Eval('width'),Eval('height'),Eval('top'),Eval('url'))%>" name="<%=Eval('name')%>" onclick="ClickChooseFun"></div>
+            </pe:if>          
+        </pe:repeatitem>
+    </pe:repeat>
+</pe:container>
+</pe:mcml> 
+</body>
+</html>
