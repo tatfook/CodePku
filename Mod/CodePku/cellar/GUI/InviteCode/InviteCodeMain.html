@@ -1,0 +1,70 @@
+<!-- "script/apps/Aries/Creator/Game/Areas/EscFramePage.html" -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+</head>
+<body>
+<pe:mcml>
+<script refresh="false" type="text/npl" src="InviteCode.lua"><![CDATA[
+InviteCode = NPL.load("(gl)Mod/CodePku/cellar/GUI/InviteCode/InviteCode.lua")
+
+function OnclickClose()
+    Page:CloseWindow()
+end
+
+InviteCode.ifBanded = false
+InviteCode.ifBandGotten = false
+InviteCode.invateCode = 'pQQxMT'
+
+]]>
+</script>
+<pe:container alignment="_lt" width="1920" height="1080" style="background-color: #000000bd; font-family: zkklt; color: #743c20;">
+    <!-- 背景 -->
+    <div onclick="OnclickClose" style="<%=format('position: relative; left: 71; top: 47; width: 1779; height: 969; background:url(%s);', InviteCode.GetIconUrl('invite_popup_bg.png'))%>"></div>
+
+    <!-- 标题 -->
+    <div style="<%=format('position: relative; left: 108; top: 18; width: 298; height: 130; background:url(%s);', InviteCode.GetIconUrl('invite_popup_tab.png'))%>"></div>
+    <div style="<%=format('position: relative; left: 152; top: 48; width: 298; height: 130; background:url(%s);', InviteCode.GetIconUrl('invite_popup_title0.png'))%>"></div>
+
+    <!-- 横幅 -->
+    <div style="<%=format('position: relative; left: 220; top: 140; width: 1484; height: 147; background:url(%s);', InviteCode.GetIconUrl('invite_popup_frame.png'))%>">
+        <div style="position: relative; left: 59; top: 50; width: 1401; height: 67; font-size: 30;">
+            2020.11.11- 2021.02.11 期间，每邀请一名新的同学注册玩学世界（非游客）并绑定你的邀请码，即可领取丰厚奖励。每个用户最多可领取累积10位好友的奖励，快来邀请好友一起来玩学世界吧！
+        </div>
+    </div>
+
+    <!-- 绑定好友 -->
+    <div style="<%=format('position: relative; left: 231; top: 343; width: 126; height: 30; background:url(%s);', InviteCode.GetIconUrl('invite_popup_title.png'))%>"></div>
+    <div style="<%=format('position: relative; left: 230; top: 392; width: 660; height: 238; background:url(%s);', InviteCode.GetIconUrl('invite_popup_frame1.png'))%>">
+        <pe:if condition="<%= InviteCode.ifBanded == true %>">
+
+        </pe:if>
+        <pe:if condition="<%= InviteCode.ifBanded == false %>">
+            <div style="position: relative; left: 34; top: 55; width: 252; height: 25; font-size: 28;">绑定好友获取奖励：</div>
+            <div style="<%=format('position: relative; left: 271; top: 33; width: 168; height: 66; background:url(%s);', InviteCode.GetIconUrl('invite_popup_frame4.png'))%>">
+                <input type="text" MoveViewWhenAttachWithIME="true" name="inviteCode" onchange="OnInviteCodeChange" value="输入邀请码" EmptyText='<%= InviteCode.invateCode %>' style="position: relative; left: 15; top: 24; width: 168; height: 28; font-size: 28; font-family: Noto Sans S Chinese Regular; background: #000000;"/>
+            </div>
+            <div style="<%=format('position: relative; left: 480; top: 40; width: 146; height: 55; font-size: 30; color: #ffffff; background-color: red; text-align: center; line-height: 55; background:url(%s);', InviteCode.GetIconUrl('invite_popup_btn_s_b.png'))%>">绑定</div>
+        </pe:if>
+        <div style="<%=format('position: relative; left: 211; top: 141; width: 43; height: 45; padding-left: 43; padding-top: 19; font-size: 26; font-family: Noto Sans S Chinese Regular; background:url(%s);', InviteCode.GetIconUrl('main_icon_coin_2.png'))%>">x10</div>
+        <div style="<%=format('position: relative; left: 328; top: 138; width: 43; height: 51; padding-left: 43; padding-top: 22; font-size: 26; font-family: Noto Sans S Chinese Regular; background:url(%s);', InviteCode.GetIconUrl('main_icon_coin_1.png'))%>">x10</div>
+        
+        <pe:if condition="<%= InviteCode.ifBandGotten == false %>">
+            <div style="<%=format('position: relative; left: 480; top: 134; width: 146; height: 55; font-size: 30; color: #ffffff; background-color: red; text-align: center; line-height: 55; background:url(%s);', InviteCode.GetIconUrl('invite_popup_btn_s_b.png'))%>">领取</div>
+        </pe:if>
+
+        <pe:if condition="<%= InviteCode.ifBandGotten == true %>">
+            <div style="<%=format('position: relative; left: 480; top: 134; width: 146; height: 55; font-size: 30; color: #ffffff; background-color: red; text-align: center; line-height: 55; background:url(%s);', InviteCode.GetIconUrl('invite_popup_btn_s_r.png'))%>">已领取</div>
+        </pe:if>
+    </div>
+
+    <!-- 关闭 -->
+    <div onclick="OnclickClose" style="<%=format('position: relative; left: 1706; top: 30; width: 77; height: 123; background-color: red; background:url(%s);', InviteCode.GetIconUrl('invite_popup_btn.png'))%>"></div>
+
+</pe:container>
+</pe:mcml>
+</body>
+</html>
+ 

@@ -44,6 +44,7 @@ MainUIButtons.left_buttons = {
 	[1]={url=mainFrameImageData:GetIconUrl("main_icon_signin.png"),top=0,width=115,height=107,left=26,name="ClickSignin",bShow=true,},
 	[2]={url=mainFrameImageData:GetIconUrl("main_icon_task.png"),top=19,width=116,height=113,left=25,name="ClickTask",bShow=true,},
 	[3]={url=mainFrameImageData:GetIconUrl("main_icon_calendar.png"),top=19,width=113,height=112,left=27,name="ClickShareApp",bShow=true,},
+	[4]={url='',top=19,width=113,height=112,left=27,name="ClickInviteCode",bShow=true,},
 }
 
 MainUIButtons.top_buttons = {
