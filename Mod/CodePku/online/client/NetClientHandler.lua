@@ -81,6 +81,7 @@ function NetClientHandler:Login()
             isSyncCmd = options.isSyncCmd,
             areaSize = options.areaSize,
             manual = options.manual,
+            no = options.no
         }
     }));
 end

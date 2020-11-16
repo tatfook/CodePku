@@ -74,6 +74,7 @@ function GeneralGameClient:LoadWorld(opts, loadworld)
     -- 确定世界ID
     options.worldId = tostring(opts.worldId or curWorldId or options.defaultWorldId);
     options.worldName = tostring(opts.worleName ~= "" and opts.worldName or 1)
+    options.no = tostring(opts.no ~= "" and opts.no or 1)
     options.username = options.username or self:GetUserInfo().username;
     options.ip = opts.ip;            -- ip port 每次重写
     options.port = opts.port;     -- 以便动态获取
