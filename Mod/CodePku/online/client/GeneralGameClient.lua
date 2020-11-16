@@ -75,12 +75,17 @@ function GeneralGameClient:LoadWorld(opts, loadworld)
     options.worldId = tostring(opts.worldId or curWorldId or options.defaultWorldId);
     options.worldName = tostring(opts.worleName ~= "" and opts.worldName or 1)
     options.no = tostring(opts.no ~= "" and opts.no or 1)
+    options.worldKey = opts.worldKey or ((options.worldId or "1").."_"..(options.worldName or "1").."_"..(options.no or "1")) -- worldKey每次重写
+
     options.username = options.username or self:GetUserInfo().username;
     options.ip = opts.ip;            -- ip port 每次重写
     options.port = opts.port;     -- 以便动态获取
-    options.worldKey = opts.worldKey or ((options.worldId or "1").."_"..(options.worldName or "1").."_"..(options.no or "1")) -- worldKey每次重写
-    options.reload = opts.reload    -- 每次重写是否重新加载世界
-    options.manual = opts.manual  -- 每次重写是否主动切换世界 
+    -- 每次登陆世界如果没有输入serverip或serverport就重置两者为默认设置，防止上一次的缓存干扰登陆服务器的选择
+    options.serverIp = (opts.serverIp and opts.serverIp ~= "") and opts.serverIp or Config.defaultOnlineServer.host;
+    options.serverPort = (opts.serverPort and opts.serverPort ~= "") and opts.serverPort or Config.defaultOnlineServer.port;
+
+    options.reload = opts.reload    -- 每次刷新是否重新加载世界
+    options.manual = opts.manual    -- 每次刷新是否主动切换世界数据(是否是在分线界面跳转的世界连接) 
   
     -- 打印选项值
     -- GGS.INFO(options);

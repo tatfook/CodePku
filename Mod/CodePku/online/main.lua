@@ -70,17 +70,8 @@ connectCodePku 145                    # 联机进入世界ID为145的世界
 connectCodePku 145 parallel           # 联机进入世界ID为145的平行世界 parallel
 ]], 
 		handler = function(cmd_name, cmd_text, cmd_params, fromEntity)		
-			local ggsCmd = string.format("/ggs connect -app=CodePku %s", cmd_text);
-			local oriCmd_text = cmd_text
-
-			local options, cmd_text = ParseOptions(cmd_text);	
-			-- echo("serverIp")
-			-- echo((options.serverIp and options.serverIp ~= "") and options.serverIp or Config.defaultOnlineServer.host);
-			-- 每次登陆世界如果没有输入serverip或serverport就重置两者为默认设置，防止上一次的缓存干扰登陆服务器的选择
-			GeneralGameClient:GetOptions().serverIp = (options.serverIp and options.serverIp ~= "") and options.serverIp or Config.defaultOnlineServer.host;
-			GeneralGameClient:GetOptions().serverPort = (options.serverPort and options.serverPort ~= "") and options.serverPort or Config.defaultOnlineServer.port;
-			
-            GameLogic.RunCommand(string.format("/ggs connect -app=CodePku %s", oriCmd_text));
+			local ggsCmd = string.format("/ggs connect -app=CodePku %s", cmd_text);			
+            GameLogic.RunCommand(string.format("/ggs connect -app=CodePku %s", cmd_text));
 		end,
 	}
 
