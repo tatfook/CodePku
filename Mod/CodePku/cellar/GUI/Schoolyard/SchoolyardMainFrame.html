@@ -27,7 +27,7 @@ end
 function LeaveSchool()
     local params = {
         title = "退出学校",
-        content = "是否退出" .. Schoolyard.schoolyard_name,
+        content = "是否退出学校:" .. Schoolyard.schoolyard_name,
         func = function ()
                 Schoolyard.joined_schoolyard = false
                 Schoolyard:ExitSchoolyard()

@@ -45,7 +45,7 @@ function OnSearch()
         search_area = Schoolyard.selected_area.code,
         search_school = Schoolyard.selected_school.category,
     }
-    echo("搜索传入的键值对")
+    echo("search_params")
     echo(params)
     Schoolyard:GetSearchSchoolResult(params, page)
 end
@@ -71,7 +71,7 @@ end
 function OnChoose(name)
     selected_school_index = tonumber(name)
     local school_name = Schoolyard.search_result[selected_school_index].name
-    GameLogic.AddBBS("CodeGlobals", school_name, 3000, "#FF0000");
+    -- GameLogic.AddBBS("CodeGlobals", school_name, 3000, "#FF0000");
     page:Refresh(0)
 end
 
@@ -79,10 +79,10 @@ end
 function JoinChooseSchool()
     if selected_school_index and Schoolyard.search_result[selected_school_index] then
         local params = {
-            title = "确认",
-            content = "是否确认加入学校：" .. Schoolyard.search_result[selected_school_index].name,
+            title = "加入学校",
+            content = "是否加入学校：" .. Schoolyard.search_result[selected_school_index].name,
             func = function ()
-                    Schoolyard:JoinSchoolyard(Schoolyard.search_result[selected_school_index].id)
+                    Schoolyard:JoinSchoolyard(Schoolyard.search_result[selected_school_index].id, Schoolyard.search_result[selected_school_index].name)
                 end,
             page = page,
         }
@@ -94,7 +94,13 @@ end
 
 -- 登记学校
 function RegisterSchool()
-    GameLogic.AddBBS("CodeGlobals", L"登记学校", 3000, "#FF0000");
+    Schoolyard.search_result = nil
+    Schoolyard.selected_province = {}
+    Schoolyard.selected_city = {}
+    Schoolyard.selected_area = {}
+    Schoolyard.selected_school = {}
+    Schoolyard.last_select_kind = nil
+    Schoolyard:ShowRegisterPage()
 end
 
 
@@ -132,24 +138,34 @@ end
     <!-- 条件筛选_学校 -->
     <div style="position: relative;left:405;top: 620;width: 203;height: 68;color: #7e2f12;">
         <input type="button" value="▼" style="<%=format('position: relative;font-size: 30;color: #7e2f12;width: 203;height: 68;text-align:right;padding-top:15;padding-right:12;background:url(%s);', GetIcon('schoolyard_term_bot.png'))%>"/>
-        <input type="text" value="<%= Schoolyard.selected_school.name or '学校' %>" style="position: relative;font-size: 30;left: 15;top: 18;width: 145;height: 36;background:#000000;"/>
+        <input type="text" value="<%= Schoolyard.selected_school.name or '学校类型' %>" style="position: relative;font-size: 30;left: 15;top: 18;width: 145;height: 36;background:#000000;"/>
         <div onclick="OnSelect" name="school" style="position: relative;width: 203;height: 68;color: #7e2f12;"></div>
     </div>
 
     <!-- 筛选结果 -->
-    <div style="position: relative;left: 745;top: 203;width: 460;height: 531;background-color:#4200f8">
+    <div style="position: relative;left: 745;top: 203;width: 460;height: 531;">
         <pe:if condition='<%= HaveResult() %>'>
         <!-- 查询到了学校 -->
-            <pe:treeview style="position: relative;width: 430;height: 531;background-color: #00ffea;" name='messages' DefaultNodeHeight = "80" ItemsPerLine="1" AllowPaging="false" RememberScrollPos="true" RememberLastPage="false" VerticalScrollBarStep="40">
+            <pe:treeview style="position: relative;width: 435;height: 531;" name='messages' DefaultNodeHeight = "80" ItemsPerLine="1" AllowPaging="false" RememberScrollPos="false" RememberLastPage="false" VerticalScrollBarStep="40">
                 <pe:repeat DataSource="<%= GetSearchResult() %>">
                     <pe:repeatitem>
                         <!-- 选中的 -->
                         <pe:if condition='<%= selected_school_index == Eval("index") %>'>
-                            <div onclick="OnChoose" name="<%= Eval('index') %>" style="<%=format('width: 408;height: 85;margin-bottom: 5;font-family: zkklt;font-size: 36;color: #7e2f12;background:url(%s);', GetIcon('schoolyard_screening_results_02.png'))%>"><%= Eval('name') %></div>
+                            <pe:if condition='<%= Eval("contents_num") < 11 %>'>
+                                <div onclick="OnChoose" name="<%= Eval('index') %>" style="<%=format('width: 408;height: 85;margin-bottom: 4;line-height:85;font-family: zkklt;font-size: 32;padding-left:5;color: #7e2f12;background:url(%s);', GetIcon('schoolyard_screening_results_02.png'))%>"><%= Eval('name') %></div>
+                            </pe:if>
+                            <pe:if condition='<%= Eval("contents_num") > 11 %>'>
+                                <div onclick="OnChoose" name="<%= Eval('index') %>" style="<%=format('width: 408;height: 85;margin-bottom: 4;font-family: zkklt;font-size: 32;padding-left:5;padding-top:5;color: #7e2f12;background:url(%s);', GetIcon('schoolyard_screening_results_02.png'))%>"><%= Eval('name') %></div>
+                            </pe:if>
                         </pe:if>
                         <!-- 未选中的 -->
                         <pe:if condition='<%= selected_school_index ~= Eval("index") %>'>
-                            <div onclick="OnChoose" name="<%= Eval('index') %>" style="<%=format('width: 408;height: 85;margin-bottom: 5;font-family: zkklt;font-size: 36;color: #7e2f12;background:url(%s);', GetIcon('schoolyard_screening_results_01.png'))%>"><%= Eval('name') %></div>
+                            <pe:if condition='<%= Eval("contents_num") < 11 %>'>
+                                <div onclick="OnChoose" name="<%= Eval('index') %>" style="<%=format('width: 408;height: 85;margin-bottom: 4;line-height:85;font-family: zkklt;font-size: 32;padding-left:5;color: #7e2f12;background:url(%s);', GetIcon('schoolyard_screening_results_01.png'))%>"><%= Eval('name') %></div>
+                            </pe:if>
+                            <pe:if condition='<%= Eval("contents_num") > 11 %>'>
+                                <div onclick="OnChoose" name="<%= Eval('index') %>" style="<%=format('width: 408;height: 85;margin-bottom: 4;font-family: zkklt;font-size: 32;padding-left:5;padding-top:5;color: #7e2f12;background:url(%s);', GetIcon('schoolyard_screening_results_01.png'))%>"><%= Eval('name') %></div>
+                            </pe:if>
                         </pe:if>
                     </pe:repeatitem>
                 </pe:repeat>
@@ -157,7 +173,7 @@ end
         </pe:if>
         <pe:if condition='<%= not HaveResult() %>'>
         <!-- 空空如也 -->
-            <div style="position: relative;width: 410;height: 531;background-color: #bd1a1a;font-family: zkklt;font-size: 48;color: #ffffff;padding-top: 160;padding-left: 100;">空空如也</div>
+            <div style="position: relative;left: 145;top: 144;width: 200;height: 50;font-family: zkklt;font-size: 36;color: #7e2f12;">空空如也</div>
         </pe:if>
     </div>
 

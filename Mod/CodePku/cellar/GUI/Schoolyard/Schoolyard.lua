@@ -13,6 +13,10 @@ local AdaptWindow = commonlib.gettable("Mod.CodePku.GUI.Window.AdaptWindow")
 local schoolyardImageData = NPL.load("(gl)Mod/CodePku/cellar/imageLuaTable/schoolyardImageData.lua")
 local request = NPL.load("(gl)Mod/CodePku/api/BaseRequest.lua");
 
+-- 导Editbox是为了改EmptyText的文本颜色，后面帕拉卡如果添加了对应的属性可以改掉这里的代码
+NPL.load("(gl)script/ide/System/Windows/Controls/EditBox.lua");
+local EditBox = commonlib.gettable("System.Windows.Controls.EditBox");
+
 
 -- 标签
 Schoolyard.tabs = {
@@ -155,7 +159,7 @@ end
 
 -- 搜索学校
 function Schoolyard:GetSearchSchoolResult(params, page)
-    -- todo 根据正确的传入参数进行查询
+    -- 拼接查询字符串
     local path = "/schools?page=1&per_page=50"
     if params.search_province then
         path = path .. "&province_code=" .. tostring(params.search_province)
@@ -176,6 +180,11 @@ function Schoolyard:GetSearchSchoolResult(params, page)
         local data = response.data.data
         if next(data) == nil then
             GameLogic.AddBBS("CodeGlobals", L"未搜索到该学校，请输入更精确的搜索内容，或手动筛选！", 3000, "#FF0000")
+            return
+        end
+        for k,v in pairs(data) do
+            local contents_num = commonlib.utf8.len(v.name)
+            data[k].contents_num = contents_num
         end
         Schoolyard.search_result = data
         if page then
@@ -236,7 +245,7 @@ function Schoolyard:GetSelectLocation(name, page)
         Schoolyard.select_page_show_table = {}
         return
     end
-    -- 逻辑基本不会走到这里，反正先放这里
+    -- 逻辑不会走到这，反正先放这里
     if page then
         page:Refresh(0)
     end
@@ -319,7 +328,7 @@ function Schoolyard:JoinPageSpecialClose()
 end
 
 -- 加入学校
-function Schoolyard:JoinSchoolyard(id)
+function Schoolyard:JoinSchoolyard(id, name)
     local id = tonumber(id)
     local params = {
         school_id = id
@@ -332,7 +341,7 @@ function Schoolyard:JoinSchoolyard(id)
         Schoolyard.selected_area = {}
         Schoolyard.selected_school = {}
         Schoolyard:GetMySchoolyardInfo(Schoolyard.main_ui)
-        local content = "恭喜您！成功加入" .. Schoolyard.schoolyard_name
+        local content = "恭喜您！成功加入" .. name .. "！"
         GameLogic.AddBBS("CodeGlobals", content, 3000, "#00FF00");
         LOG.std(nil, "succeed", "Schoolyard", "JoinSchoolyard")
     end):catch(function(e)
@@ -341,8 +350,10 @@ function Schoolyard:JoinSchoolyard(id)
 end
 
 -- 退出学校
-function Schoolyard:ExitSchoolyard()
+function Schoolyard:ExitSchoolyard(name)
     request:delete('/schools/exit'):next(function(response)
+        local content = "你已退出" .. Schoolyard.schoolyard_name .. "！"
+        GameLogic.AddBBS("CodeGlobals", content, 3000, "#00FF00");
         LOG.std(nil, "succeed", "Schoolyard", "ExitSchoolyard")
     end):catch(function(e)
         LOG.std(nil, "error", "Schoolyard", "ExitSchoolyard")
@@ -350,14 +361,14 @@ function Schoolyard:ExitSchoolyard()
 end
 
 -- 筛选弹窗
-function Schoolyard:ShowSelectPage(name)
+function Schoolyard:ShowSelectPage(name, zorder)
     if self.select_page then
         self.select_page:CloseWindow()
         self.select_page = nil
     end
     local params = {
         url="Mod/CodePku/cellar/GUI/Schoolyard/Popup/SelectLocation.html",
-        alignment="_lt", left = 0, top = 0, width = 1920 , height = 1080, zorder = 23
+        alignment="_lt", left = 0, top = 0, width = 1920 , height = 1080, zorder = zorder or 23
     };
     Schoolyard:GetSelectLocation(name)
     self.select_page = AdaptWindow:QuickWindow(params)
@@ -380,4 +391,75 @@ function Schoolyard:ShowPopupBox(data)
         alignment="_lt", left = 0, top = 0, width = 1920 , height = 1080, zorder = 23
     };
     self.popup_box = AdaptWindow:QuickWindow(params)
+end
+
+-- 登记学校弹窗
+function Schoolyard:ShowRegisterPage()
+    -- 打开之前先设置input标签的EmptyText文本颜色
+    EditBox:Property({"EmptyTextColor", "#a35229", auto=true})
+    
+    -- 这里有输入框，为了IOS适配，需要特殊处理下，再开一个空页面放下面
+    if self.RegisterEmptyBG then
+        self.RegisterEmptyBG:CloseWindow()
+        self.RegisterEmptyBG = nil
+    end
+
+    local BGparams = {
+        url="Mod/CodePku/cellar/GUI/Profile/EditNameEmptyPage.html",
+        alignment="_lt", left = 0, top = 0, width = 1920 , height = 1080, zorder = 23,
+    }
+    self.RegisterEmptyBG = AdaptWindow:QuickWindow(BGparams)
+
+    -- 登记弹窗
+    if self.register_page then
+        self.register_page:CloseWindow()
+        self.register_page = nil
+    end
+    local params = {
+        url="Mod/CodePku/cellar/GUI/Schoolyard/Popup/SchoolyardRegisterPage.html",
+        alignment="_lt", left = 398, top = 97, width = 1171 , height = 748, zorder = 24
+    };
+    self.register_page = AdaptWindow:QuickWindow(params)
+end
+
+-- 登记学校弹窗关闭
+function Schoolyard:CloseRegisterPage()
+    -- 关闭页面之后要还原为默认的，避免影响其它页面
+	EditBox:Property({"EmptyTextColor", "#888888", auto=true})
+    if self.RegisterEmptyBG then
+        self.RegisterEmptyBG:CloseWindow()
+        self.RegisterEmptyBG = nil
+    end
+    if self.register_page then
+        self.register_page:CloseWindow()
+        self.register_page = nil
+    end
+    Schoolyard.search_content = nil
+end
+
+-- 登记学校请求
+function Schoolyard:RegisterSchoolyard(params)
+    local register_data = {
+        province_code = params.search_province,
+        city_code = params.search_city,
+        district_code = params.search_area,
+        category = params.search_school,
+        name = params.register_name
+    }
+
+    request:post('/schools/registration', register_data):next(function(response)
+        Schoolyard:CloseRegisterPage()
+        Schoolyard.search_result = nil
+        Schoolyard.selected_province = {}
+        Schoolyard.selected_city = {}
+        Schoolyard.selected_area = {}
+        Schoolyard.selected_school = {}
+        Schoolyard:GetMySchoolyardInfo(Schoolyard.main_ui)
+
+        GameLogic.AddBBS("CodeGlobals", L"学校信息提交成功，我们会尽快回复您！", 3000, "#00FF00");
+        LOG.std(nil, "succeed", "Schoolyard", "RegisterSchoolyard")
+    end):catch(function(e)
+        GameLogic.AddBBS("CodeGlobals", e.data.message, 3000, "#FF0000");
+        LOG.std(nil, "error", "Schoolyard", "RegisterSchoolyard")
+    end);
 end
