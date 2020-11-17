@@ -19,34 +19,6 @@ ChooseBranch = commonlib.gettable("Mod.CodePku.GUI.ChooseBranch")
 
 local branchImageData = NPL.load("(gl)Mod/CodePku/cellar/imageLuaTable/branchImageData.lua")
 local common1ImageData = NPL.load("(gl)Mod/CodePku/cellar/imageLuaTable/common1ImageData.lua")
-ChooseBranch.HTMLStyleData = {
-    [1] = { ["desc"] = "背景图片", ["position"] = "absolute", ["left"] = 624, ["top"] = 18, ["width"] = 699, ["height"] = 1000, ["background"] = "url("..branchImageData:GetIconUrl("branch_boot_01.png")..")",},
-    [2] = { ["desc"] = "退出按钮", ["position"] = "absolute", ["left"] = 1213, ["top"] = 4, ["width"] = 77, ["height"] = 123, ["background"] = "url("..common1ImageData:GetIconUrl("comm_btn_close.png")..")",},
-    [3] = { ["desc"] = "切换分线按钮", ["position"] = "absolute", ["left"] = 830, ["top"] = 957, ["width"] = 298, ["height"] = 101, ["background"] = "url("..common1ImageData:GetIconUrl("common_btn_green01.png")..")",},
-    [4] = { ["desc"] = "爆满图标", ["position"] = "relative", ["left"] = 89, ["top"] = 186, ["width"] = 52, ["height"] = 52, ["background"] = "url("..branchImageData:GetIconUrl("branch_icon_r.png")..")",},
-    [5] = { ["desc"] = "爆满文字", ["position"] = "relative", ["left"] = 161, ["top"] = 194, ["width"] = 104, ["height"] = 52, ["color"] = "#9e6c5e", ["font-family"] = "zkklt", ["font-size"] = "40px",},
-    [6] = { ["desc"] = "繁忙图标", ["position"] = "relative", ["left"] = 278, ["top"] = 186, ["width"] = 52, ["height"] = 52, ["background"] = "url("..branchImageData:GetIconUrl("branch_icon_y.png")..")",},
-    [7] = { ["desc"] = "繁忙文字", ["position"] = "relative", ["left"] = 350, ["top"] = 194, ["width"] = 104, ["height"] = 52, ["color"] = "#9e6c5e", ["font-family"] = "zkklt", ["font-size"] = "40px",},
-    [8] = { ["desc"] = "流畅图标", ["position"] = "relative", ["left"] = 467, ["top"] = 186, ["width"] = 52, ["height"] = 52, ["background"] = "url("..branchImageData:GetIconUrl("branch_icon_g.png")..")",},
-    [9] = { ["desc"] = "流畅文字", ["position"] = "relative", ["left"] = 539, ["top"] = 194, ["width"] = 104, ["height"] = 52, ["color"] = "#9e6c5e", ["font-family"] = "zkklt", ["font-size"] = "40px",},
-    [10] = { ["desc"] = "标题文字", ["position"] = "relative", ["left"] = 210, ["top"] = 31, ["width"] = 400, ["height"] = 120, ["color"] = "#9e6c5e", ["font-family"] = "zkklt", ["font-size"] = "65px",},
-    [11] = { ["desc"] = "滚动区域", ["position"] = "relative", ["left"] = 60, ["top"] = 256, ["width"] = 565, ["height"] = 670,},
-    [12] = { ["desc"] = "分线栏背景(未选择)", ["width"] = 535, ["height"] = 106, ["top"] = 30,["background"] = "url("..branchImageData:GetIconUrl("branch_boot_g.png")..")",},
-    [13] = { ["desc"] = "分线栏背景(选中)", ["width"] = 535, ["height"] = 107, ["top"] = 30,["background"] = "url("..branchImageData:GetIconUrl("branch_boot_w.png")..")",},
-    [14] = { ["desc"] = "分线栏状态标签(流畅)", ["position"] = "relative", ["left"] = 24, ["top"] = 30, ["width"] = 52, ["height"] = 52,["background"] = "url("..branchImageData:GetIconUrl("branch_icon_g.png")..")",},
-    [15] = { ["desc"] = "分线栏文字",  ["position"] = "relative", ["left"] = 139, ["top"] = 36, ["width"] = 350, ["height"] = 60, ["color"] = "#813010", ["font-family"] = "zkklt", ["font-size"] = "48",},
-    [16] = { ["desc"] = "切换分线按钮文字",  ["position"] = "relative", ["left"] = 49, ["top"] = 26, ["width"] = 199, ["height"] = 41,["background"] = "url("..branchImageData:GetIconUrl("branch_icon_g_mat.png")..")",},
-    [17] = { ["desc"] = "分线栏状态标签(繁忙)", ["position"] = "relative", ["left"] = 24, ["top"] = 30, ["width"] = 52, ["height"] = 52,["background"] = "url("..branchImageData:GetIconUrl("branch_icon_y.png")..")",},
-    [18] = { ["desc"] = "分线栏状态标签(爆满)", ["position"] = "relative", ["left"] = 24, ["top"] = 30, ["width"] = 52, ["height"] = 52,["background"] = "url("..branchImageData:GetIconUrl("branch_icon_r.png")..")",},
-    [19] = { ["desc"] = "服务器标签背景", ["position"] = "relative", ["left"] = 394, ["top"] = -90, ["width"] = 143, ["height"] = 38,["background"] = "url("..branchImageData:GetIconUrl("branch_boot_f.png")..")",},
-    [20] = { ["desc"] = "服务器标签文字", ["position"] = "relative", ["left"] = 19, ["top"] = 5, ["width"] = 125, ["height"] = 38, ["color"] = "#813010", ["font-family"] = "zkklt", ["font-size"] = "30",},
-    [21] = { ["desc"] = "滚动栏item大小", ["left"] = 20, ["width"] = 565, ["height"] = 140,},
-    [22] = { ["desc"] = "当前线路固定提示", ["position"] = "relative", ["left"] = 16, ["top"] = 100, ["width"] = 134, ["height"] = 57,["background"] = "url("..branchImageData:GetIconUrl("branch_currentline.png")..")",},
-    [23] = { ["desc"] = "当前线路标识图片", ["position"] = "relative", ["left"] = -15, ["top"] = -100, ["width"] = 35, ["height"] = 57,["background"] = "url("..branchImageData:GetIconUrl("branch_currentline_fireballoon.png")..")",},
-    [24] = { ["desc"] = "当前线路标识图片2", ["position"] = "relative", ["left"] = 415, ["top"] = -55, ["width"] = 88, ["height"] = 60,["background"] = "url("..branchImageData:GetIconUrl("branch_arrow_pen.png")..")",},
-    [25] = { ["desc"] = "等待分线数据文字", ["position"] = "relative", ["left"] = 158, ["top"] = 461, ["width"] = 440, ["height"] = 60, ["color"] = "#813010", ["font-family"] = "zkklt", ["font-size"] = "55",},
-    [26] = { ["desc"] = "当前世界文字提示", ["position"] = "relative", ["left"] = 157, ["top"] = 136, ["width"] = 490, ["height"] = 35, ["text-align"] = "right", ["color"] = "#813010", ["font-family"] = "zkklt", ["font-size"] = "32",},
-}
 
 function GetStyleStr(index)
     return ChooseBranch:GetHTMLStyleStr(index)
