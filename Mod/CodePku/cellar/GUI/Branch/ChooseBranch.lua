@@ -53,17 +53,22 @@ ChooseBranch.HTMLStyleData = {
     [8] = { ["desc"] = "流畅图标", ["position"] = "relative", ["left"] = 467, ["top"] = 186, ["width"] = 52, ["height"] = 52, ["background"] = "url("..branchImageData:GetIconUrl("branch_icon_g.png")..")",},
     [9] = { ["desc"] = "流畅文字", ["position"] = "relative", ["left"] = 539, ["top"] = 194, ["width"] = 104, ["height"] = 52, ["color"] = "#9e6c5e", ["font-family"] = "zkklt", ["font-size"] = "40px",},
     [10] = { ["desc"] = "标题文字", ["position"] = "relative", ["left"] = 210, ["top"] = 31, ["width"] = 400, ["height"] = 120, ["color"] = "#9e6c5e", ["font-family"] = "zkklt", ["font-size"] = "65px",},
-    [11] = { ["desc"] = "滚动区域", ["position"] = "relative", ["left"] = 80, ["top"] = 256, ["width"] = 535, ["height"] = 670,},
+    [11] = { ["desc"] = "滚动区域", ["position"] = "relative", ["left"] = 80, ["top"] = 256, ["width"] = 565, ["height"] = 670,},
     [12] = { ["desc"] = "分线栏背景(未选择)", ["width"] = 535, ["height"] = 106, ["top"] = 30,["background"] = "url("..branchImageData:GetIconUrl("branch_boot_g.png")..")",},
     [13] = { ["desc"] = "分线栏背景(选中)", ["width"] = 535, ["height"] = 107, ["top"] = 30,["background"] = "url("..branchImageData:GetIconUrl("branch_boot_w.png")..")",},
     [14] = { ["desc"] = "分线栏状态标签(流畅)", ["position"] = "relative", ["left"] = 24, ["top"] = 30, ["width"] = 52, ["height"] = 52,["background"] = "url("..branchImageData:GetIconUrl("branch_icon_g.png")..")",},
-    [15] = { ["desc"] = "分线栏文字",  ["position"] = "relative", ["left"] = 80, ["top"] = 32, ["width"] = 440, ["height"] = 60, ["color"] = "#813010", ["font-family"] = "zkklt", ["font-size"] = "48",},
+    [15] = { ["desc"] = "分线栏文字",  ["position"] = "relative", ["left"] = 139, ["top"] = 36, ["width"] = 350, ["height"] = 60, ["color"] = "#813010", ["font-family"] = "zkklt", ["font-size"] = "48",},
     [16] = { ["desc"] = "切换分线按钮文字",  ["position"] = "relative", ["left"] = 49, ["top"] = 26, ["width"] = 199, ["height"] = 41,["background"] = "url("..branchImageData:GetIconUrl("branch_icon_g_mat.png")..")",},
     [17] = { ["desc"] = "分线栏状态标签(繁忙)", ["position"] = "relative", ["left"] = 24, ["top"] = 30, ["width"] = 52, ["height"] = 52,["background"] = "url("..branchImageData:GetIconUrl("branch_icon_y.png")..")",},
     [18] = { ["desc"] = "分线栏状态标签(爆满)", ["position"] = "relative", ["left"] = 24, ["top"] = 30, ["width"] = 52, ["height"] = 52,["background"] = "url("..branchImageData:GetIconUrl("branch_icon_r.png")..")",},
     [19] = { ["desc"] = "服务器标签背景", ["position"] = "relative", ["left"] = 394, ["top"] = -90, ["width"] = 143, ["height"] = 38,["background"] = "url("..branchImageData:GetIconUrl("branch_boot_f.png")..")",},
     [20] = { ["desc"] = "服务器标签文字", ["position"] = "relative", ["left"] = 19, ["top"] = 5, ["width"] = 125, ["height"] = 38, ["color"] = "#813010", ["font-family"] = "zkklt", ["font-size"] = "30",},
     [21] = { ["desc"] = "滚动栏item大小", ["width"] = 535, ["height"] = 140,},
+    [22] = { ["desc"] = "当前线路固定提示", ["position"] = "relative", ["left"] = 16, ["top"] = 100, ["width"] = 134, ["height"] = 57,["background"] = "url("..branchImageData:GetIconUrl("branch_currentline.png")..")",},
+    [23] = { ["desc"] = "当前所在线路标识图片", ["position"] = "relative", ["left"] = -18, ["top"] = -20, ["width"] = 35, ["height"] = 57,["background"] = "url("..branchImageData:GetIconUrl("branch_currentline_fireballoon.png")..")",},
+    [24] = { ["desc"] = "当前选中线路标识图片", ["position"] = "relative", ["left"] = 415, ["top"] = 25, ["width"] = 88, ["height"] = 60,["background"] = "url("..branchImageData:GetIconUrl("branch_arrow_pen.png")..")",},
+    [25] = { ["desc"] = "等待分线数据文字", ["position"] = "relative", ["left"] = 158, ["top"] = 461, ["width"] = 440, ["height"] = 60, ["color"] = "#813010", ["font-family"] = "zkklt", ["font-size"] = "55",},
+    [26] = { ["desc"] = "当前世界文字提示", ["position"] = "relative", ["left"] = 397, ["top"] = 136, ["width"] = 440, ["height"] = 35, ["text-align"] = "right", ["color"] = "#813010", ["font-family"] = "zkklt", ["font-size"] = "32",["background-color"] = "#000000",},
 }
 
 function ChooseBranch:StaticInit()
@@ -212,7 +217,7 @@ function ChooseBranch:DealBranchStateData()
                 local branchId = tonumber(refInfo[3])
                 local playerNum = v and tonumber(v.online_client_count)
                 local maxPlayerNum = v and tonumber(v.max_client_count)
-                if worldId == tonumber(ChooseBranch.currBranchData["worldId"]) and worldName == ChooseBranch.currBranchData["worldName"] and playerNum > 0 then
+                if worldId == tonumber(ChooseBranch.currBranchData["worldId"]) and worldName == ChooseBranch.currBranchData["worldName"] then -- and playerNum > 0 then
                     table.insert( ChooseBranch.branchStateTable,
                         {   
                             ["worldId"] = tonumber(worldId),
@@ -229,10 +234,10 @@ function ChooseBranch:DealBranchStateData()
                 end
             end
         end
-        if ChooseBranch.jumpToWorldKey and ChooseBranch.jumpToWorldKey ~= System.Codepku.branch.currWorld.worldKey then
-            ChooseBranch.jumpToWorldKey = nil
-            GameLogic.AddBBS(nil, string.format("你选择的分线已满，你已进入%s", ChooseBranch:getBranchNameByWorldKey(System.Codepku.branch.currWorld.worldKey)), 3000, "255 0 0")
-        end
+        -- if ChooseBranch.jumpToWorldKey and ChooseBranch.jumpToWorldKey ~= System.Codepku.branch.currWorld.worldKey then
+        --     ChooseBranch.jumpToWorldKey = nil
+        --     GameLogic.AddBBS(nil, string.format("你选择的分线已满，你已进入%s", ChooseBranch:getBranchNameByWorldKey(System.Codepku.branch.currWorld.worldKey)), 3000, "255 0 0")
+        -- end
     end
 end
 
@@ -266,7 +271,7 @@ function ChooseBranch:changeBranch()
                 GameLogic.AddBBS(nil, L"你选择的世界分线已满", 3000, "255 0 0")
                 break
             end
-            ChooseBranch.jumpToWorldKey = tostring(j["worldId"] or "1").."_"..tostring(j["worldName"] or "1").."_"..tostring(j["branchId"] or "1")
+            -- ChooseBranch.jumpToWorldKey = tostring(j["worldId"] or "1").."_"..tostring(j["worldName"] or "1").."_"..tostring(j["branchId"] or "1")
             GameLogic.RunCommand(string.format("/connectCodePku -manual=1 -no=%d -host=%s -port=%s %d %s", j["branchId"], j["ip"], j["port"], j["worldId"], j["worldName"]))
             break
         end
@@ -281,10 +286,25 @@ function ChooseBranch:getBranchName(branchId, serverId)
     local serverName = string.format("%03s",tostring(serverId + 100))
     -- local serverName = (string.format("%0.1f",tostring(serverId)):gsub("%.",""))
     -- local showName = ChooseBranch.currBranchData["currWorldName"].."-"..ChooseBranch.branchNameTalbe[branchId]
-    local showName = ChooseBranch.currBranchData["currWorldName"].."-"..serverName..branchName.."线"
-    if commonlib.utf8.len(ChooseBranch.currBranchData["currWorldName"]) > 3 then
+    -- local showName = ChooseBranch.currBranchData["currWorldName"].."-"..serverName..branchName.."线"
+    local showName = serverName..branchName.."线"
+    -- if commonlib.utf8.len(ChooseBranch.currBranchData["currWorldName"]) > 3 then
         -- showName = commonlib.utf8.sub(showName, 1, 3).."...-"..ChooseBranch.branchNameTalbe[branchId]
-        showName = commonlib.utf8.sub(ChooseBranch.currBranchData["currWorldName"], 1, 3).."...-"..serverName..branchName.."线"
+        -- showName = commonlib.utf8.sub(ChooseBranch.currBranchData["currWorldName"], 1, 3).."...-"..serverName..branchName.."线"
+    -- end
+    return showName
+end
+
+--[[
+    @desc 
+    time:2020-11-17 11:41:40
+    return 
+]]
+function ChooseBranch:getCurrWorldName()
+    local currWorldName = System and System.Codepku and System.Codepku.Coursewares and System.Codepku.Coursewares.name
+    local showName = "当前世界:"..currWorldName
+    if commonlib.utf8.len(currWorldName) > 9 then
+        showName = "当前世界:"..commonlib.utf8.sub(currWorldName, 1, 9).."..."
     end
     return showName
 end

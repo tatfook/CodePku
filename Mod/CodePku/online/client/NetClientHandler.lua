@@ -85,3 +85,13 @@ function NetClientHandler:Login()
         }
     }));
 end
+
+function NetClientHandler:handlePlayerLogin(packetPlayerLogin)
+    self._super.handlePlayerLogin(self, packetPlayerLogin)
+    -- commonlib.setfield("System.Codepku.IsGGSConnected", true)
+end
+
+function NetClientHandler:handlePlayerLogout(packetPlayerLogout)
+    self._super.handlePlayerLogout(self, packetPlayerLogout)
+    -- commonlib.setfield("System.Codepku.IsGGSConnected", false)
+end
