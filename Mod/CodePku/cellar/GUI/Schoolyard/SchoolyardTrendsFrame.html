@@ -11,6 +11,10 @@
 
 local Schoolyard = NPL.load("(gl)Mod/CodePku/cellar/GUI/Schoolyard/Schoolyard.lua");
 
+-- 获取图片
+function GetIcon(index)
+    return Schoolyard:GetImagePath(index)
+end
 
 function ClosePage()
     Schoolyard.main_ui:CloseWindow()
@@ -21,7 +25,11 @@ end
 <style type="text/mcss">
 </style>
 
-    <div onclick="ClosePage" style="width: 1500;height: 900;background-color: #f70909a4;"></div>
+    <div style="width: 1500;height: 900;background-color: #f70909a4;">
+        <div style="<%=format('position:relative;left:76;top: 42;width:1372;height:872;background:url(%s);', GetIcon('shoolyard_comm_bot.png'))%>">
+        
+        </div>
+    </div>
 
 </pe:mcml>
 </body>

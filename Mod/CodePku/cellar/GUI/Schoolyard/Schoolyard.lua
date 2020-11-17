@@ -25,6 +25,10 @@ Schoolyard.tabs = {
     [3] = {name = "trends", title = "动态"},
 }
 
+Schoolyard.members_table = {}       -- 成员列表
+
+Schoolyard.trends_table = {}        -- 动态列表
+
 Schoolyard.joined_schoolyard = false    -- 标记用户是否已经加入学校
 
 -- 选择省市区
@@ -139,16 +143,16 @@ function Schoolyard:GetMySchoolyardInfo(page)
         if not next(data) then
             Schoolyard.joined_schoolyard = false
         else
-            local province, city, district = Schoolyard:GetNameByCode(data.province_code, data.city_code, data.district_code)
+            -- local province, city, district = Schoolyard:GetNameByCode(data.province_code, data.city_code, data.district_code)
             Schoolyard.joined_schoolyard = true     -- 是否已经有组织了
             Schoolyard.schoolyard_avatar = "https://cdn.codepku.com//img/default_avatar/0714/20180714163534.png"    -- 学校头像
             Schoolyard.week_rank = data.weekly_activity        -- 学校周活跃排行
             Schoolyard.total_rank = data.total_activity       -- 学校总活跃排行
             Schoolyard.schoolyard_name = data.name       -- 学校名字
-            Schoolyard.schoolyard_address = (province .. city .. district .. data.name) or "未知"      -- 学校位置
+            Schoolyard.schoolyard_address = (data.district.full_name .. data.name) or "未知"      -- 学校位置
+            Schoolyard.number_of_people = data.members_count      -- 学校人数
             Schoolyard.schoolyard_level = "Lv.999"        -- 学校等级
             Schoolyard.schoolyard_vitality = 123123123      -- 学校周活跃度
-            Schoolyard.number_of_people = 1234      -- 学校人数
 
             page:Refresh(0)
         end
@@ -251,24 +255,51 @@ function Schoolyard:GetSelectLocation(name, page)
     end
 end
 
+-- 我的校园成员排序
+function Schoolyard:SortMembers(data)
+    -- todo 离线时间计算
+    local function GetOnlineStatu(last_offline_at)
+        if last_offline_at == nil then
+            return "在线"
+        end
+        local now_date = os.date("%Y-%m-%d %H:%M:%S", os.time())
+        -- local result = commonlib.GetMillisecond_BetweenToDate(data,now_date)
+        local day,hours,minutes,seconds,time_str,total_mill = commonlib.GetTimeStr_BetweenToDate(last_offline_at,now_date)
+        echo("commonlib.GetTimeStr_BetweenToDate(last_offline_at,now_date)")
+        echo(day)
+        echo(hours)
+        echo(minutes)
+        echo(seconds)
+        echo(time_str)
+        echo(total_mill)
+        return "在线"
+    end
+    local user_id = System.User.info.id
+    for k,v in pairs(data) do
+        local temp_table = v
+        temp_table.level = "Lv." .. "99"        -- 等级
+        temp_table.activity = "1234567"         -- 周活跃度
+        temp_table.online_statu = v.user.is_online and "在线" or GetOnlineStatu(v.user.last_offline_at)
+        if temp_table.user_id == user_id then
+            table.insert(Schoolyard.members_table,1,temp_table)
+        else
+            table.insert(Schoolyard.members_table,temp_table)
+        end
+    end
+end
+
 -- 我的校园成员
 function Schoolyard:GetMembers()
-    Schoolyard.my_members = {
-        {},
-        {},
-        {},
-        {},
-        {},
-        {},
-        {},
-        {},
-        {},
-        {},
-        {},
-        {},
-        {},
-        {},
-    }
+    request:get("/schools/members"):next(function(response)
+        local data = response.data.data
+        Schoolyard:SortMembers(data)
+        -- Schoolyard.members_table = data
+        if Schoolyard.main_ui then
+            Schoolyard.main_ui:Refresh(0)
+        end
+    end):catch(function(e)
+        LOG.std(nil, "error", "Schoolyard", "GetMembers")
+    end);
 end
 
 -- 展示我的校园页面
@@ -355,6 +386,8 @@ function Schoolyard:ExitSchoolyard(name)
         local content = "你已退出" .. Schoolyard.schoolyard_name .. "！"
         GameLogic.AddBBS("CodeGlobals", content, 3000, "#00FF00");
         LOG.std(nil, "succeed", "Schoolyard", "ExitSchoolyard")
+        Schoolyard.members_table = {}
+        Schoolyard.trends_table = {}
     end):catch(function(e)
         LOG.std(nil, "error", "Schoolyard", "ExitSchoolyard")
     end);
@@ -439,6 +472,11 @@ end
 
 -- 登记学校请求
 function Schoolyard:RegisterSchoolyard(params)
+    -- todo 无效登记拦截
+    if Schoolyard.had_register_schoolyard then
+        return
+    end
+    Schoolyard.had_register_schoolyard = true
     local register_data = {
         province_code = params.search_province,
         city_code = params.search_city,
@@ -458,8 +496,11 @@ function Schoolyard:RegisterSchoolyard(params)
 
         GameLogic.AddBBS("CodeGlobals", L"学校信息提交成功，我们会尽快回复您！", 3000, "#00FF00");
         LOG.std(nil, "succeed", "Schoolyard", "RegisterSchoolyard")
+        Schoolyard.had_register_schoolyard = false
+
     end):catch(function(e)
         GameLogic.AddBBS("CodeGlobals", e.data.message, 3000, "#FF0000");
         LOG.std(nil, "error", "Schoolyard", "RegisterSchoolyard")
+        Schoolyard.had_register_schoolyard = false
     end);
 end
