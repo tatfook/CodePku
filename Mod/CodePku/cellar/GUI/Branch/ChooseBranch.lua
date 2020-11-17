@@ -58,7 +58,7 @@ ChooseBranch.HTMLStyleData = {
 function ChooseBranch:StaticInit()
     LOG.std("", "info", "ChooseBranch", "StaticInit");
 
-    GameLogic:Connect("WorldLoaded", ChooseBranch, ChooseBranch.OnWorldLoaded, "UniqueConnection");
+    -- GameLogic:Connect("WorldLoaded", ChooseBranch, ChooseBranch.OnWorldLoaded, "UniqueConnection");
     GameLogic:Connect("WorldUnloaded", ChooseBranch, ChooseBranch.OnWorldUnloaded, "UniqueConnection");
 end
 
@@ -117,30 +117,15 @@ function ChooseBranch:GetServerName(serverId)
 	return "服务器"..tostring(serverId)
 end
 
-function ChooseBranch.OnWorldLoaded()
-    -- 向GGS服务器请求数据
-    GameLogic.RunCommand("/wanxueshijie worldInfo")
-
-    -- 处理数据的计时器  因为GGS是异步获取的数据  这里弄个计时器看是否获取到了数据
-    ChooseBranch.timerNum = 0
-    ChooseBranch.dealDataTimer = commonlib.Timer:new({callbackFunc = function(timer)
-        commonlib.log({"ontimer", timer.id, timer.delta, timer.lastTick})
-        ChooseBranch.timerNum = ChooseBranch.timerNum + 1
-        if ChooseBranch.timerNum > 10 and ChooseBranch.dealDataTimer then
-            --拉取10次后还是没有获取数据就直接终止，当前世界没有分线
-            ChooseBranch.dealDataTimer:Change()
-            return
-        end
-        ChooseBranch:DealBranchStateData()
-        if ChooseBranch.timerNum == 3 then
-            GameLogic.RunCommand("/wanxueshijie worldInfo")
-        end
-        if ChooseBranch.branchStateTable and ChooseBranch.dealDataTimer then
-            ChooseBranch.dealDataTimer:Change()
-        end
-    end})
-
-    ChooseBranch.dealDataTimer:Change(0, 1000)
+--[[
+    @desc 清空原始分线数据缓存
+    time:2020-11-17 16:50:26
+]]
+function ChooseBranch:ClearBranchData()
+	-- 清空原始分线数据缓存
+    ChooseBranch.branchStateTable = nil
+    ChooseBranch.currBranchData = nil
+    commonlib.setfield("System.Codepku.branch", nil)
 end
 
 function ChooseBranch.OnWorldUnloaded()
@@ -149,10 +134,7 @@ function ChooseBranch.OnWorldUnloaded()
         ChooseBranch.dealDataTimer = nil
     end
 
-    -- 清空原始分线数据缓存
-    ChooseBranch.branchStateTable = nil
-    ChooseBranch.currBranchData = nil
-    commonlib.setfield("System.Codepku.branch", nil)
+    ChooseBranch:ClearBranchData()
 end
 
 function ChooseBranch:DealBranchStateData()
@@ -289,9 +271,7 @@ end
 function ChooseBranch:ShowPage(bShow)
     --body
     -- 清空原始分线数据缓存
-    ChooseBranch.branchStateTable = nil
-    ChooseBranch.currBranchData = nil
-    commonlib.setfield("System.Codepku.branch", nil)
+    ChooseBranch:ClearBranchData()
 
     if ChooseBranch.ui then
         ChooseBranch.ui:CloseWindow()

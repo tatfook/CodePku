@@ -291,6 +291,15 @@ function CodePku:init()
 			LOG.std(nil, "info", "codepku", "add_filter cmd_loadworld")
 			local pid = UserConsole:GetProjectId(url)
 			if pid then
+				--判定是否是ggs的世界 等于nil是因为第一次进入世界的时候逻辑处理顺序的问题
+				local isGGSConnecting = System and System.Codepku and System.Codepku.isGGSConnecting
+				if isGGSConnecting or isGGSConnecting == nil then
+					commonlib.setfield("System.Codepku.isGGSConnecting",false)
+					commonlib.setfield("System.Codepku.GGSConnected",true)
+				else
+					commonlib.setfield("System.Codepku.GGSConnected",false)
+				end
+
 				UserConsole:HandleWorldId(pid)
 				return
 			else

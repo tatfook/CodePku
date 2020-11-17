@@ -70,8 +70,9 @@ connectCodePku 145                    # 联机进入世界ID为145的世界
 connectCodePku 145 parallel           # 联机进入世界ID为145的平行世界 parallel
 ]], 
 		handler = function(cmd_name, cmd_text, cmd_params, fromEntity)		
-			local ggsCmd = string.format("/ggs connect -app=CodePku %s", cmd_text);			
-            GameLogic.RunCommand(string.format("/ggs connect -app=CodePku %s", cmd_text));
+			local ggsCmd = string.format("/ggs connect -app=CodePku %s", cmd_text)
+			commonlib.setfield("System.Codepku.isGGSConnecting",true)
+            GameLogic.RunCommand(string.format("/ggs connect -app=CodePku %s", cmd_text))
 		end,
 	}
 

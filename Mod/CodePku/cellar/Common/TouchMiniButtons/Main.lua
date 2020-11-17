@@ -287,12 +287,12 @@ function MainUIButtons:show_common_ui()
 	else
 		MainUIButtons.top_buttons[4]["bShow"] = false
 	end
-	-- local bShowBranch = commonlib.getfield("System.Codepku.branch")
-	-- if bShowBranch then
-	-- 	MainUIButtons.top_buttons[5]["bShow"] = true
-	-- else
-	-- 	MainUIButtons.top_buttons[5]["bShow"] = false
-	-- end
+	local bShowBranch = commonlib.getfield("System.Codepku.GGSConnected")
+	if bShowBranch == false then
+		MainUIButtons.top_buttons[5]["bShow"] = false
+	else
+		MainUIButtons.top_buttons[5]["bShow"] = true
+	end
 	local open_width = MainUIButtons:getWidth(MainUIButtons.top_buttons, 0)
 	local open_height = 110
 
