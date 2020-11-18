@@ -65,7 +65,7 @@ end
 -- 登录
 function NetClientHandler:Login()
     local options = self:GetClient():GetOptions();
-    options.worldKey = options.worldKey or ((options.worldId or "1").."_"..(options.worldName or "1").."_"..(options.no or "1"))
+    -- options.worldKey = options.worldKey or ((options.worldId or "1").."_"..(options.worldName or "1").."_"..(options.no or "1"))
 
     GGS.INFO(options);
     self:AddToSendQueue(Packets.PacketPlayerLogin:new():Init({
