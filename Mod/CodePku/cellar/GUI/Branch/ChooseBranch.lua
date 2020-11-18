@@ -193,6 +193,14 @@ function ChooseBranch:DealBranchStateData()
                 end
             end
         end
+
+        --排序
+        local sortFun = function ( val1, val2 )
+            local index1 =  tonumber(string.format("%03s",tostring(val1["serverId"] + 100))..string.format("%03s",tostring(val1["branchId"])))
+            local index2 =  tonumber(string.format("%03s",tostring(val2["serverId"] + 100))..string.format("%03s",tostring(val2["branchId"])))
+            return index1 < index2
+        end
+        table.sort(ChooseBranch.branchStateTable, sortFun)
         -- if ChooseBranch.jumpToWorldKey and ChooseBranch.jumpToWorldKey ~= System.Codepku.branch.currWorld.worldKey then
         --     ChooseBranch.jumpToWorldKey = nil
         --     GameLogic.AddBBS(nil, string.format("你选择的分线已满，你已进入%s", ChooseBranch:getBranchNameByWorldKey(System.Codepku.branch.currWorld.worldKey)), 3000, "255 0 0")
