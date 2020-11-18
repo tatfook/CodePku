@@ -31,6 +31,13 @@ end
 
 -- 点击头像
 function ShowUserPage(id)
+    local UserInfoPage = NPL.load("(gl)Mod/CodePku/cellar/GUI/UserInfo.lua");
+    if id == System.User.info.id then
+        UserInfoPage:ShowPage()
+    else
+        UserInfoPage:ShowPage(1, false, id);
+        -- UserInfoPage:ShowPage(1, false, id, MainUIButtons.user_asset);
+    end
     GameLogic.AddBBS("CodeGlobals", tostring(id), 3000, "#FF0000");
 end
 
@@ -64,7 +71,12 @@ end
                                 <div style="position: relative;left: 505;top: 82;width: 400;height: 50;font-family: Alibaba PuHuiTi;font-size: 48;text-align: center;color: #945e31;"><%= Eval('total_activity') %></div>
                                 <!-- <div style="position: relative;left: 505;top: 82;width: 400;height: 50;font-family: Alibaba PuHuiTi;font-size: 48;text-align: center;color: #945e31;">1234567</div> -->
                                 <!-- <div style="position: relative;left: 984;top: 76;width: 280;height: 50;font-family: zkklt;font-size: 46;color: #47753c;">在线</div> -->
-                                <div style="position: relative;left: 984;top: 76;width: 280;height: 50;font-family: zkklt;font-size: 46;color: #47753c;"><%= Eval('online_statu') %></div>
+                                <pe:if condition='<%= user.is_online == true %>'>
+                                    <div style="position: relative;left: 984;top: 76;width: 280;height: 50;font-family: zkklt;font-size: 46;color: #47753c;"><%= Eval('online_statu') %></div>
+                                </pe:if>
+                                <pe:if condition='<%= user.is_online == false %>'>
+                                    <div style="position: relative;left: 984;top: 76;width: 280;height: 50;font-family: zkklt;font-size: 46;color: #945e31;"><%= Eval('online_statu') %></div>
+                                </pe:if>
                             </div>
                             <div onclick="ShowUserPage" name="<%= Eval('user_id') %>" style="<%=format('position: relative;left:1;top:23;width: 131;height: 136;background:url(%s);', GetIcon('shoolyard_head_bot.png'))%>">
                                 <div style="<%=format('position: relative;left:7;top:5;width: 117;height: 118;background:url(%s);', user.avatar_url)%>"></div>

@@ -16,13 +16,29 @@ function GetIcon(index)
     return Schoolyard:GetImagePath(index)
 end
 
+-- 取消
 function CancleSelect()
-
+    if Schoolyard.last_select_kind == "province" then
+        Schoolyard.selected_province = {}
+        Schoolyard.selected_city = {}
+        Schoolyard.selected_area = {}
+    elseif Schoolyard.last_select_kind == "city" then
+        Schoolyard.selected_city = {}
+        Schoolyard.selected_area = {}
+    elseif Schoolyard.last_select_kind == "area" then
+        Schoolyard.selected_area = {}
+    elseif Schoolyard.last_select_kind == "school" then
+        Schoolyard.selected_school = {}
+    end
+    Close()
+    Schoolyard.join_page:Refresh(0)
+    if Schoolyard.register_page then
+        Schoolyard.register_page:Refresh(0)
+    end
 end
 
 function Close()
     page:CloseWindow()
-    CancleSelect()
     Schoolyard.select_page_show_table = nil
 end
 
@@ -69,7 +85,6 @@ function OnChoose(name)
     Schoolyard.select_page_show_table = nil
 end
 
-
 ]]>
 </script>
 <pe:container alignment="_lt" width="1920" height="1080">
@@ -79,7 +94,7 @@ end
         <div style="position: relative;width: 408;height: 85;color: #7e2f12;">
             <input type="button" value="▼" style="<%=format('position: relative;font-size: 30;color: #7e2f12;width: 408;height: 85;text-align:right;padding-top:7;padding-right:12;background:url(%s);', GetIcon('schoolyard_screening_results_02.png'))%>"/>
             <input type="text" value="<%= GetFristLabel() or ' ' %>" style="position: relative;font-family: zkklt;color: #7e2f12;font-size: 36;left: 15;top: 25;width: 145;height: 36;background:#000000;"/>
-            <div onclick="Close" style="position: relative;width: 408;height: 85;"></div>
+            <div onclick="CancleSelect" style="position: relative;width: 408;height: 85;"></div>
         </div>
         <pe:treeview style="position: relative;top: 90;width: 430;height: 541;" name='messages' DefaultNodeHeight = "80" ItemsPerLine="1" AllowPaging="false" RememberScrollPos="true" RememberLastPage="false" VerticalScrollBarStep="40">
             <pe:repeat DataSource="<%= Schoolyard.select_page_show_table %>">

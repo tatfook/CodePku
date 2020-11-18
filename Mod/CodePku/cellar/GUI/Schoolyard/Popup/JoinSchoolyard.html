@@ -11,17 +11,9 @@
 Schoolyard = NPL.load("(gl)Mod/CodePku/cellar/GUI/Schoolyard/Schoolyard.lua");
 local page = document:GetPageCtrl()
 
--- 存放用户输入的搜索内容
-Schoolyard.search_content = ""
-
-
 function ClosePage()
     Schoolyard:JoinPageSpecialClose()
-    Schoolyard.search_result = nil
-    Schoolyard.selected_province = {}
-    Schoolyard.selected_city = {}
-    Schoolyard.selected_area = {}
-    Schoolyard.selected_school = {}
+    Schoolyard:ClearData()
     Schoolyard.last_select_kind = nil
 end
 
@@ -33,13 +25,25 @@ end
 -- 搜索
 function OnSearch()
     selected_school_index = nil
+    Schoolyard.search_result = {}
+    Schoolyard.search_result_pages = {}
     local search_name = page:GetValue("search_name")
     search_name = tostring(search_name)
     Schoolyard.search_content = search_name
+    if Schoolyard.EmptyBG then
+        Schoolyard.EmptyBG:CloseWindow()
+        Schoolyard.EmptyBG = nil
+    end
+    if Schoolyard.join_page then
+        Schoolyard.join_page:CloseWindow()
+        Schoolyard.join_page = nil
+    end
+    local new_page
+    new_page = Schoolyard:ShowJoinPage()
     -- GameLogic.AddBBS("CodeGlobals", tostring(commonlib.utf8.len(Schoolyard.search_content)), 3000, "#FF0000");
     -- GameLogic.AddBBS("CodeGlobals", search_name, 3000, "#FF0000");
     local params = {
-        search_name = search_name,
+        search_name = Schoolyard.search_content,
         search_province = Schoolyard.selected_province.code,
         search_city = Schoolyard.selected_city.code,
         search_area = Schoolyard.selected_area.code,
@@ -47,7 +51,7 @@ function OnSearch()
     }
     echo("search_params")
     echo(params)
-    Schoolyard:GetSearchSchoolResult(params, page)
+    Schoolyard:GetSearchSchoolResult(params, new_page)
 end
 
 -- 选择省市区学校
@@ -94,13 +98,25 @@ end
 
 -- 登记学校
 function RegisterSchool()
-    Schoolyard.search_result = nil
-    Schoolyard.selected_province = {}
-    Schoolyard.selected_city = {}
-    Schoolyard.selected_area = {}
-    Schoolyard.selected_school = {}
+    Schoolyard:ClearData()
     Schoolyard.last_select_kind = nil
     Schoolyard:ShowRegisterPage()
+end
+
+-- 滚动条到底部了,动态加载
+function DynamicLoading()
+    if next(Schoolyard.search_result_pages)~= nil and Schoolyard.search_result_pages.current_page < Schoolyard.search_result_pages.last_page then
+        -- 发送请求
+        local params = {
+            search_name = Schoolyard.search_content,
+            search_province = Schoolyard.selected_province.code,
+            search_city = Schoolyard.selected_city.code,
+            search_area = Schoolyard.selected_area.code,
+            search_school = Schoolyard.selected_school.category,
+            current_page = Schoolyard.search_result_pages.current_page + 1,
+        }
+        Schoolyard:GetSearchSchoolResult(params, page)
+    end
 end
 
 
@@ -146,7 +162,7 @@ end
     <div style="position: relative;left: 745;top: 203;width: 460;height: 531;">
         <pe:if condition='<%= HaveResult() %>'>
         <!-- 查询到了学校 -->
-            <pe:treeview style="position: relative;width: 435;height: 531;" name='messages' DefaultNodeHeight = "80" ItemsPerLine="1" AllowPaging="false" RememberScrollPos="false" RememberLastPage="false" VerticalScrollBarStep="40">
+            <pe:treeview onscrollend="DynamicLoading" style="position: relative;width: 435;height: 531;" ItemsPerLine="1" AllowPaging="false" RememberScrollPos="true" RememberLastPage="false" VerticalScrollBarStep="40">
                 <pe:repeat DataSource="<%= GetSearchResult() %>">
                     <pe:repeatitem>
                         <!-- 选中的 -->

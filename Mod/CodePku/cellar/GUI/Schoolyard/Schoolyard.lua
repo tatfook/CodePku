@@ -31,7 +31,8 @@ Schoolyard.trends_table = {}        -- 动态列表
 
 Schoolyard.joined_schoolyard = false    -- 标记用户是否已经加入学校
 
--- 选择省市区
+Schoolyard.search_content = ""      -- 存放用户输入的搜索内容
+
 -- 省市县学校初始，用户选择后用下面的变量来接收
 Schoolyard.selected_province = {}
 Schoolyard.selected_city = {}
@@ -41,6 +42,16 @@ Schoolyard.selected_school = {}
 -- 返回图片path
 function Schoolyard:GetImagePath(index)
     return schoolyardImageData:GetIconUrl(index)
+end
+
+-- 清除数据
+function Schoolyard:ClearData()
+    Schoolyard.search_result = {}
+    Schoolyard.search_result_pages = {}
+    Schoolyard.selected_province = {}
+    Schoolyard.selected_city = {}
+    Schoolyard.selected_area = {}
+    Schoolyard.selected_school = {}
 end
 
 -- 获取地址树
@@ -164,7 +175,7 @@ end
 -- 搜索学校
 function Schoolyard:GetSearchSchoolResult(params, page)
     -- 拼接查询字符串
-    local path = "/schools?page=1&per_page=50"
+    local path = "/schools?per_page=50"
     if params.search_province then
         path = path .. "&province_code=" .. tostring(params.search_province)
     end
@@ -180,17 +191,28 @@ function Schoolyard:GetSearchSchoolResult(params, page)
     if params.search_name then
         path = path .. "&keyword=" .. tostring(params.search_name)
     end
+    if params.current_page then
+        path = path .. "&page=" .. tostring(params.current_page)
+    else
+        path = path .. "&page=1"
+    end
     request:get(path):next(function(response)
         local data = response.data.data
         if next(data) == nil then
             GameLogic.AddBBS("CodeGlobals", L"未搜索到该学校，请输入更精确的搜索内容，或手动筛选！", 3000, "#FF0000")
+            Schoolyard.search_result = {}
+            Schoolyard.search_result_pages =  {}
+            if page then
+                page:Refresh(0)
+            end
             return
         end
         for k,v in pairs(data) do
             local contents_num = commonlib.utf8.len(v.name)
-            data[k].contents_num = contents_num
+            v.contents_num = contents_num
+            table.insert(Schoolyard.search_result, v)
         end
-        Schoolyard.search_result = data
+        Schoolyard.search_result_pages = response.data.pages
         if page then
             page:Refresh(0)
         end
@@ -257,23 +279,36 @@ end
 
 -- 我的校园成员排序
 function Schoolyard:SortMembers(data)
-    -- todo 离线时间计算
+    -- 离线时间计算
     local function GetOnlineStatu(last_offline_at)
         if last_offline_at == nil then
-            return "在线"
+            return "离线"
         end
         local now_date = os.date("%Y-%m-%d %H:%M:%S", os.time())
         -- local result = commonlib.GetMillisecond_BetweenToDate(data,now_date)
         local day,hours,minutes,seconds,time_str,total_mill = commonlib.GetTimeStr_BetweenToDate(last_offline_at,now_date)
-        echo("commonlib.GetTimeStr_BetweenToDate(last_offline_at,now_date)")
-        echo(day)
-        echo(hours)
-        echo(minutes)
-        echo(seconds)
-        echo(time_str)
-        echo(total_mill)
-        return "在线"
+        if day > 0 then
+            if day < 31 then
+                return tostring(day) .. "天前"
+            elseif day < 365 then
+                return tostring(math.modf(day/30)) .. "月前"
+            else
+                return tostring(math.modf(day/365)) .. "年前"
+            end
+        elseif hours > 0 then
+            return tostring(hours) .. "小时前"
+        elseif minutes > 0 then
+            return tostring(minutes) .. "分钟前"
+        else
+            return "离线"
+        end
     end
+
+    -- todo排序
+    local function Sort()
+
+    end
+
     local user_id = System.User.info.id
     for k,v in pairs(data) do
         local temp_table = v
@@ -343,6 +378,7 @@ function Schoolyard:ShowJoinPage()
         alignment="_lt", left = 330, top = 82, width = 1312 , height = 832, zorder = 22
     };
     self.join_page = AdaptWindow:QuickWindow(params)
+    return self.join_page
 end
 
 -- 加入页面有输入框，需要把两个窗口都关掉
@@ -365,12 +401,11 @@ function Schoolyard:JoinSchoolyard(id, name)
         school_id = id
     }
     request:post('/schools/join', params):next(function(response)
+        -- 关闭页面
         Schoolyard:JoinPageSpecialClose()
-        Schoolyard.search_result = nil
-        Schoolyard.selected_province = {}
-        Schoolyard.selected_city = {}
-        Schoolyard.selected_area = {}
-        Schoolyard.selected_school = {}
+        -- 清除数据
+        Schoolyard:ClearData()
+        -- 获取我的校园信息
         Schoolyard:GetMySchoolyardInfo(Schoolyard.main_ui)
         local content = "恭喜您！成功加入" .. name .. "！"
         GameLogic.AddBBS("CodeGlobals", content, 3000, "#00FF00");
@@ -486,12 +521,11 @@ function Schoolyard:RegisterSchoolyard(params)
     }
 
     request:post('/schools/registration', register_data):next(function(response)
+        -- 关闭页面
         Schoolyard:CloseRegisterPage()
-        Schoolyard.search_result = nil
-        Schoolyard.selected_province = {}
-        Schoolyard.selected_city = {}
-        Schoolyard.selected_area = {}
-        Schoolyard.selected_school = {}
+        -- 清除数据
+        Schoolyard:ClearData()
+        -- todo 获取我的校园信息，忘了为啥要加，有时间来看看
         Schoolyard:GetMySchoolyardInfo(Schoolyard.main_ui)
 
         GameLogic.AddBBS("CodeGlobals", L"学校信息提交成功，我们会尽快回复您！", 3000, "#00FF00");
