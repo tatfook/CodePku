@@ -42,11 +42,11 @@ InviteCode.inviteRecords = {
 }
 
 function OnclickCopyCode()
-    copy(InviteCode.myInvateCode)
+    InviteCode.InviteCopy(InviteCode.myInvateCode)
 end
 
 function OnclickInviteFriends()
-InviteCode:Share()
+    InviteCode.InviteShare()
 end
 
 ]]>
@@ -145,7 +145,7 @@ end
     <div onclick="OnclickCopyCode" style="<%=format('position: relative; left: 1323; top: 854; width: 179; height: 61; background:url(%s);', InviteCode.GetIconUrl('invite_popup_btn_blue.png'))%>">
         <div style="<%=format('position: relative; left: 18; top: 15; width: 143; height: 30; background:url(%s);', InviteCode.GetIconUrl('invite_popup_btn_text_copy.png'))%>"></div>
     </div>
-    <pe:if condition="<%= System.os.IsMobilePlatform() or true%>">  
+    <pe:if condition="<%= System.os.IsMobilePlatform() %>">  
         <!-- TODO分享 -->
         <div onclick="OnclickInviteFriends" style="<%=format('position: relative; left: 1540; top: 854; width: 179; height: 61; background:url(%s);', InviteCode.GetIconUrl('invite_popup_btn_red.png'))%>">
             <div style="<%=format('position: relative; left: 32; top: 15; width: 114; height: 30; background:url(%s);', InviteCode.GetIconUrl('invite_popup_btn_text_invite.png'))%>"></div>

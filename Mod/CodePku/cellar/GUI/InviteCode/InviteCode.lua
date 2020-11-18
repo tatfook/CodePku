@@ -2,7 +2,6 @@
 local InviteCode = NPL.load("(gl)Mod/CodePku/cellar/GUI/InviteCode/InviteCode.lua")
 --]]
 local AdaptWindow = commonlib.gettable("Mod.CodePku.GUI.Window.AdaptWindow");
-local Share = NPL.load("(gl)Mod/CodePkuCommon/util/Share.lua");
 local inviteImageData = NPL.load("(gl)Mod/CodePku/cellar/imageLuaTable/inviteImageData.lua")
 local mainFrameImageData = NPL.load("(gl)Mod/CodePku/cellar/imageLuaTable/mainFrameImageData.lua")
 
@@ -33,12 +32,17 @@ function InviteCode:ShowPage()
     AdaptWindow:QuickWindow(params)
 end
 
-function InviteCode:Share()
-    Share("url", {
-        url = "https://www.codepku.com",
+function InviteCode.InviteCopy(text)
+    ParaMisc.CopyTextToClipboard(text)
+end
+
+function InviteCode.InviteShare()
+    local Share = NPL.load("(gl)Mod/CodePkuCommon/util/Share.lua");
+    Share:fire("url", {
+        url = "https://www.wanxueshijie.com/",
         title = "玩学世界",
-        desc = "描述",
-        thumb = "http://gamecdn.codepku.com/images/official/index/logo.png"
+        desc = "https://scratch-works-staging-1253386414.file.myqcloud.com/game/admin/posters/a3b546dfab2d174b4a2ca4ae1454d484.jpg",
+        thumb = "邀请码活动"
     }, {
         onStart = function(e)
         -- 开始分享
