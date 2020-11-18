@@ -77,8 +77,14 @@ function ChooseBranch:GetServerData()
                 server.type = j.type
                 server.name = j.name
                 server.status = j.status
+                server.cluster = j.cluster
                 if j.type == 2 then
-                    ChooseBranch.serverData[j.id] = server
+                    if ChooseBranch.serverData[j.cluster] then
+                        ChooseBranch.serverData[j.cluster][j.id] = server
+                    else
+                        ChooseBranch.serverData[j.cluster] = {}
+                        ChooseBranch.serverData[j.cluster][j.id] = server
+                    end
                 end
             end
         end
@@ -88,7 +94,7 @@ function ChooseBranch:GetServerData()
 end
 
 function ChooseBranch:GetBranchStateIconHTML(branchId, ip, port)
-    local serverId = ChooseBranch:GetServerId(ip, port)
+    local serverId = ChooseBranch:GetServerId(ip, port, ChooseBranch:GetCurrCluster())
     
     for k,v in pairs(ChooseBranch.branchStateTable) do
         if v["serverId"] == serverId and v["branchId"] == branchId then
@@ -104,9 +110,9 @@ function ChooseBranch:GetBranchStateIconHTML(branchId, ip, port)
     end
 end
 
-function ChooseBranch:GetServerId(ip, port)
+function ChooseBranch:GetServerId(ip, port, cluster)
     --todo
-    for k,v in pairs(ChooseBranch.serverData) do
+    for k,v in pairs(ChooseBranch.serverData[cluster]) do
         if v.ip == tostring(ip) and v.port == tostring(port) then
             return v.id
         end
@@ -137,9 +143,21 @@ function ChooseBranch.OnWorldUnloaded()
     ChooseBranch:ClearBranchData()
 end
 
+function ChooseBranch:GetCurrCluster()
+    -- 站到最后联机世界集群用2  其余都是1
+    local currWorldId = System and System.Codepku and System.Codepku.Coursewares and System.Codepku.Coursewares.keepwork_project_id
+    local currCluster = 1
+    if currWorldId == 25161 then
+        currCluster = 2
+    end
+    return currCluster
+end
+
 function ChooseBranch:DealBranchStateData()
     -- todo   一堆逻辑要写
     local currWorldName = System and System.Codepku and System.Codepku.Coursewares and System.Codepku.Coursewares.name
+
+    
     if System.Codepku and System.Codepku.branch and System.Codepku.branch.worldInfo and System.Codepku.branch.currWorld and System.Codepku.branch.currServer then
         -- 当前所在世界的worldkey  用来判定当前ggs的服务器数据
         -- todo 记得这个数据来判定当前世界的分支数据
@@ -156,7 +174,7 @@ function ChooseBranch:DealBranchStateData()
         ChooseBranch.currBranchData["worldName"] = currInfo[2]
         ChooseBranch.currBranchData["branchId"] = tonumber(currInfo[3])
         ChooseBranch.currBranchData["currWorldName"] = currWorldName
-        ChooseBranch.currBranchData["serverId"] = ChooseBranch:GetServerId(System.Codepku.branch.currServer["outerIp"], System.Codepku.branch.currServer["outerPort"])
+        ChooseBranch.currBranchData["serverId"] = ChooseBranch:GetServerId(System.Codepku.branch.currServer["outerIp"], System.Codepku.branch.currServer["outerPort"], ChooseBranch:GetCurrCluster())
         ChooseBranch.currBranchData["ip"] = System.Codepku.branch.currServer["outerIp"]
         ChooseBranch.currBranchData["port"] = System.Codepku.branch.currServer["outerPort"]
 
@@ -185,7 +203,7 @@ function ChooseBranch:DealBranchStateData()
                             ["playerNum"] = tonumber(playerNum),
                             ["maxPlayerNum"] = tonumber(maxPlayerNum),
                             -- ["maxPlayerNum"] = 5,
-                            ["serverId"] = ChooseBranch:GetServerId(value["outerIp"], value["outerPort"]),
+                            ["serverId"] = ChooseBranch:GetServerId(value["outerIp"], value["outerPort"], ChooseBranch:GetCurrCluster()),
                             ["ip"] = value["outerIp"],
                             ["port"] = value["outerPort"],
                         } 
@@ -195,12 +213,14 @@ function ChooseBranch:DealBranchStateData()
         end
 
         --排序
-        local sortFun = function ( val1, val2 )
-            local index1 =  tonumber(string.format("%03s",tostring(val1["serverId"] + 100))..string.format("%03s",tostring(val1["branchId"])))
-            local index2 =  tonumber(string.format("%03s",tostring(val2["serverId"] + 100))..string.format("%03s",tostring(val2["branchId"])))
-            return index1 < index2
-        end
-        table.sort(ChooseBranch.branchStateTable, sortFun)
+        -- local sortFun = function ( val1, val2 )
+        --     local index1 = tonumber(string.format("%03s",tostring(tonumber(val1["serverId"]) + 100))..string.format("%03s",tostring(val1["branchId"])))
+        --     local index2 = tonumber(string.format("%03s",tostring(tonumber(val2["serverId"]) + 100))..string.format("%03s",tostring(val2["branchId"])))
+        --     return index1 < index2
+        -- end
+        -- if #ChooseBranch.branchStateTable > 1 then
+            -- table.sort(ChooseBranch.branchStateTable, sortFun)
+        -- end
         -- if ChooseBranch.jumpToWorldKey and ChooseBranch.jumpToWorldKey ~= System.Codepku.branch.currWorld.worldKey then
         --     ChooseBranch.jumpToWorldKey = nil
         --     GameLogic.AddBBS(nil, string.format("你选择的分线已满，你已进入%s", ChooseBranch:getBranchNameByWorldKey(System.Codepku.branch.currWorld.worldKey)), 3000, "255 0 0")
