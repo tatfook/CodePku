@@ -20,16 +20,54 @@ function ClosePage()
     Schoolyard.main_ui:CloseWindow()
 end
 
+-- 获取动态数据
+function GetTrendsResult()
+    return Schoolyard:GetTrends()
+end
+
 ]]>   
 </script>
 <style type="text/mcss">
 </style>
 
-    <div style="width: 1500;height: 900;background-color: #f70909a4;">
-        <div style="<%=format('position:relative;left:76;top: 42;width:1372;height:872;background:url(%s);', GetIcon('shoolyard_comm_bot.png'))%>">
-        
+<div style="width: 1500;height: 900;">
+    <div style="<%=format('position:relative;left:76;top: 42;width:1372;height:872;font-family: alhy;font-size: 48;color: #945e31;background:url(%s);', GetIcon('shoolyard_comm_bot.png'))%>">
+        <div style="<%=format('position:relative;left:57;top: -73;width:322;height:113;background:url(%s);', GetIcon('shoolyard_pagingtag_01.png'))%>">
+            <div style="position: relative;left: 125;top: 40;">动 态</div>
+        </div>
+
+        <div style="<%=format('position:relative;left:929;top: -73;width:322;height:113;background:url(%s);', GetIcon('shoolyard_pagingtag_02.png'))%>">
+            <div style="position: relative;left: 102;top: 40;">日 期</div>
         </div>
     </div>
+
+<!-- 动态 -->
+    <div style="position: relative;left: 36;top: 91;width: 1383;height: 781;">
+    
+        <pe:treeview onscrollend="DynamicLoading" style="position: relative;width: 1405;height: 781;" name='messages' DefaultNodeHeight = "185" ItemsPerLine="1" AllowPaging="false" RememberScrollPos="true" RememberLastPage="false" VerticalScrollBarStep="40">
+            <pe:repeat DataSource="<%= GetMembersResult() %>">
+                <pe:repeatitem>
+                    <div style="width: 1383;height: 185;margin-bottom: -10;">
+                        <div name="<%= Eval('index') %>" style="<%=format('position: relative;left:89;width: 1295;height: 185;background:url(%s);', GetIcon('shoolyard_member_mat_bot.png'))%>">
+                            <div style="position: relative;left: 57;top: 36;width: 200;height: 50;font-family: Impact;font-size: 48;color: #b36f14;"><%= Eval('level') %></div>
+                            <div style="position: relative;left: 57;top: 100;width: 370;height: 50;font-family: zkklt;font-size: 42;color: #945e31;"><%= user.nickname %></div>
+                            <div style="position: relative;left: 505;top: 82;width: 400;height: 50;font-family: Alibaba PuHuiTi;font-size: 48;text-align: center;color: #945e31;"><%= Eval('total_activity') %></div>
+                            <pe:if condition='<%= user.is_online == true %>'>
+                                <div style="position: relative;left: 984;top: 76;width: 280;height: 50;font-family: zkklt;font-size: 46;color: #47753c;"><%= Eval('online_statu') %></div>
+                            </pe:if>
+                            <pe:if condition='<%= user.is_online == false %>'>
+                                <div style="position: relative;left: 984;top: 76;width: 280;height: 50;font-family: zkklt;font-size: 46;color: #945e31;"><%= Eval('online_statu') %></div>
+                            </pe:if>
+                        </div>
+                        <div onclick="ShowUserPage" name="<%= Eval('user_id') %>" style="<%=format('position: relative;left:1;top:23;width: 131;height: 136;background:url(%s);', GetIcon('shoolyard_head_bot.png'))%>">
+                            <div style="<%=format('position: relative;left:7;top:5;width: 117;height: 118;background:url(%s);', user.avatar_url)%>"></div>
+                        </div>
+                    </div>
+                </pe:repeatitem>
+            </pe:repeat>
+        </pe:treeview>
+    </div>
+</div>
 
 </pe:mcml>
 </body>

@@ -157,13 +157,13 @@ function Schoolyard:GetMySchoolyardInfo(page)
             -- local province, city, district = Schoolyard:GetNameByCode(data.province_code, data.city_code, data.district_code)
             Schoolyard.joined_schoolyard = true     -- 是否已经有组织了
             Schoolyard.schoolyard_avatar = "https://cdn.codepku.com//img/default_avatar/0714/20180714163534.png"    -- 学校头像
-            Schoolyard.week_rank = data.weekly_activity        -- 学校周活跃排行
-            Schoolyard.total_rank = data.total_activity       -- 学校总活跃排行
             Schoolyard.schoolyard_name = data.name       -- 学校名字
             Schoolyard.schoolyard_address = (data.district.full_name .. data.name) or "未知"      -- 学校位置
             Schoolyard.number_of_people = data.members_count      -- 学校人数
-            Schoolyard.schoolyard_level = "Lv.999"        -- 学校等级
-            Schoolyard.schoolyard_vitality = 123123123      -- 学校周活跃度
+            Schoolyard.schoolyard_level = "Lv." .. (data.level and tostring(data.level) or "999")        -- 学校等级
+            Schoolyard.schoolyard_vitality = data.weekly_activity     -- 学校周活跃度
+            Schoolyard.week_rank = 1        -- 学校周活跃排行
+            Schoolyard.total_rank = 1       -- 学校总活跃排行
 
             page:Refresh(0)
         end
@@ -335,6 +335,12 @@ function Schoolyard:GetMembers()
     end):catch(function(e)
         LOG.std(nil, "error", "Schoolyard", "GetMembers")
     end);
+end
+
+-- 我的校园动态
+function Schoolyard:GetTrends()
+    Schoolyard.trends_table = {}
+    return Schoolyard.trends_table
 end
 
 -- 展示我的校园页面
