@@ -115,6 +115,8 @@ function GeneralGameClient:LoadWorld(opts, loadworld)
     else
         self:OnWorldLoaded()
     end
+
+    commonlib.setfield("System.Codepku.isGGSConnecting",false)
 end
 
 -- 获取主玩家类

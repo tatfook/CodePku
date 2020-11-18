@@ -173,7 +173,6 @@ function MainUIButtons:show_main_open_ui()
 			MainUIButtons.main_open = MainUIButtons.main_open_mobile_plus
 		end
 	else
-		
 		if bShowBranch == false then
 			open_heght = 176
 			open_width = 530
