@@ -85,10 +85,24 @@ MainUIButtons.main_open_pc = {
 	[3]={url=mainFrameImageData:GetIconUrl("main_icon_1.png"),top=6,width=100,height=111,left=53,name="ClickFeedback",bShow=true,},
 }
 
+MainUIButtons.main_open_pc_plus = {
+	[1]={url=mainFrameImageData:GetIconUrl("main_icon_3.png"),top=13,width=122,height=109,left=31,name="ClickSamllMap",bShow=true,},
+	[2]={url=mainFrameImageData:GetIconUrl("main_icon_2.png"),top=15,width=164,height=107,left=18,name="ClickAntiJamming",bShow=true,},
+	[3]={url=mainFrameImageData:GetIconUrl("main_icon_1.png"),top=11,width=100,height=111,left=18,name="ClickFeedback",bShow=true,},
+	[4]={url=mainFrameImageData:GetIconUrl("main_icon_4.png"),top=11,width=144,height=111,left=18,name="ClickChangeBranch",bShow=true,},
+}
+
 MainUIButtons.main_open_mobile = {
 	[1]={url=mainFrameImageData:GetIconUrl("main_icon_3_p.png"),top=20,width=157,height=147,left=53,name="ClickSamllMap",bShow=true,},
 	[2]={url=mainFrameImageData:GetIconUrl("main_icon_2_p.png"),top=20,width=213,height=145,left=36,name="ClickAntiJamming",bShow=true,},
 	[3]={url=mainFrameImageData:GetIconUrl("main_icon_1_p.png"),top=20,width=129,height=151,left=36,name="ClickFeedback",bShow=true,},
+}
+
+MainUIButtons.main_open_mobile_plus = {
+	[1]={url=mainFrameImageData:GetIconUrl("main_icon_3_p.png"),top=9,width=157,height=147,left=37,name="ClickSamllMap",bShow=true,},
+	[2]={url=mainFrameImageData:GetIconUrl("main_icon_2_p.png"),top=11,width=213,height=145,left=23,name="ClickAntiJamming",bShow=true,},
+	[3]={url=mainFrameImageData:GetIconUrl("main_icon_1_p.png"),top=5,width=129,height=151,left=23,name="ClickFeedback",bShow=true,},
+	[4]={url=mainFrameImageData:GetIconUrl("main_icon_4_p.png"),top=6,width=206,height=155,left=23,name="ClickChangeBranch",bShow=true,},
 }
 
 MainUIButtons.activity = {
@@ -148,12 +162,27 @@ function MainUIButtons:show_main_open_ui()
 	end
 	local open_heght = 250
 	local open_width = 688
+	local bShowBranch = commonlib.getfield("System.Codepku.GGSConnected")
 	if System.os.IsMobilePlatform() then
 		MainUIButtons.main_open = MainUIButtons.main_open_mobile
+		if bShowBranch == false then
+			MainUIButtons.main_open = MainUIButtons.main_open_mobile
+		else
+			open_heght = 237
+			open_width = 838
+			MainUIButtons.main_open = MainUIButtons.main_open_mobile_plus
+		end
 	else
-		open_heght = 176
-		open_width = 530
-		MainUIButtons.main_open = MainUIButtons.main_open_pc
+		
+		if bShowBranch == false then
+			open_heght = 176
+			open_width = 530
+			MainUIButtons.main_open = MainUIButtons.main_open_pc
+		else
+			open_heght = 175
+			open_width = 646
+			MainUIButtons.main_open = MainUIButtons.main_open_pc_plus
+		end
 	end
 	local open_left = 1920*0.5 - open_width*0.5
 	local params = {
