@@ -116,6 +116,9 @@ function GeneralGameClient:LoadWorld(opts, loadworld)
         self:OnWorldLoaded()
     end
 
+    -- 分线链接结束之后将manual置位空
+    options.manual = nil
+    --ggs链接结束之后将链接中变量置位false
     commonlib.setfield("System.Codepku.isGGSConnecting",false)
 end
 

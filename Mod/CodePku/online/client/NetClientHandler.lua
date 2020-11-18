@@ -99,3 +99,25 @@ end
 function NetClientHandler:handlePlayerLogout(packetPlayerLogout)
     self._super.handlePlayerLogout(self, packetPlayerLogout)
 end
+
+-- 玩家离线状态
+function NetClientHandler:Offline()
+    -- self._super.Offline(self, packetPlayerLogout)
+    -- -- 清除其它玩家
+    self:GetPlayerManager():ClearPlayers();
+
+    -- 调整当前玩家样式
+    if (not self:GetPlayer()) then return end;
+    
+    -- 分线切换的时候不切换为灰色名字
+    if tonumber(self:GetClient():GetOptions().manual) ~= 1 then
+        -- 灰化用户名
+        self:GetPlayer():SetHeadOnDisplay({url=ParaXML.LuaXML_ParseString(string.format([[
+        <pe:mcml>
+            <div style="width: 200px; margin-left: -100px; margin-top:-40px;">
+                <div style="text-align:center; color: #b1b1b1; base-font-size:20px; font-size:20px;">%s</div>
+                <div style="text-align:center; color: #ff0000; base-font-size:14px; font-size:14px;">已掉线, 处于离线模式中.</div>
+            </div>
+        </pe:mcml>]], self:GetUserName()))});
+    end
+end
