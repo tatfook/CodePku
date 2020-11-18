@@ -87,7 +87,7 @@ function GeneralGameClient:LoadWorld(opts, loadworld)
     options.manual = opts.manual    -- 每次刷新是否主动切换世界数据(是否是在分线界面跳转的世界连接)
 
     --当跳转分线的时候才强制初始化options.worldkey,其余的时候不用
-    if options.manual == 1 then
+    if tonumber(options.manual) == 1 then
         options.worldKey = opts.worldKey or ((options.worldId or "1").."_"..(options.worldName or "1").."_"..(options.no or "1")) -- worldKey每次重写
     else
         options.worldKey = opts.worldKey

@@ -65,7 +65,13 @@ end
 -- 登录
 function NetClientHandler:Login()
     local options = self:GetClient():GetOptions();
-    -- options.worldKey = options.worldKey or ((options.worldId or "1").."_"..(options.worldName or "1").."_"..(options.no or "1"))
+
+    --当跳转分线的时候才强制初始化options.worldkey,其余的时候不用,因为在一开始初始化的worldkey中途被置空了  这里重新生成下
+    if tonumber(options.manual) == 1 then
+        options.worldKey = options.worldKey or ((options.worldId or "1").."_"..(options.worldName or "1").."_"..(options.no or "1")) -- worldKey每次重写
+    else
+        options.worldKey = options.worldKey
+    end
 
     GGS.INFO(options);
     self:AddToSendQueue(Packets.PacketPlayerLogin:new():Init({
