@@ -35,9 +35,9 @@ function turnToWorld()
         return
     end
     if System.Codepku.Coursewares.course_category == 1 then
-        GameLogic.RunCommand("/loadworld 15855")
+        GameLogic.RunCommand("/connectCodePku 15855")
     elseif System.Codepku.Coursewares.course_category == 2 then
-        GameLogic.RunCommand("/loadworld 15857")    
+        GameLogic.RunCommand("/connectCodePku 15857")    
     elseif System.Codepku.Coursewares.course_category == 3 then
         if System.Codepku.Coursewares.keepwork_project_id == 25161 then
             if MainPopup.STEWindow then MainPopup.STEWindow:CloseWindow() end
