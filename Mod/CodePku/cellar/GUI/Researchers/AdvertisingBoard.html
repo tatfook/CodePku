@@ -13,10 +13,16 @@ local page = document:GetPageCtrl()
 
 function ClickChallenge()
     -- 我要挑战
+    page:CloseWindow()
+    GameLogic.GetFilters():apply_filters("ClickStatistics", {track_id= 47, track_scene =13, track_type=0, })
+    CommonFunc.ConnectStandToEnd()
 end
 
 function ClickRaffle()
     -- 我要抽奖
+    GameLogic.GetFilters():apply_filters("ClickStatistics", {track_id= 48, track_scene =13, track_type=0, })
+    local url = "http://game.dev.codepku.com/h5/event/standing-challenge"
+    CommonFunc.OpenUrl(url, true, 'portrait')
 end
 
 function OnclickClose()
@@ -37,7 +43,7 @@ end
     <!-- 背景 -->
     <div style="<%=format('position: relative; left: 42; top: 0; width: 1816; height: 1072; background:url(%s);', GetIcon('sharebot.png'))%>">
         <!-- 海报 -->
-        <div style="<%=format('position: relative; left: 270; top: 113; width: 1378; height: 767; background:url(%s);', GetUrl())%>"></div>
+        <div style="position: relative; left: 270; top: 113; width: 1378; height: 767; background:url(codepku/image/textures/share_app/challenge_background.png);"></div>
     </div>
     <!-- 关闭 -->
     <div style="<%=format('position: relative; left: 1637; top: 16; width: 278; height: 175; background:url(%s);', GetIcon('tape.png'))%>"></div>
