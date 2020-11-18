@@ -213,14 +213,24 @@ function ChooseBranch:DealBranchStateData()
         end
 
         --排序
-        -- local sortFun = function ( val1, val2 )
-        --     local index1 = tonumber(string.format("%03s",tostring(tonumber(val1["serverId"]) + 100))..string.format("%03s",tostring(val1["branchId"])))
-        --     local index2 = tonumber(string.format("%03s",tostring(tonumber(val2["serverId"]) + 100))..string.format("%03s",tostring(val2["branchId"])))
-        --     return index1 < index2
-        -- end
-        -- if #ChooseBranch.branchStateTable > 1 then
-            -- table.sort(ChooseBranch.branchStateTable, sortFun)
-        -- end
+        local sortFun = function ( val1, val2 )
+            local result = false
+            if val1["serverId"] < val2["serverId"] then
+                result = true
+            elseif val1["serverId"] > val2["serverId"] then
+                result = false
+            else
+                if val1["branchId"] < val2["branchId"] then
+                    result = true
+                else
+                    result = false
+                end
+            end
+            return result
+        end
+        if #ChooseBranch.branchStateTable > 1 then
+            table.sort(ChooseBranch.branchStateTable, sortFun)
+        end
         -- if ChooseBranch.jumpToWorldKey and ChooseBranch.jumpToWorldKey ~= System.Codepku.branch.currWorld.worldKey then
         --     ChooseBranch.jumpToWorldKey = nil
         --     GameLogic.AddBBS(nil, string.format("你选择的分线已满，你已进入%s", ChooseBranch:getBranchNameByWorldKey(System.Codepku.branch.currWorld.worldKey)), 3000, "255 0 0")
@@ -266,8 +276,18 @@ function ChooseBranch:getBranchName(branchId, serverId)
     if not branchId or not serverId then
         return "未知世界"
     end
-    local branchName = string.format("%03s",tostring(branchId))
+    -- local branchName = string.format("%03s",tostring(branchId))
+    --安卓端直接用上边的会出问题 补全的0会被替换成空格
+    local branchName = ""
+    if branchId > 99 then
+        branchName = tostring(branchId)
+    elseif branchId > 9 then
+        branchName = "0"..tostring(branchId)
+    else
+        branchName = "00"..tostring(branchId)
+    end
     local serverName = string.format("%03s",tostring(serverId + 100))
+    echo("branchName = "..tostring(branchName).."    serverName = "..tostring(serverName))
     -- local serverName = (string.format("%0.1f",tostring(serverId)):gsub("%.",""))
     local showName = serverName..branchName.."线"
     return showName
