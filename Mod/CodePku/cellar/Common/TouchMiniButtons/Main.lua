@@ -379,7 +379,7 @@ end
 function MainUIButtons.show_home_window_ui()
 	local params = {
 		url = "Mod/CodePku/cellar/Common/TouchMiniButtons/MainUIButtons_home_window.html",
-		alignment = "_lt", left = 1592, top = 250, width = 150, height = 355,
+		alignment = "_lt", left = 1392, top = 250, width = 350, height = 355,
 	}
 
 	local isHome = HomeManage:IsMyHome()
