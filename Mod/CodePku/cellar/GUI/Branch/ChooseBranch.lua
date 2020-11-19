@@ -189,25 +189,27 @@ function ChooseBranch:DealBranchStateData()
                 for each in string.gmatch(k, "%d+") do
                     table.insert( refInfo, each )
                 end
-                local worldId = tonumber(refInfo[1])
-                local worldName = refInfo[2]
-                local branchId = tonumber(refInfo[3])
-                local playerNum = v and tonumber(v.online_client_count)
-                local maxPlayerNum = v and tonumber(v.max_client_count)
-                if worldId == tonumber(ChooseBranch.currBranchData["worldId"]) and worldName == ChooseBranch.currBranchData["worldName"] then -- and playerNum > 0 then
-                    table.insert( ChooseBranch.branchStateTable,
-                        {   
-                            ["worldId"] = tonumber(worldId),
-                            ["worldName"] = worldName,
-                            ["branchId"] = tonumber(branchId),
-                            ["playerNum"] = tonumber(playerNum),
-                            ["maxPlayerNum"] = tonumber(maxPlayerNum),
-                            -- ["maxPlayerNum"] = 5,
-                            ["serverId"] = ChooseBranch:GetServerId(value["outerIp"], value["outerPort"], ChooseBranch:GetCurrCluster()),
-                            ["ip"] = value["outerIp"],
-                            ["port"] = value["outerPort"],
-                        } 
-                    )
+                if #refInfo == 3 then
+                    local worldId = tonumber(refInfo[1])
+                    local worldName = refInfo[2]
+                    local branchId = tonumber(refInfo[3])
+                    local playerNum = v and tonumber(v.online_client_count)
+                    local maxPlayerNum = v and tonumber(v.max_client_count)
+                    if worldId == tonumber(ChooseBranch.currBranchData["worldId"]) and worldName == ChooseBranch.currBranchData["worldName"] then -- and playerNum > 0 then
+                        table.insert( ChooseBranch.branchStateTable,
+                            {   
+                                ["worldId"] = tonumber(worldId),
+                                ["worldName"] = worldName,
+                                ["branchId"] = tonumber(branchId),
+                                ["playerNum"] = tonumber(playerNum),
+                                ["maxPlayerNum"] = tonumber(maxPlayerNum),
+                                -- ["maxPlayerNum"] = 5,
+                                ["serverId"] = ChooseBranch:GetServerId(value["outerIp"], value["outerPort"], ChooseBranch:GetCurrCluster()),
+                                ["ip"] = value["outerIp"],
+                                ["port"] = value["outerPort"],
+                            } 
+                        )
+                    end
                 end
             end
         end
@@ -229,6 +231,7 @@ function ChooseBranch:DealBranchStateData()
             return result
         end
         if #ChooseBranch.branchStateTable > 1 then
+            -- echo(ChooseBranch.branchStateTable)
             table.sort(ChooseBranch.branchStateTable, sortFun)
         end
         -- if ChooseBranch.jumpToWorldKey and ChooseBranch.jumpToWorldKey ~= System.Codepku.branch.currWorld.worldKey then
