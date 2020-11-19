@@ -361,7 +361,50 @@ function Schoolyard:GetMembers(current_page, page)
 end
 
 -- 我的校园动态
-function Schoolyard:GetTrends()
+function Schoolyard:GetTrends(current_page, page)
+    local function GetTrendsTime(datatime)
+        if datatime == nil then
+            return "离线"
+        end
+        local now_date = os.date("%Y-%m-%d %H:%M:%S", os.time())
+        -- local result = commonlib.GetMillisecond_BetweenToDate(data,now_date)
+        local day,hours,minutes,seconds,time_str,total_mill = commonlib.GetTimeStr_BetweenToDate(datatime,now_date)
+        if day > 0 then
+            if day < 31 then
+                return tostring(day) .. "天前"
+            elseif day < 365 then
+                return tostring(math.modf(day/30)) .. "月前"
+            else
+                return tostring(math.modf(day/365)) .. "年前"
+            end
+        elseif hours > 0 then
+            return tostring(hours) .. "小时前"
+        elseif minutes > 0 then
+            return tostring(minutes) .. "分钟前"
+        else
+            return "离线"
+        end
+    end
+    local path = "/schools/dynamics"
+    request:get(path):next(function(response)
+        local data = response.data.data
+        Schoolyard.trends_table_pages = response.data.pages
+        for k, v in pairs(data) do
+            local temp = v
+            temp.happended_at = GetTrendsTime(v.behavior.happended_at)
+            temp.action_text = v.behavior.action_text
+            
+        end
+
+
+        if page then
+            page:Refresh(0)
+        end
+        Schoolyard.get_school_Trends = false
+    end):catch(function(e)
+        LOG.std(nil, "error", "Schoolyard", "GetTrends")
+        Schoolyard.get_school_Trends = false
+    end);
     Schoolyard.trends_table = {}
 end
 
