@@ -83,6 +83,10 @@ function GeneralGameClient:LoadWorld(opts, loadworld)
     options.serverIp = (opts.serverIp and opts.serverIp ~= "") and opts.serverIp or Config.defaultOnlineServer.host;
     options.serverPort = (opts.serverPort and opts.serverPort ~= "") and opts.serverPort or Config.defaultOnlineServer.port;
 
+    -- todo 临时处理，重置同步设置
+    options.isSyncBlock = opts.isSyncBlock
+    options.isSyncCmd = opts.isSyncCmd
+
     options.reload = opts.reload    -- 每次刷新是否重新加载世界
     options.manual = opts.manual    -- 每次刷新是否主动切换世界数据(是否是在分线界面跳转的世界连接)
 
@@ -91,6 +95,10 @@ function GeneralGameClient:LoadWorld(opts, loadworld)
         options.worldKey = opts.worldKey or ((options.worldId or "1").."_"..(options.worldName or "1").."_"..(options.no or "1")) -- worldKey每次重写
     else
         options.worldKey = opts.worldKey
+    end
+    -- todo 临时处理
+    if options.worldId == "52010" then
+        commonlib.setfield("System.Codepku.isGGSConnecting",false)
     end
   
     -- 打印选项值

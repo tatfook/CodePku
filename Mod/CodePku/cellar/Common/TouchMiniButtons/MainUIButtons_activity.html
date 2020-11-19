@@ -18,8 +18,10 @@ local FriendUI = NPL.load("(gl)Mod/CodePku/cellar/GUI/Friend/FriendUI.lua");
 
 activity = MainUIButtons.activity
 function ClickChooseFun(name)
-    if (name == "ClickActivity1") then 
-        
+    if (name == "ClickActivity1") then
+        -- 直播活动
+        local Researchers = NPL.load("(gl)Mod/CodePku/cellar/GUI/Researchers/Researchers.lua");
+        Researchers:OperationActivityLive()
     elseif(name == "ClickActivity2") then 
             
     else

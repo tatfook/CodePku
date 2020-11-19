@@ -54,7 +54,7 @@ function BuildingBoard()
 
 end
 
--- 直播入口
+-- 直播入口,废弃了
 function GoLive()
     GameLogic.RunCommand(string.format('/loadworld %d', 52010));
 end
@@ -65,7 +65,7 @@ end
 </style>
 <pe:container alignment="_lt" width="100%" height="100%">
     <div onclick="BuildingBoard" style="<%=format('position: relative; left: 200;top: 0;width: 129; height: 152;background: url(%s);', main_icon_raiders_1)%>"></div>
-    <div onclick="GoLive" style="<%=format('position: relative; left: 0;top: 0;width: 150; height: 154;background: url(%s);', main_icon_entrance)%>"></div>
+    <!-- <div onclick="GoLive" style="<%=format('position: relative; left: 0;top: 0;width: 150; height: 154;background: url(%s);', main_icon_entrance)%>"></div> -->
     
     <pe:if condition='<%=GameLogic.GameMode:IsEditor()==false%>'>
         <!-- 攻略秘籍 -->
