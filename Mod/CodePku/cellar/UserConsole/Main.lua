@@ -147,6 +147,10 @@ function UserConsole:CourseEntry()
     local Schoolyard = NPL.load("(gl)Mod/CodePku/cellar/GUI/Schoolyard/Schoolyard.lua");
     Schoolyard:GetAreasTree()
 
+    -- 拉取当前分线服务器数据
+    NPL.load("(gl)Mod/CodePku/cellar/GUI/Branch/ChooseBranch.lua")
+    local ChooseBranch = commonlib.gettable("Mod.CodePku.GUI.ChooseBranch")
+    ChooseBranch:GetServerData()
 end
 
 function UserConsole:Logout()

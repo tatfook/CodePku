@@ -218,5 +218,10 @@ CommonFunc.OpenUrl = function (url, withToken, screenOrientation)
 end
 
 CommonFunc.ConnectStandToEnd = function ()
-    GameLogic.RunCommand("/connectCodePku -host=106.53.135.151 -port=9900 25161")
+    local Config = NPL.load("(gl)Mod/CodePku/online/client/Config.lua");
+    if Config.defaultEnv == "RELEASE" then
+        GameLogic.RunCommand("/connectCodePku -serverIp=106.53.135.151 -serverPort=9900 25161")
+    else
+        GameLogic.RunCommand("/connectCodePku 25161")
+    end
 end

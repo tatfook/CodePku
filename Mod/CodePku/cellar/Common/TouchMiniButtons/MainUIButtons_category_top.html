@@ -16,7 +16,7 @@ NPL.load("(gl)Mod/CodePku/cellar/GUI/rank/RankPage.lua")
 RankPage = commonlib.gettable("Mod.CodePku.RankPage");
 
 
-dialog_top = MainUIButtons.dialog_top
+category_top = MainUIButtons.category_top
 function ClickChooseFun(name)
     if (name == "ClickFeedback") then 
         GameLogic.GetFilters():apply_filters("ClickStatistics", {type = 14}); -- 点击反馈，触发操作数据统计计数
@@ -46,7 +46,7 @@ end
 
 </style>
 <pe:container alignment="_lt" width="100%" height="100%">
-    <pe:repeat DataSource="<%=dialog_top%>" style="">
+    <pe:repeat DataSource="<%=category_top%>" style="">
         <pe:repeatitem style="float:left;">
             <pe:if condition="<%=Eval('bShow') == true%>">
                 <div style="<%=format('margin-left:%d;width:%d;height:%d;top: %d;background: url(%s);',Eval('left'),Eval('width'),Eval('height'),Eval('top'),Eval('url'))%>" name="<%=Eval('name')%>" onclick="ClickChooseFun"></div>
