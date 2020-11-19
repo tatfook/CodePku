@@ -153,18 +153,20 @@ function CodepkuChatChannel.OnWorldLoaded()
             if CodepkuChatChannel.Messages[value] == nil then
                 CodepkuChatChannel.Messages[value] = {}
             end
-            for _, f in ipairs(FriendUI.vars["friends"]) do
-                local friend_id = f.friend_id
-                request:get(string.format('/chat/private-message/%d', friend_id)):next(function(response)
-                    local data = response.data.data
-                    CodepkuChatChannel.Messages[value][friend_id] = {}
-                    for i, v in ipairs(data) do
-                        v = v.raw
-                        local speakerIsMe = if_else(v.from_user_id == System.User.id, 1, 0)
-                        local msg_data = {speakerIsMe=speakerIsMe, dialog=v.content, avatar=v.from_user_avatar or DEFAULT_AVATAR, nickname=v.from_user_nickname, level=v.from_user_level or 1, channel=v.channel, from=v.from_user_id, to=v.to_user_id}
-                        CodepkuChatChannel.SetMessage(CodepkuChatChannel.Messages[value][friend_id], msg_data, 1)
-                    end
-                end)
+            if FriendUI.vars["friends"] then
+                for _, f in ipairs(FriendUI.vars["friends"]) do
+                    local friend_id = f.friend_id
+                    request:get(string.format('/chat/private-message/%d', friend_id)):next(function(response)
+                        local data = response.data.data
+                        CodepkuChatChannel.Messages[value][friend_id] = {}
+                        for i, v in ipairs(data) do
+                            v = v.raw
+                            local speakerIsMe = if_else(v.from_user_id == System.User.id, 1, 0)
+                            local msg_data = {speakerIsMe=speakerIsMe, dialog=v.content, avatar=v.from_user_avatar or DEFAULT_AVATAR, nickname=v.from_user_nickname, level=v.from_user_level or 1, channel=v.channel, from=v.from_user_id, to=v.to_user_id}
+                            CodepkuChatChannel.SetMessage(CodepkuChatChannel.Messages[value][friend_id], msg_data, 1)
+                        end
+                    end)
+                end
             end
         end
     end
