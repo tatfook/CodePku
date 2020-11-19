@@ -181,6 +181,10 @@ end
 
 -- 搜索学校
 function Schoolyard:GetSearchSchoolResult(params, page)
+    if Schoolyard.get_search_result then
+        return
+    end
+    Schoolyard.get_search_result = true
     -- 拼接查询字符串
     local path = "/schools?per_page=50"
     if params.search_province then
@@ -223,7 +227,9 @@ function Schoolyard:GetSearchSchoolResult(params, page)
         if page then
             page:Refresh(0)
         end
+        Schoolyard.get_search_result = false
     end):catch(function(e)
+        Schoolyard.get_search_result = false
         LOG.std(nil, "error", "Schoolyard", "GetSearchSchoolResult")
     end);
 end
@@ -325,7 +331,13 @@ function Schoolyard:SortMembers(data)
 end
 
 -- 我的校园成员
-function Schoolyard:GetMembers(current_page)
+function Schoolyard:GetMembers(current_page, page)
+    
+    if Schoolyard.get_my_members then
+        return
+    end
+    Schoolyard.get_my_members = true
+    
     local path = "/schools/members?per_page=15&page="
     if current_page then
         path = path .. tostring(current_page)
@@ -338,11 +350,13 @@ function Schoolyard:GetMembers(current_page)
         Schoolyard.members_pages = response.data.pages
         Schoolyard:SortMembers(data)
         -- Schoolyard.members_table = data
-        if Schoolyard.main_ui then
-            Schoolyard.main_ui:Refresh(0)
+        if page then
+            page:Refresh(0)
         end
+        Schoolyard.get_my_members = false
     end):catch(function(e)
         LOG.std(nil, "error", "Schoolyard", "GetMembers")
+        Schoolyard.get_my_members = false
     end);
 end
 
@@ -549,7 +563,6 @@ function Schoolyard:RegisterSchoolyard(params)
         Schoolyard.had_registration = true
 
     end):catch(function(e)
-        -- todo 学校如果已存在，弹出加入确认弹窗
         LOG.std(nil, "error", "Schoolyard", "RegisterSchoolyard")
         if e.data.message == "学校已存在" and e.data.school then
             local box_msg = {

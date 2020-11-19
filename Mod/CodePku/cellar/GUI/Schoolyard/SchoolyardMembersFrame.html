@@ -10,9 +10,10 @@
 <script refresh="false" type="text/npl" src="Schoolyard.lua"><![CDATA[
 
 local Schoolyard = NPL.load("(gl)Mod/CodePku/cellar/GUI/Schoolyard/Schoolyard.lua");
+local page = document:GetPageCtrl()
 
 if Schoolyard.joined_schoolyard == true and next(Schoolyard.members_table) == nil then
-    Schoolyard:GetMembers()
+    Schoolyard:GetMembers(1, page)
 end
 
 -- 获取图片
@@ -43,9 +44,9 @@ end
 
 -- 滚动条到底部了,动态加载
 function DynamicLoading()
-    if next(Schoolyard.members_pages) ~= nil and Schoolyard.members_pages.current_page < Schoolyard.members_pages.last_page then
+    if Schoolyard.members_pages and next(Schoolyard.members_pages) ~= nil and Schoolyard.members_pages.current_page < Schoolyard.members_pages.last_page then
         local new_page = Schoolyard.members_pages.current_page +1
-        Schoolyard:GetMembers(new_page)
+        Schoolyard:GetMembers(new_page, page)
     end
 end
 
