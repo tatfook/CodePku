@@ -115,17 +115,18 @@ function TaskSystem:StaticInit()
                 elseif data["type"] == "game" then
                     -- 任意游戏：小目标-20
                     TaskSystem.goal = TaskSystem:handleFinishCountNow(TaskSystem.goal,TaskSystem:FindTaskByID(20, 1), 1)
+                    TaskSystem:UpdateTaskDetail({ids = "20"})
                     -- [TODO 区分release和dev的id]，目前相同
                     if data["courseware_id"] == 9 then
                         -- 跑酷：大计划-16
                         -- 跑酷courseware_id：DEV-9 RELEASE-9
                         TaskSystem.plan = TaskSystem:handleFinishCountNow(TaskSystem.plan,TaskSystem:FindTaskByID(16, 3), 3)
-                        TaskSystem:UpdateTaskDetail({ids = "20, 16"})
+                        TaskSystem:UpdateTaskDetail({ids = "16"})
                     elseif data["courseware_id"] == 10 then
                         -- 华夏：大计划-17
                         -- 跑酷courseware_id：DEV-10 RELEASE-10
                         TaskSystem.plan = TaskSystem:handleFinishCountNow(TaskSystem.plan,TaskSystem:FindTaskByID(17, 3), 3)
-                        TaskSystem:UpdateTaskDetail({ids = "20, 17"})
+                        TaskSystem:UpdateTaskDetail({ids = "17"})
                     end
                 elseif data["type"] == "goalReward" then
                     -- 小目标奖励，每次领取小目标奖励时触发
