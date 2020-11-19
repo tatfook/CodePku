@@ -30,6 +30,7 @@ Schoolyard.members_table = {}       -- 成员列表
 Schoolyard.trends_table = {}        -- 动态列表
 
 Schoolyard.joined_schoolyard = false    -- 标记用户是否已经加入学校
+Schoolyard.had_registration = false     -- 用户是否提交过学校登记记录
 
 Schoolyard.search_content = ""      -- 存放用户输入的搜索内容
 
@@ -150,7 +151,13 @@ end
 -- 查询我的学校
 function Schoolyard:GetMySchoolyardInfo(page)
     request:get('/schools/mime'):next(function(response)
-        local data = response.data.data
+        local data = response.data.data.school
+        local school_registration = response.data.data.school_registration
+        if next(school_registration) ~= nil then
+            Schoolyard.had_registration = true
+        elseif next(school_registration) == nil then
+            Schoolyard.had_registration = false
+        end
         if not next(data) then
             Schoolyard.joined_schoolyard = false
         else
@@ -160,10 +167,10 @@ function Schoolyard:GetMySchoolyardInfo(page)
             Schoolyard.schoolyard_name = data.name       -- 学校名字
             Schoolyard.schoolyard_address = (data.district.full_name .. data.name) or "未知"      -- 学校位置
             Schoolyard.number_of_people = data.members_count      -- 学校人数
-            Schoolyard.schoolyard_level = "Lv." .. (data.level and tostring(data.level) or "999")        -- 学校等级
+            Schoolyard.schoolyard_level = "Lv." .. (data.level and tostring(data.level) or "？？？")        -- 学校等级
             Schoolyard.schoolyard_vitality = data.weekly_activity     -- 学校周活跃度
-            Schoolyard.week_rank = 1        -- 学校周活跃排行
-            Schoolyard.total_rank = 1       -- 学校总活跃排行
+            Schoolyard.week_rank = data.week_rank        -- 学校周活跃排行
+            Schoolyard.total_rank = data.total_rank       -- 学校总活跃排行
 
             page:Refresh(0)
         end
@@ -340,7 +347,6 @@ end
 -- 我的校园动态
 function Schoolyard:GetTrends()
     Schoolyard.trends_table = {}
-    return Schoolyard.trends_table
 end
 
 -- 展示我的校园页面
@@ -514,6 +520,9 @@ end
 -- 登记学校请求
 function Schoolyard:RegisterSchoolyard(params)
     -- todo 无效登记拦截
+    if Schoolyard.had_registration then
+        return
+    end
     if Schoolyard.had_register_schoolyard then
         return
     end
@@ -531,12 +540,11 @@ function Schoolyard:RegisterSchoolyard(params)
         Schoolyard:CloseRegisterPage()
         -- 清除数据
         Schoolyard:ClearData()
-        -- todo 获取我的校园信息，忘了为啥要加，有时间来看看
-        Schoolyard:GetMySchoolyardInfo(Schoolyard.main_ui)
 
         GameLogic.AddBBS("CodeGlobals", L"学校信息提交成功，我们会尽快回复您！", 3000, "#00FF00");
         LOG.std(nil, "succeed", "Schoolyard", "RegisterSchoolyard")
         Schoolyard.had_register_schoolyard = false
+        Schoolyard.had_registration = true
 
     end):catch(function(e)
         GameLogic.AddBBS("CodeGlobals", e.data.message, 3000, "#FF0000");

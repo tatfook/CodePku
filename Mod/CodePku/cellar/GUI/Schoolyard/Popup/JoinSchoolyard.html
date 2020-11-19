@@ -98,6 +98,10 @@ end
 
 -- 登记学校
 function RegisterSchool()
+    if Schoolyard.had_registration then
+        GameLogic.AddBBS("CodeGlobals", L"系统检测到您最近3天内已提交过登记信息，请稍后再试！", 3000, "#FF0000");
+        return
+    end
     Schoolyard:ClearData()
     Schoolyard.last_select_kind = nil
     Schoolyard:ShowRegisterPage()

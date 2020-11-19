@@ -11,6 +11,8 @@
 
 local Schoolyard = NPL.load("(gl)Mod/CodePku/cellar/GUI/Schoolyard/Schoolyard.lua");
 
+Schoolyard:GetTrends()
+
 -- 获取图片
 function GetIcon(index)
     return Schoolyard:GetImagePath(index)
@@ -22,7 +24,7 @@ end
 
 -- 获取动态数据
 function GetTrendsResult()
-    return Schoolyard:GetTrends()
+    return Schoolyard.trends_table
 end
 
 ]]>   
@@ -45,22 +47,12 @@ end
     <div style="position: relative;left: 36;top: 91;width: 1383;height: 781;">
     
         <pe:treeview onscrollend="DynamicLoading" style="position: relative;width: 1405;height: 781;" name='messages' DefaultNodeHeight = "185" ItemsPerLine="1" AllowPaging="false" RememberScrollPos="true" RememberLastPage="false" VerticalScrollBarStep="40">
-            <pe:repeat DataSource="<%= GetMembersResult() %>">
+            <pe:repeat DataSource="<%= GetTrendsResult() %>">
                 <pe:repeatitem>
                     <div style="width: 1383;height: 185;margin-bottom: -10;">
                         <div name="<%= Eval('index') %>" style="<%=format('position: relative;left:89;width: 1295;height: 185;background:url(%s);', GetIcon('shoolyard_member_mat_bot.png'))%>">
                             <div style="position: relative;left: 57;top: 36;width: 200;height: 50;font-family: Impact;font-size: 48;color: #b36f14;"><%= Eval('level') %></div>
-                            <div style="position: relative;left: 57;top: 100;width: 370;height: 50;font-family: zkklt;font-size: 42;color: #945e31;"><%= user.nickname %></div>
                             <div style="position: relative;left: 505;top: 82;width: 400;height: 50;font-family: Alibaba PuHuiTi;font-size: 48;text-align: center;color: #945e31;"><%= Eval('total_activity') %></div>
-                            <pe:if condition='<%= user.is_online == true %>'>
-                                <div style="position: relative;left: 984;top: 76;width: 280;height: 50;font-family: zkklt;font-size: 46;color: #47753c;"><%= Eval('online_statu') %></div>
-                            </pe:if>
-                            <pe:if condition='<%= user.is_online == false %>'>
-                                <div style="position: relative;left: 984;top: 76;width: 280;height: 50;font-family: zkklt;font-size: 46;color: #945e31;"><%= Eval('online_statu') %></div>
-                            </pe:if>
-                        </div>
-                        <div onclick="ShowUserPage" name="<%= Eval('user_id') %>" style="<%=format('position: relative;left:1;top:23;width: 131;height: 136;background:url(%s);', GetIcon('shoolyard_head_bot.png'))%>">
-                            <div style="<%=format('position: relative;left:7;top:5;width: 117;height: 118;background:url(%s);', user.avatar_url)%>"></div>
                         </div>
                     </div>
                 </pe:repeatitem>
