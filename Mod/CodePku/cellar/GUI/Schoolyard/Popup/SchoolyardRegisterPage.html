@@ -23,7 +23,9 @@ function ClosePage()
     Schoolyard.selected_area = {}
     Schoolyard.selected_school = {}
     Schoolyard.last_select_kind = nil
-    Schoolyard.join_page:Refresh(0)
+    if Schoolyard.join_page then
+        Schoolyard.join_page:Refresh(0)
+    end
 end
 
 -- 获取图片

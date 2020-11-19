@@ -32,6 +32,9 @@ end
 
 -- 取消
 function OnCancel()
+    if Schoolyard.had_register_schoolyard then
+        Schoolyard.had_register_schoolyard = false
+    end
     ClosePage()
 end
 

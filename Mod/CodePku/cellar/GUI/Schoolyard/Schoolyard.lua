@@ -153,9 +153,9 @@ function Schoolyard:GetMySchoolyardInfo(page)
     request:get('/schools/mime'):next(function(response)
         local data = response.data.data.school
         local school_registration = response.data.data.school_registration
-        if next(school_registration) ~= nil then
+        if school_registration then
             Schoolyard.had_registration = true
-        elseif next(school_registration) == nil then
+        elseif school_registration == nil then
             Schoolyard.had_registration = false
         end
         if not next(data) then
@@ -311,16 +311,10 @@ function Schoolyard:SortMembers(data)
         end
     end
 
-    -- todo排序
-    local function Sort()
-
-    end
-
     local user_id = System.User.info.id
     for k,v in pairs(data) do
         local temp_table = v
-        temp_table.level = "Lv." .. "99"        -- 等级
-        temp_table.activity = "1234567"         -- 周活跃度
+        temp_table.level = "Lv." .. (tostring((v.user.self_level or {}).current_level or 0))        -- 等级,self_level有可能为nil
         temp_table.online_statu = v.user.is_online and "在线" or GetOnlineStatu(v.user.last_offline_at)
         if temp_table.user_id == user_id then
             table.insert(Schoolyard.members_table,1,temp_table)
@@ -331,9 +325,17 @@ function Schoolyard:SortMembers(data)
 end
 
 -- 我的校园成员
-function Schoolyard:GetMembers()
-    request:get("/schools/members"):next(function(response)
+function Schoolyard:GetMembers(current_page)
+    local path = "/schools/members?per_page=15&page="
+    if current_page then
+        path = path .. tostring(current_page)
+    else
+        path = path .. "1"
+    end
+
+    request:get(path):next(function(response)
         local data = response.data.data
+        Schoolyard.members_pages = response.data.pages
         Schoolyard:SortMembers(data)
         -- Schoolyard.members_table = data
         if Schoolyard.main_ui then
@@ -468,7 +470,7 @@ function Schoolyard:ShowPopupBox(data)
     }
     local params = {
         url="Mod/CodePku/cellar/GUI/Schoolyard/Popup/SchoolyardPopupBox.html",
-        alignment="_lt", left = 0, top = 0, width = 1920 , height = 1080, zorder = 23
+        alignment="_lt", left = 0, top = 0, width = 1920 , height = 1080, zorder = 25
     };
     self.popup_box = AdaptWindow:QuickWindow(params)
 end
@@ -547,8 +549,23 @@ function Schoolyard:RegisterSchoolyard(params)
         Schoolyard.had_registration = true
 
     end):catch(function(e)
-        GameLogic.AddBBS("CodeGlobals", e.data.message, 3000, "#FF0000");
+        -- todo 学校如果已存在，弹出加入确认弹窗
         LOG.std(nil, "error", "Schoolyard", "RegisterSchoolyard")
+        if e.data.message == "学校已存在" and e.data.school then
+            local box_msg = {
+                title = "加入学校",
+                content = "你提交的学校已存在，是否加入学校：" .. e.data.school.name,
+                func = function ()
+                        Schoolyard.had_register_schoolyard = false
+                        Schoolyard:CloseRegisterPage()
+                        Schoolyard:JoinSchoolyard(e.data.school.id, e.data.school.name)
+                    end,
+                page = Schoolyard.main_ui,
+            }
+            Schoolyard:ShowPopupBox(box_msg)
+            return
+        end
+        GameLogic.AddBBS("CodeGlobals", e.data.message, 3000, "#FF0000");
         Schoolyard.had_register_schoolyard = false
     end);
 end

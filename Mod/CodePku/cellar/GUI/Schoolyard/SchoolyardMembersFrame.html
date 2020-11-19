@@ -43,7 +43,10 @@ end
 
 -- 滚动条到底部了,动态加载
 function DynamicLoading()
-
+    if next(Schoolyard.members_pages) ~= nil and Schoolyard.members_pages.current_page < Schoolyard.members_pages.last_page then
+        local new_page = Schoolyard.members_pages.current_page +1
+        Schoolyard:GetMembers(new_page)
+    end
 end
 
 ]]>   
@@ -72,7 +75,7 @@ end
                         <div style="width: 1383;height: 185;margin-bottom: -10;">
                             <div name="<%= Eval('index') %>" style="<%=format('position: relative;left:89;width: 1295;height: 185;background:url(%s);', GetIcon('shoolyard_member_mat_bot.png'))%>">
                                 <div style="position: relative;left: 57;top: 36;width: 200;height: 50;font-family: Impact;font-size: 48;color: #b36f14;"><%= Eval('level') %></div>
-                                <div style="position: relative;left: 57;top: 100;width: 370;height: 50;font-family: zkklt;font-size: 42;color: #945e31;"><%= user.nickname %></div>
+                                <div style="position: relative;left: 57;top: 100;width: 370;height: 50;font-family: zkklt;font-size: 42;color: #945e31;"><%= user.nickname or "" %></div>
                                 <div style="position: relative;left: 505;top: 82;width: 400;height: 50;font-family: Alibaba PuHuiTi;font-size: 48;text-align: center;color: #945e31;"><%= Eval('total_activity') %></div>
                                 <pe:if condition='<%= user.is_online == true %>'>
                                     <div style="position: relative;left: 984;top: 76;width: 280;height: 50;font-family: zkklt;font-size: 46;color: #47753c;"><%= Eval('online_statu') %></div>
@@ -82,7 +85,7 @@ end
                                 </pe:if>
                             </div>
                             <div onclick="ShowUserPage" name="<%= Eval('user_id') %>" style="<%=format('position: relative;left:1;top:23;width: 131;height: 136;background:url(%s);', GetIcon('shoolyard_head_bot.png'))%>">
-                                <div style="<%=format('position: relative;left:7;top:5;width: 117;height: 118;background:url(%s);', user.avatar_url)%>"></div>
+                                <div style="<%=format('position: relative;left:7;top:5;width: 117;height: 118;background:url(%s);', user.avatar_url or '')%>"></div>
                             </div>
                         </div>
                     </pe:repeatitem>
