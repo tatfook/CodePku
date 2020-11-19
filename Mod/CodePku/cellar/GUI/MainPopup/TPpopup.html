@@ -76,7 +76,7 @@ function turnToWorld()
         return
     end
 
-    if (world_id == 1 or world_id == 14312) then
+    if (world_id == 1 or world_id == 14312 or world_id == 15855 or world_id == 15857) then
         GameLogic.RunCommand(string.format('/connectCodePku %d', tonumber(world_id)));
     else
         GameLogic.RunCommand(string.format("/loadworld %d", tonumber(world_id)));

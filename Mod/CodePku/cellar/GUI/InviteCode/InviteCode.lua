@@ -41,8 +41,8 @@ function InviteCode.InviteShare()
     Share:fire("url", {
         url = "https://www.wanxueshijie.com/",
         title = "玩学世界",
-        desc = "https://scratch-works-staging-1253386414.file.myqcloud.com/game/admin/posters/a3b546dfab2d174b4a2ca4ae1454d484.jpg",
-        thumb = "邀请码活动"
+        desc = "邀请码活动",
+        thumb = "https://scratch-works-staging-1253386414.file.myqcloud.com/game/admin/posters/a3b546dfab2d174b4a2ca4ae1454d484.jpg"
     }, {
         onStart = function(e)
         -- 开始分享
