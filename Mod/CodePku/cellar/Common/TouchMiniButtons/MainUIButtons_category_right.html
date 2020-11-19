@@ -17,7 +17,7 @@ UserInfoPage.OnInit();
 local FriendUI = NPL.load("(gl)Mod/CodePku/cellar/GUI/Friend/FriendUI.lua");
 local CodePkuEscFramePage = NPL.load("(gl)Mod/CodePku/cellar/Areas/EscFramePage.lua")
 
-dialog_right = MainUIButtons.dialog_right
+category_right = MainUIButtons.category_right
 function ClickChooseFun(name)
     if (name == "ClickUserInfo") then 
         GameLogic.GetFilters():apply_filters("ClickStatistics", {type = 18}); -- 点击角色详情，触发操作数据统计计数
@@ -45,7 +45,7 @@ end
 
 </style>
 <pe:container alignment="_lt" width="100%" height="100%">
-    <pe:repeat DataSource="<%=dialog_right%>" style="">
+    <pe:repeat DataSource="<%=category_right%>" style="">
         <pe:repeatitem style="">
             <pe:if condition="<%=Eval('bShow') == true%>">
                 <div style="<%=format('margin-left:%d;width:%d;height:%d;margin-top: %d;background: url(%s);',Eval('left'),Eval('width'),Eval('height'),Eval('top'),Eval('url'))%>" name="<%=Eval('name')%>" onclick="ClickChooseFun"></div>

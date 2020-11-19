@@ -1,0 +1,142 @@
+<!-- 
+Author: zouren
+Date: 2020-10-22 19:07:50
+Des:
+Path:"Mod/CodePku/cellar/GUI/Branch/ChooseBranch.html"
+-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+</head>
+
+<body>
+<pe:mcml>
+<script refresh="false" type="text/npl" src="ChooseBranch.lua"><![CDATA[
+NPL.load("(gl)Mod/CodePku/cellar/GUI/Branch/ChooseBranch.lua")
+ChooseBranch = commonlib.gettable("Mod.CodePku.GUI.ChooseBranch")
+
+local branchImageData = NPL.load("(gl)Mod/CodePku/cellar/imageLuaTable/branchImageData.lua")
+local common1ImageData = NPL.load("(gl)Mod/CodePku/cellar/imageLuaTable/common1ImageData.lua")
+
+function GetStyleStr(index)
+    return ChooseBranch:GetHTMLStyleStr(index)
+end
+
+function PlayAnim()
+    GameLogic.AddBBS(nil, L"测试动画", 3000, "255 0 0", 21)
+    local node = ParaUI.GetUIObject("root")
+    local block = UIDirectAnimBlock:new();
+    block:SetUIObject(node);
+    block:SetTime(200);
+    block:SetScalingXRange(0.5, 1);
+    block:SetScalingYRange(0.5, 1);
+    block:SetAlphaRange(0.2, 1);
+    block:SetApplyAnim(true); 
+    UIAnimManager.PlayDirectUIAnimation(block);
+end
+
+function OnClose()
+    Page:CloseWindow()
+    if ChooseBranch.ui then
+        ChooseBranch.ui = nil
+    end
+end
+
+function OnChooseBranchBtnClicked()
+    ChooseBranch:changeBranch()
+    OnClose()
+end
+
+function ChangeBranch(name)
+    ChooseBranch:changeCurrBranch(name)
+    Page:Refresh(0.01)
+end
+
+function GetBranchName(branchId, serverId)
+    return ChooseBranch:getBranchName(branchId, serverId)
+end
+
+function GetCurrWorldName()
+    return ChooseBranch:getCurrWorldName()
+end
+
+function GetServerName(serverId)
+    return ChooseBranch:GetServerName(serverId)
+end
+
+function GetBranchStateIconHTML(branchId, ip, port)
+    return ChooseBranch:GetBranchStateIconHTML(branchId, ip, port)
+end
+
+
+]]></script>
+<style type="text/mcss">
+
+</style>
+<pe:container alignment="_lt" width="1920" height="1080">
+    <pe:div name="branch_bg" style="<%=GetStyleStr(1)%>">
+        <pe:div style="<%=GetStyleStr(4)%>"></pe:div>
+        <pe:div style="<%=GetStyleStr(6)%>"></pe:div>
+        <pe:div style="<%=GetStyleStr(8)%>"></pe:div>
+        <pe:div style="<%=GetStyleStr(5)%>"><%=L"爆满"%></pe:div>
+        <pe:div style="<%=GetStyleStr(7)%>"><%=L"繁忙"%></pe:div>
+        <pe:div style="<%=GetStyleStr(9)%>"><%=L"流畅"%></pe:div>
+        <pe:div style="<%=GetStyleStr(10)%>"><%=L"选择分线"%></pe:div>
+        <pe:div style="<%=GetStyleStr(22)%>"></pe:div>
+        <pe:div style="<%=GetStyleStr(26)%>"><%= GetCurrWorldName() %></pe:div>
+
+        <pe:if condition="<%= ChooseBranch.branchStateTable == nil %>">
+            <pe:div style="<%=GetStyleStr(25)%>"><%=L"获取分线列表中..."%></pe:div>
+        </pe:if>
+        <pe:if condition="<%= ChooseBranch.branchStateTable ~= nil %>">
+            <pe:gridview style="<%=GetStyleStr(11)%>"
+                DataSource='<%= ChooseBranch.branchStateTable %>' CellPadding="0" ItemsPerLine="1" RememberScrollPos="true"
+                VerticalScrollBarStep="25" VerticalScrollBarOffsetX="8" DefaultNodeHeight="140">
+                <Columns>
+                    <pe:if condition="<%= Eval('branchId') ~= ChooseBranch.currChooseBranch or Eval('serverId') ~= ChooseBranch.currChooseServer %>">
+                        <div style="<%=GetStyleStr(21)%>">
+                            <div name='<%=string.format("%s__%s",Eval("branchId"),Eval("serverId"))%>'  onclick="ChangeBranch" style="<%=GetStyleStr(12)%>">
+                                <div style="<%=GetStyleStr(15)%>"><%= GetBranchName(Eval('branchId'), Eval('serverId')) %></div>
+                                <!-- <div style="<%=GetStyleStr(14)%>"></div> -->
+                                <div style="<%=GetBranchStateIconHTML(Eval('branchId'), Eval('ip'), Eval('port'))%>"></div>
+                            </div>
+                            <!-- <div style="<%=GetStyleStr(19)%>">
+                                <div style="<%=GetStyleStr(20)%>"><%= GetServerName(Eval('serverId')) %></div>
+                            </div> -->
+                            <pe:if condition="<%= Eval('branchId') == ChooseBranch.currBranchData['branchId'] and Eval('serverId') == ChooseBranch.currBranchData['serverId'] %>">
+                                <pe:div style="<%=GetStyleStr(23)%>"></pe:div>
+                            </pe:if>
+                        </div>
+                    </pe:if>
+                    <pe:if condition="<%= Eval('branchId') == ChooseBranch.currChooseBranch and Eval('serverId') == ChooseBranch.currChooseServer %>">
+                        <div style="<%=GetStyleStr(21)%>">
+                            <div style="<%=GetStyleStr(13)%>">
+                                <div style="<%=GetStyleStr(15)%>"><%= GetBranchName(Eval('branchId'), Eval('serverId')) %></div>
+                                <!-- <div style="<%=GetStyleStr(14)%>"></div> -->
+                                <div style="<%=GetBranchStateIconHTML(Eval('branchId'), Eval('ip'), Eval('port'))%>"></div>
+                            </div>
+                            <!-- <div style="<%=GetStyleStr(19)%>">
+                                <div style="<%=GetStyleStr(20)%>"><%= GetServerName(Eval('serverId')) %></div>
+                            </div> -->
+                            <pe:div style="<%=GetStyleStr(24)%>"></pe:div>
+                            <pe:if condition="<%= Eval('branchId') == ChooseBranch.currBranchData['branchId'] and Eval('serverId') == ChooseBranch.currBranchData['serverId'] %>">
+                                <pe:div style="<%=GetStyleStr(23)%>"></pe:div>
+                            </pe:if>
+                        </div>
+                    </pe:if>
+                </Columns>
+            </pe:gridview>
+        </pe:if>
+    </pe:div>
+    
+    <pe:div name="exitBtn" onclick="OnClose" style="<%=GetStyleStr(2)%>"></pe:div>
+    <pe:div name="chooseBranchBtn" onclick="OnChooseBranchBtnClicked" style="<%=GetStyleStr(3)%>">
+        <pe:div style="<%=GetStyleStr(16)%>"></pe:div>
+    </pe:div>
+
+</pe:container>
+</pe:mcml>
+</body>
+</html>

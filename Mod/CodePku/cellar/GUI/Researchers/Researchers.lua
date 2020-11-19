@@ -77,6 +77,8 @@ Researchers.params = {
     [2] = {url="Mod/CodePku/cellar/GUI/Researchers/CompetitionBoard.html", alignment="_lt", left = 0, top = 0, width = 1920 , height = 1080, zorder = 30,},
     -- 信息发送通知
     [3] = {url="Mod/CodePku/cellar/GUI/Researchers/MsgNotice.html", alignment="_lt", left = 0, top = 0, width = 1920 , height = 1080, zorder = 30,},
+    -- 广告牌
+    [4] = {url="Mod/CodePku/cellar/GUI/Researchers/AdvertisingBoard.html", alignment="_lt", left = 0, top = 0, width = 1920 , height = 1080, zorder = 30,},
 }
 
 function Researchers:ShowPage(id, url)

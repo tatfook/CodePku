@@ -20,6 +20,8 @@ local GeneralGameServerMod = commonlib.gettable("Mod.GeneralGameServerMod");
 local GeneralGameClient = commonlib.gettable("Mod.CodePku.Online.Client.GeneralGameClient");
 local Online = commonlib.gettable("Mod.CodePku.Online");
 local Commands = commonlib.gettable("MyCompany.Aries.Game.Commands");
+local CmdParser = commonlib.gettable("MyCompany.Aries.Game.CmdParser")
+local Packets = commonlib.gettable("Mod.GeneralGameServerMod.Core.Common.Packets")
 
 function ParseOption(cmd_text)
 	local value, cmd_text_remain = cmd_text:match("^%s*%-([%w_]+%S+)%s*(.*)$");
@@ -68,15 +70,35 @@ connectCodePku 145                    # 联机进入世界ID为145的世界
 connectCodePku 145 parallel           # 联机进入世界ID为145的平行世界 parallel
 ]], 
 		handler = function(cmd_name, cmd_text, cmd_params, fromEntity)		
-			local ggsCmd = string.format("/ggs connect -app=CodePku %s", cmd_text);
-
-			local options, cmd_text = ParseOptions(cmd_text);	
-			echo("serverIp")
-			echo((options.serverIp and options.serverIp ~= "") and options.serverIp or Config.defaultOnlineServer.host);
-			GeneralGameClient:GetOptions().serverIp = (options.serverIp and options.serverIp ~= "") and options.serverIp or Config.defaultOnlineServer.host;
-			GeneralGameClient:GetOptions().serverPort = (options.serverPort and options.serverPort ~= "") and options.serverPort or Config.defaultOnlineServer.port;
-			
-            GameLogic.RunCommand(string.format("/ggs connect -app=CodePku %s", cmd_text));
+			local ggsCmd = string.format("/ggs connect -app=CodePku %s", cmd_text)
+			commonlib.setfield("System.Codepku.isGGSConnecting",true)
+            GameLogic.RunCommand(string.format("/ggs connect -app=CodePku %s", cmd_text))
 		end,
+	}
+
+	Commands["wanxueshijie"] = {
+		mode_deny = "",
+		name = "wanxueshijie",
+		quick_ref = "/wanxueshijie subcmd",
+		desc = [[
+subcmd: 
+worldInfo 获取玩学世界当前所有世界分线数据
+    /wanxueshijie worldInfo 获取玩学世界当前所有世界分线数据
+worldKey 获取玩学世界当前世界信息
+	/wanxueshijie worldKey 获取玩学世界当前世界信息
+		]],
+		handler = function(cmd_name, cmd_text, cmd_params, fromEntity)
+			GGS.INFO.Format(cmd_name .. " " .. cmd_text)
+            local cmd, cmd_text = CmdParser.ParseString(cmd_text)
+			local netHandler = GeneralGameServerMod:GetClientClass("CodePku"):GetWorldNetHandler()
+			if not netHandler then
+				return
+			end
+			if (cmd == "worldInfo") then
+				netHandler:AddToSendQueue(Packets.PacketGeneral:new():Init({action = "WanXueShiJie", data = { cmd = "WorldInfo"}}))
+			elseif (cmd == "worldKey") then
+				netHandler:AddToSendQueue(Packets.PacketGeneral:new():Init({action = "WanXueShiJie", data = { cmd = "WorldKey"}}))
+			end
+		end
 	}
 end
