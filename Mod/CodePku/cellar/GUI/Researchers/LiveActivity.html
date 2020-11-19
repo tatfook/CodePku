@@ -12,7 +12,24 @@
 local Researchers = NPL.load("(gl)Mod/CodePku/cellar/GUI/Researchers/Researchers.lua");
 local EditNamePage = NPL.load("(gl)Mod/CodePku/cellar/GUI/Profile/EditName.lua")
 
+local escFrameImageData = NPL.load("(gl)Mod/CodePku/cellar/imageLuaTable/escFrameImageData.lua")
+local common1ImageData = NPL.load("(gl)Mod/CodePku/cellar/imageLuaTable/common1ImageData.lua")
+
+esc_frame_bot_floor = escFrameImageData:GetIconUrl("esc_frame_bot_floor.png")
+esc_frame_thumbtac = escFrameImageData:GetIconUrl("esc_frame_thumbtac.png")
+esc_frame_btn_408_85 = escFrameImageData:GetIconUrl("esc_frame_btn_408_85.png")
+esc_frame_btn_408_85n = escFrameImageData:GetIconUrl("esc_frame_btn_408_85n.png")
+esc_frame_r = escFrameImageData:GetIconUrl("esc_frame_r.png")
+comm_btn_close = common1ImageData:GetIconUrl("comm_btn_close.png")
+esc_frame__btn_green03 = common1ImageData:GetIconUrl("common_btn_green01.png")
+esc_frame__btn_red03 = common1ImageData:GetIconUrl("common_btn_red01.png")
+
 local page = document:GetPageCtrl()
+
+
+contents1 = "联系老师可以获得一对一直播教学"
+contents2 = "微信：codepku01"
+
 
 -- 要关闭两个window，所以用特殊的方法
 function OnClose()
@@ -31,7 +48,8 @@ end
 function OnSubmit()
     -- 进入世界
     local setted_id = page:GetValue("live_id")
-    local command = "/connectCodePku -isSyncBlock -isSyncCmd 52010 " .. tostring(setted_id)
+    local command = "/connectCodePku -no=1 -isSyncBlock -isSyncCmd -host=106.53.147.185 -port=9901 52010 " .. tostring(setted_id)
+    -- GameLogic.AddBBS("CodeGlobals", setted_id, 3000, "#FF0000");
     GameLogic.RunCommand(command);
     OnClose()
 end
@@ -39,26 +57,30 @@ end
 ]]>   
 
 </script>
-<pe:container alignment="_lt" width="723" height="412" style="">
+<pe:container alignment="_lt" width="936" height="751" style="">
 
 <!-- 背景 -->
-<div style="<%=format('position: relative;width: 723;height: 412;background:url(%s);', GetIcons(1, 'common_bot_tooltip1.png'))%>">
-    <!-- title -->
-    <div style="position: relative;left: 151;top: 30;font-family: zkklt;font-size: 56;color: #4f402e;">请输入房间ID</div>
+<div style="position: relative;width: 936;height: 751;">
+    <div style="<%=format('position: relative;width: 936;height: 721;background:url(%s);', esc_frame_bot_floor)%>">
+        <!-- title -->
+        <div style="position: relative;left: 0;top: 0;width: 936;height:80 ;text-align:center; line-height:80 ; font-family: zkklt;font-size: 48;color: #9e6c5e;">请输入房间ID</div>
+    
+        <!-- 修改昵称区域 -->
+        <div style="<%=format('position: relative;left: 150;top: 200;width: 628;height: 109;font-family: zkklt;color: #4f402e;background:url(%s);', GetIcons(2, 'esc_frame_bot_428_109.png'))%>">
+            <input type="text" MoveViewWhenAttachWithIME="true" value="" name="live_id" EmptyText='<%= L"ID" %>' style="position: relative;left: 48;top: 15; width: 540; height: 82; font-family: zkklt;font-size: 48;line-height: 82;color: #4f402e;background: #000000;"/>
+        </div>
+        <div style="position: relative;position: relative;left: 150;top: 380;width: 628;height: 80;line-height:80 ; font-family: Noto Sans S Chinese Regular;font-size: 36;color: #804636;"><%= contents1 %></div>
+        <div style="position: relative;position: relative;left: 150;top: 440;width: 628;height: 80;line-height:80 ; font-family: Noto Sans S Chinese Regular;font-size: 36;color: #804636;"><%= contents2 %></div>
 
-    <!-- 修改昵称区域 -->
-    <div style="<%=format('position: relative;left: 105;top: 134;width: 428;height: 109;font-family: zkklt;color: #4f402e;background:url(%s);', GetIcons(2, 'esc_frame_bot_428_109.png'))%>">
-        <input type="text" MoveViewWhenAttachWithIME="true" value="" name="live_id" EmptyText='<%= L"ID" %>' style="position: relative;left: 48;top: 30; width: 340; height: 42; font-family: zkklt;font-size: 36;line-height: 42;color: #4f402e;background: #000000;"/>
     </div>
-    <!-- 取消 -->
-    <div onclick="ClickCancel" style="<%=format('position: relative; left: 74; top: 319; width: 146;height: 65;background:url(%s);', GetIcons(1, 'common_btn_red02.png'))%>">
-        <div style="<%=format('position: relative; left: 22; top: 9; width: 100;height: 48;background:url(%s);', GetIcons(1, 'common_btn_cancel.png'))%>"></div>
-    </div>
-    <!-- 确认 -->
-    <div onclick="OnSubmit" style="<%=format('position: relative; left: 409; top: 319; width: 146;height: 65;background:url(%s);', GetIcons(1, 'common_btn_green02.png'))%>">
-        <div style="<%=format('position: relative; left: 22; top: 9; width: 100;height: 48;background:url(%s);', GetIcons(1, 'common_btn_confirm.png'))%>"></div>
-    </div>
+
+
+    <div onclick="ClickCancel" style="<%=format('position: relative; left: 820; top: -20; width: 77;height: 123;background:url(%s);', comm_btn_close)%>"></div>
+
+    <div onclick="OnSubmit" style="<%=format('position: relative; left: 550; top: 580; width: 238;height: 81;text-align:center; line-height:81 ; font-family: zkklt;font-size: 48;color: #ffffff;background:url(%s);', esc_frame__btn_green03)%>">确定</div>
+    <div onclick="ClickCancel" style="<%=format('position: relative; left: 150; top: 580; width: 238;height: 81;text-align:center; line-height:81 ; font-family: zkklt;font-size: 48;color: #ffffff;background:url(%s);', esc_frame__btn_red03)%>">取消</div>
 </div>
+
 
 </pe:container>
 

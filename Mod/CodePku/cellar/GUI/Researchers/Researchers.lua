@@ -119,7 +119,7 @@ function Researchers:OperationActivityLive()
 	if not Researchers.LAui then
 		local params = {
 			url = "Mod/CodePku/cellar/GUI/Researchers/LiveActivity.html",
-			alignment="_lt", left = 600, top = 334, width = 723 , height = 412, zorder = 32
+			alignment="_lt", left = 464, top = 179, width = 936 , height = 751, zorder = 32
 		}
 		Researchers.LAui = AdaptWindow:QuickWindow(params)
 	end

@@ -92,6 +92,10 @@ function GeneralGameClient:LoadWorld(opts, loadworld)
     else
         options.worldKey = opts.worldKey
     end
+
+    if options.worldId == "52010" then
+        commonlib.setfield("System.Codepku.isGGSConnecting",false)
+    end
   
     -- 打印选项值
     -- GGS.INFO(options);
