@@ -77,7 +77,7 @@ MainUIButtons.category_right = {
 	[5]={url=mainFrameImageData:GetIconUrl("main_icon_buddy.png"),top=19,width=75,height=98,left=15,name="ClickFriend",bShow=true,},
 	[6]={url=mainFrameImageData:GetIconUrl("main_icon_setup.png"),top=18,width=78,height=91,left=22,name="ClickSetting",bShow=true,},
 	[7]={url=mainFrameImageData:GetIconUrl("main_icon_dressup.png"),top=20,width=85,height=86,left=14,name="ClickChange",bShow=false,},
-	[8]={url="",top=20,width=85,height=86,left=14,name="ClickSchoolyard",bShow=true,},
+	[8]={url=mainFrameImageData:GetIconUrl("main_icon_schoolyard.png"),top=20,width=96,height=86,left=10,name="ClickSchoolyard",bShow=true,},
 }
 
 MainUIButtons.main_open_pc = {
