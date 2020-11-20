@@ -19,9 +19,20 @@ function ClickChallenge()
 end
 
 function ClickRaffle()
+    -- 游客限制
+    local isVisitor = commonlib.getfield("System.User.isVisitor")
+    if isVisitor then
+        local VisitorLimit = NPL.load("(gl)Mod/CodePku/cellar/GUI/AccountUp/VisitorLimit.lua");
+        local params = {
+            title = "绑定提醒",
+            content = "亲，为了保证奖品能准确到达您手中，需要升级为正式账号才可以进行抽奖。",
+        }
+        VisitorLimit:CheckStatus(params);
+        return
+    end
     -- 我要抽奖
     GameLogic.GetFilters():apply_filters("ClickStatistics", {track_id= 48, track_scene =13, track_type=0, })
-    local url = "http://game.dev.codepku.com/h5/event/standing-challenge"
+    local url = "http://game.codepku.com/h5/event/standing-challenge"
     CommonFunc.OpenUrl(url, true, 'portrait')
 end
 

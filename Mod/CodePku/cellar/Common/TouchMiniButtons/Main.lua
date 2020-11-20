@@ -107,8 +107,8 @@ MainUIButtons.main_open_mobile_plus = {
 }
 
 MainUIButtons.activity = {
-	[1]={url=mainFrameImageData:GetIconUrl("main_icon_raiders_1.png"),top=0,width=129,height=152,left=3,name="ClickActivity1",bShow=true,},
-	[2]={url=mainFrameImageData:GetIconUrl("main_icon_home.png"),top=7,width=147,height=162,left=1,name="ClickActivity2",bShow=true,},
+	[1]={url=mainFrameImageData:GetIconUrl("main_icon_entrance.png"),top=0,width=129,height=152,left=3,name="ClickActivity1",bShow=true,},
+	[2]={url=mainFrameImageData:GetIconUrl("main_icon_home.png"),top=7,width=147,height=162,left=1,name="ClickActivity2",bShow=false,},
 }
 
 -- MainUIButtons.isIOSApproval = CommonFunc.isIOSApproval()
@@ -452,7 +452,7 @@ function MainUIButtons.ShowPage()
 
 	if not hideAllMenu then
 		if not hideMenu then 
-			-- MainUIButtons:show_activity_ui() -- 限时活动
+			MainUIButtons:show_activity_ui() -- 限时活动
 			MainUIButtons:show_common_ui()
 			MainUIButtons:show_money_ui()		
 			MainUIButtons:show_home_window_ui()
