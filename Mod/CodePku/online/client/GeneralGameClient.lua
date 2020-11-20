@@ -55,6 +55,13 @@ function GeneralGameClient:AddAssetsWhiteList()
 
     self.GetAssetsWhiteList().AddAsset("character/v5/02animals/BlueDragon/BlueDragon.x");
     self.GetAssetsWhiteList().AddAsset("character/v3/Item/ObjectComponents/GemBuffEffect/12883_teen_gem_buff_effect_level3.anim.x");
+
+    -- 课件军事基地白名单
+    self.GetAssetsWhiteList().AddAsset("codepku/model/blue-1-GM.x");
+    self.GetAssetsWhiteList().AddAsset("codepku/model/blue-2-GM.x");
+    self.GetAssetsWhiteList().AddAsset("codepku/model/red-1-GM.x");
+    self.GetAssetsWhiteList().AddAsset("codepku/model/red-2-GM.x");
+    
 end
 
 -- 加载世界
