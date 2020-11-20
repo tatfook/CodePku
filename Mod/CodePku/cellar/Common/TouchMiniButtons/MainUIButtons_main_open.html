@@ -17,8 +17,12 @@ local MainUIButtons = NPL.load("(gl)Mod/CodePku/cellar/Common/TouchMiniButtons/M
 local mainFrameImageData = NPL.load("(gl)Mod/CodePku/cellar/imageLuaTable/mainFrameImageData.lua")
 main_icon_open = ""
 local bShowBranch = commonlib.getfield("System.Codepku.GGSConnected")
+local keepwork_project_id 
+if (System.Codepku and System.Codepku.Coursewares) then	
+    keepwork_project_id = System.Codepku.Coursewares.keepwork_project_id
+end	
 if System.os.IsMobilePlatform() then
-    if bShowBranch == false then
+    if bShowBranch == false or keepwork_project_id == 52010 then
         main_icon_open = mainFrameImageData:GetIconUrl('main_icon_open_p.png')
         main_icon_open_width = 688
         main_icon_open_height = 241   
@@ -28,7 +32,7 @@ if System.os.IsMobilePlatform() then
         main_icon_open_height = 237 
     end
 else
-    if bShowBranch == false then
+    if bShowBranch == false or keepwork_project_id == 52010 then
         main_icon_open = mainFrameImageData:GetIconUrl('main_icon_open.png')
         main_icon_open_width = 530
         main_icon_open_height = 176
