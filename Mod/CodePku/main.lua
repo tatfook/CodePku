@@ -257,7 +257,7 @@ function CodePku:init()
 		"ShowLoginBackgroundPage",
 		function(bShow, bShowCopyRight, bShowLogo, bShowBg)
 			-- 预加载图片
-			CodePkuDownloadWorld:ShowPrestrainPage()
+			-- CodePkuDownloadWorld:ShowPrestrainPage()
 			NPL.load("(gl)Mod/CodePku/cellar/AssetManage/CodePkuAssetPreloader.lua")
 			local CodePkuAssetPreloader = commonlib.gettable("Mod.CodePku.AssetManage.CodePkuAssetPreloader")
 			-- CodePkuAssetPreloader.getSingleTon():PreloadAsset()
