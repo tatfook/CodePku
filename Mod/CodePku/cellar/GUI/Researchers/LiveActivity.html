@@ -48,6 +48,10 @@ end
 function OnSubmit()
     -- 进入世界
     local setted_id = page:GetValue("live_id")
+    if commonlib.utf8.len(setted_id) < 1 then
+        GameLogic.AddBBS("CodeGlobals", L"请输入ID", 3000, "#FF0000");
+        return
+    end
     local command = "/connectCodePku -no=1 -isSyncBlock -isSyncCmd -host=106.53.147.185 -port=9901 52010 " .. tostring(setted_id)
     -- GameLogic.AddBBS("CodeGlobals", setted_id, 3000, "#FF0000");
     GameLogic.RunCommand(command);
