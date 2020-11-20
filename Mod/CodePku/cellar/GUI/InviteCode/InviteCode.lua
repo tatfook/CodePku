@@ -104,8 +104,16 @@ end
 function InviteCode.GetRecord()
     request:get(string.format('/invite/list?activity_id=%d', InviteCode.activity_id)):next(function(response)
         InviteCode.inviteRecords = {}
-        for _,v in pairs(response.data.data) do
-            InviteCode.inviteRecords[v.id] = {id=v.id, name=v.u_nickname}
+
+        local inviteData = response.data.data
+        table.sort(inviteData, function (a, b)
+            return if_else(a.id<b.id, true, false)
+        end)
+
+        local index = 1
+        for _,v in pairs(inviteData) do
+            InviteCode.inviteRecords[index] = {id=index, name=v.u_nickname}
+            index = index + 1
         end
         InviteCode.window:Refresh(0)
     end):catch(function(e)
