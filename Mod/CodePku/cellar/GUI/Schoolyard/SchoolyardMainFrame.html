@@ -38,6 +38,13 @@ function LeaveSchool()
     Schoolyard:ShowPopupBox(params)
 end
 
+-- 获取经验条长度
+function GetExpWidth()
+    local width = 333       -- 经验条总长度
+    local now_width = math.modf(((Schoolyard.school_level_progress.next_level_activity-Schoolyard.school_level_progress.remain_activity)/Schoolyard.school_level_progress.next_level_activity)*width)
+    return now_width > 32 and now_width or 32
+end
+
 ]]>
 </script>
 <style type="text/mcss">
@@ -89,7 +96,7 @@ end
                 <div style="position: relative;left: 29;top: 72;width: 150;height: 40;font-family: Impact;font-size: 48;color: #b36f14;"><%= Schoolyard.schoolyard_level %></div>
                 <!-- 经验条 -->
                 <div style="<%=format('position: relative;left:83;top: 158;width: 339;height: 40;background:url(%s);', GetIcon('schoolyard_exp_bot.png'))%>">
-                    <div style="<%=format('position: relative;left:3;top: 5;width: 32;height: 30;background:url(%s);', GetIcon('schoolyard_exp.png'))%>"></div>
+                    <div style="<%=format('position: relative;left:3;top: 4;width: %s;height: 32;background:url(%s:15 0 15 0);', GetExpWidth(), GetIcon('schoolyard_exp.png'))%>"></div>
                 </div>
                 <!-- 学校人数 -->
                 <div style="position: relative;left: 225;top: 227;width: 200;height: 40;font-size: 28;color: #945e31;"><%= Schoolyard.number_of_people %></div>

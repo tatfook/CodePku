@@ -39,7 +39,7 @@ function ShowUserPage(id)
         UserInfoPage:ShowPage(1, false, id);
         -- UserInfoPage:ShowPage(1, false, id, MainUIButtons.user_asset);
     end
-    GameLogic.AddBBS("CodeGlobals", tostring(id), 3000, "#FF0000");
+    -- GameLogic.AddBBS("CodeGlobals", tostring(id), 3000, "#FF0000");
 end
 
 -- 滚动条到底部了,动态加载
@@ -77,7 +77,7 @@ end
                             <div name="<%= Eval('index') %>" style="<%=format('position: relative;left:89;width: 1295;height: 185;background:url(%s);', GetIcon('shoolyard_member_mat_bot.png'))%>">
                                 <div style="position: relative;left: 57;top: 36;width: 200;height: 50;font-family: Impact;font-size: 48;color: #b36f14;"><%= Eval('level') %></div>
                                 <div style="position: relative;left: 57;top: 100;width: 370;height: 50;font-family: zkklt;font-size: 42;color: #945e31;"><%= user.nickname or "" %></div>
-                                <div style="position: relative;left: 505;top: 82;width: 400;height: 50;font-family: Alibaba PuHuiTi;font-size: 48;text-align: center;color: #945e31;"><%= Eval('total_activity') %></div>
+                                <div style="position: relative;left: 505;top: 82;width: 400;height: 50;font-family: Alibaba PuHuiTi;font-size: 48;text-align: center;color: #945e31;"><%= Eval('weekly_activity') or 0 %></div>
                                 <pe:if condition='<%= user.is_online == true %>'>
                                     <div style="position: relative;left: 984;top: 76;width: 280;height: 50;font-family: zkklt;font-size: 46;color: #47753c;"><%= Eval('online_statu') %></div>
                                 </pe:if>

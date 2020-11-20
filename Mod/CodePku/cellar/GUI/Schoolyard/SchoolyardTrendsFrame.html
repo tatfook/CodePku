@@ -10,8 +10,11 @@
 <script refresh="false" type="text/npl" src="Schoolyard.lua"><![CDATA[
 
 local Schoolyard = NPL.load("(gl)Mod/CodePku/cellar/GUI/Schoolyard/Schoolyard.lua");
+local page = document:GetPageCtrl()
 
-Schoolyard:GetTrends()
+if Schoolyard.joined_schoolyard == true and next(Schoolyard.trends_table) == nil then
+    Schoolyard:GetTrends(1, page)
+end
 
 -- 获取图片
 function GetIcon(index)
@@ -22,9 +25,17 @@ function ClosePage()
     Schoolyard.main_ui:CloseWindow()
 end
 
--- 获取动态数据
+-- 获取学校动态数据
 function GetTrendsResult()
     return Schoolyard.trends_table
+end
+
+-- 动态加载
+function DynamicLoading()
+    if Schoolyard.trends_table_pages and next(Schoolyard.trends_table_pages) ~= nil and Schoolyard.trends_table_pages.current_page < Schoolyard.trends_table_pages.last_page then
+        local new_page = Schoolyard.trends_table_pages.current_page +1
+        Schoolyard:GetTrends(new_page, page)
+    end
 end
 
 ]]>   
@@ -34,6 +45,23 @@ end
 
 <div style="width: 1500;height: 900;">
     <div style="<%=format('position:relative;left:76;top: 42;width:1372;height:872;font-family: alhy;font-size: 48;color: #945e31;background:url(%s);', GetIcon('shoolyard_comm_bot.png'))%>">
+        <!-- 动态 -->
+        <div style="position: relative;left: 13;top: 47;width: 1308;height: 773;">
+            <pe:treeview onscrollend="DynamicLoading" style="position: relative;width: 1350;height: 773;" name='messages' DefaultNodeHeight = "0" ItemsPerLine="1" AllowPaging="false" RememberScrollPos="true" RememberLastPage="false" VerticalScrollBarStep="40">
+                <pe:repeat DataSource="<%= GetTrendsResult() %>">
+                    <pe:repeatitem>
+                        <div style="width: 1383;height: 91;">
+                            <div style="float: left;left: 18;top: 18;height: 50;font-family: zkklt;font-size: 42;color: #945e31;"><%= Eval('nickname') or "" %></div>
+                            <div style="float: left;left: 25;top: 28;width: 715;height: 40;font-family: zkklt;font-size: 32;color: #af9177;"><%= Eval('action_text') or "" %></div>
+                            <div style="<%=format('position: relative;left:10;top:22;width: 1282;height: 9;background:url(%s);', GetIcon('schoolyard_surbase.png'))%>"></div>
+                            <div style="position: relative;left: 1034;top: -30;width: 280;height: 50;font-family: zkklt;font-size: 46;color: #47753c;"><%= Eval('happended_at') %></div>
+                        </div>
+                    </pe:repeatitem>
+                </pe:repeat>
+            </pe:treeview>
+        </div>
+
+
         <div style="<%=format('position:relative;left:57;top: -73;width:322;height:113;background:url(%s);', GetIcon('shoolyard_pagingtag_01.png'))%>">
             <div style="position: relative;left: 125;top: 40;">动 态</div>
         </div>
@@ -43,22 +71,7 @@ end
         </div>
     </div>
 
-<!-- 动态 -->
-    <div style="position: relative;left: 36;top: 91;width: 1383;height: 781;">
-    
-        <pe:treeview onscrollend="DynamicLoading" style="position: relative;width: 1405;height: 781;" name='messages' DefaultNodeHeight = "185" ItemsPerLine="1" AllowPaging="false" RememberScrollPos="true" RememberLastPage="false" VerticalScrollBarStep="40">
-            <pe:repeat DataSource="<%= GetTrendsResult() %>">
-                <pe:repeatitem>
-                    <div style="width: 1383;height: 185;margin-bottom: -10;">
-                        <div name="<%= Eval('index') %>" style="<%=format('position: relative;left:89;width: 1295;height: 185;background:url(%s);', GetIcon('shoolyard_member_mat_bot.png'))%>">
-                            <div style="position: relative;left: 57;top: 36;width: 200;height: 50;font-family: Impact;font-size: 48;color: #b36f14;"><%= Eval('level') %></div>
-                            <div style="position: relative;left: 505;top: 82;width: 400;height: 50;font-family: Alibaba PuHuiTi;font-size: 48;text-align: center;color: #945e31;"><%= Eval('total_activity') %></div>
-                        </div>
-                    </div>
-                </pe:repeatitem>
-            </pe:repeat>
-        </pe:treeview>
-    </div>
+
 </div>
 
 </pe:mcml>

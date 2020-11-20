@@ -25,6 +25,9 @@ Schoolyard.tabs = {
     [3] = {name = "trends", title = "动态"},
 }
 
+
+-- character/CC/02human/paperman/boy01.x    默认皮肤男
+-- character/CC/02human/paperman/girl01.x   默认皮肤女
 Schoolyard.members_table = {}       -- 成员列表
 
 Schoolyard.trends_table = {}        -- 动态列表
@@ -171,6 +174,7 @@ function Schoolyard:GetMySchoolyardInfo(page)
             Schoolyard.schoolyard_vitality = data.weekly_activity     -- 学校周活跃度
             Schoolyard.week_rank = data.week_rank        -- 学校周活跃排行
             Schoolyard.total_rank = data.total_rank       -- 学校总活跃排行
+            Schoolyard.school_level_progress = data.level_progress      -- 学校经验
 
             page:Refresh(0)
         end
@@ -349,7 +353,6 @@ function Schoolyard:GetMembers(current_page, page)
         local data = response.data.data
         Schoolyard.members_pages = response.data.pages
         Schoolyard:SortMembers(data)
-        -- Schoolyard.members_table = data
         if page then
             page:Refresh(0)
         end
@@ -362,9 +365,13 @@ end
 
 -- 我的校园动态
 function Schoolyard:GetTrends(current_page, page)
+    if Schoolyard.get_school_Trends then
+        return
+    end
+    Schoolyard.get_school_Trends = true
     local function GetTrendsTime(datatime)
         if datatime == nil then
-            return "离线"
+            return ""
         end
         local now_date = os.date("%Y-%m-%d %H:%M:%S", os.time())
         -- local result = commonlib.GetMillisecond_BetweenToDate(data,now_date)
@@ -385,7 +392,12 @@ function Schoolyard:GetTrends(current_page, page)
             return "离线"
         end
     end
-    local path = "/schools/dynamics"
+    local path = "/schools/dynamics?page="
+    if current_page then
+        path = path .. tostring(current_page)
+    else
+        path = path .. "1"
+    end
     request:get(path):next(function(response)
         local data = response.data.data
         Schoolyard.trends_table_pages = response.data.pages
@@ -393,10 +405,9 @@ function Schoolyard:GetTrends(current_page, page)
             local temp = v
             temp.happended_at = GetTrendsTime(v.behavior.happended_at)
             temp.action_text = v.behavior.action_text
-            
+            temp.nickname = (v.user or {}).nickname
+            table.insert(Schoolyard.trends_table,temp)
         end
-
-
         if page then
             page:Refresh(0)
         end
@@ -405,7 +416,6 @@ function Schoolyard:GetTrends(current_page, page)
         LOG.std(nil, "error", "Schoolyard", "GetTrends")
         Schoolyard.get_school_Trends = false
     end);
-    Schoolyard.trends_table = {}
 end
 
 -- 展示我的校园页面
@@ -418,7 +428,7 @@ function Schoolyard:ShowPage()
     Schoolyard.tabs_select_index = 1
     local params = {
         url="Mod/CodePku/cellar/GUI/Schoolyard/Schoolyard.html",
-        alignment="_lt", left = 0, top = 0, width = 1920 , height = 1080, zorder = 20
+        alignment="_lt", left = 0, top = 0, width = 1920 , height = 1080, zorder = 19
     };
     self.main_ui = AdaptWindow:QuickWindow(params)
     -- 获取我的校园信息
