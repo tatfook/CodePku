@@ -6,7 +6,6 @@ local inviteImageData = NPL.load("(gl)Mod/CodePku/cellar/imageLuaTable/inviteIma
 local mainFrameImageData = NPL.load("(gl)Mod/CodePku/cellar/imageLuaTable/mainFrameImageData.lua")
 local request = NPL.load("(gl)Mod/CodePku/api/BaseRequest.lua")
 local Config = NPL.load("(gl)Mod/CodePkuCommon/config/Config.lua")
-local CommonFunc = commonlib.gettable("Mod.CodePku.Common.CommonFunc")
 
 local InviteCode = NPL.export();
 
@@ -35,6 +34,16 @@ function InviteCode:ShowPage()
 end
 
 function InviteCode.Init()
+    InviteCode.ifBanded = InviteCode.ifBanded or false
+    InviteCode.bandName = InviteCode.bandName ~= '' and InviteCode.bandName or ''
+    InviteCode.ifBandAwardReceived = InviteCode.ifBandAwardReceived or false
+
+    InviteCode.ifInviteRecord = InviteCode.ifInviteRecord or false
+    InviteCode.invite_code = InviteCode.invite_code ~= '' and InviteCode.invite_code or ''
+    InviteCode.inviteRewards = InviteCode.inviteRewards and  next(InviteCode.inviteRewards) and InviteCode.inviteRewards or {}
+    InviteCode.inviteRecords = InviteCode.inviteRecords and next(InviteCode.inviteRecords) and InviteCode.inviteRecords or {}
+    --reward_status/status:1未完成2已领取3未领取
+
     --标记,为了只刷新一次
     InviteCode.dataFlag1 = InviteCode.dataFlag1 or nil -- 活动时间/邀请码
     InviteCode.dataFlag2 = nil -- 邀请奖励
@@ -64,7 +73,6 @@ function InviteCode.Init()
         for _,v in pairs(rewardData) do
             if v.type=="2" then
                 v.reward_json = commonlib.Json.Decode(v.reward_json)
-                v.reward_index = index
                 InviteCode.inviteRewards[index] = v
                 index = index + 1
             end
@@ -79,7 +87,6 @@ function InviteCode.Init()
 
     request:get(string.format('/invite-reward/bind?activity_id=%d', InviteCode.activity_id)):next(function(response)
         local bindData = response.data.data
-        --todo ifBanded/ifBandAwardReceived状态获取
         InviteCode.ifBanded = bindData.status ~= 1
         InviteCode.bandName = bindData.inviter_nick_name
         InviteCode.bandRewards =  commonlib.Json.Decode(bindData.reward_json)
@@ -127,7 +134,6 @@ function InviteCode.Band(code)
     local ifCreateAfterActivity = (commonlib.GetMillisecond_Date(userCreateTime) - commonlib.GetMillisecond_Date(activityTime)) >= 0
 
     if ifCreateAfterActivity then
-        GameLogic.AddBBS("CodeGlobals", L"123", 3000, "#FF0000");
         local data = {
             invite_code = code,
             activity_id = InviteCode.activity_id
@@ -135,7 +141,7 @@ function InviteCode.Band(code)
         request:post('/invite/bind', data):next(function(response)
             InviteCode.ifBanded = true
             GameLogic.AddBBS("CodeGlobals", L"恭喜您绑定成功", 3000, "#00FF00");
-            InviteCode.window:Refresh(0)
+            InviteCode.Init()
         end):catch(function(e)
             GameLogic.AddBBS("CodeGlobals", e.data.message, 3000, "#FF0000");
         end)
@@ -145,22 +151,29 @@ function InviteCode.Band(code)
 end
 
 function InviteCode.GetAward(btnName)
+    local reward_id = tonumber(btnName)
     local data = {
-        reward_id = tonumber(btnName)+1,
+        reward_id = reward_id,
         activity_id = InviteCode.activity_id,
     }
     request:post('/invite-reward/store', data):next(function(response)
-        if tonumber(btnName) == 0 then
-            local wanxuebi = tonumber(InviteCode.bandRewards["1"]["prop_count"])
-            local wanxuequan = tonumber(InviteCode.bandRewards["2"]["prop_count"])
-            CommonFunc.RefreshLocalMoney({{amount=wanxuebi,currency_id=1,},{amount=wanxuequan,currency_id=2,},}, nil ,true)
+        local wanxuebi, wanxuequan = 0, 0
+        if reward_id == 1 then
+            wanxuebi = tonumber(InviteCode.bandRewards["1"]["prop_count"])
+            wanxuequan = tonumber(InviteCode.bandRewards["2"]["prop_count"])
         else
-            local wanxuebi = tonumber(InviteCode.inviteRewards[tonumber(btnName)]["reward_json"]["1"]["prop_count"])
-            local wanxuequan = tonumber(InviteCode.inviteRewards[tonumber(btnName)]["reward_json"]["2"]["prop_count"])
+            for _,v in pairs(InviteCode.inviteRewards) do
+                if v.id == reward_id then
+                    wanxuebi = tonumber(v["reward_json"]["1"]["prop_count"])
+                    wanxuequan = tonumber(v["reward_json"]["2"]["prop_count"])
+                end
+            end
+        end
+        if (wanxuebi and wanxuebi > 0) or (wanxuequan and wanxuequan > 0) then
             CommonFunc.RefreshLocalMoney({{amount=wanxuebi,currency_id=1,},{amount=wanxuequan,currency_id=2,},}, nil ,true)
         end
         GameLogic.AddBBS("CodeGlobals", L"恭喜您领取成功", 3000, "#00FF00");
-        InviteCode.window:Refresh(0)
+        InviteCode.Init()
     end):catch(function(e)
         GameLogic.AddBBS("CodeGlobals", e.data.message, 3000, "#FF0000");
     end)
@@ -213,3 +226,4 @@ function InviteCode.InviteShare()
         end
     });
 end
+

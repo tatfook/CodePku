@@ -11,26 +11,15 @@
 InviteCode = NPL.load("(gl)Mod/CodePku/cellar/GUI/InviteCode/InviteCode.lua")
 InviteCode.window = Page
 
-InviteCode.ifBanded = InviteCode.ifBanded or false
-InviteCode.bandName = InviteCode.bandName ~= '' and InviteCode.bandName or ''
-InviteCode.ifBandAwardReceived = InviteCode.ifBandAwardReceived or false
-
-InviteCode.ifInviteRecord = false
-InviteCode.invite_code = InviteCode.invite_code ~= '' and InviteCode.invite_code or ''
-InviteCode.inviteRewards = {}
-InviteCode.inviteRecords = {}
---reward_status/status:1未完成2已领取3未领取
-
 function OnclickReceive(id)
+    --GameLogic.AddBBS("CodeGlobals", tostring(id), 3000, "#00FF00");
     InviteCode.GetAward(id)
     Page:Refresh(0)
 end
 
 function OnclickRecord()
-    GameLogic.AddBBS(nil, "OnclickRecord", 3000, "0 255 0")
     InviteCode.ifInviteRecord = if_else(InviteCode.ifInviteRecord==false, true, false)
     if InviteCode.ifInviteRecord == true then
-        GameLogic.AddBBS(nil, tostring(InviteCode.ifInviteRecord), 3000, "0 255 0")
         InviteCode.GetRecord()
     else
         Page:Refresh(0)
@@ -102,7 +91,7 @@ InviteCode.Init()
             </pe:if>
     
             <pe:if condition="<%= InviteCode.ifBanded == true and InviteCode.ifBandAwardReceived == false %>">
-                <div name="0" onclick="OnclickReceive" style="<%=format('position: relative; left: 480; top: 134; width: 146; height: 55; font-size: 30; color: #ffffff; text-align: center; line-height: 55; background:url(%s);', InviteCode.GetIconUrl('invite_popup_btn_s_r.png'))%>">领取</div>
+                <div name="1" onclick="OnclickReceive" style="<%=format('position: relative; left: 480; top: 134; width: 146; height: 55; font-size: 30; color: #ffffff; text-align: center; line-height: 55; background:url(%s);', InviteCode.GetIconUrl('invite_popup_btn_s_r.png'))%>">领取</div>
             </pe:if>
     
             <pe:if condition="<%= InviteCode.ifBanded == true and InviteCode.ifBandAwardReceived == true %>">
@@ -148,7 +137,7 @@ InviteCode.Init()
                         <div style="<%=format('float: left; margin-left: 103; margin-top: 39; width: 146; height: 55; font-size: 30; color: #ffffff; text-align: center; line-height: 55; background:url(%s);', InviteCode.GetIconUrl('invite_popup_btn_s_g.png'))%>">已领取</div>
                     </pe:if>
                     <pe:if condition="<%= reward_status == 3 %>">
-                        <div name="<%= reward_index %>" onclick="OnclickReceive" style="<%=format('float: left; margin-left: 103; margin-top: 39; width: 146; height: 55; font-size: 30; color: #ffffff; text-align: center; line-height: 55; background:url(%s);', InviteCode.GetIconUrl('invite_popup_btn_s_r.png'))%>">领取</div>
+                        <div name="<%= id %>" onclick="OnclickReceive" style="<%=format('float: left; margin-left: 103; margin-top: 39; width: 146; height: 55; font-size: 30; color: #ffffff; text-align: center; line-height: 55; background:url(%s);', InviteCode.GetIconUrl('invite_popup_btn_s_r.png'))%>">领取</div>
                     </pe:if>
                     <pe:if condition="<%= reward_status == 1 %>">
                         <div style="<%=format('float: left; margin-left: 103; margin-top: 39; width: 146; height: 55; font-size: 30; color: #ffffff; text-align: center; line-height: 55; background:url(%s);', InviteCode.GetIconUrl('invite_popup_btn_s_g.png'))%>">领取</div>

@@ -79,7 +79,7 @@ CommonFunc.RefreshLocalMoney = function (walletChange, windows, bshow)
         local info = System.User.info
         local user_wallets =  info and info.user_wallets
         if not (user_wallets and next(user_wallets)) then
-            return
+            user_wallets = {{amount=0,currency_id=1,},{amount=0,currency_id=2,},}  -- 新号user_wallets为{}
         end
 
         for _,v in pairs(user_wallets) do
