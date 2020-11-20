@@ -11,22 +11,18 @@
 InviteCode = NPL.load("(gl)Mod/CodePku/cellar/GUI/InviteCode/InviteCode.lua")
 InviteCode.window = Page
 
-InviteCode.ifBanded = false
-InviteCode.BandName = ''
-InviteCode.ifBandAwardReceived = false
+InviteCode.ifBanded = InviteCode.ifBanded or false
+InviteCode.bandName = InviteCode.bandName ~= '' and InviteCode.bandName or ''
+InviteCode.ifBandAwardReceived = InviteCode.ifBandAwardReceived or false
 
 InviteCode.ifInviteRecord = false
-InviteCode.invite_code = ''
+InviteCode.invite_code = InviteCode.invite_code ~= '' and InviteCode.invite_code or ''
 InviteCode.inviteRewards = {}
---reward_status:1未完成2已领取3未领取
-
 InviteCode.inviteRecords = {}
+--reward_status/status:1未完成2已领取3未领取
 
-function OnclickReceive(btnName)
-    GameLogic.AddBBS(nil, btnName, 3000, "0 255 0")
-    if btnName == "band" then
-        InviteCode.ifBandAwardReceived = true
-    end
+function OnclickReceive(id)
+    InviteCode.GetAward(id)
     Page:Refresh(0)
 end
 
@@ -41,14 +37,21 @@ function OnclickRecord()
     end
 end
 
+function OnInviteCodeChange()
+    InviteCode.CheckVisitor()
+end
+
 function OnclickBand()
-    GameLogic.AddBBS(nil, "OnclickBand", 3000, "0 255 0")
-    InviteCode.ifBanded = true
-    Page:Refresh(0)
+    local inviteCode = Page:GetValue("inviteCode")
+    if inviteCode == "" or commonlib.utf8.len(inviteCode) ~= commonlib.utf8.len(InviteCode.invite_code) then
+        GameLogic.AddBBS("CodeGlobals", L"请输入六位邀请码", 3000, "#00FF00");
+    else
+        InviteCode.Band(inviteCode)
+    end
 end
 
 function OnclickCopyCode()
-    InviteCode.InviteCopy(InviteCode.myInvateCode)
+    InviteCode.InviteCopy()
 end
 
 function OnclickInviteFriends()
@@ -73,36 +76,38 @@ InviteCode.Init()
     <!-- 横幅 -->
     <div style="<%=format('position: relative; left: 220; top: 140; width: 1484; height: 147; background:url(%s);', InviteCode.GetIconUrl('invite_popup_frame.png'))%>">
         <div style="position: relative; left: 59; top: 50; width: 1401; height: 67; font-size: 30;">
-            2020.11.11- 2021.02.11 期间，每邀请一名新的同学注册玩学世界（非游客）并绑定你的邀请码，即可领取丰厚奖励。每个用户最多可领取累积10位好友的奖励，快来邀请好友一起来玩学世界吧！
+            <%= string.format("%s-%s期间，每邀请一名新的同学注册玩学世界（非游客）并绑定你的邀请码，即可领取丰厚奖励。每个用户最多可领取累积10位好友的奖励，快来邀请好友一起来玩学世界吧！", InviteCode.start_time or '2020.11.20', InviteCode.end_time or '2020.2.20') %>
         </div>
     </div>
 
     <!-- 绑定好友 -->
     <div style="<%=format('position: relative; left: 231; top: 343; width: 126; height: 30; background:url(%s);', InviteCode.GetIconUrl('invite_popup_title.png'))%>"></div>
     <div style="<%=format('position: relative; left: 230; top: 392; width: 660; height: 238; background:url(%s);', InviteCode.GetIconUrl('invite_popup_frame1.png'))%>">
-        <div style="position: relative; left: 34; top: 55; width: 252; height: 25; font-size: 28;">绑定好友获取奖励：</div>
-        <pe:if condition="<%= InviteCode.ifBanded == true %>">
-            <div style="position: relative; left: 288; top: 54; width: 336; height: 28; font-size: 28; text-align: left; font-family: Noto Sans S Chinese Regular;"><%= InviteCode.BandName..'（已绑定）' %></div>
-        </pe:if>
-        <pe:if condition="<%= InviteCode.ifBanded == false %>">
-            <div style="<%=format('position: relative; left: 271; top: 33; width: 168; height: 66; background:url(%s);', InviteCode.GetIconUrl('invite_popup_frame4.png'))%>">
-                <input type="text" MoveViewWhenAttachWithIME="true" name="inviteCode" onchange="OnInviteCodeChange" value="" EmptyText='输入邀请码' style="position: relative; left: 20; top: 24; width: 140; height: 28; font-size: 28; text-align: center; font-family: Noto Sans S Chinese Regular; background: #000000;"/>
-            </div>
-            <div onclick="OnclickBand" style="<%=format('position: relative; left: 480; top: 40; width: 146; height: 55; font-size: 30; color: #ffffff; text-align: center; line-height: 55; background:url(%s);', InviteCode.GetIconUrl('invite_popup_btn_s_b.png'))%>">绑定</div>
-        </pe:if>
-        <div style="<%=format('position: relative; left: 211; top: 141; width: 43; height: 45; padding-left: 43; padding-top: 19; font-size: 26; font-family: Noto Sans S Chinese Regular; background:url(%s);', InviteCode.GetIconUrl('main_icon_coin_2.png'))%>">x10</div>
-        <div style="<%=format('position: relative; left: 328; top: 138; width: 43; height: 51; padding-left: 43; padding-top: 22; font-size: 26; font-family: Noto Sans S Chinese Regular; background:url(%s);', InviteCode.GetIconUrl('main_icon_coin_1.png'))%>">x1000</div>
-        
-        <pe:if condition="<%= InviteCode.ifBanded == false %>">
-            <div style="<%=format('position: relative; left: 480; top: 134; width: 146; height: 55; font-size: 30; color: #ffffff; text-align: center; line-height: 55; background:url(%s);', InviteCode.GetIconUrl('invite_popup_btn_s_g.png'))%>">领取</div>
-        </pe:if>
-
-        <pe:if condition="<%= InviteCode.ifBanded == true and InviteCode.ifBandAwardReceived == false %>">
-            <div name="band" onclick="OnclickReceive" style="<%=format('position: relative; left: 480; top: 134; width: 146; height: 55; font-size: 30; color: #ffffff; text-align: center; line-height: 55; background:url(%s);', InviteCode.GetIconUrl('invite_popup_btn_s_r.png'))%>">领取</div>
-        </pe:if>
-
-        <pe:if condition="<%= InviteCode.ifBanded == true and InviteCode.ifBandAwardReceived == true %>">
-            <div style="<%=format('position: relative; left: 480; top: 134; width: 146; height: 55; font-size: 30; color: #ffffff; text-align: center; line-height: 55; background:url(%s);', InviteCode.GetIconUrl('invite_popup_btn_s_g.png'))%>">已领取</div>
+        <pe:if condition="<%= InviteCode.bandRewards ~= nil %>">
+            <div style="position: relative; left: 34; top: 55; width: 252; height: 25; font-size: 28;">绑定好友获取奖励：</div>
+            <pe:if condition="<%= InviteCode.ifBanded == true %>">
+                <div style="position: relative; left: 288; top: 54; width: 336; height: 28; font-size: 28; text-align: left; font-family: Noto Sans S Chinese Regular;"><%= InviteCode.bandName..'（已绑定）' %></div>
+            </pe:if>
+            <pe:if condition="<%= InviteCode.ifBanded == false %>">
+                <div style="<%=format('position: relative; left: 271; top: 33; width: 168; height: 66; background:url(%s);', InviteCode.GetIconUrl('invite_popup_frame4.png'))%>">
+                    <input type="text" MoveViewWhenAttachWithIME="true" name="inviteCode" onchange="OnInviteCodeChange" value="" EmptyText='输入邀请码' style="position: relative; left: 20; top: 24; width: 140; height: 28; font-size: 28; text-align: center; font-family: Noto Sans S Chinese Regular; background: #000000;"/>
+                </div>
+                <div onclick="OnclickBand" style="<%=format('position: relative; left: 480; top: 40; width: 146; height: 55; font-size: 30; color: #ffffff; text-align: center; line-height: 55; background:url(%s);', InviteCode.GetIconUrl('invite_popup_btn_s_b.png'))%>">绑定</div>
+            </pe:if>
+            <div style="<%=format('position: relative; left: 211; top: 141; width: 43; height: 45; padding-left: 43; padding-top: 19; font-size: 26; font-family: Noto Sans S Chinese Regular; background:url(%s);', InviteCode.GetIconUrl('main_icon_coin_2.png'))%>"><%= string.format("x%d", InviteCode.bandRewards["2"]["prop_count"]) %></div>
+            <div style="<%=format('position: relative; left: 328; top: 138; width: 43; height: 51; padding-left: 43; padding-top: 22; font-size: 26; font-family: Noto Sans S Chinese Regular; background:url(%s);', InviteCode.GetIconUrl('main_icon_coin_1.png'))%>"><%= string.format("x%d", InviteCode.bandRewards["1"]["prop_count"]) %></div>
+            
+            <pe:if condition="<%= InviteCode.ifBanded == false %>">
+                <div style="<%=format('position: relative; left: 480; top: 134; width: 146; height: 55; font-size: 30; color: #ffffff; text-align: center; line-height: 55; background:url(%s);', InviteCode.GetIconUrl('invite_popup_btn_s_g.png'))%>">领取</div>
+            </pe:if>
+    
+            <pe:if condition="<%= InviteCode.ifBanded == true and InviteCode.ifBandAwardReceived == false %>">
+                <div name="0" onclick="OnclickReceive" style="<%=format('position: relative; left: 480; top: 134; width: 146; height: 55; font-size: 30; color: #ffffff; text-align: center; line-height: 55; background:url(%s);', InviteCode.GetIconUrl('invite_popup_btn_s_r.png'))%>">领取</div>
+            </pe:if>
+    
+            <pe:if condition="<%= InviteCode.ifBanded == true and InviteCode.ifBandAwardReceived == true %>">
+                <div style="<%=format('position: relative; left: 480; top: 134; width: 146; height: 55; font-size: 30; color: #ffffff; text-align: center; line-height: 55; background:url(%s);', InviteCode.GetIconUrl('invite_popup_btn_s_g.png'))%>">已领取</div>
+            </pe:if>
         </pe:if>
     </div>
 
@@ -111,9 +116,9 @@ InviteCode.Init()
 
     <!-- 邀请好友 -->
     <div style="<%=format('position: relative; left: 926; top: 336; width: 554; height: 31; background:url(%s);', InviteCode.GetIconUrl('invite_popup_title2.png'))%>"></div>
-    <div style="<%=format('position: relative; left: 1538; top: 322; width: 179; height: 61; background:url(%s);', InviteCode.GetIconUrl('invite_popup_btn_blue.png'))%>">
+    <div onclick="OnclickRecord" style="<%=format('position: relative; left: 1538; top: 322; width: 179; height: 61; background:url(%s);', InviteCode.GetIconUrl('invite_popup_btn_blue.png'))%>">
         <pe:if condition="<%= InviteCode.ifInviteRecord == true %>">
-            <div onclick="OnclickRecord" style="<%=format('position: relative; left: 54; top: 16; width: 71; height: 28; background:url(%s);', InviteCode.GetIconUrl('invite_popup_btn_text_back.png'))%>"></div>
+            <div  style="<%=format('position: relative; left: 54; top: 16; width: 71; height: 28; background:url(%s);', InviteCode.GetIconUrl('invite_popup_btn_text_back.png'))%>"></div>
         </pe:if>
         <pe:if condition="<%= InviteCode.ifInviteRecord == false %>">
             <div onclick="OnclickRecord" style="<%=format('position: relative; left: 32; top: 15; width: 114; height: 30; background:url(%s);', InviteCode.GetIconUrl('invite_popup_btn_text_invitation_records.png'))%>"></div>
@@ -137,13 +142,13 @@ InviteCode.Init()
             <pe:repeat DataSource="<%= InviteCode.inviteRewards %>">
                 <pe:repeatitem>
                     <div style="float: left; margin-left: 31; margin-top: 53; margin-bottom: 13; font-size: 30; width: 330; height: 27;"><%= string.format("累计邀请%d位好友奖励：", invite_count) %></div>
-                    <div style="<%=format('float: left; margin-left: -10; margin-top: 44; width: 43; height: 45; padding-left: 43; padding-top: 19; font-size: 26; font-family: Noto Sans S Chinese Regular; background:url(%s);', InviteCode.GetIconUrl('main_icon_coin_2.png'))%>">x10</div>
-                    <div style="<%=format('float: left; margin-left: 69; margin-top: 41; width: 43; height: 51; padding-left: 43; padding-top: 22; font-size: 26; font-family: Noto Sans S Chinese Regular; background:url(%s);', InviteCode.GetIconUrl('main_icon_coin_1.png'))%>">x1000</div>            
+                    <div style="<%=format('float: left; margin-left: -10; margin-top: 44; width: 43; height: 45; padding-left: 43; padding-top: 19; font-size: 26; font-family: Noto Sans S Chinese Regular; background:url(%s);', InviteCode.GetIconUrl('main_icon_coin_2.png'))%>"><%= string.format("x%d", reward_json["2"]["prop_count"]) %></div>
+                    <div style="<%=format('float: left; margin-left: 69; margin-top: 41; width: 43; height: 51; padding-left: 43; padding-top: 22; font-size: 26; font-family: Noto Sans S Chinese Regular; background:url(%s);', InviteCode.GetIconUrl('main_icon_coin_1.png'))%>"><%= string.format("x%d", reward_json["1"]["prop_count"]) %></div>            
                     <pe:if condition="<%= reward_status == 2 %>">
                         <div style="<%=format('float: left; margin-left: 103; margin-top: 39; width: 146; height: 55; font-size: 30; color: #ffffff; text-align: center; line-height: 55; background:url(%s);', InviteCode.GetIconUrl('invite_popup_btn_s_g.png'))%>">已领取</div>
                     </pe:if>
                     <pe:if condition="<%= reward_status == 3 %>">
-                        <div name="<%= tostring(id) %>" onclick="OnclickReceive" style="<%=format('float: left; margin-left: 103; margin-top: 39; width: 146; height: 55; font-size: 30; color: #ffffff; text-align: center; line-height: 55; background:url(%s);', InviteCode.GetIconUrl('invite_popup_btn_s_r.png'))%>">领取</div>
+                        <div name="<%= reward_index %>" onclick="OnclickReceive" style="<%=format('float: left; margin-left: 103; margin-top: 39; width: 146; height: 55; font-size: 30; color: #ffffff; text-align: center; line-height: 55; background:url(%s);', InviteCode.GetIconUrl('invite_popup_btn_s_r.png'))%>">领取</div>
                     </pe:if>
                     <pe:if condition="<%= reward_status == 1 %>">
                         <div style="<%=format('float: left; margin-left: 103; margin-top: 39; width: 146; height: 55; font-size: 30; color: #ffffff; text-align: center; line-height: 55; background:url(%s);', InviteCode.GetIconUrl('invite_popup_btn_s_g.png'))%>">领取</div>

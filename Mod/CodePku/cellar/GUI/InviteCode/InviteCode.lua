@@ -1,10 +1,12 @@
 --[[usage:
 local InviteCode = NPL.load("(gl)Mod/CodePku/cellar/GUI/InviteCode/InviteCode.lua")
 --]]
-local AdaptWindow = commonlib.gettable("Mod.CodePku.GUI.Window.AdaptWindow");
+local AdaptWindow = commonlib.gettable("Mod.CodePku.GUI.Window.AdaptWindow")
 local inviteImageData = NPL.load("(gl)Mod/CodePku/cellar/imageLuaTable/inviteImageData.lua")
 local mainFrameImageData = NPL.load("(gl)Mod/CodePku/cellar/imageLuaTable/mainFrameImageData.lua")
-local request = NPL.load("(gl)Mod/CodePku/api/BaseRequest.lua");
+local request = NPL.load("(gl)Mod/CodePku/api/BaseRequest.lua")
+local Config = NPL.load("(gl)Mod/CodePkuCommon/config/Config.lua")
+local CommonFunc = commonlib.gettable("Mod.CodePku.Common.CommonFunc")
 
 local InviteCode = NPL.export();
 
@@ -26,7 +28,7 @@ function InviteCode:ShowPage()
         y = -540,
         width = 1920,
         height = 1080,
-        zorder = 31,
+        zorder = 30,
         }
 
     AdaptWindow:QuickWindow(params)
@@ -34,26 +36,41 @@ end
 
 function InviteCode.Init()
     --标记,为了只刷新一次
-    local dataFlag1 = nil -- 活动时间/邀请码
-    local dataFlag2 = nil -- 邀请奖励
-    local dataFlag3 = nil --绑定者奖励
-    request:get(string.format('/invite/show?activity_id=%d&user_id=%d', InviteCode.activity_id, System.User.info.id)):next(function(response)
-        local data = response.data.data
-        InviteCode.invite_code = data.invite_code
-        InviteCode.start_time = data.start_time
-        InviteCode.end_time = data.end_time
-        dataFlag1 = true
-        if dataFlag2 and dataFlag3 then
-            InviteCode.window:Refresh(0)
-        end
-    end):catch(function(e)
-        GameLogic.AddBBS("CodeGlobals", e.data.message, 3000, "#FF0000");
-    end)
+    InviteCode.dataFlag1 = InviteCode.dataFlag1 or nil -- 活动时间/邀请码
+    InviteCode.dataFlag2 = nil -- 邀请奖励
+    InviteCode.dataFlag3 = nil --绑定者奖励
+    if not InviteCode.dataFlag1 then -- 活动时间/邀请码不用刷新
+        request:get(string.format('/invite/show?activity_id=%d&user_id=%d', InviteCode.activity_id, System.User.info.id)):next(function(response)
+            local data = response.data.data
+            InviteCode.invite_code = data.invite_code
+            InviteCode.start_time = data.start_time
+            InviteCode.end_time = data.end_time
+            InviteCode.dataFlag1 = true
+            if InviteCode.dataFlag2 and InviteCode.dataFlag3 then
+                InviteCode.window:Refresh(0)
+            end
+        end):catch(function(e)
+            GameLogic.AddBBS("CodeGlobals", e.data.message, 3000, "#FF0000");
+        end)
+    end
 
     request:get(string.format('/invite-reward/list?activity_id=%d', InviteCode.activity_id)):next(function(response)
-        InviteCode.rewardData = response.data.data
-        dataFlag2 = true
-        if dataFlag1 and dataFlag3 then
+        local rewardData = response.data.data
+        table.sort(rewardData, function (a, b)
+            return if_else(a.id<b.id, true, false)
+        end)
+        local index = 1
+        InviteCode.inviteRewards = {}
+        for _,v in pairs(rewardData) do
+            if v.type=="2" then
+                v.reward_json = commonlib.Json.Decode(v.reward_json)
+                v.reward_index = index
+                InviteCode.inviteRewards[index] = v
+                index = index + 1
+            end
+        end
+        InviteCode.dataFlag2 = true
+        if InviteCode.dataFlag1 and InviteCode.dataFlag3 then
             InviteCode.window:Refresh(0)
         end
     end):catch(function(e)
@@ -61,10 +78,15 @@ function InviteCode.Init()
     end)
 
     request:get(string.format('/invite-reward/bind?activity_id=%d', InviteCode.activity_id)):next(function(response)
-        InviteCode.bindData = response.data.data
+        local bindData = response.data.data
         --todo ifBanded/ifBandAwardReceived状态获取
-        dataFlag3 = true
-        if dataFlag1 and dataFlag2 then
+        InviteCode.ifBanded = bindData.status ~= 1
+        InviteCode.bandName = bindData.inviter_nick_name
+        InviteCode.bandRewards =  commonlib.Json.Decode(bindData.reward_json)
+        InviteCode.ifBandAwardReceived = bindData.status == 2
+
+        InviteCode.dataFlag3 = true
+        if InviteCode.dataFlag1 and InviteCode.dataFlag2 then
             InviteCode.window:Refresh(0)
         end
     end):catch(function(e)
@@ -73,40 +95,80 @@ function InviteCode.Init()
 end
 
 function InviteCode.GetRecord()
-    request:get(string.format('/invite/list?invite_code=%s&activity_id=%d', InviteCode.activityData.invite_code, InviteCode.activity_id)):next(function(response)
-        --todo 
+    request:get(string.format('/invite/list?activity_id=%d', InviteCode.activity_id)):next(function(response)
         InviteCode.inviteRecords = {}
-        for _,v in response.data.data do
-            InviteCode.inviteRecords[v.id] = v.u_nickname
+        for _,v in pairs(response.data.data) do
+            InviteCode.inviteRecords[v.id] = {id=v.id, name=v.u_nickname}
         end
-        
         InviteCode.window:Refresh(0)
     end):catch(function(e)
         GameLogic.AddBBS("CodeGlobals", e.data.message, 3000, "#FF0000");
     end)
+end
+
+function InviteCode.CheckVisitor()
+    local VisitorLimit = NPL.load("(gl)Mod/CodePku/cellar/GUI/AccountUp/VisitorLimit.lua");
+    local params = {
+        title = "提示",
+        content = "您需要升级为正式账号才能参与活动",
+    }
+    return VisitorLimit:CheckStatus(params)
 end
 
 function InviteCode.Band(code)
-    request:post(string.format('/invite/bind?invite_code=%s&activity_id=%d', code, InviteCode.activity_id)):next(function(response)
-        --todo ifBanded状态刷新
+    if InviteCode.CheckVisitor() then
+        return
+    end
+
+    local userCreateTime =  System.User.info.created_at
+    local start_time = InviteCode.start_time
+    start_time = string.gsub(start_time,'%.','-')
+    local activityTime = string.format("%s 00:00:00", start_time)
+    local ifCreateAfterActivity = (commonlib.GetMillisecond_Date(userCreateTime) - commonlib.GetMillisecond_Date(activityTime)) >= 0
+
+    if ifCreateAfterActivity then
+        GameLogic.AddBBS("CodeGlobals", L"123", 3000, "#FF0000");
+        local data = {
+            invite_code = code,
+            activity_id = InviteCode.activity_id
+        }
+        request:post('/invite/bind', data):next(function(response)
+            InviteCode.ifBanded = true
+            GameLogic.AddBBS("CodeGlobals", L"恭喜您绑定成功", 3000, "#00FF00");
+            InviteCode.window:Refresh(0)
+        end):catch(function(e)
+            GameLogic.AddBBS("CodeGlobals", e.data.message, 3000, "#FF0000");
+        end)
+    else
+        GameLogic.AddBBS("CodeGlobals", L"您的注册时间早于活动开始时间，无法参与活动", 3000, "#FF0000");
+    end
+end
+
+function InviteCode.GetAward(btnName)
+    local data = {
+        reward_id = tonumber(btnName)+1,
+        activity_id = InviteCode.activity_id,
+    }
+    request:post('/invite-reward/store', data):next(function(response)
+        if tonumber(btnName) == 0 then
+            local wanxuebi = tonumber(InviteCode.bandRewards["1"]["prop_count"])
+            local wanxuequan = tonumber(InviteCode.bandRewards["2"]["prop_count"])
+            CommonFunc.RefreshLocalMoney({{amount=wanxuebi,currency_id=1,},{amount=wanxuequan,currency_id=2,},}, nil ,true)
+        else
+            local wanxuebi = tonumber(InviteCode.inviteRewards[tonumber(btnName)]["reward_json"]["1"]["prop_count"])
+            local wanxuequan = tonumber(InviteCode.inviteRewards[tonumber(btnName)]["reward_json"]["2"]["prop_count"])
+            CommonFunc.RefreshLocalMoney({{amount=wanxuebi,currency_id=1,},{amount=wanxuequan,currency_id=2,},}, nil ,true)
+        end
+        GameLogic.AddBBS("CodeGlobals", L"恭喜您领取成功", 3000, "#00FF00");
         InviteCode.window:Refresh(0)
     end):catch(function(e)
         GameLogic.AddBBS("CodeGlobals", e.data.message, 3000, "#FF0000");
     end)
 end
 
-function InviteCode.GetAward(id)
-    request:post(string.format('/invite-reward/store?reward_id=%d&activity_id=%d', id, InviteCode.activity_id)):next(function(response)
-        --todo 获取奖励
-        InviteCode.window:Refresh(0)
-    end):catch(function(e)
-        GameLogic.AddBBS("CodeGlobals", e.data.message, 3000, "#FF0000");
-    end)
-end
-
-function InviteCode.InviteCopy(text)
-    GameLogic.AddBBS(nil, L"邀请码复制成功", 3000, "0 255 0")
-    ParaMisc.CopyTextToClipboard(text)
+function InviteCode.InviteCopy()
+    GameLogic.AddBBS("CodeGlobals", L"邀请码复制成功", 3000, "#00FF00");
+    ParaMisc.CopyTextToClipboard(InviteCode.invite_code)
 end
 
 function InviteCode.InviteShare()
@@ -115,17 +177,18 @@ function InviteCode.InviteShare()
     local isAndroid = platform == "android";
     local isIOS = platform == "ios";
 
+    local url = string.format('%s/h5/event/invitecode/%d?user_id=%d', Config.defaultCodepkuHost, InviteCode.activity_id, System.User.info.id)
     local paras_ios = {
-        url = "https://www.wanxueshijie.com/",
-        title = "玩学世界",
-        des = "邀请码活动",
-        thumb = "https://scratch-works-staging-1253386414.file.myqcloud.com/game/admin/posters/a3b546dfab2d174b4a2ca4ae1454d484.jpg"
+        url = url,
+        title = "邀请好友领取奖励",
+        des = "《玩学世界》呼朋唤友一起边玩边学，获取海量玩学券！",
+        thumb = "https://www.wanxueshijie.com/images/common/share_img.png"
     }
     local paras_android = {
-        url = "https://www.wanxueshijie.com/",
-        title = "邀请码活动",
-        des = "https://scratch-works-staging-1253386414.file.myqcloud.com/game/admin/posters/a3b546dfab2d174b4a2ca4ae1454d484.jpg",
-        thumb = "玩学世界"
+        url = url,
+        title = "《玩学世界》呼朋唤友一起边玩边学，获取海量玩学券！",
+        des = "https://www.wanxueshijie.com/images/common/share_img.png",
+        thumb = "邀请好友领取奖励"
     }
 
     local paras = nil
