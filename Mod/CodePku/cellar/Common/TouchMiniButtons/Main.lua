@@ -107,8 +107,8 @@ MainUIButtons.main_open_mobile_plus = {
 }
 
 MainUIButtons.activity = {
-	[1]={url=mainFrameImageData:GetIconUrl("main_icon_raiders_1.png"),top=0,width=129,height=152,left=3,name="ClickActivity1",bShow=true,},
-	[2]={url=mainFrameImageData:GetIconUrl("main_icon_home.png"),top=7,width=147,height=162,left=1,name="ClickActivity2",bShow=true,},
+	[1]={url=mainFrameImageData:GetIconUrl("main_icon_entrance.png"),top=0,width=129,height=152,left=3,name="ClickActivity1",bShow=true,},
+	[2]={url=mainFrameImageData:GetIconUrl("main_icon_home.png"),top=7,width=147,height=162,left=1,name="ClickActivity2",bShow=false,},
 }
 
 -- MainUIButtons.isIOSApproval = CommonFunc.isIOSApproval()
@@ -164,17 +164,21 @@ function MainUIButtons:show_main_open_ui()
 	local open_heght = 250
 	local open_width = 688
 	local bShowBranch = commonlib.getfield("System.Codepku.GGSConnected")
-	if System.os.IsMobilePlatform() then
+	local keepwork_project_id 
+	if (System.Codepku and System.Codepku.Coursewares) then
+		keepwork_project_id = System.Codepku.Coursewares.keepwork_project_id
+	end	
+	if System.os.IsMobilePlatform()then
 		MainUIButtons.main_open = MainUIButtons.main_open_mobile
-		if bShowBranch == false then
+		if bShowBranch == false or keepwork_project_id == 52010 then
 			MainUIButtons.main_open = MainUIButtons.main_open_mobile
 		else
 			open_heght = 237
 			open_width = 838
-			MainUIButtons.main_open = MainUIButtons.main_open_mobile_plus
+			MainUIButtons.main_open = MainUIButtons.main_open_mobile_plus		
 		end
 	else
-		if bShowBranch == false then
+		if bShowBranch == false or keepwork_project_id == 52010 then
 			open_heght = 176
 			open_width = 530
 			MainUIButtons.main_open = MainUIButtons.main_open_pc
@@ -452,7 +456,7 @@ function MainUIButtons.ShowPage()
 
 	if not hideAllMenu then
 		if not hideMenu then 
-			-- MainUIButtons:show_activity_ui() -- 限时活动
+			MainUIButtons:show_activity_ui() -- 限时活动
 			MainUIButtons:show_common_ui()
 			MainUIButtons:show_money_ui()		
 			MainUIButtons:show_home_window_ui()
