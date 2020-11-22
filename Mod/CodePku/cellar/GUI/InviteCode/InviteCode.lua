@@ -102,6 +102,12 @@ function InviteCode.Init()
 end
 
 function InviteCode.GetRecord()
+    if InviteCode.runningFlagGetRecord then
+        GameLogic.AddBBS("CodeGlobals", "CD", 500, "#FF0000");
+        return
+    end
+
+    InviteCode.runningFlagGetRecord = true
     request:get(string.format('/invite/list?activity_id=%d', InviteCode.activity_id)):next(function(response)
         InviteCode.inviteRecords = {}
 
@@ -115,6 +121,7 @@ function InviteCode.GetRecord()
             InviteCode.inviteRecords[index] = {id=index, name=v.u_nickname}
             index = index + 1
         end
+        InviteCode.runningFlagGetRecord = nil
         InviteCode.window:Refresh(0)
     end):catch(function(e)
         GameLogic.AddBBS("CodeGlobals", e.data.message, 3000, "#FF0000");
@@ -131,6 +138,11 @@ function InviteCode.CheckVisitor()
 end
 
 function InviteCode.Band(code)
+    if InviteCode.runningFlagBand then
+        GameLogic.AddBBS("CodeGlobals", "CD", 500, "#FF0000");
+        return
+    end
+
     if InviteCode.CheckVisitor() then
         return
     end
@@ -149,6 +161,7 @@ function InviteCode.Band(code)
         request:post('/invite/bind', data):next(function(response)
             InviteCode.ifBanded = true
             GameLogic.AddBBS("CodeGlobals", L"恭喜您绑定成功", 3000, "#00FF00");
+            InviteCode.runningFlagBand = nil
             InviteCode.Init()
         end):catch(function(e)
             GameLogic.AddBBS("CodeGlobals", e.data.message, 3000, "#FF0000");
@@ -159,6 +172,11 @@ function InviteCode.Band(code)
 end
 
 function InviteCode.GetAward(btnName)
+    if InviteCode.runningFlagGetAward then
+        GameLogic.AddBBS("CodeGlobals", "CD", 500, "#FF0000");
+        return
+    end
+
     local reward_id = tonumber(btnName)
     local data = {
         reward_id = reward_id,
@@ -181,6 +199,7 @@ function InviteCode.GetAward(btnName)
             CommonFunc.RefreshLocalMoney({{amount=wanxuebi,currency_id=1,},{amount=wanxuequan,currency_id=2,},}, nil ,true)
         end
         GameLogic.AddBBS("CodeGlobals", L"恭喜您领取成功", 3000, "#00FF00");
+        InviteCode.runningFlagGetAward = nil
         InviteCode.Init()
     end):catch(function(e)
         GameLogic.AddBBS("CodeGlobals", e.data.message, 3000, "#FF0000");
