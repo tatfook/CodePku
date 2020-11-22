@@ -20,17 +20,29 @@ function InviteCode.GetIconUrl(iconName)
 end
 
 function InviteCode:ShowPage()
+    -- 两个window是为了适配IOS虚拟键盘无法失去焦点,同时关闭页面需要特殊处理，两个window都要关掉
+    if not InviteCode.BG then
+		local BGparams = {
+		url="Mod/CodePku/cellar/GUI/Profile/EditNameEmptyPage.html",
+		alignment="_lt", left = 0, top = 0, width = 1920 , height = 1080, zorder = 20,
+		}
+		InviteCode.BG = AdaptWindow:QuickWindow(BGparams)
+	end
+
     local params = {
         url = "Mod/CodePku/cellar/GUI/InviteCode/InviteCodePage.html",
         alignment = "_ct",
-        x = -960,
-        y = -540,
-        width = 1920,
-        height = 1080,
-        zorder = 30,
+        x = -889,
+        y = -484,
+        width = 1779,
+        height = 969,
+        zorder = 21,
         }
 
-    AdaptWindow:QuickWindow(params)
+    if not InviteCode.window then
+        AdaptWindow:QuickWindow(params)
+    end
+
 end
 
 function InviteCode.Init()
