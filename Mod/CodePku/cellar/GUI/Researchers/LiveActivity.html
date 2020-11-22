@@ -52,9 +52,12 @@ function OnSubmit()
         GameLogic.AddBBS("CodeGlobals", L"请输入ID", 3000, "#FF0000");
         return
     end
-    local command = "/connectCodePku -no=1 -isSyncBlock -isSyncCmd -host=106.53.147.185 -port=9901 52010 " .. tostring(setted_id)
+    NPL.load("(gl)Mod/CodePku/cellar/Common/CommonFunc/CommonFunc.lua")
+    local CommonFunc = commonlib.gettable("Mod.CodePku.Common.CommonFunc")
+    CommonFunc.ConnectLivingWorld(setted_id)
+    -- local command = "/connectCodePku -no=1 -isSyncBlock -isSyncCmd -host=106.53.147.185 -port=9901 52010 " .. tostring(setted_id)
     -- GameLogic.AddBBS("CodeGlobals", setted_id, 3000, "#FF0000");
-    GameLogic.RunCommand(command);
+    -- GameLogic.RunCommand(command);
     OnClose()
 end
 
