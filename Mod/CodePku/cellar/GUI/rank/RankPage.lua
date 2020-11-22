@@ -18,7 +18,11 @@ RankPage.params={
     activity = {
         url="Mod/CodePku/cellar/GUI/rank/activity.html",
         alignment="_ct", left = -960, top = -540, width = 1920, height = 1080,zorder =21
-    }
+    },
+    schoolyard = {
+        url="Mod/CodePku/cellar/GUI/rank/schoolyard.html",
+        alignment="_ct", left = -960, top = -540, width = 1920, height = 1080,zorder =21
+    },
 }
 
 RankPage.ShowActivityNavig = 0              -- 活动排行榜：0不显示，1显示
@@ -212,6 +216,11 @@ function RankPage.GetActivityItem(id, range, activity_id)
     end
 end
 
+-- 获取校园排行榜数据
+function RankPage.GetSchoolyardItem()
+    
+end
+
 function RankPage:ShowPage(PageIndex, bShow)
     RankPage.GetActivityLists()
     if RankPage.ui ~= nil then
@@ -229,5 +238,9 @@ function RankPage:ShowPage(PageIndex, bShow)
     elseif PageIndex == 3 then
         RankPage.userinfo, RankPage.myinfo = RankPage.GetActivityItem(RankPage.activity_navig[1].game_id, 1, RankPage.activity_navig[1].id)
         RankPage.ui = AdaptWindow:QuickWindow(RankPage.params["activity"])
+    elseif PageIndex == 4 then
+        RankPage.userinfo, RankPage.myinfo = RankPage.GetGameItem("parkour", 1)
+        -- RankPage.userinfo, RankPage.myinfo = RankPage.GetSchoolyardItem()
+        RankPage.ui = AdaptWindow:QuickWindow(RankPage.params["schoolyard"])
     end
 end

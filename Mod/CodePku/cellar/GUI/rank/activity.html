@@ -49,6 +49,9 @@ function IsClickedLeftNavig(name)
             Page("#navig_block"):SetAttribute('style','width: 293; display:none')
         end
         Page:Refresh(0)
+    elseif name == 'schoolyard' then
+        Page:CloseWindow()
+        RankPage:ShowPage(4)
     end
 end
 
@@ -165,13 +168,15 @@ end
 
     <!--左导航栏-->
     <div style="position: relative; width: 239; height: 800; left: 78;top: 200;">
-        <div style="width: 293; height: 99; background: url(codepku/image/textures/common_32bits.png#1475 58 131 109:30 30 30 30);  base-font-size:60px; font-size:60px; font-family:Noto Sans S Chinese Regular;font-weight:bolder; color: #ffffff; padding-left:58; padding-top:15;" name="subject" onclick="IsClickedLeftNavig">学 科</div>
+        <div style="width: 293; height: 90; background: url(codepku/image/textures/common_32bits.png#1475 58 131 109:30 30 30 30);  base-font-size:60px; font-size:60px; font-family:Noto Sans S Chinese Regular;font-weight:bolder; color: #ffffff; padding-left:58; padding-top:10;" name="subject" onclick="IsClickedLeftNavig">学 科</div>
         <pe:div style="width: 43; height: 17; margin-left: 205; margin-top: -65; background: url(codepku/image/textures/rank/rank_32bits.png#624 345 43 17);"></pe:div>
-        <div style="width: 293; height: 99; background: url(codepku/image/textures/common_32bits.png#1475 58 131 109:30 30 30 30); base-font-size:60px; font-size:60px; font-family:Noto Sans S Chinese Regular;font-weight:bolder; color: #ffffff; padding-left:58; padding-top:15;" name="game" onclick="IsClickedLeftNavig" >游 戏</div>
+        <div style="width: 293; height: 90; background: url(codepku/image/textures/common_32bits.png#1475 58 131 109:30 30 30 30); base-font-size:60px; font-size:60px; font-family:Noto Sans S Chinese Regular;font-weight:bolder; color: #ffffff; padding-left:58; padding-top:10;" name="game" onclick="IsClickedLeftNavig" >游 戏</div>
         <pe:div style="width: 43; height: 17; margin-left: 205; margin-top: -65; background: url(codepku/image/textures/rank/rank_32bits.png#624 345 43 17);"></pe:div>
-        
+        <div style="width: 293; height: 90; background: url(codepku/image/textures/common_32bits.png#1475 58 131 109:30 30 30 30);  base-font-size:60px; font-size:60px; font-family:Noto Sans S Chinese Regular;font-weight:bolder; color: #ffffff; padding-left:58; padding-top:10;" name="schoolyard" onclick="IsClickedLeftNavig">学 校</div>
+        <pe:div style="width: 43; height: 17; margin-left: 205; margin-top: -65; background: url(codepku/image/textures/rank/rank_32bits.png#624 345 43 17);"></pe:div>
+
         <pe:if condition="<%= RankPage.ShowActivityNavig == 1 %>">
-            <div style="width: 293; height: 99; background: url(codepku/image/textures/common_32bits.png#1648 59 293 109:30 30 30 30);  base-font-size:60px; font-size:60px; font-family:Noto Sans S Chinese Regular;font-weight:bolder; color: #FF9430; padding-left:58; padding-top:15;" name="activity" onclick="IsClickedLeftNavig">活动</div>
+            <div style="width: 293; height: 90; background: url(codepku/image/textures/common_32bits.png#1648 59 293 109:30 30 30 30);  base-font-size:60px; font-size:60px; font-family:Noto Sans S Chinese Regular;font-weight:bolder; color: #FF9430; padding-left:58; padding-top:10;" name="activity" onclick="IsClickedLeftNavig">活 动</div>
             <pe:if condition="<%=RankPage.show_left_navig == 0%>">
                 <pe:div style="width: 43; height: 17; margin-left: 205; margin-top: -65; background: url(codepku/image/textures/rank/rank_32bits.png#624 345 43 17);"></pe:div>     
             </pe:if>
@@ -182,19 +187,20 @@ end
                 <pe:repeat DataSource="<%=RankPage.activity_navig%>">
                     <pe:repeatitem>
                         <pe:if condition="<%=Eval('index') == RankPage.left_navig_last_clicked%>">
-                            <div style="width: 261; height: 86; margin-left: 32; background: url(codepku/image/textures/common_32bits.png#1648 196 261 96:30 30 30 30);" name="<%=Eval('id')%>">
-                            <div style="width:200; height:42; margin-left:30; margin-top: 17; base-font-size:32px; font-size:32px; font-family:Noto Sans S Chinese Regular;font-weight:bolder; font-weight:500; color:#F8DE8D; text-align: center;"><%=Eval('title')%></div>
+                            <div style="width: 261; height: 76; margin-left: 32; background: url(codepku/image/textures/common_32bits.png#1648 196 261 96:30 30 30 30);" name="<%=Eval('id')%>">
+                            <div style="width:200; height:42; margin-left:30; margin-top: 10; base-font-size:32px; font-size:32px; font-family:Noto Sans S Chinese Regular;font-weight:bolder; font-weight:500; color:#F8DE8D; text-align: center;"><%=Eval('title')%></div>
                             </div>
                         </pe:if>
                         <pe:if condition="<%=Eval('index') ~= RankPage.left_navig_last_clicked%>">
-                            <div style="width: 249; height: 84; background: url(codepku/image/textures/common_32bits.png#1294 66 134 94:30 30 30 30);" name="<%=Eval('id')%>" value="<%=Eval('title')%>" onclick="ClickedLeftNavigIndex">
-                                <div style="width:200; height:42; margin-left:30; margin-top: 19; base-font-size:32px; font-size:32px; font-family:Noto Sans S Chinese Regular;font-weight:bolder; font-weight:500; color:#ffffff; text-align: center;"><%=Eval('title')%></div>
+                            <div style="width: 249; height: 74; background: url(codepku/image/textures/common_32bits.png#1294 66 134 94:30 30 30 30);" name="<%=Eval('id')%>" value="<%=Eval('title')%>" onclick="ClickedLeftNavigIndex">
+                                <div style="width:200; height:42; margin-left:30; margin-top: 12; base-font-size:32px; font-size:32px; font-family:Noto Sans S Chinese Regular;font-weight:bolder; font-weight:500; color:#ffffff; text-align: center;"><%=Eval('title')%></div>
                             </div>
                         </pe:if>
                     </pe:repeatitem>
                 </pe:repeat>
             </div>
         </pe:if>
+
         
     </div>
 

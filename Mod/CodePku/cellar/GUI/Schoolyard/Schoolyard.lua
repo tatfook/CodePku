@@ -111,7 +111,7 @@ function Schoolyard:AddVitality(params)
             Schoolyard.duration_timer = commonlib.Timer:new({
                 callbackFunc = function(timer)
                     if Schoolyard.TimerTimes == 15 then
-                        GameLogic.AddBBS("CodeGlobals", L"关闭计时器", 3000, "#FF0000");
+                        -- GameLogic.AddBBS("CodeGlobals", L"关闭计时器", 3000, "#FF0000");
                         Schoolyard.TimerTimes = nil
                         LOG.std("", "info", "Schoolyard", "timer close");
                         timer:Change()
