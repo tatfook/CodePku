@@ -1,8 +1,8 @@
 --[[
-Title: Timing cache cleanup
+Title: cache cleanup
 Author(s): NieXX
 Date: 2020/10/22
-Desc: 定时清除图片以及资源缓存（白名单内的资源除外）
+Desc: 清除白名单以外的图片以及资源缓存
 use the lib:
 functions:
 
@@ -22,65 +22,16 @@ NPL.load("(gl)Mod/CodePku/cellar/AssetManage/CodePkuAssetPreloader.lua")
 local CodePkuAssetPreloader = commonlib.gettable("Mod.CodePku.AssetManage.CodePkuAssetPreloader")
 function MemoryOpt:StaticInit()
     LOG.std("", "info", "MemoryOpt", "OnInit");
-    GameLogic:Connect("WorldLoaded", MemoryOpt, MemoryOpt.OnMemoryClear, "UniqueConnection");
     GameLogic:Connect("WorldLoaded", MemoryOpt, MemoryOpt.Clear, "UniqueConnection");
 end
 
--- function MemoryOpt.OnMemoryClear_Callback()
-function MemoryOpt.OnMemoryClear()
-    local timer = commonlib.Timer:new({
-        callbackFunc = function(timer)
-            echo("test clear")
-            -- 剩余内存低于30%时清理内存
-            local rate = 1
-            if isAndroid then
-                local memory = DeviceInstance:getMemory();
-                rate = memory.available_memory/memory.total_memory;
-                echo(memory)
-                if rate < 0.3 then
-                    -- MemoryOpt.Clear()
-                end
-            elseif isIOS then
-                -- todo 
-                local function getMemory(pData)
-                    local decodeData = commonlib.Json.Decode(pData);
-                    rate = decodeData.ram_memory_free/decodeData.ram_memory_total;
-                    echo(rate); 
-                    local memory = DeviceInstance:getMemory(getMemory);
-                    echo(memory)
-                    if rate < 0.3 then
-                        -- MemoryOpt.Clear()
-                    end
-                end
-                
-            end
-            echo("rate="..rate)
-        end
-    })
-    timer:Change(4000, 4000)
-end
-
 function MemoryOpt.Clear()
-    -- 测试
-    local before_count = collectgarbage("count");
-	collectgarbage("collect");
-	local after_count = collectgarbage("count");
-	echo("before_count="..before_count)
-    echo("after_count="..after_count)
-    if isAndroid or isIOS then
-        local memory = DeviceInstance:getMemory();
-        echo("rate1="..memory.available_memory/memory.total_memory)
-    end
-    -- 测试end
-
     local assetManager = ParaEngine.GetAttributeObject():GetChild("AssetManager");
     local paraXManager = assetManager:GetChild("ParaXManager");
     for i=1, paraXManager:GetChildCount(0) do
         local attr = paraXManager:GetChildAt(i)
-        -- todo 添加白名单
         local filename = attr:GetField("name", "");
-        local IsInWhiteList = CodePkuAssetPreloader.getSingleTon():IsInWhiteList(filename)
-        if(filename ~= "" and not IsInWhiteList) then
+        if(filename ~= "") then
             local ext = filename:match("%.(%w+)$");
             if(ext) then
                 ext = string.lower(ext)
@@ -113,11 +64,4 @@ function MemoryOpt.Clear()
             end
         end
     end
-
-    -- 测试
-    if isAndroid or isIOS then
-        local memory2 = DeviceInstance:getMemory();
-        echo("rate2="..memory2.available_memory/memory2.total_memory)
-    end
-    -- 测试end
 end
