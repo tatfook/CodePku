@@ -36,7 +36,7 @@ function OnclickBand()
         GameLogic.AddBBS("CodeGlobals", L"请输入六位邀请码", 3000, "#FF0000");
     else
         inviteCode = string.match(inviteCode, "[%u%d]+")
-        if commonlib.utf8.len(inviteCode) == commonlib.utf8.len(InviteCode.invite_code) then
+        if inviteCode and commonlib.utf8.len(inviteCode) == commonlib.utf8.len(InviteCode.invite_code) then
             InviteCode.Band(inviteCode)
         else
             GameLogic.AddBBS("CodeGlobals", L"邀请码只能是数字和大写字母组成", 3000, "#FF0000");
