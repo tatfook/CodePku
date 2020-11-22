@@ -115,7 +115,6 @@ end
 
 function InviteCode.GetRecord()
     if InviteCode.runningFlagGetRecord then
-        GameLogic.AddBBS("CodeGlobals", "CD", 500, "#FF0000");
         return
     end
 
@@ -151,7 +150,6 @@ end
 
 function InviteCode.Band(code)
     if InviteCode.runningFlagBand then
-        GameLogic.AddBBS("CodeGlobals", "CD", 500, "#FF0000");
         return
     end
 
@@ -185,7 +183,6 @@ end
 
 function InviteCode.GetAward(btnName)
     if InviteCode.runningFlagGetAward then
-        GameLogic.AddBBS("CodeGlobals", "CD", 500, "#FF0000");
         return
     end
 
