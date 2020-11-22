@@ -142,9 +142,9 @@ InviteCode.Init()
         <pe:if condition="<%= InviteCode.ifInviteRecord == false %>">
             <pe:repeat DataSource="<%= InviteCode.inviteRewards %>">
                 <pe:repeatitem>
-                    <div style="float: left; margin-left: 31; margin-top: 53; margin-bottom: 13; font-size: 30; width: 330; height: 27;"><%= string.format("累计邀请%d位好友奖励：", invite_count) %></div>
-                    <div style="<%=format('float: left; margin-left: -10; margin-top: 44; width: 43; height: 45; padding-left: 43; padding-top: 19; font-size: 26; font-family: Noto Sans S Chinese Regular; background:url(%s);', InviteCode.GetIconUrl('main_icon_coin_2.png'))%>"><%= string.format("x%d", reward_json["2"]["prop_count"]) %></div>
-                    <div style="<%=format('float: left; margin-left: 69; margin-top: 41; width: 43; height: 51; padding-left: 43; padding-top: 22; font-size: 26; font-family: Noto Sans S Chinese Regular; background:url(%s);', InviteCode.GetIconUrl('main_icon_coin_1.png'))%>"><%= string.format("x%d", reward_json["1"]["prop_count"]) %></div>            
+                    <div style="float: left; margin-left: 31; margin-top: 53; margin-bottom: 13; font-size: 30; width: 360; height: 27;"><%= string.format("累计邀请%d位好友奖励：", invite_count) %></div>
+                    <div style="<%=format('float: left; margin-left: -20; margin-top: 44; width: 43; height: 45; padding-left: 43; padding-top: 19; font-size: 26; font-family: Noto Sans S Chinese Regular; background:url(%s);', InviteCode.GetIconUrl('main_icon_coin_2.png'))%>"><%= string.format("x%d", reward_json["2"]["prop_count"]) %></div>
+                    <div style="<%=format('float: left; margin-left: 59; margin-top: 41; width: 43; height: 51; padding-left: 43; padding-top: 22; font-size: 26; font-family: Noto Sans S Chinese Regular; background:url(%s);', InviteCode.GetIconUrl('main_icon_coin_1.png'))%>"><%= string.format("x%d", reward_json["1"]["prop_count"]) %></div>            
                     <pe:if condition="<%= reward_status == 2 %>">
                         <div style="<%=format('float: left; margin-left: 103; margin-top: 39; width: 146; height: 55; font-size: 30; color: #ffffff; text-align: center; line-height: 55; background:url(%s);', InviteCode.GetIconUrl('invite_popup_btn_s_g.png'))%>">已领取</div>
                     </pe:if>
