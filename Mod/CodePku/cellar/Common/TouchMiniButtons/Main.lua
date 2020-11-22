@@ -10,6 +10,9 @@ local MainSceneUIButtons = commonlib.gettable("Mod.CodePku.Common.TouchMiniButto
 local Screen = commonlib.gettable("System.Windows.Screen")
 NPL.load("(gl)script/apps/Aries/Creator/Game/GUI/TouchController.lua");
 local mainFrameImageData = NPL.load("(gl)Mod/CodePku/cellar/imageLuaTable/mainFrameImageData.lua")
+local UserInfoPage = NPL.load("(gl)Mod/CodePku/cellar/GUI/UserInfo.lua");
+Eldership = NPL.load("(gl)Mod/CodePku/cellar/GUI/Eldership/Eldership.lua")
+Eldership:GetBindStatus()
 
 -- CommonFunc = NPL.load("(gl)Mod/CodePku/cellar/Common/CommonFunc/CommonFunc.lua")
 CommonFunc = commonlib.gettable("Mod.CodePku.Common.CommonFunc")
@@ -47,11 +50,11 @@ MainUIButtons.left_buttons = {
 }
 
 MainUIButtons.top_buttons = {
-	[1]={url=mainFrameImageData:GetIconUrl("main_icon_parent.png"),top=30,width=122,height=104,left=0,name="ClickEldership",bShow=true,},
-	[2]={url=mainFrameImageData:GetIconUrl("main_icon_map.png"),top=27,width=104,height=107,left=22,name="ClickSamllMap",bShow=true,},
-	[3]={url=mainFrameImageData:GetIconUrl("main_icon_detach.png"),top=36,width=122,height=98,left=22,name="ClickAntiJamming",bShow=true,},
-	[4]={url=mainFrameImageData:GetIconUrl("main_icon_upgrade.png"),top=33,width=122,height=102,left=23,name="ClickUpBtn",bShow=false,},
-	[5]={url=mainFrameImageData:GetIconUrl("main_icon_switch.png"),top=32,width=122,height=102,left=23,name="ClickChangeBranch",bShow=true,},
+	[1]={url=mainFrameImageData:GetIconUrl("main_icon_parent.png"),top=30,width=122,height=104,left=0,name="ClickEldership",bShow=true,dot=false,},
+	[2]={url=mainFrameImageData:GetIconUrl("main_icon_map.png"),top=27,width=104,height=107,left=22,name="ClickSamllMap",bShow=true,dot=false,},
+	[3]={url=mainFrameImageData:GetIconUrl("main_icon_detach.png"),top=36,width=122,height=98,left=22,name="ClickAntiJamming",bShow=true,dot=false,},
+	[4]={url=mainFrameImageData:GetIconUrl("main_icon_upgrade.png"),top=33,width=122,height=102,left=23,name="ClickUpBtn",bShow=false,dot=false,},
+	[5]={url=mainFrameImageData:GetIconUrl("main_icon_switch.png"),top=32,width=122,height=102,left=23,name="ClickChangeBranch",bShow=true,dot=false,},
 }
 
 MainUIButtons.middle_buttons = {
@@ -313,6 +316,12 @@ function MainUIButtons:show_common_ui()
 		MainUIButtons.common_window = nil
 	end
 
+	if not System.User.info.user_wechat_id then
+		MainUIButtons.top_buttons[1]["dot"] = true
+	else
+		MainUIButtons.top_buttons[1]["dot"] = false
+	end
+
 	local isVisitor = commonlib.getfield("System.User.isVisitor")
 	if isVisitor then
 		MainUIButtons.top_buttons[4]["bShow"] = true
@@ -332,6 +341,7 @@ function MainUIButtons:show_common_ui()
 		url="Mod/CodePku/cellar/Common/TouchMiniButtons/MainUIButtons_common.html", 
 		alignment="_lt", left = 238, top = 0, width = open_width, height = open_height, click_through = true,
 	}
+	MainUIButtons.showCommonWindow = true;
 	MainUIButtons.common_window = AdaptWindow:QuickWindow(params)
 end
 
@@ -427,6 +437,7 @@ function MainUIButtons.JudgeNil()
 	if MainUIButtons.common_window ~= nil then
 		MainUIButtons.common_window:CloseWindow()
 		MainUIButtons.common_window = nil
+		MainUIButtons.showCommonWindow = false
 	end
 	if MainUIButtons.common_left_window ~= nil then
 		MainUIButtons.common_left_window:CloseWindow()
