@@ -14,6 +14,7 @@ local Screen = commonlib.gettable("System.Windows.Screen")
 local Log = NPL.load("(gl)Mod/CodePku/util/Log.lua");
 local Table = NPL.load("(gl)Mod/CodePku/util/Table.lua");
 local Design = NPL.load("(gl)Mod/CodePku/util/Design.lua");
+local mainFrameImageData = NPL.load("(gl)Mod/CodePku/cellar/imageLuaTable/mainFrameImageData.lua")
 
 local FeatKeyboard = commonlib.inherit(
         commonlib.gettable("System.Core.ToolBase"),
@@ -42,30 +43,57 @@ function FeatKeyboard:init()
     local fBtn = self:getFBtn();
     local xBtn = self:getXBtn();
     local shiftBtn = self:getShiftBtn();
-    local zoomBtn = self:getZoomBtn();
+    -- local zoomBtn = self:getZoomBtn();
+    local chatBtn = self:getChatBtn();
 
     jumpBtn.visible = false;
     fBtn.visible = false;
     xBtn.visible = false;
     shiftBtn.visible = false;
-    zoomBtn.visible = false;
+    -- zoomBtn.visible = false;
+    chatBtn.visible = false;
 
     return self;
 end
 
-function FeatKeyboard:show(show)
+function FeatKeyboard:show(show, jumpBtnShow, fBtnShow, xBtnShow, shiftBtnShow, chatBtnShow)
     local jumpBtn = self:getJumpBtn();
     local fBtn = self:getFBtn();
     local xBtn = self:getXBtn();
     local shiftBtn = self:getShiftBtn();
-    local zoomBtn = self:getZoomBtn();
+    -- local zoomBtn = self:getZoomBtn();
+    local chatBtn = self:getChatBtn();
 
     show = not not show;
-    jumpBtn.visible = show;
-    fBtn.visible = show;
-    xBtn.visible = show;
-    shiftBtn.visible = show;
-    zoomBtn.visible = show;
+
+    jumpBtn.visible = false;
+    fBtn.visible = false;
+    xBtn.visible = false;
+    shiftBtn.visible = false;
+    -- zoomBtn.visible = false;
+    chatBtn.visible = false;
+
+    ParaUI.GetUIObject("jump").visible = false;
+    ParaUI.GetUIObject("FLY").visible = false;
+    ParaUI.GetUIObject("XBtn").visible = false;
+    ParaUI.GetUIObject("ShiftBtn").visible = false;
+    ParaUI.GetUIObject("Chat").visible = false;
+
+    if show then
+        jumpBtn.visible = jumpBtnShow;
+        fBtn.visible = fBtnShow;
+        xBtn.visible = xBtnShow;
+        shiftBtn.visible = shiftBtnShow;
+        -- zoomBtn.visible = zoomBtnShow;
+        chatBtn.visible = chatBtnShow;
+        -- ParaUI.GetUIObject
+
+        ParaUI.GetUIObject("jump").visible = jumpBtnShow;
+        ParaUI.GetUIObject("FLY").visible = fBtnShow;
+        ParaUI.GetUIObject("XBtn").visible = xBtnShow;
+        ParaUI.GetUIObject("ShiftBtn").visible = shiftBtnShow;
+        ParaUI.GetUIObject("Chat").visible = chatBtnShow;
+    end
 end
 
 --创建跳跃按钮
@@ -75,10 +103,10 @@ function FeatKeyboard:getJumpBtn()
 
     local button = ParaUI.GetUIObject(name);
 
-    local left = Design:adapterWidth(1656);
-    local top = Design:adapterHeight(771);
-    local width = Design:adapterWidth(100);
-    local height = Design:adapterWidth(100);
+    local left = Design:adapterWidth(1554);
+    local top = Design:adapterHeight(852);
+    local width = Design:adapterWidth(134);
+    local height = Design:adapterWidth(134);
 
     if not button:IsValid() then
         button = ParaUI.CreateUIObject(
@@ -91,7 +119,7 @@ function FeatKeyboard:getJumpBtn()
                 height
         );
 
-        button.background = "codepku/image/textures/keyboard/jump_btn.png";
+        button.background = mainFrameImageData:GetIconUrl("main_icon_tiao.png");
         _guihelper.SetUIColor(button, self.colors.normal);
         button.enabled = true;
         button.zorder = self.zorder;
@@ -115,14 +143,14 @@ end
 
 --创建 F 按钮
 function FeatKeyboard:getFBtn()
-    local name = "F";
+    local name = "FLY";
 
     local button = ParaUI.GetUIObject(name);
 
-    local left = Design:adapterWidth(1722);
-    local top = Design:adapterHeight(606);
-    local width = Design:adapterWidth(100);
-    local height = Design:adapterWidth(100);
+    local left = Design:adapterWidth(1348);
+    local top = Design:adapterHeight(906);
+    local width = Design:adapterWidth(134);
+    local height = Design:adapterWidth(134);
 
     if not button:IsValid() then
         button = ParaUI.CreateUIObject(
@@ -135,7 +163,7 @@ function FeatKeyboard:getFBtn()
                 height
         );
 
-        button.background = "codepku/image/textures/keyboard/F_btn.png";
+        button.background = mainFrameImageData:GetIconUrl("main_icon_fly.png");
         _guihelper.SetUIColor(button, self.colors.normal);
         button.enabled = true;
         button.zorder = self.zorder;
@@ -159,14 +187,14 @@ end
 
 --创建 X 按钮
 function FeatKeyboard:getXBtn()
-    local name = "X";
+    local name = "XBtn";
 
     local button = ParaUI.GetUIObject(name);
 
-    local left = Design:adapterWidth(1722);
-    local top = Design:adapterHeight(441);
-    local width = Design:adapterWidth(100);
-    local height = Design:adapterWidth(100);
+    local left = Design:adapterWidth(1597);
+    local top = Design:adapterHeight(648);
+    local width = Design:adapterWidth(134);
+    local height = Design:adapterWidth(134);
 
     if not button:IsValid() then
         button = ParaUI.CreateUIObject(
@@ -179,7 +207,7 @@ function FeatKeyboard:getXBtn()
                 height
         );
 
-        button.background = "codepku/image/textures/keyboard/X_btn.png";
+        button.background = mainFrameImageData:GetIconUrl("main_icon_x.png");
         _guihelper.SetUIColor(button, self.colors.normal);
         button.enabled = true;
         button.zorder = self.zorder;
@@ -203,14 +231,14 @@ end
 
 --创建 X 按钮
 function FeatKeyboard:getShiftBtn()
-    local name = "Shift";
+    local name = "ShiftBtn";
 
     local button = ParaUI.GetUIObject(name);
 
-    local left = Design:adapterWidth(1722);
-    local top = Design:adapterHeight(141);
-    local width = Design:adapterWidth(100);
-    local height = Design:adapterWidth(100);
+    local left = Design:adapterWidth(1419);
+    local top = Design:adapterHeight(724);
+    local width = Design:adapterWidth(134);
+    local height = Design:adapterWidth(134);
 
     if not button:IsValid() then
         button = ParaUI.CreateUIObject(
@@ -223,11 +251,56 @@ function FeatKeyboard:getShiftBtn()
                 height
         );
 
-        button.background = "codepku/image/textures/keyboard/shift_btn.png";
+        button.background = mainFrameImageData:GetIconUrl("main_icon_shift.png");
         _guihelper.SetUIColor(button, self.colors.normal);
         button.enabled = true;
         button.zorder = self.zorder;
         button:SetScript("onclick", function()
+            Keyboard:SendKeyEvent("keyDownEvent", DIK_SCANCODE.DIK_LSHIFT);
+            _guihelper.SetUIColor(button, self.colors.pressed);
+
+            commonlib.TimerManager.SetTimeout(function()
+                Keyboard:SendKeyEvent("keyUpEvent", DIK_SCANCODE.DIK_LSHIFT);
+                _guihelper.SetUIColor(button, self.colors.normal);
+            end, 300)
+        end)
+
+        button:AttachToRoot();
+    else
+        button:Reposition(self.align, left, top, width, height);
+    end
+
+    return button;
+end
+
+--创建 交互 按钮
+function FeatKeyboard:getChatBtn()
+    local name = "Chat";
+
+    local button = ParaUI.GetUIObject(name);
+
+    local left = Design:adapterWidth(1464);
+    local top = Design:adapterHeight(566);
+    local width = Design:adapterWidth(94);
+    local height = Design:adapterWidth(94);
+
+    if not button:IsValid() then
+        button = ParaUI.CreateUIObject(
+                "button",
+                name,
+                self.align,
+                left,
+                top,
+                width,
+                height
+        );
+
+        button.background = mainFrameImageData:GetIconUrl("main_icon_talk.png");
+        _guihelper.SetUIColor(button, self.colors.normal);
+        button.enabled = true;
+        button.zorder = self.zorder;
+        button:SetScript("onclick", function()
+            
             Keyboard:SendKeyEvent("keyDownEvent", DIK_SCANCODE.DIK_LSHIFT);
             _guihelper.SetUIColor(button, self.colors.pressed);
 

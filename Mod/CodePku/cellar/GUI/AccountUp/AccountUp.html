@@ -14,12 +14,22 @@
 
     AccountUp.isClickedGetPhoneCaptcha = false
 
+    local VisitorLimit = NPL.load("(gl)Mod/CodePku/cellar/GUI/AccountUp/VisitorLimit.lua");
+    
+
+    -- 获取图片 tpye  1 通用；2 ESC专用
+    function GetIcons(type, index)
+        return AccountUp:GetIconPath(type, index)
+    end
+
     function OnSureBtnClicked()
         AccountUp.OnSureBtnCLicked(Page)
+        VisitorLimit:destroy()
     end
 
     function OnCancelBtnClicked()
         AccountUp.OnCancelBtnClicked()
+        VisitorLimit:destroy()
     end
 
     function OnGetMobileCodeBtnClicked() 
@@ -29,39 +39,39 @@
 <style type="text/mcss">
 </style>
 
-<pe:container alignment="_lt" width="945" height="615">
-    <div style="position: relative; width: 945px; height: 615px;background: url(codepku/image/textures/login/updataAccountBg.png);">
+<pe:container alignment="_lt" width="936" height="721">
 
-        <div style="position: relative; width: 410; height: 86; left: 267; line-height: 86; font-size: 45; font-weight: bold; font-family: PuHuiTi-Bold; color: #F46D3D; text-align: center; background:url(codepku/image/textures/login/quickLogin.png#444 205 434 86);">账号升级</div>
-
-        <div style="position: relative; width: 429; height: 34; left: 114; top: 139;color: #ffffff; font-family: Noto Sans S Chinese Regular-Regular; font-size: 36px;"><%=L"请输入你想绑定的手机号"%></div>
-
-        <div style="position: relative; width: 722; height: 88; left: 112; top: 210; font-family: Noto Sans S Chinese Regular-Regular;
-            font-size: 32px; font-weight: normal; font-stretch: normal; line-height: 40px; letter-spacing: 0px; color: #ffffff; background:url(codepku/image/textures/login/main.png#1011 271 88 88:10 10 10 10)">
-            <input type="text" MoveViewWhenAttachWithIME="true" name="account" EmptyText='<%= L"请输入手机号码" %>' style="position: relative;left: 139px; width: 583; height: 88; background: #000000;"/>
-            <div style="position: relative; left: 93px; top: 41px; width: 16px; height: 8px;background: url(codepku/image/textures/login/quickLogin.png#751 82 16 8);"></div>
-            <input type="button" name="numberChoose" onclick="OnNumberChooseBtnClicked" value='<%= L"+86"%>' style="position: relative; width: 101px; height: 88px; background: #000000;"/>
-        </div>
-
-        <div name="verifyCodeDiv" style="position: relative; width: 722; height: 88; left: 111; top: 329;">
-
-            <div style="position: relative; width: 722; height: 88; font-size: 32; color:#FFFFFF; font-family: Noto Sans S Chinese Regular; background:url(codepku/image/textures/login/main.png#1011 271 88 88:10 10 10 10);">
-                <input type="text" MoveViewWhenAttachWithIME="true" name="verify_code" EmptyText='<%= L"请输入验证码" %>' style="position: relative; width: 672; height: 88; left: 25; line-height: 88; background: #000000;" />
-            </div>
-
-            <input type="button" name="GetMobileCodeBtn" onclick="OnGetMobileCodeBtnClicked()"
-                style="position: relative; width: 201; height: 89; left: 522; font-size: 32; font-family: PuHuiTi-Bold; font-weight: bold; color: #F46D3D; background:url(codepku/image/textures/login/main.png#1537 413 200 88:0 10 10 0);" value='<%= L"获取验证码" %>' />
-
-        </div>
-
-
-        <input type="button"  onclick="OnSureBtnClicked" value='<%= L"确定升级"%>'
-        style="position: relative; width: 286; height: 86; left: 542; top: 458; font-size: 36; color: #0e5516; font-family: PuHuiTi-Bold; font-weight: bold; border-radius: 6px; background:url(codepku/image/textures/login/quickLogin.png#276 46 74 94:6 6 6 6);" />
-
-        <input type="button"  onclick="OnCancelBtnClicked" value='<%= L"取消"%>'
-        style="position: relative; width: 286; height: 86; left: 114; top: 458; font-size: 36; color: #85272b; font-family: PuHuiTi-Bold; font-weight: bold; border-radius: 6px; background:url(codepku/image/textures/login/quickLogin.png#344 478 102 86:6 6 6 6);" />
-
+<!-- 背景 -->
+<div style="<%=format('position: relative; width: 936;height: 721;background:url(%s);', GetIcons(2, 'esc_frame_bot_floor.png'))%>">
+    <!-- title -->
+    <div style="position: relative;left: 362;top: 14;font-family: zkklt;font-size: 48;color: #9e6c5e;"><%=L"账号升级"%></div>
+    <div style="position: relative;left: 154;top: 157;font-family: zkklt;font-size: 36;color: #803011;"><%=L"请输入你想绑定的手机号"%></div>
+    <!-- 输入框 -->
+    <div style="<%=format('position: relative; left: 163;top:216;width: 608;height: 83;background:url(%s);', GetIcons(2, 'esc_frame_bot_608_83.png'))%>">
+        <input type="text" MoveViewWhenAttachWithIME="true" name="account" EmptyText='<%= L"请输入手机号码" %>' style="position: relative;left: 170px;top: 20; width: 583; height: 42; font-family: zkklt;font-size: 36;line-height: 42;color: #803011;background: #000000;"/>
+        <input type="button" name="numberChoose" onclick="OnNumberChooseBtnClicked" value='<%= L"+86"%>' style="position: relative;left: 18;top: 20; width: 101px; height: 42; font-family: zkklt;font-size: 36;line-height: 42;color: #803011;background: #000000;"/>
+        <input type="button" name="numberChoose" onclick="OnNumberChooseBtnClicked" value='<%= L"▼"%>' style="position: relative;left: 80;top: 22; width: 101px; height: 42; font-family: zkklt;font-size: 22;line-height: 42;color: #803011;background: #000000;"/>
     </div>
+    <!-- 验证码框 -->
+    <div name="verifyCodeDiv" style="<%=format('position: relative; left: 163; top: 366;width: 608; height: 83;background:url(%s);', GetIcons(2, 'esc_frame_bot_608_83.png'))%>">
+        <input type="text" MoveViewWhenAttachWithIME="true" name="verify_code" EmptyText='<%= L"请输入验证码" %>' style="position: relative; width: 500; height: 83; left: 25; line-height: 83; font-family: zkklt;font-size: 36;line-height: 42;color: #803011; background: #000000;" />
+        <input type="button" name="GetMobileCodeBtn" onclick="OnGetMobileCodeBtnClicked()" style="<%=format('position: relative; left: 356;top:-6;width: 252;height: 95;font-family: zkklt;font-size: 36;line-height: 42;color: #803011;background:url(%s);', GetIcons(2, 'esc_frame_btn_nauthcode.png'))%>" value='<%= L"获取验证码" %>' />
+    </div>
+
+    <!-- 取消 -->
+    <div onclick="OnCancelBtnClicked" style="<%=format('position: relative; left: 121; top: 550;width: 238; height: 81;background:url(%s);', GetIcons(1, 'common_btn_red01.png'))%>">
+        <div style="<%=format('position: relative;left:80;top:22;width: 78; height: 32; background:url(%s);', GetIcons(2, 'esc_frame_btn_cancel.png'))%>"></div>
+    </div>
+
+    <!-- 确定升级 -->
+    <div onclick="OnSureBtnClicked" style="<%=format('position: relative; left: 575; top: 550;width: 238; height: 81;background:url(%s);', GetIcons(1, 'common_btn_green01.png'))%>">
+        <div style="<%=format('position: relative;left:39;top:22;width: 161; height: 32; background:url(%s);', GetIcons(2, 'esc_frame_btn_upgrade.png'))%>"></div>
+    </div>
+
+</div>
+<!-- 关闭 -->
+<div onclick="OnCancelBtnClicked" style="<%=format('position: relative; left: 811; top: -23; width: 77;height: 123;background:url(%s);', GetIcons(1, 'comm_btn_close.png'))%>"></div>
+
 </pe:container>
 
 

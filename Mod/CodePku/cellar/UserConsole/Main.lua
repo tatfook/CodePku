@@ -75,7 +75,12 @@ function UserConsole:ClosePage()
     if MainLogin then
         MainLogin.LoginBGPage:CloseWindow()
     end
-
+    
+    echo("+++++++++UnloadAllUnusedAssets<<<<<<<<");
+    NPL.load("(gl)script/apps/Aries/Creator/Game/Common/Files.lua");
+    local Files = commonlib.gettable("MyCompany.Aries.Game.Common.Files");
+    Files:UnloadAllUnusedAssets();
+    echo("---------UnloadAllUnusedAssets>>>>>>>>");
 
 end
 
@@ -142,6 +147,10 @@ function UserConsole:CourseEntry()
     local TaskSystem = commonlib.gettable("Mod.CodePku.Common.TaskSystem")
     TaskSystem:GetTask();
 
+    -- 拉取当前分线服务器数据
+    NPL.load("(gl)Mod/CodePku/cellar/GUI/Branch/ChooseBranch.lua")
+    local ChooseBranch = commonlib.gettable("Mod.CodePku.GUI.ChooseBranch")
+    ChooseBranch:GetServerData()
 end
 
 function UserConsole:Logout()

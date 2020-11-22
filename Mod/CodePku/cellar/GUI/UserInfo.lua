@@ -1,6 +1,13 @@
+--[[
+local UserInfoPage = NPL.load("(gl)Mod/CodePku/cellar/GUI/UserInfo.lua");
+--]]
+
 local request = NPL.load("(gl)Mod/CodePku/api/BaseRequest.lua");
 local page;
 local UserInfoPage = NPL.export();
+local AdaptWindow = commonlib.gettable("Mod.CodePku.GUI.Window.AdaptWindow")
+local common1ImageData = NPL.load("(gl)Mod/CodePku/cellar/imageLuaTable/common1ImageData.lua")
+local escFrameImageData = NPL.load("(gl)Mod/CodePku/cellar/imageLuaTable/escFrameImageData.lua")
 
 UserInfoPage.tab_ds_index = 1;
 UserInfoPage.tab_ds_name = "Home";
@@ -184,8 +191,27 @@ function UserInfoPage:ShowPage(PageIndex, bShow, id, mainasset)
 end
 
 function UserInfoPage:InitWindow()
-    local AdaptWindow = commonlib.gettable("Mod.CodePku.GUI.Window.AdaptWindow")
-    AdaptWindow:QuickWindow({url="Mod/CodePku/cellar/GUI/UserInfo.html", 
+    UserInfoPage.MainUI = AdaptWindow:QuickWindow({url="Mod/CodePku/cellar/GUI/UserInfo.html", 
     alignment="_fi", left = 0, top = 0, width = 0, height = 0,zorder =20
 })
+end
+
+
+-- 获取图片
+-- @params:type|int 1代表通用,2代表修改昵称
+function UserInfoPage:GetIcon(type, index)
+    if type == 1 then
+        return common1ImageData:GetIconUrl(index)
+    elseif type == 2 then
+        return escFrameImageData:GetIconUrl(index)
+    end
+end
+
+-- 用户设置弹窗
+function UserInfoPage:ShowSettingPopup()
+    local params = {
+        url="Mod/CodePku/cellar/GUI/Profile/UserSetting.html",
+        alignment="_lt", left = 0, top = 0, width = 1920 , height = 1080, zorder = 30
+    };
+    UserInfoPage.ShowSettingPopupUI = AdaptWindow:QuickWindow(params)
 end

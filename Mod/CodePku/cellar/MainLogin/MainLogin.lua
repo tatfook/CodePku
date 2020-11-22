@@ -55,7 +55,6 @@ function MainLogin:Show(index)
                     if PWDInfo and PWDInfo.account then
                         SessionsData:RemoveSession(PWDInfo.account)
                     end
-                    echo("-----MainLogin1-----")
                     local params = {url = "Mod/CodePku/cellar/MainLogin/MainLogin.html", 
                         name = "MainLogin", 
                         isShowTitleBar = false,
@@ -80,7 +79,6 @@ function MainLogin:Show(index)
         else
             IsPassword = 1
         end
-        echo("-----MainLogin2-----")
         local params = {
             [1] = {url = "Mod/CodePku/cellar/MainLogin/MainLogin.html", 
                     name = "MainLogin", 
@@ -166,7 +164,6 @@ function MainLogin:LoginAction(methodIndex)
         return false
     end
 
-    local visitor_id = MainLogin:GetVisitorUUID()
     local app_market = ParaEngine.GetAppCommandLineByParam("app_market", nil)
     local account = MainLoginPage:GetValue("account")
     
@@ -244,6 +241,7 @@ function MainLogin:LoginAction(methodIndex)
     end
 
     if (methodIndex == 1) then
+        local currentVisitorId = MainLogin:CurrentVisitorId()
         CodePkuServiceSession:Login(
             account,
             verifyCode,
@@ -274,6 +272,7 @@ function MainLogin:LoginAction(methodIndex)
             end
         )
     elseif (methodIndex == 3) then
+        local visitor_id = MainLogin:GetVisitorUUID();
         CodePkuServiceSession:QuickLogin(
             visitor_id,
             app_market,
@@ -452,11 +451,23 @@ function MainLogin:GetVisitorUUID()
 
     UUIDData.machineID = machineID
     GameLogic.GetPlayerController():SaveLocalData("UUIDData", UUIDData, true)
-    return UUIDData.softwareUUID .. "-" .. machineID
-    
+    return UUIDData.softwareUUID .. "-" .. machineID    
     -- LOG.std(nil, "MainLogin", "GetDeviceUUID", "UUIDData.softwareUUID = %s , UUIDData.machineID = %s", tostring(UUIDData.softwareUUID), tostring(UUIDData.machineID))    
 end
 
+function MainLogin:CurrentVisitorId()
+    local UUIDData = GameLogic.GetPlayerController():LoadLocalData("UUIDData", {}, true)
+    local currentParacraftDir = ParaIO.GetWritablePath()    
+    
+    if (UUIDData.softwareUUID and UUIDData.paracraftDir and UUIDData.paracraftDir == currentParacraftDir) then
+        local machineID = UUIDData.machineID or "";
+        local visitorUUId = UUIDData.softwareUUID .. "-" .. machineID;
+        if visitorUUId ~= 'uuid-' and visitorUUId ~= 'uuid--' then 
+            return visitorUUId;
+        end
+    end
+    return nil;
+end
 
 function MainLogin:getMobileCode()
     local MainLoginPage = Mod.CodePku.Store:Get("page/MainLogin")

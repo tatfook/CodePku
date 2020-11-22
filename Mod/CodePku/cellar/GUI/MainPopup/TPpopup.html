@@ -17,6 +17,8 @@ local FastEntrence = NPL.load("(gl)Mod/CodePku/cellar/GUI/SmallMap/FastEntrence/
 local TopicCourse = NPL.load("(gl)Mod/CodePku/cellar/GUI/SmallMap/FastEntrence/TopicCourse.lua")
 local SmallMap = commonlib.gettable("Mod.CodePku.GUI.SmallMap")
 local TeachCourses = NPL.load("(gl)Mod/CodePku/cellar/GUI/SmallMap/FastEntrence/TeachCourses/TeachCourses.lua");
+NPL.load("(gl)Mod/CodePku/cellar/Common/CommonFunc/CommonFunc.lua")
+local CommonFunc = commonlib.gettable("Mod.CodePku.Common.CommonFunc")
 
 
 local world_name = MainPopup.TP_Location   
@@ -62,7 +64,19 @@ end
 
 function turnToWorld()
     CloseAllPage()
-    if (world_id == 1 or world_id == 14312) then
+
+    if MainPopup.fromTeachCourse then
+        MainPopup.fromTeachCourse = false
+        GameLogic.RunCommand(string.format('/connectCodePku %d', tonumber(world_id)));
+        return
+    end
+
+    if world_id == 25161 then
+        CommonFunc.ConnectStandToEnd()
+        return
+    end
+
+    if (world_id == 1 or world_id == 14312 or world_id == 15855 or world_id == 15857) then
         GameLogic.RunCommand(string.format('/connectCodePku %d', tonumber(world_id)));
     else
         GameLogic.RunCommand(string.format("/loadworld %d", tonumber(world_id)));

@@ -125,11 +125,30 @@ function CodePku:init()
 
 	self:BasicConfig()
 
-	-- 预加载图片
-	NPL.load("(gl)Mod/CodePku/cellar/AssetManage/CodePkuAssetPreloader.lua")
-	local CodePkuAssetPreloader = commonlib.gettable("Mod.CodePku.AssetManage.CodePkuAssetPreloader")
-	CodePkuAssetPreloader.getSingleTon():PreloadAsset()
+
 	-- NPL.activate("(gl)Mod/CodePku/cellar/AssertManage/CodePkuAssertPreloader.lua")
+
+	GameLogic.GetFilters():add_filter(
+		"Player.LoadRemoteData",
+		function(default_return, name, default_value)
+			if(System.User.id) then
+				name = NPL.EncodeURLQuery(name, {"name", System.User.id})
+			end
+			local value = GameLogic.GetPlayerController():LoadLocalData(name, default_value, true)
+			return value;
+		end
+	)
+
+	GameLogic.GetFilters():add_filter(
+		"Player.SaveRemoteData",
+		function(default_return, name, value, bDeferSave)
+			if(System.User.id) then
+				name = NPL.EncodeURLQuery(name, {"name", System.User.id})
+			end
+			local result = GameLogic.GetPlayerController():SaveLocalData(name, value, true, bDeferSave)
+			return result
+		end
+	)
 
 	GameLogic.GetFilters():add_filter(
 		"ShowLoginModePage",
@@ -148,7 +167,7 @@ function CodePku:init()
 			if System.Codepku.isLoadingHome then
 				LOG.std(nil, "info", "codepku", "add_filter OnWorldUnloaded")
 				commonlib.setfield("System.Codepku.Coursewares", nil)
-			end
+			end			
 		end
 	)
 
@@ -237,6 +256,11 @@ function CodePku:init()
 	GameLogic.GetFilters():add_filter(
 		"ShowLoginBackgroundPage",
 		function(bShow, bShowCopyRight, bShowLogo, bShowBg)
+			-- 预加载图片
+			-- CodePkuDownloadWorld:ShowPrestrainPage()
+			NPL.load("(gl)Mod/CodePku/cellar/AssetManage/CodePkuAssetPreloader.lua")
+			local CodePkuAssetPreloader = commonlib.gettable("Mod.CodePku.AssetManage.CodePkuAssetPreloader")
+			-- CodePkuAssetPreloader.getSingleTon():PreloadAsset()
 			LOG.std(nil, "info", "codepku", "add_filter ShowLoginBackgroundPage")
 			MainLogin:ShowLoadingPage()
 			MainLogin:ShowLoginBackgroundPage()
@@ -267,6 +291,15 @@ function CodePku:init()
 			LOG.std(nil, "info", "codepku", "add_filter cmd_loadworld")
 			local pid = UserConsole:GetProjectId(url)
 			if pid then
+				--判定是否是ggs的世界 等于nil是因为第一次进入世界的时候逻辑处理顺序的问题
+				local isGGSConnecting = System and System.Codepku and System.Codepku.isGGSConnecting
+				if isGGSConnecting or isGGSConnecting == nil then
+					commonlib.setfield("System.Codepku.isGGSConnecting",false)
+					commonlib.setfield("System.Codepku.GGSConnected",true)
+				else
+					commonlib.setfield("System.Codepku.GGSConnected",false)
+				end
+
 				UserConsole:HandleWorldId(pid)
 				return
 			else
@@ -419,7 +452,8 @@ function CodePku:init()
 		function(bRestart)
 			local Desktop = commonlib.gettable("MyCompany.Aries.Creator.Game.Desktop")
 			local dialog = {
-				text = L "确定要退出当前世界么？",
+				-- 同时存在text和callback会走messagebox的逻辑，界面重构需要弹出自己的页面，注释一个即可
+				-- text = L "确定要退出当前世界么？",
 				callback = function(res)
 					Desktop.is_exiting = false
 					if (res and res == _guihelper.DialogResult.OK) then
@@ -430,6 +464,9 @@ function CodePku:init()
 				end,
 				messageBoxButton = _guihelper.MessageBoxButtons.OKCancel
 			}
+			-- 展示自己的退出页面
+			local ExitPage = NPL.load("(gl)Mod/CodePku/cellar/Areas/ExitPage.lua");
+			ExitPage:ShowPage();
 			return dialog
 		end
 	)
@@ -512,6 +549,16 @@ function CodePku:init()
 	NPL.load("(gl)Mod/CodePku/cellar/GUI/MemoryOpt/MemoryOpt.lua")
 	local MemoryOpt = commonlib.gettable("Mod.CodePku.GUI.MemoryOpt")
 	MemoryOpt:StaticInit();
+	
+	-- 初始化分线系统
+	NPL.load("(gl)Mod/CodePku/cellar/GUI/Branch/ChooseBranch.lua")
+	local ChooseBranch = commonlib.gettable("Mod.CodePku.GUI.ChooseBranch")
+	ChooseBranch:StaticInit()
+	
+	-- 初始化玩家操作数据统计
+	NPL.load("(gl)Mod/CodePku/cellar/GUI/ClickStatistics/ClickStatistics.lua")
+	local ClickStatistics = commonlib.gettable("Mod.CodePku.GUI.ClickStatistics")
+	ClickStatistics:StaticInit();
 
 	GameLogic.GetFilters():add_filter(
 		"DesktopMenuPage.ShowPage",
@@ -565,10 +612,32 @@ function CodePku:init()
 	)
 
 	GameLogic.GetFilters():add_filter(
+		"HandleGlobalKeyByRETURN",
+		function()
+			local isEmployee = System.User and System.User.info and System.User.info.is_employee;
+			if isEmployee and tonumber(isEmployee) == 1 or (HomeManage:IsMyHome() and GameLogic.GameMode:IsEditor()) then
+				return false
+			end
+			return true
+		end
+	);
+
+	GameLogic.GetFilters():add_filter(
+		"HandleGlobalKeyBySLASH",
+		function()
+			local isEmployee = System.User and System.User.info and System.User.info.is_employee;
+			if isEmployee and tonumber(isEmployee) == 1 or (HomeManage:IsMyHome() and GameLogic.GameMode:IsEditor()) then
+				return false
+			end
+			return true
+		end
+	);
+
+	GameLogic.GetFilters():add_filter(
 		"KeyPressEvent",
 		function(callbackVal, event)
 			local isEmployee = System.User and System.User.info and System.User.info.is_employee;
-			if isEmployee and tonumber(isEmployee) == 1 then
+			if isEmployee and tonumber(isEmployee) == 1 or (HomeManage:IsMyHome() and GameLogic.GameMode:IsEditor()) then
 				return true
 			end
 

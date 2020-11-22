@@ -14,6 +14,10 @@ local AdaptWindow = commonlib.gettable("Mod.CodePku.GUI.Window.AdaptWindow")
 local request = NPL.load("(gl)Mod/CodePku/api/BaseRequest.lua");
 local Eldership = NPL.load("(gl)Mod/CodePku/cellar/GUI/Eldership/Eldership.lua");
 
+-- 导Editbox是为了改EmptyText的文本颜色，后面帕拉卡如果添加了对应的属性可以改掉这里的代码
+NPL.load("(gl)script/ide/System/Windows/Controls/EditBox.lua");
+local EditBox = commonlib.gettable("System.Windows.Controls.EditBox");
+
 
 Researchers.IconsV1 = "codepku/image/textures/researchers/researchersV1.png"    -- 按键雪碧图
 Researchers.NoticeBGV1 = "codepku/image/textures/researchers/bg.png"    -- 蓝色弹窗背景
@@ -77,6 +81,8 @@ Researchers.params = {
     [2] = {url="Mod/CodePku/cellar/GUI/Researchers/CompetitionBoard.html", alignment="_lt", left = 0, top = 0, width = 1920 , height = 1080, zorder = 30,},
     -- 信息发送通知
     [3] = {url="Mod/CodePku/cellar/GUI/Researchers/MsgNotice.html", alignment="_lt", left = 0, top = 0, width = 1920 , height = 1080, zorder = 30,},
+    -- 广告牌
+    [4] = {url="Mod/CodePku/cellar/GUI/Researchers/AdvertisingBoard.html", alignment="_lt", left = 0, top = 0, width = 1920 , height = 1080, zorder = 30,},
 }
 
 function Researchers:ShowPage(id, url)
@@ -98,4 +104,38 @@ function Researchers:ShowPage(id, url)
         Eldership:GetBindStatus()
     end
     self.ui = AdaptWindow:QuickWindow(self.params[id])
+end
+
+function Researchers:OperationActivityLive()
+    -- 打开之前先设置input标签的EmptyText文本颜色
+	EditBox:Property({"EmptyTextColor", "#a35229", auto=true})
+	if not Researchers.LABG then
+		local BGparams = {
+		url="Mod/CodePku/cellar/GUI/Profile/EditNameEmptyPage.html",
+		alignment="_lt", left = 0, top = 0, width = 1920 , height = 1080, zorder = 31,
+		}
+		Researchers.LABG = AdaptWindow:QuickWindow(BGparams)
+	end
+	if not Researchers.LAui then
+		local params = {
+			url = "Mod/CodePku/cellar/GUI/Researchers/LiveActivity.html",
+			alignment="_lt", left = 464, top = 179, width = 936 , height = 751, zorder = 32
+		}
+		Researchers.LAui = AdaptWindow:QuickWindow(params)
+	end
+end
+
+-- 关闭页面
+function Researchers:CloseOperationActivityLivePage()
+	-- 关闭遮罩window
+	if Researchers.LABG then
+		Researchers.LABG:CloseWindow()
+		Researchers.LABG = nil
+	end
+	if Researchers.LAui then
+		Researchers.LAui:CloseWindow()
+		Researchers.LAui = nil
+	end
+	-- 关闭页面之后要还原为默认的，避免影响其它页面
+	EditBox:Property({"EmptyTextColor", "#888888", auto=true})
 end

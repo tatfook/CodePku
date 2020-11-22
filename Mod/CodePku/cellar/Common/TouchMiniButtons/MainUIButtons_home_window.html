@@ -17,6 +17,11 @@ Path:"Mod/CodePku/cellar/Common/TouchMiniButtons/MainUIButtons_home_window.html"
 NPL.load("(gl)Mod/CodePku/cellar/GUI/Home/HomeManage.lua");
 local HomeManage = commonlib.gettable("Mod.CodePku.Common.HomeManage")
 local Researchers = NPL.load("(gl)Mod/CodePku/cellar/GUI/Researchers/Researchers.lua");
+local mainFrameImageData = NPL.load("(gl)Mod/CodePku/cellar/imageLuaTable/mainFrameImageData.lua")
+main_icon_raiders_1 = mainFrameImageData:GetIconUrl("main_icon_raiders_1.png")
+main_icon_operating_2 = mainFrameImageData:GetIconUrl("main_icon_operating_2.png")
+main_icon_operating_3 = mainFrameImageData:GetIconUrl("main_icon_operating_3.png")
+main_icon_entrance = mainFrameImageData:GetIconUrl("main_icon_entrance.png")
 
 function StartEditWorld()
     LOG.std(nil, "MainUIButtons_home_window", "StartEditWorldBtn", "clicked")
@@ -25,28 +30,49 @@ function StartEditWorld()
 end
 
 function SaveAndExitEditWorld()
+    local isVisitor = commonlib.getfield("System.User.isVisitor")
+    if isVisitor then
+        local VisitorLimit = NPL.load("(gl)Mod/CodePku/cellar/GUI/AccountUp/VisitorLimit.lua");
+        local params = {
+            title = "权限提醒",
+            content = "你还没注册哦，等下搭建完了保存不了哦！快去注册来和玩仔一决高下吧！",
+            source = 4,
+        }
+        VisitorLimit:CheckStatus(params);
+        return
+    end
     LOG.std(nil, "MainUIButtons_home_window", "SaveAndExitEditWorldBtn", "clicked")
     HomeManage:SaveHome()
     Page:Refresh()
 end
 
 function BuildingBoard()
-    local url = Mod.CodePku.BasicConfigTable.links.home_world_announcement or "https://none.h5.xeknow.com/st/5XKdbYHy5"
-    Researchers:ShowPage(1, url)
+    GameLogic.GetFilters():apply_filters("ClickStatistics", {track_id= 46, track_scene =10, track_type=0, }) -- 点击秘籍，触发操作系统数据
+    -- local url = Mod.CodePku.BasicConfigTable.links.home_world_announcement or "https://none.h5.xeknow.com/st/5XKdbYHy5"
+    local url = "https://www.codepku.com/activity?slug=phly1605089446MP06"
+    CommonFunc.OpenUrl(url, true, 'portrait')
+
+end
+
+-- 直播入口,废弃了
+function GoLive()
+    GameLogic.RunCommand(string.format('/loadworld %d', 52010));
 end
 
 ]]></script>
 <style type="text/mcss">
 
 </style>
-<pe:container alignment="_lt" width="335" height="355" >
-    <!-- 攻略秘籍 -->
-    <div onclick="BuildingBoard" style="position: relative; left: 180;top: 30;width: 169; height: 158;background: url(codepku/image/textures/enter_world_btn/enter_world_btn.png#185 536 169 158);"></div>
+<pe:container alignment="_lt" width="100%" height="100%">
+    <div onclick="BuildingBoard" style="<%=format('position: relative; left: 200;top: 0;width: 129; height: 152;background: url(%s);', main_icon_raiders_1)%>"></div>
+    <!-- <div onclick="GoLive" style="<%=format('position: relative; left: 0;top: 0;width: 150; height: 154;background: url(%s);', main_icon_entrance)%>"></div> -->
+    
     <pe:if condition='<%=GameLogic.GameMode:IsEditor()==false%>'>
-        <div name="StartEditWorldBtn" onclick="StartEditWorld" style="position: relative; left: 200;top: 220;width: 135; height: 134; background: url(codepku/image/textures/enter_world_btn/enter_world_btn.png#96 330 134 134);"></div>
+        <!-- 攻略秘籍 -->
+        <div name="StartEditWorldBtn" onclick="StartEditWorld" style="<%=format('position: relative; left: 207;top: 191;width: 134; height: 134; background: url(%s);', main_icon_operating_3)%>"></div>
     </pe:if>
     <pe:if condition='<%=GameLogic.GameMode:IsEditor()==true%>'>
-        <div name="SaveAndExitEditWorldBtn" onclick="SaveAndExitEditWorld" style="position: relative; left: 200;top: 220;width: 135; height: 134;background: url(codepku/image/textures/enter_world_btn/enter_world_btn.png#312 330 134 134);"></div>
+        <div name="SaveAndExitEditWorldBtn" onclick="SaveAndExitEditWorld" style="<%=format('position: relative; left: 207;top: 191;width: 134; height: 134;background: url(%s);', main_icon_operating_2)%>"></div>
     </pe:if>
 </pe:container>
 

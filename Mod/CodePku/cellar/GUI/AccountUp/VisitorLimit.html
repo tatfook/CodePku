@@ -1,0 +1,66 @@
+<!-- "Mod/CodePku/cellar/GUI/AccountUp/VisitorLimit.html" -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" >
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+</head>
+
+<body>
+<pe:mcml>
+<script refresh="false" type="text/npl" src="VisitorLimit.lua"><![CDATA[
+
+VisitorLimit = NPL.load("(gl)Mod/CodePku/cellar/GUI/AccountUp/VisitorLimit.lua")
+
+function Close()
+    -- 防止多开的参数，本页面关闭一定要走这里的逻辑，不然会导致下一次开不起来
+    VisitorLimit.PageShowed = false
+    Page:CloseWindow()
+end
+
+function PageClose()
+    VisitorLimit:destroy()
+    Close()
+end
+
+function GetIcons(type, index)
+    return VisitorLimit:GetIconPath(type, index)
+end
+
+function AccountNow()
+    Close()
+    NPL.load("(gl)Mod/CodePku/cellar/GUI/AccountUp/AccountUp.lua")
+    local AccountUp = commonlib.gettable("Mod.CodePku.AccountUp")
+    AccountUp.ShowPage(VisitorLimit.source)
+end
+
+]]></script>
+<style type="text/mcss">
+</style>
+
+<pe:container alignment="_lt" width="1920" height="1080">
+
+<!-- 背景 -->
+<div style="<%=format('position: relative; left: 532; top: 102; width: 795;height: 778;background:url(%s);', GetIcons(2, 'esc_frame_bot_paper.png'))%>">
+    <!-- title -->
+    <div style="position: relative;left: 292;top: 68;width: 258;font-family: zkklt;font-size: 56;text-align: center;color: #4f402e;"><%= VisitorLimit.PageTitle %></div>
+    <!-- content -->
+    <div style="position: relative;left: 150;top: 260;width: 530;height: 200;font-family: zkklt;font-size: 38;line-height: 60;color: #675947;"><%= VisitorLimit.PageContent %></div>
+    <!-- 取消 -->
+    <div onclick="PageClose" style="<%=format('position: relative; left: 127; top: 567; width: 238;height: 81;background:url(%s);', GetIcons(1, 'common_btn_red01.png'))%>">
+        <div style="<%=format('position: relative; left: 41; top: 17; width: 158;height: 39;background:url(%s);', GetIcons(2, 'esc_frame_btn_nexttime.png'))%>"></div>
+    </div>
+    <!-- 确认 -->
+    <div onclick="AccountNow" style="<%=format('position: relative; left: 463; top: 567; width: 238;height: 81;background:url(%s);', GetIcons(1, 'common_btn_green01.png'))%>">
+        <div style="<%=format('position: relative; left: 41; top: 17; width: 158;height: 39;background:url(%s);', GetIcons(2, 'esc_frame_btn_enroll.png'))%>"></div>
+    </div>
+</div>
+
+<div onclick="Close" style="<%=format('position: relative; left: 1196; top: 95; width: 77;height: 123;background:url(%s);', GetIcons(1, 'comm_btn_close.png'))%>"></div>
+
+</pe:container>
+
+
+</pe:mcml> 
+</body>
+</html>

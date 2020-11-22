@@ -163,14 +163,14 @@ CommonFunc.OpenUrl = function (url, withToken, screenOrientation)
         if type(params) == "table" then
             local fields = {}
             for key,value in pairs(params) do
-            local keyString = urlencode(stringifyPrimitive(key)) .. eq
-            if type(value) == "table" then
-                for _, v in ipairs(value) do
-                table.insert(fields, keyString .. urlencode(stringifyPrimitive(v)))
+                local keyString = urlencode(stringifyPrimitive(key)) .. eq
+                if type(value) == "table" then
+                    for _, v in ipairs(value) do
+                    table.insert(fields, keyString .. urlencode(stringifyPrimitive(v)))
+                    end
+                else
+                    table.insert(fields, keyString .. urlencode(stringifyPrimitive(value)))
                 end
-            else
-                table.insert(fields, keyString .. urlencode(stringifyPrimitive(value)))
-            end
             end
             return table.concat(fields, sep)
         end
@@ -214,5 +214,14 @@ CommonFunc.OpenUrl = function (url, withToken, screenOrientation)
         Map3DSystem.App.Commands.Call("File.WebBrowser", url)        
     else
         GameLogic.RunCommand(string.format("/open %s", url))
+    end
+end
+
+CommonFunc.ConnectStandToEnd = function ()
+    local Config = NPL.load("(gl)Mod/CodePku/online/client/Config.lua");
+    if Config.defaultEnv == "RELEASE" then
+        GameLogic.RunCommand("/connectCodePku -serverIp=106.53.135.151 -serverPort=9900 25161")
+    else
+        GameLogic.RunCommand("/connectCodePku 25161")
     end
 end

@@ -16,6 +16,8 @@ local ToWhere = commonlib.gettable("Mod.CodePku.GUI.Popup.ToWhere")
 local GameLogic = commonlib.gettable("MyCompany.Aries.Game.GameLogic")
 NPL.load("(gl)Mod/CodePku/cellar/Common/TouchMiniButtons/TaskSystem/TaskSystem.lua")
 local TaskSystem = commonlib.gettable("Mod.CodePku.Common.TaskSystem")
+NPL.load("(gl)Mod/CodePku/cellar/Common/CommonFunc/CommonFunc.lua")
+local CommonFunc = commonlib.gettable("Mod.CodePku.Common.CommonFunc")
 
 local name = ToWhere.ToWhereName
 local id = ToWhere.ToWhereId
@@ -38,7 +40,13 @@ end
 function turnTo()
     CloseAllPage()
     local _id = tonumber(id)
-    if (_id == 1 or _id == 14312) then
+
+    if world_id == 25161 then
+        CommonFunc.ConnectStandToEnd()
+        return
+    end
+    
+    if (_id == 1 or _id == 14312 or _id == 15855 or _id == 15857) then
         GameLogic.RunCommand(string.format('/connectCodePku %d', _id));
     else
         GameLogic.RunCommand(string.format('/loadworld %d', _id));
