@@ -403,7 +403,7 @@ function Schoolyard:GetTrends(current_page, page)
         Schoolyard.trends_table_pages = response.data.pages
         for k, v in pairs(data) do
             local temp = v
-            temp.happended_at = GetTrendsTime(v.behavior.happended_at)
+            temp.happened_at = GetTrendsTime(v.behavior.happened_at)
             temp.action_text = v.behavior.action_text
             temp.nickname = (v.user or {}).nickname
             table.insert(Schoolyard.trends_table,temp)

@@ -31,12 +31,23 @@ function GetMembersResult()
 end
 
 -- 点击头像
-function ShowUserPage(id)
+function ShowUserPage(index)
     local UserInfoPage = NPL.load("(gl)Mod/CodePku/cellar/GUI/UserInfo.lua");
+    local id = Schoolyard.members_table[index].user_id
     if id == System.User.info.id then
         UserInfoPage:ShowPage()
     else
-        UserInfoPage:ShowPage(1, false, id);
+        local asset
+        if Schoolyard.members_table[index].user.ext_data == nil then
+            if Schoolyard.members_table[index].user.gender == 0 or Schoolyard.members_table[index].user.gender == 1 then
+                asset = "character/CC/02human/paperman/boy01.x"
+            elseif Schoolyard.members_table[index].user.gender == 2 then
+                asset = "character/CC/02human/paperman/girl01.x"
+            end
+        else
+            asset = Schoolyard.members_table[index].user.ext_data.player_info.asset
+        end
+        UserInfoPage:ShowPage(1, false, id, asset);
         -- UserInfoPage:ShowPage(1, false, id, MainUIButtons.user_asset);
     end
     -- GameLogic.AddBBS("CodeGlobals", tostring(id), 3000, "#FF0000");
@@ -85,7 +96,7 @@ end
                                     <div style="position: relative;left: 984;top: 76;width: 280;height: 50;font-family: zkklt;font-size: 46;color: #945e31;"><%= Eval('online_statu') %></div>
                                 </pe:if>
                             </div>
-                            <div onclick="ShowUserPage" name="<%= Eval('user_id') %>" style="<%=format('position: relative;left:1;top:23;width: 131;height: 136;background:url(%s);', GetIcon('shoolyard_head_bot.png'))%>">
+                            <div onclick="ShowUserPage" name="<%= Eval('index') %>" style="<%=format('position: relative;left:1;top:23;width: 131;height: 136;background:url(%s);', GetIcon('shoolyard_head_bot.png'))%>">
                                 <div style="<%=format('position: relative;left:7;top:5;width: 117;height: 118;background:url(%s);', user.avatar_url or '')%>"></div>
                             </div>
                         </div>
