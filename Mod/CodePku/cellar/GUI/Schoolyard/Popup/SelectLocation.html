@@ -40,6 +40,7 @@ end
 function Close()
     page:CloseWindow()
     Schoolyard.select_page_show_table = nil
+    Schoolyard.came_from_join_page = false
 end
 
 -- 返回第一个标签
@@ -77,8 +78,20 @@ function OnChoose(name)
         Schoolyard.selected_school.category = Schoolyard.select_page_show_table[selected_area_index].category
         Schoolyard.selected_school.name = Schoolyard.select_page_show_table[selected_area_index].name
     end
+
     page:CloseWindow()
-    Schoolyard.join_page:Refresh(0)
+    if Schoolyard.came_from_join_page then
+        Schoolyard.search_result = {}
+        Schoolyard.came_from_join_page = false
+        local params = {
+            search_province = Schoolyard.selected_province.code,
+            search_city = Schoolyard.selected_city.code,
+            search_area = Schoolyard.selected_area.code,
+            search_school = Schoolyard.selected_school.category,
+        }
+        Schoolyard:GetSearchSchoolResult(params, Schoolyard.join_page)
+    end
+
     if Schoolyard.register_page then
         Schoolyard.register_page:Refresh(0)
     end
@@ -90,13 +103,13 @@ end
 <pe:container alignment="_lt" width="1920" height="1080">
 
 <div onclick="Close" style="position: relative;width: 1920;height: 1080;background-color: #00000082;">
-    <div style="position: relative;left: 756;top: 233;width: 500;height: 600;">
-        <div style="position: relative;width: 408;height: 85;color: #7e2f12;">
+    <div style="<%=format('position: relative;left: 756;top: 233;width: 432;height: 609;background:url(%s);', GetIcon('bot.png'))%>">
+        <div style="position: relative;left:5;width: 408;height: 85;color: #7e2f12;">
             <input type="button" value="▼" style="<%=format('position: relative;font-size: 30;color: #7e2f12;width: 408;height: 85;text-align:right;padding-top:7;padding-right:12;background:url(%s);', GetIcon('schoolyard_screening_results_02.png'))%>"/>
             <input type="text" value="<%= GetFristLabel() or ' ' %>" style="position: relative;font-family: zkklt;color: #7e2f12;font-size: 36;left: 15;top: 25;width: 145;height: 36;background:#000000;"/>
             <div onclick="CancleSelect" style="position: relative;width: 408;height: 85;"></div>
         </div>
-        <pe:treeview style="position: relative;top: 90;width: 430;height: 541;" name='messages' DefaultNodeHeight = "80" ItemsPerLine="1" AllowPaging="false" RememberScrollPos="true" RememberLastPage="false" VerticalScrollBarStep="40">
+        <pe:treeview style="position: relative;left:5;top: 90;width: 430;height: 515;" name='messages' DefaultNodeHeight = "80" ItemsPerLine="1" AllowPaging="false" RememberScrollPos="true" RememberLastPage="false" VerticalScrollBarStep="40">
             <pe:repeat DataSource="<%= Schoolyard.select_page_show_table %>">
                 <pe:repeatitem>
                     <div onclick="OnChoose" name="<%= Eval('index') %>" style="<%=format('width: 408;height: 85;line-height:85;padding-left:10;margin-bottom: 5;font-family: zkklt;font-size: 36;color: #7e2f12;background:url(%s);', GetIcon('schoolyard_screening_results_01.png'))%>"><%= Eval('name') %></div>

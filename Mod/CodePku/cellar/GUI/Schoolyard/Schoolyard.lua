@@ -324,6 +324,7 @@ function Schoolyard:SortMembers(data)
         temp_table.online_statu = v.user.is_online and "在线" or GetOnlineStatu(v.user.last_offline_at)
         if temp_table.user_id == user_id then
             temp_table.online_statu = "在线"
+            temp_table.is_myself = true
             table.insert(Schoolyard.members_table,1,temp_table)
         else
             table.insert(Schoolyard.members_table,temp_table)

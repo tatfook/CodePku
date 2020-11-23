@@ -89,10 +89,10 @@ end
                                 <div style="position: relative;left: 57;top: 36;width: 200;height: 50;font-family: Impact;font-size: 48;color: #b36f14;"><%= Eval('level') %></div>
                                 <div style="position: relative;left: 57;top: 100;width: 370;height: 50;font-family: zkklt;font-size: 42;color: #945e31;"><%= user.nickname or "" %></div>
                                 <!-- <div style="position: relative;left: 505;top: 82;width: 400;height: 50;font-family: Alibaba PuHuiTi;font-size: 48;text-align: center;color: #945e31;"><%= Eval('weekly_activity') or 0 %></div> -->
-                                <pe:if condition='<%= user.is_online == true %>'>
+                                <pe:if condition='<%= user.is_online == true or is_myself == true %>'>
                                     <div style="position: relative;left: 984;top: 76;width: 280;height: 50;font-family: zkklt;font-size: 46;color: #47753c;"><%= Eval('online_statu') %></div>
                                 </pe:if>
-                                <pe:if condition='<%= user.is_online == false %>'>
+                                <pe:if condition='<%= user.is_online == false and is_myself ~= true %>'>
                                     <div style="position: relative;left: 984;top: 76;width: 280;height: 50;font-family: zkklt;font-size: 46;color: #945e31;"><%= Eval('online_statu') %></div>
                                 </pe:if>
                             </div>

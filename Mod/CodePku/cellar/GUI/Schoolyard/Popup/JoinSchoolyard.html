@@ -62,6 +62,7 @@ end
 function OnSelect(name)
     Schoolyard.search_content = page:GetValue("search_name")
     -- 3级弹窗
+    Schoolyard.came_from_join_page = true
     Schoolyard:ShowSelectPage(name)
 end
 
