@@ -65,8 +65,9 @@ function AdaptWindow:QuickWindow(params)
         top =  params.y or params.top, 
         width = params.width, 
         height = params.height, 
-        parent = viewport:GetUIObject(true),
-
+		parent = params.parent or viewport:GetUIObject(true), -- todo: may need refactor
+		-- parent: paracraft默认值是ParaUI.GetUIObject("root")，避免影响已开发的页面，保留之前开发写的viewport:GetUIObject(true)为默认值，
+		-- 需要使用ParaUI.GetUIObject("root")或其它值，自行传入
         zorder=params.zorder or 1, 
         allowDrag=params.allowDrag or false, 
 
