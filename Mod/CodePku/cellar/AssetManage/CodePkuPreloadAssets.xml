@@ -32,5 +32,11 @@
         <item>codepku/image/textures/tasksystem/bot.png</item>
         <item>codepku/image/textures/tasksystem/main.png</item>
         <item>codepku/image/textures/tasksystem/reward_bg.png</item>
+
+        <item>codepku/image/textures/UI/branch/branch.png</item>
+        <item>codepku/image/textures/UI/common1/common1.png</item>
+        <item>codepku/image/textures/UI/escFrame/escFrame.png</item>
+        <item>codepku/image/textures/UI/mainFrame/mainFrame.png</item>
+        <item>codepku/image/textures/UI/share/share.png</item>
     </textures>
 </assets>
