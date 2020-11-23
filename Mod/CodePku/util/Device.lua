@@ -20,26 +20,69 @@ Example:(下面只描述返回 table 或者 json 的对象例子，其他返回i
                     available_memory_format="783兆字节",  格式化可用内存
                 }
 
-
+        获取内存信息 ->
+        iOS Example ->
+            -- 回调函数
+            local function getMemory(pData)
+                local decodeData = commonlib.Json.Decode(pData);
+                echo(decodeData);
+            end
+            --
+            local memory = DeviceInstance.getMemory(getMemory);
+            
+            -- 回调函数返回数据
+            decodeData ->
+                {
+                    ram_memory_free = "", 可用内存，单位字节
+                    ram_memory_used = "", 已使用内存，单位字节
+                    ram_memory_total = "", 总内存，单位字节
+                    
+                    ram_memory_free_format = "", 格式化可用内存
+                    ram_memory_used_format = "", 格式化已使用内存
+                    ram_memory_total_format = "", 格式化总内存
+                }
 -------------------------------------------------------
 ]]
 
 
 local Device =  commonlib.inherit(nil, NPL.export());
 
-
 local platform = System.os.GetPlatform();
 local isAndroid = platform == "android";
 local isIOS = platform == "ios";
-callbacks = {}
+
+--对应oc/java互调
+local BLUETOOTH_SYSTEM_CALL =
+{
+    GET_MEMORY = 555;
+    GET_DEVICE = 777;
+}
+
+-- Android
+Device.callbacks = {}
+-- iOS
+local LocalService = {callBacks = {}};
 
 NPL.this(function()
-    local spltPos = string.find(msg, "_");
-    if spltPos then
-        local params = string.sub(msg, spltPos + 1)
-        local method = string.sub(msg, 1, spltPos - 1);
-        if callbacks and callbacks[method] then
-            callbacks[method](params);
+    if isAndroid then
+        local spltPos = string.find(msg, "_");
+        if spltPos then
+            local params = string.sub(msg, spltPos + 1)
+            local method = string.sub(msg, 1, spltPos - 1);
+            if Device.callbacks and Device.callbacks[method] then
+                Device.callbacks[method](params);
+            end
+        end
+    elseif isIOS then
+        local spltPos = string.find(msg, "_");
+        if spltPos then
+            local extData = string.sub(msg, spltPos + 1)
+            local extId = tonumber(string.sub(msg, 1, spltPos - 1));
+            if LocalService and LocalService.callBacks then
+                if LocalService.callBacks[extId] then
+                    LocalService.callBacks[extId](extData);
+                end
+            end
         end
     end
 end);
@@ -64,7 +107,14 @@ function Device:init()
             NPL.call("LuaJavaBridge.cpp", {});
         end
     elseif isIOS then
-
+        -- lua层绑定OC的DeviceMessage类
+        echo("Device.regNplEngineeBridge.start");
+        if LuaObjcBridge == nil then
+            NPL.call("LuaObjcBridge.cpp", {});
+        end
+        local args = { luaPath = "(gl)Mod/CodePku/util/Device.lua" };
+        local ok, ret = LuaObjcBridge.callStaticMethod("DeviceMessage", "registerLuaCall", args);
+        echo("Device.regNplEngineeBridge.end");
     end
 
     return self;
@@ -74,7 +124,7 @@ end
 -- support devices：
 -- android
 -- ios
-function Device:getMemory()
+function Device:getMemory(callBack)
     if isAndroid then
         local ret = LuaJavaBridge.callJavaStaticMethod("plugin/Codepku/Device", "getMemory", "()Ljava/lang/String;",{});
         if(type(ret.result) == "string") then
@@ -82,7 +132,11 @@ function Device:getMemory()
         end
         return ret.result;
     elseif isIOS then
-
+        -- 注册iOS:GET_MEMORY回调
+        LocalService.callBacks[BLUETOOTH_SYSTEM_CALL.GET_MEMORY] = callBack;
+        -- 调用OC: Class:DeviceMessage Method:getMemoryJsonString
+        local args = {};
+        local ok, ret = LuaObjcBridge.callStaticMethod("DeviceMessage", "getMemoryJsonString", args);
     end
 end
 
@@ -131,7 +185,7 @@ end
 -- 获取设备名称
 -- support devices：
 -- android
-function Device:getDevice()
+function Device:getDevice(callBack)
     if isAndroid then
         local ret = LuaJavaBridge.callJavaStaticMethod("plugin/Codepku/Device", "getDevice", "()Ljava/lang/String;",{});
         return ret.result;
@@ -187,8 +241,4 @@ function Device:getManufacturer()
         return ret.result;
     end
 end
-
-
-
-
 
