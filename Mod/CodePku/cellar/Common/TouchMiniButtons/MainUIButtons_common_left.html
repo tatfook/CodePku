@@ -15,6 +15,7 @@ local SignInPage = commonlib.gettable("Mod.CodePku.GUI.SignInPage")
 local ShareApp = NPL.load("(gl)Mod/CodePku/cellar/GUI/Share/ShareApp.lua");
 NPL.load("(gl)Mod/CodePku/cellar/Common/TouchMiniButtons/TaskSystem/TaskSystem.lua")
 local TaskSystem = commonlib.gettable("Mod.CodePku.Common.TaskSystem")
+local InviteCode = NPL.load("(gl)Mod/CodePku/cellar/GUI/InviteCode/InviteCode.lua")
 
 left_buttons = MainUIButtons.left_buttons
 function ClickChooseFun(name)
@@ -27,6 +28,8 @@ function ClickChooseFun(name)
     elseif(name == "ClickShareApp") then 
         GameLogic.GetFilters():apply_filters("ClickStatistics", {type = 74}); -- 点击分享，触发操作数据统计计数
         ShareApp:ShowPage(1)
+    elseif(name == "ClickInviteCode") then
+        InviteCode:ShowPage()
     else
         GameLogic.AddBBS("CodeGlobals", L"功能开发中", 3000, "#ff0000");
     end

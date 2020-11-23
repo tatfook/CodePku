@@ -18,7 +18,7 @@ local Feedback = NPL.load("(gl)Mod/CodePku/cellar/GUI/Feedback/Feedback.lua");
 local Eldership = NPL.load("(gl)Mod/CodePku/cellar/GUI/Eldership/Eldership.lua");
 local MainUIButtons = NPL.load("(gl)Mod/CodePku/cellar/Common/TouchMiniButtons/Main.lua");
 local ShareApp = NPL.load("(gl)Mod/CodePku/cellar/GUI/Share/ShareApp.lua");
-
+mainFrameImageData = NPL.load("(gl)Mod/CodePku/cellar/imageLuaTable/mainFrameImageData.lua")
 is_open = MainUIButtons.open_common
 
 function ClickClose() 
@@ -109,7 +109,11 @@ end
     <pe:repeat DataSource="<%=top_buttons%>" style="">
         <pe:repeatitem style="float:left;">
             <pe:if condition="<%=Eval('bShow') == true%>">
-                <div style="<%=format('margin-left:%d;width:%d;height:%d;top: %d;background: url(%s);',Eval('left'),Eval('width'),Eval('height'),Eval('top'),Eval('url'))%>" name="<%=Eval('name')%>" onclick="ClickChooseFun"></div>
+                <div style="<%=format('margin-left:%d;width:%d;height:%d;top: %d;background: url(%s);',Eval('left'),Eval('width'),Eval('height'),Eval('top'),Eval('url'))%>" name="<%=Eval('name')%>" onclick="ClickChooseFun">
+                    <pe:if condition="<%=Eval('dot') == true%>">
+                        <div onclick="clickInfo" style="<%=format('position:relative;width:39;height:39;top:0;left:%d;background:url(%s);',Eval('width')-39,mainFrameImageData:GetIconUrl('main_icon_tip.png'))%>"></div>
+                    </pe:if>
+                </div>
             </pe:if>          
         </pe:repeatitem>
     </pe:repeat>

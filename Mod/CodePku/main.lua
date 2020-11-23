@@ -257,10 +257,10 @@ function CodePku:init()
 		"ShowLoginBackgroundPage",
 		function(bShow, bShowCopyRight, bShowLogo, bShowBg)
 			-- 预加载图片
-			-- CodePkuDownloadWorld:ShowPrestrainPage()
+			CodePkuDownloadWorld:ShowPrestrainPage()
 			NPL.load("(gl)Mod/CodePku/cellar/AssetManage/CodePkuAssetPreloader.lua")
 			local CodePkuAssetPreloader = commonlib.gettable("Mod.CodePku.AssetManage.CodePkuAssetPreloader")
-			-- CodePkuAssetPreloader.getSingleTon():PreloadAsset()
+			CodePkuAssetPreloader.getSingleTon():PreloadAsset()
 			LOG.std(nil, "info", "codepku", "add_filter ShowLoginBackgroundPage")
 			MainLogin:ShowLoadingPage()
 			MainLogin:ShowLoginBackgroundPage()
@@ -544,6 +544,11 @@ function CodePku:init()
 	NPL.load("(gl)Mod/CodePku/cellar/Common/TouchMiniButtons/TaskSystem/TaskSystem.lua")
 	local TaskSystem = commonlib.gettable("Mod.CodePku.Common.TaskSystem")
 	TaskSystem:StaticInit();
+
+	-- 初始化定时清理内存
+	NPL.load("(gl)Mod/CodePku/cellar/GUI/MemoryOpt/MemoryOpt.lua")
+	local MemoryOpt = commonlib.gettable("Mod.CodePku.GUI.MemoryOpt")
+	MemoryOpt:StaticInit();
 
 	-- 初始化分线系统
 	NPL.load("(gl)Mod/CodePku/cellar/GUI/Branch/ChooseBranch.lua")
