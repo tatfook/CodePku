@@ -170,8 +170,9 @@ function Schoolyard:GetMySchoolyardInfo(page)
             Schoolyard.schoolyard_name = data.name       -- 学校名字
             Schoolyard.schoolyard_address = data.district.full_name or "未知"      -- 学校位置
             Schoolyard.number_of_people = data.members_count      -- 学校人数
-            Schoolyard.schoolyard_level = "Lv." .. (data.level and tostring(data.level) or "？？？")        -- 学校等级
+            Schoolyard.schoolyard_level = data.level and tostring(data.level) or "？？？"        -- 学校等级
             Schoolyard.schoolyard_vitality = Schoolyard:DigitalProcessing(data.weekly_activity)     -- 学校周活跃度
+            Schoolyard.schoolyard_total_vitality = Schoolyard:DigitalProcessing(data.total_activity)     -- 学校总活跃度
             Schoolyard.week_rank = data.week_rank        -- 学校周活跃排行
             Schoolyard.total_rank = data.total_rank       -- 学校总活跃排行
             Schoolyard.school_level_progress = data.level_progress      -- 学校经验

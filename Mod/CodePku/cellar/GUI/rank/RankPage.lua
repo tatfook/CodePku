@@ -2,6 +2,7 @@ RankPage = commonlib.gettable("Mod.CodePku.RankPage");
 local AdaptWindow = commonlib.gettable("Mod.CodePku.GUI.Window.AdaptWindow")
 
 local request = NPL.load("(gl)Mod/CodePku/api/BaseRequest.lua")
+local schoolyardImageData = NPL.load("(gl)Mod/CodePku/cellar/imageLuaTable/schoolyardImageData.lua")
 
 RankPage.ui = nil
 RankPage.popui = nil
@@ -215,6 +216,12 @@ function RankPage.GetActivityItem(id, range, activity_id)
         return list, mylist
     end
 end
+
+-- 获取图标
+function RankPage.GetIconPathBySchoolyard(index)
+    return schoolyardImageData:GetIconUrl(index)
+end
+
 
 -- 获取校园排行榜数据
 function RankPage.GetSchoolyardItem(type)

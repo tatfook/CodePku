@@ -12,10 +12,15 @@
 Schoolyard = NPL.load("(gl)Mod/CodePku/cellar/GUI/Schoolyard/Schoolyard.lua");
 UserInfoPage = NPL.load("(gl)Mod/CodePku/cellar/GUI/UserInfo.lua");
 local page = document:GetPageCtrl()
+local mainFrameImageData = NPL.load("(gl)Mod/CodePku/cellar/imageLuaTable/mainFrameImageData.lua")
 
 -- 获取图片
 function GetIcon(index)
     return Schoolyard:GetImagePath(index)
+end
+
+function GetMainIcon(index)
+    return mainFrameImageData:GetIconUrl(index)
 end
 
 -- 搜索学校弹窗
@@ -69,7 +74,7 @@ end
         </div>
         <!-- 人物头像 -->
         <div style="<%=format('position: relative;left:114;top: 394;width: 174;height: 174;background:url(%s);', GetIcon('schoolyard_head_bot.png'))%>">
-            <div style="<%=format('position: relative;left:11;top: 10;width: 153;height: 153;background:url(%s);', GetIcon('schoolyard_head_eg.png'))%>"></div>
+            <div style="<%=format('position: relative;left:26;top: 35;width: 123;height: 126;background:url(%s);', GetMainIcon('main_icon_avatar_2.png'))%>"></div>
         </div>
         <!-- 人物ID -->
         <div style="position: relative;left: 246;top: 588;width: 400;height: 47;font-size: 36;color: #b36f14;"><%= System.User.info.no %></div>
@@ -93,16 +98,26 @@ end
     <div style="<%=format('position: relative;left:813;top: -51;width: 699;height: 981;background:url(%s);', GetIcon('schoolyard_information_bot.png'))%>">
         <!-- 已经加入学校 -->
         <pe:if condition='<%= Schoolyard.joined_schoolyard == true %>'>
-            <div style="<%=format('position: relative;left:94;top: 278;width: 458;height: 350;background:url(%s);', GetIcon('schoolyard_information_mat.png'))%>">
-                <div style="position: relative;left: 29;top: 72;width: 150;height: 40;font-family: Impact;font-size: 48;color: #b36f14;"><%= Schoolyard.schoolyard_level %></div>
+            <div style="<%=format('position: relative;left:128;top: 278;width: 419;height: 341;background:url(%s);', GetIcon('schoolyard_information_mat.png'))%>">
+                <!-- 等级 -->
+                <div style="<%=format('position: relative;left:52;top: -15;width: 285;height: 66;background:url(%s);', GetIcon('schoolyard_information_title.png'))%>">
+                    <div style="position: relative;left: 16;top: 5;width: 160;height: 66;font-family: zkklt;font-size: 48;color: #945e31;">等级：</div>
+                    <div style="position: relative;left: 150;top: 5;width: 150;height: 66;font-family: Impact;font-size: 48;color: #945e31;"><%= Schoolyard.schoolyard_level %></div>
+                </div>
+                <!-- 总活跃度 -->
+                <div style="position: relative;left: 11;top: 70;width: 180;height: 66;font-family: zkklt;font-size: 36;color: #b36f14;">总活跃度：</div>
+                <div style="position: relative;left: 182;top: 70;width: 180;height: 66;font-size: 36;color: #945e31;"><%= Schoolyard.schoolyard_total_vitality %></div>
                 <!-- 经验条 -->
-                <div style="<%=format('position: relative;left:83;top: 158;width: 339;height: 40;background:url(%s);', GetIcon('schoolyard_exp_bot.png'))%>">
+                <div style="<%=format('position: relative;left:11;top: 130;width: 339;height: 40;background:url(%s);', GetIcon('schoolyard_exp_bot.png'))%>">
                     <div style="<%=format('position: relative;left:3;top: 4;width: %s;height: 32;background:url(%s:15 0 15 0);', GetExpWidth(), GetIcon('schoolyard_exp.png'))%>"></div>
                 </div>
+                <div style="<%=format('position: relative;left:359;top: 118;width: 46;height: 53;background:url(%s);', GetIcon('schoolyard_fire.png'))%>"></div>
                 <!-- 学校人数 -->
-                <div style="position: relative;left: 225;top: 227;width: 200;height: 40;font-size: 28;color: #945e31;"><%= Schoolyard.number_of_people %></div>
+                <div style="position: relative;left: 25;top: 195;width: 180;height: 66;font-family: zkklt;font-size: 36;color: #b36f14;">学校人数：</div>
+                <div style="position: relative;left: 195;top: 198;width: 200;height: 40;font-size: 32;color: #945e31;"><%= Schoolyard.number_of_people %></div>
                 <!-- 周活跃度 -->
-                <div style="position: relative;left: 225;top: 270;width: 200;height: 40;font-size: 28;color: #945e31;"><%= Schoolyard.schoolyard_vitality %></div>
+                <div style="position: relative;left: 25;top: 240;width: 180;height: 66;font-family: zkklt;font-size: 36;color: #b36f14;">周活跃度：</div>
+                <div style="position: relative;left: 195;top: 242;width: 200;height: 40;font-size: 32;color: #945e31;"><%= Schoolyard.schoolyard_vitality %></div>
             </div>
             <!-- 活跃排行 -->
             <div style="<%=format('position: relative;left:207;top: 681;width: 388;height: 109;font-family: Impact;font-size: 40;color: #fb9a1a;text-align:center;background:url(%s);', GetIcon('schoolyard_ranking_mat.png'))%>">
