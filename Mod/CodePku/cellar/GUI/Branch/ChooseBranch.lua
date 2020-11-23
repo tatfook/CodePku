@@ -259,15 +259,17 @@ function ChooseBranch:changeCurrBranch(name)
 end
 
 function ChooseBranch:changeBranch()
-    for i,j in ipairs(ChooseBranch.branchStateTable) do
-        if ChooseBranch.currChooseBranch == j["branchId"] and ChooseBranch.currChooseServer == j["serverId"] then
-            if j["playerNum"] >= j["maxPlayerNum"] then
-                GameLogic.AddBBS(nil, L"你选择的世界分线已满", 3000, "255 0 0")
+    if ChooseBranch.branchStateTable then
+        for i,j in ipairs(ChooseBranch.branchStateTable) do
+            if ChooseBranch.currChooseBranch == j["branchId"] and ChooseBranch.currChooseServer == j["serverId"] then
+                if j["playerNum"] >= j["maxPlayerNum"] then
+                    GameLogic.AddBBS(nil, L"你选择的世界分线已满", 3000, "255 0 0")
+                    break
+                end
+                -- ChooseBranch.jumpToWorldKey = tostring(j["worldId"] or "1").."_"..tostring(j["worldName"] or "1").."_"..tostring(j["branchId"] or "1")
+                GameLogic.RunCommand(string.format("/connectCodePku -manual=1 -no=%d -host=%s -port=%s %d %s", j["branchId"], j["ip"], j["port"], j["worldId"], j["worldName"]))
                 break
             end
-            -- ChooseBranch.jumpToWorldKey = tostring(j["worldId"] or "1").."_"..tostring(j["worldName"] or "1").."_"..tostring(j["branchId"] or "1")
-            GameLogic.RunCommand(string.format("/connectCodePku -manual=1 -no=%d -host=%s -port=%s %d %s", j["branchId"], j["ip"], j["port"], j["worldId"], j["worldName"]))
-            break
         end
     end
 end
