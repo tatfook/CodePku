@@ -75,13 +75,6 @@ function UserConsole:ClosePage()
     if MainLogin then
         MainLogin.LoginBGPage:CloseWindow()
     end
-    
-    echo("+++++++++UnloadAllUnusedAssets<<<<<<<<");
-    NPL.load("(gl)script/apps/Aries/Creator/Game/Common/Files.lua");
-    local Files = commonlib.gettable("MyCompany.Aries.Game.Common.Files");
-    Files:UnloadAllUnusedAssets();
-    echo("---------UnloadAllUnusedAssets>>>>>>>>");
-
 end
 
 function UserConsole:CourseEntry() 
