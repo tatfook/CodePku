@@ -27,6 +27,7 @@ local Screen = commonlib.gettable("System.Windows.Screen")
 local Log = NPL.load("(gl)Mod/CodePku/util/Log.lua")
 local Table = NPL.load("(gl)Mod/CodePku/util/Table.lua")
 local Design = NPL.load("(gl)Mod/CodePku/util/Design.lua")
+local mainFrameImageData = NPL.load("(gl)Mod/CodePku/cellar/imageLuaTable/mainFrameImageData.lua")
 
 local TouchCASTKeyboard = commonlib.inherit(commonlib.gettable("System.Core.ToolBase"),commonlib.gettable("Mod.CodePku.Common.TouchMiniKeyboard.TouchCASTKeyboard"))
 TouchCASTKeyboard:Property("Name", "TouchCASTKeyboard");
@@ -156,9 +157,48 @@ function TouchCASTKeyboard:ctor()
 	};
 end
 
-function TouchCASTKeyboard:Init(name, left, top, width)
+--单例实例化
+local newInstance;
+function DirectionKeyboard.getSingleton()
+    if (not newInstance) then
+        newInstance = DirectionKeyboard:new():init()
+    end
+    return newInstance
+end
+
+function TouchCASTKeyboard:init()
 	self.name = name or self.name;
-	-- self:SetPosition(left, top, width);
+	local container = self:getContainer();
+    container:RemoveAll();
+	container.visible = false;
+	
+	for _, item in ipairs(self.keylayout) do
+        if item.name then
+            item.width = Design:adapterWidth(item.width);
+            item.height = Design:adapterWidth(item.height);
+
+            item.left = Design:adapterWidth(item.left);
+            item.right = item.width + item.left;
+
+            item.top = Design:adapterWidth(item.top);
+            item.bottom = item.height + item.top;
+
+            local button = ParaUI.CreateUIObject("button",
+                item.name,
+                "_lt",
+                item.left,
+                item.top,
+                item.width,
+                item.height);
+
+            button.background = item.background;
+			button.enabled = false;
+			button.CASTType = item.type
+			button.CASTKey = item.key
+            _guihelper.SetUIColor(button, "#FFFFFF");
+            container:AddChild(button);
+        end
+    end
 	return self;
 end
 
@@ -176,10 +216,10 @@ function TouchCASTKeyboard:GetContainer()
 
 		container:AttachToRoot();
 		container.zorder = self.zorder;
-		container:SetScript("ontouch", function() self:OnTouch(msg) end);
-		container:SetScript("onmousedown", function() self:OnMouseDown() end);
-		container:SetScript("onmouseup", function() self:OnMouseUp() end);
-		container:SetScript("onmousemove", function() self:OnMouseMove() end);
+		container:SetScript("ontouch", function() self:handleTouch(msg) end);
+		container:SetScript("onmousedown", function() self:handleMouseDown() end);
+		container:SetScript("onmouseup", function() self:handleMouseUp() end);
+		container:SetScript("onmousemove", function() self:handleMouseMove() end);
 
 		self.id = container.id;
 	else
@@ -189,58 +229,47 @@ function TouchCASTKeyboard:GetContainer()
 end
 
 --处理鼠标移动事件
-function DirectionKeyboard:OnMouseMove()
+function TouchCASTKeyboard:handleMouseMove()
     local touch = { type = "WM_POINTERUPDATE", x = mouse_x, y = mouse_y, id = -1, time = 0 };
-    self:OnTouch(touch);
+    self:handleTouch(touch);
 end
 
 --处理鼠标点击事件
-function DirectionKeyboard:OnMouseDown()
+function TouchCASTKeyboard:handleMouseDown()
     local touch = { type = "WM_POINTERDOWN", x = mouse_x, y = mouse_y, id = -1, time = 0 };
-    self:OnTouch(touch);
+    self:handleTouch(touch);
 end
 
 --处理鼠标弹起事件
-function DirectionKeyboard:OnMouseUp()
+function TouchCASTKeyboard:handleMouseUp()
     local touch = { type = "WM_POINTERUP", x = mouse_x, y = mouse_y, id = -1, time = 0 };
-    self:OnTouch(touch);
+    self:handleTouch(touch);
 end
 
 --处理触摸事件
-function DirectionKeyboard:OnTouch(touch)
+function TouchCASTKeyboard:handleTouch(touch)
     local touchSession = TouchSession.GetTouchSession(touch);
-    local button = self:getButtonItem(touch.x, touch.y);
 
     if touch.type == "WM_POINTERDOWN" then
-        if button then
-            touchSession:SetField("keydownBtn", button);
-            self:updateButtonState(button, true);
-            button.isDragged = nil;
-        end
+
     elseif touch.type == "WM_POINTERUP" then
-        local keydownBtn = touchSession:GetField("keydownBtn");
-        if keydownBtn then
-            self:updateButtonState(keydownBtn, false);
-        end
+
     elseif touch.type == "WM_POINTERUPDATE" then
-        local keydownBtn = touchSession:GetField("keydownBtn");
 
-        if keydownBtn then
-            keydownBtn.isDragged = true;
-
-            if button and button ~= keydownBtn then
-                if keydownBtn.isPressed then
-                    self:updateButtonState(keydownBtn, false);
-                end
-
-                touchSession:SetField("keydownBtn", button);
-                self:updateButtonState(button, true);
-            end
-        else
-            if button then
-                touchSession:SetField("keydownBtn", button);
-                self:updateButtonState(button, true);
-            end
-        end
     end
+end
+
+--控制显示功能键盘
+function DirectionKeyboard:show(show)
+    local container = self:getContainer();
+    if show == nil then
+        show = not container.visible;
+    end
+    container.visible = show;
+end
+
+function TouchCASTKeyboard:Destroy()
+    TouchCASTKeyboard._super.Destroy(self)
+    ParaUI.Destroy(self.id or self.name)
+    self.id = nil
 end
