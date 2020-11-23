@@ -77,15 +77,15 @@ end
     <div style="<%=format('position: relative;left:147;top: 123;width: 533;height: 228;font-family: zkklt;background:url(%s);', GetIcon('schoolyard_school_tag.png'))%>">
         <pe:if condition='<%= Schoolyard.joined_schoolyard == true %>'>
             <!-- 学校图标 -->
-            <div style="<%=format('position: relative;left:97;top:29;width: 118;height: 118;background:url(%s);', Schoolyard.joined_schoolyard and Schoolyard.schoolyard_avatar or 'https://cdn.codepku.com//img/default_avatar/0714/20180714163534.png')%>"></div>
+            <!-- <div style="<%=format('position: relative;left:97;top:29;width: 118;height: 118;background:url(%s);', Schoolyard.joined_schoolyard and Schoolyard.schoolyard_avatar or 'https://cdn.codepku.com//img/default_avatar/0714/20180714163534.png')%>"></div> -->
             <!-- 学校名称 -->
-            <div style="position: relative;left: 225;top: 47;width: 250;height: 95;font-size: 46;color: #b36f14;"><%= Schoolyard.schoolyard_name %></div>
+            <div style="position: relative;left: 90;top: 40;width: 360;height: 100;font-size: 38;color: #b36f14;"><%= Schoolyard.schoolyard_name %></div>
         </pe:if>
         <pe:if condition='<%= Schoolyard.joined_schoolyard ~= true %>'>
             <!-- 学校图标 -->
-            <div style="<%=format('position: relative;left:97;top:29;width: 118;height: 118;background:url(%s);', Schoolyard.joined_schoolyard and Schoolyard.schoolyard_avatar or 'https://cdn.codepku.com//img/default_avatar/0714/20180714163534.png')%>"></div>
+            <!-- <div style="<%=format('position: relative;left:97;top:29;width: 118;height: 118;background:url(%s);', Schoolyard.joined_schoolyard and Schoolyard.schoolyard_avatar or 'https://cdn.codepku.com//img/default_avatar/0714/20180714163534.png')%>"></div> -->
             <!-- 学校名称 -->
-            <div style="position: relative;left: 225;top: 47;width: 250;height: 95;font-size: 46;color: #b36f14;"><%= "暂未加入任何学校" %></div>
+            <div style="position: relative;left: 90;top: 40;width: 360;height: 100;font-size: 38;color: #b36f14;text-align: center;"><%= "暂未加入任何学校" %></div>
         </pe:if>
     </div>
     <!-- 右边板 -->

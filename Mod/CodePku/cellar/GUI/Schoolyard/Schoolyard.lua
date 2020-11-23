@@ -168,10 +168,10 @@ function Schoolyard:GetMySchoolyardInfo(page)
             Schoolyard.joined_schoolyard = true     -- 是否已经有组织了
             Schoolyard.schoolyard_avatar = "https://cdn.codepku.com//img/default_avatar/0714/20180714163534.png"    -- 学校头像
             Schoolyard.schoolyard_name = data.name       -- 学校名字
-            Schoolyard.schoolyard_address = (data.district.full_name .. data.name) or "未知"      -- 学校位置
+            Schoolyard.schoolyard_address = data.district.full_name or "未知"      -- 学校位置
             Schoolyard.number_of_people = data.members_count      -- 学校人数
             Schoolyard.schoolyard_level = "Lv." .. (data.level and tostring(data.level) or "？？？")        -- 学校等级
-            Schoolyard.schoolyard_vitality = data.weekly_activity     -- 学校周活跃度
+            Schoolyard.schoolyard_vitality = Schoolyard:DigitalProcessing(data.weekly_activity)     -- 学校周活跃度
             Schoolyard.week_rank = data.week_rank        -- 学校周活跃排行
             Schoolyard.total_rank = data.total_rank       -- 学校总活跃排行
             Schoolyard.school_level_progress = data.level_progress      -- 学校经验
@@ -185,10 +185,6 @@ end
 
 -- 搜索学校
 function Schoolyard:GetSearchSchoolResult(params, page)
-    if Schoolyard.get_search_result then
-        return
-    end
-    Schoolyard.get_search_result = true
     -- 拼接查询字符串
     local path = "/schools?per_page=50"
     if params.search_province then
@@ -213,6 +209,7 @@ function Schoolyard:GetSearchSchoolResult(params, page)
     end
     request:get(path):next(function(response)
         local data = response.data.data
+        Schoolyard.get_search_result = false
         if next(data) == nil then
             GameLogic.AddBBS("CodeGlobals", L"未搜索到该学校，请输入更精确的搜索内容，或手动筛选！", 3000, "#FF0000")
             Schoolyard.search_result = {}
@@ -231,7 +228,6 @@ function Schoolyard:GetSearchSchoolResult(params, page)
         if page then
             page:Refresh(0)
         end
-        Schoolyard.get_search_result = false
     end):catch(function(e)
         Schoolyard.get_search_result = false
         LOG.std(nil, "error", "Schoolyard", "GetSearchSchoolResult")
@@ -327,6 +323,7 @@ function Schoolyard:SortMembers(data)
         temp_table.level = "Lv." .. (tostring((v.user.self_level or {}).current_level or 0))        -- 等级,self_level有可能为nil
         temp_table.online_statu = v.user.is_online and "在线" or GetOnlineStatu(v.user.last_offline_at)
         if temp_table.user_id == user_id then
+            temp_table.online_statu = "在线"
             table.insert(Schoolyard.members_table,1,temp_table)
         else
             table.insert(Schoolyard.members_table,temp_table)
@@ -389,7 +386,7 @@ function Schoolyard:GetTrends(current_page, page)
         elseif minutes > 0 then
             return tostring(minutes) .. "分钟前"
         else
-            return "离线"
+            return "1分钟前"
         end
     end
     local path = "/schools/dynamics?page="
@@ -589,6 +586,27 @@ end
 -- 登记学校请求
 function Schoolyard:RegisterSchoolyard(params)
     -- todo 无效登记拦截
+    if not params.search_province then
+        GameLogic.AddBBS("CodeGlobals", L"省份不能为空", 3000, "#FF0000");
+        return
+    end
+    if not params.search_city then
+        GameLogic.AddBBS("CodeGlobals", L"城市不能为空", 3000, "#FF0000");
+        return
+    end
+    if not params.search_area then
+        GameLogic.AddBBS("CodeGlobals", L"地区不能为空", 3000, "#FF0000");
+        return
+    end
+    if not params.search_school then
+        GameLogic.AddBBS("CodeGlobals", L"学校类型不能为空", 3000, "#FF0000");
+        return
+    end
+    if not params.register_name then
+        GameLogic.AddBBS("CodeGlobals", L"学校名称不能为空", 3000, "#FF0000");
+        return
+    end
+
     if Schoolyard.had_registration then
         return
     end
@@ -609,6 +627,7 @@ function Schoolyard:RegisterSchoolyard(params)
         Schoolyard:CloseRegisterPage()
         -- 清除数据
         Schoolyard:ClearData()
+        Schoolyard.join_page:Refresh(0)
 
         GameLogic.AddBBS("CodeGlobals", L"学校信息提交成功，我们会尽快回复您！", 3000, "#00FF00");
         LOG.std(nil, "succeed", "Schoolyard", "RegisterSchoolyard")

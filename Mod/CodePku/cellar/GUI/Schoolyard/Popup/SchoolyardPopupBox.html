@@ -40,14 +40,20 @@ end
 
 -- 计算文本区域上边距和高
 function GetCoordinate()
-    local height_per_line = 43      -- 每行高度
+    local height_per_line = 50      -- 每行高度
     local middle_line_coordinate = 195      --中线
     local fonts_per_line = 11       --每行最多11个字
+    local leftright
     local total_fonts = commonlib.utf8.len(Schoolyard.box_msg.content)      -- 提示文本总字数
     local total_lines = math.ceil(total_fonts/fonts_per_line)       -- 行数
     local top = middle_line_coordinate - (height_per_line * total_lines / 2)
     local height = height_per_line * total_lines
-    return top, height
+    if total_lines > 1 then
+        leftright = "left"
+    else
+        leftright = "center"
+    end
+    return top, height, leftright
 end
 
 ]]>
@@ -59,7 +65,7 @@ end
     <!-- title -->
     <div style="position: relative;left: 60;top: 30;width: 480;font-family: zkklt;font-size: 56;text-align: center;color: #4f402e;"><%= Schoolyard.box_msg.title %></div>
     <!-- 提示文本区域 -->
-    <div style="<%=format('position: relative;left: 92;top: %s;width: 428;height: %s;font-family: zkklt;text-align:center;font-size: 38;color: #675947;', GetCoordinate())%>"><%= Schoolyard.box_msg.content %></div>
+    <div style="<%=format('position: relative;left: 92;top: %s;width: 428;height: %s;font-family: zkklt;text-align:%s;font-size: 38;color: #675947;', GetCoordinate())%>"><%= Schoolyard.box_msg.content %></div>
     <!-- 取消 -->
     <div onclick="OnCancel" style="<%=format('position: relative; left: 409; top: 319; width: 146;height: 65;background:url(%s);', GetIcon('schoolyard_btn_gray_01.png'))%>">
         <div style="<%=format('position: relative; left: 22; top: 9; width: 100;height: 48;background:url(%s);', GetIcon('schoolyard_btn_cancel.png'))%>"></div>

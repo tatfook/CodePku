@@ -24,6 +24,10 @@ end
 
 -- 搜索
 function OnSearch()
+    if Schoolyard.get_search_result then
+        return
+    end
+    Schoolyard.get_search_result = true
     selected_school_index = nil
     Schoolyard.search_result = {}
     Schoolyard.search_result_pages = {}
