@@ -61,11 +61,12 @@ function TouchVirtualKeyboardIcon.ShowSingleton(bSHow)
 	NPL.load("(gl)script/ide/timer.lua");
 
 	if bSHow then
+		local isEmployee = System.User and System.User.info and System.User.info.is_employee;
 		if System.Codepku then
 			if not HomeManage:IsMyHome() then
 				if System.Codepku and System.Codepku.Coursewares then
 					local category = System.Codepku.Coursewares.category;
-					if category == 8 then
+					if category == 8 and isEmployee ~= 1 then
 						bSHow = false
 					end
 				end
