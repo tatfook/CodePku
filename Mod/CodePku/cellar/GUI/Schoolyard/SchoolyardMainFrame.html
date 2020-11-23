@@ -41,7 +41,8 @@ end
 -- 获取经验条长度
 function GetExpWidth()
     local width = 333       -- 经验条总长度
-    local now_width = math.modf(((Schoolyard.school_level_progress.current_level_activity-Schoolyard.school_level_progress.remain_activity)/Schoolyard.school_level_progress.current_level_activity)*width)
+    local level_up_exp = Schoolyard.school_level_progress.next_level_activity-Schoolyard.school_level_progress.current_level_activity
+    local now_width = math.modf(((level_up_exp - Schoolyard.school_level_progress.remain_activity)/level_up_exp)*width)
     return now_width > 32 and now_width or 32
 end
 
