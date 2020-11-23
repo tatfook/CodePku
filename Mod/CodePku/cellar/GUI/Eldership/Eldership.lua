@@ -161,12 +161,15 @@ function Eldership:Unbind()
 end
 
 -- 我的家长页面
-function Eldership:ShowPage()
-    params = {
-      url="Mod/CodePku/cellar/GUI/Eldership/Eldership.html", 
-      alignment="_lt", left = 0, top = 0, width = 1920 , height = 1080, zorder = 30
-    };
-    self.ui = AdaptWindow:QuickWindow(params)
+function Eldership:ShowPage(zorder)
+	if zorder then
+		Eldership.zorder = zorder
+	end
+	local params = {
+	url="Mod/CodePku/cellar/GUI/Eldership/Eldership.html", 
+	alignment="_lt", left = 0, top = 0, width = 1920 , height = 1080, zorder = Eldership.zorder or 30
+	};
+	self.ui = AdaptWindow:QuickWindow(params)
 end
 
 -- 绑定页面
@@ -183,7 +186,7 @@ function Eldership:ShowBindPage()
     -- end})
     -- Eldership.mytimer:Change(1000, 3000)
 
-    params = {
+    local params = {
       url="Mod/CodePku/cellar/GUI/Eldership/EldershipBind.html", 
       alignment="_lt", left = 0, top = 0, width = 1920 , height = 1080, zorder = 33
     };
@@ -192,7 +195,7 @@ end
 
 -- 解绑页面
 function Eldership:ShowUnbindPage()
-    params = {
+  local params = {
       url="Mod/CodePku/cellar/GUI/Eldership/EldershipUnbind.html", 
       alignment="_lt", left = 0, top = 0, width = 1920 , height = 1080, zorder = 31
     };

@@ -31,27 +31,72 @@ end
 
 -- local allFiles;
 local male_assets = {
-	{filename="character/CC/02human/paperman/boy01.x", name="boy01", displayname="新年红"},
-	{filename="character/CC/02human/paperman/boy02.x", name="boy02", displayname="蓝色浪潮"},
-	{filename="character/CC/02human/paperman/boy03.x", name="boy03", displayname="蓝色非主流"},
-	{filename="character/CC/02human/paperman/boy04.x", name="boy04", displayname="非非变身器"},
-	{filename="character/CC/02human/paperman/boy05.x", name="boy05", displayname="学霸变身器"},
-	{filename="character/CC/02human/paperman/boy06.x", name="boy06", displayname="新年蓝"},
-	{filename="character/CC/02human/paperman/boy07.x", name="boy07", displayname="劳动最光荣"},
-	{filename="character/CC/02human/paperman/Male_teacher.x", name="Male_teacher", displayname="男老师"},
-	{filename="character/CC/02human/paperman/xiaolong.x", name="xiaolong", displayname="李小龙变身器"},
-	{filename="character/CC/02human/paperman/zaizai.x", name="zaizai", displayname="欢度中秋"},
+	[1] = {filename="character/CC/02human/paperman/boy01.x", name="boy01", displayname="新年红"},
+	[2] = {filename="character/CC/02human/paperman/boy02.x", name="boy02", displayname="蓝色浪潮"},
+	[3] = {filename="character/CC/02human/paperman/boy03.x", name="boy03", displayname="蓝色非主流"},
+	[4] = {filename="character/CC/02human/paperman/boy04.x", name="boy04", displayname="非非变身器"},
+	[5] = {filename="character/CC/02human/paperman/boy05.x", name="boy05", displayname="学霸变身器"},
+	[6] = {filename="character/CC/02human/paperman/boy06.x", name="boy06", displayname="新年蓝"},
+	[7] = {filename="character/CC/02human/paperman/boy07.x", name="boy07", displayname="劳动最光荣"},
+	[8] = {filename="character/CC/02human/paperman/Male_teacher.x", name="Male_teacher", displayname="男老师"},
+	[9] = {filename="character/CC/02human/paperman/xiaolong.x", name="xiaolong", displayname="李小龙变身器"},
+	[10] = {filename="character/CC/02human/paperman/zaizai.x", name="zaizai", displayname="欢度中秋"},
 };
 local female_assets = {
-	{filename="character/CC/02human/paperman/girl01.x", name="girl01", displayname="新年套装红"},
-	{filename="character/CC/02human/paperman/girl02.x", name="girl02", displayname="夏日时光"},
-	{filename="character/CC/02human/paperman/girl03.x", name="girl03", displayname="夏日校园"},
-	{filename="character/CC/02human/paperman/girl04.x", name="girl04", displayname="粉红花裙"},
-	{filename="character/CC/02human/paperman/girl05.x", name="girl05", displayname="音乐潮人"},
-	{filename="character/CC/02human/paperman/Female_teachers.x", name="Female_teachers", displayname="女老师"},
-	{filename="character/CC/02human/paperman/nuannuan.x", name="nuannuan", displayname="欢度中秋"},
+	[1] = {filename="character/CC/02human/paperman/girl01.x", name="girl01", displayname="新年套装红"},
+	[2] = {filename="character/CC/02human/paperman/girl02.x", name="girl02", displayname="夏日时光"},
+	[3] = {filename="character/CC/02human/paperman/girl03.x", name="girl03", displayname="夏日校园"},
+	[4] = {filename="character/CC/02human/paperman/girl04.x", name="girl04", displayname="粉红花裙"},
+	[5] = {filename="character/CC/02human/paperman/girl05.x", name="girl05", displayname="音乐潮人"},
+	[6] = {filename="character/CC/02human/paperman/Female_teachers.x", name="Female_teachers", displayname="女老师"},
+	[7] = {filename="character/CC/02human/paperman/nuannuan.x", name="nuannuan", displayname="欢度中秋"},
 };
+
+function SkinPageV1.GetLimitFiles()
+	local isVisitor = commonlib.getfield("System.User.isVisitor", nil)
+	local user_wechat_id = commonlib.getfield("System.User.info.user_wechat_id", nil)
+
+	--2-4号皮肤需要绑定手机,4以上需要绑定家长微信
+	local limit_index_1 = 2
+	local limit_index_2 = 4
+
+	-- 初始化
+	for _,v in ipairs(male_assets) do
+		v["disabled"] = nil
+	end
+	for _,v in ipairs(female_assets) do
+		v["disabled"] = nil
+	end
+
+	if not user_wechat_id then
+		for k,v in ipairs(male_assets) do
+			if k > limit_index_2 then
+				v["disabled"] = true
+			end
+		end
+		for k,v in ipairs(female_assets) do
+			if k > limit_index_2 then
+				v["disabled"] = true
+			end
+		end
+	end
+
+	if isVisitor then
+		for k,v in ipairs(male_assets) do
+			if k >= limit_index_1 then
+				v["disabled"] = true
+			end
+		end
+		for k,v in ipairs(female_assets) do
+			if k >= limit_index_1 then
+				v["disabled"] = true
+			end
+		end
+	end
+end
+
 function SkinPageV1.GetAllFiles()
+	SkinPageV1.GetLimitFiles()
 	local gender = System.User and System.User.info and System.User.info.gender;
 	if (tonumber(gender) == 2) then
 		return female_assets;
@@ -146,20 +191,50 @@ function SkinPageV1.RefreshAnims(filepath, tryCount)
 	end
 end
 
-function SkinPageV1.OnOK()
-	if(SkinPageV1.cur_filename) then
-		local filepath = PlayerAssetFile:GetValidAssetByString(SkinPageV1.cur_filename);
-		SkinPageV1.result = filepath;
-		
-		local player = SkinPageV1.GetEntity();
-		local lastFilepath = player:GetMainAssetPath();
+function SkinPageV1.VisitorLimit()
+    -- 判断游客
+    local isVisitor = commonlib.getfield("System.User.isVisitor")
+    if (isVisitor) then
+        -- 游客
+        NPL.load("(gl)Mod/CodePku/cellar/GUI/AccountUp/AccountUpTips.lua")
+		local AccountUpTips = commonlib.gettable("Mod.CodePku.AccountUpTips")
+		AccountUpTips.title = L"修改提醒"
+        AccountUpTips.desc = L"您现在是游客账号，暂不能使用该皮肤，是否现在升级账号?"
+        AccountUpTips:ShowEditNameTips()
+    else
+        -- 非游客
+        local user_wechat_id = commonlib.getfield("System.User.info.user_wechat_id", nil)
+        if user_wechat_id then
+            -- 绑定了微信
+        else
+            -- 未绑定微信
+            NPL.load("(gl)Mod/CodePku/cellar/GUI/Eldership/EldershipTips.lua")
+			local EldershipTips = commonlib.gettable("Mod.CodePku.EldershipTips")
+			EldershipTips.title = L"修改提醒"
+            EldershipTips.desc = L"您还没绑定家长微信哦，暂不能使用该皮肤，是否现在绑定微信？"
+            EldershipTips:ShowEditNameTips()
+        end
+	end
+end
 
-		if(filepath ~= lastFilepath) then
-			GameLogic.RunCommand("/avatar "..filepath);
-			GameLogic.options:SetMainPlayerAssetName(filepath);
+function SkinPageV1.OnOK()
+	if SkinPageV1.index and SkinPageV1.GetAllFiles()[tonumber(SkinPageV1.index)]["disabled"] then
+		SkinPageV1.VisitorLimit()
+	else
+		if(SkinPageV1.cur_filename) then
+			local filepath = PlayerAssetFile:GetValidAssetByString(SkinPageV1.cur_filename);
+			SkinPageV1.result = filepath;
+			
+			local player = SkinPageV1.GetEntity();
+			local lastFilepath = player:GetMainAssetPath();
+	
+			if(filepath ~= lastFilepath) then
+				GameLogic.RunCommand("/avatar "..filepath);
+				GameLogic.options:SetMainPlayerAssetName(filepath);
+			end
+			
+			page:CloseWindow();
 		end
-		
-		page:CloseWindow();
 	end
 end
 
