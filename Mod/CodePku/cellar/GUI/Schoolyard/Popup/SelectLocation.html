@@ -1,0 +1,126 @@
+<!-- "script/apps/Aries/Creator/Game/Areas/EscFramePage.html" -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+</head>
+<body>
+    <pe:mcml>
+<script refresh="false" type="text/npl" src="Schoolyard.lua"><![CDATA[
+Schoolyard = NPL.load("(gl)Mod/CodePku/cellar/GUI/Schoolyard/Schoolyard.lua");
+local page = document:GetPageCtrl()
+
+-- 获取图片
+function GetIcon(index)
+    return Schoolyard:GetImagePath(index)
+end
+
+-- 取消
+function CancleSelect()
+    if Schoolyard.last_select_kind == "province" then
+        Schoolyard.selected_province = {}
+        Schoolyard.selected_city = {}
+        Schoolyard.selected_area = {}
+    elseif Schoolyard.last_select_kind == "city" then
+        Schoolyard.selected_city = {}
+        Schoolyard.selected_area = {}
+    elseif Schoolyard.last_select_kind == "area" then
+        Schoolyard.selected_area = {}
+    elseif Schoolyard.last_select_kind == "school" then
+        Schoolyard.selected_school = {}
+    end
+    Close()
+    Schoolyard.join_page:Refresh(0)
+    if Schoolyard.register_page then
+        Schoolyard.register_page:Refresh(0)
+    end
+end
+
+function Close()
+    page:CloseWindow()
+    Schoolyard.select_page_show_table = nil
+    Schoolyard.came_from_join_page = false
+end
+
+-- 返回第一个标签
+function GetFristLabel()
+    if Schoolyard.last_select_kind == "school" then
+        first_label = "学校类型"
+    elseif Schoolyard.last_select_kind == "province" then
+        first_label = "省"
+    elseif Schoolyard.last_select_kind == "city" then
+        first_label = "市"
+    elseif Schoolyard.last_select_kind == "area" then
+        first_label = "区"
+    else
+        first_label = ""
+    end
+    return first_label
+end
+
+-- 选中
+function OnChoose(name)
+    selected_area_index = name
+    if Schoolyard.last_select_kind == "province" then
+        Schoolyard.selected_province.code = Schoolyard.select_page_show_table[selected_area_index].code
+        Schoolyard.selected_province.name = Schoolyard.select_page_show_table[selected_area_index].name
+        Schoolyard.selected_city = {}
+        Schoolyard.selected_area = {}
+    elseif Schoolyard.last_select_kind == "city" then
+        Schoolyard.selected_city.code = Schoolyard.select_page_show_table[selected_area_index].code
+        Schoolyard.selected_city.name = Schoolyard.select_page_show_table[selected_area_index].name
+        Schoolyard.selected_area = {}
+    elseif Schoolyard.last_select_kind == "area" then
+        Schoolyard.selected_area.code = Schoolyard.select_page_show_table[selected_area_index].code
+        Schoolyard.selected_area.name = Schoolyard.select_page_show_table[selected_area_index].name
+    elseif Schoolyard.last_select_kind == "school" then
+        Schoolyard.selected_school.category = Schoolyard.select_page_show_table[selected_area_index].category
+        Schoolyard.selected_school.name = Schoolyard.select_page_show_table[selected_area_index].name
+    end
+
+    page:CloseWindow()
+    if Schoolyard.came_from_join_page then
+        Schoolyard.search_result = {}
+        Schoolyard.came_from_join_page = false
+        local params = {
+            search_province = Schoolyard.selected_province.code,
+            search_city = Schoolyard.selected_city.code,
+            search_area = Schoolyard.selected_area.code,
+            search_school = Schoolyard.selected_school.category,
+        }
+        Schoolyard:GetSearchSchoolResult(params, Schoolyard.join_page)
+    end
+
+    if Schoolyard.register_page then
+        Schoolyard.register_page:Refresh(0)
+    end
+    Schoolyard.select_page_show_table = nil
+end
+
+]]>
+</script>
+<pe:container alignment="_lt" width="1920" height="1080">
+
+<div onclick="Close" style="position: relative;width: 1920;height: 1080;background-color: #00000082;">
+    <div style="<%=format('position: relative;left: 756;top: 233;width: 432;height: 613;background:url(%s);', GetIcon('schoolyard_bot02.png'))%>">
+        <div style="position: relative;left:5;top:5;width: 408;height: 85;color: #7e2f12;">
+            <input type="button" value="▼" style="<%=format('position: relative;font-size: 30;color: #7e2f12;width: 423;height: 85;text-align:right;padding-top:7;padding-right:12;background:url(%s);', GetIcon('schoolyard_screening_results_02.png'))%>"/>
+            <input type="text" value="<%= GetFristLabel() or ' ' %>" style="position: relative;font-family: zkklt;color: #7e2f12;font-size: 36;left: 15;top: 25;width: 145;height: 36;background:#000000;"/>
+            <div onclick="CancleSelect" style="position: relative;width: 408;height: 85;"></div>
+        </div>
+        <pe:treeview style="position: relative;left:5;top: 90;width: 420;height: 515;" name='messages' DefaultNodeHeight = "80" ItemsPerLine="1" AllowPaging="false" RememberScrollPos="true" RememberLastPage="false" VerticalScrollBarStep="40">
+            <pe:repeat DataSource="<%= Schoolyard.select_page_show_table %>">
+                <pe:repeatitem>
+                    <div onclick="OnChoose" name="<%= Eval('index') %>" style="<%=format('width: 400;height: 85;line-height:85;padding-left:10;margin-bottom: 1;font-family: zkklt;font-size: 36;color: #7e2f12;background:url(%s);', GetIcon('schoolyard_screening_results_01.png'))%>"><%= Eval('name') %></div>
+                </pe:repeatitem>
+            </pe:repeat>
+        </pe:treeview>
+    </div>
+</div>
+
+</pe:container>
+</pe:mcml>
+</body>
+</html>
+ 

@@ -112,7 +112,6 @@ function TeachCourses.GetTeachCoursesIconPathStr(id)
       path = path..' '..tostring(TeachCourses.icons[id].width)
       path = path..' '..tostring(TeachCourses.icons[id].height)
     end
-    LOG.std(nil, "TeachCourses", "GetTeachCoursesIconPathStr", "path = %s", path)
     return path
 end
 

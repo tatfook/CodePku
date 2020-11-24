@@ -13,6 +13,8 @@ SkinPageV1 = commonlib.gettable("Mod.CodePku.GUI.Profile.SkinPage");
 SkinPageV1.OnInit();
 
 function ChangeSkin(name, mcmlNode)
+    SkinPageV1.index = mcmlNode:GetAttribute('param1');
+
     local filename = mcmlNode:GetAttribute('param2');
     if (filename) then
         SkinPageV1.SetText(filename);
@@ -36,12 +38,16 @@ end
 -- end
 
 function ClosePage()
+    if SkinPageV1.timer then
+        SkinPageV1.timer:Change()
+        SkinPageV1.timer = nil
+    end
     Page:CloseWindow();
 end
 
 function OnOK()
     SkinPageV1.OnOK();
-    ClosePage();
+    --ClosePage();
 end
 
 ]]></script>
@@ -119,8 +125,15 @@ end
                 ItemsPerLine="1" DefaultNodeHeight="42" ScrollBarTrackWidth="24" VerticalScrollBarWidth="" DataSource='<%=SkinPageV1.GetAllFiles()%>'>
                 <Columns>
                     <div style="height:42px;margin-left:12px;font-size:18px;base-font-size:18px;font-family:Noto Sans S Chinese Regular;">
+                        <pe:if condition='<%= Eval("disabled") == true %>'>
+                            <!-- codepku/image/textures/profile/profile_2_32bit.png#424 366 153 60 -->
+                            <div style="position: relative; min-width: 290px;height:40px; background-color: #00000099;">
+                                <div style="position: relative; left: 250px; top:5px; width: 22px;height:30px; background:url(codepku/image/textures/profile/profile_2_32bit.png#424 292 30 39)"></div>
+                            </div>
+                        </pe:if>
+
                         <pe:if condition='<%= SkinIsSelected(Eval("filename")) == true %>'>
-                            <div style="float:left;color:#155F9E;height:40px;line-height:36px;background:url(codepku/image/textures/profile/achievement.png#246 192 80 82:16 0 16 0)">
+                            <div style="float:left;color:#ffffff;height:40px;line-height:36px;background:url(codepku/image/textures/profile/achievement.png#246 192 80 82:16 0 16 0)">
                                 <div style="float:left;margin-left:20px;width:30px;text-align:center;">
                                     <%= Eval("index") %>
                                 </div>
@@ -130,7 +143,7 @@ end
                             </div>
                         </pe:if>
                         <pe:if condition='<%= SkinIsSelected(Eval("filename")) == false %>'>
-                            <div style="position:relative;color:#686695;height:40px;line-height:36px;background:url(codepku/image/textures/profile/achievement.png#361 192 81 81:16 0 16 0)">
+                            <div style="position:relative;color:#0b0a0e;height:40px;line-height:36px;background:url(codepku/image/textures/profile/achievement.png#361 192 81 81:16 0 16 0)">
                                 <div style="float:left;margin-left:20px;width:30px;text-align:center;">
                                     <%= Eval("index") %>
                                 </div>

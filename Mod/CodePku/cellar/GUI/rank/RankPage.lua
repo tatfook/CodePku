@@ -2,6 +2,7 @@ RankPage = commonlib.gettable("Mod.CodePku.RankPage");
 local AdaptWindow = commonlib.gettable("Mod.CodePku.GUI.Window.AdaptWindow")
 
 local request = NPL.load("(gl)Mod/CodePku/api/BaseRequest.lua")
+local schoolyardImageData = NPL.load("(gl)Mod/CodePku/cellar/imageLuaTable/schoolyardImageData.lua")
 
 RankPage.ui = nil
 RankPage.popui = nil
@@ -18,7 +19,11 @@ RankPage.params={
     activity = {
         url="Mod/CodePku/cellar/GUI/rank/activity.html",
         alignment="_ct", left = -960, top = -540, width = 1920, height = 1080,zorder =21
-    }
+    },
+    schoolyard = {
+        url="Mod/CodePku/cellar/GUI/rank/schoolyard.html",
+        alignment="_ct", left = -960, top = -540, width = 1920, height = 1080,zorder =21
+    },
 }
 
 RankPage.ShowActivityNavig = 0              -- 活动排行榜：0不显示，1显示
@@ -212,6 +217,84 @@ function RankPage.GetActivityItem(id, range, activity_id)
     end
 end
 
+-- 获取图标
+function RankPage.GetIconPathBySchoolyard(index)
+    return schoolyardImageData:GetIconUrl(index)
+end
+
+
+-- 获取校园排行榜数据
+function RankPage.GetSchoolyardItem(type)
+    -- 活跃度数值处理|return str
+    local function DigitalProcessing(vitality)
+        local vitality_int = tonumber(vitality)
+        local result
+        if vitality_int <10000 then
+            result = tostring(vitality_int)
+        elseif vitality_int > 9999 then
+            vitality_int = vitality_int / 10000
+            result = vitality_int - vitality_int % 0.1
+            result = tostring(result) .. "w+"
+        end
+        return result
+    end
+    local list = {}
+    local mylist = {}
+    local url = '/schools/rank/'..type
+    local response = request:get(url,nil,{sync = true})
+    local data = response.data.data
+    if type == "week" then
+        -- 周排行
+        for i = 1, #data do
+            local l = {}
+            l['name'] = data[i].full_name
+            l['score'] = DigitalProcessing(data[i].weekly_activity)
+            l['rank'] = i
+            table.insert(list, l)
+            if data[i].is_my_school then
+                local l = {}
+                l['name'] = data[i].full_name
+                l['score'] = DigitalProcessing(data[i].weekly_activity)
+                if data[i].rank then
+                    l['rank'] = i
+                else
+                    l['rank'] = "未上榜"
+                end
+                table.insert(mylist, l)
+            end
+        end
+        if #mylist == 0 or mylist == nil then
+            table.insert(mylist, {name = '---', score = '---', rank = '未上榜'})
+        end
+    elseif type == "total" then
+        -- 总排行
+        for i = 1, #data do
+            local l = {}
+            l['name'] = data[i].full_name
+            l['score'] = DigitalProcessing(data[i].total_activity)
+            l['rank'] = i
+            table.insert(list, l)
+            if data[i].is_my_school then
+                local l = {}
+                l['name'] = data[i].full_name
+                l['score'] = DigitalProcessing(data[i].total_activity)
+                if data[i].rank then
+                    l['rank'] = i
+                else
+                    l['rank'] = "未上榜"
+                end
+                table.insert(mylist, l)
+            end
+        end
+        if #mylist == 0 or mylist == nil then
+            table.insert(mylist, {name = '---', score = '---', rank = '未上榜'})
+        end
+    end
+    if response.data.code == 200 then
+        return list, mylist
+    end
+end
+
 function RankPage:ShowPage(PageIndex, bShow)
     RankPage.GetActivityLists()
     if RankPage.ui ~= nil then
@@ -229,5 +312,9 @@ function RankPage:ShowPage(PageIndex, bShow)
     elseif PageIndex == 3 then
         RankPage.userinfo, RankPage.myinfo = RankPage.GetActivityItem(RankPage.activity_navig[1].game_id, 1, RankPage.activity_navig[1].id)
         RankPage.ui = AdaptWindow:QuickWindow(RankPage.params["activity"])
+    elseif PageIndex == 4 then
+        -- RankPage.userinfo, RankPage.myinfo = RankPage.GetGameItem("parkour", 1)
+        RankPage.userinfo, RankPage.myinfo = RankPage.GetSchoolyardItem("week")
+        RankPage.ui = AdaptWindow:QuickWindow(RankPage.params["schoolyard"])
     end
 end

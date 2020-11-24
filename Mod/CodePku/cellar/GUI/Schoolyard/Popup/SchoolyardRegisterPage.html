@@ -1,0 +1,116 @@
+<!-- "script/apps/Aries/Creator/Game/Areas/EscFramePage.html" -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+</head>
+<body>
+    <pe:mcml>
+<script refresh="false" type="text/npl" src="Schoolyard.lua"><![CDATA[
+Schoolyard = NPL.load("(gl)Mod/CodePku/cellar/GUI/Schoolyard/Schoolyard.lua");
+local page = document:GetPageCtrl()
+
+-- 存放用户输入的搜索内容
+Schoolyard.search_content = ""
+
+
+function ClosePage()
+    Schoolyard:CloseRegisterPage()
+    Schoolyard.search_result = nil
+    Schoolyard.selected_province = {}
+    Schoolyard.selected_city = {}
+    Schoolyard.selected_area = {}
+    Schoolyard.selected_school = {}
+    Schoolyard.last_select_kind = nil
+    if Schoolyard.join_page then
+        Schoolyard.join_page:Refresh(0)
+    end
+end
+
+-- 获取图片
+function GetIcon(index)
+    return Schoolyard:GetImagePath(index)
+end
+
+-- 搜索
+function OnRegister()
+    selected_school_index = nil
+    local register_name = page:GetValue("register_name")
+    register_name = tostring(register_name)
+    Schoolyard.search_content = register_name
+    -- GameLogic.AddBBS("CodeGlobals", tostring(commonlib.utf8.len(Schoolyard.search_content)), 3000, "#FF0000");
+    -- GameLogic.AddBBS("CodeGlobals", register_name, 3000, "#FF0000");
+    local params = {
+        register_name = register_name,
+        search_province = Schoolyard.selected_province.code,
+        search_city = Schoolyard.selected_city.code,
+        search_area = Schoolyard.selected_area.code,
+        search_school = Schoolyard.selected_school.category,
+    }
+    echo("登记传入的键值对")
+    echo(params)
+    Schoolyard:RegisterSchoolyard(params)
+end
+
+-- 选择省市区学校
+function OnSelect(name)
+    Schoolyard.search_content = page:GetValue("register_name")
+    -- 3级弹窗
+    Schoolyard:ShowSelectPage(name,25)
+end
+
+
+]]>
+</script>
+
+<pe:container alignment="_lt" width="100%" height="100%">
+<div style="<%=format('position: relative;font-family: zkklt;width: 1171;height: 748;background:url(%s);', GetIcon('schoolyard_checkin_bot.png'))%>">
+    <!-- 输入学校名称 -->
+    <div style="<%=format('position: relative;left:394;top: 478;width: 408;height: 85;font-size: 36;color: #7e2f12;padding-left: 24;background:url(%s);', GetIcon('schoolyard_seek_bot.png'))%>">
+        <input type="text" MoveViewWhenAttachWithIME="true" name="register_name" value="<%= Schoolyard.search_content %>" EmptyText='<%= L"在此输入学校名称" %>' style="position: relative;top:15;width: 360;height: 55;background: #000000;"/>
+    </div>
+
+    <!-- 条件筛选_省 -->
+    <div style="position: relative;left:375;top: 179;width: 203;height: 68;color: #7e2f12;">
+        <input type="button" value="▼" style="<%=format('position: relative;font-size: 30;color: #7e2f12;width: 203;height: 68;text-align:right;padding-top:15;padding-right:12;background:url(%s);', GetIcon('schoolyard_term_bot.png'))%>"/>
+        <input type="text" value="<%= Schoolyard.selected_province.name or '省' %>" style="position: relative;font-size: 30;left: 15;top: 18;width: 145;height: 36;background:#000000;"/>
+        <div onclick="OnSelect" name="province" style="position: relative;width: 203;height: 68;color: #7e2f12;"></div>
+    </div>
+    <!-- 条件筛选_市 -->
+    <div style="position: relative;left:688;top: 179;width: 203;height: 68;color: #7e2f12;">
+        <input type="button" value="▼" style="<%=format('position: relative;font-size: 30;color: #7e2f12;width: 203;height: 68;text-align:right;padding-top:15;padding-right:12;background:url(%s);', GetIcon('schoolyard_term_bot.png'))%>"/>
+        <input type="text" value="<%= Schoolyard.selected_city.name or '市' %>" style="position: relative;font-size: 30;left: 15;top: 18;width: 145;height: 36;background:#000000;"/>
+        <div onclick="OnSelect" name="city" style="position: relative;width: 203;height: 68;color: #7e2f12;"></div>
+    </div>
+    <!-- 条件筛选_区 -->
+    <div style="position: relative;left:375;top: 306;width: 203;height: 68;color: #7e2f12;">
+        <input type="button" value="▼" style="<%=format('position: relative;font-size: 30;color: #7e2f12;width: 203;height: 68;text-align:right;padding-top:15;padding-right:12;background:url(%s);', GetIcon('schoolyard_term_bot.png'))%>"/>
+        <input type="text" value="<%= Schoolyard.selected_area.name or '区' %>" style="position: relative;font-size: 30;left: 15;top: 18;width: 145;height: 36;background:#000000;"/>
+        <div onclick="OnSelect" name="area" style="position: relative;width: 203;height: 68;color: #7e2f12;"></div>
+    </div>
+    <!-- 条件筛选_学校 -->
+    <div style="position: relative;left:688;top: 306;width: 203;height: 68;color: #7e2f12;">
+        <input type="button" value="▼" style="<%=format('position: relative;font-size: 30;color: #7e2f12;width: 203;height: 68;text-align:right;padding-top:15;padding-right:12;background:url(%s);', GetIcon('schoolyard_term_bot.png'))%>"/>
+        <input type="text" value="<%= Schoolyard.selected_school.name or '学校类型' %>" style="position: relative;font-size: 30;left: 15;top: 18;width: 145;height: 36;background:#000000;"/>
+        <div onclick="OnSelect" name="school" style="position: relative;width: 203;height: 68;color: #7e2f12;"></div>
+    </div>
+
+
+    <!-- 提交 -->
+    <div onclick="OnRegister" style="<%=format('position: relative;left:223;top: 658;width: 238;height: 81;background:url(%s);', GetIcon('schoolyard_btn_green_02.png'))%>">
+        <div style="<%=format('position: relative;left:69;top: 15;width: 98;height: 39;background:url(%s);', GetIcon('schoolyard_btn_green_mat.png'))%>"></div>
+    </div>
+
+    <!-- 取消 -->
+    <div onclick="ClosePage" style="<%=format('position: relative;left:743;top: 658;width: 238;height: 81;background:url(%s);', GetIcon('schoolyard_btn_gray_02.png'))%>">
+        <div style="<%=format('position: relative;left:69;top: 15;width: 98;height: 39;background:url(%s);', GetIcon('schoolyard_btn_gray_mat.png'))%>"></div>
+    </div>
+</div>
+
+</pe:container>
+
+</pe:mcml>
+</body>
+</html>
+ 

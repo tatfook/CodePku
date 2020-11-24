@@ -8,20 +8,20 @@
 
 <body>
 <pe:mcml>
-<script refresh="false" type="text/npl" src="AccountUpTips.lua"><![CDATA[
-    NPL.load("(gl)Mod/CodePku/cellar/GUI/AccountUp/AccountUpTips.lua")
-    AccountUpTips = commonlib.gettable("Mod.CodePku.AccountUpTips")
+<script refresh="false" type="text/npl" src="Eldership.lua"><![CDATA[
+    NPL.load("(gl)Mod/CodePku/cellar/GUI/Eldership/EldershipTips.lua")
+    EldershipTips = commonlib.gettable("Mod.CodePku.EldershipTips")
 
     function OnSureBtnClicked()
-        AccountUpTips.OnSureBtnClicked()
+        EldershipTips.OnSureBtnClicked()
     end
 
     function OnCancelBtnClicked()
-        AccountUpTips.OnCancelBtnClicked()
+        EldershipTips.OnCancelBtnClicked()
     end
 
     function GetIcons(index)
-        return AccountUpTips:GetIconPath(index)
+        return EldershipTips:GetIconPath(index)
     end
 
 ]]></script>
@@ -33,9 +33,9 @@
 <!-- 背景 -->
 <div style="<%=format('position: relative; left: 624; top: 251; width: 723;height: 412;background:url(%s);', GetIcons('common_bot_tooltip1.png'))%>">
     <!-- title -->
-    <div style="position: relative;left: 200;top: 30;font-family: zkklt;font-size: 56;color: #4f402e;"><%= AccountUpTips.title or "" %></div>
+    <div style="position: relative;left: 200;top: 30;font-family: zkklt;font-size: 56;color: #4f402e;"><%= EldershipTips.title or "" %></div>
     <!-- content -->
-    <div style="position: relative;left: 92;top: 120;width: 419;height: 137;line-height: 45;text-align: left;font-family: zkklt;font-size: 38;color: #675947;"><%= AccountUpTips.desc or "" %></div>
+    <div style="position: relative;left: 92;top: 120;width: 419;height: 137;line-height: 45;text-align: left;font-family: zkklt;font-size: 38;color: #675947;"><%= EldershipTips.desc or "" %></div>
     <!-- 取消 -->
     <div onclick="OnCancelBtnClicked" style="<%=format('position: relative; left: 74; top: 319; width: 146;height: 65;background:url(%s);', GetIcons('common_btn_red02.png'))%>">
         <div style="<%=format('position: relative; left: 22; top: 9; width: 100;height: 48;background:url(%s);', GetIcons('common_btn_cancel.png'))%>"></div>

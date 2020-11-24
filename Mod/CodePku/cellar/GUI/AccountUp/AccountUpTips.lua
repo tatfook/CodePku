@@ -44,6 +44,7 @@ function AccountUpTips.ShowPage(  )
         width = 1920,
         height = 1080,
         zorder = 31,
+        parent = ParaUI.GetUIObject("root")
     }
     if AccountUpTips.ui then
         AccountUpTips.ui:CloseWindow()
@@ -70,6 +71,7 @@ function AccountUpTips:ShowEditNameTips()
         width = 1920,
         height = 1080,
         zorder = 31,
+        parent = ParaUI.GetUIObject("root")
     }
     if AccountUpTips.ui then
         AccountUpTips.ui:CloseWindow()
