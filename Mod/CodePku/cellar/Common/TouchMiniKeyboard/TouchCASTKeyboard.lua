@@ -74,7 +74,7 @@ function TouchCASTKeyboard:ctor()
 			name = "Ctrl+V",
 			background = mainFrameImageData:GetIconUrl("main_icon_up.png"),
 			clickedBackground = mainFrameImageData:GetIconUrl("main_icon_up.png"),
-			left = 18, top = 64, width = 192, height = 80,
+			left = 219, top = 146, width = 192, height = 80,
 			key = {	
 				DIK_SCANCODE.DIK_LCONTROL,
 				DIK_SCANCODE.DIK_V,
