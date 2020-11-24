@@ -156,7 +156,11 @@ end
 -- 获取当前认证用户信息
 -- 此函函数返回用户信息会在各玩家间同步, 所以尽量精简
 function GeneralGameClient:GetUserInfo()
-    return self.userinfo;
+    return {
+        id = System.User.id,
+        username = System.User.username,
+        nickname = System.User.username,
+    };
 end
 
 -- 是否是匿名用户
