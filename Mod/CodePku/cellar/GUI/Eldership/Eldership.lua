@@ -173,7 +173,7 @@ function Eldership:ShowPage(zorder)
 	end
 	local params = {
 	url="Mod/CodePku/cellar/GUI/Eldership/Eldership.html", 
-	alignment="_lt", left = 0, top = 0, width = 1920 , height = 1080, zorder = Eldership.zorder or 30
+	alignment="_lt", left = 0, top = 0, width = 1920 , height = 1080, zorder = Eldership.zorder or 30, parent = ParaUI.GetUIObject("root")
 	};
 	self.ui = AdaptWindow:QuickWindow(params)
 end
@@ -194,7 +194,7 @@ function Eldership:ShowBindPage()
 
     local params = {
       url="Mod/CodePku/cellar/GUI/Eldership/EldershipBind.html", 
-      alignment="_lt", left = 0, top = 0, width = 1920 , height = 1080, zorder = 33
+      alignment="_lt", left = 0, top = 0, width = 1920 , height = 1080, zorder = 33, parent = ParaUI.GetUIObject("root")
     };
     self.ui = AdaptWindow:QuickWindow(params)
 end
@@ -203,7 +203,7 @@ end
 function Eldership:ShowUnbindPage()
   local params = {
       url="Mod/CodePku/cellar/GUI/Eldership/EldershipUnbind.html", 
-      alignment="_lt", left = 0, top = 0, width = 1920 , height = 1080, zorder = 31
+      alignment="_lt", left = 0, top = 0, width = 1920 , height = 1080, zorder = 31, parent = ParaUI.GetUIObject("root")
     };
     self.ui = AdaptWindow:QuickWindow(params)
 end

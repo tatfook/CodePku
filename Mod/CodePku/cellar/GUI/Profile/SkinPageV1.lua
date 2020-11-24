@@ -193,28 +193,48 @@ end
 
 function SkinPageV1.VisitorLimit()
     -- 判断游客
-    local isVisitor = commonlib.getfield("System.User.isVisitor")
-    if (isVisitor) then
+	SkinPageV1.isVisitor = commonlib.getfield("System.User.isVisitor")
+	SkinPageV1.user_wechat_id = commonlib.getfield("System.User.info.user_wechat_id", nil)
+	SkinPageV1.StartTimer()
+
+    if (SkinPageV1.isVisitor) then
         -- 游客
         NPL.load("(gl)Mod/CodePku/cellar/GUI/AccountUp/AccountUpTips.lua")
 		local AccountUpTips = commonlib.gettable("Mod.CodePku.AccountUpTips")
-		AccountUpTips.title = L"修改提醒"
+		AccountUpTips.title = L"更换提醒"
         AccountUpTips.desc = L"您现在是游客账号，暂不能使用该皮肤，是否现在升级账号?"
         AccountUpTips:ShowEditNameTips()
     else
         -- 非游客
-        local user_wechat_id = commonlib.getfield("System.User.info.user_wechat_id", nil)
-        if user_wechat_id then
+        if SkinPageV1.user_wechat_id then
             -- 绑定了微信
         else
             -- 未绑定微信
             NPL.load("(gl)Mod/CodePku/cellar/GUI/Eldership/EldershipTips.lua")
 			local EldershipTips = commonlib.gettable("Mod.CodePku.EldershipTips")
-			EldershipTips.title = L"修改提醒"
+			EldershipTips.title = L"更换提醒"
             EldershipTips.desc = L"您还没绑定家长微信哦，暂不能使用该皮肤，是否现在绑定微信？"
             EldershipTips:ShowEditNameTips()
         end
 	end
+end
+
+function SkinPageV1.StartTimer()
+	NPL.load("(gl)script/ide/timer.lua");
+	if SkinPageV1.timer then
+		SkinPageV1.timer:Change()
+		SkinPageV1.timer = nil
+	end
+	SkinPageV1.timer = commonlib.Timer:new({callbackFunc = function(timer)
+		if SkinPageV1.isVisitor ~= commonlib.getfield("System.User.isVisitor") or SkinPageV1.user_wechat_id ~= commonlib.getfield("System.User.info.user_wechat_id", nil) then
+			SkinPageV1.GetAllFiles()
+			timer:Change()
+			timer = nil
+			page:Refresh(0)
+			SkinPageV1.OnOK()
+		end
+	end})
+	SkinPageV1.timer:Change(0, 1000)
 end
 
 function SkinPageV1.OnOK()
@@ -232,7 +252,12 @@ function SkinPageV1.OnOK()
 				GameLogic.RunCommand("/avatar "..filepath);
 				GameLogic.options:SetMainPlayerAssetName(filepath);
 			end
-			
+
+			if SkinPageV1.timer then
+				SkinPageV1.timer:Change()
+				SkinPageV1.timer = nil
+			end
+
 			page:CloseWindow();
 		end
 	end

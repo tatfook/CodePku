@@ -44,6 +44,7 @@ function EldershipTips:ShowEditNameTips()
         width = 1920,
         height = 1080,
         zorder = 31,
+        parent = ParaUI.GetUIObject("root")
     }
     if EldershipTips.ui then
         EldershipTips.ui:CloseWindow()

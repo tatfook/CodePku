@@ -38,12 +38,16 @@ end
 -- end
 
 function ClosePage()
+    if SkinPageV1.timer then
+        SkinPageV1.timer:Change()
+        SkinPageV1.timer = nil
+    end
     Page:CloseWindow();
 end
 
 function OnOK()
     SkinPageV1.OnOK();
-    ClosePage();
+    --ClosePage();
 end
 
 ]]></script>
