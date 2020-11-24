@@ -24,16 +24,17 @@ function StudyStats.StaticInit()
 end
 
 function StudyStats.OnWorldLoaded()
-    local id = System.Codepku and System.Codepku.Coursewares and System.Codepku.Coursewares.id;
-    StudyStats.worldId = id;
     
-    echo("StudyStats.OnWorldLoaded: System.Codepku.MyHouse: ");
-    echo(System.Codepku.MyHouse);
-    if System.Codepku and System.Codepku.MyHouse then
+    if System.Codepku and System.Codepku.MyHouse and System.Codepku.isLoadingHome then
         StudyStats.myHouseId = System.Codepku.MyHouse.id;
         StudyStats.myHouseTemplateId = System.Codepku.MyHouse.template_kp_id;
+        LOG.std(nil, "info", "StudyStats", "House OnWorldLoaded: %s",tostring(StudyStats.myHouseId));
+    else
+        local id = System.Codepku and System.Codepku.Coursewares and System.Codepku.Coursewares.id;
+        StudyStats.worldId = id;
+        LOG.std(nil, "info", "StudyStats", "Course OnWorldLoaded: %s",tostring(StudyStats.myHouseId));
     end
-    LOG.std(nil, "info", "StudyStats", "OnWorldLoaded: %s",tostring(StudyStats.worldId));
+    
     LOG.std(nil, "info", "StudyStats", "OnWorldLoaded @: %s", os.time());
     StudyStats.enterTime = os.date("%Y-%m-%d %H:%M:%S", os.time());
     -- GameLogic.events:AddEventListener("OnWorldUnload", StudyStats.OnWorldUnload, StudyStats, "StudyStats"); -- do not work

@@ -1,0 +1,83 @@
+<!-- "script/apps/Aries/Creator/Game/Areas/EscFramePage.html" -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+</head>
+<body>
+<pe:mcml>
+<script refresh="false" type="text/npl" src="Schoolyard.lua"><![CDATA[
+Schoolyard = NPL.load("(gl)Mod/CodePku/cellar/GUI/Schoolyard/Schoolyard.lua");
+local page = document:GetPageCtrl()
+
+function ClosePage()
+    Schoolyard.box_msg = nil
+    if Schoolyard.popup_box then
+        Schoolyard.popup_box:CloseWindow()
+        Schoolyard.popup_box = nil
+    end
+end
+
+-- 获取图片
+function GetIcon(index)
+    return Schoolyard:GetImagePath(index)
+end
+
+-- 确认
+function OnSure()
+    Schoolyard.box_msg.func()
+    ClosePage()
+end
+
+-- 取消
+function OnCancel()
+    if Schoolyard.had_register_schoolyard then
+        Schoolyard.had_register_schoolyard = false
+    end
+    ClosePage()
+end
+
+-- 计算文本区域上边距和高
+function GetCoordinate()
+    local height_per_line = 50      -- 每行高度
+    local middle_line_coordinate = 195      --中线
+    local fonts_per_line = 11       --每行最多11个字
+    local leftright
+    local total_fonts = commonlib.utf8.len(Schoolyard.box_msg.content)      -- 提示文本总字数
+    local total_lines = math.ceil(total_fonts/fonts_per_line)       -- 行数
+    local top = middle_line_coordinate - (height_per_line * total_lines / 2)
+    local height = height_per_line * total_lines
+    if total_lines > 1 then
+        leftright = "left"
+    else
+        leftright = "center"
+    end
+    return top, height, leftright
+end
+
+]]>
+</script>
+
+<pe:container alignment="_lt" width="1920" height="1080" style="background-color: #00000081;">
+
+<div style="<%=format('position: relative;left:624;top: 251;width: 723;height: 412;background:url(%s);', GetIcon('schoolyard_common_tips_bot.png'))%>">
+    <!-- title -->
+    <div style="position: relative;left: 60;top: 30;width: 480;font-family: zkklt;font-size: 56;text-align: center;color: #4f402e;"><%= Schoolyard.box_msg.title %></div>
+    <!-- 提示文本区域 -->
+    <div style="<%=format('position: relative;left: 92;top: %s;width: 428;height: %s;font-family: zkklt;text-align:%s;font-size: 38;color: #675947;', GetCoordinate())%>"><%= Schoolyard.box_msg.content %></div>
+    <!-- 取消 -->
+    <div onclick="OnCancel" style="<%=format('position: relative; left: 409; top: 319; width: 146;height: 65;background:url(%s);', GetIcon('schoolyard_btn_gray_01.png'))%>">
+        <div style="<%=format('position: relative; left: 22; top: 9; width: 100;height: 48;background:url(%s);', GetIcon('schoolyard_btn_cancel.png'))%>"></div>
+    </div>
+    <!-- 确认 -->
+    <div onclick="OnSure" style="<%=format('position: relative; left: 74; top: 319; width: 146;height: 65;background:url(%s);', GetIcon('schoolyard_btn_green_01.png'))%>">
+        <div style="<%=format('position: relative; left: 22; top: 9; width: 100;height: 48;background:url(%s);', GetIcon('schoolyard_btn_confirm.png'))%>"></div>
+    </div>
+</div>
+
+</pe:container>
+</pe:mcml>
+</body>
+</html>
+ 

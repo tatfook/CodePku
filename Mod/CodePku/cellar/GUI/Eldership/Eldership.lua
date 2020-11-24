@@ -154,6 +154,14 @@ function Eldership:Unbind()
       commonlib.setfield("System.User.info.user_wechat_id", nil)    -- 设置system缓存里用户的微信绑定信息
       GameLogic.AddBBS("CodeGlobals", L"解绑成功", 3000, "#00FF00");
       commonlib.setfield("System.User.info.user_wechat_id", nil)    -- 设置system缓存里用户的微信绑定信息
+
+      -- 解除绑定恢复为默认皮肤
+      NPL.load("(gl)Mod/CodePku/cellar/GUI/Profile/SkinPageV1.lua");
+      local SkinPageV1 = commonlib.gettable("Mod.CodePku.GUI.Profile.SkinPage");
+      local filepath = SkinPageV1.GetAllFiles()[1]["filename"]
+      GameLogic.RunCommand("/avatar "..filepath);
+      GameLogic.options:SetMainPlayerAssetName(filepath);
+
       if MainUIButtons.showCommonWindow then
         MainUIButtons:show_common_ui()
       end
@@ -167,12 +175,15 @@ function Eldership:Unbind()
 end
 
 -- 我的家长页面
-function Eldership:ShowPage()
-    params = {
-      url="Mod/CodePku/cellar/GUI/Eldership/Eldership.html", 
-      alignment="_lt", left = 0, top = 0, width = 1920 , height = 1080, zorder = 30
-    };
-    self.ui = AdaptWindow:QuickWindow(params)
+function Eldership:ShowPage(zorder)
+	if zorder then
+		Eldership.zorder = zorder
+	end
+	local params = {
+	url="Mod/CodePku/cellar/GUI/Eldership/Eldership.html", 
+	alignment="_lt", left = 0, top = 0, width = 1920 , height = 1080, zorder = Eldership.zorder or 30, parent = ParaUI.GetUIObject("root")
+	};
+	self.ui = AdaptWindow:QuickWindow(params)
 end
 
 -- 绑定页面
@@ -189,18 +200,18 @@ function Eldership:ShowBindPage()
     -- end})
     -- Eldership.mytimer:Change(1000, 3000)
 
-    params = {
+    local params = {
       url="Mod/CodePku/cellar/GUI/Eldership/EldershipBind.html", 
-      alignment="_lt", left = 0, top = 0, width = 1920 , height = 1080, zorder = 33
+      alignment="_lt", left = 0, top = 0, width = 1920 , height = 1080, zorder = 33, parent = ParaUI.GetUIObject("root")
     };
     self.ui = AdaptWindow:QuickWindow(params)
 end
 
 -- 解绑页面
 function Eldership:ShowUnbindPage()
-    params = {
+  local params = {
       url="Mod/CodePku/cellar/GUI/Eldership/EldershipUnbind.html", 
-      alignment="_lt", left = 0, top = 0, width = 1920 , height = 1080, zorder = 31
+      alignment="_lt", left = 0, top = 0, width = 1920 , height = 1080, zorder = 31, parent = ParaUI.GetUIObject("root")
     };
     self.ui = AdaptWindow:QuickWindow(params)
 end

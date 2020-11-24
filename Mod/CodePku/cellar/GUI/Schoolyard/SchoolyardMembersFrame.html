@@ -1,0 +1,112 @@
+<!-- "script/apps/Aries/Creator/Game/Areas/EscFramePage.html" -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>我的校园-成员</title>
+</head>
+<body>
+    <pe:mcml>
+<script refresh="false" type="text/npl" src="Schoolyard.lua"><![CDATA[
+
+local Schoolyard = NPL.load("(gl)Mod/CodePku/cellar/GUI/Schoolyard/Schoolyard.lua");
+local page = document:GetPageCtrl()
+
+if Schoolyard.joined_schoolyard == true and next(Schoolyard.members_table) == nil then
+    Schoolyard:GetMembers(1, page)
+end
+
+-- 获取图片
+function GetIcon(index)
+    return Schoolyard:GetImagePath(index)
+end
+
+function ClosePage()
+    Schoolyard.main_ui:CloseWindow()
+end
+
+-- 返回成员信息
+function GetMembersResult()
+    return Schoolyard.members_table
+end
+
+-- 点击头像
+function ShowUserPage(index)
+    local UserInfoPage = NPL.load("(gl)Mod/CodePku/cellar/GUI/UserInfo.lua");
+    local id = Schoolyard.members_table[index].user_id
+    if id == System.User.info.id then
+        UserInfoPage:ShowPage()
+    else
+        local asset
+        if Schoolyard.members_table[index].user.ext_data == nil then
+            if Schoolyard.members_table[index].user.gender == 0 or Schoolyard.members_table[index].user.gender == 1 then
+                asset = "character/CC/02human/paperman/boy01.x"
+            elseif Schoolyard.members_table[index].user.gender == 2 then
+                asset = "character/CC/02human/paperman/girl01.x"
+            end
+        else
+            asset = Schoolyard.members_table[index].user.ext_data.player_info.asset
+        end
+        UserInfoPage:ShowPage(1, false, id, asset);
+        -- UserInfoPage:ShowPage(1, false, id, MainUIButtons.user_asset);
+    end
+    -- GameLogic.AddBBS("CodeGlobals", tostring(id), 3000, "#FF0000");
+end
+
+-- 滚动条到底部了,动态加载
+function DynamicLoading()
+    if Schoolyard.members_pages and next(Schoolyard.members_pages) ~= nil and Schoolyard.members_pages.current_page < Schoolyard.members_pages.last_page then
+        local new_page = Schoolyard.members_pages.current_page +1
+        Schoolyard:GetMembers(new_page, page)
+    end
+end
+
+]]>   
+</script>
+<style type="text/mcss">
+</style>
+    <div style="width: 1500;height: 900;">
+        <div style="<%=format('position:relative;left:76;top: 42;width:1372;height:872;font-family: alhy;font-size: 48;color: #945e31;background:url(%s);', GetIcon('shoolyard_comm_bot.png'))%>">
+            <div style="<%=format('position:relative;left:57;top: -73;width:322;height:113;background:url(%s);', GetIcon('shoolyard_pagingtag_01.png'))%>">
+                <div style="position: relative;left: 125;top: 40;">成 员</div>
+            </div>
+            <!-- <div style="<%=format('position:relative;left:571;top: -73;width:322;height:113;background:url(%s);', GetIcon('shoolyard_pagingtag_03.png'))%>">
+                <div style="position: relative;left: 102;top: 40;">周活跃度</div>
+            </div> -->
+            <div style="<%=format('position:relative;left:929;top: -73;width:322;height:113;background:url(%s);', GetIcon('shoolyard_pagingtag_02.png'))%>">
+                <div style="position: relative;left: 102;top: 40;">最近在线</div>
+            </div>
+        </div>
+    
+    <!-- 成员信息 -->
+        <div style="position: relative;left: 36;top: 91;width: 1383;height: 781;">
+        
+            <pe:treeview onscrollend="DynamicLoading" style="position: relative;width: 1405;height: 781;" name='messages' DefaultNodeHeight = "185" ItemsPerLine="1" AllowPaging="false" RememberScrollPos="true" RememberLastPage="false" VerticalScrollBarStep="40">
+                <pe:repeat DataSource="<%= GetMembersResult() %>">
+                    <pe:repeatitem>
+                        <div style="width: 1383;height: 185;margin-bottom: -10;">
+                            <div name="<%= Eval('index') %>" style="<%=format('position: relative;left:89;width: 1295;height: 185;background:url(%s);', GetIcon('shoolyard_member_mat_bot.png'))%>">
+                                <div style="position: relative;left: 57;top: 36;width: 200;height: 50;font-family: Impact;font-size: 48;color: #b36f14;"><%= Eval('level') %></div>
+                                <div style="position: relative;left: 57;top: 100;width: 370;height: 50;font-family: zkklt;font-size: 42;color: #945e31;"><%= user.nickname or "" %></div>
+                                <!-- <div style="position: relative;left: 505;top: 82;width: 400;height: 50;font-family: Alibaba PuHuiTi;font-size: 48;text-align: center;color: #945e31;"><%= Eval('weekly_activity') or 0 %></div> -->
+                                <pe:if condition='<%= user.is_online == true or is_myself == true %>'>
+                                    <div style="position: relative;left: 984;top: 76;width: 280;height: 50;font-family: zkklt;font-size: 46;color: #47753c;"><%= Eval('online_statu') %></div>
+                                </pe:if>
+                                <pe:if condition='<%= user.is_online == false and is_myself ~= true %>'>
+                                    <div style="position: relative;left: 984;top: 76;width: 280;height: 50;font-family: zkklt;font-size: 46;color: #945e31;"><%= Eval('online_statu') %></div>
+                                </pe:if>
+                            </div>
+                            <div onclick="ShowUserPage" name="<%= Eval('index') %>" style="<%=format('position: relative;left:1;top:23;width: 131;height: 136;background:url(%s);', GetIcon('shoolyard_head_bot.png'))%>">
+                                <div style="<%=format('position: relative;left:7;top:5;width: 117;height: 118;background:url(%s);', user.avatar_url or '')%>"></div>
+                            </div>
+                        </div>
+                    </pe:repeatitem>
+                </pe:repeat>
+            </pe:treeview>
+        </div>
+    </div>
+
+</pe:mcml>
+</body>
+</html>
+ 

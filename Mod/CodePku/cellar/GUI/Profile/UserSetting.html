@@ -50,13 +50,26 @@ function ShowEdit()
         -- 游客
         NPL.load("(gl)Mod/CodePku/cellar/GUI/AccountUp/AccountUpTips.lua")
         local AccountUpTips = commonlib.gettable("Mod.CodePku.AccountUpTips")
+        AccountUpTips.title = L"修改提醒"
+        AccountUpTips.desc = L"您现在是游客账号，暂不支持修改昵称，是否现在升级账号?"
         AccountUpTips:ShowEditNameTips()
         return
     else
         -- 非游客
-        local EditNamePage = NPL.load("(gl)Mod/CodePku/cellar/GUI/Profile/EditName.lua");
-        EditNamePage:ShowPage();
-        return
+        local user_wechat_id = commonlib.getfield("System.User.info.user_wechat_id", nil)
+        if user_wechat_id then
+            -- 绑定了微信
+            local EditNamePage = NPL.load("(gl)Mod/CodePku/cellar/GUI/Profile/EditName.lua");
+            EditNamePage:ShowPage();
+            return
+        else
+            -- 未绑定微信
+            NPL.load("(gl)Mod/CodePku/cellar/GUI/Eldership/EldershipTips.lua")
+            local EldershipTips = commonlib.gettable("Mod.CodePku.EldershipTips")
+            EldershipTips.title = L"修改提醒"
+            EldershipTips.desc = L"您还没绑定家长微信哦，无法改名，是否现在绑定微信？"
+            EldershipTips:ShowEditNameTips()
+        end
     end
 end
 

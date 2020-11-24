@@ -1,0 +1,220 @@
+<!-- "script/apps/Aries/Creator/Game/Areas/EscFramePage.html" -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+</head>
+<body>
+    <pe:mcml>
+<script refresh="false" type="text/npl" src="Schoolyard.lua"><![CDATA[
+Schoolyard = NPL.load("(gl)Mod/CodePku/cellar/GUI/Schoolyard/Schoolyard.lua");
+local page = document:GetPageCtrl()
+
+function ClosePage()
+    Schoolyard:JoinPageSpecialClose()
+    Schoolyard:ClearData()
+    Schoolyard.last_select_kind = nil
+end
+
+-- 获取图片
+function GetIcon(index)
+    return Schoolyard:GetImagePath(index)
+end
+
+-- 搜索
+function OnSearch()
+    if Schoolyard.get_search_result then
+        return
+    end
+    Schoolyard.get_search_result = true
+    selected_school_index = nil
+    Schoolyard.search_result = {}
+    Schoolyard.search_result_pages = {}
+    local search_name = page:GetValue("search_name")
+    search_name = tostring(search_name)
+    Schoolyard.search_content = search_name
+    if Schoolyard.EmptyBG then
+        Schoolyard.EmptyBG:CloseWindow()
+        Schoolyard.EmptyBG = nil
+    end
+    if Schoolyard.join_page then
+        Schoolyard.join_page:CloseWindow()
+        Schoolyard.join_page = nil
+    end
+    local new_page
+    new_page = Schoolyard:ShowJoinPage()
+    -- GameLogic.AddBBS("CodeGlobals", tostring(commonlib.utf8.len(Schoolyard.search_content)), 3000, "#FF0000");
+    -- GameLogic.AddBBS("CodeGlobals", search_name, 3000, "#FF0000");
+    local params = {
+        search_name = Schoolyard.search_content,
+        search_province = Schoolyard.selected_province.code,
+        search_city = Schoolyard.selected_city.code,
+        search_area = Schoolyard.selected_area.code,
+        search_school = Schoolyard.selected_school.category,
+    }
+    echo("search_params")
+    echo(params)
+    Schoolyard:GetSearchSchoolResult(params, new_page)
+end
+
+-- 选择省市区学校
+function OnSelect(name)
+    Schoolyard.search_content = page:GetValue("search_name")
+    -- 3级弹窗
+    Schoolyard.came_from_join_page = true
+    Schoolyard:ShowSelectPage(name)
+end
+
+-- 搜索结果
+function GetSearchResult()
+    return Schoolyard.search_result
+end
+
+-- 搜索是否有结果
+function HaveResult()
+    return Schoolyard.search_result and next(Schoolyard.search_result) ~= nil
+end
+
+-- 选中学校
+function OnChoose(name)
+    selected_school_index = tonumber(name)
+    local school_name = Schoolyard.search_result[selected_school_index].name
+    -- GameLogic.AddBBS("CodeGlobals", school_name, 3000, "#FF0000");
+    page:Refresh(0)
+end
+
+-- 加入学校
+function JoinChooseSchool()
+    if selected_school_index and Schoolyard.search_result[selected_school_index] then
+        local params = {
+            title = "加入学校",
+            content = "是否加入学校：" .. Schoolyard.search_result[selected_school_index].name,
+            func = function ()
+                    Schoolyard:JoinSchoolyard(Schoolyard.search_result[selected_school_index].id, Schoolyard.search_result[selected_school_index].name)
+                end,
+            page = page,
+        }
+        Schoolyard:ShowPopupBox(params)
+    else
+        GameLogic.AddBBS("CodeGlobals", L"请选择要加入的学校", 3000, "#FF0000");
+    end
+end
+
+-- 登记学校
+function RegisterSchool()
+    if Schoolyard.had_registration then
+        GameLogic.AddBBS("CodeGlobals", L"系统检测到您最近3天内已提交过登记信息，请稍后再试！", 3000, "#FF0000");
+        return
+    end
+    Schoolyard:ClearData()
+    Schoolyard.last_select_kind = nil
+    Schoolyard:ShowRegisterPage()
+end
+
+-- 滚动条到底部了,动态加载
+function DynamicLoading()
+    if next(Schoolyard.search_result_pages)~= nil and Schoolyard.search_result_pages.current_page < Schoolyard.search_result_pages.last_page then
+        -- 发送请求
+        local params = {
+            search_name = Schoolyard.search_content,
+            search_province = Schoolyard.selected_province.code,
+            search_city = Schoolyard.selected_city.code,
+            search_area = Schoolyard.selected_area.code,
+            search_school = Schoolyard.selected_school.category,
+            current_page = Schoolyard.search_result_pages.current_page + 1,
+        }
+        Schoolyard:GetSearchSchoolResult(params, page)
+    end
+end
+
+
+]]>
+</script>
+
+<pe:container alignment="_lt" width="1312" height="832">
+<div style="<%=format('position: relative;font-family: zkklt;width: 1312;height: 832;background:url(%s);', GetIcon('schoolyard_join_bot.png'))%>">
+    <input type="button" name="close" onclick="ClosePage" style="<%=format('position:relative;left:1213;top: 40;width:77;height:123;background:url(%s);', GetIcon('schoolyard_comm_x.png'))%>"/>
+
+    <!-- 搜索筛选 -->
+    <div style="<%=format('position: relative;left:92;top: 255;width: 408;height: 85;font-size: 36;color: #7e2f12;padding-left: 24;background:url(%s);', GetIcon('schoolyard_seek_bot.png'))%>">
+        <input type="text" MoveViewWhenAttachWithIME="true" name="search_name" value="<%= Schoolyard.search_content %>" style="position: relative;top:15;width: 360;height: 55;background: #000000;"/>
+    </div>
+    <input type="button" onclick="OnSearch" style="<%=format('position: relative;left:536;top: 261;width: 74;height: 74;background:url(%s);', GetIcon('schoolyard_seek.png'))%>"/>
+
+    <!-- 条件筛选_省 -->
+    <div style="position: relative;left:92;top: 500;width: 203;height: 68;color: #7e2f12;">
+        <input type="button" value="▼" style="<%=format('position: relative;font-size: 30;color: #7e2f12;width: 203;height: 68;text-align:right;padding-top:15;padding-right:12;background:url(%s);', GetIcon('schoolyard_term_bot.png'))%>"/>
+        <input type="text" value="<%= Schoolyard.selected_province.name or '省' %>" style="position: relative;font-size: 30;left: 15;top: 18;width: 145;height: 36;background:#000000;"/>
+        <div onclick="OnSelect" name="province" style="position: relative;width: 203;height: 68;color: #7e2f12;"></div>
+    </div>
+    <!-- 条件筛选_市 -->
+    <div style="position: relative;left:405;top: 500;width: 203;height: 68;color: #7e2f12;">
+        <input type="button" value="▼" style="<%=format('position: relative;font-size: 30;color: #7e2f12;width: 203;height: 68;text-align:right;padding-top:15;padding-right:12;background:url(%s);', GetIcon('schoolyard_term_bot.png'))%>"/>
+        <input type="text" value="<%= Schoolyard.selected_city.name or '市' %>" style="position: relative;font-size: 30;left: 15;top: 18;width: 145;height: 36;background:#000000;"/>
+        <div onclick="OnSelect" name="city" style="position: relative;width: 203;height: 68;color: #7e2f12;"></div>
+    </div>
+    <!-- 条件筛选_区 -->
+    <div style="position: relative;left:92;top: 620;width: 203;height: 68;color: #7e2f12;">
+        <input type="button" value="▼" style="<%=format('position: relative;font-size: 30;color: #7e2f12;width: 203;height: 68;text-align:right;padding-top:15;padding-right:12;background:url(%s);', GetIcon('schoolyard_term_bot.png'))%>"/>
+        <input type="text" value="<%= Schoolyard.selected_area.name or '区' %>" style="position: relative;font-size: 30;left: 15;top: 18;width: 145;height: 36;background:#000000;"/>
+        <div onclick="OnSelect" name="area" style="position: relative;width: 203;height: 68;color: #7e2f12;"></div>
+    </div>
+    <!-- 条件筛选_学校 -->
+    <div style="position: relative;left:405;top: 620;width: 203;height: 68;color: #7e2f12;">
+        <input type="button" value="▼" style="<%=format('position: relative;font-size: 30;color: #7e2f12;width: 203;height: 68;text-align:right;padding-top:15;padding-right:12;background:url(%s);', GetIcon('schoolyard_term_bot.png'))%>"/>
+        <input type="text" value="<%= Schoolyard.selected_school.name or '学校类型' %>" style="position: relative;font-size: 30;left: 15;top: 18;width: 145;height: 36;background:#000000;"/>
+        <div onclick="OnSelect" name="school" style="position: relative;width: 203;height: 68;color: #7e2f12;"></div>
+    </div>
+
+    <!-- 筛选结果 -->
+    <div style="position: relative;left: 745;top: 203;width: 460;height: 531;">
+        <pe:if condition='<%= HaveResult() %>'>
+        <!-- 查询到了学校 -->
+            <pe:treeview onscrollend="DynamicLoading" style="position: relative;width: 435;height: 531;" ItemsPerLine="1" AllowPaging="false" RememberScrollPos="true" RememberLastPage="false" VerticalScrollBarStep="40">
+                <pe:repeat DataSource="<%= GetSearchResult() %>">
+                    <pe:repeatitem>
+                        <!-- 选中的 -->
+                        <pe:if condition='<%= selected_school_index == Eval("index") %>'>
+                            <pe:if condition='<%= Eval("contents_num") < 11 %>'>
+                                <div onclick="OnChoose" name="<%= Eval('index') %>" style="<%=format('width: 408;height: 85;margin-bottom: 4;line-height:85;font-family: zkklt;font-size: 32;padding-left:5;color: #7e2f12;background:url(%s);', GetIcon('schoolyard_screening_results_02.png'))%>"><%= Eval('full_name') %></div>
+                            </pe:if>
+                            <pe:if condition='<%= Eval("contents_num") > 11 %>'>
+                                <div onclick="OnChoose" name="<%= Eval('index') %>" style="<%=format('width: 408;height: 85;margin-bottom: 4;font-family: zkklt;font-size: 32;padding-left:5;padding-top:5;color: #7e2f12;background:url(%s);', GetIcon('schoolyard_screening_results_02.png'))%>"><%= Eval('full_name') %></div>
+                            </pe:if>
+                        </pe:if>
+                        <!-- 未选中的 -->
+                        <pe:if condition='<%= selected_school_index ~= Eval("index") %>'>
+                            <pe:if condition='<%= Eval("contents_num") < 11 %>'>
+                                <div onclick="OnChoose" name="<%= Eval('index') %>" style="<%=format('width: 408;height: 85;margin-bottom: 4;line-height:85;font-family: zkklt;font-size: 32;padding-left:5;color: #7e2f12;background:url(%s);', GetIcon('schoolyard_screening_results_01.png'))%>"><%= Eval('full_name') %></div>
+                            </pe:if>
+                            <pe:if condition='<%= Eval("contents_num") > 11 %>'>
+                                <div onclick="OnChoose" name="<%= Eval('index') %>" style="<%=format('width: 408;height: 85;margin-bottom: 4;font-family: zkklt;font-size: 32;padding-left:5;padding-top:5;color: #7e2f12;background:url(%s);', GetIcon('schoolyard_screening_results_01.png'))%>"><%= Eval('full_name') %></div>
+                            </pe:if>
+                        </pe:if>
+                    </pe:repeatitem>
+                </pe:repeat>
+            </pe:treeview>
+        </pe:if>
+        <pe:if condition='<%= not HaveResult() %>'>
+        <!-- 空空如也 -->
+            <div style="position: relative;left: 145;top: 144;width: 200;height: 50;font-family: zkklt;font-size: 36;color: #7e2f12;">空空如也</div>
+        </pe:if>
+    </div>
+
+    <!-- 加入 -->
+    <div onclick="JoinChooseSchool" style="<%=format('position: relative;left:219;top: 732;width: 263;height: 89;background:url(%s);', GetIcon('schoolyard_btn_r.png'))%>">
+        <div style="<%=format('position: relative;left:54;top: 18;width: 159;height: 39;background:url(%s);', GetIcon('schoolyard_btn_in.png'))%>"></div>
+    </div>
+
+    <!-- 登记学校 -->
+    <div onclick="RegisterSchool" style="position: relative;left: 1023;top: 780;width: 120;height: 40;font-family: zkklt;font-size: 28;text-align: center;line-height: 40;color: #ff0a54;">登记学校</div>
+
+</div>
+
+</pe:container>
+
+</pe:mcml>
+</body>
+</html>
+ 

@@ -1,0 +1,80 @@
+<!-- "script/apps/Aries/Creator/Game/Areas/EscFramePage.html" -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>我的校园-动态</title>
+</head>
+<body>
+    <pe:mcml>
+<script refresh="false" type="text/npl" src="Schoolyard.lua"><![CDATA[
+
+local Schoolyard = NPL.load("(gl)Mod/CodePku/cellar/GUI/Schoolyard/Schoolyard.lua");
+local page = document:GetPageCtrl()
+
+if Schoolyard.joined_schoolyard == true and next(Schoolyard.trends_table) == nil then
+    Schoolyard:GetTrends(1, page)
+end
+
+-- 获取图片
+function GetIcon(index)
+    return Schoolyard:GetImagePath(index)
+end
+
+function ClosePage()
+    Schoolyard.main_ui:CloseWindow()
+end
+
+-- 获取学校动态数据
+function GetTrendsResult()
+    return Schoolyard.trends_table
+end
+
+-- 动态加载
+function DynamicLoading()
+    if Schoolyard.trends_table_pages and next(Schoolyard.trends_table_pages) ~= nil and Schoolyard.trends_table_pages.current_page < Schoolyard.trends_table_pages.last_page then
+        local new_page = Schoolyard.trends_table_pages.current_page +1
+        Schoolyard:GetTrends(new_page, page)
+    end
+end
+
+]]>   
+</script>
+<style type="text/mcss">
+</style>
+
+<div style="width: 1500;height: 900;">
+    <div style="<%=format('position:relative;left:76;top: 42;width:1372;height:872;font-family: alhy;font-size: 48;color: #945e31;background:url(%s);', GetIcon('shoolyard_comm_bot.png'))%>">
+        <!-- 动态 -->
+        <div style="position: relative;left: 13;top: 47;width: 1308;height: 773;">
+            <pe:treeview onscrollend="DynamicLoading" style="position: relative;width: 1350;height: 773;" name='messages' DefaultNodeHeight = "0" ItemsPerLine="1" AllowPaging="false" RememberScrollPos="true" RememberLastPage="false" VerticalScrollBarStep="40">
+                <pe:repeat DataSource="<%= GetTrendsResult() %>">
+                    <pe:repeatitem>
+                        <div style="width: 1383;height: 91;">
+                            <div style="float: left;left: 18;top: 18;height: 50;font-family: zkklt;font-size: 42;color: #945e31;"><%= Eval('nickname') or "" %></div>
+                            <div style="float: left;left: 25;top: 28;width: 715;height: 40;font-family: zkklt;font-size: 32;color: #af9177;"><%= Eval('action_text') or "" %></div>
+                            <div style="<%=format('position: relative;left:10;top:22;width: 1282;height: 9;background:url(%s);', GetIcon('schoolyard_surbase.png'))%>"></div>
+                            <div style="position: relative;left: 1034;top: -30;width: 280;height: 50;font-family: zkklt;font-size: 46;color: #47753c;"><%= Eval('happened_at') %></div>
+                        </div>
+                    </pe:repeatitem>
+                </pe:repeat>
+            </pe:treeview>
+        </div>
+
+
+        <div style="<%=format('position:relative;left:57;top: -73;width:322;height:113;background:url(%s);', GetIcon('shoolyard_pagingtag_01.png'))%>">
+            <div style="position: relative;left: 125;top: 40;">动 态</div>
+        </div>
+
+        <div style="<%=format('position:relative;left:929;top: -73;width:322;height:113;background:url(%s);', GetIcon('shoolyard_pagingtag_02.png'))%>">
+            <div style="position: relative;left: 125;top: 40;">时 间</div>
+        </div>
+    </div>
+
+
+</div>
+
+</pe:mcml>
+</body>
+</html>
+ 
