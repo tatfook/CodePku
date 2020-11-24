@@ -11,7 +11,11 @@ local GeneralGameClient = commonlib.inherit(commonlib.gettable("Mod.GeneralGameS
 local Config = NPL.load("(gl)Mod/CodePku/online/client/Config.lua");
 
 function GeneralGameClient:ctor()
-    self.userinfo = System.User;
+    self.userinfo = {
+        id = System.User.id,
+        username = System.User.username,
+        nickname = System.User.nickname,
+    };
 
     GameLogic.GetFilters():add_filter("ggs", function(msg)
         if (type(msg) == "table" and msg.action == "UpdateNickName") then
