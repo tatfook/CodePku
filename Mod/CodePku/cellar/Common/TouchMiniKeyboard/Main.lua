@@ -72,7 +72,7 @@ function TouchMiniKeyboard.CheckShow(show,isDirectionKeyboard )
             DirectionRocker.getSingleton():show(show);
         end
         GameLogic.RunCommand("/show keyboard");
-        if isEmployee == 0 then    
+        if isEmployee ~= 1 then    
             if System.Codepku then
                 if System.Codepku.isLoadingHome then
                     FeatKeyboard.getSingleton():show(show, true, true, true, true, false);
