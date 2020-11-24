@@ -177,19 +177,19 @@ end
                         <!-- 选中的 -->
                         <pe:if condition='<%= selected_school_index == Eval("index") %>'>
                             <pe:if condition='<%= Eval("contents_num") < 11 %>'>
-                                <div onclick="OnChoose" name="<%= Eval('index') %>" style="<%=format('width: 408;height: 85;margin-bottom: 4;line-height:85;font-family: zkklt;font-size: 32;padding-left:5;color: #7e2f12;background:url(%s);', GetIcon('schoolyard_screening_results_02.png'))%>"><%= Eval('name') %></div>
+                                <div onclick="OnChoose" name="<%= Eval('index') %>" style="<%=format('width: 408;height: 85;margin-bottom: 4;line-height:85;font-family: zkklt;font-size: 32;padding-left:5;color: #7e2f12;background:url(%s);', GetIcon('schoolyard_screening_results_02.png'))%>"><%= Eval('full_name') %></div>
                             </pe:if>
                             <pe:if condition='<%= Eval("contents_num") > 11 %>'>
-                                <div onclick="OnChoose" name="<%= Eval('index') %>" style="<%=format('width: 408;height: 85;margin-bottom: 4;font-family: zkklt;font-size: 32;padding-left:5;padding-top:5;color: #7e2f12;background:url(%s);', GetIcon('schoolyard_screening_results_02.png'))%>"><%= Eval('name') %></div>
+                                <div onclick="OnChoose" name="<%= Eval('index') %>" style="<%=format('width: 408;height: 85;margin-bottom: 4;font-family: zkklt;font-size: 32;padding-left:5;padding-top:5;color: #7e2f12;background:url(%s);', GetIcon('schoolyard_screening_results_02.png'))%>"><%= Eval('full_name') %></div>
                             </pe:if>
                         </pe:if>
                         <!-- 未选中的 -->
                         <pe:if condition='<%= selected_school_index ~= Eval("index") %>'>
                             <pe:if condition='<%= Eval("contents_num") < 11 %>'>
-                                <div onclick="OnChoose" name="<%= Eval('index') %>" style="<%=format('width: 408;height: 85;margin-bottom: 4;line-height:85;font-family: zkklt;font-size: 32;padding-left:5;color: #7e2f12;background:url(%s);', GetIcon('schoolyard_screening_results_01.png'))%>"><%= Eval('name') %></div>
+                                <div onclick="OnChoose" name="<%= Eval('index') %>" style="<%=format('width: 408;height: 85;margin-bottom: 4;line-height:85;font-family: zkklt;font-size: 32;padding-left:5;color: #7e2f12;background:url(%s);', GetIcon('schoolyard_screening_results_01.png'))%>"><%= Eval('full_name') %></div>
                             </pe:if>
                             <pe:if condition='<%= Eval("contents_num") > 11 %>'>
-                                <div onclick="OnChoose" name="<%= Eval('index') %>" style="<%=format('width: 408;height: 85;margin-bottom: 4;font-family: zkklt;font-size: 32;padding-left:5;padding-top:5;color: #7e2f12;background:url(%s);', GetIcon('schoolyard_screening_results_01.png'))%>"><%= Eval('name') %></div>
+                                <div onclick="OnChoose" name="<%= Eval('index') %>" style="<%=format('width: 408;height: 85;margin-bottom: 4;font-family: zkklt;font-size: 32;padding-left:5;padding-top:5;color: #7e2f12;background:url(%s);', GetIcon('schoolyard_screening_results_01.png'))%>"><%= Eval('full_name') %></div>
                             </pe:if>
                         </pe:if>
                     </pe:repeatitem>

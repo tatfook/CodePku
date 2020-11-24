@@ -247,13 +247,13 @@ function RankPage.GetSchoolyardItem(type)
         -- 周排行
         for i = 1, #data do
             local l = {}
-            l['name'] = data[i].name
+            l['name'] = data[i].full_name
             l['score'] = DigitalProcessing(data[i].weekly_activity)
             l['rank'] = i
             table.insert(list, l)
             if data[i].is_my_school then
                 local l = {}
-                l['name'] = data[i].name
+                l['name'] = data[i].full_name
                 l['score'] = DigitalProcessing(data[i].weekly_activity)
                 if data[i].rank then
                     l['rank'] = i
@@ -270,13 +270,13 @@ function RankPage.GetSchoolyardItem(type)
         -- 总排行
         for i = 1, #data do
             local l = {}
-            l['name'] = data[i].name
+            l['name'] = data[i].full_name
             l['score'] = DigitalProcessing(data[i].total_activity)
             l['rank'] = i
             table.insert(list, l)
             if data[i].is_my_school then
                 local l = {}
-                l['name'] = data[i].name
+                l['name'] = data[i].full_name
                 l['score'] = DigitalProcessing(data[i].total_activity)
                 if data[i].rank then
                     l['rank'] = i
