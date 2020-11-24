@@ -16,7 +16,7 @@ local PlayerAssetFile = commonlib.gettable("MyCompany.Aries.Game.EntityManager.P
 local EntityManager = commonlib.gettable("MyCompany.Aries.Game.EntityManager");
 local PlayerSkins = commonlib.gettable("MyCompany.Aries.Game.EntityManager.PlayerSkins")
 local pe_gridview = commonlib.gettable("Map3DSystem.mcml_controls.pe_gridview");
-
+local request = NPL.load("(gl)Mod/CodePku/api/BaseRequest.lua");
 
 -- local Files = commonlib.gettable("MyCompany.Aries.Game.Common.Files");
 
@@ -251,6 +251,15 @@ function SkinPageV1.OnOK()
 			if(filepath ~= lastFilepath) then
 				GameLogic.RunCommand("/avatar "..filepath);
 				GameLogic.options:SetMainPlayerAssetName(filepath);
+				-- 更换皮肤
+				local params = {
+					player_info = {asset=filepath,},
+				}
+				request:put('/users/profile',params):next(function(response)
+					LOG.std(nil, "info", "SkinPageV1", "OnOK")
+				end):catch(function(e)
+					LOG.std(nil, "error", "SkinPageV1", "OnOK")
+				end);
 			end
 
 			if SkinPageV1.timer then
@@ -259,6 +268,9 @@ function SkinPageV1.OnOK()
 			end
 
 			page:CloseWindow();
+			local UserInfoPage = NPL.load("(gl)Mod/CodePku/cellar/GUI/UserInfo.lua");
+			UserInfoPage.MainUI:Refresh(0)
+
 		end
 		GameLogic.AddBBS(nil, string.format("【%s】更换成功",SkinPageV1.GetAllFiles()[tonumber(SkinPageV1.index)]["displayname"]), 3000, "#00ff00");
 	end

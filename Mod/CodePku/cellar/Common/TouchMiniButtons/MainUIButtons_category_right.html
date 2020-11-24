@@ -33,8 +33,21 @@ function ClickChooseFun(name)
         FriendUI:ShowPage(1)
     elseif(name == "ClickSetting") then 
         CodePkuEscFramePage:ShowPage(true)
-    elseif(name == "ClickChange") then 
-        
+    elseif(name == "ClickChange") then
+
+    elseif(name == "ClickSchoolyard") then
+        -- 游客限制
+        local VisitorLimit = NPL.load("(gl)Mod/CodePku/cellar/GUI/AccountUp/VisitorLimit.lua");
+        local params = {
+            title = "提示",
+            content = "你现在是游客账号，暂不支持该操作，是否立即升级账号？",
+        }
+        local value = VisitorLimit:CheckStatus(params);
+        if value then
+            return
+        end
+        local Schoolyard = NPL.load("(gl)Mod/CodePku/cellar/GUI/Schoolyard/Schoolyard.lua");
+        Schoolyard:ShowPage();
     else
         GameLogic.AddBBS("CodeGlobals", L"功能开发中", 3000, "#ff0000");
     end

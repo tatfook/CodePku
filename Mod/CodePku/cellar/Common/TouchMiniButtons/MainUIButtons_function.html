@@ -1,0 +1,133 @@
+<!-- "Mod/CodePku/cellar/Common/TouchMiniButtons/MainUIButtons_function.html" -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" >
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+</head>
+
+<body>
+<pe:mcml>
+<script refresh="false" type="text/npl" src="MainSceneUIButtons.lua"><![CDATA[
+local MainUIButtons = NPL.load("(gl)Mod/CodePku/cellar/Common/TouchMiniButtons/Main.lua");
+is_open = MainUIButtons.open_function
+
+NPL.load("(gl)Mod/CodePku/cellar/Common/TouchMiniButtons/TaskSystem/TaskSystem.lua")
+TaskSystem = commonlib.gettable("Mod.CodePku.Common.TaskSystem")
+
+NPL.load("(gl)Mod/CodePku/cellar/GUI/rank/RankPage.lua")
+local UserInfoPage = NPL.load("(gl)Mod/CodePku/cellar/GUI/UserInfo.lua");
+UserInfoPage.OnInit();
+
+RankPage = commonlib.gettable("Mod.CodePku.RankPage");
+FriendUI = NPL.load("(gl)Mod/CodePku/cellar/GUI/Friend/FriendUI.lua");
+
+function ClickClose() 
+    Page:CloseWindow()
+    MainUIButtons.show_function_ui("close")
+end
+
+function ClickOpen() 
+    if (is_open == true) then
+        ClickRank()
+        return
+    end
+    Page:CloseWindow()
+    MainUIButtons.show_function_ui()
+end
+
+function ClickFunctionButton()
+    GameLogic.AddBBS("CodeGlobals", L"功能开发中", 3000, "#ff0000");
+end
+
+function ClickUserInfo()
+    GameLogic.GetFilters():apply_filters("ClickStatistics", {type = 18}); -- 点击角色详情，触发操作数据统计计数
+    UserInfoPage:ShowPage()
+end
+
+function ClickBag()
+    UserInfoPage:ShowPage(5)
+end
+
+
+function ClickFriend()
+    GameLogic.GetFilters():apply_filters("ClickStatistics", {type = 19}); -- 点击好友，触发操作数据统计计数
+    FriendUI:ShowPage(1)
+end
+
+function ClickRank()
+    GameLogic.GetFilters():apply_filters("ClickStatistics", {type = 20}); -- 点击排行榜，触发操作数据统计计数
+    RankPage:ShowPage(1)
+end
+
+function ClickTask()
+    GameLogic.GetFilters():apply_filters("ClickStatistics", {type = 22}); -- 点击任务系统，触发操作数据统计计数
+    TaskSystem:ShowPage(1,true)
+end
+
+-- 校园
+function ClickSchoolyard()
+    local Schoolyard = NPL.load("(gl)Mod/CodePku/cellar/GUI/Schoolyard/Schoolyard.lua")
+    Schoolyard:ShowPage()
+end
+
+local SignInPage = commonlib.gettable("Mod.CodePku.GUI.SignInPage")
+function ClickSignin()
+    GameLogic.GetFilters():apply_filters("ClickStatistics", {type = 21}); -- 点击签到，触发操作数据统计计数
+    SignInPage:ShowPage()
+end
+
+NPL.load("(gl)Mod/CodePku/cellar/Common/CommonFunc/CommonFunc.lua")
+local CommonFunc = commonlib.gettable("Mod.CodePku.Common.CommonFunc")
+function isHuaweiApproval()
+    return CommonFunc.isHuaweiApproval()
+end
+function isIOSPlatform()
+    return CommonFunc.isIOSPlatform()
+end
+
+]]></script>
+<style type="text/mcss">
+
+</style>
+<pe:container alignment="_rb" width="100%" height="100%">
+    <pe:if condition='<%= is_open %>'>
+        <div style="position: relative; width: 82; height: 178; left: 2; background: url(codepku/image/textures/main_ui/main.png#915 14 82 178);" onclick="ClickClose"></div>
+        <div style="position: relative; width: 896; height: 178; left: 82; background: url(codepku/image/textures/main_ui/main.png#46 495 200 54:20 20 20 20); " >
+            <div style="position: relative; width: 103; height: 127; left: 45; top: 27; background-color: #ffffff;" onclick="ClickSchoolyard"></div>
+            <div style="position: relative; width: 103; height: 127; left: 185; top: 27; background: url(codepku/image/textures/main_ui/main.png#148 25 107 131);" onclick="ClickUserInfo"></div>
+            <pe:if condition = "<%= not isIOSPlatform() %>" >
+                <div style="position: relative; width: 93; height: 134; left: 337; top: 20; background: url(codepku/image/textures/main_ui/main.png#285 18 97 138);" onclick="ClickFriend"></div>
+                <pe:if condition = "<%= not isHuaweiApproval()%>" >
+                    <div style="position: relative; width: 80; height: 134; left: 475; top: 20; background: url(codepku/image/textures/main_ui/main.png#416 18 84 138);" onclick="ClickRank"></div>
+                    <div style="position: relative; width: 97; height: 137; left: 606; top: 18; background: url(codepku/image/textures/main_ui/main.png#557 478 97 137);" onclick="ClickSignin"></div>
+                    <div style="position: relative; width: 112; height: 133; left: 746; top: 24; background: url(codepku/image/textures/main_ui/main.png#34 645 112 133);" onclick="ClickTask"></div>
+                </pe:if>
+                <pe:if condition = "<%= isHuaweiApproval()%>" >
+                    <div style="position: relative; width: 97; height: 137; left: 475; top: 18; background: url(codepku/image/textures/main_ui/main.png#557 478 97 137);" onclick="ClickSignin"></div>
+                    <div style="position: relative; width: 112; height: 133; left: 615; top: 24; background: url(codepku/image/textures/main_ui/main.png#34 645 112 133);" onclick="ClickTask"></div>
+                </pe:if>
+            </pe:if>
+       
+            <!-- 因好友搜索问题，暂时屏蔽ios渠道好友功能 -->
+            <pe:if condition = "<%= isIOSPlatform() %>" >
+                <pe:if condition = "<%= not isHuaweiApproval()%>" >
+                    <div style="position: relative; width: 80; height: 134; left: 337; top: 20; background: url(codepku/image/textures/main_ui/main.png#416 18 84 138);" onclick="ClickRank"></div>
+                    <div style="position: relative; width: 97; height: 137; left: 475; top: 18; background: url(codepku/image/textures/main_ui/main.png#557 478 97 137);" onclick="ClickSignin"></div>
+                    <div style="position: relative; width: 112; height: 133; left: 615; top: 24; background: url(codepku/image/textures/main_ui/main.png#34 645 112 133);" onclick="ClickTask"></div>
+                </pe:if>
+                <pe:if condition = "<%= isHuaweiApproval()%>" >
+                    <div style="position: relative; width: 97; height: 137; left: 337; top: 18; background: url(codepku/image/textures/main_ui/main.png#557 478 97 137);" onclick="ClickSignin"></div>
+                    <div style="position: relative; width: 112; height: 133; left: 477; top: 24; background: url(codepku/image/textures/main_ui/main.png#34 645 112 133);" onclick="ClickTask"></div>
+                </pe:if>
+            </pe:if>
+                
+        </div>
+    </pe:if>
+    <pe:if condition='<%= not is_open %>'>
+        <div style="position: relative; width: 82; height: 178; left: 0; transform: rotate(180deg); transform-origin: 41px 89px; background: url(codepku/image/textures/main_ui/main.png#915 14 82 178);" onclick="ClickOpen"></div>
+    </pe:if>
+</pe:container>
+</pe:mcml> 
+</body>
+</html>
