@@ -28,6 +28,7 @@ local Log = NPL.load("(gl)Mod/CodePku/util/Log.lua")
 local Table = NPL.load("(gl)Mod/CodePku/util/Table.lua")
 local Design = NPL.load("(gl)Mod/CodePku/util/Design.lua")
 local mainFrameImageData = NPL.load("(gl)Mod/CodePku/cellar/imageLuaTable/mainFrameImageData.lua")
+local funcKeyboardImageData = NPL.load("(gl)Mod/CodePku/cellar/imageLuaTable/funcKeyboardImageData.lua")
 
 local TouchFuncKeyboard = commonlib.inherit(commonlib.gettable("System.Core.ToolBase"),commonlib.gettable("Mod.CodePku.Common.TouchMiniKeyboard.TouchFuncKeyboard"))
 TouchFuncKeyboard:Property("Name", "TouchFuncKeyboard");
@@ -40,7 +41,7 @@ function TouchFuncKeyboard:ctor()
 	self.keylayout = {
 		{
 			name = "Ctrl",
-			background = mainFrameImageData:GetIconUrl("main_icon_up.png"),
+			background = funcKeyboardImageData:GetIconUrl("main_icon_up.png"),
 			clickedBackground = mainFrameImageData:GetIconUrl("main_icon_up.png"),
 			left = 18, top = 64, width = 192, height = 80,
 			key = {
@@ -212,7 +213,7 @@ function TouchFuncKeyboard:getContainer()
 	
 	if(not container:IsValid()) then
 		container = ParaUI.CreateUIObject("container",self.name, self.alignment,self.left,self.top,self.width,self.height);
-		container.background = "";
+		container.background = funcKeyboardImageData:GetIconUrl("funckeyboard_bot.png");
 
 		container:AttachToRoot();
 		container.zorder = self.zorder;
@@ -261,8 +262,10 @@ end
 
 --控制显示功能键盘
 function TouchFuncKeyboard:show(_show)
+	GameLogic.AddBBS(nil, L"TouchFuncKeyboard:show", 2000, "0 0 255", 21)
+	GameLogic.AddBBS(nil, tostring(false == (_show == false)), 2000, "0 0 255", 21)
     local container = self:getContainer();
-    container.visible = _show == false;
+    container.visible = (false == (_show == false));
 end
 
 function TouchFuncKeyboard:Destroy()
