@@ -51,6 +51,17 @@ function GetExpWidth()
     return now_width > 32 and now_width or 32
 end
 
+-- 计算文本区域左边距和上边距
+function GetCoordinate()
+    local height_per_line, middle_line_coordinate, fonts_per_line, align_type = 44, 84, 9, nil      -- 每行高度,中线,每行最多11个字
+    local total_fonts_num = commonlib.utf8.len(Schoolyard.schoolyard_name)      -- 名称总字数
+    local total_lines = math.ceil(total_fonts_num/fonts_per_line)       -- 行数
+    local top = middle_line_coordinate - (height_per_line * total_lines / 2)
+    local height = height_per_line * total_lines
+    align_type = total_lines > 1 and "left" or "center"
+    return top, height, align_type
+end
+
 ]]>
 </script>
 <style type="text/mcss">
@@ -85,7 +96,9 @@ end
             <!-- 学校图标 -->
             <!-- <div style="<%=format('position: relative;left:97;top:29;width: 118;height: 118;background:url(%s);', Schoolyard.joined_schoolyard and Schoolyard.schoolyard_avatar or 'https://cdn.codepku.com//img/default_avatar/0714/20180714163534.png')%>"></div> -->
             <!-- 学校名称 -->
-            <div style="position: relative;left: 90;top: 40;width: 360;height: 100;font-size: 38;color: #b36f14;"><%= Schoolyard.schoolyard_name %></div>
+            <!-- <div style="position: relative;left: 90;top: 40;width: 360;height: 100;font-size: 38;color: #b36f14;background-color: #000000;"><%= Schoolyard.schoolyard_name %></div> -->
+            <div style="<%=format('position: relative;left: 90;top: %s;width: 360;height: %s;font-size: 38;text-align: %s;color: #b36f14;', GetCoordinate())%>"><%= Schoolyard.schoolyard_name %></div>
+            
         </pe:if>
         <pe:if condition='<%= Schoolyard.joined_schoolyard ~= true %>'>
             <!-- 学校图标 -->

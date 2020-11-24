@@ -173,8 +173,8 @@ function Schoolyard:GetMySchoolyardInfo(page)
             Schoolyard.schoolyard_level = data.level and tostring(data.level) or "？？？"        -- 学校等级
             Schoolyard.schoolyard_vitality = Schoolyard:DigitalProcessing(data.weekly_activity)     -- 学校周活跃度
             Schoolyard.schoolyard_total_vitality = Schoolyard:DigitalProcessing(data.total_activity)     -- 学校总活跃度
-            Schoolyard.week_rank = data.week_rank        -- 学校周活跃排行
-            Schoolyard.total_rank = data.total_rank       -- 学校总活跃排行
+            Schoolyard.week_rank = data.week_rank == 0 and "未上榜" or data.week_rank        -- 学校周活跃排行
+            Schoolyard.total_rank = data.total_rank == 0 and "未上榜" or data.total_rank       -- 学校总活跃排行
             Schoolyard.school_level_progress = data.level_progress      -- 学校经验
 
             page:Refresh(0)
@@ -221,7 +221,7 @@ function Schoolyard:GetSearchSchoolResult(params, page)
             return
         end
         for k,v in pairs(data) do
-            local contents_num = commonlib.utf8.len(v.name)
+            local contents_num = commonlib.utf8.len(v.full_name)
             v.contents_num = contents_num
             table.insert(Schoolyard.search_result, v)
         end
@@ -476,11 +476,16 @@ end
 
 -- 加入学校
 function Schoolyard:JoinSchoolyard(id, name)
+    if Schoolyard.had_join_schoolyard then
+        return
+    end
+    Schoolyard.had_join_schoolyard = true
     local id = tonumber(id)
     local params = {
         school_id = id
     }
     request:post('/schools/join', params):next(function(response)
+        Schoolyard.had_join_schoolyard = false
         -- 关闭页面
         Schoolyard:JoinPageSpecialClose()
         -- 清除数据
@@ -492,6 +497,7 @@ function Schoolyard:JoinSchoolyard(id, name)
         LOG.std(nil, "succeed", "Schoolyard", "JoinSchoolyard")
     end):catch(function(e)
         LOG.std(nil, "error", "Schoolyard", "JoinSchoolyard")
+        Schoolyard.had_join_schoolyard = false
     end);
 end
 
