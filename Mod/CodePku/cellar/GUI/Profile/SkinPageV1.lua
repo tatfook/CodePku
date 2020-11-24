@@ -169,6 +169,8 @@ function SkinPageV1.OnOK()
 		end
 		
 		page:CloseWindow();
+		local UserInfoPage = NPL.load("(gl)Mod/CodePku/cellar/GUI/UserInfo.lua");
+		UserInfoPage.MainUI:Refresh(0)
 	end
 end
 
