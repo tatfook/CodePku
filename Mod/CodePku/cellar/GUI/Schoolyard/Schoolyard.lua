@@ -43,6 +43,8 @@ Schoolyard.selected_city = {}
 Schoolyard.selected_area = {}
 Schoolyard.selected_school = {}
 
+Schoolyard.key = "Schoolyard.areaskey"
+
 -- 返回图片path
 function Schoolyard:GetImagePath(index)
     return schoolyardImageData:GetIconUrl(index)
@@ -61,7 +63,9 @@ end
 -- 获取地址树
 function Schoolyard:GetAreasTree()
     request:get('/areas'):next(function(response)
+        LOG.std(nil, "info", "Schoolyard", "GetAreasTree")
         Schoolyard.AreasTreeData = response.data.data
+        GameLogic.GetPlayerController():SaveLocalData(Schoolyard.key,Schoolyard.AreasTreeData,true);
     end):catch(function(e)
         LOG.std(nil, "error", "Schoolyard", "GetAreasTree")
     end);
