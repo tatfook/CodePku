@@ -257,6 +257,7 @@ function AccountUp.ShowPage(track_scene)
         width = 936,
         height = 721,
         zorder = 32,
+        parent = ParaUI.GetUIObject("root")
     }
     if AccountUp.ui then
         AccountUp.ui:CloseWindow()
