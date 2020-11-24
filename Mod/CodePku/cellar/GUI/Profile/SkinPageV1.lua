@@ -251,6 +251,7 @@ function SkinPageV1.OnOK()
 			if(filepath ~= lastFilepath) then
 				GameLogic.RunCommand("/avatar "..filepath);
 				GameLogic.options:SetMainPlayerAssetName(filepath);
+				GameLogic.AddBBS(nil, string.format("【%s】更换成功",SkinPageV1.GetAllFiles()[tonumber(SkinPageV1.index or 1)]["displayname"]), 3000, "#00ff00");
 				-- 更换皮肤
 				local params = {
 					player_info = {asset=filepath,},
@@ -272,7 +273,6 @@ function SkinPageV1.OnOK()
 			UserInfoPage.MainUI:Refresh(0)
 
 		end
-		GameLogic.AddBBS(nil, string.format("【%s】更换成功",SkinPageV1.GetAllFiles()[tonumber(SkinPageV1.index)]["displayname"]), 3000, "#00ff00");
 	end
 end
 
@@ -288,7 +288,7 @@ function SkinPageV1.ShowPage(OnClose)
 			enable_esc_key = true,
 			--bShow = bShow,
 			click_through = false, 
-			zorder = 21,
+			zorder = 9,
 			app_key = MyCompany.Aries.Creator.Game.Desktop.App.app_key, 
 			directPosition = true,
 			align = "_ct",
