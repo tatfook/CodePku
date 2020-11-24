@@ -136,7 +136,7 @@ function CodePku:init()
 			end
 			-- local value = GameLogic.GetPlayerController():LoadLocalData(name, default_value, true)
 			-- 优先读服务器的皮肤数据，修复不同设备皮肤不统一的bug
-			local value =(((System.User.info or {}).ext_data or {}).player_info or {}).asset or GameLogic.GetPlayerController():LoadLocalData(name, default_value, true)
+			local value = GameLogic.GetPlayerController():LoadLocalData(name, default_value, true)
 			return value;
 		end
 	)
