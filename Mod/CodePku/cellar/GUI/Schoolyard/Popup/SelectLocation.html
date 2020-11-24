@@ -11,6 +11,8 @@
 Schoolyard = NPL.load("(gl)Mod/CodePku/cellar/GUI/Schoolyard/Schoolyard.lua");
 local page = document:GetPageCtrl()
 
+click_times = 1
+
 -- 获取图片
 function GetIcon(index)
     return Schoolyard:GetImagePath(index)
@@ -61,6 +63,9 @@ end
 
 -- 选中
 function OnChoose(name)
+    if selected_area_index and selected_area_index ~= name then
+        click_times = 1
+    end
     selected_area_index = name
     if Schoolyard.last_select_kind == "province" then
         Schoolyard.selected_province.code = Schoolyard.select_page_show_table[selected_area_index].code
@@ -78,7 +83,12 @@ function OnChoose(name)
         Schoolyard.selected_school.category = Schoolyard.select_page_show_table[selected_area_index].category
         Schoolyard.selected_school.name = Schoolyard.select_page_show_table[selected_area_index].name
     end
-
+    -- 第一次点击
+    if click_times == 1 then
+        click_times = click_times + 1
+        page:Refresh(0)
+        return
+    end
     page:CloseWindow()
     if Schoolyard.came_from_join_page then
         Schoolyard.search_result = {}
@@ -112,7 +122,12 @@ end
         <pe:treeview style="position: relative;left:5;top: 90;width: 420;height: 515;" name='messages' DefaultNodeHeight = "80" ItemsPerLine="1" AllowPaging="false" RememberScrollPos="true" RememberLastPage="false" VerticalScrollBarStep="40">
             <pe:repeat DataSource="<%= Schoolyard.select_page_show_table %>">
                 <pe:repeatitem>
-                    <div onclick="OnChoose" name="<%= Eval('index') %>" style="<%=format('width: 400;height: 85;line-height:85;padding-left:10;margin-bottom: 1;font-family: zkklt;font-size: 36;color: #7e2f12;background:url(%s);', GetIcon('schoolyard_screening_results_01.png'))%>"><%= Eval('name') %></div>
+                    <pe:if condition='<%= selected_area_index == Eval("index") %>'>
+                        <div onclick="OnChoose" name="<%= Eval('index') %>" style="<%=format('width: 400;height: 85;line-height:85;padding-left:10;margin-bottom: 1;font-family: zkklt;font-size: 36;color: #7e2f12;background:url(%s);', GetIcon('schoolyard_screening_results_02.png'))%>"><%= Eval('name') %></div>
+                    </pe:if>
+                    <pe:if condition='<%= selected_area_index ~= Eval("index") %>'>
+                        <div onclick="OnChoose" name="<%= Eval('index') %>" style="<%=format('width: 400;height: 85;line-height:85;padding-left:10;margin-bottom: 1;font-family: zkklt;font-size: 36;color: #7e2f12;background:url(%s);', GetIcon('schoolyard_screening_results_01.png'))%>"><%= Eval('name') %></div>
+                    </pe:if>
                 </pe:repeatitem>
             </pe:repeat>
         </pe:treeview>

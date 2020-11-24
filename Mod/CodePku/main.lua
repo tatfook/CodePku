@@ -137,6 +137,10 @@ function CodePku:init()
 			-- local value = GameLogic.GetPlayerController():LoadLocalData(name, default_value, true)
 			-- 优先读服务器的皮肤数据，修复不同设备皮肤不统一的bug
 			local value = GameLogic.GetPlayerController():LoadLocalData(name, default_value, true)
+			local temp_name = "Paracraft_System_MainPlayer_AssetName?name=" .. tostring(System.User.id)
+			if name == temp_name then
+				value = (((System.User.info or {}).ext_data or {}).player_info or {}).asset
+			end
 			return value;
 		end
 	)

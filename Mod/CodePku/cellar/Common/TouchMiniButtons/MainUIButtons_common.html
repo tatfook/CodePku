@@ -111,7 +111,7 @@ end
             <pe:if condition="<%=Eval('bShow') == true%>">
                 <div style="<%=format('margin-left:%d;width:%d;height:%d;top: %d;background: url(%s);',Eval('left'),Eval('width'),Eval('height'),Eval('top'),Eval('url'))%>" name="<%=Eval('name')%>" onclick="ClickChooseFun">
                     <pe:if condition="<%=Eval('dot') == true%>">
-                        <div onclick="clickInfo" style="<%=format('position:relative;width:39;height:39;top:0;left:%d;background:url(%s);',Eval('width')-39,mainFrameImageData:GetIconUrl('main_icon_tip.png'))%>"></div>
+                        <div style="<%=format('position:relative;width:39;height:39;top:0;left:%d;background:url(%s);',Eval('width')-39,mainFrameImageData:GetIconUrl('main_icon_tip.png'))%>"></div>
                     </pe:if>
                 </div>
             </pe:if>          
