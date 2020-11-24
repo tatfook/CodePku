@@ -191,6 +191,17 @@ function SkinPageV1.RefreshAnims(filepath, tryCount)
 	end
 end
 
+-- 检测是否可用，如果不可用则返回默认皮肤
+function SkinPageV1.CheckAvailable(filename)
+	local skins = SkinPageV1.GetAllFiles()
+	for _,v in ipairs(skins) do
+		if filename == v.filename and v.disabled then
+			return false
+		end
+	end
+	return true
+end
+
 function SkinPageV1.VisitorLimit()
     -- 判断游客
 	SkinPageV1.isVisitor = commonlib.getfield("System.User.isVisitor")
@@ -237,7 +248,7 @@ function SkinPageV1.StartTimer()
 	SkinPageV1.timer:Change(0, 1000)
 end
 
-function SkinPageV1.OnOK()
+function SkinPageV1.OnOK(notip)
 	if SkinPageV1.index and SkinPageV1.GetAllFiles()[tonumber(SkinPageV1.index)]["disabled"] then
 		SkinPageV1.VisitorLimit()
 	else
@@ -251,7 +262,9 @@ function SkinPageV1.OnOK()
 			if(filepath ~= lastFilepath) then
 				GameLogic.RunCommand("/avatar "..filepath);
 				GameLogic.options:SetMainPlayerAssetName(filepath);
-				GameLogic.AddBBS(nil, string.format("【%s】更换成功",SkinPageV1.GetAllFiles()[tonumber(SkinPageV1.index or 1)]["displayname"]), 3000, "#00ff00");
+				if not notip then
+					GameLogic.AddBBS(nil, string.format("【%s】更换成功",SkinPageV1.GetAllFiles()[tonumber(SkinPageV1.index or 1)]["displayname"]), 3000, "#00ff00");
+				end
 				-- 更换皮肤
 				local params = {
 					player_info = {asset=filepath,},
