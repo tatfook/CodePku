@@ -191,7 +191,7 @@ function SkinPageV1.RefreshAnims(filepath, tryCount)
 	end
 end
 
--- 检测是否可用，如果不可用则返回默认皮肤
+-- 检测是否可用
 function SkinPageV1.CheckAvailable(filename)
 	local skins = SkinPageV1.GetAllFiles()
 	for _,v in ipairs(skins) do
