@@ -328,7 +328,7 @@ function ChooseBranch:ShowPage(bShow)
     if bShow == false then
         return
     end
-    params = {
+    local params = {
         name = "branch_choose",
         url = "Mod/CodePku/cellar/GUI/Branch/ChooseBranch.html",
         alignment="_ct",
