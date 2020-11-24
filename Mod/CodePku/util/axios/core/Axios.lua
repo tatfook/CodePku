@@ -17,6 +17,15 @@ local InterceptorManager = NPL.load("(gl)Mod/CodePku/util/axios/core/Interceptor
 
 local os = commonlib.gettable("System.os");
 
+local bShow = ParaEngine.GetAppCommandLineByParam("show_echo", nil)
+
+
+local echo = echo
+if bShow == "false" then
+    echo = function ()
+    end
+end
+
 function Axios:ctor()
     self.defaults = {};
     self.interceptors = {
