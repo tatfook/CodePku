@@ -154,6 +154,14 @@ function Eldership:Unbind()
       commonlib.setfield("System.User.info.user_wechat_id", nil)    -- 设置system缓存里用户的微信绑定信息
       GameLogic.AddBBS("CodeGlobals", L"解绑成功", 3000, "#00FF00");
       commonlib.setfield("System.User.info.user_wechat_id", nil)    -- 设置system缓存里用户的微信绑定信息
+
+      -- 解除绑定恢复为默认皮肤
+      NPL.load("(gl)Mod/CodePku/cellar/GUI/Profile/SkinPageV1.lua");
+      local SkinPageV1 = commonlib.gettable("Mod.CodePku.GUI.Profile.SkinPage");
+      local filepath = SkinPageV1.GetAllFiles()[1]["filename"]
+      GameLogic.RunCommand("/avatar "..filepath);
+      GameLogic.options:SetMainPlayerAssetName(filepath);
+
       if MainUIButtons.showCommonWindow then
         MainUIButtons:show_common_ui()
       end

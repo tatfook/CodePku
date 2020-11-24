@@ -260,6 +260,7 @@ function SkinPageV1.OnOK()
 
 			page:CloseWindow();
 		end
+		GameLogic.AddBBS(nil, string.format("【%s】更换成功",SkinPageV1.GetAllFiles()[tonumber(SkinPageV1.index)]["displayname"]), 3000, "#00ff00");
 	end
 end
 
