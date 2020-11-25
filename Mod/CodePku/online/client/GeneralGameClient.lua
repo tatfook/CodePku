@@ -66,6 +66,26 @@ function GeneralGameClient:AddAssetsWhiteList()
     self.GetAssetsWhiteList().AddAsset("codepku/model/red-1-GM.x");
     self.GetAssetsWhiteList().AddAsset("codepku/model/red-2-GM.x");
     
+    -- 角色变身课白名单
+    self.GetAssetsWhiteList().AddAsset("character/v5/02animals/ZodiacAnimals/Sheep/Sheep.x");
+    self.GetAssetsWhiteList().AddAsset("character/v5/02animals/Squirrel/Squirrel.x");
+    self.GetAssetsWhiteList().AddAsset("character/v5/02animals/Swan/Swan.x");
+    self.GetAssetsWhiteList().AddAsset("character/v5/02animals/ZodiacAnimals/Cock/Cock.x");
+    self.GetAssetsWhiteList().AddAsset("character/v5/02animals/ZodiacAnimals/Cow/Cow.x");
+    self.GetAssetsWhiteList().AddAsset("character/v5/02animals/ZodiacAnimals/Dragon/Dragon.x");
+    self.GetAssetsWhiteList().AddAsset("character/v5/02animals/ZodiacAnimals/Horse/Horse.x");
+    self.GetAssetsWhiteList().AddAsset("character/v5/02animals/ZodiacAnimals/Monkey/Monkey.x");
+    self.GetAssetsWhiteList().AddAsset("character/v5/02animals/ZodiacAnimals/Mouse/Mouse.x");
+    self.GetAssetsWhiteList().AddAsset("character/v5/02animals/ZodiacAnimals/Pig/Pig.x");
+    self.GetAssetsWhiteList().AddAsset("character/v5/02animals/ZodiacAnimals/Rabbit/Rabbit.x");
+    self.GetAssetsWhiteList().AddAsset("character/CC/codewar/lang.x");
+    self.GetAssetsWhiteList().AddAsset("character/v5/02animals/Deer/Deer.x");
+    self.GetAssetsWhiteList().AddAsset("character/v3/Npc/qie/qie.x");
+    self.GetAssetsWhiteList().AddAsset("character/v5/10mobs/HaqiTown/FireManekiNeko/FireManekiNeko.x");
+    self.GetAssetsWhiteList().AddAsset("character/CC/codewar/pangjuanjiangjunxingtai_movie.x");
+    self.GetAssetsWhiteList().AddAsset("character/CC/codewar/sunbinjunshixingtai_movie.x");
+    self.GetAssetsWhiteList().AddAsset("character/CC/artwar/movie/lieren_movie.x");
+    self.GetAssetsWhiteList().AddAsset("character/v6/01human/ArenaAdministrator/ArenaAdministrator.x");
 end
 
 -- 加载世界
