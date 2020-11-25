@@ -160,6 +160,7 @@ function GeneralGameClient:GetUserInfo()
         id = System.User.id,
         username = System.User.username,
         nickname = System.User.username,
+        school = (System.User.info and System.User.info.school and System.User.info.school.name) or ''
     };
 end
 

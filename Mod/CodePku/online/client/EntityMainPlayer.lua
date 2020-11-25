@@ -37,7 +37,6 @@ end
 -- 构造函数
 function EntityMainPlayer:ctor()    
     self.appEntityPlayerHelper = AppEntityPlayerHelper:new():Init(self, true);
-
     GameLogic.GetFilters():add_filter("ggs", function(msg)
         if (type(msg) == "table" and msg.action == "UpdateUserInfo") then
             local userinfo = msg.userinfo;
