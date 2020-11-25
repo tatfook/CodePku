@@ -33,10 +33,13 @@ function CustomizationPopup:GetIconPathStr(index)
     return inviteImageData:GetIconUrl(index)
 end
 
-function CustomizationPopup:ShowPage(data)
+function CustomizationPopup:ShowPage(data, title_icon_path)
     if type(data) ~= "table" then
         GameLogic.AddBBS("CodeGlobals", L"无效的参数", 3000, "#FF0000");
         return
+    end
+    if title_icon_path then
+        CustomizationPopup.title_icon_path = title_icon_path
     end
     CustomizationPopup.DataSource = {}
     for k,v in pairs(data) do
