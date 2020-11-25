@@ -498,7 +498,8 @@ function Schoolyard:JoinSchoolyard(id, name)
         Schoolyard:GetMySchoolyardInfo(Schoolyard.main_ui)
         local content = "恭喜您！成功加入" .. name .. "！"
         GameLogic.AddBBS("CodeGlobals", content, 3000, "#00FF00");
-        GameLogic.GetFilters():apply_filters("ggs", {action = "UpdateUserInfo", userinfo = {school = name}});
+        commonlib.setfield("System.User.schoolName", name);
+        GameLogic.GetFilters():apply_filters("ggs", {action = "UpdateUserInfo", userinfo = {schoolName = name}});
         LOG.std(nil, "succeed", "Schoolyard", "JoinSchoolyard");
     end):catch(function(e)
         LOG.std(nil, "error", "Schoolyard", "JoinSchoolyard")
@@ -511,7 +512,8 @@ function Schoolyard:ExitSchoolyard(name)
     request:delete('/schools/exit'):next(function(response)
         local content = "你已退出" .. Schoolyard.schoolyard_name .. "！"
         GameLogic.AddBBS("CodeGlobals", content, 3000, "#00FF00");
-        GameLogic.GetFilters():apply_filters("ggs", {action = "UpdateUserInfo", userinfo = {school = ''}});
+        commonlib.setfield("System.User.schoolName", nil)
+        GameLogic.GetFilters():apply_filters("ggs", {action = "UpdateUserInfo", userinfo = {schoolName = ''}});
         LOG.std(nil, "succeed", "Schoolyard", "ExitSchoolyard")
         Schoolyard.members_table = {}
         Schoolyard.trends_table = {}
