@@ -134,7 +134,13 @@ function CodePku:init()
 			if(System.User.id) then
 				name = NPL.EncodeURLQuery(name, {"name", System.User.id})
 			end
+			-- local value = GameLogic.GetPlayerController():LoadLocalData(name, default_value, true)
+			-- 优先读服务器的皮肤数据，修复不同设备皮肤不统一的bug
 			local value = GameLogic.GetPlayerController():LoadLocalData(name, default_value, true)
+			local temp_name = "Paracraft_System_MainPlayer_AssetName?name=" .. tostring(System.User.id)
+			if name == temp_name then
+				value = (((System.User.info or {}).ext_data or {}).player_info or {}).asset
+			end
 			return value;
 		end
 	)
@@ -168,6 +174,16 @@ function CodePku:init()
 				LOG.std(nil, "info", "codepku", "add_filter OnWorldUnloaded")
 				commonlib.setfield("System.Codepku.Coursewares", nil)
 			end			
+		end
+	)
+
+	-- 活跃度
+	GameLogic.GetFilters():add_filter(
+		"Schoolyard.IncreaseVitality",
+		function(params)
+			local Schoolyard = NPL.load("(gl)Mod/CodePku/cellar/GUI/Schoolyard/Schoolyard.lua");
+			Schoolyard:AddVitality(params)
+			LOG.std(nil, "info", "CodePku", "add_filter Schoolyard.IncreaseVitality")
 		end
 	)
 
@@ -257,10 +273,10 @@ function CodePku:init()
 		"ShowLoginBackgroundPage",
 		function(bShow, bShowCopyRight, bShowLogo, bShowBg)
 			-- 预加载图片
-			-- CodePkuDownloadWorld:ShowPrestrainPage()
+			CodePkuDownloadWorld:ShowPrestrainPage()
 			NPL.load("(gl)Mod/CodePku/cellar/AssetManage/CodePkuAssetPreloader.lua")
 			local CodePkuAssetPreloader = commonlib.gettable("Mod.CodePku.AssetManage.CodePkuAssetPreloader")
-			-- CodePkuAssetPreloader.getSingleTon():PreloadAsset()
+			CodePkuAssetPreloader.getSingleTon():PreloadAsset()
 			LOG.std(nil, "info", "codepku", "add_filter ShowLoginBackgroundPage")
 			MainLogin:ShowLoadingPage()
 			MainLogin:ShowLoginBackgroundPage()
@@ -544,6 +560,11 @@ function CodePku:init()
 	NPL.load("(gl)Mod/CodePku/cellar/Common/TouchMiniButtons/TaskSystem/TaskSystem.lua")
 	local TaskSystem = commonlib.gettable("Mod.CodePku.Common.TaskSystem")
 	TaskSystem:StaticInit();
+
+	-- 初始化定时清理内存
+	NPL.load("(gl)Mod/CodePku/cellar/GUI/MemoryOpt/MemoryOpt.lua")
+	local MemoryOpt = commonlib.gettable("Mod.CodePku.GUI.MemoryOpt")
+	MemoryOpt:StaticInit();
 
 	-- 初始化分线系统
 	NPL.load("(gl)Mod/CodePku/cellar/GUI/Branch/ChooseBranch.lua")

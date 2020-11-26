@@ -26,7 +26,7 @@ end
 function ExitPage:ShowPage()
     local params = {
         url="Mod/CodePku/cellar/Areas/ExitPage.html",
-        alignment="_lt", left = 0, top = 0, width = 1920 , height = 1080, zorder = 1001,
+        alignment="_lt", left = 0, top = 0, width = 1920 , height = 1080, zorder = 1001, parent = ParaUI.GetUIObject("root")
     };
     AdaptWindow:QuickWindow(params)
 end

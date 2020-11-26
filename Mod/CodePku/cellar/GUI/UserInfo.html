@@ -365,13 +365,13 @@ end
         <!-- 角色展示区 note: 放在其它tag后面 -->
         <div style='<%=format("position:absolute;margin-left:235px;margin-top:298px;width:727px;height:653px;background:url(%s#410 490 750 653);", Eval("ProfilePng")) %>'>
             <div style="margin-left:40px;margin-top:-138px;width:640px;height:640px;" >
-                <pe:if condition="<%= System.os.GetPlatform() == 'win32' %>">
+                <!-- <pe:if condition="<%= System.os.GetPlatform() == 'win32' %>">
                     <pe:mc_player align="center" assetfile="<%= GetMainAsset() %>" miniscenegraphname="AvatarMyselfTabCharacter" LookAtHeight=1 CameraObjectDist=4 RenderTargetSize=640 style="width:640px;height:640px;"></pe:mc_player>
                 </pe:if>
                 <pe:if condition="<%= System.os.GetPlatform() ~= 'win32' %>">
                     <div style='<%=format("margin-left:178px;margin-top:35px;width:345px;height:600px;background:url(%s#66 531 345 600);", Eval("ProfilePng")) %>'></div>
-                </pe:if>
-
+                </pe:if> -->
+                <pe:mc_player align="center" assetfile="<%= GetMainAsset() %>" miniscenegraphname="AvatarMyselfTabCharacter" LookAtHeight=1 CameraObjectDist=4 RenderTargetSize=640 style="width:640px;height:640px;"></pe:mc_player>
                 
             </div>
             <!-- hide for now -->

@@ -11,15 +11,19 @@ local GeneralGameClient = commonlib.inherit(commonlib.gettable("Mod.GeneralGameS
 local Config = NPL.load("(gl)Mod/CodePku/online/client/Config.lua");
 
 function GeneralGameClient:ctor()
-    self.userinfo = System.User;
+    -- self.userinfo = {
+    --     id = System.User.id,
+    --     username = System.User.username,
+    --     nickname = System.User.nickname,
+    -- };
 
-    GameLogic.GetFilters():add_filter("ggs", function(msg)
-        if (type(msg) == "table" and msg.action == "UpdateNickName") then
-            self.userinfo.username = msg.nickname;
-            self.userinfo.nickname = msg.nickname;
-        end
-        return msg;
-    end);
+    -- GameLogic.GetFilters():add_filter("ggs", function(msg)
+    --     if (type(msg) == "table" and msg.action == "UpdateNickName") then
+    --         self.userinfo.username = msg.nickname;
+    --         self.userinfo.nickname = msg.nickname;
+    --     end
+    --     return msg;
+    -- end);
 end
 
 function GeneralGameClient:Init()
@@ -152,7 +156,11 @@ end
 -- 获取当前认证用户信息
 -- 此函函数返回用户信息会在各玩家间同步, 所以尽量精简
 function GeneralGameClient:GetUserInfo()
-    return self.userinfo;
+    return {
+        id = System.User.id,
+        username = System.User.username,
+        nickname = System.User.username,
+    };
 end
 
 -- 是否是匿名用户

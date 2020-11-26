@@ -100,6 +100,7 @@ function UserInfoPage.GetUserInfo(id, show)
             UserInfoPage.no = data.no
             UserInfoPage.gender = data.gender
             UserInfoPage.avatar = data.avatar_url
+            UserInfoPage.schoolname = (data.school or {}).name or "暂无"
             local _, _, y, m, d, _hour, _min, _sec = string.find(data.created_at, "(%d+)-(%d+)-(%d+)%s*(%d+):(%d+):(%d+)");
             UserInfoPage.created_at = y..'-'..m..'-'..d
             if data.self_level == nil then

@@ -75,13 +75,6 @@ function UserConsole:ClosePage()
     if MainLogin then
         MainLogin.LoginBGPage:CloseWindow()
     end
-    
-    echo("+++++++++UnloadAllUnusedAssets<<<<<<<<");
-    NPL.load("(gl)script/apps/Aries/Creator/Game/Common/Files.lua");
-    local Files = commonlib.gettable("MyCompany.Aries.Game.Common.Files");
-    Files:UnloadAllUnusedAssets();
-    echo("---------UnloadAllUnusedAssets>>>>>>>>");
-
 end
 
 function UserConsole:CourseEntry() 
@@ -141,11 +134,20 @@ function UserConsole:CourseEntry()
 
     local GameLogic = commonlib.gettable("MyCompany.Aries.Game.GameLogic")
     GameLogic.GetFilters():apply_filters("TaskSystemList", {type = "login"});-- 登录之后，触发任务系统计数
+    GameLogic.GetFilters():apply_filters("Schoolyard.IncreaseVitality", {type = "login"});-- 登录之后，触发活跃度系统
 
     -- 登录之后，获取任务数据
     NPL.load("(gl)Mod/CodePku/cellar/Common/TouchMiniButtons/TaskSystem/TaskSystem.lua")
     local TaskSystem = commonlib.gettable("Mod.CodePku.Common.TaskSystem")
     TaskSystem:GetTask();
+
+    -- 登陆之后，获取地址树
+    local Schoolyard = NPL.load("(gl)Mod/CodePku/cellar/GUI/Schoolyard/Schoolyard.lua");
+    Schoolyard.AreasTreeData = GameLogic.GetPlayerController():LoadLocalData(Schoolyard.key,false,true);
+    if not Schoolyard.AreasTreeData then
+        Schoolyard:GetAreasTree()
+    end
+    
 
     -- 拉取当前分线服务器数据
     NPL.load("(gl)Mod/CodePku/cellar/GUI/Branch/ChooseBranch.lua")
@@ -189,6 +191,9 @@ function UserConsole:HandleWorldId(pid)
         HomeManage:GetHomeWorld()
         return
     end
+
+    -- 关闭家园区计时器
+    GameLogic.GetFilters():apply_filters("Schoolyard.IncreaseVitality", {type = "home", time = "close"});   -- 未进入家园，家园区计时器如果存在，则需要关闭
 
     local function LoadWorld(world, refreshMode)
         if world then
