@@ -1,0 +1,92 @@
+<!-- "Mod/CodePku/cellar/Common/TouchMiniButtons/MainUIButtons_common.html" -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" >
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+</head>
+
+<body>
+<pe:mcml>
+<script refresh="false" type="text/npl" src="LiveLessonBasic.lua"><![CDATA[
+LiveLessonBasic = NPL.load("(gl)Mod/CodePku/cellar/GUI/LiveLesson/Basic/LiveLessonBasic.lua")
+
+function GetStudents()
+    LiveLessonBasic.students = {
+        [1] = {name="名字最多七个一", bShow=true},
+        [2] = {name="名字最多七个二", bShow=true},
+        [3] = {name="名字最多七个三", bShow=true},
+        [4] = {name="名字最多七个四", bShow=true},
+        [5] = {name="名字最多七个五", bShow=true},
+        [6] = {name="名字最多七个六", bShow=true},
+        [7] = {name="名字最多七个七", bShow=true},
+        [8] = {name="名字最多七个八", bShow=true},
+        [9] = {name="名字最多七个九", bShow=true},
+        [10] = {name="名字最多七个十", bShow=true},
+        [11] = {name="名字最多七十一", bShow=true},
+        [12] = {name="名字最多七十二", bShow=true},
+    }
+    return LiveLessonBasic.students
+end
+
+function OnClickChangeMode()
+    GameLogic.AddBBS("CodeGlobals", L"模式切换", 1000, "#FF0000")
+end
+
+function OnClickRoomInfo()
+    GameLogic.AddBBS("CodeGlobals", L"房间信息", 1000, "#FF0000")
+end
+
+function OnClickKickOut(index)
+    GameLogic.AddBBS("CodeGlobals", L"踢"..tostring(index), 1000, "#FF0000")
+end
+
+function OnClickForcePlayMode(index)
+    GameLogic.AddBBS("CodeGlobals", L"禁"..tostring(index), 1000, "#FF0000")
+end
+
+function OnSwitch()
+    GameLogic.AddBBS("CodeGlobals", L"切换"..tostring(LiveLessonBasic.windowOpenFlag), 1000, "#FF0000")
+    LiveLessonBasic.Switch()
+end
+
+function OnClose()
+    Page:CloseWindow()
+    LiveLessonBasic.windowRight = nil
+end
+
+]]></script>
+<style type="text/mcss">
+
+</style>
+<pe:container alignment="_lt" width="100%" height="100%">
+    <div onclick="OnClose" style='<%= string.format("width: %d; height: 800; background-color: #ffffff; text-align: center; font-size: 24;",LiveLessonBasic.windowRightWidth) %>'>
+    <pe:if condition="<%= LiveLessonBasic.windowOpenFlag %>">
+        <div style="position: relative; left: 50; top: 20; width: 350; height: 50; background-color: #ffff00; color: #ff00ff; line-height: 50;">
+            <div onclick="OnClickChangeMode" style="position: relative; left: 50; top: 0; width: 100; height: 50; background-color: #00ffff;">模式切换</div>
+            <div onclick="OnClickRoomInfo" style="position: relative; left: 200; top: 0; width: 100; height: 50; background-color: #00ffff;">房间信息</div>
+        </div>
+
+        <div style="position: relative; left: 50; top: 100; width: 350; height: 50; background-color: #00ff00; color: #ff00ff; line-height: 50;">
+            学员列表
+        </div>
+
+        <div style="position: relative; left: 50; top: 150; width: 350; height: 650; background-color: #5b288b; color: #ff00ff; line-height: 50;">
+            <pe:repeat DataSource="<%= GetStudents() %>">
+                <pe:repeatitem>
+                    <div style="margin-top: 10; line-height: 36; width: 350; height: 36; color: #ff0000; background-color: #aaaaaa;">
+                        <div style="float: left; width: 200; text-align: left; background-color: #3a7fff;"><%= name %></div>
+                        <div name="<%= index %>" onclick="OnClickKickOut" style="float: left; margin-left: 55; width: 36; background-color: #daff74;">踢</div>
+                        <div name="<%= index %>" onclick="OnClickForcePlayMode" style="float: left; margin-left: 15; width: 36; background-color: #daff74;">禁</div>
+                    </div>
+                </pe:repeatitem>
+            </pe:repeat>
+        </div>
+    </pe:if>
+
+        <div onclick="OnSwitch" style="position: relative; left: 0; top: 300; width: 50; height: 200; background-color: #ff00ff;"></div>
+    </div>
+</pe:container>
+</pe:mcml> 
+</body>
+</html>

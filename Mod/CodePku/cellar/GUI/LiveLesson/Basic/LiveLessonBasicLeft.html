@@ -1,0 +1,69 @@
+<!-- "Mod/CodePku/cellar/Common/TouchMiniButtons/MainUIButtons_common.html" -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" >
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+</head>
+
+<body>
+<pe:mcml>
+<script refresh="false" type="text/npl" src="LiveLessonBasic.lua"><![CDATA[
+LiveLessonBasic = NPL.load("(gl)Mod/CodePku/cellar/GUI/LiveLesson/Basic/LiveLessonBasic.lua")
+
+LiveLessonBasic.userSize = 1
+
+function GetTeachTools()
+    LiveLessonBasic.teachTools = {
+        [1] = {name="快速广播", bShow=true},
+        [2] = {name="集合学生", bShow=true},
+        [3] = {name="变大", bShow=true},
+        [4] = {name="奖励", bShow=true},
+        [5] = {name="分组", bShow=true},
+    }
+    return LiveLessonBasic.teachTools
+end
+
+
+
+function OnClickTools(index)
+    if index == 1 then
+        GameLogic.AddBBS("CodeGlobals", LiveLessonBasic.teachTools[index]["name"], 3000, "#FF0000")
+    elseif index == 2 then
+        GameLogic.RunCommand("/sendevent 1")
+    elseif index == 3 then
+        LiveLessonBasic.userSize = if_else(LiveLessonBasic.userSize == 1, 2, 1)
+        GameLogic.RunCommand(string.format("/scaling %d", LiveLessonBasic.userSize))
+    elseif index == 4 then
+        GameLogic.AddBBS("CodeGlobals", LiveLessonBasic.teachTools[index]["name"], 3000, "#FF0000")
+    elseif index == 5 then
+        GameLogic.AddBBS("CodeGlobals", LiveLessonBasic.teachTools[index]["name"], 3000, "#FF0000")
+    end
+end
+
+function OnClose()
+    Page:CloseWindow()
+    LiveLessonBasic.windowLeft = nil
+end
+
+]]></script>
+<style type="text/mcss">
+
+</style>
+<pe:container alignment="_lt" width="100%" height="100%">
+    <div style="width: 200; height: 800; background-color: #ffffff; text-align: center; font-size: 36;">
+        <div onclick="OnClose" style="position: relative; top: 30; width: 200; height: 50;">教学工具</div>
+        <div style="position: relative; top: 100; width: 200; height: 750; background-color: #797979;">
+            <pe:repeat DataSource="<%= GetTeachTools() %>">
+                <pe:repeatitem>
+                    <pe:if condition="<%= bShow == true %>">
+                        <div name="<%= index %>" onclick="OnClickTools" style="margin-top: 20; line-height: 50; width: 200; height: 50; color: #ff0000; background-color: #00ff00;"><%= name %></div>
+                    </pe:if>          
+                </pe:repeatitem>
+            </pe:repeat>
+        </div>
+    </div>
+</pe:container>
+</pe:mcml> 
+</body>
+</html>
