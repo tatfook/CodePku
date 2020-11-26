@@ -5,10 +5,10 @@ Date: 2020/11/25
 -----------------------------------------------
 
 local CustomizationPopup = NPL.load("(gl)Mod/CodePku/cellar/GUI/Researchers/CustomizationPopup.lua");
-
 NPL.load("(gl)Mod/CodePku/cellar/Common/CommonFunc/CommonFunc.lua")
 local CommonFunc = commonlib.gettable("Mod.CodePku.Common.CommonFunc")
 
+local title_icon_path = "pic/title.png"     -- 左上角图片的路径
 local data = {
     [1] = {title = "标题最多十二个字一", pic_path = "pic/1.png", func = function ()
         CommonFunc.OpenUrl(url, true, 'portrait')
@@ -20,7 +20,7 @@ local data = {
         GameLogic.RunCommand(string.format('/loadworld %d', id))
     end, },
 }
-CustomizationPopup:ShowPage(data)
+CustomizationPopup:ShowPage(data, title_icon_path)
 
 -----------------------------------------------
 ]]
