@@ -225,3 +225,14 @@ CommonFunc.ConnectStandToEnd = function ()
         GameLogic.RunCommand("/connectCodePku 25161")
     end
 end
+
+CommonFunc.ConnectLivingWorld = function (live_id)
+    local Config = NPL.load("(gl)Mod/CodePku/online/client/Config.lua");
+    if Config.defaultEnv == "RELEASE" then
+        local command = "/connectCodePku -no=1 -isSyncBlock -isSyncCmd -host=106.53.147.185 -port=9901 52010 " .. tostring(live_id)
+        GameLogic.RunCommand(command)
+    else
+        local command = "/connectCodePku -no=1 -isSyncBlock -isSyncCmd 52010 " .. tostring(live_id)
+        GameLogic.RunCommand(command)
+    end
+end
