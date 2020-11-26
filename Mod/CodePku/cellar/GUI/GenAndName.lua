@@ -65,6 +65,7 @@ function GenAndName:CreateRole(name,gen)
     response =  request:put('/users/profile' ,data,{sync = true});
 
     if response and response.data and response.data.data then
+        commonlib.setfield("System.User.info.ext_data.player_info", response.data.data.ext_data.player_info) 
         Mod.CodePku.Store:Set('user/info', response.data.data)
     end
 
