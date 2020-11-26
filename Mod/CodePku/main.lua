@@ -543,7 +543,7 @@ function CodePku:init()
 
 	local AppStats = NPL.load("(gl)Mod/CodePku/script/apps/Statistics/AppStats.lua");
 	AppStats:init();
-    local CodepkuChatChannel = NPL.load("(gl)Mod/CodePku/chat/CodepkuChatChannel.lua");
+    local CodepkuChatChannel = NPL.load("(gl)Mod/CodePku/chat/CodepkuChatChannel2.lua");
 	CodepkuChatChannel.StaticInit();
 
 

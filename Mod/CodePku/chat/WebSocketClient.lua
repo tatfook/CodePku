@@ -22,14 +22,37 @@ local WebSocketClient = commonlib.inherit(commonlib.gettable("commonlib.EventSys
 local WebSocketClientMaps = {};
 local ack_id_counter = -1;
 
-function WebSocketClient:ctor()
-    self.keepalive_interval = 10000;
+function WebSocketClient:ctor()    
     self.address_id = "id_" .. ParaGlobal.GenerateUniqueID();
-    self.state = 'CLOSED';
+    self.state = 'CLOSED';    
 
     WebSocketClientMaps[self.address_id] = self;
 end
 
+function WebSocketClient:Init(url, token)
+    self.url = url;
+    self.token = token;    
+
+    self.pingTimeout = 8000;
+    self.pongTimeout = 9000;
+    self.reconnectTimeout = 4000;
+    self.reconnectLimit = 15;
+    self.reconnectCount = 0;    
+    self.lockReconnect = false;
+    self.lockReconnectTask = false;
+
+    commonlib.log({
+        "WebSocketClient:Init",
+        pingTimeout = self.pingTimeout,
+        pongTimeout = self.pongTimeout,
+        reconnectTimeout = self.reconnectTimeout,
+        reconnectLimit = self.reconnectLimit,
+        reconnectCount = self.reconnectCount,
+        lockReconnect = self.lockReconnect,
+        lockReconnectTask = self.lockReconnectTask
+    })       
+    return self;
+end
 function WebSocketClient:GetAddressID()
     return self.address_id;
 end
@@ -37,61 +60,94 @@ function WebSocketClient:GetServerAddr()
 	local server_addr = string.format("%s:tcp", self:GetAddressID());
     return server_addr;
 end
-function WebSocketClient:Connect(url)   
+
+function WebSocketClient:ClearAllTimer()
+    LOG.std("", "info", "WebSocketClient", "run ClearAllTimer");         
+    if self.pingTimer then self.pingTimer:Change(); end;
+    if self.pongTimer then self.pongTimer:Change(); end;
+    if self.reconnectTimer then self.reconnectTimer:Change(); end;
+end
+
+function WebSocketClient:Connect()   
     if self.state == "OPEN" then
         return
     end
-    local protocol,host,port,uri = tools.parse_url(url);
+    -- if self.isConnecting then return end;
+    -- self.isConnecting = true;
+
+    local protocol,host,port,uri = tools.parse_url(self.url);
+    commonlib.echo({protocol,host,port,uri});
 
     local ws_protocols_tbl = {""}
     if type(ws_protocol) == "string" then
-        ws_protocols_tbl = {ws_protocol}
+        ws_protocols_tbl = {protocol}
     elseif type(ws_protocol) == "table" then
-        ws_protocols_tbl = ws_protocol
+        ws_protocols_tbl = protocol
     end
 
     local key = tools.generate_key();
     local req = handshake.upgrade_request({
-            key = key,
-            host = host,
-            port = port,
-            protocols = ws_protocols_tbl,
-            origin = "",
-            uri = uri
-    })
+        key = key,
+        host = host,
+        port = port,
+        protocols = ws_protocols_tbl,
+        origin = "",
+        uri = uri,
+        token = self.token,
+    });
+
     self.key = key;
     self.state = "CONNECTING";
     NPL.AddPublicFile("Mod/CodePku/chat/WebSocketClient.lua", -30);
 	NPL.StartNetServer("0.0.0.0", "0");
-	NPL.AddNPLRuntimeAddress({host = host, port = tostring(port), nid = self:GetAddressID()})
-	
-    if(NPL.activate_with_timeout(2, self:GetServerAddr(), req) == 0) then
+    NPL.AddNPLRuntimeAddress({host = host, port = tostring(port), nid = self:GetAddressID()})
+    
+    if(NPL.activate_with_timeout(2, self:GetServerAddr(), req) == 0) then        
+        LOG.std("", "info", "WebSocketClient", "发起连接!");        
+        return;
     end
+
 end
 
 function WebSocketClient:HandleOpen()
     self.state = "OPEN";
-    self:KeepAlive();
+    self:ClearAllTimer();        
 
+    -- 解锁，可以重连
+    self.reconnectCount = 0    
+    self.lockReconnect = false
+    self.lockReconnectTask = false;
+    
+    self:HeartBeat();
     self:DispatchEvent({type = "OnOpen" });
 end
-function WebSocketClient:KeepAlive()
-    if(not self.timer)then
-        self.timer = commonlib.Timer:new({callbackFunc = function(timer)
-           
-	        if(self.state == "OPEN")then
-                self:Ping();
-            end
-        end})
-        self.timer:Change(0, self.keepalive_interval);
-    end
+
+-- 
+function WebSocketClient:HeartBeat()
+    if self.pingTimer then self.pingTimer:Change(); end;
+
+    self.pingTimer = commonlib.Timer:new({callbackFunc = function(timer)
+        commonlib.log({"onpingTimer", timer.id, timer.delta, timer.lastTick})
+        LOG.std("", "info", "WebSocketClient", "run pingTimer");         
+        if(self.state == "OPEN")then
+            self:Ping();             
+        end            
+    end});
+    self.pingTimer:Change(0, self.pingTimeout);
+    
+    -- self.pingTimer = commonlib.TimerManager.SetTimeout(function(timer) 
+    --     LOG.std("", "info", "WebSocketClient", "run pingTimer");         
+    --     if(self.state == "OPEN")then
+    --         self:Ping(); 
+    --         self:HeartBeat();               
+    --     end            
+    -- end, self.pingTimeout);    
 end
+
 function WebSocketClient:HandleClose(nid, decoded)
-    self.state = "CLOSED";
+    self.state = "CLOSED";        
     self:DispatchEvent({type = "OnClose" });
-end
-function WebSocketClient:HandleMsg(nid, msg)
-    self:DispatchEvent({type = "OnMsg", data = msg });
+    self:ReadyReconnect();
 end
 
 function WebSocketClient:IsConnected()
@@ -117,7 +173,28 @@ function WebSocketClient:SendPacket(message,opcode)
 end
 
 function WebSocketClient:HandlePong(nid,decoded)
+    LOG.std("", "info", "WebSocketClient", "HandlePong");
+    self:ResetPongTimer()    
+end
 
+function WebSocketClient:HandleMsg(nid, msg)
+    LOG.std("", "info", "WebSocketClient", "HandleMsg");
+    self:ResetPongTimer()
+    self:DispatchEvent({type = "OnMsg", data = msg });
+end
+
+function WebSocketClient:ResetPongTimer()    
+    if (self.pongTimer) then self.pongTimer:Change(); end; 
+    LOG.std("", "info", "WebSocketClient", "ResetPongTimer");    
+    self.pongTimer = commonlib.TimerManager.SetTimeout(function(timer)    
+        commonlib.log({"onpongTimer", timer.id, timer.delta, timer.lastTick})       
+        LOG.std("", "info", "WebSocketClient", "run pongTimer");         
+        -- 指定时间内没有收到消息 可以开始尝试重连了
+        self:ReadyReconnect();
+    end, self.pongTimeout);
+
+    LOG.std("", 'info', 'WebSocketClient', "self.pongTimer")
+    echo(self.pongTimer)
 end
 
 function WebSocketClient:HandlePacket(nid,decoded,fin,opcode)    
@@ -134,8 +211,30 @@ function WebSocketClient:HandlePacket(nid,decoded,fin,opcode)
 		LOG.std("", "warn", "WebSocketClient", "%s received an unknown msg with opcode:%s", tostring(nid), tostring(opcode));
     end
 end
+
+function WebSocketClient:ReadyReconnect()
+    if self.lockReconnectTask then return end;
+    self.lockReconnectTask = true;
+    self:ClearAllTimer();
+    self:Reconnect();
+end
+
+function WebSocketClient:Reconnect()
+    if self.lockReconnect then return end;
+    if self.reconnectCount > self.reconnectLimit then return end;
+
+    self.lockReconnect = true;
+    self.reconnectCount = self.reconnectCount + 1;
+    self:Connect();
+    self.reconnectTimer = commonlib.TimerManager.SetTimeout(function (timer) 
+        LOG.std("", "info", "WebSocketClient", "正在重新连接...");   
+        self.lockReconnect = false;
+        self:Reconnect();
+    end, self.reconnectTimeout);    
+end
+
 local function activate()
-    --LOG.std("", "debug", "WebSocketClient OnMsg", msg);
+    -- LOG.std("", "debug", "WebSocketClient OnMsg", msg);
     local nid = msg.nid;
     if(not nid)then
 		LOG.std("", "error", "WebSocketClient", "activate nid is nil");
@@ -145,8 +244,8 @@ local function activate()
     if(not client)then
         return
     end
-    local response = msg[1];
-    
+
+    local response = msg[1];    
     -- waitting for handshake
     if(client.state == "CONNECTING")then
         local headers = handshake.http_headers(response)
