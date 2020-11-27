@@ -46,7 +46,7 @@ function OnSubmit()
 end
 
 function jumpToQQ(track_id)
-    GameLogic.AddBBS(nil, Researchers.livingCoursesData and Researchers.livingCoursesData[1].qq_url, 3000, "255 0 0", 21)
+    --GameLogic.AddBBS(nil, Researchers.livingCoursesData and Researchers.livingCoursesData[1].qq_url, 3000, "255 0 0", 21)
     if track_id == 59 then
         GameLogic.RunCommand(string.format("/open %s", Researchers.livingCoursesData and Researchers.livingCoursesData[1].qq_url or "https://jq.qq.com/?_wv=1027&k=wZEBkBLL"))
     elseif track_id == 60 then
