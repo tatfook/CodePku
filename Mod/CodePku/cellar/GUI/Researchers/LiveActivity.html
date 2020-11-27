@@ -23,7 +23,6 @@ live_lesson_qq = liveLessonImageData:GetIconUrl("live_lesson_qq.png")
 live_lesson_weixin02 = liveLessonImageData:GetIconUrl("live_lesson_weixin02.png")
 
 local page = document:GetPageCtrl()
-livingCoursesData = Researchers.livingCoursesData
 -- 要关闭两个window，所以用特殊的方法
 function OnClose()
     Researchers:CloseOperationActivityLivePage()
@@ -47,13 +46,13 @@ function OnSubmit()
 end
 
 function jumpToQQ(track_id)
-    GameLogic.AddBBS(nil, livingCoursesData and livingCoursesData[1].qq_url, 3000, "255 0 0", 21)
+    GameLogic.AddBBS(nil, Researchers.livingCoursesData and Researchers.livingCoursesData[1].qq_url, 3000, "255 0 0", 21)
     if track_id == 59 then
-        GameLogic.RunCommand(string.format("/open %s", livingCoursesData and livingCoursesData[1].qq_url or "https://jq.qq.com/?_wv=1027&k=wZEBkBLL"))
+        GameLogic.RunCommand(string.format("/open %s", Researchers.livingCoursesData and Researchers.livingCoursesData[1].qq_url or "https://jq.qq.com/?_wv=1027&k=wZEBkBLL"))
     elseif track_id == 60 then
-        GameLogic.RunCommand(string.format("/open %s", livingCoursesData and livingCoursesData[2].qq_url or "https://jq.qq.com/?_wv=1027&k=wZEBkBLL"))
+        GameLogic.RunCommand(string.format("/open %s", Researchers.livingCoursesData and Researchers.livingCoursesData[2].qq_url or "https://jq.qq.com/?_wv=1027&k=wZEBkBLL"))
     elseif track_id == 61 then
-        GameLogic.RunCommand(string.format("/open %s", livingCoursesData and livingCoursesData[3].qq_url or "https://jq.qq.com/?_wv=1027&k=wZEBkBLL"))
+        GameLogic.RunCommand(string.format("/open %s", Researchers.livingCoursesData and Researchers.livingCoursesData[3].qq_url or "https://jq.qq.com/?_wv=1027&k=wZEBkBLL"))
     end
 end
 
