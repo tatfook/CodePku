@@ -23,6 +23,26 @@ LiveLessonBasic.params = {
     },
 }
 
+function LiveLessonBasic:RunGGSCommand(commandName)
+    if commandName == "broadcast" then
+        GameLogic.RunCommand(string.format("/ggs cmd tip -color #ff0000 -duration 3000 %s", L"快速广播测试"))
+    elseif commandName == "call" then
+        local EM = GameLogic.EntityManager
+        local player = EM.GetPlayer()
+        if(player) then
+            local x, y, z = player:GetBlockPos()
+            GameLogic.RunCommand(string.format("/ggs cmd goto %d %d %d", x, y, z))
+        end
+    elseif commandName == "changeMode" then
+        local ifEditMode = GameLogic.GameMode:IsEditor()
+        if ifEditMode then
+            GameLogic.RunCommand(string.format("/ggs cmd mode %s", "game"))
+        else
+            GameLogic.RunCommand(string.format("/ggs cmd mode %s", "edit"))
+        end
+    end
+end
+
 function LiveLessonBasic:Switch()
     if LiveLessonBasic.windowRight then
         LiveLessonBasic.windowRight:CloseWindow()
@@ -49,5 +69,16 @@ function LiveLessonBasic:ShowPage()
     end
     if not LiveLessonBasic.windowRight then
         LiveLessonBasic.windowRight = AdaptWindow:QuickWindow(LiveLessonBasic.params.right)
+    end
+end
+
+function LiveLessonBasic:CloseAllWindows()
+    if LiveLessonBasic.windowLeft then
+        LiveLessonBasic.windowLeft:CloseWindow()
+        LiveLessonBasic.windowLeft = nil
+    end
+    if LiveLessonBasic.windowRight then
+        LiveLessonBasic.windowRight:CloseWindow()
+        LiveLessonBasic.windowRight = nil
     end
 end

@@ -28,9 +28,9 @@ end
 
 function OnClickTools(index)
     if index == 1 then
-        GameLogic.AddBBS("CodeGlobals", LiveLessonBasic.teachTools[index]["name"], 3000, "#FF0000")
+        LiveLessonBasic:RunGGSCommand("broadcast")
     elseif index == 2 then
-        GameLogic.RunCommand("/sendevent 1")
+        LiveLessonBasic:RunGGSCommand("call")
     elseif index == 3 then
         LiveLessonBasic.userSize = if_else(LiveLessonBasic.userSize == 1, 2, 1)
         GameLogic.RunCommand(string.format("/scaling %d", LiveLessonBasic.userSize))

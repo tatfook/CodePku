@@ -30,7 +30,7 @@ function GetStudents()
 end
 
 function OnClickChangeMode()
-    GameLogic.AddBBS("CodeGlobals", L"模式切换", 1000, "#FF0000")
+    LiveLessonBasic:RunGGSCommand("changeMode")
 end
 
 function OnClickRoomInfo()

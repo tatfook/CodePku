@@ -180,7 +180,8 @@ function GeneralGameClient:GetUserInfo()
         id = System.User.id,
         username = System.User.username,
         nickname = System.User.username,
-        schoolName = System.User.schoolName
+        schoolName = System.User.schoolName,
+        is_employee = System.User.info.is_employee == 1
     };
 end
 
