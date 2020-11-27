@@ -52,11 +52,11 @@ MainUIButtons.activetimer = commonlib.Timer:new({
         local timelist = split( hour, "-" )
         if tonumber(timelist[1]) > 20 or tonumber(timelist[1]) < 9 then
             page:SetValue("deltatime", string.format("%s)", L"敬请期待"))
-        elseif tonumber(timelist[1]) == 20 then
-            page:SetValue("deltatime", string.format("%s%02s:%02s:%02s", L"倒计时:", 0, 59-tonumber(timelist[2]), 60-tonumber(timelist[3])))
         elseif tonumber(timelist[1]) == 19 then
             page:SetValue("deltatime", string.format("%s%02s:%02s:%02s", L"倒计时:", 0, 59-tonumber(timelist[2]), 60-tonumber(timelist[3])))
-        elseif tonumber(timelist[1]) >= 9 and tonumber(timelist[1]) < 19 then
+        elseif tonumber(timelist[1]) == 18 then
+            page:SetValue("deltatime", string.format("%s%02s:%02s:%02s", L"倒计时:", 0, 59-tonumber(timelist[2]), 60-tonumber(timelist[3])))
+        elseif tonumber(timelist[1]) >= 9 and tonumber(timelist[1]) < 18 then
             page:SetValue("deltatime", string.format("%s%02s:%02s:%02s", L"倒计时:", 17-tonumber(timelist[1]), 59-tonumber(timelist[2]), 60-tonumber(timelist[3])))
         end
     end
