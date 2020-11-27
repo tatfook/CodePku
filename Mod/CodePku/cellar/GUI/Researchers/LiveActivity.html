@@ -46,12 +46,17 @@ function OnSubmit()
     OnClose()
 end
 
-function OnClickQQ()
-    GameLogic.GetFilters():apply_filters("ClickStatistics", {type = 15}); -- 点击Q群，触发操作数据统计计数
+function jumpToQQ()
     GameLogic.RunCommand(string.format("/open %s", "https://jq.qq.com/?_wv=1027&k=wZEBkBLL"))
 end
 
-function OnClickWechat()
+function OnClickQQ(name)
+    local track_id = tonumber(name)
+    GameLogic.GetFilters():apply_filters("ClickStatistics", {track_id= track_id, track_scene =14, track_type=0, }) -- 点击Q群，触发操作数据统计计数
+    jumpToQQ()
+end
+
+function showWeChatQRCode()
     local AdaptWindow = commonlib.gettable("Mod.CodePku.GUI.Window.AdaptWindow")
     local params = {
         url = "Mod/CodePku/cellar/GUI/Researchers/WeChatQRCode.html",
@@ -63,6 +68,12 @@ function OnClickWechat()
         zorder = 10000,
     }
     AdaptWindow:QuickWindow(params)
+end
+
+function OnClickWechat(name)
+    local track_id = tonumber(name)
+    GameLogic.GetFilters():apply_filters("ClickStatistics", {track_id= track_id, track_scene =14, track_type=0, }) -- 点击Wechat，触发操作数据统计计数
+    showWeChatQRCode()
 end
 
 ]]>   
@@ -89,12 +100,12 @@ end
         <div style="position: relative;position: relative;left: 91;top: 470;width: 350;height: 50;line-height:50 ; font-family: PuHuiTi-Bold;font-size: 42;color: #94522f;">19:00-20:00</div>
         <div style="position: relative;position: relative;left: 91;top: 583;width: 350;height: 50;line-height:50 ; font-family: PuHuiTi-Bold;font-size: 42;color: #94522f;">20:00-21:00</div>
 
-        <div onclick="OnClickWechat" style="<%=format('position: relative; left: 404; top: 359; width: 115;height: 51;text-align:center; line-height:51 ; font-family: zkklt;font-size: 48;color: #ffffff;background:url(%s);', live_lesson_btn_blue)%>">报名</div>
-        <div onclick="OnClickWechat" style="<%=format('position: relative; left: 404; top: 472; width: 115;height: 51;text-align:center; line-height:51 ; font-family: zkklt;font-size: 48;color: #ffffff;background:url(%s);', live_lesson_btn_blue)%>">报名</div>
-        <div onclick="OnClickWechat" style="<%=format('position: relative; left: 404; top: 585; width: 115;height: 51;text-align:center; line-height:51 ; font-family: zkklt;font-size: 48;color: #ffffff;background:url(%s);', live_lesson_btn_blue)%>">报名</div>
-        <div onclick="OnClickQQ" style="<%=format('position: relative; left: 597; top: 359; width: 115;height: 51;text-align:center; line-height:51 ; font-family: zkklt;font-size: 48;color: #ffffff;background:url(%s);', live_lesson_btn_blue)%>">报名</div>
-        <div onclick="OnClickQQ" style="<%=format('position: relative; left: 597; top: 472; width: 115;height: 51;text-align:center; line-height:51 ; font-family: zkklt;font-size: 48;color: #ffffff;background:url(%s);', live_lesson_btn_blue)%>">报名</div>
-        <div onclick="OnClickQQ" style="<%=format('position: relative; left: 597; top: 585; width: 115;height: 51;text-align:center; line-height:51 ; font-family: zkklt;font-size: 48;color: #ffffff;background:url(%s);', live_lesson_btn_blue)%>">报名</div>
+        <div onclick="OnClickWechat" name="56" style="<%=format('position: relative; left: 404; top: 359; width: 115;height: 51;text-align:center; line-height:51 ; font-family: zkklt;font-size: 48;color: #ffffff;background:url(%s);', live_lesson_btn_blue)%>">报名</div>
+        <div onclick="OnClickWechat" name="57" style="<%=format('position: relative; left: 404; top: 472; width: 115;height: 51;text-align:center; line-height:51 ; font-family: zkklt;font-size: 48;color: #ffffff;background:url(%s);', live_lesson_btn_blue)%>">报名</div>
+        <div onclick="OnClickWechat" name="58" style="<%=format('position: relative; left: 404; top: 585; width: 115;height: 51;text-align:center; line-height:51 ; font-family: zkklt;font-size: 48;color: #ffffff;background:url(%s);', live_lesson_btn_blue)%>">报名</div>
+        <div onclick="OnClickQQ" name="59" style="<%=format('position: relative; left: 597; top: 359; width: 115;height: 51;text-align:center; line-height:51 ; font-family: zkklt;font-size: 48;color: #ffffff;background:url(%s);', live_lesson_btn_blue)%>">报名</div>
+        <div onclick="OnClickQQ" name="60" style="<%=format('position: relative; left: 597; top: 472; width: 115;height: 51;text-align:center; line-height:51 ; font-family: zkklt;font-size: 48;color: #ffffff;background:url(%s);', live_lesson_btn_blue)%>">报名</div>
+        <div onclick="OnClickQQ" name="61" style="<%=format('position: relative; left: 597; top: 585; width: 115;height: 51;text-align:center; line-height:51 ; font-family: zkklt;font-size: 48;color: #ffffff;background:url(%s);', live_lesson_btn_blue)%>">报名</div>
 
         <div style="<%=format('position: relative; left: 350; top: 365; width: 42;height: 40;background:url(%s);', live_lesson_weixin02)%>"></div>
         <div style="<%=format('position: relative; left: 538; top: 359; width: 41;height: 48;background:url(%s);', live_lesson_qq)%>"></div>

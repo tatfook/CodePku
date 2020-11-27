@@ -15,11 +15,17 @@ NPL.load("(gl)Mod/CodePku/cellar/GUI/rank/RankPage.lua")
 local UserInfoPage = NPL.load("(gl)Mod/CodePku/cellar/GUI/UserInfo.lua");
 UserInfoPage.OnInit();
 local FriendUI = NPL.load("(gl)Mod/CodePku/cellar/GUI/Friend/FriendUI.lua");
+local liveLessonImageData = NPL.load("(gl)Mod/CodePku/cellar/imageLuaTable/liveLessonImageData.lua")
+
+live_lesson_countdown_bot = liveLessonImageData:GetIconUrl("live_lesson_countdown_bot.png")
+
+page = document:GetPageCtrl()
 
 activity = MainUIButtons.activity
 function ClickChooseFun(name)
     if (name == "ClickActivity1") then
         -- 直播活动
+        GameLogic.GetFilters():apply_filters("ClickStatistics", {track_id= 62, track_scene =1, track_type=0, }) --直播入口埋点
         local Researchers = NPL.load("(gl)Mod/CodePku/cellar/GUI/Researchers/Researchers.lua");
         Researchers:OperationActivityLive()
     elseif(name == "ClickActivity2") then 
@@ -28,6 +34,35 @@ function ClickChooseFun(name)
         GameLogic.AddBBS("CodeGlobals", L"功能开发中", 3000, "#ff0000");
     end
 end
+
+function split( str,reps )
+    local resultStrList = {}
+    string.gsub(str,'[^'..reps..']+',function ( w )
+        table.insert(resultStrList,w)
+    end)
+    return resultStrList
+end
+
+if MainUIButtons.activetimer then
+    MainUIButtons.activetimer:Change(nil, nil)
+end
+MainUIButtons.activetimer = commonlib.Timer:new({
+    callbackFunc = function(timer)
+        local day, hour = commonlib.timehelp.GetLocalTime()
+        local timelist = split( hour, "-" )
+        if tonumber(timelist[1]) > 20 or tonumber(timelist[1]) < 9 then
+            page:SetValue("deltatime", format("%s)", L"敬请期待"))
+        elseif tonumber(timelist[1]) == 20 then
+            page:SetValue("deltatime", format("%s%d:%d:%d", L"倒计时:", 0, 59-tonumber(timelist[2]), 60-tonumber(timelist[3])))
+        elseif tonumber(timelist[1]) == 19 then
+            page:SetValue("deltatime", format("%s%d:%d:%d", L"倒计时:", 0, 59-tonumber(timelist[2]), 60-tonumber(timelist[3])))
+        elseif tonumber(timelist[1]) >= 9 and tonumber(timelist[1]) < 19 then
+            page:SetValue("deltatime", format("%s%d:%d:%d", L"倒计时:", 18-tonumber(timelist[1]), 59-tonumber(timelist[2]), 60-tonumber(timelist[3])))
+        end
+    end
+})
+MainUIButtons.activetimer:Change(0, 1000)
+
 
 ]]></script>
 <style type="text/mcss">
@@ -38,6 +73,7 @@ end
         <pe:repeatitem style="">
             <pe:if condition="<%=Eval('bShow') == true%>">
                 <div style="<%=format('margin-left:%d;width:%d;height:%d;margin-top: %d;background: url(%s);',Eval('left'),Eval('width'),Eval('height'),Eval('top'),Eval('url'))%>" name="<%=Eval('name')%>" onclick="ClickChooseFun"></div>
+                <input type="button" value="" name="deltatime" style="<%=format('margin-left:%d;width:243;height:34;margin-top: %d;background: url(%s);text-align: center; font-family: zkklt;font-size: 26;line-height: 60;color: #ffffff;',Eval('left')-46,Eval('top'),live_lesson_countdown_bot)%>"/>    
             </pe:if>          
         </pe:repeatitem>
     </pe:repeat>
