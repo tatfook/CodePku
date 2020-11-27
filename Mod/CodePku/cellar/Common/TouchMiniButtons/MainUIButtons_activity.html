@@ -57,7 +57,7 @@ MainUIButtons.activetimer = commonlib.Timer:new({
         elseif tonumber(timelist[1]) == 19 then
             page:SetValue("deltatime", string.format("%s%02s:%02s:%02s", L"倒计时:", 0, 59-tonumber(timelist[2]), 60-tonumber(timelist[3])))
         elseif tonumber(timelist[1]) >= 9 and tonumber(timelist[1]) < 19 then
-            page:SetValue("deltatime", string.format("%s%02s:%02s:%02s", L"倒计时:", 18-tonumber(timelist[1]), 59-tonumber(timelist[2]), 60-tonumber(timelist[3])))
+            page:SetValue("deltatime", string.format("%s%02s:%02s:%02s", L"倒计时:", 17-tonumber(timelist[1]), 59-tonumber(timelist[2]), 60-tonumber(timelist[3])))
         end
     end
 })
