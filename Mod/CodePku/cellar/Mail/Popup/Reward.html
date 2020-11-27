@@ -1,0 +1,62 @@
+<!-- "Mod/CodePku/cellar/Gui/FriendUI/MyFriend.html" -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+</head>
+
+<body>
+<pe:mcml>
+<script refresh="false" type="text/npl" src="FriendUI.lua">
+<![CDATA[
+local Mail = commonlib.gettable("Mod.CodePku.celler.Mail")
+rewardList = Mail.rewardList
+local mailImageData = NPL.load("(gl)Mod/CodePku/cellar/imageLuaTable/mailImageData.lua")
+mail_popup_gain = mailImageData:GetIconUrl("mail_popup_gain.png")
+mail_icon_coin_4 = mailImageData:GetIconUrl("mail_icon_coin_4.png")
+mail_icon_coin_1 = mailImageData:GetIconUrl("mail_icon_coin_1.png")
+mail_icon_coin_0 = mailImageData:GetIconUrl("mail_icon_coin_0.png")
+
+function ClosePage()
+    Page:CloseWindow();
+end
+
+function getRwardLeft(len)
+    leftLen = {360,270,180}
+    return leftLen[len]
+end
+
+
+]]>
+</script>
+
+<pe:container alignment="_lt" width="1920" height="1080" >
+    <div style="position: relative;width: 1920;height:1080;background-color: #00000077;" onclick="ClosePage"></div>
+    <div onclick="ClosePage" style="<%=format('position: relative; width: 952; height: 528; left: 484; top: 278; background: url(%s);', mail_popup_gain)%>"></div>
+
+    <!-- <div style="position: relative; width: 1158; height: 588; left: 406; top: 219; background:url(codepku/image/textures/commonpopup/main.png#99 275 1158 588);"></div> -->
+
+    <div onclick="ClosePage" style="position: relative; width: 410; height: 97; left: 755; top: 330; font-size: 56; line-height: 97; color: #ffe76c; font-family: Noto Sans S Chinese Regular; font-weight: bold; text-align: center;">
+        恭喜获得
+    </div>
+
+    <!-- <div style="position: relative; width: 66; height: 76; left: 1335; top: 287; background: url(codepku/image/textures/tasksystem/main.png#454 214 68 78);" onclick="ClosePage"></div> -->
+
+    <div onclick="ClosePage" style="position: relative; height: 134; left: 500; top: 490;">
+        <pe:repeat DataSource="<%= rewardList %>"  style="<%= format('margin-left:%d;', getRwardLeft(#rewardList)) %>">
+            <div style="float: left;width: 134; height: 134; margin-left: 36;">
+                <div style="<%= format('position:relative;top:4;left:4;width: 126; height: 125;background:url(%s);', mail_icon_coin_0) %>"></div>
+                <div style="<%= format('position:relative;top:0;left:0;position:relative;top:0;left:0;;width: 134; height: 134;background:url(%s);', mail_icon_coin_1) %>"></div>
+                <div style="<%= format('position:relative;left:31;top:31;width: 72; height: 72;background:url(%s);', prop_icon_url) %>"></div>
+                <div style="<%= format('position:relative;left:72;top:112;width: 63;height:29; text-align: center; font-size: 22; color: #ffffff; font-family: Noto Sans S Chinese Regular;background:url(%s);', mail_icon_coin_4) %>"><%=Eval('prop_num')%></div>
+            </div>
+        </pe:repeat>
+    </div>
+</pe:container>
+</pe:mcml>
+</body>
+
+</html>
+

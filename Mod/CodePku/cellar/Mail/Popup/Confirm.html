@@ -1,0 +1,61 @@
+<!-- "script/apps/Aries/Creator/Game/Areas/EscFramePage.html" -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+</head>
+<body>
+    <pe:mcml>
+<script refresh="false" type="text/npl" src="EditName.lua"><![CDATA[
+local mailImageData = NPL.load("(gl)Mod/CodePku/cellar/imageLuaTable/mailImageData.lua")
+mail_popup_remind = mailImageData:GetIconUrl("mail_popup_remind.png")
+mail_btn_delete_normal = mailImageData:GetIconUrl("mail_btn_delete_normal.png")
+mail_btn_receive_normal = mailImageData:GetIconUrl("mail_btn_receive_normal.png")
+mail_title_shape = mailImageData:GetIconUrl("mail_title_shape.png")
+mail_pop_delete = mailImageData:GetIconUrl("mail_pop_delete.png")
+mail_boot = mailImageData:GetIconUrl("mail_boot.png")
+
+page = document:GetPageCtrl()
+function OnClose()
+    Page:CloseWindow();
+end
+
+function ClickCancel()
+    Page:CloseWindow();
+end
+
+function OnOK()
+    Mail:DeleteAll();
+    Page:CloseWindow();
+end
+
+]]>   
+
+</script>
+<pe:container alignment="_lt" width="1920" height="1080" >
+    <div style="position: relative;width: 1920;height:1080;background-color: #00000077;" onclick="ClickCancel"></div>
+    <!-- 背景 -->
+    <div style="<%=format('position: relative;left:574;top:285;width: 771;height: 469;background:url(%s);background-color:white;font-family:Noto Sans S Chinese Regular;', mail_pop_delete)%>">
+
+        <div style="<%=format('position: relative;left: 210;top: 0;width: 350; height: 85;font-size: 56;line-height:85;text-align:center;color: #F46D3D;font-family:PuHuiTi-Bold;background:url(%s);', mail_title_shape)%>">删除提示</div>
+        <div style="<%=format('position: relative;left: 40;top: 160;width: 690; height: 160;background:url(%s);', mail_boot)%>">
+            <div style="<%=format('position: relative;left: 0;top: 0;width: 690;height: 160;font-size: 38;color: #ffffff;line-height:80;text-align:left;', common_btn_confirm)%>">
+                一键删除会删除所有已读无附件邮件，是否现在删除？
+            </div>
+        </div>
+
+        
+        <div onclick="OnOK" style="<%=format('position: relative; left: 200; top: 358; width: 146;height: 65;line-height:60;font-weight:bold;color:#ffffff;font-size: 34;text-align:center;background:url(%s);', mail_btn_receive_normal)%>">
+            删除
+        </div>
+        <div onclick="ClickCancel" style="<%=format('position: relative; left: 430; top: 358; width: 146;height:65;line-height:60;font-weight:bold;color:#ffffff;font-size: 34;text-align:center;background:url(%s);', mail_btn_delete_normal)%>">
+            取消
+        </div>
+    </div>
+</pe:container>
+
+</pe:mcml>
+</body>
+</html>
+ 

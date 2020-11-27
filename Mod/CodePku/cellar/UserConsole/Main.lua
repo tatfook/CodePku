@@ -153,6 +153,12 @@ function UserConsole:CourseEntry()
     NPL.load("(gl)Mod/CodePku/cellar/GUI/Branch/ChooseBranch.lua")
     local ChooseBranch = commonlib.gettable("Mod.CodePku.GUI.ChooseBranch")
     ChooseBranch:GetServerData()
+
+    -- 登陆之后，获取邮件信息
+    NPL.load("(gl)Mod/CodePku/cellar/Mail/Mail.lua")
+    local Mail = commonlib.gettable("Mod.CodePku.celler.Mail")
+    Mail.StaticInit()
+    
 end
 
 function UserConsole:Logout()

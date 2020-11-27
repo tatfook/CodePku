@@ -26,7 +26,8 @@ local ChatChannel = commonlib.gettable("MyCompany.Aries.ChatSystem.ChatChannel")
 local SocketIOClient = NPL.load("(gl)script/ide/System/os/network/SocketIO/SocketIOClient.lua");
 local WorldCommon = commonlib.gettable("MyCompany.Aries.Creator.WorldCommon")
 local KeepWorkItemManager = NPL.load("(gl)script/apps/Aries/Creator/HttpAPI/KeepWorkItemManager.lua");
-local WebSocketClient = NPL.load("(gl)Mod/CodePku/chat/WebSocketClient.lua");
+-- local WebSocketClient = NPL.load("(gl)Mod/CodePku/chat/WebSocketClient.lua");
+local WebSocketClient = NPL.load("(gl)Mod/CodePku/cellar/Heartbeat/WebSocketClient.lua");
 local request = NPL.load("(gl)Mod/CodePku/api/BaseRequest.lua");
 -- local UserInfoPage = NPL.load("(gl)Mod/CodePku/cellar/GUI/UserInfo.lua");
 local EntityManager = commonlib.gettable("MyCompany.Aries.Game.EntityManager")
@@ -210,7 +211,8 @@ function CodepkuChatChannel.Connect(url,options,onopen_callback)
 
     url  = url or CodepkuChatChannel.GetUrl();
     if(not CodepkuChatChannel.client)then
-        CodepkuChatChannel.client = WebSocketClient:new();
+        -- CodepkuChatChannel.client = WebSocketClient:new();
+        CodepkuChatChannel.client = WebSocketClient:new():Init(url, System.User.codepkuToken);
         CodepkuChatChannel.client:AddEventListener("OnOpen",CodepkuChatChannel.OnOpen,CodepkuChatChannel);
         CodepkuChatChannel.client:AddEventListener("OnMsg",CodepkuChatChannel.OnMsg,CodepkuChatChannel);
         CodepkuChatChannel.client:AddEventListener("OnClose",CodepkuChatChannel.OnClose,CodepkuChatChannel);
