@@ -8,6 +8,7 @@
     <pe:mcml>
 <script refresh="false" type="text/npl" src=""><![CDATA[
 local LiveLessonEntrance = NPL.load("(gl)Mod/CodePku/cellar/GUI/LiveLesson/Entrance/LiveLessonEntrance.lua")
+local page = document:GetPageCtrl()
 
 -- 获取图标
 function GetIcon(index)
@@ -31,6 +32,30 @@ end
 
 -- 生成匹配码
 function GetCode()
+    local RoomName = Page:GetValue("roomname")
+    local CoursewareID = Page:GetValue("coursewareID")
+    if commonlib.utf8.len(CoursewareID) < 1 then
+        GameLogic.AddBBS("CodeGlobals", L"请输入课件ID", 3000, "#FF0000");
+        return
+    end
+    if commonlib.utf8.len(CoursewareID) > LiveLessonEntrance.constant.CoursewareIDLimit then
+        GameLogic.AddBBS("CodeGlobals", L"课件ID不超过" .. tostring(LiveLessonEntrance.constant.CoursewareIDLimit) .. L"个字", 3000, "#FF0000");
+        return
+    end
+    if commonlib.utf8.len(RoomName) < 1 then
+        GameLogic.AddBBS("CodeGlobals", L"请输入房间名称", 3000, "#FF0000");
+        return
+    end
+    if commonlib.utf8.len(RoomName) > LiveLessonEntrance.constant.RoomNameLimit then
+        GameLogic.AddBBS("CodeGlobals", L"房间名称不超过" .. tostring(LiveLessonEntrance.constant.RoomNameLimit) .. L"个字", 3000, "#FF0000");
+        return
+    end
+    local param = {
+        room_name = RoomName,
+        keep_work_id = CoursewareID,
+    }
+    -- 发送请求
+    LiveLessonEntrance:GetMatchCode(param, page)
     GameLogic.AddBBS("CodeGlobals", L"生成匹配码", 3000, "#00FF00");
 end
 

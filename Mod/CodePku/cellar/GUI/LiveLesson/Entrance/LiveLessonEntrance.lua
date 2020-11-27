@@ -6,6 +6,8 @@ Date: 2020/11/26
 Example:
 -----------------------------------------------
 local LiveLessonEntrance = NPL.load("(gl)Mod/CodePku/cellar/GUI/LiveLesson/Entrance/LiveLessonEntrance.lua");
+LiveLessonEntrance:ShowEntrancePage()   -- 加入房间
+LiveLessonEntrance:ShowEstablishPage()  -- 创建房间
 -----------------------------------------------
 ]]
 
@@ -16,7 +18,7 @@ local request = NPL.load("(gl)Mod/CodePku/api/BaseRequest.lua");
 
 -- 常量table
 LiveLessonEntrance.constant = {
-    MatchCodeLimit = 6,     -- 匹配码输入字数限制
+    MatchCodeLimit = 4,     -- 匹配码输入字数限制
     RoomNameLimit = 30,     -- 房间名字数限制
     CoursewareIDLimit = 8   -- 课件ID字数限制
 }
@@ -25,6 +27,19 @@ LiveLessonEntrance.constant = {
 function LiveLessonEntrance:GetIconPath(index)
     return liveLessonImageData:GetIconUrl(index)
 end
+
+-- 获取匹配码
+function LiveLessonEntrance:GetMatchCode(param, page)
+    --[[
+    request:post('/class-room/store',param):next(function(response)
+        
+    end):catch(function(e)
+        
+    end);
+    --]]
+    page:SetValue("matchcode", "123456")
+end
+
 
 -- 加入页面有输入框，需要把两个窗口都关掉
 function LiveLessonEntrance:EntrancePageSpecialClose()
@@ -65,6 +80,7 @@ function LiveLessonEntrance:ShowEntrancePage()
     return LiveLessonEntrance.frist_page
 end
 
+-- 关闭创建房间弹窗
 function LiveLessonEntrance:EstablishPageSpecialClose()
     if LiveLessonEntrance.EmptyBG then
         LiveLessonEntrance.EmptyBG:CloseWindow()
