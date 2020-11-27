@@ -52,6 +52,7 @@ end
 
 function OnClickQQ(name)
     local track_id = tonumber(name)
+    -- GameLogic.AddBBS(nil, tostring(track_id), 3000, "255 0 0", 21)
     GameLogic.GetFilters():apply_filters("ClickStatistics", {track_id= track_id, track_scene =14, track_type=0, }) -- 点击Q群，触发操作数据统计计数
     jumpToQQ()
 end
@@ -72,6 +73,7 @@ end
 
 function OnClickWechat(name)
     local track_id = tonumber(name)
+    -- GameLogic.AddBBS(nil, tostring(track_id), 3000, "255 0 0", 21)
     GameLogic.GetFilters():apply_filters("ClickStatistics", {track_id= track_id, track_scene =14, track_type=0, }) -- 点击Wechat，触发操作数据统计计数
     showWeChatQRCode()
 end
