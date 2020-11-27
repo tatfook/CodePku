@@ -1,0 +1,89 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>创建房间</title>
+</head>
+<body>
+    <pe:mcml>
+<script refresh="false" type="text/npl" src=""><![CDATA[
+local LiveLessonEntrance = NPL.load("(gl)Mod/CodePku/cellar/GUI/LiveLesson/Entrance/LiveLessonEntrance.lua")
+
+-- 获取图标
+function GetIcon(index)
+    return LiveLessonEntrance:GetIconPath(index)
+end
+
+function Close()
+    LiveLessonEntrance:EstablishPageSpecialClose()
+end
+
+-- 创建房间
+function EstablishRoom()
+    GameLogic.AddBBS("CodeGlobals", L"创建房间", 3000, "#00FF00");
+end
+
+-- 返回
+function GoBack()
+    LiveLessonEntrance:EstablishPageSpecialClose()
+    LiveLessonEntrance:ShowEntrancePage()
+end
+
+-- 生成匹配码
+function GetCode()
+    GameLogic.AddBBS("CodeGlobals", L"生成匹配码", 3000, "#00FF00");
+end
+
+]]>
+</script>
+<pe:container alignment="_lt" width="704" height="528" style="">
+    <div style="position: relative; width: 704; height: 528;">
+        <!-- 背景 -->
+        <div style="<%=format('position: relative; left: 29; top: 38; width: 666;height: 470;background:url(%s);', GetIcon('live_lesson_comm.png'))%>">
+            <!-- 课件ID -->
+            <div style="position: relative;left: 31;top: 125;width: 590;height: 65;">
+                <div style="position: relative;left: 3;top: 5;width: 290;height: 55;font-family: zkklt;font-size: 48;color: #7e2f12;">输入课件ID：</div>
+                <div style="<%=format('position: relative; left: 269; top: 0; width: 316;height: 65;background:url(%s);', GetIcon('live_lesson_comm_frame.png'))%>">
+                    <input type="text" MoveViewWhenAttachWithIME="true" value="" name="coursewareID" EmptyText='' style="position: relative;left: 15;top: 3; width: 290; height: 60; font-family: zkklt;font-size: 48;line-height: 60;color: #ffffff;background: #000000;"/>
+                </div>
+            </div>
+            <!-- 匹配码 -->
+            <div style="position: relative;left: 31;top: 221;width: 590;height: 65;">
+                <div style="position: relative;left: 3;top: 5;width: 290;height: 55;font-family: zkklt;font-size: 48;color: #7e2f12;">生成匹配码：</div>
+                <div style="<%=format('position: relative; left: 269; top: 0; width: 316;height: 65;background:url(%s);', GetIcon('live_lesson_comm_frame.png'))%>">
+                    <div onclick="GetCode" style="<%=format('position: relative; left: 221; top: 11; width: 86;height: 43;background:url(%s);', GetIcon('live_lesson_frame_generatebtn.png'))%>"></div>
+                    <input type="button" MoveViewWhenAttachWithIME="true" value="点击生成" name="matchcode" EmptyText='' style="position: relative;left: 15;top: 3; width: 200; height: 60; font-family: zkklt;font-size: 32;line-height: 60;color: #ffffff;background: #000000;"/>
+                </div>
+            </div>
+            <!-- 房间名 -->
+            <div style="position: relative;left: 31;top: 317;width: 590;height: 65;">
+                <div style="position: relative;left: 3;top: 5;width: 290;height: 55;font-family: zkklt;font-size: 48;color: #7e2f12;">输入房间名：</div>
+                <div style="<%=format('position: relative; left: 269; top: 0; width: 316;height: 65;background:url(%s);', GetIcon('live_lesson_comm_frame.png'))%>">
+                    <input type="text" MoveViewWhenAttachWithIME="true" value="" name="roomname" EmptyText='' style="position: relative;left: 15;top: 3; width: 290; height: 60; font-family: zkklt;font-size: 48;line-height: 60;color: #ffffff;background: #000000;"/>
+                </div>
+            </div>
+        </div>
+        <!-- 飘带 -->
+        <div style="<%=format('position: relative; left: 34; top: 24; width: 337;height: 106;background:url(%s);', GetIcon('live_lesson_cion01.png'))%>">
+            <div style="position: relative;left: 65;top: 21;font-family: zkklt;font-size: 48;color: #ffffff;">创建房间</div>
+        </div>
+        <!-- 回形针 -->
+        <div style="<%=format('position: relative; left: 0; top: 0; width: 103;height: 113;background:url(%s);', GetIcon('live_lesson_cion_pin.png'))%>"></div>
+        <!-- 关闭 -->
+        <div onclick="Close" style="<%=format('position: relative; left: 580; top: 27; width: 77;height: 123;background:url(%s);', GetIcon('live_lesson_comm_x.png'))%>"></div>
+        <!-- 功能按钮-老师 -->
+        <!-- 返回 -->
+        <div onclick="GoBack" style="<%=format('position: relative; left: 98; top: 461; width: 198;height: 67;background:url(%s);', GetIcon('live_lesson_btn_yellow_big.png'))%>">
+            <div style="<%=format('position: relative; left: 47; top: 10; width: 97;height: 39;background:url(%s);', GetIcon('live_lesson_cion_return02.png'))%>"></div>
+        </div>
+        <!-- 创建房间 -->
+        <div onclick="EstablishRoom" style="<%=format('position: relative; left: 411; top: 461; width: 198;height: 67;background:url(%s);', GetIcon('live_lesson_btn_blue_big.png'))%>">
+            <div style="<%=format('position: relative; left: 19; top: 10; width: 159;height: 39;background:url(%s);', GetIcon('live_lesson_chuangjian.png'))%>"></div>
+        </div>
+
+    </div>
+</pe:container>
+</pe:mcml>
+</body>
+</html>
+  
