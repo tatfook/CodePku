@@ -1,4 +1,4 @@
-<!-- "script/apps/Aries/Creator/Game/Areas/EscFramePage.html" -->
+<!-- "Mod/CodePku/cellar/GUI/Researchers/LiveActivity.html" -->
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -7,38 +7,25 @@
 </head>
 <body>
     <pe:mcml>
-<script refresh="false" type="text/npl" src="EditName.lua"><![CDATA[
+<script refresh="false" type="text/npl" src="Researchers.lua"><![CDATA[
 
 local Researchers = NPL.load("(gl)Mod/CodePku/cellar/GUI/Researchers/Researchers.lua");
 local EditNamePage = NPL.load("(gl)Mod/CodePku/cellar/GUI/Profile/EditName.lua")
 
-local escFrameImageData = NPL.load("(gl)Mod/CodePku/cellar/imageLuaTable/escFrameImageData.lua")
-local common1ImageData = NPL.load("(gl)Mod/CodePku/cellar/imageLuaTable/common1ImageData.lua")
+local liveLessonImageData = NPL.load("(gl)Mod/CodePku/cellar/imageLuaTable/liveLessonImageData.lua")
 
-esc_frame_bot_floor = escFrameImageData:GetIconUrl("esc_frame_bot_floor.png")
-esc_frame_thumbtac = escFrameImageData:GetIconUrl("esc_frame_thumbtac.png")
-esc_frame_btn_408_85 = escFrameImageData:GetIconUrl("esc_frame_btn_408_85.png")
-esc_frame_btn_408_85n = escFrameImageData:GetIconUrl("esc_frame_btn_408_85n.png")
-esc_frame_r = escFrameImageData:GetIconUrl("esc_frame_r.png")
-comm_btn_close = common1ImageData:GetIconUrl("comm_btn_close.png")
-esc_frame__btn_green03 = common1ImageData:GetIconUrl("common_btn_green01.png")
-esc_frame__btn_red03 = common1ImageData:GetIconUrl("common_btn_red01.png")
+live_lesson_comm_x = liveLessonImageData:GetIconUrl("live_lesson_comm_x.png")
+live_lesson_common_cot_floor = liveLessonImageData:GetIconUrl("live_lesson_common_cot_floor.png")
+live_lesson_comm_box_new = liveLessonImageData:GetIconUrl("live_lesson_comm_box_new.png")
+live_lesson_btn_breen = liveLessonImageData:GetIconUrl("live_lesson_btn_breen.png")
+live_lesson_btn_blue = liveLessonImageData:GetIconUrl("live_lesson_btn_blue.png")
+live_lesson_qq = liveLessonImageData:GetIconUrl("live_lesson_qq.png")
+live_lesson_weixin02 = liveLessonImageData:GetIconUrl("live_lesson_weixin02.png")
 
 local page = document:GetPageCtrl()
-
-
-contents1 = "联系老师可以获得一对一直播教学"
-contents2 = "微信：codepku01"
-
-
 -- 要关闭两个window，所以用特殊的方法
 function OnClose()
     Researchers:CloseOperationActivityLivePage()
-end
-
--- 获取图片,tpye  1 通用；2 ESC专用
-function GetIcons(type, index)
-    return EditNamePage:GetIconPath(type, index)
 end
 
 function ClickCancel()
@@ -55,40 +42,121 @@ function OnSubmit()
     NPL.load("(gl)Mod/CodePku/cellar/Common/CommonFunc/CommonFunc.lua")
     local CommonFunc = commonlib.gettable("Mod.CodePku.Common.CommonFunc")
     CommonFunc.ConnectLivingWorld(setted_id)
-    -- local command = "/connectCodePku -no=1 -isSyncBlock -isSyncCmd -host=106.53.147.185 -port=9901 52010 " .. tostring(setted_id)
-    -- GameLogic.AddBBS("CodeGlobals", setted_id, 3000, "#FF0000");
-    -- GameLogic.RunCommand(command);
     OnClose()
 end
+
+function jumpToQQ(track_id)
+    GameLogic.AddBBS(nil, Researchers.livingCoursesData and Researchers.livingCoursesData[1].qq_url, 3000, "255 0 0", 21)
+    if track_id == 59 then
+        GameLogic.RunCommand(string.format("/open %s", Researchers.livingCoursesData and Researchers.livingCoursesData[1].qq_url or "https://jq.qq.com/?_wv=1027&k=wZEBkBLL"))
+    elseif track_id == 60 then
+        GameLogic.RunCommand(string.format("/open %s", Researchers.livingCoursesData and Researchers.livingCoursesData[2].qq_url or "https://jq.qq.com/?_wv=1027&k=wZEBkBLL"))
+    elseif track_id == 61 then
+        GameLogic.RunCommand(string.format("/open %s", Researchers.livingCoursesData and Researchers.livingCoursesData[3].qq_url or "https://jq.qq.com/?_wv=1027&k=wZEBkBLL"))
+    end
+end
+
+function OnClickQQ(name)
+    local track_id = tonumber(name)
+    -- GameLogic.AddBBS(nil, tostring(track_id), 3000, "255 0 0", 21)
+    GameLogic.GetFilters():apply_filters("ClickStatistics", {track_id= track_id, track_scene =14, track_type=0, }) -- 点击Q群，触发操作数据统计计数
+    jumpToQQ(track_id)
+end
+
+function showWeChatQRCode(track_id)
+    local AdaptWindow = commonlib.gettable("Mod.CodePku.GUI.Window.AdaptWindow")
+    local params = {
+        url = "Mod/CodePku/cellar/GUI/Researchers/WeChatQRCode.html",
+        alignment="_ct",
+        left = -960,
+        top = -540,
+        width = 1920,
+        height = 1080,
+        zorder = 10000,
+    }
+    AdaptWindow:QuickWindow(params)
+end
+
+function OnClickWechat(name)
+    local track_id = tonumber(name)
+    -- GameLogic.AddBBS(nil, tostring(track_id), 3000, "255 0 0", 21)
+    GameLogic.GetFilters():apply_filters("ClickStatistics", {track_id= track_id, track_scene =14, track_type=0, }) -- 点击Wechat，触发操作数据统计计数
+    showWeChatQRCode(track_id)
+end
+
+if Researchers.activetimer then
+    Researchers.activetimer:Change(nil, nil)
+end
+Researchers.activetimer = commonlib.Timer:new({
+    callbackFunc = function(timer)
+        if Researchers.livingCoursesData then
+            --page("#56"):SetAttribute("onclick", "OnClickWechat")
+
+            page:SetValue("timearea1", tostring(Researchers.livingCoursesData[1].start_at).."-"..tostring(Researchers.livingCoursesData[1].end_at))
+            page:SetValue("timearea2", tostring(Researchers.livingCoursesData[2].start_at).."-"..tostring(Researchers.livingCoursesData[2].end_at))
+            page:SetValue("timearea3", tostring(Researchers.livingCoursesData[3].start_at).."-"..tostring(Researchers.livingCoursesData[3].end_at))
+
+            page:SetValue("groupNum1", tostring(Researchers.livingCoursesData[1].people).."人")
+            page:SetValue("groupNum2", tostring(Researchers.livingCoursesData[2].people).."人")
+            page:SetValue("groupNum3", tostring(Researchers.livingCoursesData[3].people).."人")
+            Researchers.activetimer:Change(nil, nil)
+            Researchers.activetimer = nil
+        end
+    end
+})
+Researchers.activetimer:Change(0, 1000)
 
 ]]>   
 
 </script>
-<pe:container alignment="_lt" width="936" height="751" style="">
-
-<!-- 背景 -->
-<div style="position: relative;width: 936;height: 751;">
-    <div style="<%=format('position: relative;width: 936;height: 721;background:url(%s);', esc_frame_bot_floor)%>">
+<pe:container alignment="_lt" width="956" height="751" style="">
+    <!-- 背景 -->
+    <div style="<%=format('position: relative;width: 936;height: 721; top: 20; background:url(%s);', live_lesson_common_cot_floor)%>">
         <!-- title -->
-        <div style="position: relative;left: 0;top: 0;width: 936;height:80 ;text-align:center; line-height:80 ; font-family: zkklt;font-size: 48;color: #9e6c5e;">请输入房间ID</div>
+        <div style="position: relative;left: 0;top: 10;width: 936;height:80 ;text-align:center; line-height:80 ; font-family: zkklt;font-size: 66;color: #9a5534;">试听课入口</div>
     
-        <!-- 修改昵称区域 -->
-        <div style="<%=format('position: relative;left: 150;top: 200;width: 628;height: 109;font-family: zkklt;color: #4f402e;background:url(%s);', GetIcons(2, 'esc_frame_bot_428_109.png'))%>">
-            <input type="text" MoveViewWhenAttachWithIME="true" value="" name="live_id" EmptyText='<%= L"ID" %>' style="position: relative;left: 48;top: 15; width: 540; height: 82; font-family: zkklt;font-size: 48;line-height: 82;color: #4f402e;background: #000000;"/>
+        <!-- 输入房间id -->
+        <div style="<%=format('position: relative;left: 157;top: 148;width: 454;height: 85;font-family: zkklt;color: #4f402e;background:url(%s);', live_lesson_comm_box_new)%>">
+            <input type="text" MoveViewWhenAttachWithIME="true" value="" name="live_id" EmptyText='<%= L"输入房间ID" %>' style="position: relative;left: 38;top: 5; width: 540; height: 82; font-family: zkklt;font-size: 48;line-height: 82;color: #ffffff;background: #000000;"/>
         </div>
-        <div style="position: relative;position: relative;left: 150;top: 380;width: 628;height: 80;line-height:80 ; font-family: Noto Sans S Chinese Regular;font-size: 36;color: #804636;"><%= contents1 %></div>
-        <div style="position: relative;position: relative;left: 150;top: 440;width: 628;height: 80;line-height:80 ; font-family: Noto Sans S Chinese Regular;font-size: 36;color: #804636;"><%= contents2 %></div>
 
+        <div onclick="OnSubmit" style="<%=format('position: relative; left: 664; top: 158; width: 146;height: 65;text-align:center; line-height:65 ; font-family: zkklt;font-size: 48;color: #ffffff;background:url(%s);', live_lesson_btn_breen)%>">进入</div>
+
+        <div style="position: relative;position: relative;left: 126;top: 273;width: 200;height: 50;line-height:50 ; font-family: zkklt;font-size: 42;color: #94522f;">开课时间</div>
+        <div style="position: relative;position: relative;left: 385;top: 273;width: 200;height: 50;line-height:50 ; font-family: zkklt;font-size: 42;color: #94522f;">报名方式</div>
+        <div style="position: relative;position: relative;left: 616;top: 273;width: 320;height: 50;line-height:50 ; font-family: zkklt;font-size: 42;color: #94522f;">当前报名人数</div>
+
+        <input type="button" value="18:00-19:00" name="timearea1" style="position: relative;position: relative;left: 42;top: 357;width: 350;height: 50;line-height:50 ; font-family: PuHuiTi-Bold;font-size: 42;color: #94522f;background: #000000;"/>    
+        <input type="button" value="19:00-20:00" name="timearea2" style="position: relative;position: relative;left: 42;top: 470;width: 350;height: 50;line-height:50 ; font-family: PuHuiTi-Bold;font-size: 42;color: #94522f;background: #000000;"/>    
+        <input type="button" value="20:00-21:00" name="timearea3" style="position: relative;position: relative;left: 42;top: 583;width: 350;height: 50;line-height:50 ; font-family: PuHuiTi-Bold;font-size: 42;color: #94522f;background: #000000;"/>    
+
+        <!-- <div style="position: relative;position: relative;left: 91;top: 357;width: 350;height: 50;line-height:50 ; font-family: PuHuiTi-Bold;font-size: 42;color: #94522f;">18:00-19:00</div> -->
+        <!-- <div style="position: relative;position: relative;left: 91;top: 470;width: 350;height: 50;line-height:50 ; font-family: PuHuiTi-Bold;font-size: 42;color: #94522f;">19:00-20:00</div> -->
+        <!-- <div style="position: relative;position: relative;left: 91;top: 583;width: 350;height: 50;line-height:50 ; font-family: PuHuiTi-Bold;font-size: 42;color: #94522f;">20:00-21:00</div> -->
+
+        <div onclick="OnClickWechat" name="56" style="<%=format('position: relative; left: 404; top: 359; width: 115;height: 51;text-align:center; padding-top: 5; font-family: zkklt;font-size: 40;color: #ffffff;background:url(%s);', live_lesson_btn_blue)%>">报名</div>
+        <div onclick="OnClickWechat" name="57" style="<%=format('position: relative; left: 404; top: 472; width: 115;height: 51;text-align:center; padding-top: 5; font-family: zkklt;font-size: 40;color: #ffffff;background:url(%s);', live_lesson_btn_blue)%>">报名</div>
+        <div onclick="OnClickWechat" name="58" style="<%=format('position: relative; left: 404; top: 585; width: 115;height: 51;text-align:center; padding-top: 5; font-family: zkklt;font-size: 40;color: #ffffff;background:url(%s);', live_lesson_btn_blue)%>">报名</div>
+        <div onclick="OnClickQQ" name="59" style="<%=format('position: relative; left: 597; top: 359; width: 115;height: 51;text-align:center; padding-top: 5; font-family: zkklt;font-size: 40;color: #ffffff;background:url(%s);', live_lesson_btn_blue)%>">报名</div>
+        <div onclick="OnClickQQ" name="60" style="<%=format('position: relative; left: 597; top: 472; width: 115;height: 51;text-align:center; padding-top: 5; font-family: zkklt;font-size: 40;color: #ffffff;background:url(%s);', live_lesson_btn_blue)%>">报名</div>
+        <div onclick="OnClickQQ" name="61" style="<%=format('position: relative; left: 597; top: 585; width: 115;height: 51;text-align:center; padding-top: 5; font-family: zkklt;font-size: 40;color: #ffffff;background:url(%s);', live_lesson_btn_blue)%>">报名</div>
+
+        <div style="<%=format('position: relative; left: 350; top: 365; width: 42;height: 40;background:url(%s);', live_lesson_weixin02)%>"></div>
+        <div style="<%=format('position: relative; left: 538; top: 359; width: 41;height: 48;background:url(%s);', live_lesson_qq)%>"></div>
+        <div style="<%=format('position: relative; left: 350; top: 478; width: 42;height: 40;background:url(%s);', live_lesson_weixin02)%>"></div>
+        <div style="<%=format('position: relative; left: 538; top: 472; width: 41;height: 48;background:url(%s);', live_lesson_qq)%>"></div>
+        <div style="<%=format('position: relative; left: 350; top: 591; width: 42;height: 40;background:url(%s);', live_lesson_weixin02)%>"></div>
+        <div style="<%=format('position: relative; left: 538; top: 585; width: 41;height: 48;background:url(%s);', live_lesson_qq)%>"></div>
+
+        <input type="button" value="" name="groupNum1" style="position: relative;left: 696;top: 360;width: 200;height: 50;line-height:50 ; font-family: PuHuiTi-Bold;font-size: 42;color: #94522f;background: #000000;"/>    
+        <input type="button" value="" name="groupNum2" style="position: relative;left: 696;top: 473;width: 200;height: 50;line-height:50 ; font-family: PuHuiTi-Bold;font-size: 42;color: #94522f;background: #000000;"/>    
+        <input type="button" value="" name="groupNum3" style="position: relative;left: 696;top: 586;width: 200;height: 50;line-height:50 ; font-family: PuHuiTi-Bold;font-size: 42;color: #94522f;background: #000000;"/>    
+
+        <!-- <div style="position: relative;left: 736;top: 360;width: 200;height: 50;line-height:50 ; font-family: PuHuiTi-Bold;font-size: 42;color: #94522f;">500人</div> -->
+        <!-- <div style="position: relative;left: 736;top: 473;width: 200;height: 50;line-height:50 ; font-family: PuHuiTi-Bold;font-size: 42;color: #94522f;">500人</div> -->
+        <!-- <div style="position: relative;left: 736;top: 586;width: 200;height: 50;line-height:50 ; font-family: PuHuiTi-Bold;font-size: 42;color: #94522f;">500人</div> -->
     </div>
-
-
-    <div onclick="ClickCancel" style="<%=format('position: relative; left: 820; top: -20; width: 77;height: 123;background:url(%s);', comm_btn_close)%>"></div>
-
-    <div onclick="OnSubmit" style="<%=format('position: relative; left: 550; top: 580; width: 238;height: 81;text-align:center; line-height:81 ; font-family: zkklt;font-size: 48;color: #ffffff;background:url(%s);', esc_frame__btn_green03)%>">确定</div>
-    <div onclick="ClickCancel" style="<%=format('position: relative; left: 150; top: 580; width: 238;height: 81;text-align:center; line-height:81 ; font-family: zkklt;font-size: 48;color: #ffffff;background:url(%s);', esc_frame__btn_red03)%>">取消</div>
-</div>
-
-
+    <div onclick="ClickCancel" style="<%=format('position: relative; left: 820; width: 77;height: 123;background:url(%s);', live_lesson_comm_x)%>"></div>
 </pe:container>
 
 </pe:mcml>
