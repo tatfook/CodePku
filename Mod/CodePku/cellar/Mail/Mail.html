@@ -70,8 +70,14 @@
             Page:Refresh(0)
         end
 
-        function OnDelete()
+        function OnDeleteAll()
             Mail:ConfirmDeleteAll()
+        end
+        
+        function OnDelete(name)
+            Mail:Delete(current_id)
+            value = mail_data[1]
+            current_id = value.user_mail_id
         end
         
         function OnReceive()
@@ -99,7 +105,7 @@
                 <pe:if condition="<%= #Mail.mailList > 0 %>">
                     <div style="<%=format('position: relative;top:108;left:10;width: 421; height: 80; line-height: 60; font-size: 32;font-family: Noto Sans S Chinese Regular;color: #0d405a; text-align: center;', mail_title_shape)%>"><%=Mail.tips%></div>
                     <!-- 标题列表 -->
-                    <div style="<%=format('position: relative;left: 0; top: 108; width:416; height: 798; background:url(%s);', mail_zhezhao)%>" onclick="OnClose"></div>
+                    <div style="<%=format('position: relative;left: 0; top: 108; width:416; height: 798; background:url(%s);', mail_zhezhao)%>"></div>
                     <pe:treeview style="position: relative;top:160;left:0;width: 420; height: 610;padding-bottom: 20;" id="mail_title" name='mail_title' DefaultNodeHeight = "110" ItemsPerLine="1" AllowPaging="false" RememberScrollPos="true" RememberLastPage="false" VerticalScrollBarStep="40">
                         <pe:repeat DataSource="<%= Mail.mailList %>">
                             <pe:repeatitem>
@@ -150,7 +156,7 @@
                             </pe:repeatitem>
                         </pe:repeat>
                     </pe:treeview>
-                    <div onclick="OnDelete" style="<%=format('position: relative;top: 790;left: 30; width: 161; height: 87; line-height: 87; font-size: 34;font-family: Noto Sans S Chinese Regular;color: #ffffff; text-align: center; background:url(%s);', mail_btn_delete_normal)%>">一键删除</div>
+                    <div onclick="OnDeleteAll" style="<%=format('position: relative;top: 790;left: 30; width: 161; height: 87; line-height: 87; font-size: 34;font-family: Noto Sans S Chinese Regular;color: #ffffff; text-align: center; background:url(%s);', mail_btn_delete_normal)%>">一键删除</div>
                     <div onclick="OnReceive" style="<%=format('position: relative;top: 790;left: 210; width: 161; height: 87; line-height: 87; font-size: 34;font-family: Noto Sans S Chinese Regular;color: #ffffff; text-align: center; background:url(%s);', mail_btn_receive_normal)%>">一键领取</div>
 
                     <!-- 内容 -->
@@ -211,12 +217,11 @@
                             </div>
                         </pe:if>
                         
-                        <pe:if condition="<%= value.annex_status == 1 %>">
-                            <div style="<%=format('position: relative; left: 840; top: 550; width: 161;height:87;line-height:87;font-family: Noto Sans S Chinese Regular;color:#ffffff;font-size: 34;text-align:center;background:url(%s);', mail_btn_1)%>">
-                                已领取
+                        <pe:if condition="<%= value.annex_status == 1 or value.annex_status == 2 %>">
+                            <div  name="<%=Eval('value.user_mail_id')%>" onclick="OnDelete" style="<%=format('position: relative; left: 840; top: 550; width: 161;height:87;line-height:87;font-family: Noto Sans S Chinese Regular;color:#ffffff;font-size: 34;text-align:center;background:url(%s);', mail_btn_delete_normal)%>">
+                                删除
                             </div>
                         </pe:if>
-                        
                     </div>
                 </pe:if>
                 

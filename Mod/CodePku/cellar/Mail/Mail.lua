@@ -22,6 +22,7 @@ Mail = commonlib.gettable("Mod.CodePku.celler.Mail");
 
 Mail.content = {}
 Mail.todoLen = 0;
+Mail.receiveFlag = 0;
 Mail.tips = "当前有"..Mail.todoLen.."封待处理的邮件"
 Mail.Status = {
     [0] = {style = ""},--string.format("%s:tcp", self:GetAddressID())
@@ -163,14 +164,22 @@ function Mail:TableSort(t)
                         r = true
                     end
                 else -- 已读邮件 先按有无附件，再按时间排序
-                    if a.annex_status == b.annex_status then
+                    if a.annex_status == b.annex_status and a.annex_status ~= 0 then
                         if timestamp < timestamp2 then
                             r = false
                         else
                             r = true
                         end
                     else
-                        r = a.annex_status < b.annex_status
+                        if (a.annex_status ~= 0 and b.annex_status ~= 0) then
+                            if timestamp < timestamp2 then
+                                r = false
+                            else
+                                r = true
+                            end
+                        else
+                            r = a.annex_status < b.annex_status
+                        end
                     end
                 end
             else
@@ -200,7 +209,7 @@ function Mail:GetTodoCount()
     local list = Mail.mailList;
     local count = 0;
     for k, v in ipairs(list) do
-        if v.status == 0 then
+        if v.status == 0 or v.annex_status == 0 then
             count = count + 1
         end
     end
@@ -260,6 +269,27 @@ function Mail:HandleStatus(id)
     Mail:GetTodoCount()
     Mail:RefreshCategoryPage();
     return value
+end
+
+-- 删除单条
+function Mail:Delete(id)
+    local list = Mail.mailList;
+    for k, v in ipairs(list) do
+        if v.user_mail_id == id then
+            table.remove(list, k)
+            echo(k)
+        end
+    end
+    for k, v in ipairs(list) do
+        echo(v)
+    end
+    Mail.mailList = list;
+    Mail:GetTodoCount()
+    Mail:RefreshCategoryPage()
+    Mail:RefreshPage()
+    request:delete('/mails/delete/'..id,{},nil):next(function(response)
+    end):catch(function(e)
+    end);
 end
 
 -- 一键删除

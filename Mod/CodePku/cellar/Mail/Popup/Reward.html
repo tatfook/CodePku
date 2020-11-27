@@ -24,7 +24,7 @@ function ClosePage()
 end
 
 function getRwardLeft(len)
-    leftLen = {360,270,180}
+    leftLen = {360,270,180,90}
     return leftLen[len]
 end
 
@@ -36,13 +36,9 @@ end
     <div style="position: relative;width: 1920;height:1080;background-color: #00000077;" onclick="ClosePage"></div>
     <div onclick="ClosePage" style="<%=format('position: relative; width: 952; height: 528; left: 484; top: 278; background: url(%s);', mail_popup_gain)%>"></div>
 
-    <!-- <div style="position: relative; width: 1158; height: 588; left: 406; top: 219; background:url(codepku/image/textures/commonpopup/main.png#99 275 1158 588);"></div> -->
-
     <div onclick="ClosePage" style="position: relative; width: 410; height: 97; left: 755; top: 330; font-size: 56; line-height: 97; color: #ffe76c; font-family: Noto Sans S Chinese Regular; font-weight: bold; text-align: center;">
         恭喜获得
     </div>
-
-    <!-- <div style="position: relative; width: 66; height: 76; left: 1335; top: 287; background: url(codepku/image/textures/tasksystem/main.png#454 214 68 78);" onclick="ClosePage"></div> -->
 
     <div onclick="ClosePage" style="position: relative; height: 134; left: 500; top: 490;">
         <pe:repeat DataSource="<%= rewardList %>"  style="<%= format('margin-left:%d;', getRwardLeft(#rewardList)) %>">
