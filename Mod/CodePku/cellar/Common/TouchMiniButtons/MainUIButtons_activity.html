@@ -20,6 +20,10 @@ activity = MainUIButtons.activity
 function ClickChooseFun(name)
     if (name == "ClickActivity1") then
         -- 直播活动
+
+        --标记正在进入直播课
+        System.Codepku.isLoadingLiveLesson = true
+
         local Researchers = NPL.load("(gl)Mod/CodePku/cellar/GUI/Researchers/Researchers.lua");
         Researchers:OperationActivityLive()
     elseif(name == "ClickActivity2") then 

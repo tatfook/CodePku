@@ -9,9 +9,8 @@
 <body>
 <pe:mcml>
 <script refresh="false" type="text/npl" src="LiveLessonBasic.lua"><![CDATA[
-LiveLessonBasic = NPL.load("(gl)Mod/CodePku/cellar/GUI/LiveLesson/Basic/LiveLessonBasic.lua")
-
-LiveLessonBasic.userSize = 1
+NPL.load("(gl)Mod/CodePku/cellar/GUI/LiveLesson/Basic/LiveLessonBasic.lua")
+LiveLessonBasic = commonlib.gettable("Mod.CodePku.Common.LiveLessonBasic")
 
 function GetTeachTools()
     LiveLessonBasic.teachTools = {
@@ -32,12 +31,11 @@ function OnClickTools(index)
     elseif index == 2 then
         LiveLessonBasic:RunGGSCommand("call")
     elseif index == 3 then
-        LiveLessonBasic.userSize = if_else(LiveLessonBasic.userSize == 1, 2, 1)
-        GameLogic.RunCommand(string.format("/scaling %d", LiveLessonBasic.userSize))
+        LiveLessonBasic:RunGGSCommand("changesize")
     elseif index == 4 then
-        GameLogic.AddBBS("CodeGlobals", LiveLessonBasic.teachTools[index]["name"], 3000, "#FF0000")
+        LiveLessonBasic:RunGGSCommand("award")
     elseif index == 5 then
-        GameLogic.AddBBS("CodeGlobals", LiveLessonBasic.teachTools[index]["name"], 3000, "#FF0000")
+        LiveLessonBasic:RunGGSCommand("group")
     end
 end
 

@@ -9,7 +9,8 @@
 <body>
 <pe:mcml>
 <script refresh="false" type="text/npl" src="LiveLessonBasic.lua"><![CDATA[
-LiveLessonBasic = NPL.load("(gl)Mod/CodePku/cellar/GUI/LiveLesson/Basic/LiveLessonBasic.lua")
+NPL.load("(gl)Mod/CodePku/cellar/GUI/LiveLesson/Basic/LiveLessonBasic.lua")
+LiveLessonBasic = commonlib.gettable("Mod.CodePku.Common.LiveLessonBasic")
 
 function GetStudents()
     LiveLessonBasic.students = {
