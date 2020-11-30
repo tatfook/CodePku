@@ -12,22 +12,16 @@
 NPL.load("(gl)Mod/CodePku/cellar/GUI/LiveLesson/Basic/LiveLessonBasic.lua")
 LiveLessonBasic = commonlib.gettable("Mod.CodePku.Common.LiveLessonBasic")
 
-function GetTeachTools()
-    return LiveLessonBasic.teachTools
+function GetBroadcastTips()
+    return LiveLessonBasic.broadcastTips
 end
 
 function OnClickTools(index)
-    if index == 1 then
-        LiveLessonBasic:ShowBroadCastPage()
-    elseif index == 2 then
-        LiveLessonBasic:RunGGSCommand("call")
-    elseif index == 3 then
-        LiveLessonBasic:RunGGSCommand("changesize")
-    elseif index == 4 then
-        LiveLessonBasic:RunGGSCommand("award")
-    elseif index == 5 then
-        LiveLessonBasic:RunGGSCommand("group")
+    local text = GetBroadcastTips()[tonumber(index)] and GetBroadcastTips()[tonumber(index)]["text"]
+    if text then
+        LiveLessonBasic:RunGGSCommand("broadcast", {text=text})
     end
+    OnClose()
 end
 
 function OnClose()
@@ -40,13 +34,12 @@ end
 
 </style>
 <pe:container alignment="_lt" width="100%" height="100%">
-    <div style="width: 200; height: 800; background-color: #ffffff; text-align: center; font-size: 36;">
-        <div onclick="OnClose" style="position: relative; top: 30; width: 200; height: 50;">教学工具</div>
-        <div style="position: relative; top: 100; width: 200; background-color: #797979;">
-            <pe:repeat DataSource="<%= GetTeachTools() %>">
+    <div style="width: 200; height: 800; background-color: #ffffff; text-align: center; font-size: 24;">
+        <div onclick="OnClose" style="position: relative; top: 100; width: 200; background-color: #797979;">
+            <pe:repeat DataSource="<%= GetBroadcastTips() %>">
                 <pe:repeatitem>
                     <pe:if condition="<%= bShow == true %>">
-                        <div name="<%= index %>" onclick="OnClickTools" style="margin-top: 20; line-height: 50; width: 200; height: 50; color: #ff0000; background-color: #00ff00;"><%= name %></div>
+                        <div name="<%= index %>" onclick="OnClickTools" style="margin-top: 20; width: 200; height: 50; color: #ff0000; background-color: #00ff00;"><%= text %></div>
                     </pe:if>          
                 </pe:repeatitem>
             </pe:repeat>

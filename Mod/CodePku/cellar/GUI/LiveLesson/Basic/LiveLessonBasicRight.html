@@ -13,21 +13,7 @@ NPL.load("(gl)Mod/CodePku/cellar/GUI/LiveLesson/Basic/LiveLessonBasic.lua")
 LiveLessonBasic = commonlib.gettable("Mod.CodePku.Common.LiveLessonBasic")
 
 function GetStudents()
-    LiveLessonBasic.students = {
-        [1] = {name="名字最多七个一", bShow=true},
-        [2] = {name="名字最多七个二", bShow=true},
-        [3] = {name="名字最多七个三", bShow=true},
-        [4] = {name="名字最多七个四", bShow=true},
-        [5] = {name="名字最多七个五", bShow=true},
-        [6] = {name="名字最多七个六", bShow=true},
-        [7] = {name="名字最多七个七", bShow=true},
-        [8] = {name="名字最多七个八", bShow=true},
-        [9] = {name="名字最多七个九", bShow=true},
-        [10] = {name="名字最多七个十", bShow=true},
-        [11] = {name="名字最多七十一", bShow=true},
-        [12] = {name="名字最多七十二", bShow=true},
-    }
-    return LiveLessonBasic.students
+    return LiveLessonBasic.GetStudents
 end
 
 function OnClickChangeMode()
@@ -48,7 +34,7 @@ end
 
 function OnSwitch()
     GameLogic.AddBBS("CodeGlobals", L"切换"..tostring(LiveLessonBasic.windowOpenFlag), 1000, "#FF0000")
-    LiveLessonBasic.Switch()
+    LiveLessonBasic:Switch()
 end
 
 function OnClose()
