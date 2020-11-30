@@ -17,6 +17,12 @@ LiveLessonBasic.teachTools = {
     [4] = {name = L"奖励", bShow=true},
     [5] = {name = L"分组", bShow=true},
 }
+LiveLessonBasic.studentTools = {
+    [1] = {name = L"举手", bShow=true},
+    [2] = {name = L"瞬移到老师身边", bShow=true},
+    [3] = {name = L"举牌√", bShow=true},
+    [4] = {name = L"举牌×", bShow=true},
+}
 LiveLessonBasic.broadcastTips = {
     [1] = {text = L"大家请安静", bShow=true},
     [2] = {text = L"大家现在自由练习3分钟", bShow=true},
@@ -44,24 +50,28 @@ LiveLessonBasic.students = {
 LiveLessonBasic.params = {
     left = {
         url="Mod/CodePku/cellar/GUI/LiveLesson/Basic/LiveLessonBasicLeft.html",
-		alignment="_lt", left = 20, top = 20, width = 200, height = 800, zorder=19,
+		alignment="_lt", left = 20, top = 20, width = 200, height = 500, zorder=9,
     },
     right = {
         url="Mod/CodePku/cellar/GUI/LiveLesson/Basic/LiveLessonBasicRight.html",
-		alignment="_lt", left = 1500, top = 20, width = 400, height = 800, zorder=19,
+		alignment="_lt", left = 1500, top = 20, width = 400, height = 800, zorder=9,
     },
     right_closed = {
         url="Mod/CodePku/cellar/GUI/LiveLesson/Basic/LiveLessonBasicRight.html",
-		alignment="_lt", left = 1850, top = 20, width = 50, height = 800, zorder=19,
+		alignment="_lt", left = 1850, top = 20, width = 50, height = 800, zorder=9,
     },
     broadcast = {
         url="Mod/CodePku/cellar/GUI/LiveLesson/Basic/LiveLessonBasicBroadCast.html",
-		alignment="_lt", left = 220, top = 20, width = 200, height = 800, zorder=19,
+		alignment="_lt", left = 220, top = 20, width = 200, height = 500, zorder=9,
     },
 }
 
-function LiveLessonBasic.GetStudents()
+function LiveLessonBasic:GetStudents()
     return LiveLessonBasic.students
+end
+
+function LiveLessonBasic:GetIentity()
+    return System.User.info.is_employee == 1
 end
 
 function LiveLessonBasic:RunGGSCommand(commandName, params)

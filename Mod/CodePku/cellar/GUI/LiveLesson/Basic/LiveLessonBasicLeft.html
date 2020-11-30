@@ -16,17 +16,30 @@ function GetTeachTools()
     return LiveLessonBasic.teachTools
 end
 
+function GetStudentTools()
+    return LiveLessonBasic.studentTools
+end
+
+function GetIentity()
+    return LiveLessonBasic:GetIentity()
+end
+
 function OnClickTools(index)
-    if index == 1 then
-        LiveLessonBasic:ShowBroadCastPage()
-    elseif index == 2 then
-        LiveLessonBasic:RunGGSCommand("call")
-    elseif index == 3 then
-        LiveLessonBasic:RunGGSCommand("changesize")
-    elseif index == 4 then
-        LiveLessonBasic:RunGGSCommand("award")
-    elseif index == 5 then
-        LiveLessonBasic:RunGGSCommand("group")
+    if GetIentity() then
+        if index == 1 then
+            LiveLessonBasic:ShowBroadCastPage()
+        elseif index == 2 then
+            LiveLessonBasic:RunGGSCommand("call")
+        elseif index == 3 then
+            LiveLessonBasic:RunGGSCommand("changesize")
+        elseif index == 4 then
+            LiveLessonBasic:RunGGSCommand("award")
+        elseif index == 5 then
+            LiveLessonBasic:RunGGSCommand("group")
+        end
+    else
+        -- todo
+        GameLogic.AddBBS("CodeGlobals", GetStudentTools()[index]["name"], 1000, "#FF0000")
     end
 end
 
@@ -40,17 +53,32 @@ end
 
 </style>
 <pe:container alignment="_lt" width="100%" height="100%">
-    <div style="width: 200; height: 800; background-color: #ffffff; text-align: center; font-size: 36;">
-        <div onclick="OnClose" style="position: relative; top: 30; width: 200; height: 50;">教学工具</div>
-        <div style="position: relative; top: 100; width: 200; background-color: #797979;">
-            <pe:repeat DataSource="<%= GetTeachTools() %>">
-                <pe:repeatitem>
-                    <pe:if condition="<%= bShow == true %>">
-                        <div name="<%= index %>" onclick="OnClickTools" style="margin-top: 20; line-height: 50; width: 200; height: 50; color: #ff0000; background-color: #00ff00;"><%= name %></div>
-                    </pe:if>          
-                </pe:repeatitem>
-            </pe:repeat>
-        </div>
+    <div onclick="OnClose" style="width: 200; height: 500; background-color: #ffffff; text-align: center; font-size: 26;">
+        <pe:if condition="<%= GetIentity() %>">
+            <div style="position: relative; top: 30; width: 200; height: 50;">教学工具</div>
+            <div style="position: relative; top: 100; width: 200; background-color: #797979;">
+                <pe:repeat DataSource="<%= GetTeachTools() %>">
+                    <pe:repeatitem>
+                        <pe:if condition="<%= bShow == true %>">
+                            <div name="<%= index %>" onclick="OnClickTools" style="margin-top: 20; line-height: 50; width: 200; height: 50; color: #ff0000; background-color: #00ff00;"><%= name %></div>
+                        </pe:if>                  
+                    </pe:repeatitem>
+                </pe:repeat>
+            </div>
+        </pe:if>
+
+        <pe:if condition="<%= GetIentity() == false %>">
+            <div style="position: relative; top: 30; width: 200; height: 50;">快捷操作</div>
+            <div style="position: relative; top: 100; width: 200; background-color: #797979;">
+                <pe:repeat DataSource="<%= GetStudentTools() %>">
+                    <pe:repeatitem>
+                        <pe:if condition="<%= bShow == true %>">
+                            <div name="<%= index %>" onclick="OnClickTools" style="margin-top: 20; line-height: 50; width: 200; height: 50; color: #ff0000; background-color: #00ff00;"><%= name %></div>
+                        </pe:if>          
+                    </pe:repeatitem>
+                </pe:repeat>
+            </div>
+        </pe:if>
     </div>
 </pe:container>
 </pe:mcml> 

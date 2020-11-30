@@ -13,7 +13,15 @@ NPL.load("(gl)Mod/CodePku/cellar/GUI/LiveLesson/Basic/LiveLessonBasic.lua")
 LiveLessonBasic = commonlib.gettable("Mod.CodePku.Common.LiveLessonBasic")
 
 function GetStudents()
-    return LiveLessonBasic.GetStudents
+    return LiveLessonBasic:GetStudents()
+end
+
+function GetIentity()
+    return LiveLessonBasic:GetIentity()
+end
+
+function GetSwitchBtnTop()
+    return GetIentity() and 200 or 150
 end
 
 function OnClickChangeMode()
@@ -48,30 +56,38 @@ end
 </style>
 <pe:container alignment="_lt" width="100%" height="100%">
     <div onclick="OnClose" style='<%= string.format("width: %d; height: 800; background-color: #ffffff; text-align: center; font-size: 24;",LiveLessonBasic.windowRightWidth) %>'>
-    <pe:if condition="<%= LiveLessonBasic.windowOpenFlag %>">
-        <div style="position: relative; left: 50; top: 20; width: 350; height: 50; background-color: #ffff00; color: #ff00ff; line-height: 50;">
-            <div onclick="OnClickChangeMode" style="position: relative; left: 50; top: 0; width: 100; height: 50; background-color: #00ffff;">模式切换</div>
-            <div onclick="OnClickRoomInfo" style="position: relative; left: 200; top: 0; width: 100; height: 50; background-color: #00ffff;">房间信息</div>
-        </div>
+        <div onclick="OnSwitch" style='<%= string.format("float: left; top: %d; width: 50; height: 200; background-color: #ff00ff;", GetSwitchBtnTop()) %>'></div>
 
-        <div style="position: relative; left: 50; top: 100; width: 350; height: 50; background-color: #00ff00; color: #ff00ff; line-height: 50;">
-            学员列表
-        </div>
+        <pe:if condition="<%= LiveLessonBasic.windowOpenFlag %>">
+            <div style="float: left; width: 350; height: 800; background-color: #111111;">
 
-        <div style="position: relative; left: 50; top: 150; width: 350; height: 650; background-color: #5b288b; color: #ff00ff; line-height: 50;">
-            <pe:repeat DataSource="<%= GetStudents() %>">
-                <pe:repeatitem>
-                    <div style="margin-top: 10; line-height: 36; width: 350; height: 36; color: #ff0000; background-color: #aaaaaa;">
-                        <div style="float: left; width: 200; text-align: left; background-color: #3a7fff;"><%= name %></div>
-                        <div name="<%= index %>" onclick="OnClickKickOut" style="float: left; margin-left: 55; width: 36; background-color: #daff74;">踢</div>
-                        <div name="<%= index %>" onclick="OnClickForcePlayMode" style="float: left; margin-left: 15; width: 36; background-color: #daff74;">禁</div>
+                <pe:if condition="<%= GetIentity() %>">
+                    <div style="margin-top: 20; width: 350; height: 50; background-color: #ffff00; color: #ff00ff; line-height: 50;">
+                        <div onclick="OnClickChangeMode" style="position: relative; left: 50; top: 0; width: 100; height: 50; background-color: #00ffff;">模式切换</div>
+                        <div onclick="OnClickRoomInfo" style="position: relative; left: 200; top: 0; width: 100; height: 50; background-color: #00ffff;">房间信息</div>
                     </div>
-                </pe:repeatitem>
-            </pe:repeat>
-        </div>
-    </pe:if>
+                </pe:if>
+    
+                <div style="margin-top: 10; width: 350; height: 50; background-color: #00ff00; color: #ff00ff; line-height: 50;">
+                    学员列表
+                </div>
+    
+                <div style="margin-top: 10; width: 350; background-color: #5b288b; color: #ff00ff; line-height: 50;">
+                    <pe:repeat DataSource="<%= GetStudents() %>">
+                        <pe:repeatitem>
+                            <div style="margin-bottom: 6; line-height: 36; width: 350; height: 36; color: #ff0000; background-color: #aaaaaa;">
+                                <div style="float: left; width: 200; text-align: left; background-color: #3a7fff;"><%= name %></div>
+                                <pe:if condition="<%= GetIentity() %>">
+                                    <div name="<%= index %>" onclick="OnClickKickOut" style="float: left; margin-left: 55; width: 36; background-color: #daff74;">踢</div>
+                                    <div name="<%= index %>" onclick="OnClickForcePlayMode" style="float: left; margin-left: 15; width: 36; background-color: #daff74;">禁</div>
+                                </pe:if>
+                            </div>
+                        </pe:repeatitem>
+                    </pe:repeat>
+                </div>
+            </div>
+        </pe:if>
 
-        <div onclick="OnSwitch" style="position: relative; left: 0; top: 300; width: 50; height: 200; background-color: #ff00ff;"></div>
     </div>
 </pe:container>
 </pe:mcml> 
