@@ -442,7 +442,7 @@ function MainLogin:GetVisitorUUID()
         end
     end
 
-    --local machineID = ParaEngine.GetAttributeObject():GetField("MachineID", "");
+    local machineID = ParaEngine.GetAttributeObject():GetField("MachineID", "");
     if not machineID or machineID == '' then
         machineID = getUUID().. '-' .. os.time()
     end
