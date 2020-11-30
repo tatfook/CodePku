@@ -34,22 +34,6 @@ end
 function GetCode()
     local RoomName = Page:GetValue("roomname")
     local CoursewareID = Page:GetValue("coursewareID")
-    if commonlib.utf8.len(CoursewareID) < 1 then
-        GameLogic.AddBBS("CodeGlobals", L"请输入课件ID", 3000, "#FF0000");
-        return
-    end
-    if commonlib.utf8.len(CoursewareID) > LiveLessonEntrance.constant.CoursewareIDLimit then
-        GameLogic.AddBBS("CodeGlobals", L"课件ID不超过" .. tostring(LiveLessonEntrance.constant.CoursewareIDLimit) .. L"个字", 3000, "#FF0000");
-        return
-    end
-    if commonlib.utf8.len(RoomName) < 1 then
-        GameLogic.AddBBS("CodeGlobals", L"请输入房间名称", 3000, "#FF0000");
-        return
-    end
-    if commonlib.utf8.len(RoomName) > LiveLessonEntrance.constant.RoomNameLimit then
-        GameLogic.AddBBS("CodeGlobals", L"房间名称不超过" .. tostring(LiveLessonEntrance.constant.RoomNameLimit) .. L"个字", 3000, "#FF0000");
-        return
-    end
     local param = {
         room_name = RoomName,
         keep_work_id = CoursewareID,
@@ -77,7 +61,7 @@ end
                 <div style="position: relative;left: 3;top: 5;width: 290;height: 55;font-family: zkklt;font-size: 48;color: #7e2f12;">生成匹配码：</div>
                 <div style="<%=format('position: relative; left: 269; top: 0; width: 316;height: 65;background:url(%s);', GetIcon('live_lesson_comm_frame.png'))%>">
                     <div onclick="GetCode" style="<%=format('position: relative; left: 221; top: 11; width: 86;height: 43;background:url(%s);', GetIcon('live_lesson_frame_generatebtn.png'))%>"></div>
-                    <input type="button" MoveViewWhenAttachWithIME="true" value="点击生成" name="matchcode" EmptyText='' style="position: relative;left: 15;top: 3; width: 200; height: 60; font-family: zkklt;font-size: 32;line-height: 60;color: #ffffff;background: #000000;"/>
+                    <input type="button" MoveViewWhenAttachWithIME="true" value="点击生成" name="matchcode" EmptyText='' style="position: relative;left: 15;top: 3; width: 200; height: 60; font-family: zkklt;font-size: 42;line-height: 60;color: #ffffff;background: #000000;"/>
                 </div>
             </div>
             <!-- 房间名 -->

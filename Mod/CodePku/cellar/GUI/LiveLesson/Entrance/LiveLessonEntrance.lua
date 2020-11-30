@@ -30,6 +30,24 @@ end
 
 -- 获取匹配码
 function LiveLessonEntrance:GetMatchCode(param, page)
+    local RoomName = param.room_name
+    local CoursewareID = param.keep_work_id
+    if commonlib.utf8.len(CoursewareID) < 1 then
+        GameLogic.AddBBS("CodeGlobals", L"请输入课件ID", 3000, "#FF0000");
+        return
+    end
+    if commonlib.utf8.len(CoursewareID) > LiveLessonEntrance.constant.CoursewareIDLimit then
+        GameLogic.AddBBS("CodeGlobals", L"课件ID不超过" .. tostring(LiveLessonEntrance.constant.CoursewareIDLimit) .. L"个字", 3000, "#FF0000");
+        return
+    end
+    if commonlib.utf8.len(RoomName) < 1 then
+        GameLogic.AddBBS("CodeGlobals", L"请输入房间名称", 3000, "#FF0000");
+        return
+    end
+    if commonlib.utf8.len(RoomName) > LiveLessonEntrance.constant.RoomNameLimit then
+        GameLogic.AddBBS("CodeGlobals", L"房间名称不超过" .. tostring(LiveLessonEntrance.constant.RoomNameLimit) .. L"个字", 3000, "#FF0000");
+        return
+    end
     --[[
     request:post('/class-room/store',param):next(function(response)
         
