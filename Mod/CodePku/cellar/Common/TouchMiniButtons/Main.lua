@@ -301,10 +301,8 @@ function MainUIButtons:show_category_top_ui()
 		MainUIButtons.category_top_window = nil
 	end
 	if Mail.todoLen > 0 then
-		echo("dayu")
 		MainUIButtons.category_top[6]["dot"] = true
 	else
-		echo("else")
 		MainUIButtons.category_top[6]["dot"] = false
 	end
 	local open_width = MainUIButtons:getWidth(MainUIButtons.category_top, 0)
@@ -492,6 +490,7 @@ function MainUIButtons.ShowPage()
 			MainUIButtons:show_avatar_ui()
 			MainUIButtons:show_category(true)		
 		else
+			MainUIButtons.showCategoryWindow = false
 			-- 竞技，教学区按钮
 			MainUIButtons:show_main_open_ui()
 			-- MainUIButtons.CloseNav()
