@@ -218,7 +218,9 @@ function Mail:GetTodoCount()
 end
 
 function Mail:RefreshPage()
-    Mail.mailPage:Refresh()
+    if Mail.mailPage then
+        Mail.mailPage:Refresh()
+    end
 end
 
 
