@@ -101,4 +101,100 @@ worldKey 获取玩学世界当前世界信息
 			end
 		end
 	}
+
+	Commands["liveLesson"] = {
+		mode_deny = "",
+		name = "liveLesson",
+		quick_ref = "/liveLesson subcmd",
+		desc = [[
+subcmd: 
+redflower 获取玩学世界当前所有世界分线数据
+    /liveLesson redflower 获取玩学世界当前所有世界分线数据
+		]],
+		handler = function(cmd_name, cmd_text, cmd_params, fromEntity)
+			GGS.INFO.Format(cmd_name .. " " .. cmd_text)
+			local cmd, cmd_text = CmdParser.ParseString(cmd_text)
+			local options = ParseOptions(cmd_text)
+			local netHandler = GeneralGameServerMod:GetClientClass("CodePku"):GetWorldNetHandler()
+			if not netHandler then
+				return
+			end
+			if (cmd == "redflower") then
+				local type = options.type --1=增加,2=减少
+				local num = options.num or 1
+				local username = options.username
+				local userid = options.userid
+
+				local text = string.format("恭喜%s获得了老师奖励的小红花", username, num)
+				if type == "1" then
+					GameLogic.RunCommand(string.format("/tip -color #ff0000 -duration 3000 %s", text))
+				end
+
+				--todo 刷新奖励的本地缓存
+			elseif (cmd == "entrance") then
+				local username = options.username
+				local userid = options.userid
+
+				local text = string.format("%s进来了", username)
+				if username and username ~= "" then
+					GameLogic.RunCommand(string.format("/tip -color #ff0000 -duration 3000 %s", text))
+				end
+
+				--todo 刷新学员列表的本地缓存/重新请求一次
+
+			elseif (cmd == "behavior") then
+				local type = options.type and tonumber(options.type) --1=举手,2=举牌√,3=举牌x
+				local username = options.username
+				local userid = options.userid
+				local entityid = options.userid
+
+				local behaviorTable = {
+					[1] = L"举手",
+					[2] = L"举牌√",
+					[3] = L"举牌x",
+				}
+
+				if type then
+					local text = string.format("%s%s", username, behaviorTable[type])
+					GameLogic.RunCommand(string.format("/tip -color #ff0000 -duration 3000 %s", text))
+				end
+				--todo entityid获取
+				--todo 即时改变headondisplay
+				--todo 刷新学员列表的本地缓存/重新请求一次
+
+			elseif (cmd == "toteacher") then
+				local userid = options.userid
+				--todo entityid获取
+				local entityid = options.userid
+				if entityid then
+					-- test
+					local text = string.format("%s%s", userid, L"移动到老师的请求")
+					GameLogic.RunCommand(string.format("/tip -color #ff0000 -duration 3000 %s", text))
+				end
+
+			elseif (cmd == "movestudent") then
+				local userid = options.userid
+				--todo entityid获取
+				local entityid = options.entityid
+				local group = options.group
+				if entityid then
+					-- test
+					local text = string.format("%s%s", userid, L"移动到老师的请求")
+					GameLogic.RunCommand(string.format("/tip -color #ff0000 -duration 3000 %s", text))
+				end
+
+			elseif (cmd == "groupmove") then
+				local group = options.group
+				local position = options.position
+				--todo 分组
+				if group and group == System.Codepku.liveLessonGroup then
+					-- test
+					local text = string.format("%s%s", group, L"组移动请求")
+					GameLogic.RunCommand(string.format("/tip -color #ff0000 -duration 3000 %s", text))
+					GameLogic.RunCommand(string.format("/goto %s %s %s", position.x, position.y, position.z))
+				end
+
+			end
+		end
+	}
 end

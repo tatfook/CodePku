@@ -163,6 +163,9 @@ function LiveLessonBasic:OnWorldLoaded()
     --如果当前正在进入直播课就在进入世界后设置直播课判定变量为true
     if System.Codepku.isLoadingLiveLesson then
         System.Codepku.isLiveLesson = true
+
+        --todo 进入房间广播
+
     else
         System.Codepku.isLiveLesson = false
     end
