@@ -143,7 +143,11 @@ function UserConsole:CourseEntry()
 
     -- 登陆之后，获取地址树
     local Schoolyard = NPL.load("(gl)Mod/CodePku/cellar/GUI/Schoolyard/Schoolyard.lua");
-    Schoolyard:GetAreasTree()
+    Schoolyard.AreasTreeData = GameLogic.GetPlayerController():LoadLocalData(Schoolyard.key,false,true);
+    if not Schoolyard.AreasTreeData then
+        Schoolyard:GetAreasTree()
+    end
+    
 
     -- 拉取当前分线服务器数据
     NPL.load("(gl)Mod/CodePku/cellar/GUI/Branch/ChooseBranch.lua")

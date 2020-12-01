@@ -43,6 +43,8 @@ Schoolyard.selected_city = {}
 Schoolyard.selected_area = {}
 Schoolyard.selected_school = {}
 
+Schoolyard.key = "Schoolyard.areaskey"
+
 -- 返回图片path
 function Schoolyard:GetImagePath(index)
     return schoolyardImageData:GetIconUrl(index)
@@ -61,7 +63,9 @@ end
 -- 获取地址树
 function Schoolyard:GetAreasTree()
     request:get('/areas'):next(function(response)
+        LOG.std(nil, "info", "Schoolyard", "GetAreasTree")
         Schoolyard.AreasTreeData = response.data.data
+        GameLogic.GetPlayerController():SaveLocalData(Schoolyard.key,Schoolyard.AreasTreeData,true);
     end):catch(function(e)
         LOG.std(nil, "error", "Schoolyard", "GetAreasTree")
     end);
@@ -494,7 +498,9 @@ function Schoolyard:JoinSchoolyard(id, name)
         Schoolyard:GetMySchoolyardInfo(Schoolyard.main_ui)
         local content = "恭喜您！成功加入" .. name .. "！"
         GameLogic.AddBBS("CodeGlobals", content, 3000, "#00FF00");
-        LOG.std(nil, "succeed", "Schoolyard", "JoinSchoolyard")
+        commonlib.setfield("System.User.schoolName", name);
+        GameLogic.GetFilters():apply_filters("ggs", {action = "UpdateUserInfo", userinfo = {schoolName = name}});
+        LOG.std(nil, "succeed", "Schoolyard", "JoinSchoolyard");
     end):catch(function(e)
         LOG.std(nil, "error", "Schoolyard", "JoinSchoolyard")
         Schoolyard.had_join_schoolyard = false
@@ -506,6 +512,8 @@ function Schoolyard:ExitSchoolyard(name)
     request:delete('/schools/exit'):next(function(response)
         local content = "你已退出" .. Schoolyard.schoolyard_name .. "！"
         GameLogic.AddBBS("CodeGlobals", content, 3000, "#00FF00");
+        commonlib.setfield("System.User.schoolName", nil)
+        GameLogic.GetFilters():apply_filters("ggs", {action = "UpdateUserInfo", userinfo = {schoolName = ''}});
         LOG.std(nil, "succeed", "Schoolyard", "ExitSchoolyard")
         Schoolyard.members_table = {}
         Schoolyard.trends_table = {}

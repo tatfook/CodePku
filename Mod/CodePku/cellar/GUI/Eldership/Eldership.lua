@@ -158,9 +158,14 @@ function Eldership:Unbind()
       -- 解除绑定恢复为默认皮肤
       NPL.load("(gl)Mod/CodePku/cellar/GUI/Profile/SkinPageV1.lua");
       local SkinPageV1 = commonlib.gettable("Mod.CodePku.GUI.Profile.SkinPage");
-      local filepath = SkinPageV1.GetAllFiles()[1]["filename"]
-      GameLogic.RunCommand("/avatar "..filepath);
-      GameLogic.options:SetMainPlayerAssetName(filepath);
+			local player = SkinPageV1.GetEntity();
+			local lastFilepath = player:GetMainAssetPath();
+      if not SkinPageV1.CheckAvailable(lastFilepath) then
+        SkinPageV1.index = 1
+        local filepath = SkinPageV1.GetAllFiles()[1]["filename"]
+        SkinPageV1.SetText(filepath)
+        SkinPageV1.OnOK(true)
+      end
 
       if MainUIButtons.showCommonWindow then
         MainUIButtons:show_common_ui()

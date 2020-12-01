@@ -88,6 +88,10 @@ end
 
 -- 获取用户信息 async
 function UserInfoPage.GetUserInfo(id, show)
+    -- -- 重复打开同一个用户，不重新请求数据
+    -- if (UserInfoPage.id and UserInfoPage.id == id) then
+    --     return;
+    -- end
     local path = '/users/profile';
     if (id and id ~= "") then
         path = path.."/"..id;
@@ -100,6 +104,7 @@ function UserInfoPage.GetUserInfo(id, show)
             UserInfoPage.no = data.no
             UserInfoPage.gender = data.gender
             UserInfoPage.avatar = data.avatar_url
+            UserInfoPage.schoolname = (data.school or {}).name or "暂无"
             local _, _, y, m, d, _hour, _min, _sec = string.find(data.created_at, "(%d+)-(%d+)-(%d+)%s*(%d+):(%d+):(%d+)");
             UserInfoPage.created_at = y..'-'..m..'-'..d
             if data.self_level == nil then
@@ -112,7 +117,6 @@ function UserInfoPage.GetUserInfo(id, show)
             end
             UserInfoPage.day = data.career
             wallets = data.user_wallets or {}
-            echo(string.format( "wallets: %s,  length:  %d", wallets, #wallets))
             UserInfoPage.money = {goldcoin=0, wanxuecoin=0}
             for i, v in ipairs(wallets) do
                 if v.currency_id == 1 then
