@@ -8,6 +8,7 @@
     <pe:mcml>
 <script refresh="false" type="text/npl" src=""><![CDATA[
 local LiveLessonEntrance = NPL.load("(gl)Mod/CodePku/cellar/GUI/LiveLesson/Entrance/LiveLessonEntrance.lua")
+local page = document:GetPageCtrl()
 
 -- 获取图标
 function GetIcon(index)
@@ -20,7 +21,8 @@ end
 
 -- todo加入房间
 function JoinRoom()
-    GameLogic.AddBBS("CodeGlobals", L"加入房间", 3000, "#FF0000");
+    local code = page:GetValue("matchcode")
+    LiveLessonEntrance:EnterRoom(code)
 end
 
 -- 创建房间
@@ -31,11 +33,11 @@ end
 
 -- onchange
 function ChangeCode()
-    local code = Page:GetValue("matchingcode")
+    local code = Page:GetValue("matchcode")
     if commonlib.utf8.len(code) > LiveLessonEntrance.constant.MatchCodeLimit then
         code = string.sub(code, 1, LiveLessonEntrance.constant.MatchCodeLimit)
     end
-    Page:SetValue("matchingcode", code)
+    page:SetValue("matchcode", code)
 end
 
 ]]>
@@ -47,7 +49,7 @@ end
             <div style="position: relative;left: 31;top: 195;width: 290;height: 55;font-family: zkklt;font-size: 48;color: #7e2f12;">输入匹配码：</div>
             <!-- 输入框 -->
             <div style="<%=format('position: relative; left: 299; top: 188; width: 316;height: 65;background:url(%s);', GetIcon('live_lesson_comm_frame.png'))%>">
-                <input type="text" onchange="ChangeCode" MoveViewWhenAttachWithIME="true" value="" name="matchingcode" EmptyText='' style="position: relative;left: 15;top: 3; width: 290; height: 60; font-family: zkklt;font-size: 48;line-height: 60;color: #ffffff;background: #000000;"/>
+                <input type="text" onchange="ChangeCode" MoveViewWhenAttachWithIME="true" value="" name="matchcode" EmptyText='' style="position: relative;left: 15;top: 3; width: 290; height: 60; font-family: zkklt;font-size: 48;line-height: 60;color: #ffffff;background: #000000;"/>
             </div>
         </div>
         <!-- 飘带 -->

@@ -30,6 +30,9 @@ end
 
 -- 获取匹配码
 function LiveLessonEntrance:GetMatchCode(param, page)
+    if LiveLessonEntrance.get_code then
+        return
+    end
     local RoomName = param.room_name
     local CoursewareID = param.keep_work_id
     if commonlib.utf8.len(CoursewareID) < 1 then
@@ -48,16 +51,59 @@ function LiveLessonEntrance:GetMatchCode(param, page)
         GameLogic.AddBBS("CodeGlobals", L"房间名称不超过" .. tostring(LiveLessonEntrance.constant.RoomNameLimit) .. L"个字", 3000, "#FF0000");
         return
     end
-    --[[
+    if System.User.info.is_employee ~= 1 then
+        GameLogic.AddBBS("CodeGlobals", L"只有老师才能创建房间", 3000, "#FF0000");
+        return
+    end
+    LiveLessonEntrance.get_code = true
     request:post('/class-room/store',param):next(function(response)
-        
+        local data = response.data.data
+        System.User.CreateLiveLessonData = data
+        local code = tostring(data.match_code)
+        page:SetValue("matchcode", code)
+        LiveLessonEntrance.get_code = false
     end):catch(function(e)
-        
+        GameLogic.AddBBS("CodeGlobals", L"匹配码生成失败,请检查输入的信息", 3000, "#FF0000");
+        LiveLessonEntrance.get_code = false
     end);
-    --]]
-    page:SetValue("matchcode", "123456")
 end
 
+-- 进入房间
+function LiveLessonEntrance:EnterRoom(code)
+    if LiveLessonEntrance.entre_room then
+        return
+    end
+    if commonlib.utf8.len(code) ~= 4 then
+        GameLogic.AddBBS("CodeGlobals", L"请输入完整的匹配码", 3000, "#FF0000");
+        return
+    end
+    local temp_code = tonumber(code)
+    if not temp_code then
+        GameLogic.AddBBS("CodeGlobals", L"请输入正确的匹配码", 3000, "#FF0000");
+        return
+    end
+    local path = "/class-room/enter?match_code=" .. code
+    LiveLessonEntrance.entre_room = true
+    request:get(path):next(function(response)
+        local data = response.data.data
+        System.User.LiveLessonData = data
+        local Config = NPL.load("(gl)Mod/CodePku/online/client/Config.lua");
+        if Config.defaultEnv == "RELEASE" then
+            local command = "/connectCodePku -no=1 -isSyncBlock -isSyncCmd -host=106.53.147.185 -port=9901 " .. tostring(data.keep_work_id) .. " " .. tostring(data.match_code)
+            GameLogic.RunCommand(command)
+        else
+            local command = "/connectCodePku -no=1 -isSyncBlock -isSyncCmd " .. tostring(data.keep_work_id) .. " " .. tostring(data.match_code)
+            GameLogic.RunCommand(command)
+        end
+        -- 关闭所有窗口
+        LiveLessonEntrance:EntrancePageSpecialClose()
+        LiveLessonEntrance:EstablishPageSpecialClose()
+        LiveLessonEntrance.entre_room = false
+    end):catch(function(e)
+        GameLogic.AddBBS("CodeGlobals", e.data.message, 3000, "#FF0000");
+        LiveLessonEntrance.entre_room = false
+    end);
+end
 
 -- 加入页面有输入框，需要把两个窗口都关掉
 function LiveLessonEntrance:EntrancePageSpecialClose()
