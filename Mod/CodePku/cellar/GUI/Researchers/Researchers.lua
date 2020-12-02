@@ -115,11 +115,34 @@ function Researchers:OperationActivityLive()
 		alignment="_lt", left = 0, top = 0, width = 1920 , height = 1080, zorder = 31,
 		}
 		Researchers.LABG = AdaptWindow:QuickWindow(BGparams)
-	end
+    end
+
+    Researchers.livingCoursesData = nil
+	local request = NPL.load("(gl)Mod/CodePku/api/BaseRequest.lua")
+	request:get("/trial-live/courses", nil, nil):next(function( response )
+		if response.status == 200 then
+			local data = response.data and response.data.data
+			local courses = data.courses
+			if courses then
+				Researchers.livingCoursesData = {}
+				for _, val in ipairs(courses) do
+					table.insert(Researchers.livingCoursesData, {
+						start_at = val.start_at,
+						end_at = val.end_at,
+						qq_url = val.qq and val.qq.url,
+						wechat_image = val.wechat and val.wechat.image,
+						people = val.people,
+						timestamp = val.updated_at,
+					})
+				end
+			end
+		end
+    end)
+    
 	if not Researchers.LAui then
 		local params = {
 			url = "Mod/CodePku/cellar/GUI/Researchers/LiveActivity.html",
-			alignment="_lt", left = 464, top = 179, width = 936 , height = 751, zorder = 32
+			alignment="_lt", left = 464, top = 179, width = 956 , height = 751, zorder = 32
 		}
 		Researchers.LAui = AdaptWindow:QuickWindow(params)
 	end

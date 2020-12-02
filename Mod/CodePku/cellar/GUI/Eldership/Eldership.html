@@ -29,6 +29,18 @@ function ClosePage()
 end
 
 function BindWechat()
+    -- 判断游客
+    local isVisitor = commonlib.getfield("System.User.isVisitor")
+    if (isVisitor) then
+        -- 游客
+        NPL.load("(gl)Mod/CodePku/cellar/GUI/AccountUp/AccountUpTips.lua")
+        local AccountUpTips = commonlib.gettable("Mod.CodePku.AccountUpTips")
+        AccountUpTips.title = L"绑定提醒"
+        AccountUpTips.desc = L"您现在是游客账号，暂不支持绑定家长，是否现在升级账号?"
+        AccountUpTips:ShowEditNameTips()
+        return
+    end
+
     Page:CloseWindow();
     -- 展示绑定页面
     Eldership.IsCameFromDeldership = 1
