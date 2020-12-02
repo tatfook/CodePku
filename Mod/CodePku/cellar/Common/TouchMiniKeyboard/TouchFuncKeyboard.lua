@@ -33,16 +33,15 @@ local funcKeyboardImageData = NPL.load("(gl)Mod/CodePku/cellar/imageLuaTable/fun
 local TouchFuncKeyboard = commonlib.inherit(commonlib.gettable("System.Core.ToolBase"),commonlib.gettable("Mod.CodePku.Common.TouchMiniKeyboard.TouchFuncKeyboard"))
 TouchFuncKeyboard:Property("Name", "TouchFuncKeyboard");
 
-TouchFuncKeyboard.name = "TouchFuncKeyboard";
-TouchFuncKeyboard:Signal("hidden")
+TouchFuncKeyboard.name = "default_TouchFuncKeyboard";
 
 function TouchFuncKeyboard:ctor()
-	self.zorder = 1000;
+	self.zorder = 31;
 	self.keylayout = {
 		{
 			name = "Ctrl",
-			background = funcKeyboardImageData:GetIconUrl("main_icon_up.png"),
-			clickedBackground = mainFrameImageData:GetIconUrl("main_icon_up.png"),
+			background = funcKeyboardImageData:GetIconUrl("funckeyboard_key_bot.png"),
+			clickedBackground = funcKeyboardImageData:GetIconUrl("funckeyboard_key_dark.png"),
 			left = 18, top = 64, width = 192, height = 80,
 			key = {
 				DIK_SCANCODE.DIK_LCONTROL,
@@ -51,8 +50,8 @@ function TouchFuncKeyboard:ctor()
 		},
 		{
 			name = "Ctrl+C",
-			background = mainFrameImageData:GetIconUrl("main_icon_up.png"),
-			clickedBackground = mainFrameImageData:GetIconUrl("main_icon_up.png"),
+			background = funcKeyboardImageData:GetIconUrl("funckeyboard_key_bot.png"),
+			clickedBackground = funcKeyboardImageData:GetIconUrl("funckeyboard_key_dark.png"),
 			left = 219, top = 64, width = 192, height = 80,
 			key = {	
 				DIK_SCANCODE.DIK_LCONTROL,
@@ -62,8 +61,8 @@ function TouchFuncKeyboard:ctor()
 		},
 		{
 			name = "Ctrl+Z",
-			background = mainFrameImageData:GetIconUrl("main_icon_up.png"),
-			clickedBackground = mainFrameImageData:GetIconUrl("main_icon_up.png"),
+			background = funcKeyboardImageData:GetIconUrl("funckeyboard_key_bot.png"),
+			clickedBackground = funcKeyboardImageData:GetIconUrl("funckeyboard_key_dark.png"),
 			left = 18,top = 146,width = 192,height = 80,
 			key = {	
 				DIK_SCANCODE.DIK_LCONTROL,
@@ -73,8 +72,8 @@ function TouchFuncKeyboard:ctor()
 		},
 		{
 			name = "Ctrl+V",
-			background = mainFrameImageData:GetIconUrl("main_icon_up.png"),
-			clickedBackground = mainFrameImageData:GetIconUrl("main_icon_up.png"),
+			background = funcKeyboardImageData:GetIconUrl("funckeyboard_key_bot.png"),
+			clickedBackground = funcKeyboardImageData:GetIconUrl("funckeyboard_key_dark.png"),
 			left = 219, top = 146, width = 192, height = 80,
 			key = {	
 				DIK_SCANCODE.DIK_LCONTROL,
@@ -84,9 +83,9 @@ function TouchFuncKeyboard:ctor()
 		},
 		{
 			name = "Ctrl+Shift",
-			background = mainFrameImageData:GetIconUrl("main_icon_up.png"),
-			clickedBackground = mainFrameImageData:GetIconUrl("main_icon_up.png"),
-			left = 18, top = 64, width = 192, height = 80,
+			background = funcKeyboardImageData:GetIconUrl("funckeyboard_key_bot.png"),
+			clickedBackground = funcKeyboardImageData:GetIconUrl("funckeyboard_key_dark.png"),
+			left = 18, top = 228, width = 192, height = 80,
 			key = {	
 				DIK_SCANCODE.DIK_LCONTROL,
 				DIK_SCANCODE.DIK_LSHIFT,
@@ -94,10 +93,18 @@ function TouchFuncKeyboard:ctor()
 			type = 1,
 		},
 		{
+			name = "",
+			background = funcKeyboardImageData:GetIconUrl("funckeyboard_key_bot.png"),
+			clickedBackground = funcKeyboardImageData:GetIconUrl("funckeyboard_key_dark.png"),
+			left = 219, top = 228, width = 192, height = 80,
+			key = {},
+			type = 1,
+		},
+		{
 			name = "Shift",
-			background = mainFrameImageData:GetIconUrl("main_icon_up.png"),
-			clickedBackground = mainFrameImageData:GetIconUrl("main_icon_up.png"),
-			left = 18, top = 64, width = 192, height = 80,
+			background = funcKeyboardImageData:GetIconUrl("funckeyboard_key_bot.png"),
+			clickedBackground = funcKeyboardImageData:GetIconUrl("funckeyboard_key_dark.png"),
+			left = 18, top = 310, width = 192, height = 80,
 			key = {	
 				DIK_SCANCODE.DIK_LSHIFT,
 				},
@@ -105,9 +112,9 @@ function TouchFuncKeyboard:ctor()
 		},
 		{
 			name = "Shift+Tab",
-			background = mainFrameImageData:GetIconUrl("main_icon_up.png"),
-			clickedBackground = mainFrameImageData:GetIconUrl("main_icon_up.png"),
-			left = 18, top = 64, width = 192, height = 80,
+			background = funcKeyboardImageData:GetIconUrl("funckeyboard_key_bot.png"),
+			clickedBackground = funcKeyboardImageData:GetIconUrl("funckeyboard_key_dark.png"),
+			left = 219, top = 310, width = 192, height = 80,
 			key = {	
 				DIK_SCANCODE.DIK_LSHIFT,
 				DIK_SCANCODE.DIK_TAB,
@@ -116,9 +123,9 @@ function TouchFuncKeyboard:ctor()
 		},
 		{
 			name = "Alt",
-			background = mainFrameImageData:GetIconUrl("main_icon_up.png"),
-			clickedBackground = mainFrameImageData:GetIconUrl("main_icon_up.png"),
-			left = 18, top = 64, width = 192, height = 80,
+			background = funcKeyboardImageData:GetIconUrl("funckeyboard_key_bot.png"),
+			clickedBackground = funcKeyboardImageData:GetIconUrl("funckeyboard_key_dark.png"),
+			left = 18, top = 392, width = 192, height = 80,
 			key = {	
 				DIK_SCANCODE.DIK_LMENU,
 				},
@@ -126,9 +133,9 @@ function TouchFuncKeyboard:ctor()
 		},
 		{
 			name = "Alt+Shift",
-			background = mainFrameImageData:GetIconUrl("main_icon_up.png"),
-			clickedBackground = mainFrameImageData:GetIconUrl("main_icon_up.png"),
-			left = 18, top = 64, width = 192, height = 80,
+			background = funcKeyboardImageData:GetIconUrl("funckeyboard_key_bot.png"),
+			clickedBackground = funcKeyboardImageData:GetIconUrl("funckeyboard_key_dark.png"),
+			left = 219, top = 392, width = 192, height = 80,
 			key = {	
 				DIK_SCANCODE.DIK_LMENU,
 				DIK_SCANCODE.DIK_LSHIFT,
@@ -137,9 +144,9 @@ function TouchFuncKeyboard:ctor()
 		},
 		{
 			name = "Tab",
-			background = mainFrameImageData:GetIconUrl("main_icon_up.png"),
-			clickedBackground = mainFrameImageData:GetIconUrl("main_icon_up.png"),
-			left = 18, top = 64, width = 192, height = 80,
+			background = funcKeyboardImageData:GetIconUrl("funckeyboard_key_bot.png"),
+			clickedBackground = funcKeyboardImageData:GetIconUrl("funckeyboard_key_dark.png"),
+			left = 18, top = 474, width = 192, height = 80,
 			key = {	
 				DIK_SCANCODE.DIK_TAB,
 				},
@@ -147,27 +154,20 @@ function TouchFuncKeyboard:ctor()
 		},
 		{
 			name = "DEL",
-			background = mainFrameImageData:GetIconUrl("main_icon_up.png"),
-			clickedBackground = mainFrameImageData:GetIconUrl("main_icon_up.png"),
-			left = 18, top = 64, width = 192, height = 80,
+			background = funcKeyboardImageData:GetIconUrl("funckeyboard_key_bot.png"),
+			clickedBackground = funcKeyboardImageData:GetIconUrl("funckeyboard_key_dark.png"),
+			left = 219, top = 474, width = 192, height = 80,
 			key = {	
 				DIK_SCANCODE.DIK_BACK,
 				},
 			type = 2,
 		},
 	};
+
+	self:initUIComponent()
 end
 
---单例实例化
-local newInstance;
-function TouchFuncKeyboard.getSingleton()
-    if (not newInstance) then
-        newInstance = TouchFuncKeyboard:new():init()
-    end
-    return newInstance
-end
-
-function TouchFuncKeyboard:init()
+function TouchFuncKeyboard:initUIComponent()
 	self.name = name or self.name;
 	local container = self:getContainer();
     container:RemoveAll();
@@ -175,27 +175,27 @@ function TouchFuncKeyboard:init()
 	
 	for _, item in ipairs(self.keylayout) do
         if item.name then
-            item.width = Design:adapterWidth(item.width);
-            item.height = Design:adapterWidth(item.height);
+            local width = Design:adapterWidth(item.width);
+            local height = Design:adapterWidth(item.height);
 
-            item.left = Design:adapterWidth(item.left);
-            item.right = item.width + item.left;
-
-            item.top = Design:adapterWidth(item.top);
-            item.bottom = item.height + item.top;
+            local left = Design:adapterWidth(item.left);
+            local top = Design:adapterWidth(item.top);
 
             local button = ParaUI.CreateUIObject("button",
                 item.name,
                 "_lt",
-                item.left,
-                item.top,
-                item.width,
-                item.height);
+                left,
+                top,
+                width,
+                height);
 
             button.background = item.background;
 			button.enabled = false;
-			button.CASTType = item.type
-			button.CASTKey = item.key
+			button.funcType = item.type
+			button.funcKey = item.key
+
+			item.id = button.id
+
             _guihelper.SetUIColor(button, "#FFFFFF");
             container:AddChild(button);
         end
@@ -203,11 +203,27 @@ function TouchFuncKeyboard:init()
 	return self;
 end
 
+function TouchFuncKeyboard:refreshUIComponent()
+	self:getContainer()
+	for _, item in ipairs(self.keylayout) do
+        if item.name then
+			local button = ParaUI.GetUIObject(item.id or item.name)
+			local width = Design:adapterWidth(item.width)
+            local height = Design:adapterWidth(item.height)
+
+            local left = Design:adapterWidth(item.left)
+			local top = Design:adapterWidth(item.top)
+			
+			button:Reposition("_lt", left, top, width, height)
+        end
+    end
+end
+
 function TouchFuncKeyboard:getContainer()
 	local container = ParaUI.GetUIObject(self.id or self.name);
-	self.alignment = "_rt";
+	self.alignment = "_lt";
 	self.left = Design:adapterWidth(1354);
-    self.top = Screen:GetHeight() - Design:adapterWidth(58);
+    self.top = Design:adapterWidth(58);
     self.width = Design:adapterWidth(429);
     self.height = Design:adapterWidth(577);
 	
@@ -249,8 +265,9 @@ end
 
 --处理触摸事件
 function TouchFuncKeyboard:handleTouch(touch)
-    local touchSession = TouchSession.GetTouchSession(touch);
-
+	local touchSession = TouchSession.GetTouchSession(touch);
+	
+	GameLogic.AddBBS(nil, touch.type, 2000, "0 0 255", 21)
     if touch.type == "WM_POINTERDOWN" then
 
     elseif touch.type == "WM_POINTERUP" then
@@ -262,8 +279,9 @@ end
 
 --控制显示功能键盘
 function TouchFuncKeyboard:show(_show)
-	GameLogic.AddBBS(nil, L"TouchFuncKeyboard:show", 2000, "0 0 255", 21)
-	GameLogic.AddBBS(nil, tostring(false == (_show == false)), 2000, "0 0 255", 21)
+	-- GameLogic.AddBBS(nil, L"TouchFuncKeyboard:show", 2000, "0 0 255", 21)
+	-- GameLogic.AddBBS(nil, tostring(false == (_show == false)), 2000, "0 0 255", 21)
+	self:refreshUIComponent()
     local container = self:getContainer();
     container.visible = (false == (_show == false));
 end
@@ -273,3 +291,5 @@ function TouchFuncKeyboard:Destroy()
     ParaUI.Destroy(self.id or self.name)
     self.id = nil
 end
+
+TouchFuncKeyboard:InitSingleton()
