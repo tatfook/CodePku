@@ -14,6 +14,9 @@ Online:init();
 NPL.load("(gl)Mod/GeneralGameServerMod/main.lua"); 
 NPL.load("(gl)Mod/CodePku/online/client/GeneralGameClient.lua");
 NPL.load("Mod/GeneralGameServerMod/Core/Common/Log.lua");
+NPL.load("(gl)Mod/CodePku/cellar/GUI/LiveLesson/Basic/LiveLessonBasic.lua")
+local LiveLessonBasic = commonlib.gettable("Mod.CodePku.Common.LiveLessonBasic")
+local LiveLessonSettlement = NPL.load("(gl)Mod/CodePku/cellar/GUI/LiveLesson/Settlement/LiveLessonSettlement.lua");
 local Config = NPL.load("(gl)Mod/CodePku/online/client/Config.lua");
 
 local GeneralGameServerMod = commonlib.gettable("Mod.GeneralGameServerMod");
@@ -108,17 +111,20 @@ worldKey 获取玩学世界当前世界信息
 		quick_ref = "/liveLesson subcmd",
 		desc = [[
 subcmd: 
-redflower 获取玩学世界当前所有世界分线数据
-    /liveLesson redflower 获取玩学世界当前所有世界分线数据
+redflower 奖励/扣除小红花
+entrance 获取玩学世界当前所有世界分线数据
+behavior 获取玩学世界当前所有世界分线数据
+toteacher 获取玩学世界当前所有世界分线数据
+movestudent 获取玩学世界当前所有世界分线数据
+movegroup 获取玩学世界当前所有世界分线数据
+settlement 获取玩学世界当前所有世界分线数据
+classover 获取玩学世界当前所有世界分线数据
 		]],
 		handler = function(cmd_name, cmd_text, cmd_params, fromEntity)
 			GGS.INFO.Format(cmd_name .. " " .. cmd_text)
 			local cmd, cmd_text = CmdParser.ParseString(cmd_text)
 			local options = ParseOptions(cmd_text)
-			local netHandler = GeneralGameServerMod:GetClientClass("CodePku"):GetWorldNetHandler()
-			if not netHandler then
-				return
-			end
+
 			if (cmd == "redflower") then
 				local type = options.type --1=增加,2=减少
 				local num = options.num or 1
@@ -183,7 +189,7 @@ redflower 获取玩学世界当前所有世界分线数据
 					GameLogic.RunCommand(string.format("/tip -color #ff0000 -duration 3000 %s", text))
 				end
 
-			elseif (cmd == "groupmove") then
+			elseif (cmd == "movegroup") then
 				local group = options.group
 				local position = options.position
 				--todo 分组
@@ -194,6 +200,11 @@ redflower 获取玩学世界当前所有世界分线数据
 					GameLogic.RunCommand(string.format("/goto %s %s %s", position.x, position.y, position.z))
 				end
 
+			elseif (cmd == "settlement") then
+				LiveLessonSettlement:ShowStudentSettlementPage()
+
+			elseif (cmd == "classover") then
+				--todo 下课五分钟后自动解散
 			end
 		end
 	}

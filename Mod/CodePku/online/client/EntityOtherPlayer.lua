@@ -52,3 +52,16 @@ end
 function EntityOtherPlayer:SetSuperPlayerInfo(playerInfo)
     EntityOtherPlayer._super.SetPlayerInfo(self, playerInfo);
 end
+
+
+-- 更改人物外观
+function EntityOtherPlayer:UpdateEntityActionState()
+    EntityOtherPlayer._super.UpdateEntityActionState(self);
+    -- 改写大小同步规则
+    local dataWatcher = self:GetDataWatcher();
+    local curScale = dataWatcher:GetField(self.dataFieldScale);
+    if(curScale and curScale ~= self:GetScaling()) then
+        self:SetScaling(curScale);
+        dataWatcher:SetField(self.dataFieldScale, curScale);
+    end
+end
