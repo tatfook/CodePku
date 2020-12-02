@@ -269,6 +269,7 @@ function SkinPageV1.OnOK(notip)
 				local params = {
 					player_info = {asset=filepath,},
 				}
+				commonlib.setfield("System.User.info.ext_data", params)
 				request:put('/users/profile',params):next(function(response)
 					LOG.std(nil, "info", "SkinPageV1", "OnOK")
 				end):catch(function(e)
