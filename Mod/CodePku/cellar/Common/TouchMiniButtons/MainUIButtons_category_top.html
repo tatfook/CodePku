@@ -13,8 +13,10 @@
 local MainUIButtons = NPL.load("(gl)Mod/CodePku/cellar/Common/TouchMiniButtons/Main.lua");
 local Feedback = NPL.load("(gl)Mod/CodePku/cellar/GUI/Feedback/Feedback.lua");
 NPL.load("(gl)Mod/CodePku/cellar/GUI/rank/RankPage.lua")
+NPL.load("(gl)Mod/CodePku/cellar/Mail/Mail.lua")
+local Mail = commonlib.gettable("Mod.CodePku.celler.Mail")
 RankPage = commonlib.gettable("Mod.CodePku.RankPage");
-
+mainFrameImageData = NPL.load("(gl)Mod/CodePku/cellar/imageLuaTable/mainFrameImageData.lua")
 
 category_top = MainUIButtons.category_top
 function ClickChooseFun(name)
@@ -33,7 +35,7 @@ function ClickChooseFun(name)
         GameLogic.GetFilters():apply_filters("ClickStatistics", {type = 13}); -- 点击社区，触发操作数据统计计数
         GameLogic.RunCommand("/open http://kids.wanxueshijie.com/")
     elseif(name == "ClickEmail") then 
-        
+        Mail:ShowPage()
     elseif(name == "ClickShareApp") then 
         
     else
@@ -49,7 +51,11 @@ end
     <pe:repeat DataSource="<%=category_top%>" style="">
         <pe:repeatitem style="float:left;">
             <pe:if condition="<%=Eval('bShow') == true%>">
-                <div style="<%=format('margin-left:%d;width:%d;height:%d;top: %d;background: url(%s);',Eval('left'),Eval('width'),Eval('height'),Eval('top'),Eval('url'))%>" name="<%=Eval('name')%>" onclick="ClickChooseFun"></div>
+                <div style="<%=format('margin-left:%d;width:%d;height:%d;top: %d;background: url(%s);',Eval('left'),Eval('width'),Eval('height'),Eval('top'),Eval('url'))%>" name="<%=Eval('name')%>" onclick="ClickChooseFun">
+                    <pe:if condition="<%=Eval('dot') == true%>">
+                        <div style="<%=format('position:relative;width:30;height:30;top:0;left:%d;background:url(%s);',Eval('width')-30,mainFrameImageData:GetIconUrl('main_icon_tip.png'))%>"></div>
+                    </pe:if>
+                </div>
             </pe:if>          
         </pe:repeatitem>
     </pe:repeat>

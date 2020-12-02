@@ -170,10 +170,10 @@ function CodePku:init()
 		"OnWorldUnloaded",
 		function()
 			-- 这里因为只能在世界加载完成之前，所以只能用isLoadingHome来判断
-			if System.Codepku.isLoadingHome then
+			if System.Codepku.isLoadingHome or System.Codepku.isLoadingUserHome then
 				LOG.std(nil, "info", "codepku", "add_filter OnWorldUnloaded")
 				commonlib.setfield("System.Codepku.Coursewares", nil)
-			end			
+			end						
 		end
 	)
 
