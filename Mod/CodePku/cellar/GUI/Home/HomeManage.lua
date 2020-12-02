@@ -28,6 +28,34 @@ local HomeManage = commonlib.gettable("Mod.CodePku.Common.HomeManage")
 function HomeManage:OnInit()
     LOG.std("", "info", "HomeManage", "OnInit");
     GameLogic:Connect("WorldLoaded", HomeManage, HomeManage.OnWorldLoaded, "UniqueConnection");
+    self:RegisterCommand();
+end
+
+function HomeManage:RegisterCommand()
+    local Commands = commonlib.gettable("MyCompany.Aries.Game.Commands"); 
+    -- local CmdParser = commonlib.gettable("MyCompany.Aries.Game.CmdParser");   
+
+    Commands["loadWanxueHouse"] = {
+		mode_deny = "",  
+		name="loadWanxueHouse",
+		quick_ref="/loadWanxueHouse [userId]", 
+		desc=[[进入指定玩学用户的家园 
+userId 为玩学世界用户ID
+]], 
+        handler = function(cmd_name, cmd_text, cmd_params)	                        	
+            local userId = tonumber(cmd_text) or '';            
+            if (not userId or tonumber(userId) <= 0) then
+                return ;
+            end
+            local isEmployee = System.User and System.User.info and System.User.info.is_employee;
+            if isEmployee and tonumber(isEmployee) == 1 then
+                HomeManage:LoadHomeWorld(userId)
+            else
+                GameLogic.AddBBS(nil, L"你不允许查看该家园", 3000, "255 0 0", 21)
+            end
+            
+		end,
+	}
 end
 
 function HomeManage:OnWorldLoaded()
@@ -40,6 +68,67 @@ function HomeManage:OnWorldLoaded()
     end
     --判定结束后将正在进入家园区判定变量设置为false
     System.Codepku.isLoadingHome = false
+    System.Codepku.isLoadingUserHome = false
+end
+
+function HomeManage:LoadHomeWorld(userId)
+    local currentUserId = System.User.id;
+    if (userId == currentUserId) then
+        HomeManage:GetHomeWorld();
+        return;
+    end
+
+    local function LoadWorld(world, refreshMode)
+        if world then
+            if refreshMode == 'never' then
+                if not LocalService:IsFileExistInZip(world:GetLocalFileName(), ":worldconfig.txt") then
+                    refreshMode = 'force'
+                end
+            end
+
+            local url = world:GetLocalFileName()
+            DownloadWorld.ShowPage(url)
+            local mytimer = commonlib.Timer:new(
+                {
+                    callbackFunc = function(timer)
+                        InternetLoadWorld.LoadWorld(
+                            world,
+                            nil,
+                            refreshMode or "auto",
+                            function(bSucceed, localWorldPath)   
+                                System.Codepku.isLoadingUserHome = true       
+                                DownloadWorld.Close()
+                            end
+                        )
+                    end
+                }
+            );
+            -- prevent recursive calls.
+            mytimer:Change(1,nil);
+        else
+            _guihelper.MessageBox(L"无效的世界文件");
+        end
+    end
+    request:get('/house/user/' .. userId):next(function (response)                 
+        local responseData = response and response.data and response.data.data;
+        echo('get user house response')
+        echo(responseData);
+        local worldUrl = responseData and responseData.file and responseData.file.file_url;
+        if not worldUrl then 
+            GameLogic.AddBBS(nil, L"获取家园失败", 3000, "255 0 0", 21)
+            return false
+        end
+        local world = RemoteWorld.LoadFromHref(worldUrl, "self")
+        LoadWorld(world, 'auto')
+
+    end):catch(function (error) 
+        echo('load user house world error')
+        echo(error);
+        local errorMsg = error and error.data and error.data and error.data.message or L"该用户没有家园";
+        GameLogic.AddBBS(nil, errorMsg, 3000, "255 0 0", 21)
+        return false
+    end)
+
 end
 
 -- 判断是否在自己的家园

@@ -24,6 +24,11 @@ function StudyStats.StaticInit()
 end
 
 function StudyStats.OnWorldLoaded()
+    echo("System.Codepku.isLoadingUserHome")
+    echo(System.Codepku.isLoadingUserHome)
+    if System.Codepku.isLoadingUserHome then
+        return;
+    end
     
     if System.Codepku and System.Codepku.MyHouse and System.Codepku.isLoadingHome then
         StudyStats.myHouseId = System.Codepku.MyHouse.id;
@@ -51,7 +56,7 @@ function StudyStats.OnWorldUnload(self, event)
             entry_at = StudyStats.enterTime,
             leave_at = StudyStats.leaveTime
         }):next(function(response)
-            echo(response)
+            LOG.std("", 'info', 'codepku', 'upload courseware learn log');
         end):catch(function(err)
             LOG.error("ERROR: catched at StudyStats.OnWorldUnload");
             LOG.error(err)
@@ -68,7 +73,7 @@ function StudyStats.OnWorldUnload(self, event)
             entry_at = StudyStats.enterTime,
             leave_at = StudyStats.leaveTime
         }):next(function(response)            
-            echo(response)
+            LOG.std("", 'info', 'codepku', 'upload house building learn log');
         end):catch(function(err)
             LOG.error("ERROR: catched at StudyStats.OnWorldUnload");
             LOG.error(err)
