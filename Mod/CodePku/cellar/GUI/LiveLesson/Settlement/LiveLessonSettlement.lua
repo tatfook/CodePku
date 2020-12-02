@@ -14,25 +14,29 @@ local AdaptWindow = commonlib.gettable("Mod.CodePku.GUI.Window.AdaptWindow")
 local liveLessonImageData = NPL.load("(gl)Mod/CodePku/cellar/imageLuaTable/liveLessonImageData.lua")
 local request = NPL.load("(gl)Mod/CodePku/api/BaseRequest.lua");
 
+-- 常量table
+LiveLessonSettlement.constant = {
+    ExitTime = 300,     -- 老师点击下课后，学生强制退出的时间/秒
+}
 
 -- 获取图标
 function LiveLessonSettlement:GetIconPath(index)
     return liveLessonImageData:GetIconUrl(index)
 end
 
--- 下课计时器
+-- todo 下课计时器
 function LiveLessonSettlement:ClassOverTimer()
-    -- todo 下课计时器
     GameLogic.AddBBS("CodeGlobals", L"下课了，教室将于5分钟后关闭", 3000, "#FF0000");
+    if LiveLessonSettlement.TimerTimes and LiveLessonSettlement.TimerTimes ~= 0 then
+        return
+    end
+    LiveLessonSettlement.TimerTimes = 0
     LiveLessonSettlement.class_over_timer = commonlib.Timer:new({
         callbackFunc = function(timer)
-            if LiveLessonSettlement.TimerTimes == 300 then
-                -- GameLogic.AddBBS("CodeGlobals", L"关闭计时器", 3000, "#FF0000");
+            if LiveLessonSettlement.TimerTimes == LiveLessonSettlement.constant.ExitTime then
+                GameLogic.AddBBS("CodeGlobals", L"时间到了，强制退出", 3000, "#FF0000");
                 LiveLessonSettlement.TimerTimes = nil
                 timer:Change()
-            end
-            if not LiveLessonSettlement.TimerTimes then
-                LiveLessonSettlement.TimerTimes = 0
             end
             LiveLessonSettlement.TimerTimes = LiveLessonSettlement.TimerTimes + 1
         end
