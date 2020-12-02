@@ -20,16 +20,51 @@ function LiveLessonSettlement:GetIconPath(index)
     return liveLessonImageData:GetIconUrl(index)
 end
 
--- 结算弹窗
-function LiveLessonSettlement:ShowSettlementPage()
-    if LiveLessonSettlement.settlement_page then
-        LiveLessonSettlement.settlement_page:CloseWindow()
-        LiveLessonSettlement.settlement_page = nil
+-- 下课计时器
+function LiveLessonSettlement:ClassOverTimer()
+    -- todo 下课计时器
+    GameLogic.AddBBS("CodeGlobals", L"下课了，教室将于5分钟后关闭", 3000, "#FF0000");
+    LiveLessonSettlement.class_over_timer = commonlib.Timer:new({
+        callbackFunc = function(timer)
+            if LiveLessonSettlement.TimerTimes == 300 then
+                -- GameLogic.AddBBS("CodeGlobals", L"关闭计时器", 3000, "#FF0000");
+                LiveLessonSettlement.TimerTimes = nil
+                timer:Change()
+            end
+            if not LiveLessonSettlement.TimerTimes then
+                LiveLessonSettlement.TimerTimes = 0
+            end
+            LiveLessonSettlement.TimerTimes = LiveLessonSettlement.TimerTimes + 1
+        end
+    })
+    LiveLessonSettlement.class_over_timer:Change(0, 1000)
+end
+
+-- 学生结算弹窗
+function LiveLessonSettlement:ShowStudentSettlementPage()
+    -- todo 通过GGS执行cmd，需要判断是否是老师，老师不展示下面的弹窗
+    if LiveLessonSettlement.student_settlement_page then
+        LiveLessonSettlement.student_settlement_page:CloseWindow()
+        LiveLessonSettlement.student_settlement_page = nil
     end
     local params = {
-        url="Mod/CodePku/cellar/GUI/LiveLesson/Settlement/LiveLessonSettlement.html",
+        url="Mod/CodePku/cellar/GUI/LiveLesson/Settlement/LiveLessonStudentSettlement.html",
         alignment="_lt", left = 0, top = 0, width = 1920 , height = 1080, zorder = 10000
     }
-    LiveLessonSettlement.settlement_page = AdaptWindow:QuickWindow(params)
-    return LiveLessonSettlement.settlement_page
+    LiveLessonSettlement.student_settlement_page = AdaptWindow:QuickWindow(params)
+    return LiveLessonSettlement.student_settlement_page
+end
+
+-- 教师结算界面
+function LiveLessonSettlement:ShowTeacherSettlementPage()
+    if LiveLessonSettlement.teacher_settlement_page then
+        LiveLessonSettlement.teacher_settlement_page:CloseWindow()
+        LiveLessonSettlement.teacher_settlement_page = nil
+    end
+    local params = {
+        url="Mod/CodePku/cellar/GUI/LiveLesson/Settlement/LiveLessonTeacherSettlement.html",
+        alignment="_lt", left = 0, top = 0, width = 1920 , height = 1080, zorder = 9999
+    }
+    LiveLessonSettlement.teacher_settlement_page = AdaptWindow:QuickWindow(params)
+    return LiveLessonSettlement.teacher_settlement_page
 end
