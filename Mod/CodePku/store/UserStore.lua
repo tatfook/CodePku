@@ -31,6 +31,7 @@ function UserStore:Action()
             self.mobile = user.mobile
             self.random_name = user.random_name
             self.isvisitor = user.visitor_id and (user.mobile == nil)
+            self.schoolName = user.school and user.school.name or nil
             self.info = user
 
             
@@ -41,6 +42,7 @@ function UserStore:Action()
             commonlib.setfield("System.User.nickName", user.nickname)
             commonlib.setfield("System.User.randomName", user.random_name)
             commonlib.setfield("System.User.isVisitor", self.isvisitor)
+            commonlib.setfield("System.User.schoolName", user.school and user.school.name or nil)
             commonlib.setfield("System.User.info", user)
 
         end,
@@ -55,7 +57,8 @@ function UserStore:Action()
             self.mobile = nil
             self.random_name = nil
             self.isvisitor = nil
-            self.info = nil      
+            self.schoolName = nil
+            self.info = nil
 
             commonlib.setfield("System.User.codepkuToken", nil)
             commonlib.setfield("System.User.mobile", nil)
@@ -64,6 +67,7 @@ function UserStore:Action()
             commonlib.setfield("System.User.nickName", nil)
             commonlib.setfield("System.User.randomName", nil)
             commonlib.setfield("System.User.isVisitor", nil)
+            commonlib.setfield("System.User.schoolName", nil)
             commonlib.setfield("System.User.info", nil)
         end
     }

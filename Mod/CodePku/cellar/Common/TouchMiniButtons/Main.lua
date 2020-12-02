@@ -151,6 +151,35 @@ end
 
 -- 限时活动页
 function MainUIButtons:show_activity_ui()
+	local currday, currhour = commonlib.timehelp.GetLocalTime()
+	if not MainUIButtons.livingCoursesData or not MainUIButtons.livingCoursesDay == currday then
+		local request = NPL.load("(gl)Mod/CodePku/api/BaseRequest.lua")
+		request:get("/trial-live/courses", nil, nil):next(function( response )
+			if response.status == 200 then
+				local data = response.data and response.data.data
+				local courses = data.courses
+				local function split( str,reps )
+					local resultStrList = {}
+					string.gsub(str,'[^'..reps..']+',function ( w )
+						table.insert(resultStrList,w)
+					end)
+					return resultStrList
+				end
+
+				MainUIButtons.livingCoursesDay = split(data.courses[1].updated_at," ")[1]
+				if courses then
+					MainUIButtons.livingCoursesData = {}
+					for _, val in ipairs(courses) do
+						table.insert(MainUIButtons.livingCoursesData, {
+							start_at = val.start_at,
+							end_at = val.end_at,
+							timestamp = val.updated_at,
+						})
+					end
+				end
+			end
+		end)
+	end
 	local open_height = MainUIButtons:getWidth(MainUIButtons.activity, 1)
 	local params = {
 		url="Mod/CodePku/cellar/Common/TouchMiniButtons/MainUIButtons_activity.html", 
