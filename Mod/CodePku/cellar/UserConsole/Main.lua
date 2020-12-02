@@ -154,6 +154,10 @@ function UserConsole:CourseEntry()
     local ChooseBranch = commonlib.gettable("Mod.CodePku.GUI.ChooseBranch")
     ChooseBranch:GetServerData()
 
+    -- 初始化websocket
+    local WebSocketClient = NPL.load("(gl)Mod/CodePku/cellar/Heartbeat/WebSocketClient.lua");
+    WebSocketClient:StaticInit()
+
     -- 登陆之后，获取邮件信息
     NPL.load("(gl)Mod/CodePku/cellar/Mail/Mail.lua")
     local Mail = commonlib.gettable("Mod.CodePku.celler.Mail")

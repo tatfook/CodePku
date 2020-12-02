@@ -36,7 +36,7 @@
         echo("---------------------Mail-----------------------")
 
         function OnClose()
-            --TODO 给邮件列表排序
+            Mail.ShowMailPage = false
             Page:CloseWindow()
         end
 
@@ -55,7 +55,7 @@
         value = mail_data[1]
         current_id = value.user_mail_id
 
-        content = Mail:HandleContent(value.body)
+        --content = Mail:HandleContent(value.body)
         content = value.body
 
         --获取状态标签 火热，限时 > 新 > 无
@@ -200,16 +200,19 @@
                             ></textarea> -->
                         </div>
 
-                        <div style="position: relative; height: 134; left: 25; top: 500;">
-                            <pe:repeat DataSource="<%= value.annexes %>">
-                                <div style="float: left;width: 134; height: 134; margin-right: 36;">
-                                    <div style="<%= format('position:relative;top:4;left:4;width: 126; height: 125;background:url(%s);', mail_icon_coin_0) %>"></div>
-                                    <div style="<%= format('position:relative;top:0;left:0;position:relative;top:0;left:0;;width: 134; height: 134;background:url(%s);', mail_icon_coin_1) %>"></div>
-                                    <div style="<%= format('position:relative;left:31;top:31;width: 72;height: 72;background:url(%s);', prop_icon_url) %>"></div>
-                                    <div style="<%= format('position:relative;left:72;top:112;width: 63;height:29;text-align: center;font-size: 22;color: #ffffff;font-family: Noto Sans S Chinese Regular;background:url(%s);', mail_icon_coin_4) %>"><%=Eval('prop_num')%></div>
-                                </div>
-                            </pe:repeat>
-                        </div>
+                        <pe:if condition="<%= value.annex_status ~= 2 %>">
+                            <div style="position: relative; height: 134; left: 25; top: 500;">
+                                <pe:repeat DataSource="<%= value.annexes %>">
+                                    <div style="float: left;width: 134; height: 134; margin-right: 36;">
+                                        <div style="<%= format('position:relative;top:4;left:4;width: 126; height: 125;background:url(%s);', mail_icon_coin_0) %>"></div>
+                                        <div style="<%= format('position:relative;top:0;left:0;position:relative;top:0;left:0;;width: 134; height: 134;background:url(%s);', mail_icon_coin_1) %>"></div>
+                                        <div style="<%= format('position:relative;left:31;top:31;width: 72;height: 72;background:url(%s);', prop_icon_url) %>"></div>
+                                        <div style="<%= format('position:relative;left:72;top:112;width: 63;height:29;text-align: center;font-size: 22;color: #ffffff;font-family: Noto Sans S Chinese Regular;background:url(%s);', mail_icon_coin_4) %>"><%=Eval('prop_num')%></div>
+                                    </div>
+                                </pe:repeat>
+                            </div>
+                        </pe:if>
+                        
 
                         <pe:if condition="<%= value.annex_status == 0 %>">
                             <div onclick="ClickReceive" style="<%=format('position: relative; left: 840; top: 550; width: 161;height:87;line-height:87;font-family: Noto Sans S Chinese Regular;color:#ffffff;font-size: 34;text-align:center;background:url(%s);', mail_btn_receive_normal)%>">

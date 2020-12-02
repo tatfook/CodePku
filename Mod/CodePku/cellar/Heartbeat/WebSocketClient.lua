@@ -18,9 +18,44 @@ local handshake = NPL.load("(gl)script/ide/System/os/network/WebSocket/handshake
 local frame = NPL.load("(gl)script/ide/System/os/network/WebSocket/frame.lua");
 local tools = NPL.load("(gl)script/ide/System/os/network/WebSocket/tools.lua");
 local WebSocketClient = commonlib.inherit(commonlib.gettable("commonlib.EventSystem"), NPL.export());
+local CodepkuConfig = NPL.load("(gl)Mod/CodePku/config/Config.lua")
 
 local WebSocketClientMaps = {};
 local ack_id_counter = -1;
+
+function WebSocketClient:StaticInit()
+    url  = url or WebSocketClient.GetUrl();
+    WebSocketClient.client = WebSocketClient:new():Init(url, System.User.codepkuToken);
+    commonlib.setfield("System.CodePku.WebSocketClient", WebSocketClient.client)
+    WebSocketClient.client:AddEventListener("OnOpen",WebSocketClient.OnOpen,WebSocketClient);
+    WebSocketClient.client:AddEventListener("OnMsg",WebSocketClient.OnMsg,WebSocketClient);
+    WebSocketClient.client:AddEventListener("OnClose",WebSocketClient.OnClose,WebSocketClient);
+    if(WebSocketClient.client.state == "OPEN")then
+        WebSocketClient.OnOpen();
+        return
+    end
+    WebSocketClient.client:Connect(url);
+end
+
+function WebSocketClient.GetUrl()
+    local coursewareId = System.Codepku and System.Codepku.Coursewares and System.Codepku.Coursewares.id;
+    return CodepkuConfig.defaultSocketServer .. string.format("?token=%s&world_id=%s", System.User.codepkuToken, tostring(coursewareId));
+end
+
+function WebSocketClient.OnOpen(self)
+
+end
+
+function WebSocketClient.OnMsg(self, msg)   
+    if(not msg or not msg.data)then
+        return
+    end
+    msg = msg.data;
+end
+
+function WebSocketClient.OnClose(self)
+
+end
 
 function WebSocketClient:ctor()    
     self.address_id = "id_" .. ParaGlobal.GenerateUniqueID();
@@ -33,7 +68,6 @@ function WebSocketClient:Init(url, token)
     self.url = url;
     self.token = token;    
 
-    echo("url===================="..url)
     self.pingTimeout = 8000;
     self.pongTimeout = 9000;
     self.reconnectTimeout = 4000;
@@ -96,12 +130,6 @@ function WebSocketClient:Connect(url)
         uri = uri,
         token = self.token,
     });
-    echo("heartbeat:WebSocketClient:Connect-----------req")
-    echo("url======")
-    echo(url)
-    echo("nid============"..self:GetAddressID())
-    echo("req======")
-    echo(req)
     self.key = key;
     self.state = "CONNECTING";
     NPL.AddPublicFile("Mod/CodePku/cellar/Heartbeat/WebSocketClient.lua", -30);
@@ -244,8 +272,6 @@ end
 local function activate()
     -- LOG.std("", "debug", "WebSocketClient OnMsg", msg);
     local nid = msg.nid;
-    echo("============activate=============")
-    echo(msg)
     if(not nid)then
 		LOG.std("", "error", "WebSocketClient", "activate nid is nil");
         return
@@ -256,8 +282,6 @@ local function activate()
     end
 
     local response = msg[1];
-    echo("===========response==========="..nid)
-    echo(response) 
     -- waitting for handshake
     if(client.state == "CONNECTING")then
         local headers = handshake.http_headers(response)

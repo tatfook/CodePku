@@ -507,7 +507,9 @@ function MainUIButtons.ShowPage()
 		hideMenu = System.Codepku.Coursewares.hide_menu;
 		hideAllMenu = System.Codepku.Coursewares.hide_all_menu;
 	end
-
+	if MainUIButtons.mytimer then
+		MainUIButtons.mytimer:Change()
+	end
 	if not hideAllMenu then
 		if not hideMenu then 
 			MainUIButtons:show_activity_ui() -- 限时活动
@@ -532,9 +534,9 @@ function MainUIButtons.ShowPage()
 			MainUIButtons:show_home_window_ui()
 			MainUIButtons:show_main_open_ui()
 		else 
-			if MainUIButtons.mytimer then
-				MainUIButtons.mytimer:Change()
-			end
+			-- if MainUIButtons.mytimer then
+			-- 	MainUIButtons.mytimer:Change()
+			-- end
 			MainUIButtons:show_category(false)
 		end
 	end

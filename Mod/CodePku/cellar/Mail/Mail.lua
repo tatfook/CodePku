@@ -24,6 +24,7 @@ Mail.content = {}
 Mail.todoLen = 0;
 Mail.receiveFlag = 0;
 Mail.tips = "当前有"..Mail.todoLen.."封待处理的邮件"
+Mail.ShowMailPage = false
 Mail.Status = {
     [0] = {style = ""},--string.format("%s:tcp", self:GetAddressID())
     [1] = {title = "已读",style = string.format("position:relative;width: 82;height:53;left:10;top:-130;background:url(%s)", mailImageData:GetIconUrl("mail_tab_read.png"))},
@@ -65,6 +66,10 @@ function Mail:GetMailList()
     request:get('/mails',{},nil):next(function(response)
         Mail.mailList = (response and response.data and response.data.data) or {}
         Mail:GetTodoCount()
+        echo("=======Mail:GetMailList=======")
+        for i,v in pairs(Mail.mailList) do
+            echo(i)
+        end
     end):catch(function(e)
         GameLogic.AddBBS(nil, L"邮件获取失败，请重试", 3000, "255 0 0", 21);
     end);
@@ -76,25 +81,26 @@ function Mail:Connect(url,options,onopen_callback)
     end
 
     url = url or Mail.GetUrl();
-    if(not Mail.client)then
-        Mail.client = WebSocketClient:new():Init(url, System.User.codepkuToken);
-        Mail.client:AddEventListener("OnOpen",Mail.OnOpen,Mail);
-        Mail.client:AddEventListener("OnMsg",Mail.OnMsg,Mail);
-        Mail.client:AddEventListener("OnClose",Mail.OnClose,Mail);
+    WebSocketClient.client = commonlib.getfield("System.CodePku.WebSocketClient")
+    if(not WebSocketClient.client)then
+        WebSocketClient.client = WebSocketClient:new():Init(url, System.User.codepkuToken);
+        commonlib.setfield("System.CodePku.WebSocketClient", WebSocketClient.client)
     end
-    options = options or {};
-    Mail.onopen_callback = onopen_callback;
-    if(Mail.client.state == "OPEN")then
-        Mail.OnOpen();
-        return
-    end
-    Mail.client:Connect(url);
+    WebSocketClient.client:AddEventListener("OnOpen",Mail.OnOpen,Mail);
+    WebSocketClient.client:AddEventListener("OnMsg",Mail.OnMsg,Mail);
+    WebSocketClient.client:AddEventListener("OnClose",Mail.OnClose,Mail);
+    -- options = options or {};
+    -- Mail.onopen_callback = onopen_callback;
+    -- if(WebSocketClient.client.state == "OPEN")then
+    --     Mail.OnOpen();
+    --     return
+    -- end
+    -- WebSocketClient.client:Connect(url);
 end
 
 function Mail.GetUrl()
     local coursewareId = System.Codepku and System.Codepku.Coursewares and System.Codepku.Coursewares.id;
     return CodepkuConfig.defaultSocketServer .. string.format("?token=%s&world_id=%s", System.User.codepkuToken, tostring(coursewareId));
-    -- return CodepkuConfig.defaultSocketServer .. string.format("?token=%s", System.User.codepkuToken);
 end
 
 function Mail.OnOpen(self)
@@ -109,12 +115,11 @@ function Mail.OnClose(self)
 end
 
 function Mail.OnMsg(self, msg)
-    echo("输出msg=========")  
-    echo(msg)
     if(not msg or not msg.data)then
         return
     end
-
+    echo("Mail输出msg=========")  
+    echo(msg)
     msg = msg.data;
     if msg["action"] == "new_mail" then
         -- 更新本地缓存数据
@@ -125,11 +130,9 @@ function Mail.OnMsg(self, msg)
         -- 更新 Mail.todoLen
         Mail.todoLen = Mail.todoLen + 1
         Mail.tips = "当前有"..Mail.todoLen.."封待处理的邮件"
-        echo("---------------")
-        echo(Mail.todoLen)
-        echo(Mail.tips)
         Mail:RefreshCategoryPage()
         Mail:RefreshPage()
+        -- WebSocketClient.client:SendMsg({ msg ="确认收到邮件", });
     end
 end
 
@@ -152,7 +155,7 @@ end
 -- annex_status 0 未领取，1已领取，2无奖励
 function Mail:TableSort(t)
     if #t > 1 then
-        local sort = function(a, b)
+        local sortFun = function(a, b)
             local r = false
             local timestamp = Mail:TranslateTime(a.send_time)
             local timestamp2 = Mail:TranslateTime(b.send_time)
@@ -160,12 +163,17 @@ function Mail:TableSort(t)
                 if a.status == 0 then -- 新邮件，仅按时间排序
                     if timestamp < timestamp2 then
                         r = false
+                    elseif timestamp == timestamp2 then
+                        r = false
                     else
                         r = true
                     end
                 else -- 已读邮件 先按有无附件，再按时间排序
-                    if a.annex_status == b.annex_status and a.annex_status ~= 0 then
+                    if a.annex_status == b.annex_status and a.annex_status == 0 then
+                    -- if a.annex_status == b.annex_status then
                         if timestamp < timestamp2 then
+                            r = false
+                        elseif timestamp == timestamp2 then
                             r = false
                         else
                             r = true
@@ -173,6 +181,8 @@ function Mail:TableSort(t)
                     else
                         if (a.annex_status ~= 0 and b.annex_status ~= 0) then
                             if timestamp < timestamp2 then
+                                r = false
+                            elseif timestamp == timestamp2 then
                                 r = false
                             else
                                 r = true
@@ -187,7 +197,39 @@ function Mail:TableSort(t)
             end
             return r
         end
-        table.sort(t, sort)
+        table.sort(t, sortFun)
+    end
+    -- t = Mail:TableSortByTime(t)
+    -- t = Mail:TableSortByAnnexStatus(t)
+    -- t = Mail:TableSortByStatus(t)
+    return t
+end
+
+function Mail:TableSortByTime(t)
+    if #t > 1 then
+        table.sort(t, function (a, b)
+            local timestamp = Mail:TranslateTime(a.send_time)
+            local timestamp2 = Mail:TranslateTime(b.send_time)
+            return timestamp > timestamp2
+        end)
+    end
+    return t
+end
+
+function Mail:TableSortByStatus(t)
+    if #t > 1 then
+        table.sort(t, function (a, b)
+            return a.status < b.status
+        end) 
+    end
+    return t
+end
+
+function Mail:TableSortByAnnexStatus(t)
+    if #t > 1 then
+        table.sort(t, function (a, b)
+            return a.annex_status < b.annex_status
+        end) 
     end
     return t
 end
@@ -218,7 +260,7 @@ function Mail:GetTodoCount()
 end
 
 function Mail:RefreshPage()
-    if Mail.mailPage then
+    if Mail.mailPage and Mail.ShowMailPage then
         Mail.mailPage:Refresh()
     end
 end
@@ -230,6 +272,7 @@ function Mail:ShowPage()
         alignment="_lt", left = 0, top = 0, width = 1920, height = 1080, zorder = 30,
         click_through = false,
     }
+    Mail.ShowMailPage = true
     Mail.mailPage = AdaptWindow:QuickWindow(params)
 end
 
@@ -258,18 +301,18 @@ function Mail:HandleStatus(id)
     local value = {};
     for k, v in ipairs(list) do
         if v.user_mail_id == id then
-            v.status = 1 --todo 设置已读
+            v.status = 1
             value = v;
         end
     end
 
-    request:post('/mails/read/'..id,{},nil):next(function(response)
-    end):catch(function(e)
-    end);
-    
     Mail.mailList = list;
     Mail:GetTodoCount()
     Mail:RefreshCategoryPage();
+
+    request:post('/mails/read/'..id,{},nil):next(function(response)
+    end):catch(function(e)
+    end);
     return value
 end
 
@@ -281,9 +324,6 @@ function Mail:Delete(id)
             table.remove(list, k)
             echo(k)
         end
-    end
-    for k, v in ipairs(list) do
-        echo(v)
     end
     Mail.mailList = list;
     Mail:GetTodoCount()
@@ -298,10 +338,10 @@ end
 function Mail:DeleteAll()
     echo("一键删除")
     local list = Mail.mailList;
-    for k, v in ipairs(list) do
-        if v.status == 1 then --如果已读，并且有奖励时奖励已领取
-            if v.annex_status == 1 or v.annex_status == 2 then
-                list[k] = nil
+    for i = #list, 1, -1 do
+        if list[i]["status"] == 1 then --已读
+            if list[i]["annex_status"] == 1 or list[i]["annex_status"] == 2 then --已领取/无奖励
+                table.remove(list, i)
             end
         end
     end
