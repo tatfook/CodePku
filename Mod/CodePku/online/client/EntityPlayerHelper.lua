@@ -72,17 +72,19 @@ function EntityPlayerHelper:SetHeadOnDisplay()
     -- local color = state == "online" and (self.isMainPlayer and "#ffffff" or "#0cff05") or "#b1b1b1";
     local color = self.isMainPlayer and "#ffffff" or "#0cff05";
     local playerUsernameStyle = state == "online" and "" or "shadow-quality:8; shadow-color:#2b2b2b;text-shadow:true;";
-    
+    local schoolName = userinfo.schoolName or "";
+    if (schoolName ~= "") then schoolName = "&lt;" .. schoolName .. "&gt;" end
     local mcml = string.format([[
 <pe:mcml>
     <div style="width:200px; margin-left: -100px; margin-top: -30px; color: %s;">
         <div align="center" style="">
             %s
             <div style="float:left; margin-left: 2px; font-weight:bold; font-size: 14px; base-font-size:14px; %s">%s</div>
-        </div>        
+        </div>
+        <div style="text-align: center; font-weight: bold; font-size: 12px; base-font-size:12px; margin-top: 0px;">%s</div>
     </div>
 </pe:mcml>
-    ]], color, usertag, playerUsernameStyle, GetUserName(username));
+    ]], color, usertag, playerUsernameStyle, GetUserName(username), schoolName);
     player:SetHeadOnDisplay({url = ParaXML.LuaXML_ParseString(mcml)});
 end
 
