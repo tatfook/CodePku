@@ -112,100 +112,98 @@ worldKey 获取玩学世界当前世界信息
 		desc = [[
 subcmd: 
 redflower 奖励/扣除小红花
-entrance 获取玩学世界当前所有世界分线数据
-behavior 获取玩学世界当前所有世界分线数据
-toteacher 获取玩学世界当前所有世界分线数据
-movestudent 获取玩学世界当前所有世界分线数据
-movegroup 获取玩学世界当前所有世界分线数据
-settlement 获取玩学世界当前所有世界分线数据
-classover 获取玩学世界当前所有世界分线数据
-		]],
-		handler = function(cmd_name, cmd_text, cmd_params, fromEntity)
-			GGS.INFO.Format(cmd_name .. " " .. cmd_text)
-			local cmd, cmd_text = CmdParser.ParseString(cmd_text)
-			local options = ParseOptions(cmd_text)
+entrance 用户进入直播课世界广播
+behavior 学生举手/举牌√/举牌x
+toteacher 发起学生移动到老师位置的请求需要配合movestudent
+movestudent 配合toteacher移动学生到老师位置
+movegroup 移动一个小组的学生到指定位置
+settlement 老师结算广播
+classover 老师下课广播
+	]],
+	handler = function(cmd_name, cmd_text, cmd_params, fromEntity)
+		GGS.INFO.Format(cmd_name .. " " .. cmd_text)
+		local cmd, cmd_text = CmdParser.ParseString(cmd_text)
+		local options = ParseOptions(cmd_text)
 
-			if (cmd == "redflower") then
-				local type = options.type --1=增加,2=减少
-				local num = options.num or 1
-				local username = options.username
-				local userid = options.userid
+		if (cmd == "redflower") then
+			local _type = options.type --1=增加,2=减少
+			local num = options.num or 1
+			local username = options.username
+			local userid = options.userid
 
-				local text = string.format("恭喜%s获得了老师奖励的小红花", username, num)
-				if type == "1" then
-					GameLogic.RunCommand(string.format("/tip -color #ff0000 -duration 3000 %s", text))
-				end
-
-				--todo 刷新奖励的本地缓存
-			elseif (cmd == "entrance") then
-				local username = options.username
-				local userid = options.userid
-
-				local text = string.format("%s进来了", username)
-				if username and username ~= "" then
-					GameLogic.RunCommand(string.format("/tip -color #ff0000 -duration 3000 %s", text))
-				end
-
-				--todo 刷新学员列表的本地缓存/重新请求一次
-
-			elseif (cmd == "behavior") then
-				local type = options.type and tonumber(options.type) --1=举手,2=举牌√,3=举牌x
-				local username = options.username
-				local userid = options.userid
-				local entityid = options.userid
-
-				local behaviorTable = {
-					[1] = L"举手",
-					[2] = L"举牌√",
-					[3] = L"举牌x",
-				}
-
-				if type then
-					local text = string.format("%s%s", username, behaviorTable[type])
-					GameLogic.RunCommand(string.format("/tip -color #ff0000 -duration 3000 %s", text))
-				end
-				--todo entityid获取
-				--todo 即时改变headondisplay
-				--todo 刷新学员列表的本地缓存/重新请求一次
-
-			elseif (cmd == "toteacher") then
-				local userid = options.userid
-				--todo entityid获取
-				local entityid = options.userid
-				if entityid then
-					-- test
-					local text = string.format("%s%s", userid, L"移动到老师的请求")
-					GameLogic.RunCommand(string.format("/tip -color #ff0000 -duration 3000 %s", text))
-				end
-
-			elseif (cmd == "movestudent") then
-				local userid = options.userid
-				--todo entityid获取
-				local entityid = options.entityid
-				local group = options.group
-				if entityid then
-					-- test
-					local text = string.format("%s%s", userid, L"移动到老师的请求")
-					GameLogic.RunCommand(string.format("/tip -color #ff0000 -duration 3000 %s", text))
-				end
-
-			elseif (cmd == "movegroup") then
-				local group = options.group
-				local position = options.position
-				--todo 分组
-				if group and group == System.Codepku.liveLessonGroup then
-					-- test
-					local text = string.format("%s%s", group, L"组移动请求")
-					GameLogic.RunCommand(string.format("/tip -color #ff0000 -duration 3000 %s", text))
-					GameLogic.RunCommand(string.format("/goto %s %s %s", position.x, position.y, position.z))
-				end
-
-			elseif (cmd == "settlement") then
-				LiveLessonSettlement:ShowStudentSettlementPage()
-
-			elseif (cmd == "classover") then
-				--todo 下课五分钟后自动解散
+			local text = string.format("恭喜%s获得了老师奖励的小红花", username, num)
+			if _type == "1" then
+				GameLogic.RunCommand(string.format("/tip -color #ff0000 -duration 3000 %s", text))
 			end
+
+			--todo 刷新奖励的本地缓存
+		elseif (cmd == "entrance") then
+			local username = options.username
+			local userid = options.userid
+
+			local text = string.format("%s进来了", username)
+			if username and username ~= "" then
+				GameLogic.RunCommand(string.format("/tip -color #ff0000 -duration 3000 %s", text))
+			end
+
+			--todo 刷新学员列表的本地缓存/重新请求一次
+
+		elseif (cmd == "behavior") then
+			local _type = options.type and tonumber(options.type) --1=举手,2=举牌√,3=举牌x
+			local username = options.username
+			local userid = options.userid and tonumber(options.userid)
+			local entityid = options.entityid and tonumber(options.entityid)
+
+			local behaviorTable = {
+				[1] = L"举手",
+				[2] = L"举牌√",
+				[3] = L"举牌x",
+			}
+
+			if _type then
+				local text = string.format("%s%s", username, behaviorTable[_type])
+				GameLogic.RunCommand(string.format("/tip -color #ff0000 -duration 3000 %s", text))
+
+				LiveLessonBasic:SetHeadOnDisplay(entityid,_type,userid)
+			end
+			--todo 刷新学员列表的本地缓存/重新请求一次
+
+		elseif (cmd == "toteacher") then
+			local userid = options.userid
+			local EM = GameLogic.EntityManager
+			local player = EM.GetPlayer()
+			if player and LiveLessonBasic.GetIentity() then
+				local x, y, z = player:GetBlockPos()
+				local position = string.format("%s,%s,%s",x,y,z)
+				GameLogic.RunCommand(string.format("/ggs cmd liveLesson movestudent -userid=%s -position=%s", userid, position))
+			end
+
+		elseif (cmd == "movestudent") then
+			local userid = options.userid
+			local position = options.position
+			if userid == tostring(System.User.info.id) then
+				GameLogic.RunCommand(string.format("/goto %s", position))
+			end
+
+		elseif (cmd == "movegroup") then
+			local group = options.group
+			local position = options.position
+			--todo 分组System.Codepku.liveLessonGroup
+			--教研用
+			if group and group == System.Codepku.liveLessonGroup then
+				-- test
+				local text = string.format("%s%s", group, L"组移动请求")
+				GameLogic.RunCommand(string.format("/tip -color #ff0000 -duration 3000 %s", text))
+				GameLogic.RunCommand(string.format("/goto %s", position))
+			end
+
+		elseif (cmd == "settlement") then
+			LiveLessonSettlement:ShowStudentSettlementPage()
+
+		elseif (cmd == "classover") then
+			LiveLessonSettlement:ClassOverTimer()
 		end
-	}
+	end
+}
+	
 end

@@ -39,6 +39,22 @@ function OnClickTools(index)
         end
     else
         -- todo
+        if index == 1 then
+            local type = 1
+            local username = System.User.info.nickname
+            local userid = System.User.info.id
+            local EM = GameLogic.EntityManager
+            local player = EM.GetPlayer()
+            local entityid = player.entityId
+            GameLogic.RunCommand(string.format("/ggs cmd liveLesson behavior -type=%s -username=%s -userid=%s -entityid=%s", type, username, userid, entityid))
+        elseif index == 2 then
+            local userid = System.User.info.id
+            GameLogic.RunCommand(string.format("/ggs cmd liveLesson toteacher -userid=%s", userid))
+        elseif index == 3 then
+
+        elseif index == 4 then
+
+        end
         GameLogic.AddBBS("CodeGlobals", GetStudentTools()[index]["name"], 1000, "#FF0000")
     end
 end

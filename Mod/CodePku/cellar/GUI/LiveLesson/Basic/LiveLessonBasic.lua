@@ -6,6 +6,8 @@ LiveLessonBasic:ShowPage()
 local LiveLessonBasic = NPL.export();
 local request = NPL.load("(gl)Mod/CodePku/api/BaseRequest.lua")
 local AdaptWindow = commonlib.gettable("Mod.CodePku.GUI.Window.AdaptWindow")
+local GeneralGameServerMod = commonlib.gettable("Mod.GeneralGameServerMod");
+local UniString = commonlib.gettable("System.Core.UniString");
 
 local LiveLessonBasic = commonlib.gettable("Mod.CodePku.Common.LiveLessonBasic")
 
@@ -84,7 +86,8 @@ function LiveLessonBasic:RunGGSCommand(commandName, params)
         local player = EM.GetPlayer()
         if(player) then
             local x, y, z = player:GetBlockPos()
-            GameLogic.RunCommand(string.format("/ggs cmd goto %d %d %d", x, y, z))
+            local position = string.format("%s,%s,%s",x,y,z)
+            GameLogic.RunCommand(string.format("/ggs cmd goto %s", position))
         end
     elseif commandName == "changesize" then
         self.userSize = if_else(self.userSize == 1, 2, 1)
@@ -176,4 +179,146 @@ end
 -- 判断是否在直播课世界
 function LiveLessonBasic:IsInLiveLesson()
     return System.Codepku and (System.Codepku.isLiveLesson or System.Codepku.isLoadingLiveLesson)
+end
+
+local function GetUserName(text)
+    if type(text) ~= 'string' then
+        return ''
+    end
+
+    local utf8Text = UniString:new(text)
+
+    if _guihelper.GetTextWidth(text) > 112 then
+        return utf8Text:sub(1, 8).text .. '...'
+    else
+        return text
+    end
+end
+
+function LiveLessonBasic:SetHeadOnDisplay(entityid,_type,userid)
+    self:SetHeadOnDisplaySelf(userid,_type)
+    self:SetHeadOnDisplayBehaviorOthers(entityid,_type)
+end
+
+-- 设置替他人头顶信息
+function LiveLessonBasic:SetHeadOnDisplayBehaviorOthers(entityid, _type)
+    local netHandler = GeneralGameServerMod:GetClientClass("CodePku"):GetWorldNetHandler()
+    if not netHandler then
+        return
+    end
+    local player = netHandler:GetPlayerManager():GetPlayerByEntityId(entityid)
+    if not player then
+        return
+    end
+
+    local playerInfo = player:GetPlayerInfo()
+    local userinfo = playerInfo.userinfo or {}
+    local username = userinfo.nickname or playerInfo.username
+    local state = playerInfo.state
+    local usertag = state == "online" and userinfo.usertag or ""
+    local color = self.isMainPlayer and "#ffffff" or "#0cff05"
+    local playerUsernameStyle = state == "online" and "" or "shadow-quality:8; shadow-color:#2b2b2b;text-shadow:true;"
+
+    local tagColor = userinfo.is_employee and "#ff0000" or "#3CAAF0"
+    local tagName = ""
+    if self.windowLeft then
+        --todo test
+        tagName = userinfo.is_employee and "教师"..tostring(_type) or "学生"..tostring(_type)
+    end
+
+    local schoolName = userinfo.schoolName or ""
+    if (schoolName ~= "") then schoolName = "&lt;" .. schoolName .. "&gt;" end
+    local mcml_behavior = string.format([[
+        <pe:mcml>
+            <div style="width:200px; margin-left: -100px; margin-top: -30px; color: %s;">
+                <div align="center" style="">
+                    %s
+                    <span style="float:left; margin-left: 2px; font-weight:bold; font-size: 14px; base-font-size:14px; color: #ffffff; background-color:%s">%s</span>
+                    <div style="float:left; margin-left: 2px; font-weight:bold; font-size: 14px; base-font-size:14px; %s">%s</div>
+                </div>
+                <div style="text-align: center; font-weight: bold; font-size: 12px; base-font-size:12px; margin-top: 0px;">%s</div>
+            </div>
+        </pe:mcml>
+            ]], color, usertag, tagColor, tagName, playerUsernameStyle, GetUserName(username), schoolName)
+    player:SetHeadOnDisplay({url = ParaXML.LuaXML_ParseString(mcml_behavior)})
+
+    local mytimer = commonlib.Timer:new({callbackFunc = function(timer)
+        --todo test
+        tagName = userinfo.is_employee and "教师" or "学生"
+        local mcml_original = string.format([[
+            <pe:mcml>
+                <div style="width:200px; margin-left: -100px; margin-top: -30px; color: %s;">
+                    <div align="center" style="">
+                        %s
+                        <span style="float:left; margin-left: 2px; font-weight:bold; font-size: 14px; base-font-size:14px; color: #ffffff; background-color:%s">%s</span>
+                        <div style="float:left; margin-left: 2px; font-weight:bold; font-size: 14px; base-font-size:14px; %s">%s</div>
+                    </div>
+                    <div style="text-align: center; font-weight: bold; font-size: 12px; base-font-size:12px; margin-top: 0px;">%s</div>
+                </div>
+            </pe:mcml>
+                ]], color, usertag, tagColor, tagName, playerUsernameStyle, GetUserName(username), schoolName)
+        player:SetHeadOnDisplay({url = ParaXML.LuaXML_ParseString(mcml_original)})
+    end})
+
+    mytimer:Change(3000, nil)
+
+end
+
+
+-- 设置自己头顶信息
+function LiveLessonBasic:SetHeadOnDisplaySelf(userid,_type)
+    if System.User.info.id ~= tonumber(userid) then
+        return
+    end
+    local EM = GameLogic.EntityManager
+    local player = EM.GetPlayer()
+    local playerInfo = player:GetPlayerInfo()
+    local userinfo = playerInfo.userinfo or {}
+    local username = userinfo.nickname or playerInfo.username
+    local state = playerInfo.state
+    local usertag = state == "online" and userinfo.usertag or ""
+    local color = self.isMainPlayer and "#ffffff" or "#0cff05"
+    local playerUsernameStyle = state == "online" and "" or "shadow-quality:8; shadow-color:#2b2b2b;text-shadow:true;"
+
+    local tagColor = userinfo.is_employee and "#ff0000" or "#3CAAF0"
+    local tagName = ""
+    if LiveLessonBasic.windowLeft then
+        tagName = userinfo.is_employee and "教师"..tostring(_type) or "学生"..tostring(_type)
+    end
+
+    local schoolName = userinfo.schoolName or ""
+    if (schoolName ~= "") then schoolName = "&lt;" .. schoolName .. "&gt;" end
+    local mcml_behavior = string.format([[
+        <pe:mcml>
+            <div style="width:200px; margin-left: -100px; margin-top: -30px; color: %s;">
+                <div align="center" style="">
+                    %s
+                    <span style="float:left; margin-left: 2px; font-weight:bold; font-size: 14px; base-font-size:14px; color: #ffffff; background-color:%s">%s</span>
+                    <div style="float:left; margin-left: 2px; font-weight:bold; font-size: 14px; base-font-size:14px; %s">%s</div>
+                </div>
+                <div style="text-align: center; font-weight: bold; font-size: 12px; base-font-size:12px; margin-top: 0px;">%s</div>
+            </div>
+        </pe:mcml>
+            ]], color, usertag, tagColor, tagName, playerUsernameStyle, GetUserName(username), schoolName)
+    player:SetHeadOnDisplay({url = ParaXML.LuaXML_ParseString(mcml_behavior)})
+
+    local mytimer = commonlib.Timer:new({callbackFunc = function(timer)
+        --todo test
+        tagName = userinfo.is_employee and "教师" or "学生"
+        local mcml_original = string.format([[
+            <pe:mcml>
+                <div style="width:200px; margin-left: -100px; margin-top: -30px; color: %s;">
+                    <div align="center" style="">
+                        %s
+                        <span style="float:left; margin-left: 2px; font-weight:bold; font-size: 14px; base-font-size:14px; color: #ffffff; background-color:%s">%s</span>
+                        <div style="float:left; margin-left: 2px; font-weight:bold; font-size: 14px; base-font-size:14px; %s">%s</div>
+                    </div>
+                    <div style="text-align: center; font-weight: bold; font-size: 12px; base-font-size:12px; margin-top: 0px;">%s</div>
+                </div>
+            </pe:mcml>
+                ]], color, usertag, tagColor, tagName, playerUsernameStyle, GetUserName(username), schoolName)
+        player:SetHeadOnDisplay({url = ParaXML.LuaXML_ParseString(mcml_original)})
+    end})
+
+    mytimer:Change(3000, nil)
 end
