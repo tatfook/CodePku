@@ -26,7 +26,8 @@ local ChatChannel = commonlib.gettable("MyCompany.Aries.ChatSystem.ChatChannel")
 local SocketIOClient = NPL.load("(gl)script/ide/System/os/network/SocketIO/SocketIOClient.lua");
 local WorldCommon = commonlib.gettable("MyCompany.Aries.Creator.WorldCommon")
 local KeepWorkItemManager = NPL.load("(gl)script/apps/Aries/Creator/HttpAPI/KeepWorkItemManager.lua");
-local WebSocketClient = NPL.load("(gl)Mod/CodePku/chat/WebSocketClient.lua");
+-- local WebSocketClient = NPL.load("(gl)Mod/CodePku/chat/WebSocketClient.lua");
+local WebSocketClient = NPL.load("(gl)Mod/CodePku/cellar/Heartbeat/WebSocketClient.lua");
 local request = NPL.load("(gl)Mod/CodePku/api/BaseRequest.lua");
 -- local UserInfoPage = NPL.load("(gl)Mod/CodePku/cellar/GUI/UserInfo.lua");
 local EntityManager = commonlib.gettable("MyCompany.Aries.Game.EntityManager")
@@ -209,19 +210,21 @@ function CodepkuChatChannel.Connect(url,options,onopen_callback)
     end
 
     url  = url or CodepkuChatChannel.GetUrl();
-    if(not CodepkuChatChannel.client)then
-        CodepkuChatChannel.client = WebSocketClient:new();
-        CodepkuChatChannel.client:AddEventListener("OnOpen",CodepkuChatChannel.OnOpen,CodepkuChatChannel);
-        CodepkuChatChannel.client:AddEventListener("OnMsg",CodepkuChatChannel.OnMsg,CodepkuChatChannel);
-        CodepkuChatChannel.client:AddEventListener("OnClose",CodepkuChatChannel.OnClose,CodepkuChatChannel);
+    WebSocketClient.client = commonlib.getfield("System.CodePku.WebSocketClient")
+    if(not WebSocketClient.client)then
+        WebSocketClient.client = WebSocketClient:new():Init(url, System.User.codepkuToken);
+        commonlib.setfield("System.CodePku.WebSocketClient", WebSocketClient.client)
     end
-    options = options or {};
-    CodepkuChatChannel.onopen_callback = onopen_callback;
-    if(CodepkuChatChannel.client.state == "OPEN")then
-        CodepkuChatChannel.OnOpen();
-        return
-    end
-    CodepkuChatChannel.client:Connect(url);
+    WebSocketClient.client:AddEventListener("OnOpen",CodepkuChatChannel.OnOpen,CodepkuChatChannel);
+    WebSocketClient.client:AddEventListener("OnMsg",CodepkuChatChannel.OnMsg,CodepkuChatChannel);
+    WebSocketClient.client:AddEventListener("OnClose",CodepkuChatChannel.OnClose,CodepkuChatChannel);
+    -- options = options or {};
+    -- CodepkuChatChannel.onopen_callback = onopen_callback;
+    -- if(WebSocketClient.client.state == "OPEN")then
+    --     CodepkuChatChannel.OnOpen();
+    --     return
+    -- end
+    -- WebSocketClient.client:Connect(url);
 end
 function CodepkuChatChannel.OnOpen(self)
 	LOG.std("", "info", "CodepkuChatChannel", "OnOpen");
