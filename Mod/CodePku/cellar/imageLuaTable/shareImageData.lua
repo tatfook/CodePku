@@ -9,6 +9,7 @@ local imageTable = {
 	["frames"] = {
 		["share_btn.png"] = { ["url"] = "codepku/image/textures/UI/share/share.png", ["left"] = 2, ["top"] = 1077, ["width"] = 395, ["height"] = 193,},
 		["share_btn_b_big.png"] = { ["url"] = "codepku/image/textures/UI/share/share.png", ["left"] = 283, ["top"] = 1273, ["width"] = 320, ["height"] = 105,},
+		["share_btn_b_new.png"] = { ["url"] = "codepku/image/textures/UI/share/share.png", ["left"] = 606, ["top"] = 1185, ["width"] = 277, ["height"] = 92,},
 		["share_btn_r_big.png"] = { ["url"] = "codepku/image/textures/UI/share/share.png", ["left"] = 400, ["top"] = 1077, ["width"] = 320, ["height"] = 105,},
 		["share_challenge.png"] = { ["url"] = "codepku/image/textures/UI/share/share.png", ["left"] = 283, ["top"] = 1381, ["width"] = 263, ["height"] = 58,},
 		["share_lotto.png"] = { ["url"] = "codepku/image/textures/UI/share/share.png", ["left"] = 549, ["top"] = 1381, ["width"] = 263, ["height"] = 58,},
