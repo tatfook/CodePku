@@ -192,7 +192,9 @@ function CodePku:init()
 		function (backValue, event)
 			-- LOG.std(nil, "info", "codepku", "add_filter BaseContextMousePressEvent")
 			-- 家园区编辑模式特殊处理
-			if HomeManage:IsMyHome() and GameLogic.GameMode:IsEditor() then
+			-- if HomeManage:IsMyHome() and GameLogic.GameMode:IsEditor() then
+			-- 只要是编辑模式就特殊处理
+			if GameLogic.GameMode:IsEditor() then
 				-- 手机端特殊处理
 				local platform = System.os.GetPlatform()
 				if platform == "ios" or platform == "android" then
@@ -211,7 +213,9 @@ function CodePku:init()
 		function (backValue, event)
 			-- LOG.std(nil, "info", "codepku", "add_filter BaseContextMouseReleaseEvent")
 			-- 家园区编辑模式特殊处理
-			if HomeManage:IsMyHome() and GameLogic.GameMode:IsEditor() then
+			-- if HomeManage:IsMyHome() and GameLogic.GameMode:IsEditor() then
+			-- 只要是编辑模式就特殊处理
+			if GameLogic.GameMode:IsEditor() then
 				-- 判定鼠标点击的方块距离人物的距离是否过远，distance控制判定距离长短
 				-- local distance = 10
 				-- NPL.load("(gl)script/apps/Aries/Creator/Game/SceneContext/SelectionManager.lua");
