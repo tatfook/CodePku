@@ -26,7 +26,7 @@ end
 
 function OnClose()
     Page:CloseWindow()
-    LiveLessonBasic.windowBroadCast = nil
+    LiveLessonBasic.windowGroup = nil
 end
 
 ]]></script>
@@ -34,15 +34,16 @@ end
 
 </style>
 <pe:container alignment="_lt" width="100%" height="100%">
-    <div style="width: 200; height: 500; background-color: #ffffff; text-align: center; font-size: 18;">
-        <div onclick="OnClose" style="position: relative; top: 0; width: 200; background-color: #797979;">
-            <pe:repeat DataSource="<%= GetBroadcastTips() %>">
+    <div style="width: 1100; height: 850; background-color: #ffffff; text-align: center; font-size: 24;">
+        <div onclick="OnClose" style="position: relative; top: 100; width: 200; background-color: #797979;">
+            <!-- <pe:repeat DataSource="<%= GetBroadcastTips() %>">
                 <pe:repeatitem>
                     <pe:if condition="<%= bShow == true %>">
-                        <div name="<%= index %>" onclick="OnClickTools" style="margin-top: 20; width: 200; height: 50; line-height: 50; color: #ff0000; background-color: #a6d4ff;"><%= text %></div>
+                        <div name="<%= index %>" onclick="OnClickTools" style="margin-top: 20; width: 200; height: 50; color: #ff0000; background-color: #00ff00;"><%= text %></div>
                     </pe:if>          
                 </pe:repeatitem>
-            </pe:repeat>
+            </pe:repeat> -->
+            <div style="position: relative; left:350; top: 20; line-height: 50; width: 400; height: 50; color: #ff0000; background-color: #ceffd1;">分组管理</div>
         </div>
     </div>
 </pe:container>

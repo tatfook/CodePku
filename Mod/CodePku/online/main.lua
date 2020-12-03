@@ -117,6 +117,9 @@ behavior 学生举手/举牌√/举牌x
 toteacher 发起学生移动到老师位置的请求需要配合movestudent
 movestudent 配合toteacher移动学生到老师位置
 movegroup 移动一个小组的学生到指定位置
+call 老师集合学生
+kickout 老师踢出学生到主世界
+forceplaymode 老师设置某个学生为播放模式
 settlement 老师结算广播
 classover 老师下课广播
 	]],
@@ -131,19 +134,24 @@ classover 老师下课广播
 			local username = options.username
 			local userid = options.userid
 
-			local text = string.format("恭喜%s获得了老师奖励的小红花", username, num)
+			local text = string.format("恭喜 %s 获得了老师奖励的小红花", username, num)
 			if _type == "1" then
-				GameLogic.RunCommand(string.format("/tip -color #ff0000 -duration 3000 %s", text))
+				LiveLessonBasic:RunGGSCommand("broadcast", {text=text})
 			end
 
-			--todo 刷新奖励的本地缓存
 		elseif (cmd == "entrance") then
 			local username = options.username
+			local isteacher = options.isteacher
 			local userid = options.userid
 
-			local text = string.format("%s进来了", username)
-			if username and username ~= "" then
-				GameLogic.RunCommand(string.format("/tip -color #ff0000 -duration 3000 %s", text))
+			local text = nil
+			if isteacher then
+				text = string.format("教师 %s 进来了", username)
+			else
+				text = string.format("学生 %s 进来了", username)
+			end
+			if username and username ~= "" and text then
+				LiveLessonBasic:RunGGSCommand("broadcast", {text=text})
 			end
 
 			--todo 刷新学员列表的本地缓存/重新请求一次
@@ -154,25 +162,18 @@ classover 老师下课广播
 			local userid = options.userid and tonumber(options.userid)
 			local entityid = options.entityid and tonumber(options.entityid)
 
-			local behaviorTable = {
-				[1] = L"举手",
-				[2] = L"举牌√",
-				[3] = L"举牌x",
-			}
-
 			if _type then
-				local text = string.format("%s%s", username, behaviorTable[_type])
-				GameLogic.RunCommand(string.format("/tip -color #ff0000 -duration 3000 %s", text))
+				local text = string.format("%s%s", username, LiveLessonBasic.behaviorTable[_type])
+				LiveLessonBasic:RunGGSCommand("broadcast", {text=text})
 
 				LiveLessonBasic:SetHeadOnDisplay(entityid,_type,userid)
 			end
-			--todo 刷新学员列表的本地缓存/重新请求一次
 
 		elseif (cmd == "toteacher") then
 			local userid = options.userid
 			local EM = GameLogic.EntityManager
 			local player = EM.GetPlayer()
-			if player and LiveLessonBasic.GetIentity() then
+			if player and LiveLessonBasic:GetIentity() then
 				local x, y, z = player:GetBlockPos()
 				local position = string.format("%s,%s,%s",x,y,z)
 				GameLogic.RunCommand(string.format("/ggs cmd liveLesson movestudent -userid=%s -position=%s", userid, position))
@@ -193,17 +194,44 @@ classover 老师下课广播
 			if group and group == System.Codepku.liveLessonGroup then
 				-- test
 				local text = string.format("%s%s", group, L"组移动请求")
-				GameLogic.RunCommand(string.format("/tip -color #ff0000 -duration 3000 %s", text))
+				LiveLessonBasic:RunGGSCommand("broadcast", {text=text})
 				GameLogic.RunCommand(string.format("/goto %s", position))
 			end
 
+		elseif (cmd == "call") then
+			local position = options.position
+			local r = options.r
+			local x, y, z = string.match(position, "(%d+),(%d+),(%d+)")
+			local index = LiveLessonBasic:GetStudentIndex()
+			if index then
+				local studentsCount = #LiveLessonBasic:GetStudents()
+				local a = (index-1)*(360/studentsCount)
+				local x1 = math.floor(x + r * math.cos(a * math.pi / 180))
+				local z1 = math.floor(z + r * math.sin(a * math.pi / 180))
+				local position_new = string.format("%s,%s,%s", x1, y, z1)
+				GameLogic.RunCommand(string.format("/goto %s", position_new))
+				GameLogic.RunCommand(string.format("/lookat %s", position))
+			end
+
+		elseif (cmd == "kickout") then
+			local userid = options.userid
+			if userid == tostring(System.User.info.id) then
+				GameLogic.RunCommand(string.format("/connectCodePku %s", 1))
+			end
+
+		elseif (cmd == "forceplaymode") then
+			local userid = options.userid
+			if userid == tostring(System.User.info.id) then
+				GameLogic.RunCommand(string.format("/mode %s", "game"))
+			end
+
 		elseif (cmd == "settlement") then
-			LiveLessonSettlement:ShowStudentSettlementPage()
+			LiveLessonSettlement:StudentSettlement()
 
 		elseif (cmd == "classover") then
 			LiveLessonSettlement:ClassOverTimer()
 		end
 	end
 }
-	
+
 end
