@@ -32,7 +32,7 @@ end
 function SaveAndExitEditWorld()
     local isVisitor = commonlib.getfield("System.User.isVisitor");
     -- 游客去掉保存限制
-    if isVisitor or false then
+    if isVisitor and false then
         local VisitorLimit = NPL.load("(gl)Mod/CodePku/cellar/GUI/AccountUp/VisitorLimit.lua");
         local params = {
             title = "权限提醒",
