@@ -635,7 +635,8 @@ function CodePku:init()
 		"HandleGlobalKeyByRETURN",
 		function()
 			local isEmployee = System.User and System.User.info and System.User.info.is_employee;
-			if isEmployee and tonumber(isEmployee) == 1 or (HomeManage:IsMyHome() and GameLogic.GameMode:IsEditor()) then
+			-- if isEmployee and tonumber(isEmployee) == 1 or (HomeManage:IsMyHome() and GameLogic.GameMode:IsEditor()) then
+			if isEmployee and tonumber(isEmployee) == 1 or (GameLogic.GameMode:IsEditor()) then
 				return false
 			end
 			return true
@@ -657,7 +658,8 @@ function CodePku:init()
 		"KeyPressEvent",
 		function(callbackVal, event)
 			local isEmployee = System.User and System.User.info and System.User.info.is_employee;
-			if isEmployee and tonumber(isEmployee) == 1 or (HomeManage:IsMyHome() and GameLogic.GameMode:IsEditor()) then
+			-- if isEmployee and tonumber(isEmployee) == 1 or (HomeManage:IsMyHome() and GameLogic.GameMode:IsEditor()) then
+			if isEmployee and tonumber(isEmployee) == 1 or (GameLogic.GameMode:IsEditor()) then
 				return true
 			end
 
