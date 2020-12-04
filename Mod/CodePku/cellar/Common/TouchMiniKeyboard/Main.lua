@@ -93,8 +93,9 @@ function TouchMiniKeyboard.CheckShow(show,isDirectionKeyboard )
                             -- FeatKeyboard.getSingleton():show(show, true, false, false, true);
                         elseif category == 8 then
                             FeatKeyboard.getSingleton():show(show, true, false, false, false, false);
-                            GameLogic.RunCommand("/hide keyboard");
+                            -- GameLogic.RunCommand("/hide keyboard");
                             local icon = TouchVirtualKeyboardIcon.GetSingleton();
+                            icon:GetUIControl():GetChild("text").visitor = false
                             icon:ShowKeyboard(false)
                         else
                             FeatKeyboard.getSingleton():show(show, true, false, false, true, false);

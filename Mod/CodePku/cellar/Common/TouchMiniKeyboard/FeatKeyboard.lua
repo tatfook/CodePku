@@ -40,8 +40,8 @@ end
 
 function FeatKeyboard:init()
     local jumpBtn = self:getJumpBtn();
-    local fBtn = self:getFBtn();
-    local xBtn = self:getXBtn();
+    local fBtn = self:getFlyBtn();
+    local xBtn = self:getAltBtn();
     local shiftBtn = self:getShiftBtn();
     -- local zoomBtn = self:getZoomBtn();
     local chatBtn = self:getChatBtn();
@@ -58,8 +58,8 @@ end
 
 function FeatKeyboard:show(show, jumpBtnShow, fBtnShow, xBtnShow, shiftBtnShow, chatBtnShow)
     local jumpBtn = self:getJumpBtn();
-    local fBtn = self:getFBtn();
-    local xBtn = self:getXBtn();
+    local fBtn = self:getFlyBtn();
+    local xBtn = self:getAltBtn();
     local shiftBtn = self:getShiftBtn();
     -- local zoomBtn = self:getZoomBtn();
     local chatBtn = self:getChatBtn();
@@ -75,7 +75,7 @@ function FeatKeyboard:show(show, jumpBtnShow, fBtnShow, xBtnShow, shiftBtnShow, 
 
     ParaUI.GetUIObject("jump").visible = false;
     ParaUI.GetUIObject("FLY").visible = false;
-    ParaUI.GetUIObject("XBtn").visible = false;
+    ParaUI.GetUIObject("AltBtn").visible = false;
     ParaUI.GetUIObject("ShiftBtn").visible = false;
     ParaUI.GetUIObject("Chat").visible = false;
 
@@ -90,7 +90,7 @@ function FeatKeyboard:show(show, jumpBtnShow, fBtnShow, xBtnShow, shiftBtnShow, 
 
         ParaUI.GetUIObject("jump").visible = jumpBtnShow;
         ParaUI.GetUIObject("FLY").visible = fBtnShow;
-        ParaUI.GetUIObject("XBtn").visible = xBtnShow;
+        ParaUI.GetUIObject("AltBtn").visible = xBtnShow;
         ParaUI.GetUIObject("ShiftBtn").visible = shiftBtnShow;
         ParaUI.GetUIObject("Chat").visible = chatBtnShow;
     end
@@ -103,8 +103,8 @@ function FeatKeyboard:getJumpBtn()
 
     local button = ParaUI.GetUIObject(name);
 
-    local left = Design:adapterWidth(1554);
-    local top = Design:adapterHeight(852);
+    local left = Design:adapterWidth(1594);
+    local top = Design:adapterHeight(845);
     local width = Design:adapterWidth(134);
     local height = Design:adapterWidth(134);
 
@@ -141,14 +141,14 @@ function FeatKeyboard:getJumpBtn()
     return button;
 end
 
---创建 F 按钮
-function FeatKeyboard:getFBtn()
+--创建 F(飞行) 按钮
+function FeatKeyboard:getFlyBtn()
     local name = "FLY";
 
     local button = ParaUI.GetUIObject(name);
 
-    local left = Design:adapterWidth(1348);
-    local top = Design:adapterHeight(906);
+    local left = Design:adapterWidth(1711);
+    local top = Design:adapterHeight(649);
     local width = Design:adapterWidth(134);
     local height = Design:adapterWidth(134);
 
@@ -185,16 +185,16 @@ function FeatKeyboard:getFBtn()
     return button;
 end
 
---创建 X 按钮
-function FeatKeyboard:getXBtn()
-    local name = "XBtn";
+--创建 alt 按钮
+function FeatKeyboard:getAltBtn()
+    local name = "AltBtn";
 
     local button = ParaUI.GetUIObject(name);
 
-    local left = Design:adapterWidth(1597);
-    local top = Design:adapterHeight(648);
-    local width = Design:adapterWidth(134);
-    local height = Design:adapterWidth(134);
+    local left = Design:adapterWidth(1399);
+    local top = Design:adapterHeight(864);
+    local width = Design:adapterWidth(94);
+    local height = Design:adapterWidth(94);
 
     if not button:IsValid() then
         button = ParaUI.CreateUIObject(
@@ -212,11 +212,11 @@ function FeatKeyboard:getXBtn()
         button.enabled = true;
         button.zorder = self.zorder;
         button:SetScript("onclick", function()
-            Keyboard:SendKeyEvent("keyDownEvent", DIK_SCANCODE.DIK_X);
+            Keyboard:SendKeyEvent("keyDownEvent", DIK_SCANCODE.DIK_LMENU);
             _guihelper.SetUIColor(button, self.colors.pressed);
 
             commonlib.TimerManager.SetTimeout(function()
-                Keyboard:SendKeyEvent("keyUpEvent", DIK_SCANCODE.DIK_X);
+                Keyboard:SendKeyEvent("keyUpEvent", DIK_SCANCODE.DIK_LMENU);
                 _guihelper.SetUIColor(button, self.colors.normal);
             end, 300)
         end)
@@ -229,16 +229,16 @@ function FeatKeyboard:getXBtn()
     return button;
 end
 
---创建 X 按钮
+--创建 Shift 按钮
 function FeatKeyboard:getShiftBtn()
     local name = "ShiftBtn";
 
     local button = ParaUI.GetUIObject(name);
 
-    local left = Design:adapterWidth(1419);
-    local top = Design:adapterHeight(724);
-    local width = Design:adapterWidth(134);
-    local height = Design:adapterWidth(134);
+    local left = Design:adapterWidth(1555);
+    local top = Design:adapterHeight(670);
+    local width = Design:adapterWidth(94);
+    local height = Design:adapterWidth(94);
 
     if not button:IsValid() then
         button = ParaUI.CreateUIObject(
@@ -306,6 +306,50 @@ function FeatKeyboard:getChatBtn()
 
             commonlib.TimerManager.SetTimeout(function()
                 Keyboard:SendKeyEvent("keyUpEvent", DIK_SCANCODE.DIK_LSHIFT);
+                _guihelper.SetUIColor(button, self.colors.normal);
+            end, 300)
+        end)
+
+        button:AttachToRoot();
+    else
+        button:Reposition(self.align, left, top, width, height);
+    end
+
+    return button;
+end
+
+--创建 Ctrl 按钮
+function FeatKeyboard:getCtrlBtn()
+    local name = "CtrlBtn";
+
+    local button = ParaUI.GetUIObject(name);
+
+    local left = Design:adapterWidth(1450);
+    local top = Design:adapterHeight(746);
+    local width = Design:adapterWidth(94);
+    local height = Design:adapterWidth(94);
+
+    if not button:IsValid() then
+        button = ParaUI.CreateUIObject(
+                "button",
+                name,
+                self.align,
+                left,
+                top,
+                width,
+                height
+        );
+
+        button.background = mainFrameImageData:GetIconUrl("main_icon_shift.png");
+        _guihelper.SetUIColor(button, self.colors.normal);
+        button.enabled = true;
+        button.zorder = self.zorder;
+        button:SetScript("onclick", function()
+            Keyboard:SendKeyEvent("keyDownEvent", DIK_SCANCODE.DIK_LCONTROL);
+            _guihelper.SetUIColor(button, self.colors.pressed);
+
+            commonlib.TimerManager.SetTimeout(function()
+                Keyboard:SendKeyEvent("keyUpEvent", DIK_SCANCODE.DIK_LCONTROL);
                 _guihelper.SetUIColor(button, self.colors.normal);
             end, 300)
         end)

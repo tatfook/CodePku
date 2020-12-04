@@ -42,7 +42,6 @@ function TouchFuncKeyboard:ctor()
 		{
 			name = "Ctrl+C",
 			background = funcKeyboardImageData:GetIconUrl("funckeyboard_key_bot.png"),
-			clickedBackground = funcKeyboardImageData:GetIconUrl("funckeyboard_key_dark.png"),
 			left = 18, top = 64, width = 192, height = 80,
 			key = {	
 				DIK_SCANCODE.DIK_LCONTROL,
@@ -53,7 +52,6 @@ function TouchFuncKeyboard:ctor()
 		{
 			name = "Ctrl",
 			background = funcKeyboardImageData:GetIconUrl("funckeyboard_key_bot.png"),
-			clickedBackground = funcKeyboardImageData:GetIconUrl("funckeyboard_key_dark.png"),
 			left = 219, top = 64, width = 192, height = 80,
 			key = {	
 				DIK_SCANCODE.DIK_LCONTROL,
@@ -63,7 +61,6 @@ function TouchFuncKeyboard:ctor()
 		{
 			name = "Ctrl+V",
 			background = funcKeyboardImageData:GetIconUrl("funckeyboard_key_bot.png"),
-			clickedBackground = funcKeyboardImageData:GetIconUrl("funckeyboard_key_dark.png"),
 			left = 18,top = 146,width = 192,height = 80,
 			key = {	
 				DIK_SCANCODE.DIK_LCONTROL,
@@ -74,7 +71,6 @@ function TouchFuncKeyboard:ctor()
 		{
 			name = "Alt",
 			background = funcKeyboardImageData:GetIconUrl("funckeyboard_key_bot.png"),
-			clickedBackground = funcKeyboardImageData:GetIconUrl("funckeyboard_key_dark.png"),
 			left = 219, top = 146, width = 192, height = 80,
 			key = {	
 				DIK_SCANCODE.DIK_LMENU,
@@ -84,7 +80,6 @@ function TouchFuncKeyboard:ctor()
 		{
 			name = "Ctrl+Z",
 			background = funcKeyboardImageData:GetIconUrl("funckeyboard_key_bot.png"),
-			clickedBackground = funcKeyboardImageData:GetIconUrl("funckeyboard_key_dark.png"),
 			left = 18, top = 228, width = 192, height = 80,
 			key = {	
 				DIK_SCANCODE.DIK_LCONTROL,
@@ -95,7 +90,6 @@ function TouchFuncKeyboard:ctor()
 		{
 			name = "Shift",
 			background = funcKeyboardImageData:GetIconUrl("funckeyboard_key_bot.png"),
-			clickedBackground = funcKeyboardImageData:GetIconUrl("funckeyboard_key_dark.png"),
 			left = 219, top = 228, width = 192, height = 80,
 			key = {
 				DIK_SCANCODE.DIK_LSHIFT,
@@ -105,7 +99,6 @@ function TouchFuncKeyboard:ctor()
 		{
 			name = "Tab",
 			background = funcKeyboardImageData:GetIconUrl("funckeyboard_key_bot.png"),
-			clickedBackground = funcKeyboardImageData:GetIconUrl("funckeyboard_key_dark.png"),
 			left = 18, top = 310, width = 192, height = 80,
 			key = {	
 				DIK_SCANCODE.DIK_TAB,
@@ -115,7 +108,6 @@ function TouchFuncKeyboard:ctor()
 		{
 			name = "Ctrl+Shift",
 			background = funcKeyboardImageData:GetIconUrl("funckeyboard_key_bot.png"),
-			clickedBackground = funcKeyboardImageData:GetIconUrl("funckeyboard_key_dark.png"),
 			left = 219, top = 310, width = 192, height = 80,
 			key = {	
 				DIK_SCANCODE.DIK_LCONTROL,
@@ -126,7 +118,6 @@ function TouchFuncKeyboard:ctor()
 		{
 			name = "Shift+Tab",
 			background = funcKeyboardImageData:GetIconUrl("funckeyboard_key_bot.png"),
-			clickedBackground = funcKeyboardImageData:GetIconUrl("funckeyboard_key_dark.png"),
 			left = 18, top = 392, width = 192, height = 80,
 			key = {	
 				DIK_SCANCODE.DIK_LSHIFT,
@@ -137,7 +128,6 @@ function TouchFuncKeyboard:ctor()
 		{
 			name = "Alt+Shift",
 			background = funcKeyboardImageData:GetIconUrl("funckeyboard_key_bot.png"),
-			clickedBackground = funcKeyboardImageData:GetIconUrl("funckeyboard_key_dark.png"),
 			left = 219, top = 392, width = 192, height = 80,
 			key = {	
 				DIK_SCANCODE.DIK_LMENU,
@@ -148,7 +138,6 @@ function TouchFuncKeyboard:ctor()
 		{
 			name = "DEL",
 			background = funcKeyboardImageData:GetIconUrl("funckeyboard_key_bot.png"),
-			clickedBackground = funcKeyboardImageData:GetIconUrl("funckeyboard_key_dark.png"),
 			left = 18, top = 474, width = 192, height = 80,
 			key = {	
 				DIK_SCANCODE.DIK_DELETE,
