@@ -5,8 +5,9 @@ StudyStats.StaticInit();
 -------------------------------------------------------
 ]]
 
-
+local request = NPL.load("(gl)Mod/CodePku/api/BaseRequest.lua");    
 local StudyStats = NPL.export();
+
 
 StudyStats.worldId = nil;
 StudyStats.enterTime = nil;
@@ -23,21 +24,15 @@ function StudyStats.StaticInit()
     GameLogic:Connect("WorldUnloaded", StudyStats, StudyStats.OnWorldUnload, "UniqueConnection");
 end
 
-function StudyStats.OnWorldLoaded()
-    echo("System.Codepku.isLoadingUserHome")
-    echo(System.Codepku.isLoadingUserHome)
-    if System.Codepku.isLoadingUserHome then
-        return;
-    end
-    
-    if System.Codepku and System.Codepku.MyHouse and System.Codepku.isLoadingHome then
-        StudyStats.myHouseId = System.Codepku.MyHouse.id;
-        StudyStats.myHouseTemplateId = System.Codepku.MyHouse.template_kp_id;
-        LOG.std(nil, "info", "StudyStats", "House OnWorldLoaded: %s",tostring(StudyStats.myHouseId));
+function StudyStats.OnWorldLoaded()            
+    if System.Codepku and System.Codepku.loadedHouse then
+        StudyStats.houseId = System.Codepku.loadedHouse.id;
+        StudyStats.houseTemplateId = System.Codepku.loadedHouse.template_kp_id;
+        LOG.std(nil, "info", "StudyStats", "House OnWorldLoaded: %s",tostring(StudyStats.houseId));
     else
         local id = System.Codepku and System.Codepku.Coursewares and System.Codepku.Coursewares.id;
         StudyStats.worldId = id;
-        LOG.std(nil, "info", "StudyStats", "Course OnWorldLoaded: %s",tostring(StudyStats.myHouseId));
+        LOG.std(nil, "info", "StudyStats", "Course OnWorldLoaded: %s",tostring(StudyStats.houseId));
     end
     
     LOG.std(nil, "info", "StudyStats", "OnWorldLoaded @: %s", os.time());
@@ -46,11 +41,10 @@ function StudyStats.OnWorldLoaded()
 end
 
 function StudyStats.OnWorldUnload(self, event)
-    LOG.std(nil, "info", "StudyStats", "OnWorldUnload @: worldId: %s, houseId: %s, templateId: %s", StudyStats.worldId, StudyStats.myHouseId, StudyStats.myHouseTemplateId);
-    
-    if (StudyStats.worldId ~= nil) then
-        StudyStats.leaveTime = os.date("%Y-%m-%d %H:%M:%S", os.time());
-        local request = NPL.load("(gl)Mod/CodePku/api/BaseRequest.lua");    
+    LOG.std(nil, "info", "StudyStats", "OnWorldUnload @: worldId: %s, houseId: %s, templateId: %s", StudyStats.worldId, StudyStats.houseId, StudyStats.houseTemplateId);
+    StudyStats.leaveTime = os.date("%Y-%m-%d %H:%M:%S", os.time());
+
+    if (StudyStats.worldId ~= nil) then                
         request:post('/courseware-learn-log', {
             courseware_id = StudyStats.worldId,
             entry_at = StudyStats.enterTime,
@@ -64,12 +58,10 @@ function StudyStats.OnWorldUnload(self, event)
         StudyStats.worldId = nil;
     end
 
-    if StudyStats.myHouseId and StudyStats.myHouseTemplateId then
-        StudyStats.leaveTime = os.date("%Y-%m-%d %H:%M:%S", os.time());
-        local request = NPL.load("(gl)Mod/CodePku/api/BaseRequest.lua");    
+    if StudyStats.houseId and StudyStats.houseTemplateId then                
         request:post('/house-learn-log', {
-            user_house_id = StudyStats.myHouseId,
-            template_id = StudyStats.myHouseTemplateId,
+            user_house_id = StudyStats.houseId,
+            template_id = StudyStats.houseId,
             entry_at = StudyStats.enterTime,
             leave_at = StudyStats.leaveTime
         }):next(function(response)            
@@ -78,23 +70,7 @@ function StudyStats.OnWorldUnload(self, event)
             LOG.error("ERROR: catched at StudyStats.OnWorldUnload");
             LOG.error(err)
         end);
-        StudyStats.myHouseId = nil;
-        StudyStats.myHouseTemplateId = nil;
+        StudyStats.houseId = nil;
+        StudyStats.houseTemplateId = nil;
     end
 end
-
--- function StudyStats.OnExitApp()
---     LOG.std(nil, "info", "StudyStats", "OnExitApp");
--- end
-
--- function StudyStats.OnCodepkuStatsin_Callback()
---     LOG.std(nil, "info", "StudyStats", "OnCodepkuStatsin_Callback: %s",tostring(CodepkuChatChannel.worldId));
---     if (StudyStats.worldId ~= nil) then
---         StudyStats.OnWorldLoaded();
---     end
--- end
-
--- function StudyStats.OnCodepkuStatsout_Callback()
---     if (CodepkuChatChannel.worldId) then
---     end
--- end

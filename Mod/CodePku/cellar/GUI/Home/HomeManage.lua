@@ -110,20 +110,21 @@ function HomeManage:LoadHomeWorld(userId)
         end
     end
     request:get('/house/user/' .. userId):next(function (response)                 
-        local responseData = response and response.data and response.data.data;
-        echo('get user house response')
-        echo(responseData);
+        local responseData = response and response.data and response.data.data;        
         local worldUrl = responseData and responseData.file and responseData.file.file_url;
         if not worldUrl then 
             GameLogic.AddBBS(nil, L"获取家园失败", 3000, "255 0 0", 21)
             return false
         end
         local world = RemoteWorld.LoadFromHref(worldUrl, "self")
+
+        commonlib.setfield("System.Codepku.loadedHouse", {
+            id = responseData.id,
+            template_kp_id = 0
+        });        
         LoadWorld(world, 'auto')
 
     end):catch(function (error) 
-        echo('load user house world error')
-        echo(error);
         local errorMsg = error and error.data and error.data and error.data.message or L"该用户没有家园";
         GameLogic.AddBBS(nil, errorMsg, 3000, "255 0 0", 21)
         return false
@@ -176,12 +177,10 @@ function HomeManage:GetHomeWorld()
         local myHouseId = (response.data.my_house and response.data.my_house.id) or 0;
         local templateKpId = (response.data.default_house and response.data.default_house.keepwork_project_id) or 0;
         
-        commonlib.setfield("System.Codepku.MyHouse", {
+        commonlib.setfield("System.Codepku.loadedHouse", {
             id = myHouseId,
             template_kp_id = templateKpId
-        });
-        echo("set System.Codepku.MyHouse: ")
-        echo(System.Codepku.MyHouse)
+        });        
         LoadWorld(world, 'auto')
     end)
 end
@@ -268,8 +267,7 @@ function HomeManage:UploadHomeWorld(zipfile)
     end
     local zipFileName = zipfile:match("[%w%s_]*.zip$")
     
-    local function uploadSucceed(data, err)     
-        echo(data)
+    local function uploadSucceed(data, err)             
         local houseId = (data and data.data and data.data.id) or 0;
         commonlib.setfield("System.Codepku.MyHouse.id", houseId);
         GameLogic.AddBBS("CodeGlobals", L"世界上传成功", 3000, "#00FF00");

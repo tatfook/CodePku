@@ -168,12 +168,15 @@ function CodePku:init()
 	--退出世界时将世界课程数据置位空
 	GameLogic.GetFilters():add_filter(
 		"OnWorldUnloaded",
-		function()
+		function()		
 			-- 这里因为只能在世界加载完成之前，所以只能用isLoadingHome来判断
 			if System.Codepku.isLoadingHome or System.Codepku.isLoadingUserHome then
 				LOG.std(nil, "info", "codepku", "add_filter OnWorldUnloaded")
 				commonlib.setfield("System.Codepku.Coursewares", nil)
-			end						
+			end	
+			if not System.Codepku.isLoadingHome and not System.Codepku.isLoadingUserHome then
+				commonlib.setfield("System.Codepku.loadedHouse", nil)
+			end
 		end
 	)
 
