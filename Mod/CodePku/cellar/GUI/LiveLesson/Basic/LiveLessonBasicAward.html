@@ -40,7 +40,7 @@ end
                 <pe:repeatitem>
                     <div style="margin-bottom: 6; line-height: 30; width: 350; height: 30; color: #ff0000; background-color: #ceffd1;">
                         <div style="float: left; width: 150; text-align: left; background-color: #3a7fff;"><%= name %></div>
-                        <div style="float: left; margin-left: 40; width: 60; background-color: #daff74;"><%= string.format("%s朵", redflower) %></div>
+                        <div style="float: left; margin-left: 40; width: 60; background-color: #daff74;"><%= string.format("%s朵", redflower or 0) %></div>
                         <div name="<%= index %>" onclick="OnClickAdd" style="float: left; margin-left: 10; width: 36; background-color: #daff74;">加</div>
                         <div name="<%= index %>" onclick="OnClickReduce" style="float: left; margin-left: 10; width: 36; background-color: #daff74;">减</div>
                     </div>    

@@ -176,6 +176,7 @@ classover 老师下课广播
 			if player and LiveLessonBasic:GetIentity() then
 				local x, y, z = player:GetBlockPos()
 				local position = string.format("%s,%s,%s",x,y,z)
+				--todo LiveLessonBasic:GetIentity() 额外加一个判定是房间创建者老师
 				GameLogic.RunCommand(string.format("/ggs cmd liveLesson movestudent -userid=%s -position=%s", userid, position))
 			end
 
@@ -202,7 +203,8 @@ classover 老师下课广播
 			local position = options.position
 			local r = options.r
 			local x, y, z = string.match(position, "(%d+),(%d+),(%d+)")
-			local index = LiveLessonBasic:GetStudentIndex()
+			local userid = System.User.info.id
+			local index = LiveLessonBasic:GetStudentIndexByUserId(userid)
 			if index then
 				local studentsCount = #LiveLessonBasic:GetStudents()
 				local a = (index-1)*(360/studentsCount)

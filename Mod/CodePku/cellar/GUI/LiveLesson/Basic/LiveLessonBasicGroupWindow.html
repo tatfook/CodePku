@@ -1,0 +1,64 @@
+<!-- "Mod/CodePku/cellar/Common/TouchMiniButtons/MainUIButtons_common.html" -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" >
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+</head>
+
+<body>
+<pe:mcml>
+<script refresh="false" type="text/npl" src="LiveLessonBasic.lua"><![CDATA[
+NPL.load("(gl)Mod/CodePku/cellar/GUI/LiveLesson/Basic/LiveLessonBasic.lua")
+LiveLessonBasic = commonlib.gettable("Mod.CodePku.Common.LiveLessonBasic")
+
+function GetStudents()
+    return LiveLessonBasic:GetStudents()
+end
+
+function GetOtherStudents()
+    return LiveLessonBasic:GetOtherStudents()
+end
+
+function GetGroups()
+    return LiveLessonBasic:GetGroups()
+end
+
+
+function OnClickGroup(index)
+    GameLogic.AddBBS(nil, tostring(index), 500, "255 0 0", 21)
+
+    local others = GetOtherStudents()
+    local userid = others[LiveLessonBasic.windowIndex]["userid"]
+    local group = index
+
+    LiveLessonBasic.AddStudentToGroup_userid = userid
+    LiveLessonBasic.AddStudentToGroup_group = group
+    LiveLessonBasic:ShowSubPage("confirm")
+end
+
+function OnClose()
+    Page:CloseWindow()
+    LiveLessonBasic.windowGroupWindow = nil
+end
+
+]]></script>
+<style type="text/mcss">
+
+</style>
+<pe:container alignment="_lt" width="100%" height="100%">
+    <div onclick="OnClose" style="width: 1920; height: 1080; text-align: center; font-size: 24;">
+        <div style="<%= LiveLessonBasic.styleStr %>">
+            <pe:gridview name="windowgroup" style="" DataSource="<%= GetGroups() %>" CellPadding="0" DefaultNodeHeight="50" ItemsPerLine="1" AllowPaging="false" RememberScrollPos="true" RememberLastPage="true" pagesize="6">
+                <Columns>
+                    <div name="<%= index %>" onclick="OnClickGroup" style="line-height: 24; width: 150; height: 50; font-size:24; color: #ff0000; background-color: #e4bcd8;">
+                        <%= index %>
+                    </div>
+                </Columns>
+            </pe:gridview>
+        </div>
+    </div>
+</pe:container>
+</pe:mcml> 
+</body>
+</html>

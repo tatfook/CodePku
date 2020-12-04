@@ -3,14 +3,13 @@ NPL.load("(gl)Mod/CodePku/cellar/GUI/LiveLesson/Basic/LiveLessonBasic.lua")
 local LiveLessonBasic = commonlib.gettable("Mod.CodePku.Common.LiveLessonBasic")
 LiveLessonBasic:ShowPage()
 --]]
-local LiveLessonBasic = NPL.export();
 local request = NPL.load("(gl)Mod/CodePku/api/BaseRequest.lua")
 local AdaptWindow = commonlib.gettable("Mod.CodePku.GUI.Window.AdaptWindow")
-local GeneralGameServerMod = commonlib.gettable("Mod.GeneralGameServerMod");
-local UniString = commonlib.gettable("System.Core.UniString");
+local GeneralGameServerMod = commonlib.gettable("Mod.GeneralGameServerMod")
+local UniString = commonlib.gettable("System.Core.UniString")
 -- 导Editbox是为了改EmptyText的文本颜色，后面帕拉卡如果添加了对应的属性可以改掉这里的代码
-NPL.load("(gl)script/ide/System/Windows/Controls/EditBox.lua");
-local EditBox = commonlib.gettable("System.Windows.Controls.EditBox");
+NPL.load("(gl)script/ide/System/Windows/Controls/EditBox.lua")
+local EditBox = commonlib.gettable("System.Windows.Controls.EditBox")
 
 local LiveLessonBasic = commonlib.gettable("Mod.CodePku.Common.LiveLessonBasic")
 
@@ -55,36 +54,47 @@ LiveLessonBasic.students = {
     [10] = {name="名字最多七个十", userid=10, group=4, redflower=10, bShow=true},
     [11] = {name="名字最多七十一", userid=11, group=4, redflower=11, bShow=true},
     [12] = {name="名字最多七十二", userid=12, group=4, redflower=12, bShow=true},
+    [13] = {name="名字最多七十三", userid=13, bShow=true},
+    [14] = {name="名字最多七十四", userid=14, bShow=true},
 }
 
 LiveLessonBasic.params = {
     left = {
         url="Mod/CodePku/cellar/GUI/LiveLesson/Basic/LiveLessonBasicLeft.html",
-		alignment="_lt", left = 20, top = 20, width = 200, height = 500, zorder=7,
+		alignment="_lt", left = 20, top = 20, width = 200, height = 500, zorder=5,
     },
     right = {
         url="Mod/CodePku/cellar/GUI/LiveLesson/Basic/LiveLessonBasicRight.html",
-		alignment="_lt", left = 1500, top = 20, width = 400, height = 800, zorder=7,
+		alignment="_lt", left = 1500, top = 20, width = 400, height = 800, zorder=5,
     },
     right_closed = {
         url="Mod/CodePku/cellar/GUI/LiveLesson/Basic/LiveLessonBasicRight.html",
-		alignment="_lt", left = 1850, top = 20, width = 50, height = 800, zorder=7,
+		alignment="_lt", left = 1850, top = 20, width = 50, height = 800, zorder=5,
+    },
+    bottom = {
+        --todo 2个底部按钮
+        url="Mod/CodePku/cellar/GUI/LiveLesson/Basic/LiveLessonBasicBottom.html",
+		alignment="_lt", left = 200, top = 1000, width = 400, height = 50, zorder=5,
     },
     broadcast = {
         url="Mod/CodePku/cellar/GUI/LiveLesson/Basic/LiveLessonBasicBroadCast.html",
-		alignment="_lt", left = 220, top = 120, width = 200, height = 500, zorder=8,
+		alignment="_lt", left = 220, top = 120, width = 200, height = 500, zorder=6,
     },
     award = {
         url="Mod/CodePku/cellar/GUI/LiveLesson/Basic/LiveLessonBasicAward.html",
-		alignment="_lt", left = 220, top = 330, width = 350, height = 600, zorder=8,
+		alignment="_lt", left = 220, top = 330, width = 350, height = 600, zorder=6,
     },
     group = {
         url="Mod/CodePku/cellar/GUI/LiveLesson/Basic/LiveLessonBasicGroup.html",
-		alignment="_ct", left = -1100/2, top = -850/2, width = 1100, height = 850, zorder=9,
+		alignment="_ct", left = -1100/2, top = -850/2, width = 1100, height = 850, zorder=7,
     },
     tipboard = {
         url="Mod/CodePku/cellar/GUI/LiveLesson/Basic/LiveLessonBasicTipBoard.html",
 		alignment="_ct", left = -800/2, top = -400/2, width = 800, height = 400, zorder=9,
+    },
+    groupwindow = {
+        url="Mod/CodePku/cellar/GUI/LiveLesson/Basic/LiveLessonBasicGroupWindow.html",
+		alignment="_ct", left = -1920/2, top = -1080/2, width = 1920, height = 1080, zorder=8,
     },
 }
 
@@ -93,16 +103,45 @@ function LiveLessonBasic:GetStudents()
     return LiveLessonBasic.students
 end
 
+function LiveLessonBasic:GetGroups()
+    local students = self.GetStudents()
+    local groups = {}
+    for k,v in ipairs(students) do
+        if v.group then 
+            if groups[v.group] then
+                --groups[v.group][#groups[v.group]+1]["students"] = v
+                groups[v.group]["students"][#groups[v.group]["students"]+1] = v
+            else
+                groups[v.group] = {students={[1] = v}}
+            end
+        end
+    end
+    return groups
+end
+
+function LiveLessonBasic:GetOtherStudents()
+    local students = self.GetStudents()
+    local others = {}
+    local index = 1
+    for k,v in ipairs(students) do
+        if not v.group then
+            others[index] = v
+            index = index + 1
+        end
+    end
+    return others
+end
+
 -- 身份判定,暂定以is_employee字段判定,创建人
 function LiveLessonBasic:GetIentity()
     return System.User.info.is_employee == 1
 end
 
--- 获取当前学生用户在学员列表里的index
-function LiveLessonBasic:GetStudentIndex()
+-- userid获取学生在学员列表里的index
+function LiveLessonBasic:GetStudentIndexByUserId(userid)
     local students = self:GetStudents()
     for index,student in ipairs(students) do
-        if student.userid == System.User.info.id then
+        if student.userid == userid then
             return index
         end
     end
@@ -117,11 +156,13 @@ function LiveLessonBasic:GetWorldInfo()
 end
 
 function LiveLessonBasic:CopyMatchCode()
-    GameLogic.AddBBS("CodeGlobals", L"匹配码复制成功", 3000, "#00FF00");
+    GameLogic.AddBBS("CodeGlobals", L"匹配码复制成功", 3000, "#00FF00")
     ParaMisc.CopyTextToClipboard(tostring(self:GetWorldInfo().matchCode))
 end
 
-function LiveLessonBasic:GrouGping()
+function LiveLessonBasic:Grouping()
+    local windowGroup = self.windowGroup ~= nil
+    GameLogic.AddBBS("CodeGlobals", tostring(windowGroup), 3000, "#00FF00")
     self.ifGroupedFlag = true
     -- todo 分组 System.Codepku.liveLessonGroup
     self:ShowSubPage("group")
@@ -189,6 +230,13 @@ end
 
 -- 学生快捷操作功能
 function LiveLessonBasic:QuickOperation(index)
+    local curTime = os.time()
+
+    if self.recordTime and curTime - self.recordTime < 4 then
+        -- 学生快捷操作加4秒CD
+        return
+    end
+
     local _type = nil
     local username = System.User.info.nickname
     local userid = System.User.info.id
@@ -205,6 +253,8 @@ function LiveLessonBasic:QuickOperation(index)
         return
     end
     GameLogic.RunCommand(string.format("/ggs cmd liveLesson behavior -type=%s -username=%s -userid=%s -entityid=%s", _type, username, userid, entityid))
+
+    self.recordTime = curTime
 end
 
 -- 打开/收起右侧界面
@@ -235,6 +285,9 @@ function LiveLessonBasic:ShowPage()
     if not self.windowRight then
         self.windowRight = AdaptWindow:QuickWindow(self.params.right)
     end
+    if not self.windowBottom and self.GetIentity() then
+        self.windowBottom = AdaptWindow:QuickWindow(self.params.bottom)
+    end
 end
 
 function LiveLessonBasic:CloseAllWindows()
@@ -245,6 +298,10 @@ function LiveLessonBasic:CloseAllWindows()
     if self.windowRight then
         self.windowRight:CloseWindow()
         self.windowRight = nil
+    end
+    if self.windowBottom then
+        self.windowBottom:CloseWindow()
+        self.windowBottom = nil
     end
     if self.windowBroadCast then
         self.windowBroadCast:CloseWindow()
@@ -261,6 +318,10 @@ function LiveLessonBasic:CloseAllWindows()
     if self.windowWorldInfo then
         self.windowWorldInfo:CloseWindow()
         self.windowWorldInfo = nil
+    end
+    if self.windowConfirm then
+        self.windowConfirm:CloseWindow()
+        self.windowConfirm = nil
     end
 end
 
@@ -281,6 +342,11 @@ function LiveLessonBasic:ShowSubPage(pageName)
             self.windowAward = AdaptWindow:QuickWindow(self.params.award)
         end
     elseif pageName == "group" then
+        if self.windowWorldInfo then self.windowWorldInfo:CloseWindow() end
+        self.windowWorldInfo = nil
+        if self.windowConfirm then self.windowConfirm:CloseWindow() end
+        self.windowConfirm = nil
+
         local params = nil
         if self.ifGroupedFlag then
             params = self.params.group
@@ -295,27 +361,48 @@ function LiveLessonBasic:ShowSubPage(pageName)
 	        EditBox:Property({"EmptyTextColor", "#888888", auto=true})
             self.windowGroup:CloseWindow()
             self.windowGroup = nil
-            self.windowWorldInfo = nil
         else
-            if self.windowWorldInfo then self.windowWorldInfo:CloseWindow() end
             self.tipBoardFlag = "grouping"  -- 通用html,标记是分组页面
             self.windowGroup = AdaptWindow:QuickWindow(params)
         end
     elseif pageName == "roominfo" then
+        if self.windowGroup then self.windowGroup:CloseWindow() end
+        self.windowGroup = nil
+        if self.windowConfirm then self.windowConfirm:CloseWindow() end
+        self.windowConfirm = nil
+
         if self.windowWorldInfo then
             self.windowWorldInfo:CloseWindow()
             self.windowWorldInfo = nil
-            self.windowGroup = nil
         else
-            if self.windowGroup then self.windowGroup:CloseWindow() end
             self.tipBoardFlag = "roominfo"  -- 通用html,标记是房间信息页面
             self.windowWorldInfo = AdaptWindow:QuickWindow(self.params.tipboard)
         end
+    elseif pageName == "confirm" then
+        if self.windowWorldInfo then self.windowWorldInfo:CloseWindow() end
+        self.windowWorldInfo = nil
+
+        if self.windowConfirm then
+            self.windowConfirm:CloseWindow()
+            self.windowConfirm = nil
+        else
+            self.tipBoardFlag = "confirm"  -- 通用html,标记是房间信息页面
+            self.windowConfirm = AdaptWindow:QuickWindow(self.params.tipboard)
+        end
+    elseif pageName == "groupwindow" then
+        if self.windowGroupWindow then
+            self.windowGroupWindow:CloseWindow()
+            self.windowGroupWindow = nil
+        else
+            if self.windowGroupWindow then self.windowGroupWindow:CloseWindow() end
+            self.windowGroupWindow = AdaptWindow:QuickWindow(self.params.groupwindow)
+        end
+
     end
 end
 
 function LiveLessonBasic:OnInit()
-    LOG.std("", "info", "LiveLessonBasic", "OnInit");
+    LOG.std("", "info", "LiveLessonBasic", "OnInit")
     GameLogic:Connect("WorldLoaded", self, self.OnWorldLoaded, "UniqueConnection")
     GameLogic:Connect("WorldUnloaded", self, self.OnWorldUnloaded, "UniqueConnection")
 end
@@ -378,7 +465,20 @@ end
 
 -- 设置头顶显示,用于表现学生行为举手/举牌
 function LiveLessonBasic:SetHeadOnDisplay(entityid,_type,userid)
-    --todo 需要同步右边的学员列表标记
+    local index =  self:GetStudentIndexByUserId(userid)
+    if index then
+        self.students[index].behavior = _type
+        --todo 改为setvalue
+        self.windowRight:Refresh(0)
+
+    end
+    local mytimer = commonlib.Timer:new({callbackFunc = function(timer)
+        self.students[index].behavior = nil
+        self.windowRight:Refresh(0)
+
+    end})
+    mytimer:Change(3000, nil)
+
     self:SetHeadOnDisplaySelf(userid,_type) -- 触发者自己
     self:SetHeadOnDisplayBehaviorOthers(entityid,_type) -- 其他人看到触发者
 end

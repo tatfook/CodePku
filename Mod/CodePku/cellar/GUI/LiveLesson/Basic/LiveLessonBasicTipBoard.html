@@ -20,19 +20,45 @@ function GetWorldInfo()
     return LiveLessonBasic:GetWorldInfo()
 end
 
-function OnClickGrouGping()
+function OnClickGrouping()
     OnClose()
-    LiveLessonBasic:GrouGping()
+    LiveLessonBasic:Grouping()
 end
 
 function OnClickCopyMatchCode()
     LiveLessonBasic:CopyMatchCode()
 end
 
+function OnConfirm()
+    OnClose()
+
+    local group = LiveLessonBasic.AddStudentToGroup_group
+    local userid = LiveLessonBasic.AddStudentToGroup_userid
+    local students = GetStudents()
+
+    for index,student in ipairs(students) do
+        if student.userid == userid then
+            LiveLessonBasic.students[index]["group"] = group
+            if LiveLessonBasic.windowGroupWindow then
+                LiveLessonBasic.windowGroupWindow:CloseWindow()
+                LiveLessonBasic.windowGroupWindow = nil
+            end
+            LiveLessonBasic.windowGroup:Refresh(0)
+            return
+        end
+    end
+
+end
+
 function OnClose()
     Page:CloseWindow()
-    LiveLessonBasic.windowGroup = nil
-    LiveLessonBasic.windowWorldInfo = nil
+    if LiveLessonBasic.tipBoardFlag == 'grouping' then
+        LiveLessonBasic.windowGroup = nil
+    elseif LiveLessonBasic.tipBoardFlag == 'roominfo' then
+        LiveLessonBasic.windowWorldInfo = nil
+    elseif LiveLessonBasic.tipBoardFlag == 'confirm' then
+        LiveLessonBasic.windowConfirm = nil
+    end
 end
 
 ]]></script>
@@ -68,6 +94,11 @@ end
                 <div onclick="OnClickCopyMatchCode" style="position: relative; left:300; top: 300; line-height: 50; width: 200; height: 50; color: #ffffff; background-color: #006eff;">复制匹配码</div>
 
                 <div onclick="OnClose" style="position: relative; left:750; top: -10; line-height: 50; width: 50; height: 100; color: #ffffff; background-color: #006eff;"></div>
+            </pe:if>
+
+            <pe:if condition="<%= LiveLessonBasic.tipBoardFlag == 'confirm' %>">
+                <div onclick="OnClose" style="position: relative; left:100; top: 300; line-height: 50; width: 200; height: 50; color: #ffffff; background-color: #006eff;">取消</div>
+                <div onclick="OnConfirm" style="position: relative; left:500; top: 300; line-height: 50; width: 200; height: 50; color: #ffffff; background-color: #006eff;">确认</div>
             </pe:if>
        </div>
     </div>

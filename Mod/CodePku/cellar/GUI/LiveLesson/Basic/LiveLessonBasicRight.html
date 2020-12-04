@@ -33,11 +33,15 @@ function OnClickGrouping()
 end
 
 function OnClickKickOut(index)
+    local name = GetStudents()[index]["name"]
+    GameLogic.AddBBS(nil, string.format("%s  踢出到主世界",name), 3000, "255 0 0", 21)
     local userid = GetStudents()[index]["userid"]
     LiveLessonBasic:RunGGSCommand("kickout", {userid=userid})
 end
 
 function OnClickForcePlayMode(index)
+    local name = GetStudents()[index]["name"]
+    GameLogic.AddBBS(nil, string.format("%s  改成播放模式",name), 3000, "255 0 0", 21)
     local userid = GetStudents()[index]["userid"]
     LiveLessonBasic:RunGGSCommand("forceplaymode", {userid=userid})
 end
@@ -70,22 +74,22 @@ end
                     </div>
                 </pe:if>
     
-                <div style="margin-top: 10; width: 350; height: 50; background-color: #00ff00; color: #ff00ff; line-height: 50;">
-                    学员列表
-                </div>
+                <div style="margin-top: 10; width: 350; height: 50; background-color: #00ff00; color: #ff00ff; line-height: 50;">学员列表</div>
     
-                <div style="margin-top: 10; width: 350; background-color: #5b288b; color: #ff00ff; line-height: 50;">
-                    <pe:repeat DataSource="<%= GetStudents() %>">
-                        <pe:repeatitem>
-                            <div style="margin-bottom: 6; line-height: 36; width: 350; height: 36; color: #ff0000; background-color: #aaaaaa;">
-                                <div style="float: left; width: 200; text-align: left; background-color: #3a7fff;"><%= name %></div>
+                <div style="margin-top: 0; width: 350; background-color: #5b288b; color: #ff00ff; line-height: 36;">
+                    <pe:gridview name="students" style="" DataSource="<%= GetStudents() %>" CellPadding="0" DefaultNodeHeight="46" ItemsPerLine="1" AllowPaging="false" RememberScrollPos="true" RememberLastPage="true" pagesize="12">
+                        <Columns>
+                            <div style="margin-bottom: 0; line-height: 36; width: 330; height: 36; font-size:24; color: #ff0000; background-color: #aaaaaa;">
+                                <div style="float: left; width: 36; height: 36; text-align: left; background-color: #3aff75;"><%= behavior %></div>
+                                
+                                <div style="float: left; width: 170; text-align: left; background-color: #3a7fff;"><%= name %></div>
                                 <pe:if condition="<%= GetIentity() %>">
-                                    <div name="<%= index %>" onclick="OnClickKickOut" style="float: left; margin-left: 55; width: 36; background-color: #daff74;">踢</div>
-                                    <div name="<%= index %>" onclick="OnClickForcePlayMode" style="float: left; margin-left: 15; width: 36; background-color: #daff74;">禁</div>
+                                    <div name="<%= index %>" onclick="OnClickKickOut" style="float: left; margin-left: 40; width: 36; background-color: #daff74;">踢</div>
+                                    <div name="<%= index %>" onclick="OnClickForcePlayMode" style="float: left; margin-left: 10; width: 36; background-color: #daff74;">禁</div>
                                 </pe:if>
                             </div>
-                        </pe:repeatitem>
-                    </pe:repeat>
+                        </Columns>
+                    </pe:gridview>
                 </div>
             </div>
         </pe:if>
