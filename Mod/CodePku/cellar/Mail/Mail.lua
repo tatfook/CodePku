@@ -58,7 +58,7 @@ function Mail.StaticInit()
     --     end
     -- );
     Mail:Connect(nil,nil,function()
-        echo("connnect--------callback")
+        -- echo("connnect--------callback")
     end);
 end
 
@@ -67,10 +67,6 @@ function Mail:GetMailList()
     request:get('/mails',{},nil):next(function(response)
         Mail.mailList = (response and response.data and response.data.data) or {}
         Mail:GetTodoCount()
-        echo("=======Mail:GetMailList=======")
-        for i,v in pairs(Mail.mailList) do
-            echo(i)
-        end
     end):catch(function(e)
         GameLogic.AddBBS(nil, L"邮件获取失败，请重试", 3000, "255 0 0", 21);
     end);
@@ -119,7 +115,7 @@ function Mail.OnMsg(self, msg)
     if(not msg or not msg.data)then
         return
     end
-    echo("Mail输出msg=========")  
+    echo("Mail输出msg")  
     echo(msg)
     msg = msg.data;
     if msg["action"] == "new_mail" then
@@ -357,7 +353,6 @@ end
 
 -- 一键删除
 function Mail:DeleteAll()
-    echo("一键删除")
     local list = Mail.mailList;
     for i = #list, 1, -1 do
         if list[i]["status"] == 1 then --已读
@@ -389,7 +384,6 @@ end
 
 -- 一键领取
 function Mail:ReceiveAll()
-    echo("一键领取")
     local list = Mail.mailList;
     local reward = {}
     local flag
@@ -508,8 +502,6 @@ function Mail:RefreshMoney(id, num)
 end
 
 function Mail:HandleContent(content)
-    echo("Mail:HandleContent============")
-    echo(content)
     local result = content
 
 
