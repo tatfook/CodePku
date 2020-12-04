@@ -1,0 +1,31 @@
+<!-- "Mod/CodePku/cellar/GUI/InviteCode/QRCode.html" -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+</head>
+<body>
+<pe:mcml>
+    <script type="text/npl" refresh="false"><![CDATA[
+        local page = document:GetPageCtrl()
+        InviteCode = NPL.load("(gl)Mod/CodePku/cellar/GUI/InviteCode/InviteCode.lua")
+
+        function OnClose()
+            Page:CloseWindow()
+        end
+
+        function OnClickMistake()
+        end
+    ]]>
+    </script>
+    <style type="text/mcss">
+    </style>
+
+    <pe:container alignment="_lt" width="1920" height="1080">
+        <div style="position: relative;width: 1920;height:1080;background-color: #00000000;" onclick="OnClose"></div>
+        <div style="<%=format('position: relative; left: 1210; top: 570; width: 264; height: 285; background:url(%s);', InviteCode.GetIconUrl('wechat_code.png'))%>"></div>
+    </pe:container>
+</pe:mcml>
+</body>
+</html>

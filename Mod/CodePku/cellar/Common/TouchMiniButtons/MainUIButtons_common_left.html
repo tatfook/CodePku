@@ -29,6 +29,7 @@ function ClickChooseFun(name)
         GameLogic.GetFilters():apply_filters("ClickStatistics", {type = 74}); -- 点击分享，触发操作数据统计计数
         ShareApp:ShowPage(1)
     elseif(name == "ClickInviteCode") then
+        GameLogic.GetFilters():apply_filters("ClickStatistics", {track_id= 31, track_scene=16, track_type=0, }); -- 点击呼朋唤友，触发操作数据统计计数
         InviteCode:ShowPage()
     else
         GameLogic.AddBBS("CodeGlobals", L"功能开发中", 3000, "#ff0000");

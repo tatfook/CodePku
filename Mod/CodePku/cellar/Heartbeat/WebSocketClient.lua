@@ -162,7 +162,7 @@ function WebSocketClient:HeartBeat()
 
     self.pingTimer = commonlib.Timer:new({callbackFunc = function(timer)
         commonlib.log({"onpingTimer", timer.id, timer.delta, timer.lastTick})
-        LOG.std("", "info", "WebSocketClient", "run pingTimer");         
+        -- LOG.std("", "info", "WebSocketClient", "run pingTimer");         
         if(self.state == "OPEN")then
             self:Ping();             
         end            
@@ -207,14 +207,14 @@ function WebSocketClient:SendPacket(message,opcode)
 end
 
 function WebSocketClient:HandlePong(nid,decoded)
-    LOG.std("", "info", "WebSocketClient", "HandlePong");
+    -- LOG.std("", "info", "WebSocketClient", "HandlePong");
     self:ResetPongTimer()    
 end
 
 function WebSocketClient:HandleMsg(nid, msg)
-    LOG.std("", "info", "WebSocketClient", "HandleMsg");
-    echo("收到消息=="..nid)
-    echo(msg)
+    -- LOG.std("", "info", "WebSocketClient", "HandleMsg");
+    -- echo("收到消息=="..nid)
+    -- echo(msg)
     self:ResetPongTimer()
     self:DispatchEvent({type = "OnMsg", data = msg });
 end
@@ -224,13 +224,13 @@ function WebSocketClient:ResetPongTimer()
     LOG.std("", "info", "WebSocketClient", "ResetPongTimer");    
     self.pongTimer = commonlib.TimerManager.SetTimeout(function(timer)    
         commonlib.log({"onpongTimer", timer.id, timer.delta, timer.lastTick})       
-        LOG.std("", "info", "WebSocketClient", "run pongTimer");         
+        -- LOG.std("", "info", "WebSocketClient", "run pongTimer");         
         -- 指定时间内没有收到消息 可以开始尝试重连了
         self:ReadyReconnect();
     end, self.pongTimeout);
 
-    LOG.std("", 'info', 'WebSocketClient', "self.pongTimer")
-    echo(self.pongTimer)
+    -- LOG.std("", 'info', 'WebSocketClient', "self.pongTimer")
+    -- echo(self.pongTimer)
 end
 
 function WebSocketClient:HandlePacket(nid,decoded,fin,opcode)    
@@ -297,7 +297,7 @@ local function activate()
         client:HandleOpen();
     else 
         local nid = msg.nid;
-        echo("activate=============="..nid)       
+        -- echo("activate=============="..nid)       
         local decoded,fin,opcode = frame.decode(response);        
         client:HandlePacket(nid,decoded,fin,opcode)
     end
