@@ -58,7 +58,7 @@ function LiveLessonEntrance:GetMatchCode(param, page)
     LiveLessonEntrance.get_code = true
     request:post('/class-room/store',param):next(function(response)
         local data = response.data.data
-        System.User.CreateLiveLessonData = data
+        System.User.CreateLiveLessonData = data         -- 创建房间信息存全局，暂时没用到
         local code = tostring(data.match_code)
         page:SetValue("matchcode", code)
         LiveLessonEntrance.get_code = false
@@ -86,7 +86,7 @@ function LiveLessonEntrance:EnterRoom(code)
     LiveLessonEntrance.entre_room = true
     request:get(path):next(function(response)
         local data = response.data.data
-        System.User.LiveLessonData = data
+        System.User.LiveLessonData = data       -- 房间信息存全局，进入房间后需要用到
         local Config = NPL.load("(gl)Mod/CodePku/online/client/Config.lua");
         if Config.defaultEnv == "RELEASE" then
             local command = "/connectCodePku -no=1 -isSyncBlock -isSyncCmd -host=106.53.147.185 -port=9901 " .. tostring(data.keep_work_id) .. " " .. tostring(data.match_code)
@@ -95,6 +95,7 @@ function LiveLessonEntrance:EnterRoom(code)
             local command = "/connectCodePku -no=1 -isSyncBlock -isSyncCmd " .. tostring(data.keep_work_id) .. " " .. tostring(data.match_code)
             GameLogic.RunCommand(command)
         end
+        System.Codepku.isLoadingLiveLesson = true       -- 统计时间的进入标记
         -- 关闭所有窗口
         LiveLessonEntrance:EntrancePageSpecialClose()
         LiveLessonEntrance:EstablishPageSpecialClose()

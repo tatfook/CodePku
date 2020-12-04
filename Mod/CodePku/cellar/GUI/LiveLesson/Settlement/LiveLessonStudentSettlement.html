@@ -7,11 +7,9 @@
 <body>
     <pe:mcml>
 <script refresh="false" type="text/npl" src=""><![CDATA[
-local LiveLessonSettlement = NPL.load("(gl)Mod/CodePku/cellar/GUI/LiveLesson/Settlement/LiveLessonSettlement.lua");
+LiveLessonSettlement = NPL.load("(gl)Mod/CodePku/cellar/GUI/LiveLesson/Settlement/LiveLessonSettlement.lua");
 local page = document:GetPageCtrl()
 UserInfoPage = NPL.load("(gl)Mod/CodePku/cellar/GUI/UserInfo.lua");
-
-ProfilePng = "codepku/image/textures/profile_32bits.png";
 
 -- 获取图标
 function GetIcon(index)
@@ -20,6 +18,16 @@ end
 
 function Close()
     Page:CloseWindow()
+end
+
+-- 确认
+function Confirm()
+    Close()
+end
+
+-- todo 分享好友
+function Share()
+    GameLogic.AddBBS("CodeGlobals", L"分享好友", 1000, "#FF0000");
 end
 
 local mainasset = UserInfoPage.mainasset or nil;
@@ -31,20 +39,73 @@ end
 </script>
 <pe:container alignment="_lt" width="100%" height="100%" style="">
     <div style="position: relative; width: 1920; height: 1080;background-color: #00000082;">
-        <div style="position: relative;left: 300;top: 200;width: 1320;height: 680;"></div>
         
-        <div style='<%=format("position:absolute;margin-left:235px;margin-top:298px;width:727px;height:653px;background:url(%s#410 490 750 653);", Eval("ProfilePng")) %>'>
-            <div style="margin-left:40px;margin-top:-138px;width:640px;height:640px;" >
-                <pe:mc_player align="center" assetfile="<%= GetMainAsset() %>" miniscenegraphname="AvatarMyselfTabCharacter" LookAtHeight=1 CameraObjectDist=4 RenderTargetSize=640 style="width:640px;height:640px;background-color: #00000082;"></pe:mc_player>
+        <div style="<%=format('position: relative; left: 207; top: 69; width: 1485; height: 960;background:url(%s);', GetIcon('live_lesson_comm_settlement_bot.png'))%>">
+            <!-- 课程结算 -->
+            <div style="<%=format('position: relative; left: 511; top: -35; width: 455;height: 106;background:url(%s);', GetIcon('live_lesson_comm_settlement_title_bot.png'))%>">
+                <div style="position: relative;left: 112;top: 17;width: 230;height: 70;font-family: zkklt;font-size: 56;color: #ffffff;">课程结算</div>
             </div>
-            <pe:if condition='<%= UserInfoPage.isSelf %>'>
-                <input align="center" type="button" onclick="OpenSkinPage" style="background:url(codepku/image/textures/common_32bits.png#1502 740 86 86:14 14 14 14);width:246px;height:86px;color:#B35D0A;font-size:36px;font-weight:bold;margin-top:16px;" value="更换角色"/>
-            </pe:if>
+            <!-- 左侧挂牌 -->
+            <div style="<%=format('position: relative; left: 12; top: -11; width: 398;height: 876;background:url(%s);', GetIcon('live_lesson_personshow_bot.png'))%>">
+                <div style="<%=format('position: relative; left: -79; top: -43; width: 151;height: 121;background:url(%s);', GetIcon('live_lesson_personshowadorn.png'))%>"></div>
+                <div style="<%=format('position: relative;left:63;top:546;width:276;height:111;background:url(%s);', GetIcon('live_lesson_person_bot.png'))%>"></div>
+                <pe:mc_player align="center" assetfile="<%= GetMainAsset() %>" IsInteractive="false" miniscenegraphname="AvatarMyselfTabCharacter" LookAtHeight=1 CameraObjectDist=4 RenderTargetSize=366 style="position: relative;left:5;top:227;width:366;height:366;"></pe:mc_player>
+                <!-- <div style="<%=format('position: relative;left:45;top:219;width:256;height:366;background:url(%s);', GetIcon('live_lesson_person_eg.png'))%>"></div> -->
+                <div style="<%=format('position: relative;left:18;top:751;width:264;height:64;background:url(%s);', GetIcon('live_lesson_courseclearing_id_bot.png'))%>">
+                    <div style="position: relative;left:-5;top:15;width:254;height:44;font-size:30px;font-family:Noto Sans S Chinese Regular;text-align: center;color: #613f2e;"><%= System.User.info.nickname %></div>
+                </div>
+                <div style="<%=format('position: relative;left:296;top:746;width:75;height:74;background:url(%s);', GetIcon('live_lesson_file.png'))%>"></div>
+            </div>
+            
+            <!-- title -->
+            <div style="<%=format('position: relative;left:397;top:115;width:791;height:113;background:url(%s);', GetIcon('live_lesson_coursetitle_bot.png'))%>">
+                <div style="position: relative;left:68;top:17;width:650;height:50;font-size:36;font-family:Noto Sans S Chinese Regular;text-align: center;color: #613f2e;"><%= LiveLessonSettlement.StudentSettlementResult.course_name %></div>
+            </div>
+
+            <!-- 二维码 -->
+            <div style="<%=format('position: relative;left:1270;top:50;width:177;height:177;background:url(%s);', GetIcon('live_lesson_erweima.png'))%>"></div>
+
+            <!-- 学科知识点 -->
+            <div style="<%=format('position: relative;left:452;top:270;width:994;height:223;background:url(%s);', GetIcon('live_lesson_knowledgepoint_bot.png'))%>">
+                <div style="<%=format('position: relative;left:-19;top:-28;width:214;height:91;background:url(%s);', GetIcon('live_lesson_staple_bot.png'))%>">
+                    <div style="<%=format('position: relative;left:6;top:0;width:43;height:63;background:url(%s);', GetIcon('live_lesson_comm_stapleicon.png'))%>"></div>
+                    <div style="position: relative;left:44;top:26;width:180;height:50;font-size:32;font-family:Noto Sans S Chinese Regular;color: #613f2e;">本课知识点</div>
+                </div>
+                <scrollarea ref="scrollarea" style="padding-right:20;position: relative;left:45;top:63;width:920;height:150;font-size:32;line-height: 50;font-family:Noto Sans S Chinese Regular;color: #FFE3B3;">
+                    <%= LiveLessonSettlement.StudentSettlementResult.description %>
+                </scrollarea>
+            </div>
+
+            <!-- 我的成绩 -->
+            <div style="<%=format('position: relative;left:452;top:553;width:994;height:223;background:url(%s);', GetIcon('live_lesson_knowledgepoint_bot.png'))%>">
+                <div style="<%=format('position: relative;left:-19;top:-58;width:214;height:91;background:url(%s);', GetIcon('live_lesson_staple_bot.png'))%>">
+                    <div style="<%=format('position: relative;left:6;top:0;width:43;height:63;background:url(%s);', GetIcon('live_lesson_comm_stapleicon.png'))%>"></div>
+                    <div style="position: relative;left:53;top:26;width:180;height:50;font-size:32;font-family:Noto Sans S Chinese Regular;color: #613f2e;">我的成绩</div>
+                </div>
+
+                <!-- 数值区域 -->
+                <div style="position: relative;left: 53;top: 24;width: 930; height:190;">
+                    <pe:gridview style="position: relative;left: -11; width: 950; height:210;" DataSource='<%= LiveLessonSettlement.StudentSettlementResult.grade %>' CellPadding="0" ItemsPerLine="5" AllowPaging="false" RememberScrollPos="true" RememberLastPage="true" VerticalScrollBarStep="150" VerticalScrollBarOffsetX="8">
+                        <Columns>
+                            <div style="<%=format('margin-left: 11;width:174;height:180;background:url(%s);', GetIcon('live_lesson_mygrade_bot.png'))%>">
+                                <div style="<%=format('position: relative;left:0;top:35;width:174;height:70;font-size:62;text-align:center;font-family:IMPACT;color: %s;', Eval('color'))%>"><%= Eval('content') %></div>
+                                <div style="<%=format('position: relative;left:-10;top:113;width:165;height:60;background:url(%s);', Eval('pic'))%>">
+                                    <div style="position: relative;left:30;top:14;width:130;height:30;text-align: center;font-size:24;font-family:Noto Sans S Chinese Regular;color: #ffffff;"><%= Eval('title') %></div>
+                                </div>
+                            </div>
+                        </Columns>
+                    </pe:gridview>
+                </div>
+            </div>
+            <!-- 确认 -->
+            <div onclick="Confirm" style="<%=format('position: relative; left: 603; top: 835; width: 320;height: 105;background:url(%s);', GetIcon('live_lesson_comm_bot_02.png'))%>">
+                <div style="<%=format('position: relative; left: 97; top: 21; width: 141;height: 54;background:url(%s);', GetIcon('live_lesson_btn_mat_queren.png'))%>"></div>
+            </div>
+            <!-- 分享好友 -->
+            <div onclick="Share" style="<%=format('position: relative; left: 1060; top: 835; width: 320;height: 105;background:url(%s);', GetIcon('live_lesson_comm_btn_01.png'))%>">
+                <div style="<%=format('position: relative; left: 52; top: 20; width: 226;height: 53;background:url(%s);', GetIcon('live_lesson_btn_mat_share.png'))%>"></div>
+            </div>
         </div>
-
-        <!-- 关闭 -->
-        <div onclick="Close" style="<%=format('position: relative; left: 1580; top: 127; width: 77;height: 123;background:url(%s);', GetIcon('live_lesson_comm_x.png'))%>"></div>
-
     </div>
 </pe:container>
 </pe:mcml>

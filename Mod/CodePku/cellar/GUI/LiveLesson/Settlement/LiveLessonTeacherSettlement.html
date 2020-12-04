@@ -9,9 +9,6 @@
 <script refresh="false" type="text/npl" src=""><![CDATA[
 local LiveLessonSettlement = NPL.load("(gl)Mod/CodePku/cellar/GUI/LiveLesson/Settlement/LiveLessonSettlement.lua");
 local page = document:GetPageCtrl()
-UserInfoPage = NPL.load("(gl)Mod/CodePku/cellar/GUI/UserInfo.lua");
-
-ProfilePng = "codepku/image/textures/profile_32bits.png";
 
 -- 获取图标
 function GetIcon(index)
@@ -23,26 +20,80 @@ function Test()
     GameLogic.AddBBS("CodeGlobals", L"点击测试", 1000, "#00FF00");
 end
 
+-- 有输入框，要关闭两个页面
 function Close()
-    Page:CloseWindow()
+    LiveLessonSettlement:EntrancePageSpecialClose()
 end
 
-local mainasset = UserInfoPage.mainasset or nil;
-function GetMainAsset()
-    return mainasset;
+-- 学生列表
+function GetStudentsInfo()
+    return LiveLessonSettlement.settlement_result_table
+end
+
+-- todo 课堂结算
+function Settlement()
+    GameLogic.AddBBS("CodeGlobals", L"课堂结算", 1000, "#FF0000");
+    Close()
+end
+
+-- todo 下课
+function Finish()
+    GameLogic.AddBBS("CodeGlobals", L"下课了", 1000, "#FF0000");
+    Close()
 end
 
 ]]>
 </script>
 <pe:container alignment="_lt" width="100%" height="100%" style="">
-    <div style="position: relative; width: 1920; height: 1080;background-color: #00000082;">
-        <div onclick="Test" style="position: relative;left: 300;top: 200;width: 1320;height: 680;background-color: #ff000082;"></div>
-        
+    <div style="<%=format('position: relative; width: 1485; height: 960;background:url(%s);', GetIcon('live_lesson_comm_settlement_bot.png'))%>">
+        <div style="<%=format('position: relative; left: 511; top: -35; width: 455;height: 106;background:url(%s);', GetIcon('live_lesson_comm_settlement_title_bot.png'))%>">
+            <div style="position: relative;left: 112;top: 17;width: 230;height: 70;font-family: zkklt;font-size: 56;color: #ffffff;">下课结算</div>
+        </div>
 
-        <!-- 关闭 -->
-        <div onclick="Close" style="<%=format('position: relative; left: 1580; top: 127; width: 77;height: 123;background:url(%s);', GetIcon('live_lesson_comm_x.png'))%>"></div>
+        <div style="<%=format('position: relative; left: 55; top: 92; width: 342;height: 79;background:url(%s);', GetIcon('live_lesson_settlement_btn_bot.png'))%>">
+            <div style="position: relative;left: 83;top: 15;width: 230;height: 70;font-family: zkklt;font-size: 42;color: #613f22;">用户昵称</div>
+        </div>
+        <div style="<%=format('position: relative; left: 440; top: 92; width: 1021;height: 79;background:url(%s);', GetIcon('live_lesson_settlement_mat.png'))%>"></div>
 
+        <!-- 学生信息 -->
+        <div style="position: relative;left: 29;top: 192;width: 1438;height: 675;">
+            <pe:treeview style="position: relative;width: 1438;height: 675;" name='students' DefaultNodeHeight = "0" ItemsPerLine="1" AllowPaging="false" RememberScrollPos="true" RememberLastPage="false" VerticalScrollBarStep="40">
+                <pe:repeat DataSource="<%= GetStudentsInfo() %>">
+                    <pe:repeatitem>
+                        <div style="<%=format('width: 1438;height: 96;margin-bottom: 16;font-family: Noto Sans S Chinese Regular;text-align: center;font-size: 42;color: #dac9ae;background:url(%s);', GetIcon('live_lesson_settlement_mat_bot.png'))%>">
+                            <!-- todo 学生详细信息 -->
+                            <!-- 昵称 -->
+                            <div style="position: relative;left: 28;top: 27;width: 330;"><%= Eval('nickname') %></div>
+                            <!-- 节点 -->
+                            <div style="position: relative;left: 413;top: 27;width: 150;"><%= Eval('rate_of_learn') %></div>
+                            <!-- 首次答题正确率 -->
+                            <div style="position: relative;left: 570;top: 27;width: 150;"><%= Eval('accuracy') %></div>
+                            <!-- 综合答题排名 -->
+                            <div style="position: relative;left: 725;top: 27;width: 150;"><%= Eval('rank') %></div>
+                            <!-- 小组排名 -->
+                            <div style="position: relative;left: 885;top: 27;width: 150;"><%= Eval('group_rank') %></div>
+                            <!-- 奖励 -->
+                            <div style="position: relative;left: 1043;top: 27;width: 150;"><%= Eval('reward_num') %></div>
+                            <!-- 综合评分 -->
+                            <div style="position: relative;left: 1240;top: 23;width: 150;font-family: IMPACT;font-size: 48;"><%= Eval('rate') %></div>
+
+                        </div>
+                    </pe:repeatitem>
+                </pe:repeat>
+            </pe:treeview>
+        </div>
     </div>
+
+    <!-- 课堂结算 -->
+    <div onclick="Settlement" style="<%=format('position: relative; left: 126; top: 893; width: 320;height: 105;background:url(%s);', GetIcon('live_lesson_comm_bot_02.png'))%>">
+        <div style="<%=format('position: relative; left: 52; top: 20; width: 224;height: 53;background:url(%s);', GetIcon('live_lesson_settlement_mat_classroomsettlement.png'))%>"></div>
+    </div>
+
+    <!-- 下课 -->
+    <div onclick="Finish" style="<%=format('position: relative; left: 1011; top: 893; width: 320;height: 105;background:url(%s);', GetIcon('live_lesson_comm_btn_01.png'))%>">
+        <div style="<%=format('position: relative; left: 97; top: 21; width: 138;height: 53;background:url(%s);', GetIcon('live_lesson_settlement_mat_finishclass.png'))%>"></div>
+    </div>
+
 </pe:container>
 </pe:mcml>
 </body>
