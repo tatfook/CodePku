@@ -31,7 +31,7 @@ function GoBack()
     LiveLessonEntrance:ShowEntrancePage()
 end
 
--- 生成匹配码 todo 增加CD
+-- 生成匹配码
 function GetCode()
     local RoomName = Page:GetValue("roomname")
     local CoursewareID = Page:GetValue("coursewareID")
@@ -56,19 +56,19 @@ end
                     <input type="text" MoveViewWhenAttachWithIME="true" value="" name="coursewareID" EmptyText='' style="position: relative;left: 15;top: 3; width: 290; height: 60; font-family: zkklt;font-size: 48;line-height: 60;color: #ffffff;background: #000000;"/>
                 </div>
             </div>
-            <!-- 匹配码 -->
+            <!-- 房间名 -->
             <div style="position: relative;left: 31;top: 221;width: 590;height: 65;">
+                <div style="position: relative;left: 3;top: 5;width: 290;height: 55;font-family: zkklt;font-size: 48;color: #7e2f12;">输入房间名：</div>
+                <div style="<%=format('position: relative; left: 269; top: 0; width: 316;height: 65;background:url(%s);', GetIcon('live_lesson_comm_frame.png'))%>">
+                    <input type="text" MoveViewWhenAttachWithIME="true" value="" name="roomname" EmptyText='' style="position: relative;left: 15;top: 3; width: 290; height: 60; font-family: zkklt;font-size: 48;line-height: 60;color: #ffffff;background: #000000;"/>
+                </div>
+            </div>
+            <!-- 匹配码 -->
+            <div style="position: relative;left: 31;top: 317;width: 590;height: 65;">
                 <div style="position: relative;left: 3;top: 5;width: 290;height: 55;font-family: zkklt;font-size: 48;color: #7e2f12;">生成匹配码：</div>
                 <div style="<%=format('position: relative; left: 269; top: 0; width: 316;height: 65;background:url(%s);', GetIcon('live_lesson_comm_frame.png'))%>">
                     <div onclick="GetCode" style="<%=format('position: relative; left: 221; top: 11; width: 86;height: 43;background:url(%s);', GetIcon('live_lesson_frame_generatebtn.png'))%>"></div>
                     <input type="button" MoveViewWhenAttachWithIME="true" value="点击生成" name="matchcode" EmptyText='' style="position: relative;left: 5;top: 3; width: 180; height: 60; font-family: zkklt;font-size: 42;line-height: 60;color: #ffffff;background: #000000;"/>
-                </div>
-            </div>
-            <!-- 房间名 -->
-            <div style="position: relative;left: 31;top: 317;width: 590;height: 65;">
-                <div style="position: relative;left: 3;top: 5;width: 290;height: 55;font-family: zkklt;font-size: 48;color: #7e2f12;">输入房间名：</div>
-                <div style="<%=format('position: relative; left: 269; top: 0; width: 316;height: 65;background:url(%s);', GetIcon('live_lesson_comm_frame.png'))%>">
-                    <input type="text" MoveViewWhenAttachWithIME="true" value="" name="roomname" EmptyText='' style="position: relative;left: 15;top: 3; width: 290; height: 60; font-family: zkklt;font-size: 48;line-height: 60;color: #ffffff;background: #000000;"/>
                 </div>
             </div>
         </div>

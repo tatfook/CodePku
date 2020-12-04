@@ -20,7 +20,8 @@ local request = NPL.load("(gl)Mod/CodePku/api/BaseRequest.lua");
 LiveLessonEntrance.constant = {
     MatchCodeLimit = 4,     -- 匹配码输入字数限制
     RoomNameLimit = 30,     -- 房间名字数限制
-    CoursewareIDLimit = 8   -- 课件ID字数限制
+    CoursewareIDLimit = 8,  -- 课件ID字数限制
+    CodeLimit = 10,         -- 匹配码CD
 }
 
 -- 获取图标
@@ -55,15 +56,34 @@ function LiveLessonEntrance:GetMatchCode(param, page)
         GameLogic.AddBBS("CodeGlobals", L"只有老师才能创建房间", 3000, "#FF0000");
         return
     end
+    -- 计时器CD
+    if LiveLessonEntrance.TimerTimes then
+        GameLogic.AddBBS("CodeGlobals", tostring(LiveLessonEntrance.TimerTimes) .. "秒后才能重新生成匹配码", 3000, "#FF0000");
+        return
+    end
+    LiveLessonEntrance.TimerTimes = LiveLessonEntrance.constant.CodeLimit
+    LiveLessonEntrance.get_code_timer = commonlib.Timer:new({
+        callbackFunc = function(timer)
+            if LiveLessonEntrance.TimerTimes == 0 then
+                LiveLessonEntrance.TimerTimes = nil
+                timer:Change()
+            else
+                LiveLessonEntrance.TimerTimes = LiveLessonEntrance.TimerTimes - 1
+            end
+        end
+    })
+
     LiveLessonEntrance.get_code = true
     request:post('/class-room/store',param):next(function(response)
         local data = response.data.data
-        System.User.CreateLiveLessonData = data         -- 创建房间信息存全局，暂时没用到
         local code = tostring(data.match_code)
         page:SetValue("matchcode", code)
+        LiveLessonEntrance.get_code_timer:Change(0, 1000)       -- 匹配码CD开启
         LiveLessonEntrance.get_code = false
     end):catch(function(e)
         GameLogic.AddBBS("CodeGlobals", L"匹配码生成失败,请检查输入的信息", 3000, "#FF0000");
+        LiveLessonEntrance.TimerTimes = nil
+        LiveLessonEntrance.get_code_timer:Change()
         LiveLessonEntrance.get_code = false
     end);
 end
