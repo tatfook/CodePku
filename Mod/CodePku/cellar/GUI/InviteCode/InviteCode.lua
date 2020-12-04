@@ -11,6 +11,35 @@ local InviteCode = NPL.export();
 
 InviteCode.activity_id = 1  --活动ID
 
+InviteCode.rewardInfo = {
+	[1]={url=inviteImageData:GetIconUrl("invite_popup_icon6.png"),top=30,width=103,height=121,name="invite_popup_icon6",info="玩学币/券",},
+	[2]={url=inviteImageData:GetIconUrl("invite_popup_icon7.png"),top=30,width=103,height=121,name="invite_popup_icon7",info="福尔摩斯探案集",},
+	[3]={url=inviteImageData:GetIconUrl("invite_popup_icon3.png"),top=30,width=103,height=121,name="invite_popup_icon3",info="神秘萌宠",},
+	[4]={url=inviteImageData:GetIconUrl("invite_popup_icon4.png"),top=30,width=103,height=121,name="invite_popup_icon4",info="神秘皮肤",},
+	[5]={url=inviteImageData:GetIconUrl("invite_popup_icon5.png"),top=30,width=103,height=121,name="invite_popup_icon5",info="神秘道具",},
+}
+
+InviteCode.rewardInfoDetail = {
+	[1]={
+        info = {
+            [1] = {url=inviteImageData:GetIconUrl("invite_popup_icon1.png"),top=0,width=46,height=61,name="invite_popup_icon1",info="神秘道具",},
+        }
+    },
+	[2]={
+        info = {
+            [1] = {url=inviteImageData:GetIconUrl("invite_popup_icon1.png"),top=0,width=46,height=61,name="invite_popup_icon5",info="神秘道具",},
+            [2] = {url=inviteImageData:GetIconUrl("invite_popup_icon2.png"),top=0,width=51,height=60,name="invite_popup_icon2",info="神秘萌宠",},
+        }
+    },
+	[3]={
+        info = {
+            [1] = {url=inviteImageData:GetIconUrl("invite_popup_icon1.png"),top=0,width=46,height=61,name="invite_popup_icon5",info="神秘道具",},
+            [2] = {url=inviteImageData:GetIconUrl("invite_popup_icon2.png"),top=0,width=51,height=60,name="invite_popup_icon2",info="神秘萌宠",},
+            [3] = {url=inviteImageData:GetIconUrl("invite_popup_icon0.png"),top=5,width=52,height=51,name="invite_popup_icon0",info="福尔摩斯探案集",},
+        }
+    },
+}
+
 function InviteCode.GetIconUrl(iconName)
     if iconName == 'main_icon_coin_1.png' or iconName == 'main_icon_coin_2.png' or iconName == 'main_friends_call.png' then
         return mainFrameImageData:GetIconUrl(iconName)
@@ -43,6 +72,23 @@ function InviteCode:ShowPage()
         AdaptWindow:QuickWindow(params)
     end
 
+end
+
+function InviteCode:ShowQRCode()
+    if InviteCode.codeWindow ~= nil then
+        InviteCode.codeWindow:CloseWindow()
+        InviteCode.codeWindow = nil
+    end
+    local params = {
+        url = "Mod/CodePku/cellar/GUI/InviteCode/QRCode.html",
+        alignment = "_lt",
+        x = 0,
+        y = 0,
+        width = 1920,
+        height = 1080,
+        zorder = 22,
+    }
+    InviteCode.codeWindow = AdaptWindow:QuickWindow(params)
 end
 
 function InviteCode.Init()
@@ -247,12 +293,15 @@ function InviteCode.InviteShare()
         paras = paras_android
     end
 
+    GameLogic.GetFilters():apply_filters("ClickStatistics", {track_id= 32, track_scene=16, track_type=0, }); -- 点击分享次数，触发操作数据统计计数
     Share:fire("url", paras, {
         onStart = function(e)
         -- 开始分享
+            InviteCode:GetStatisticData(e, 1)
         end,
         onResult = function(e)
         -- 分享结果
+            InviteCode:GetStatisticData(e, 2)
         end,
         onError = function(e)
         -- 分享失败
@@ -261,5 +310,36 @@ function InviteCode.InviteShare()
         -- 取消分享
         end
     });
+end
+
+function InviteCode:GetStatisticData(e, flag)
+    local platform = commonlib.Json.Decode(e).platform
+    local data = {}
+    local data2 = {}
+    if flag == 1 then
+        if platform == "QQ" then
+            data = {track_id= 33, track_scene=16, track_type=0, }
+        elseif platform == "QZONE" then
+            data = {track_id= 34, track_scene=16, track_type=0, }
+        elseif platform == "WEIXIN" then
+            data = {track_id= 35, track_scene=16, track_type=0, }
+        elseif platform == "WEIXIN_CIRCLE" then
+            data = {track_id= 36, track_scene=16, track_type=0, }
+        end
+        GameLogic.GetFilters():apply_filters("ClickStatistics", data); -- 分享成功前，触发操作数据统计计数
+    elseif flag == 2 then
+        data2 = {track_id= 31, track_scene=16, track_type=1, }
+        if platform == "QQ" then
+            data = {track_id= 33, track_scene=16, track_type=1, }
+        elseif platform == "QZONE" then
+            data = {track_id= 34, track_scene=16, track_type=1, }
+        elseif platform == "WEIXIN" then
+            data = {track_id= 35, track_scene=16, track_type=1, }
+        elseif platform == "WEIXIN_CIRCLE" then
+            data = {track_id= 36, track_scene=16, track_type=1, }
+        end
+        GameLogic.GetFilters():apply_filters("ClickStatistics", data); -- 分享成功，触发操作数据统计计数
+        GameLogic.GetFilters():apply_filters("ClickStatistics", data2); -- 记录成功分享至某个平台的次数，触发操作数据统计计数
+    end
 end
 
