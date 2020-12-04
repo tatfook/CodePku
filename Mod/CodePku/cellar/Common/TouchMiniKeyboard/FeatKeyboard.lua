@@ -43,14 +43,12 @@ function FeatKeyboard:init()
     local fBtn = self:getFlyBtn();
     local xBtn = self:getAltBtn();
     local shiftBtn = self:getShiftBtn();
-    -- local zoomBtn = self:getZoomBtn();
     local chatBtn = self:getChatBtn();
 
     jumpBtn.visible = false;
     fBtn.visible = false;
     xBtn.visible = false;
     shiftBtn.visible = false;
-    -- zoomBtn.visible = false;
     chatBtn.visible = false;
 
     return self;
@@ -70,7 +68,6 @@ function FeatKeyboard:show(show, jumpBtnShow, fBtnShow, xBtnShow, shiftBtnShow, 
     fBtn.visible = false;
     xBtn.visible = false;
     shiftBtn.visible = false;
-    -- zoomBtn.visible = false;
     chatBtn.visible = false;
 
     ParaUI.GetUIObject("jump").visible = false;
@@ -132,6 +129,10 @@ function FeatKeyboard:getJumpBtn()
                 _guihelper.SetUIColor(button, self.colors.normal);
             end, 300)
         end)
+        button:SetScript("ontouch", function() self:handleTouch(msg) end)
+		button:SetScript("onmousedown", function() self:handleMouseDown() end)
+		button:SetScript("onmouseup", function() self:handleMouseUp() end)
+		button:SetScript("onmousemove", function() self:handleMouseMove() end)
 
         button:AttachToRoot();
     else
@@ -184,277 +185,6 @@ function FeatKeyboard:getFlyBtn()
 
     return button;
 end
-
---创建 alt 按钮
-function FeatKeyboard:getAltBtn()
-    local name = "AltBtn";
-
-    local button = ParaUI.GetUIObject(name);
-
-    local left = Design:adapterWidth(1399);
-    local top = Design:adapterHeight(864);
-    local width = Design:adapterWidth(94);
-    local height = Design:adapterWidth(94);
-
-    if not button:IsValid() then
-        button = ParaUI.CreateUIObject(
-                "button",
-                name,
-                self.align,
-                left,
-                top,
-                width,
-                height
-        );
-
-        button.background = mainFrameImageData:GetIconUrl("main_icon_x.png");
-        _guihelper.SetUIColor(button, self.colors.normal);
-        button.enabled = true;
-        button.zorder = self.zorder;
-        button:SetScript("onclick", function()
-            Keyboard:SendKeyEvent("keyDownEvent", DIK_SCANCODE.DIK_LMENU);
-            _guihelper.SetUIColor(button, self.colors.pressed);
-
-            commonlib.TimerManager.SetTimeout(function()
-                Keyboard:SendKeyEvent("keyUpEvent", DIK_SCANCODE.DIK_LMENU);
-                _guihelper.SetUIColor(button, self.colors.normal);
-            end, 300)
-        end)
-
-        button:AttachToRoot();
-    else
-        button:Reposition(self.align, left, top, width, height);
-    end
-
-    return button;
-end
-
---创建 Shift 按钮
-function FeatKeyboard:getShiftBtn()
-    local name = "ShiftBtn";
-
-    local button = ParaUI.GetUIObject(name);
-
-    local left = Design:adapterWidth(1555);
-    local top = Design:adapterHeight(670);
-    local width = Design:adapterWidth(94);
-    local height = Design:adapterWidth(94);
-
-    if not button:IsValid() then
-        button = ParaUI.CreateUIObject(
-                "button",
-                name,
-                self.align,
-                left,
-                top,
-                width,
-                height
-        );
-
-        button.background = mainFrameImageData:GetIconUrl("main_icon_shift.png");
-        _guihelper.SetUIColor(button, self.colors.normal);
-        button.enabled = true;
-        button.zorder = self.zorder;
-        button:SetScript("onclick", function()
-            Keyboard:SendKeyEvent("keyDownEvent", DIK_SCANCODE.DIK_LSHIFT);
-            _guihelper.SetUIColor(button, self.colors.pressed);
-
-            commonlib.TimerManager.SetTimeout(function()
-                Keyboard:SendKeyEvent("keyUpEvent", DIK_SCANCODE.DIK_LSHIFT);
-                _guihelper.SetUIColor(button, self.colors.normal);
-            end, 300)
-        end)
-
-        button:AttachToRoot();
-    else
-        button:Reposition(self.align, left, top, width, height);
-    end
-
-    return button;
-end
-
---创建 交互 按钮
-function FeatKeyboard:getChatBtn()
-    local name = "Chat";
-
-    local button = ParaUI.GetUIObject(name);
-
-    local left = Design:adapterWidth(1464);
-    local top = Design:adapterHeight(566);
-    local width = Design:adapterWidth(94);
-    local height = Design:adapterWidth(94);
-
-    if not button:IsValid() then
-        button = ParaUI.CreateUIObject(
-                "button",
-                name,
-                self.align,
-                left,
-                top,
-                width,
-                height
-        );
-
-        button.background = mainFrameImageData:GetIconUrl("main_icon_talk.png");
-        _guihelper.SetUIColor(button, self.colors.normal);
-        button.enabled = true;
-        button.zorder = self.zorder;
-        button:SetScript("onclick", function()
-            
-            Keyboard:SendKeyEvent("keyDownEvent", DIK_SCANCODE.DIK_LSHIFT);
-            _guihelper.SetUIColor(button, self.colors.pressed);
-
-            commonlib.TimerManager.SetTimeout(function()
-                Keyboard:SendKeyEvent("keyUpEvent", DIK_SCANCODE.DIK_LSHIFT);
-                _guihelper.SetUIColor(button, self.colors.normal);
-            end, 300)
-        end)
-
-        button:AttachToRoot();
-    else
-        button:Reposition(self.align, left, top, width, height);
-    end
-
-    return button;
-end
-
---创建 Ctrl 按钮
-function FeatKeyboard:getCtrlBtn()
-    local name = "CtrlBtn";
-
-    local button = ParaUI.GetUIObject(name);
-
-    local left = Design:adapterWidth(1450);
-    local top = Design:adapterHeight(746);
-    local width = Design:adapterWidth(94);
-    local height = Design:adapterWidth(94);
-
-    if not button:IsValid() then
-        button = ParaUI.CreateUIObject(
-                "button",
-                name,
-                self.align,
-                left,
-                top,
-                width,
-                height
-        );
-
-        button.background = mainFrameImageData:GetIconUrl("main_icon_shift.png");
-        _guihelper.SetUIColor(button, self.colors.normal);
-        button.enabled = true;
-        button.zorder = self.zorder;
-        button:SetScript("onclick", function()
-            Keyboard:SendKeyEvent("keyDownEvent", DIK_SCANCODE.DIK_LCONTROL);
-            _guihelper.SetUIColor(button, self.colors.pressed);
-
-            commonlib.TimerManager.SetTimeout(function()
-                Keyboard:SendKeyEvent("keyUpEvent", DIK_SCANCODE.DIK_LCONTROL);
-                _guihelper.SetUIColor(button, self.colors.normal);
-            end, 300)
-        end)
-
-        button:AttachToRoot();
-    else
-        button:Reposition(self.align, left, top, width, height);
-    end
-
-    return button;
-end
-
---创建 缩放 按钮
-function FeatKeyboard:getZoomBtn()
-    local buttonName = "zoom-button";
-    local containerName = "zoom-container";
-
-    local button = ParaUI.GetUIObject(buttonName);
-    local container = ParaUI.GetUIObject(containerName);
-
-    local left = Design:adapterWidth(75);
-    local top = Design:adapterHeight(361);
-    local width = Design:adapterWidth(150);
-    local height = Design:adapterWidth(200);
-
-    if not container:IsValid() then
-        container = ParaUI.CreateUIObject(
-                "container",
-                containerName,
-                self.align,
-                left,
-                top,
-                width,
-                height
-        );
-
-        container.enabled = true;
-        container.background = "";
-        container.zorder = self.zorder;
-
-        container:AttachToRoot();
-    else
-        container:Reposition(self.align, left, top, width, height);
-    end
-
-    if not button:IsValid() then
-        button = ParaUI.CreateUIObject(
-                "button",
-                buttonName,
-                self.align,
-                Design:adapterWidth(25),
-                Design:adapterHeight(50),
-                Design:adapterWidth(100),
-                Design:adapterWidth(100)
-        );
-
-        button.background = "codepku/image/textures/keyboard/zoom_btn.png";
-        _guihelper.SetUIColor(button, self.colors.normal);
-        button.enabled = true;
-        --button.zorder = self.zorder - 2;
-
-        container:AddChild(button);
-    end
-
-    container:SetScript("onmousedown", function()
-        local touchSession = TouchSession.GetTouchSession({ type = "WM_POINTERDOWN", x = mouse_x, y = mouse_y, id = -1, time = 0 });
-
-        local buttonUI = container:GetChild(buttonName);
-        _guihelper.SetUIColor(buttonUI, self.colors.pressed);
-
-        touchSession:SetField("cameraDist", GameLogic.options:GetCameraObjectDistance());
-    end);
-
-    container:SetScript("onmousemove", function()
-
-        Mouse:SetTouchButtonSwapped(true);
-
-        local touchSession = TouchSession.GetTouchSession({ type = "WM_POINTERUPDATE", x = mouse_x, y = mouse_y, id = -1, time = 0 });
-
-        local dx,dy = touchSession:GetOffsetFromStartLocation();
-
-        local cameraStartDist = touchSession:GetField("cameraDist");
-        if (cameraStartDist) then
-            local delta;
-            local fingerSize = touchSession:GetFingerSize();
-            if (dy >= 0) then
-                delta = (dy + fingerSize * 5) / (fingerSize * 5);
-            else
-                delta = (fingerSize * 5) / (-dy + fingerSize * 5);
-            end
-            GameLogic.options:SetCameraObjectDistance(cameraStartDist * delta);
-        end
-    end);
-
-    container:SetScript("onmouseup", function()
-
-        local buttonUI = container:GetChild(buttonName);
-        _guihelper.SetUIColor(buttonUI, self.colors.normal);
-
-        Mouse:SetTouchButtonSwapped(false);
-    end);
-
-    return button;
-end
-
 
 function FeatKeyboard:Destroy()
     FeatKeyboard._super.Destroy(self)
