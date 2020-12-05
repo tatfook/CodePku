@@ -35,6 +35,7 @@ end
 function OnSubmit()
     local index = LiveLessonSettlement.selected_user_index
     local new_rate = page:GetValue("rate")
+    new_rate = string.upper(new_rate)
     LiveLessonSettlement.settlement_result_table[index].rate = new_rate
     OnClose()
     LiveLessonSettlement.teacher_settlement_page:Refresh(0)
