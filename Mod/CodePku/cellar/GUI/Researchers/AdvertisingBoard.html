@@ -27,6 +27,12 @@ function GoShareFriend()
     InviteCode:ShowPage()
 end
 
+-- 查看礼包
+function Gift()
+    local url = "https://wanxueshijie.com/invite/202012"
+    CommonFunc.OpenUrl(url, true, 'portrait')
+end
+
 ]]>
 </script>
 <pe:container alignment="_lt" width="1920" height="1080" style="background-color: #00000083;">
@@ -38,8 +44,10 @@ end
     <!-- 关闭 -->
     <div style="<%=format('position: relative; left: 1637; top: 16; width: 278; height: 175; background:url(%s);', GetIcon('tape.png'))%>"></div>
     <div onclick="OnclickClose" style="<%=format('position: relative; left: 1741; top: 19; width: 101; height: 102; background:url(%s);', GetIcon('share_x.png'))%>"></div>
-    <!-- 挑战按钮 -->
-    <div onclick="GoShareFriend" style="<%=format('position: relative; left: 836; top: 936; width: 320; height: 105; background:url(%s);', GetIcon('share_btn_b_new.png'))%>"></div>
+    <!-- 前往呼朋唤友 -->
+    <div onclick="GoShareFriend" style="<%=format('position: relative; left: 386; top: 936; width: 320; height: 105; background:url(%s);', GetIcon('share_btn_b_new.png'))%>"></div>
+    <!-- 查看礼包 -->
+    <div onclick="Gift" style="<%=format('position: relative; left: 1212; top: 936; width: 320; height: 105; background:url(%s);', GetIcon('share_btn_b_new02.png'))%>"></div>
 
 
     
