@@ -23,6 +23,7 @@ Mail = commonlib.gettable("Mod.CodePku.celler.Mail");
 Mail.content = {}
 Mail.todoLen = 0;
 Mail.receiveFlag = 0;
+Mail.deleteFlag = true;
 Mail.tips = "当前有"..Mail.todoLen.."封待处理的邮件"
 Mail.ShowMailPage = false
 Mail.Status = {
@@ -57,7 +58,7 @@ function Mail.StaticInit()
     --     end
     -- );
     Mail:Connect(nil,nil,function()
-        echo("connnect--------callback")
+        -- echo("connnect--------callback")
     end);
 end
 
@@ -66,10 +67,6 @@ function Mail:GetMailList()
     request:get('/mails',{},nil):next(function(response)
         Mail.mailList = (response and response.data and response.data.data) or {}
         Mail:GetTodoCount()
-        echo("=======Mail:GetMailList=======")
-        for i,v in pairs(Mail.mailList) do
-            echo(i)
-        end
     end):catch(function(e)
         GameLogic.AddBBS(nil, L"邮件获取失败，请重试", 3000, "255 0 0", 21);
     end);
@@ -118,7 +115,7 @@ function Mail.OnMsg(self, msg)
     if(not msg or not msg.data)then
         return
     end
-    echo("Mail输出msg=========")  
+    echo("Mail输出msg")  
     echo(msg)
     msg = msg.data;
     if msg["action"] == "new_mail" then
@@ -127,6 +124,9 @@ function Mail.OnMsg(self, msg)
         local data = msg.data
         table.insert(Mail.mailList, 1, data);
 
+        if #Mail.mailList == 1 then
+            Mail.defaultValue = Mail.mailList[1]
+        end
         -- 更新 Mail.todoLen
         Mail.todoLen = Mail.todoLen + 1
         Mail.tips = "当前有"..Mail.todoLen.."封待处理的邮件"
@@ -273,6 +273,8 @@ function Mail:ShowPage()
         click_through = false,
     }
     Mail.ShowMailPage = true
+    Mail.mailList = Mail:TableSort(Mail.mailList)
+    Mail.defaultValue = Mail.mailList[1]
     Mail.mailPage = AdaptWindow:QuickWindow(params)
 end
 
@@ -313,30 +315,44 @@ function Mail:HandleStatus(id)
     request:post('/mails/read/'..id,{},nil):next(function(response)
     end):catch(function(e)
     end);
+    Mail.defaultValue = value
     return value
 end
 
 -- 删除单条
 function Mail:Delete(id)
-    local list = Mail.mailList;
-    for k, v in ipairs(list) do
-        if v.user_mail_id == id then
-            table.remove(list, k)
-            echo(k)
+    if Mail.deleteFlag and id then
+        Mail.deleteFlag = false 
+        local list = Mail.mailList;
+        if #list > 0 then
+            for k, v in ipairs(list) do
+                if v.user_mail_id == id then
+                    if v.status == 1 then
+                        table.remove(list, k)
+                        
+                    end
+                end
+            end
         end
+        Mail.mailList = list;
+        if #list > 0 then
+            Mail.defaultValue = list[1]
+        else
+            Mail.defaultValue = {}
+        end
+        Mail:GetTodoCount()
+        Mail:RefreshCategoryPage()
+        Mail:RefreshPage()
+        request:delete('/mails/delete/'..id,{},nil):next(function(response)
+            Mail.deleteFlag = true
+        end):catch(function(e)
+            Mail.deleteFlag = true
+        end);
     end
-    Mail.mailList = list;
-    Mail:GetTodoCount()
-    Mail:RefreshCategoryPage()
-    Mail:RefreshPage()
-    request:delete('/mails/delete/'..id,{},nil):next(function(response)
-    end):catch(function(e)
-    end);
 end
 
 -- 一键删除
 function Mail:DeleteAll()
-    echo("一键删除")
     local list = Mail.mailList;
     for i = #list, 1, -1 do
         if list[i]["status"] == 1 then --已读
@@ -346,6 +362,11 @@ function Mail:DeleteAll()
         end
     end
     Mail.mailList = list;
+    if #list > 0 then
+        Mail.defaultValue = list[1]
+    else
+        Mail.defaultValue = {}
+    end
     Mail:GetTodoCount()
     Mail:RefreshCategoryPage()
     Mail:RefreshPage()
@@ -363,7 +384,6 @@ end
 
 -- 一键领取
 function Mail:ReceiveAll()
-    echo("一键领取")
     local list = Mail.mailList;
     local reward = {}
     local flag
@@ -482,8 +502,6 @@ function Mail:RefreshMoney(id, num)
 end
 
 function Mail:HandleContent(content)
-    echo("Mail:HandleContent============")
-    echo(content)
     local result = content
 
 
