@@ -6,7 +6,7 @@ use the lib:
 ------------------------------------
 NPL.load("(gl)Mod/CodePku/cellar/Common/TouchMiniKeyboard/TouchFuncKeyboard.lua")
 local TouchFuncKeyboard = commonlib.gettable("Mod.CodePku.Common.TouchMiniKeyboard.TouchFuncKeyboard")
-TouchFuncKeyboard.getSingleton():show()
+TouchFuncKeyboard:show()
 -----------------------------------
 ]]--
 

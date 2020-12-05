@@ -24,36 +24,36 @@ function TouchMiniKeyboard:show(show)
         GameLogic.RunCommand("/show keyboard");
         if System.Codepku then
             if System.Codepku.isLoadingHome then
-                FeatKeyboard.getSingleton():show(show, true, true, true, true, false);
+                FeatKeyboard:show(show, true, true, true, true, false);
             else
                 if System.Codepku and System.Codepku.Coursewares then
                     local category = System.Codepku.Coursewares.category;
                     if category == 2 then
-                        FeatKeyboard.getSingleton():show(show, true, true, true, true, false);
+                        FeatKeyboard:show(show, true, true, true, true, false);
                     elseif category == 3 then
-                        FeatKeyboard.getSingleton():show(show, true, false, false, true, false);
+                        FeatKeyboard:show(show, true, false, false, true, false);
                     elseif category == 4 then
-                        FeatKeyboard.getSingleton():show(show, true, false, false, true, false);
+                        FeatKeyboard:show(show, true, false, false, true, false);
                     elseif category == 5 then
-                        FeatKeyboard.getSingleton():show(show, true, false, false, true, false);
+                        FeatKeyboard:show(show, true, false, false, true, false);
                     elseif category == 6 then
-                        FeatKeyboard.getSingleton():show(show, true, false, false, true, false);
+                        FeatKeyboard:show(show, true, false, false, true, false);
                     -- elseif category == 7 then
-                        -- FeatKeyboard.getSingleton():show(show, true, false, false, true);
+                        -- FeatKeyboard:show(show, true, false, false, true);
                     elseif category == 8 then
-                        FeatKeyboard.getSingleton():show(show, true, false, false, false, false);
+                        FeatKeyboard:show(show, true, false, false, false, false);
                         GameLogic.RunCommand("/hide keyboard");
                         local icon = TouchVirtualKeyboardIcon.GetSingleton();
                         icon:ShowKeyboard(false)
                     else
-                        FeatKeyboard.getSingleton():show(show, true, false, false, true, false);
+                        FeatKeyboard:show(show, true, false, false, true, false);
                     end
                 else
 
                 end
             end
         else
-            FeatKeyboard.getSingleton():show(show, true, true, true, true, false);
+            FeatKeyboard:show(show, true, true, true, true, false);
         end
     end
 end
@@ -72,43 +72,19 @@ function TouchMiniKeyboard.CheckShow(show,isDirectionKeyboard )
             DirectionRocker.getSingleton():show(show);
         end
         GameLogic.RunCommand("/show keyboard");
-        if isEmployee ~= 1 then    
-            if System.Codepku then
-                if System.Codepku.isLoadingHome then
-                    FeatKeyboard.getSingleton():show(show, true, true, true, true, false);
-                else
-                    if System.Codepku and System.Codepku.Coursewares then
-                        local category = System.Codepku.Coursewares.category;
-                        if category == 2 then
-                            FeatKeyboard.getSingleton():show(show, true, true, true, true, false);
-                        elseif category == 3 then
-                            FeatKeyboard.getSingleton():show(show, true, false, false, true, false);
-                        elseif category == 4 then
-                            FeatKeyboard.getSingleton():show(show, true, false, false, true, false);
-                        elseif category == 5 then
-                            FeatKeyboard.getSingleton():show(show, true, false, false, true, false);
-                        elseif category == 6 then
-                            FeatKeyboard.getSingleton():show(show, true, false, false, true, false);
-                        -- elseif category == 7 then
-                            -- FeatKeyboard.getSingleton():show(show, true, false, false, true);
-                        elseif category == 8 then
-                            FeatKeyboard.getSingleton():show(show, true, false, false, false, false);
-                            -- GameLogic.RunCommand("/hide keyboard");
-                            local icon = TouchVirtualKeyboardIcon.GetSingleton();
-                            icon:GetUIControl():GetChild("text").visitor = false
-                            icon:ShowKeyboard(false)
-                        else
-                            FeatKeyboard.getSingleton():show(show, true, false, false, true, false);
-                        end
-                    else
-
-                    end
-                end
-            else
-                FeatKeyboard.getSingleton():show(show, true, true, true, true, false);
-            end
-        else
-            FeatKeyboard.getSingleton():show(show, true, true, true, true, false);
-        end
+        -- FeatKeyboard:show(show)
+        -- if isEmployee ~= 1 then    
+        --     if System.Codepku then
+        --         if System.Codepku.isLoadingHome then
+        --             FeatKeyboard:show(show);
+        --         else
+                    
+        --         end
+        --     else
+        --         FeatKeyboard:show(show);
+        --     end
+        -- else
+        --     FeatKeyboard:show(show);
+        -- end
     end
 end
