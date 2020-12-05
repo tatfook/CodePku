@@ -16,7 +16,7 @@ local request = NPL.load("(gl)Mod/CodePku/api/BaseRequest.lua");
 
 -- 常量table
 LiveLessonSettlement.constant = {
-    ExitTime = 5,     -- 老师点击下课后，学生强制退出的时间/秒
+    ExitTime = 300,     -- 老师点击下课后，学生强制退出的时间/秒
 }
 
 -- 获取图标
@@ -24,21 +24,22 @@ function LiveLessonSettlement:GetIconPath(index)
     return liveLessonImageData:GetIconUrl(index)
 end
 
--- todo CMD下课退出，所有人都会执行
+-- CMD下课退出，所有人都会执行
 function LiveLessonSettlement:ClassOverTimer()
-    GameLogic.AddBBS("CodeGlobals", L"下课了，教室将于5分钟后关闭", 3000, "#FF0000");
     if LiveLessonSettlement.TimerTimes and LiveLessonSettlement.TimerTimes ~= 0 then
         return
     end
-    LiveLessonSettlement.TimerTimes = 0
+    LiveLessonSettlement.TimerTimes = LiveLessonSettlement.constant.ExitTime
+    local content = string.format("下课了，教室将于%.0f分钟后关闭", LiveLessonSettlement.TimerTimes/60)
+    GameLogic.AddBBS("CodeGlobals", content, 5000, "#FF0000");
     LiveLessonSettlement.class_over_timer = commonlib.Timer:new({
         callbackFunc = function(timer)
-            if LiveLessonSettlement.TimerTimes == LiveLessonSettlement.constant.ExitTime then
+            if LiveLessonSettlement.TimerTimes == 0 then
                 GameLogic.AddBBS("CodeGlobals", L"时间到了，强制退出", 3000, "#FF0000");
                 LiveLessonSettlement.TimerTimes = nil
                 timer:Change()
             else
-                LiveLessonSettlement.TimerTimes = LiveLessonSettlement.TimerTimes + 1
+                LiveLessonSettlement.TimerTimes = LiveLessonSettlement.TimerTimes - 1
             end
         end
     })
@@ -144,19 +145,31 @@ function LiveLessonSettlement:CommitSettlementResult()
         }
     end
     LiveLessonSettlement.had_commit = true
+    --[[
     -- 发送数据
     request:post('/class-room/save-class',params):next(function(response)
+        GameLogic.AddBBS("CodeGlobals", L"课程结算成功", 3000, "#00FF00")
         LiveLessonSettlement.had_settlement = true      -- 正常结算的标记，根据该字段判断是否能点击下课
         LiveLessonSettlement.teacher_settlement_page:Refresh(0)
         LiveLessonSettlement.had_commit = false
+        GameLogic.RunCommand("/ggs cmd liveLesson settlement")      -- 成功保存信息，发送ggs命令弹出学生结算弹窗
     end):catch(function(e)
         GameLogic.AddBBS("CodeGlobals", e.data.message, 3000, "#FF0000");
         LiveLessonSettlement.had_commit = false
     end);
+    --]]
+    GameLogic.AddBBS("CodeGlobals", L"课程结算成功", 3000, "#00FF00")
+    LiveLessonSettlement.had_settlement = true      -- 正常结算的标记，根据该字段判断是否能点击下课
+    LiveLessonSettlement.teacher_settlement_page:Refresh(0)
+    LiveLessonSettlement.had_commit = false
 end
 
--- todo CMD学生获取结算信息，所有人都会执行，需要判断身份，老师不执行
+-- CMD学生获取结算信息，所有人都会执行，需要判断身份，老师不执行
 function LiveLessonSettlement:StudentSettlement()
+    if System.User.info.is_employee == 1 then
+        --  员工默认为老师，拦截弹窗
+        return
+    end
     if LiveLessonSettlement.StudentHadSettlement then
         return
     end
@@ -172,8 +185,8 @@ function LiveLessonSettlement:StudentSettlement()
         else
             accuracy = tostring(string.format("%02d", (v.right_count/v.answer_count)*100)) .. "%"       -- 首次答题正确率
         end
-        -- 学习进度转百分比
-        local node = tostring(string.format("%02d", ToPercentage(data.rate_of_learn)*100)) .. "%"
+        
+        local node = tostring(string.format("%02d", ToPercentage(data.rate_of_learn)*100)) .. "%"       -- 学习进度转百分比
         
         LiveLessonSettlement.StudentSettlementResult = {}
         LiveLessonSettlement.StudentSettlementResult.course_name = data.course_name or "未知"     -- 课件名称
@@ -196,7 +209,6 @@ end
 
 -- 学生结算弹窗
 function LiveLessonSettlement:ShowStudentSettlementPage()
-    -- todo 通过GGS执行cmd，需要判断是否是老师，老师不展示下面的弹窗
     if LiveLessonSettlement.student_settlement_page then
         LiveLessonSettlement.student_settlement_page:CloseWindow()
         LiveLessonSettlement.student_settlement_page = nil
