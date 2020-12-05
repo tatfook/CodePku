@@ -126,9 +126,33 @@ function LiveLessonSettlement:TeacherSettlement()
     end);
 end
 
--- todo 老师评分后保存结算信息
+-- todo 老师保存结算信息
 function LiveLessonSettlement:CommitSettlementResult()
-    
+    if LiveLessonSettlement.had_commit then
+        return
+    end
+    local params = {}
+    -- 拼接数据
+    params.room_id = (System.User.LiveLessonData or {}).id or "7"        -- todo 测试服目前只有7号有数据，最后记得去掉这个
+    params.data = {}
+    for k, v in pairs(LiveLessonSettlement.settlement_result_table) do
+        params.data[tostring(v.user_id)] = {
+            user_id = v.user_id,
+            reward_count = v.reward_num,
+            comment_score_final = v.rate,
+            person_average = v.rank
+        }
+    end
+    LiveLessonSettlement.had_commit = true
+    -- 发送数据
+    request:post('/class-room/save-class',params):next(function(response)
+        LiveLessonSettlement.had_settlement = true      -- 正常结算的标记，根据该字段判断是否能点击下课
+        LiveLessonSettlement.teacher_settlement_page:Refresh(0)
+        LiveLessonSettlement.had_commit = false
+    end):catch(function(e)
+        GameLogic.AddBBS("CodeGlobals", e.data.message, 3000, "#FF0000");
+        LiveLessonSettlement.had_commit = false
+    end);
 end
 
 -- todo CMD学生获取结算信息，所有人都会执行，需要判断身份，老师不执行
@@ -179,26 +203,26 @@ function LiveLessonSettlement:ShowStudentSettlementPage()
     end
     local params = {
         url="Mod/CodePku/cellar/GUI/LiveLesson/Settlement/LiveLessonStudentSettlement.html",
-        alignment="_lt", left = 0, top = 0, width = 1920 , height = 1080, zorder = 10000
+        alignment="_lt", left = 0, top = 0, width = 1920 , height = 1080, zorder = 30
     }
     LiveLessonSettlement.student_settlement_page = AdaptWindow:QuickWindow(params)
     return LiveLessonSettlement.student_settlement_page
 end
 
--- 有输入框，需要把两个窗口都关掉
-function LiveLessonSettlement:EntrancePageSpecialClose()
+-- 修改评分弹窗有输入框，需要把两个窗口都关掉
+function LiveLessonSettlement:ChangeGradePageSpecialClose()
     if LiveLessonSettlement.EmptyBG then
         LiveLessonSettlement.EmptyBG:CloseWindow()
         LiveLessonSettlement.EmptyBG = nil
     end
-    if LiveLessonSettlement.teacher_settlement_page then
-        LiveLessonSettlement.teacher_settlement_page:CloseWindow()
-        LiveLessonSettlement.teacher_settlement_page = nil
+    if LiveLessonSettlement.change_rate_page then
+        LiveLessonSettlement.change_rate_page:CloseWindow()
+        LiveLessonSettlement.change_rate_page = nil
     end
 end
 
--- 教师结算界面
-function LiveLessonSettlement:ShowTeacherSettlementPage()
+-- 修改评分弹窗
+function LiveLessonSettlement:ShowChangeRate()
     -- 这里有输入框，为了IOS适配，需要特殊处理下，再开一个空页面放下面
     if LiveLessonSettlement.EmptyBG then
         LiveLessonSettlement.EmptyBG:CloseWindow()
@@ -206,9 +230,24 @@ function LiveLessonSettlement:ShowTeacherSettlementPage()
     end
     local BGparams = {
         url="Mod/CodePku/cellar/GUI/LiveLesson/LiveLessonEmptyPage.html",
-        alignment="_lt", left = 0, top = 0, width = 1920 , height = 1080, zorder = 21,
+        alignment="_lt", left = 0, top = 0, width = 1920 , height = 1080, zorder = 31,
     }
     LiveLessonSettlement.EmptyBG = AdaptWindow:QuickWindow(BGparams)
+    -- 修改弹窗
+    if LiveLessonSettlement.change_rate_page then
+        LiveLessonSettlement.change_rate_page:CloseWindow()
+        LiveLessonSettlement.change_rate_page = nil
+    end
+    local params = {
+        url="Mod/CodePku/cellar/GUI/LiveLesson/Settlement/LiveLessonChangeRate.html",
+        alignment="_lt", left = 600, top = 334, width = 723 , height = 412, zorder = 32,
+    }
+    LiveLessonSettlement.change_rate_page = AdaptWindow:QuickWindow(params)
+    return LiveLessonSettlement.change_rate_page
+end
+
+-- 教师结算界面
+function LiveLessonSettlement:ShowTeacherSettlementPage()
     -- 教师主动触发结算页面
     if LiveLessonSettlement.teacher_settlement_page then
         LiveLessonSettlement.teacher_settlement_page:CloseWindow()
@@ -216,7 +255,7 @@ function LiveLessonSettlement:ShowTeacherSettlementPage()
     end
     local params = {
         url="Mod/CodePku/cellar/GUI/LiveLesson/Settlement/LiveLessonTeacherSettlement.html",
-        alignment="_lt", left = 207, top = 69, width = 1485 , height = 1000, zorder = 9999
+        alignment="_lt", left = 0, top = 0, width = 1920 , height = 1080, zorder = 30
     }
     LiveLessonSettlement.teacher_settlement_page = AdaptWindow:QuickWindow(params)
     return LiveLessonSettlement.teacher_settlement_page

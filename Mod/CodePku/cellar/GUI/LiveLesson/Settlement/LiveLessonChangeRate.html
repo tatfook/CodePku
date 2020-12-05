@@ -1,0 +1,71 @@
+<!-- "script/apps/Aries/Creator/Game/Areas/EscFramePage.html" -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+</head>
+<body>
+    <pe:mcml>
+<script refresh="false" type="text/npl" src=""><![CDATA[
+local EditNamePage = NPL.load("(gl)Mod/CodePku/cellar/GUI/Profile/EditName.lua")
+local page = document:GetPageCtrl()
+local LiveLessonSettlement = NPL.load("(gl)Mod/CodePku/cellar/GUI/LiveLesson/Settlement/LiveLessonSettlement.lua");
+
+-- 要关闭两个window，所以用特殊的方法
+function OnClose()
+    LiveLessonSettlement:ChangeGradePageSpecialClose()
+end
+
+-- 获取图片,tpye  1 通用；2 ESC专用
+function GetIcons(type, index)
+    return EditNamePage:GetIconPath(type, index)
+end
+
+-- 取消
+function ClickCancel()
+    OnClose()
+end
+
+function GetUserGrade()
+    return LiveLessonSettlement.selected_user_index and LiveLessonSettlement.settlement_result_table[LiveLessonSettlement.selected_user_index].rate or ""
+end
+
+-- 确认
+function OnSubmit()
+    local index = LiveLessonSettlement.selected_user_index
+    local new_rate = page:GetValue("rate")
+    LiveLessonSettlement.settlement_result_table[index].rate = new_rate
+    OnClose()
+    LiveLessonSettlement.teacher_settlement_page:Refresh(0)
+end
+
+]]>   
+
+</script>
+<pe:container alignment="_lt" width="723" height="412" style="">
+
+<!-- 背景 -->
+<div style="<%=format('position: relative;width: 723;height: 412;background:url(%s);', GetIcons(1, 'common_bot_tooltip1.png'))%>">
+    <!-- title -->
+    <div style="position: relative;left: 191;top: 30;font-family: zkklt;font-size: 56;color: #4f402e;">设置评分</div>
+    <!-- 修改昵称区域 -->
+    <div style="<%=format('position: relative;left: 105;top: 134;width: 428;height: 109;font-family: zkklt;font-size: 38;color: #4f402e;background:url(%s);', GetIcons(2, 'esc_frame_bot_428_109.png'))%>">
+        <input type="text" MoveViewWhenAttachWithIME="true" value="<%= GetUserGrade() %>" name="rate" EmptyText='' style="position: relative;left: 30;top: 17; width: 340; height: 80; font-family: IMPACT;font-size: 62;line-height: 80;color: #4f402e;background: #000000;"/>
+    </div>
+    <!-- 取消 -->
+    <div onclick="ClickCancel" style="<%=format('position: relative; left: 74; top: 319; width: 146;height: 65;background:url(%s);', GetIcons(1, 'common_btn_red02.png'))%>">
+        <div style="<%=format('position: relative; left: 22; top: 9; width: 100;height: 48;background:url(%s);', GetIcons(1, 'common_btn_cancel.png'))%>"></div>
+    </div>
+    <!-- 确认 -->
+    <div onclick="OnSubmit" style="<%=format('position: relative; left: 409; top: 319; width: 146;height: 65;background:url(%s);', GetIcons(1, 'common_btn_green02.png'))%>">
+        <div style="<%=format('position: relative; left: 22; top: 9; width: 100;height: 48;background:url(%s);', GetIcons(1, 'common_btn_confirm.png'))%>"></div>
+    </div>
+</div>
+
+</pe:container>
+
+</pe:mcml>
+</body>
+</html>
+ 

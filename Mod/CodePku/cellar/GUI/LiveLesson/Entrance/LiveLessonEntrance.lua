@@ -119,6 +119,9 @@ function LiveLessonEntrance:EnterRoom(code)
         -- 关闭所有窗口
         LiveLessonEntrance:EntrancePageSpecialClose()
         LiveLessonEntrance:EstablishPageSpecialClose()
+        -- 能不能下课的标记
+        local LiveLessonSettlement = NPL.load("(gl)Mod/CodePku/cellar/GUI/LiveLesson/Settlement/LiveLessonSettlement.lua");
+        LiveLessonSettlement.had_settlement = false
         LiveLessonEntrance.entre_room = false
     end):catch(function(e)
         GameLogic.AddBBS("CodeGlobals", e.data.message, 3000, "#FF0000");
