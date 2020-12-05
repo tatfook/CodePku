@@ -15,6 +15,8 @@ local mainFrameImageData = NPL.load("(gl)Mod/CodePku/cellar/imageLuaTable/mainFr
 local UserInfoPage = NPL.load("(gl)Mod/CodePku/cellar/GUI/UserInfo.lua");
 Eldership = NPL.load("(gl)Mod/CodePku/cellar/GUI/Eldership/Eldership.lua")
 Eldership:GetBindStatus()
+NPL.load("(gl)Mod/CodePku/cellar/Mail/Mail.lua")
+local Mail = commonlib.gettable("Mod.CodePku.celler.Mail")
 
 -- CommonFunc = NPL.load("(gl)Mod/CodePku/cellar/Common/CommonFunc/CommonFunc.lua")
 CommonFunc = commonlib.gettable("Mod.CodePku.Common.CommonFunc")
@@ -66,13 +68,13 @@ MainUIButtons.middle_buttons = {
 }
 
 MainUIButtons.category_top = {
-	[1]={url=mainFrameImageData:GetIconUrl("main_icon_feedback.png"),top=4,width=74,height=100,left=0,name="ClickFeedback",bShow=true,},
-	[2]={url=mainFrameImageData:GetIconUrl("main_icon_notice.png"),top=8,width=74,height=95,left=47,name="ClickNotice",bShow=false,},
-	[3]={url=mainFrameImageData:GetIconUrl("main_icon_ranking.png"),top=7,width=73,height=96,left=47,name="ClickRank",bShow=true,},
-	[4]={url=mainFrameImageData:GetIconUrl("main_icon_qq.png"),top=2,width=94,height=103,left=39,name="ClickQQGroup",bShow=true,},
-	[5]={url=mainFrameImageData:GetIconUrl("main_icon_community.png"),top=5,width=97,height=98,left=40,name="ClickCommunity",bShow=true,},
-	[6]={url=mainFrameImageData:GetIconUrl("main_icon_mailbox.png"),top=9,width=86,height=94,left=40,name="ClickEmail",bShow=false,},
-	[7]={url=mainFrameImageData:GetIconUrl("main_icon_shareit.png"),top=8,width=87,height=95,left=41,name="ClickShareApp",bShow=false,},
+	[1]={url=mainFrameImageData:GetIconUrl("main_icon_feedback.png"),top=4,width=74,height=100,left=0,name="ClickFeedback",bShow=true,dot=false,},
+	[2]={url=mainFrameImageData:GetIconUrl("main_icon_notice.png"),top=8,width=74,height=95,left=47,name="ClickNotice",bShow=false,dot=false,},
+	[3]={url=mainFrameImageData:GetIconUrl("main_icon_ranking.png"),top=7,width=73,height=96,left=47,name="ClickRank",bShow=true,dot=false,},
+	[4]={url=mainFrameImageData:GetIconUrl("main_icon_qq.png"),top=2,width=94,height=103,left=39,name="ClickQQGroup",bShow=true,dot=false,},
+	[5]={url=mainFrameImageData:GetIconUrl("main_icon_community.png"),top=5,width=97,height=98,left=40,name="ClickCommunity",bShow=true,dot=false,},
+	[6]={url=mainFrameImageData:GetIconUrl("main_icon_mailbox.png"),top=9,width=86,height=94,left=40,name="ClickEmail",bShow=true,dot=false,},
+	[7]={url=mainFrameImageData:GetIconUrl("main_icon_shareit.png"),top=8,width=87,height=95,left=41,name="ClickShareApp",bShow=false,dot=false,},
 }
 
 MainUIButtons.category_right = {
@@ -153,6 +155,35 @@ end
 
 -- 限时活动页
 function MainUIButtons:show_activity_ui()
+	local currday, currhour = commonlib.timehelp.GetLocalTime()
+	if not MainUIButtons.livingCoursesData or not MainUIButtons.livingCoursesDay == currday then
+		local request = NPL.load("(gl)Mod/CodePku/api/BaseRequest.lua")
+		request:get("/trial-live/courses", nil, nil):next(function( response )
+			if response.status == 200 then
+				local data = response.data and response.data.data
+				local courses = data.courses
+				local function split( str,reps )
+					local resultStrList = {}
+					string.gsub(str,'[^'..reps..']+',function ( w )
+						table.insert(resultStrList,w)
+					end)
+					return resultStrList
+				end
+
+				MainUIButtons.livingCoursesDay = split(data.courses[1].updated_at," ")[1]
+				if courses then
+					MainUIButtons.livingCoursesData = {}
+					for _, val in ipairs(courses) do
+						table.insert(MainUIButtons.livingCoursesData, {
+							start_at = val.start_at,
+							end_at = val.end_at,
+							timestamp = val.updated_at,
+						})
+					end
+				end
+			end
+		end)
+	end
 	local open_height = MainUIButtons:getWidth(MainUIButtons.activity, 1)
 	local params = {
 		url="Mod/CodePku/cellar/Common/TouchMiniButtons/MainUIButtons_activity.html", 
@@ -253,6 +284,7 @@ function MainUIButtons:show_category(flag)
 			MainUIButtons.category_close_window:CloseWindow()
 			MainUIButtons.category_close_window = nil
 		end
+		MainUIButtons.showCategoryWindow = true
 		MainUIButtons:show_category_open_ui()
 		MainUIButtons:show_category_top_ui()
 		MainUIButtons:show_category_right_ui()
@@ -270,6 +302,7 @@ function MainUIButtons:show_category(flag)
 			MainUIButtons.category_open_window:CloseWindow()
 			MainUIButtons.category_open_window = nil
 		end
+		MainUIButtons.showCategoryWindow = false
 		MainUIButtons:show_category_close_ui()
 	end
 end
@@ -294,6 +327,15 @@ end
 
 -- 右上横向目录
 function MainUIButtons:show_category_top_ui()
+	if MainUIButtons.category_top_window then
+		MainUIButtons.category_top_window:CloseWindow()
+		MainUIButtons.category_top_window = nil
+	end
+	if Mail.todoLen > 0 then
+		MainUIButtons.category_top[6]["dot"] = true
+	else
+		MainUIButtons.category_top[6]["dot"] = false
+	end
 	local open_width = MainUIButtons:getWidth(MainUIButtons.category_top, 0)
 	local open_left = 1920 - open_width - 113 - 20
 	local params = {
@@ -469,7 +511,9 @@ function MainUIButtons.ShowPage()
 		hideMenu = System.Codepku.Coursewares.hide_menu;
 		hideAllMenu = System.Codepku.Coursewares.hide_all_menu;
 	end
-
+	if MainUIButtons.mytimer then
+		MainUIButtons.mytimer:Change()
+	end
 	if not hideAllMenu then
 		if not hideMenu then 
 			MainUIButtons:show_activity_ui() -- 限时活动
@@ -481,6 +525,7 @@ function MainUIButtons.ShowPage()
 			MainUIButtons:show_avatar_ui()
 			MainUIButtons:show_category(true)		
 		else
+			MainUIButtons.showCategoryWindow = false
 			-- 竞技，教学区按钮
 			MainUIButtons:show_main_open_ui()
 			-- MainUIButtons.CloseNav()
@@ -493,9 +538,9 @@ function MainUIButtons.ShowPage()
 			MainUIButtons:show_home_window_ui()
 			MainUIButtons:show_main_open_ui()
 		else 
-			if MainUIButtons.mytimer then
-				MainUIButtons.mytimer:Change()
-			end
+			-- if MainUIButtons.mytimer then
+			-- 	MainUIButtons.mytimer:Change()
+			-- end
 			MainUIButtons:show_category(false)
 		end
 	end

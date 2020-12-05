@@ -15,23 +15,76 @@ NPL.load("(gl)Mod/CodePku/cellar/GUI/rank/RankPage.lua")
 local UserInfoPage = NPL.load("(gl)Mod/CodePku/cellar/GUI/UserInfo.lua");
 UserInfoPage.OnInit();
 local FriendUI = NPL.load("(gl)Mod/CodePku/cellar/GUI/Friend/FriendUI.lua");
+local liveLessonImageData = NPL.load("(gl)Mod/CodePku/cellar/imageLuaTable/liveLessonImageData.lua")
+
+page = document:GetPageCtrl()
 
 activity = MainUIButtons.activity
 function ClickChooseFun(name)
     if (name == "ClickActivity1") then
-        -- 直播活动
+        -- 沉浸式课堂
 
         --标记正在进入直播课
         System.Codepku.isLoadingLiveLesson = true
 
-        local Researchers = NPL.load("(gl)Mod/CodePku/cellar/GUI/Researchers/Researchers.lua");
-        Researchers:OperationActivityLive()
+        local LiveLessonEntrance = NPL.load("(gl)Mod/CodePku/cellar/GUI/LiveLesson/Entrance/LiveLessonEntrance.lua");
+        LiveLessonEntrance:ShowEntrancePage()
+        -- GameLogic.GetFilters():apply_filters("ClickStatistics", {track_id= 62, track_scene =1, track_type=0, }) --直播入口埋点
+
     elseif(name == "ClickActivity2") then 
             
     else
         GameLogic.AddBBS("CodeGlobals", L"功能开发中", 3000, "#ff0000");
     end
 end
+
+function split( str,reps )
+    local resultStrList = {}
+    string.gsub(str,'[^'..reps..']+',function ( w )
+        table.insert(resultStrList,w)
+    end)
+    return resultStrList
+end
+
+
+--[[ 以下代码邹老师要求留着，后面做倒计时可以参考
+if MainUIButtons.activetimer then
+MainUIButtons.activetimer:Change(nil, nil)
+end
+MainUIButtons.activetimer = commonlib.Timer:new({
+    callbackFunc = function(timer)
+    local currday, currtime = commonlib.timehelp.GetLocalTime()
+    local timelist = split( currtime, "-" )
+    local currhour = tonumber(timelist[1])
+    local currminute = tonumber(timelist[2])
+    local currsecond = tonumber(timelist[3])
+    if currhour < 9 then
+    page:SetValue("deltatime", "敬请期待")
+    return
+    end
+    if MainUIButtons.livingCoursesData then
+    for _,val in ipairs(MainUIButtons.livingCoursesData) do
+    local startTime = val.start_at
+    local startlist = split( startTime, ":" )
+    local starthour = tonumber(startlist[1]) or 18
+    local startminute = tonumber(startlist[2]) or 0
+    local startsecond = tonumber(startlist[3]) or 0
+    
+    if currhour < starthour or (currhour == starthour and currminute < startminute) then
+    local date1 = currday.." "..currhour..":"..currminute..":"..currsecond
+    local date2 = currday.." "..starthour..":"..startminute..":"..startsecond
+    local day,hours,minutes,seconds,time_str,total_mill = commonlib.GetTimeStr_BetweenToDate(date1, date2)
+                    page:SetValue("deltatime", string.format("%s: %02d: %02d: %02d", "倒计时", hours, minutes, seconds))
+                    return
+                    end
+                    end
+        end
+        page:SetValue("deltatime", "敬请期待")
+    end
+})
+MainUIButtons.activetimer:Change(0, 1000)
+]]
+
 
 ]]></script>
 <style type="text/mcss">

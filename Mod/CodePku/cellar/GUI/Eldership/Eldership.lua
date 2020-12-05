@@ -186,8 +186,11 @@ function Eldership:ShowPage(zorder)
 	end
 	local params = {
 	url="Mod/CodePku/cellar/GUI/Eldership/Eldership.html", 
-	alignment="_lt", left = 0, top = 0, width = 1920 , height = 1080, zorder = Eldership.zorder or 30, parent = ParaUI.GetUIObject("root")
-	};
+	alignment="_lt", left = 0, top = 0, width = 1920 , height = 1080, zorder = Eldership.zorder or 30
+  };
+  if Eldership.zorder then
+    params.parent = ParaUI.GetUIObject("root")
+  end
 	self.ui = AdaptWindow:QuickWindow(params)
 end
 

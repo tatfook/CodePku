@@ -1,0 +1,40 @@
+<!-- 
+Author: zouren
+Date: 2020-11-26 20:15:19
+Des:
+Path:"Mod/CodePku/cellar/GUI/Researchers/WeChatQRCode.html"
+-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+</head>
+
+<body>
+<pe:mcml>
+<script refresh="false" type="text/npl">
+<![CDATA[
+local Researchers = NPL.load("(gl)Mod/CodePku/cellar/GUI/Researchers/Researchers.lua");
+
+local liveLessonImageData = NPL.load("(gl)Mod/CodePku/cellar/imageLuaTable/liveLessonImageData.lua")
+live_lesson_weixin = liveLessonImageData:GetIconUrl("live_lesson_weixin.png")
+live_lesson_x = liveLessonImageData:GetIconUrl("live_lesson_x.png")
+
+function OnClose()
+    Page:CloseWindow()
+end
+
+]]></script>
+<style type="text/mcss">
+
+</style>
+<pe:container alignment="_lt" width="1920" height="1080">
+    <div style="position: relative; width: 1920; height: 1920; left: 0;top: 0; background-color: #000000C0;">
+        <div style="<%=format('position: relative; left: 638; top: 175; width: 641; height: 586; background: url(%s);', live_lesson_weixin)%>"></div>
+        <div onclick="OnClose" style="<%=format('position: relative; left: 1305; top: 151; width: 117; height: 117; background: url(%s);', live_lesson_x)%>"></div>
+    </div>
+</pe:container>
+</pe:mcml>
+</body>
+</html>

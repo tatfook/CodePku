@@ -170,10 +170,10 @@ function CodePku:init()
 		"OnWorldUnloaded",
 		function()
 			-- 这里因为只能在世界加载完成之前，所以只能用isLoadingHome来判断
-			if System.Codepku.isLoadingHome then
+			if System.Codepku.isLoadingHome or System.Codepku.isLoadingUserHome then
 				LOG.std(nil, "info", "codepku", "add_filter OnWorldUnloaded")
 				commonlib.setfield("System.Codepku.Coursewares", nil)
-			end			
+			end						
 		end
 	)
 
@@ -192,7 +192,9 @@ function CodePku:init()
 		function (backValue, event)
 			-- LOG.std(nil, "info", "codepku", "add_filter BaseContextMousePressEvent")
 			-- 家园区编辑模式特殊处理
-			if HomeManage:IsMyHome() and GameLogic.GameMode:IsEditor() then
+			-- if HomeManage:IsMyHome() and GameLogic.GameMode:IsEditor() then
+			-- 只要是编辑模式就特殊处理
+			if GameLogic.GameMode:IsEditor() then
 				-- 手机端特殊处理
 				local platform = System.os.GetPlatform()
 				if platform == "ios" or platform == "android" then
@@ -211,7 +213,9 @@ function CodePku:init()
 		function (backValue, event)
 			-- LOG.std(nil, "info", "codepku", "add_filter BaseContextMouseReleaseEvent")
 			-- 家园区编辑模式特殊处理
-			if HomeManage:IsMyHome() and GameLogic.GameMode:IsEditor() then
+			-- if HomeManage:IsMyHome() and GameLogic.GameMode:IsEditor() then
+			-- 只要是编辑模式就特殊处理
+			if GameLogic.GameMode:IsEditor() then
 				-- 判定鼠标点击的方块距离人物的距离是否过远，distance控制判定距离长短
 				-- local distance = 10
 				-- NPL.load("(gl)script/apps/Aries/Creator/Game/SceneContext/SelectionManager.lua");
@@ -591,7 +595,7 @@ function CodePku:init()
 	GameLogic.GetFilters():add_filter(
 		"QuickSelectBar.ShowPage",
 		function(bShow)
-			if HomeManage:IsMyHome() then
+			if HomeManage:IsMyHome() or (System.Codepku.Coursewares and System.Codepku.Coursewares.course_category == 5) then
 				return false
 			end
 			return not (System.Codepku.Coursewares and (System.Codepku.Coursewares.category == 1 or System.Codepku.Coursewares.category == 2 or System.Codepku.Coursewares.category == 7));
@@ -636,7 +640,8 @@ function CodePku:init()
 		"HandleGlobalKeyByRETURN",
 		function()
 			local isEmployee = System.User and System.User.info and System.User.info.is_employee;
-			if isEmployee and tonumber(isEmployee) == 1 or (HomeManage:IsMyHome() and GameLogic.GameMode:IsEditor()) then
+			-- if isEmployee and tonumber(isEmployee) == 1 or (HomeManage:IsMyHome() and GameLogic.GameMode:IsEditor()) then
+			if isEmployee and tonumber(isEmployee) == 1 or (GameLogic.GameMode:IsEditor()) then
 				return false
 			end
 			return true
@@ -658,7 +663,8 @@ function CodePku:init()
 		"KeyPressEvent",
 		function(callbackVal, event)
 			local isEmployee = System.User and System.User.info and System.User.info.is_employee;
-			if isEmployee and tonumber(isEmployee) == 1 or (HomeManage:IsMyHome() and GameLogic.GameMode:IsEditor()) then
+			-- if isEmployee and tonumber(isEmployee) == 1 or (HomeManage:IsMyHome() and GameLogic.GameMode:IsEditor()) then
+			if isEmployee and tonumber(isEmployee) == 1 or (GameLogic.GameMode:IsEditor()) then
 				return true
 			end
 

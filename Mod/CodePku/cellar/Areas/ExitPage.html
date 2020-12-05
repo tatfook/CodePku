@@ -39,7 +39,14 @@ function ClickExit()
         end
     else
         echo("电脑退出")
-        Desktop.ForceExit()
+        local Config = NPL.load("(gl)Mod/CodePku/online/client/Config.lua");
+        if Config.defaultEnv == "DEV" then
+            -- DEV重启
+            Desktop.ForceExit(true)
+        else
+            -- RELEASE关闭
+            Desktop.ForceExit()
+        end
     end
 end
 

@@ -1,0 +1,227 @@
+<!-- "script/apps/Aries/Creator/Game/Areas/EscFramePage.html" -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+</head>
+<body>
+<pe:mcml>
+    <script type="text/npl" refresh="false"><![CDATA[
+        local page = document:GetPageCtrl()
+        NPL.load("(gl)Mod/CodePku/cellar/Mail/Mail.lua")
+        Mail = commonlib.gettable("Mod.CodePku.celler.Mail")
+        local mailImageData = NPL.load("(gl)Mod/CodePku/cellar/imageLuaTable/mailImageData.lua")
+
+        mail_pop_bg = mailImageData:GetIconUrl("mail_pop_bg.png")
+        mail_Label = mailImageData:GetIconUrl("mail_Label.png")
+        mail_bottomborder = mailImageData:GetIconUrl("mail_bottomborder.png")
+        mail_title_shape = mailImageData:GetIconUrl("mail_title_shape.png")
+        mail_btn_delete = mailImageData:GetIconUrl("mail_btn_delete.png")
+        mail_zhezhao = mailImageData:GetIconUrl("mail_zhezhao.png")
+        mail_btn_1 = mailImageData:GetIconUrl("mail_btn_1.png")
+        mail_btn_unread_selected = mailImageData:GetIconUrl("mail_btn_unread_selected.png")
+        mail_btn_read_normal = mailImageData:GetIconUrl("mail_btn_read_normal.png")
+        mail_btn_2 = mailImageData:GetIconUrl("mail_btn_2.png")
+        mail_btn_read_selected = mailImageData:GetIconUrl("mail_btn_read_selected.png")
+        mail_btn_delete_normal = mailImageData:GetIconUrl("mail_btn_delete_normal.png")
+        mail_btn_receive_normal = mailImageData:GetIconUrl("mail_btn_receive_normal.png")
+        mail_icon_coin_1 = mailImageData:GetIconUrl("mail_icon_coin_1.png")
+        mail_icon_coin_0 = mailImageData:GetIconUrl("mail_icon_coin_0.png")
+        mail_icon_coin_4 = mailImageData:GetIconUrl("mail_icon_coin_4.png")
+        mail_pic = mailImageData:GetIconUrl("mail_pic.png")
+        mail_icon_gift = mailImageData:GetIconUrl("mail_icon_gift.png")
+
+
+        echo("---------------------Mail-----------------------")
+
+        function OnClose()
+            Mail.ShowMailPage = false
+            Page:CloseWindow()
+        end
+
+        function OnClickMistake()
+            
+        end  
+        
+        function getRwardLeft(len)
+            leftLen = {230,315,400}
+            return leftLen[len]
+        end
+
+
+        mail_data = Mail.mailList
+        mail_data = Mail:TableSort(mail_data)
+
+        --获取状态标签 火热，限时 > 新 > 无
+        function getStatus(status, send_time)
+            return Mail:GetStatus(status, send_time)
+        end
+
+        function OnClickMail(name)
+            Mail:HandleStatus(name)
+            Page:Refresh(0)
+        end
+
+        function OnDeleteAll()
+            Mail:ConfirmDeleteAll()
+        end
+        
+        function OnDelete(name)
+            Mail:Delete(Mail.defaultValue.user_mail_id)
+        end
+        
+        function OnReceive()
+            Mail:ReceiveAll()
+        end
+        
+        function ClickReceive()
+            Mail:ClickReceive(Mail.defaultValue)
+        end
+
+
+    ]]>
+    </script>
+    <style type="text/mcss">
+    </style>
+
+    <pe:container alignment="_lt" width="1920" height="1080">
+        <div style="position: relative;width: 1920;height:1080;background-color: #00000099;" onclick="OnClose"></div>
+        <div style="position: relative;top:85;width:1494;height:910;left: 213;"  onclick="OnClickMistake"></div>
+            <div style="<%=format('position: relative;top:85;width:1494;height:910;left: 213;background:url(%s);', mail_pop_bg)%>">
+                <div style="<%=format('position: relative;left: 491; width: 511; height: 108; line-height: 108; font-size: 57; font-weight: bold; font-family: PuHuiTi-Bold; color: #F46D3D; text-align: center; background:url(%s);', mail_title_shape)%>">邮箱</div>
+                <div style="<%=format('position: relative;left: 1382; top: 15; width:68; height: 78; background:url(%s);', mail_btn_delete)%>" onclick="OnClose"></div>
+                <pe:if condition="<%= #Mail.mailList == 0 %>">
+                    <div style="<%=format('position: relative;left: 344; top: 328; width:650; height: 417; background:url(%s);', mail_pic)%>"></div>
+                </pe:if>
+                <!-- todo 如果mailListLen > 0 则显示列表页，否则显示空页 -->
+                <pe:if condition="<%= #Mail.mailList > 0 %>">
+                    <div style="<%=format('position: relative;top:108;left:10;width: 421; height: 80; line-height: 60; font-size: 32;font-family: Noto Sans S Chinese Regular;color: #0d405a; text-align: center;', mail_title_shape)%>"><%=Mail.tips%></div>
+                    <!-- 标题列表 -->
+                    <div style="<%=format('position: relative;left: 0; top: 108; width:416; height: 798; background:url(%s);', mail_zhezhao)%>"></div>
+                    <pe:treeview style="position: relative;top:160;left:0;width: 420; height: 610;padding-bottom: 20;" id="mail_title" name='mail_title' DefaultNodeHeight = "110" ItemsPerLine="1" AllowPaging="false" RememberScrollPos="true" RememberLastPage="false" VerticalScrollBarStep="40">
+                        <pe:repeat DataSource="<%= Mail.mailList %>">
+                            <pe:repeatitem>
+                                <!-- 未选中 -->
+                                <pe:if condition="<%= Eval('user_mail_id') ~= Mail.defaultValue.user_mail_id %>">
+                                    <!-- 未读 -->
+                                    <pe:if condition="<%= Eval('status') == 0 %>">
+                                        <div style="width:431;height:136">
+                                            <div style="<%=format('overflow: hidden;white-space:nowrap;text-overflow:ellipsis;width: 370;height:110;margin-left:24;top:22;font-size:42;line-height: 110;color: #0e3565;font-family: PuHuiTi-Bold; text-align: center;background:url(%s)', mail_btn_unread_selected)%>" name="<%=Eval('user_mail_id')%>" onclick="OnClickMail"><%=Mail:HandleTitle(Eval('title'))%></div>
+                                        </div>
+                                        <div style="<%= getStatus(Eval('status'),Eval('send_time')) %>"></div>
+                                    </pe:if>
+                                    <!-- 已读 -->
+                                    <pe:if condition="<%= Eval('status') == 1 %>">
+                                        <div style="width:431;height:136">
+                                            <div style="<%=format('overflow: hidden;white-space:nowrap;text-overflow:ellipsis;width: 370;height:110;margin-left:24;top:22;font-size:42;line-height: 110;color: #686695;font-family: PuHuiTi-Bold; text-align: center;background:url(%s)', mail_btn_read_normal)%>" name="<%=Eval('user_mail_id')%>" onclick="OnClickMail"><%=Mail:HandleTitle(Eval('title'))%></div>
+                                        </div>
+                                        <div style="<%= getStatus(Eval('status'),Eval('send_time')) %>"></div>
+                                    </pe:if>
+                                    <pe:if condition="<%= Eval('annex_status') == 0 %>">
+                                        <div style="<%=format('position:relative;width:50;height:46;left:355;top:-130;background:url(%s)', mail_icon_gift)%>"></div>
+                                    </pe:if>
+                                </pe:if>
+
+                                <!-- 选中 -->
+                                <pe:if condition="<%= Eval('user_mail_id') == Mail.defaultValue.user_mail_id %>">
+                                    <!-- 未读 -->
+                                    <pe:if condition="<%= Eval('status') == 0 %>">
+                                        <div style="margin-top:0;width:431;height:136">
+                                            <div style="<%=format('position:relative;width: 382;height:118;margin-left:18;margin-top:18;font-size:42;line-height: 110;background:url(%s)', mail_btn_2)%>"></div>
+                                            <div style="<%=format('width: 370;height:110;margin-left:24;top:22;font-size:42;line-height: 110;color: #0e3565;font-family: PuHuiTi-Bold; text-align: center;background:url(%s)', mail_btn_unread_selected)%>" name="<%=Eval('user_mail_id')%>" onclick="OnClickMail"><%=Mail:HandleTitle(Eval('title'))%></div>
+                                        </div>
+                                        <div style="<%= getStatus(Eval('status'),Eval('send_time')) %>"></div>
+                                    </pe:if>
+
+                                    <!-- 已读 -->
+                                    <pe:if condition="<%= Eval('status') == 1 %>">
+                                        <div style="margin-top:0;width:431;height:136">
+                                            <div style="<%=format('position:relative;width: 382;height:118;margin-left:18;margin-top:18;font-size:42;line-height: 110;background:url(%s)', mail_btn_2)%>"></div>
+                                            <div style="<%=format('width: 370;height:110;margin-left:24;top:22;font-size:42;line-height: 110;color: #686695;font-family: PuHuiTi-Bold; text-align: center;background:url(%s)', mail_btn_read_normal)%>" name="<%=Eval('user_mail_id')%>" onclick="OnClickMail"><%=Mail:HandleTitle(Eval('title'))%></div>
+                                        </div>
+                                        <div style="<%= getStatus(Eval('status'),Eval('send_time')) %>"></div>
+                                    </pe:if>
+                                    <pe:if condition="<%= Eval('annex_status') == 0 %>">
+                                        <div style="<%=format('position:relative;width:50;height:46;left:355;top:-130;background:url(%s)', mail_icon_gift)%>"></div>
+                                    </pe:if>
+                                </pe:if>
+                            </pe:repeatitem>
+                        </pe:repeat>
+                    </pe:treeview>
+                    <div onclick="OnDeleteAll" style="<%=format('position: relative;top: 790;left: 30; width: 161; height: 87; line-height: 87; font-size: 34;font-family: Noto Sans S Chinese Regular;color: #ffffff; text-align: center; background:url(%s);', mail_btn_delete_normal)%>">一键删除</div>
+                    <div onclick="OnReceive" style="<%=format('position: relative;top: 790;left: 210; width: 161; height: 87; line-height: 87; font-size: 34;font-family: Noto Sans S Chinese Regular;color: #ffffff; text-align: center; background:url(%s);', mail_btn_receive_normal)%>">一键领取</div>
+
+                    <!-- 内容 -->
+                    <div style="<%=format('position: relative;left:437;top:149;width: 1033; height: 756;background:url(%s);', mail_bottomborder)%>">
+                        <div style="height:92;width:1033;line-height: 92;font-weight: bold;font-size: 42; font-family: PuHuiTi-Bold;color:white;text-align: center;"><%=Mail.defaultValue.title%></div>
+
+                        <div style="position:relative;top:0;left:20;line-height: 80;font-size: 36; font-family: Noto Sans S Chinese Regular;color:#ffffff;text-align: left;">来自：<%=Mail.defaultValue.from%></div>
+                        <div style="position:relative;top:0;left:400;width:600;height:56;line-height: 80;font-size: 36; font-family: Noto Sans S Chinese Regular;color:#ffffff;text-align: right;"><%=Mail:GetDate(Mail.defaultValue.send_time)%></div>
+                        <!-- <div style="position:relative;top:0;left:500;width:500;height:56;line-height: 80;font-size: 36; font-family: Noto Sans S Chinese Regular;color:#ffffff;text-align: right;">2020年8月19日 00时00分01秒</div> -->
+                        <div style="<%=format('overflow:scroll;position: relative;left:0;top:80;text-indent:50;padding: 10;margin-left: 22;height:384;width:983;line-height: 56;font-weight: bold;font-size: 36; font-family: Noto Sans S Chinese Regular;color:#0e69cd;background:url(%s);', mail_Label)%>">
+                            <!-- 方案1：默认一段 -->
+                            <!-- <span style="float: left;height:59;width: 72;"></span> -->
+                            <scrollarea ref="scrollarea" style="width: 970; height: 350; padding: 20px;">
+                                <%=Mail.defaultValue.body%>
+                            </scrollarea>
+                            
+                            <!-- 方案2：分段处理 -->
+                            <!-- <pe:treeview style="height:384;width:999;padding: 10;" name='messages' DefaultNodeHeight = "110" ItemsPerLine="1" AllowPaging="false" RememberScrollPos="true" RememberLastPage="false" VerticalScrollBarStep="40">
+                                <pe:repeat DataSource="<%=content%>">
+                                    <pe:repeatitem>
+                                        <div style="line-height: 56;font-size: 36; font-family: Noto Sans S Chinese Regular ;color:#0e69cd;">
+                                            <span style="float: left;height:59;width: 72;"></span>
+                                            <%=Eval('pContent')%>
+                                        </div>
+                                    </pe:repeatitem>
+                                </pe:repeat>
+                            </pe:treeview>
+                            -->
+
+                            <!-- <input type="text" rows="20" language="npl" style="width:500px;" value="<%=value.body%>"/> -->
+
+                            <!-- 方案3：testarea处理，存在问题：背景图片无法正常显示，内容点击后消失，无法传入html代码 -->
+                            <!-- <textarea
+                                rows="10"
+                                EmptyText="心情寄语"
+                                value="<%=value.body%>"
+                                LineWrap="true"
+                                disabled="disabled"
+                                AlwaysShowCurLineBackground="false"
+                                style="width:940;height:470;line-height: 56;font-weight: bold;font-size: 36; font-family: PuHuiTi-Bold;color:#0e69cd;background-color:#a6eeff;border-radius: 10px;"
+                            ></textarea> -->
+                        </div>
+
+                        <pe:if condition="<%= Mail.defaultValue.annex_status ~= 2 %>">
+                            <div style="position: relative; height: 134; left: 25; top: 500;">
+                                <pe:repeat DataSource="<%= Mail.defaultValue.annexes %>">
+                                    <div style="float: left;width: 134; height: 134; margin-right: 36;">
+                                        <div style="<%= format('position:relative;top:4;left:4;width: 126; height: 125;background:url(%s);', mail_icon_coin_0) %>"></div>
+                                        <div style="<%= format('position:relative;top:0;left:0;position:relative;top:0;left:0;;width: 134; height: 134;background:url(%s);', mail_icon_coin_1) %>"></div>
+                                        <div style="<%= format('position:relative;left:31;top:31;width: 72;height: 72;background:url(%s);', prop_icon_url) %>"></div>
+                                        <div style="<%= format('position:relative;left:72;top:112;width: 63;height:29;text-align: center;font-size: 22;color: #ffffff;font-family: Noto Sans S Chinese Regular;background:url(%s);', mail_icon_coin_4) %>"><%=Eval('prop_num')%></div>
+                                    </div>
+                                </pe:repeat>
+                            </div>
+                        </pe:if>
+                        
+
+                        <pe:if condition="<%= Mail.defaultValue.annex_status == 0 %>">
+                            <div onclick="ClickReceive" style="<%=format('position: relative; left: 840; top: 550; width: 161;height:87;line-height:87;font-family: Noto Sans S Chinese Regular;color:#ffffff;font-size: 34;text-align:center;background:url(%s);', mail_btn_receive_normal)%>">
+                                领取
+                            </div>
+                        </pe:if>
+                        
+                        <pe:if condition="<%= (Mail.defaultValue.annex_status == 1 or Mail.defaultValue.annex_status == 2) and Mail.defaultValue.status == 1 %>">
+                            <div  name="<%=Eval('Mail.defaultValue.user_mail_id')%>" onclick="OnDelete" style="<%=format('position: relative; left: 840; top: 550; width: 161;height:87;line-height:87;font-family: Noto Sans S Chinese Regular;color:#ffffff;font-size: 34;text-align:center;background:url(%s);', mail_btn_delete_normal)%>">
+                                删除
+                            </div>
+                        </pe:if>
+                    </div>
+                </pe:if>
+            </div>
+    </pe:container>
+</pe:mcml>
+</body>
+</html>
