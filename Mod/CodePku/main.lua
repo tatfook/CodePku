@@ -580,6 +580,11 @@ function CodePku:init()
 	local ClickStatistics = commonlib.gettable("Mod.CodePku.GUI.ClickStatistics")
 	ClickStatistics:StaticInit();
 
+	--初始化直播课
+	NPL.load("(gl)Mod/CodePku/cellar/GUI/LiveLesson/Basic/LiveLessonBasic.lua")
+	local LiveLessonBasic = commonlib.gettable("Mod.CodePku.Common.LiveLessonBasic")
+	LiveLessonBasic:OnInit()
+
 	GameLogic.GetFilters():add_filter(
 		"DesktopMenuPage.ShowPage",
 		function(bShow)

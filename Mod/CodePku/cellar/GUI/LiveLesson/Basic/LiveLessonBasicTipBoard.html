@@ -1,0 +1,108 @@
+<!-- "Mod/CodePku/cellar/Common/TouchMiniButtons/MainUIButtons_common.html" -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" >
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+</head>
+
+<body>
+<pe:mcml>
+<script refresh="false" type="text/npl" src="LiveLessonBasic.lua"><![CDATA[
+NPL.load("(gl)Mod/CodePku/cellar/GUI/LiveLesson/Basic/LiveLessonBasic.lua")
+LiveLessonBasic = commonlib.gettable("Mod.CodePku.Common.LiveLessonBasic")
+
+function GetStudents()
+    return LiveLessonBasic:GetStudents()
+end
+
+function GetWorldInfo()
+    return LiveLessonBasic:GetWorldInfo()
+end
+
+function OnClickGrouping()
+    OnClose()
+    LiveLessonBasic:Grouping()
+end
+
+function OnClickCopyMatchCode()
+    LiveLessonBasic:CopyMatchCode()
+end
+
+function OnConfirm()
+    OnClose()
+
+    local group = LiveLessonBasic.AddStudentToGroup_group
+    local userid = LiveLessonBasic.AddStudentToGroup_userid
+    local students = GetStudents()
+
+    for index,student in ipairs(students) do
+        if student.userid == userid then
+            LiveLessonBasic.students[index]["group"] = group
+            if LiveLessonBasic.windowGroupWindow then
+                LiveLessonBasic.windowGroupWindow:CloseWindow()
+                LiveLessonBasic.windowGroupWindow = nil
+            end
+            LiveLessonBasic.windowGroup:Refresh(0)
+            return
+        end
+    end
+
+end
+
+function OnClose()
+    Page:CloseWindow()
+    if LiveLessonBasic.tipBoardFlag == 'grouping' then
+        LiveLessonBasic.windowGroup = nil
+    elseif LiveLessonBasic.tipBoardFlag == 'roominfo' then
+        LiveLessonBasic.windowWorldInfo = nil
+    elseif LiveLessonBasic.tipBoardFlag == 'confirm' then
+        LiveLessonBasic.windowConfirm = nil
+    end
+end
+
+]]></script>
+<style type="text/mcss">
+
+</style>
+<pe:container alignment="_lt" width="100%" height="100%">
+    <div style="width: 800; height: 400; text-align: center; font-size: 36;">
+        <div style="position: relative; width: 800; height: 400; background-color: #797979;">
+            <pe:if condition="<%= LiveLessonBasic.tipBoardFlag == 'grouping' %>">
+                <div style="position: relative; left:225; top: 20; line-height: 50; width: 350; height: 50; color: #ff0000; background-color: #ceffd1;">分&nbsp;&nbsp;组</div>
+                <div style="position: relative; left:150; top: 100; line-height: 50; width: 150; height: 50; color: #ff0000; background-color: #ceffd1;">学生人数</div>
+                <div style="position: relative; left:500; top: 100; line-height: 50; width: 150; height: 50; color: #ff0000; background-color: #ceffd1;">小组数</div>
+    
+                <div style="position: relative; left:150; top: 200; line-height: 50; width: 150; height: 50; color: #ffffff; background-color: #ff9100;"><%= #GetStudents() %></div>
+                <div style="position: relative; left:500; top: 200; line-height: 50; width: 150; height: 50; color: #ffffff; background-color: #ff9100;">
+                    <input type="text" MoveViewWhenAttachWithIME="true" name="groupNum" onchange="OnGroupNumChange" value="" EmptyText='输入小组数' style="position: relative; left: 5; top: 11; width: 120; height: 28; font-size: 28; text-align: center; font-family: Noto Sans S Chinese Regular; background: #000000;"/>
+                </div>
+    
+                <div onclick="OnClickGrouping" style="position: relative; left:300; top: 300; line-height: 50; width: 200; height: 50; color: #ffffff; background-color: #006eff;">随机分组</div>    
+            </pe:if>
+
+            <pe:if condition="<%= LiveLessonBasic.tipBoardFlag == 'roominfo' %>">
+                <div style="position: relative; left:225; top: 20; line-height: 50; width: 350; height: 50; color: #ff0000; background-color: #ceffd1;">房间名称上线9个字</div>
+                <div style="position: relative; left:120; top: 100; line-height: 50; width: 150; height: 50; color: #ff0000; background-color: #ceffd1;">世界ID</div>
+                <div style="position: relative; left:320; top: 100; line-height: 50; width: 150; height: 50; color: #ff0000; background-color: #ceffd1;">当前分线</div>
+                <div style="position: relative; left:520; top: 100; line-height: 50; width: 150; height: 50; color: #ff0000; background-color: #ceffd1;">匹配码</div>
+    
+                <div style="position: relative; left:120; top: 200; line-height: 50; width: 150; height: 50; color: #ffffff; background-color: #ff9100;"><%= GetWorldInfo().worldId %></div>
+                <div style="position: relative; left:320; top: 200; line-height: 50; width: 150; height: 50; color: #ffffff; background-color: #ff9100;"><%= GetWorldInfo().curBranch %></div>
+                <div style="position: relative; left:520; top: 200; line-height: 50; width: 150; height: 50; color: #ffffff; background-color: #ff9100;"><%= GetWorldInfo().matchCode %></div>
+
+                <div onclick="OnClickCopyMatchCode" style="position: relative; left:300; top: 300; line-height: 50; width: 200; height: 50; color: #ffffff; background-color: #006eff;">复制匹配码</div>
+
+                <div onclick="OnClose" style="position: relative; left:750; top: -10; line-height: 50; width: 50; height: 100; color: #ffffff; background-color: #006eff;"></div>
+            </pe:if>
+
+            <pe:if condition="<%= LiveLessonBasic.tipBoardFlag == 'confirm' %>">
+                <div onclick="OnClose" style="position: relative; left:100; top: 300; line-height: 50; width: 200; height: 50; color: #ffffff; background-color: #006eff;">取消</div>
+                <div onclick="OnConfirm" style="position: relative; left:500; top: 300; line-height: 50; width: 200; height: 50; color: #ffffff; background-color: #006eff;">确认</div>
+            </pe:if>
+       </div>
+    </div>
+</pe:container>
+</pe:mcml> 
+</body>
+</html>

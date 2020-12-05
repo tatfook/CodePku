@@ -1,0 +1,93 @@
+<!-- "Mod/CodePku/cellar/Common/TouchMiniButtons/MainUIButtons_common.html" -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" >
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+</head>
+
+<body>
+<pe:mcml>
+<script refresh="false" type="text/npl" src="LiveLessonBasic.lua"><![CDATA[
+NPL.load("(gl)Mod/CodePku/cellar/GUI/LiveLesson/Basic/LiveLessonBasic.lua")
+LiveLessonBasic = commonlib.gettable("Mod.CodePku.Common.LiveLessonBasic")
+
+local windowIndex = 1
+
+function GetStudents()
+    return LiveLessonBasic:GetStudents()
+end
+
+function GetOtherStudents()
+    return LiveLessonBasic:GetOtherStudents()
+end
+
+function GetGroups()
+    return LiveLessonBasic:GetGroups()
+end
+
+function OnClickStudent(index)
+    GameLogic.AddBBS(nil, tostring(index), 500, "255 0 0", 21)
+
+    windowIndex = index
+    LiveLessonBasic.windowIndex = index
+    local left = 1920/2 + LiveLessonBasic.params.group.left
+    local top = 1080/2 + LiveLessonBasic.params.group.top + 500 --todo 500根据实际调整  "未分组"距离分组页面的高度
+    local positionStr = string.format("left:%s;top:%s;height:%s;", ((windowIndex-1)%4)*200+left, math.floor((windowIndex-1)/4)*50+top, #GetGroups()*50)
+    LiveLessonBasic.styleStr= string.format("position: relative; %s; line-height: 36; width: 150; font-size:24; color: #ff0000; background-color: #3dddc2;", positionStr)
+
+    LiveLessonBasic:ShowSubPage("groupwindow")
+end
+
+function OnClose()
+    OnClickClose()
+    Page:CloseWindow()
+    LiveLessonBasic.windowGroup = nil
+end
+
+]]></script>
+<style type="text/mcss">
+
+</style>
+<pe:container alignment="_lt" width="100%" height="100%">
+    <div style="width: 1100; height: 850; background-color: #ffffff; text-align: center; font-size: 24;">
+        <div style="position: relative; top: 0; width: 1100; height: 850; background-color: #797979;">
+            <div style="position: relative; left:350; top: 0; line-height: 50; width: 400; height: 50; color: #ff0000; background-color: #ceffd1;">分组管理</div>
+
+            <div style="position: relative; left:0; top: 50; line-height: 50; width: 200; height: 50; color: #ff0000; background-color: #ceffd1;">已分组</div>
+            <div style="position: relative; top: 100; width: 1100; height: 350; background-color: #5b288b; color: #ff00ff; line-height: 36;">
+                <pe:gridview name="groups" style="" DataSource="<%= GetGroups() %>" CellPadding="0" DefaultNodeHeight = "175" ItemsPerLine="1" AllowPaging="false" RememberScrollPos="true" RememberLastPage="true" pagesize="2">
+                    <Columns>
+                        <div style="width: 1080; height: 175; color: #ff00ff; background-color: #3da2dd;">
+                            <div style="height: 35;"><%= index %></div>
+                            <div style="width: 1080; height: 140;">
+                                <pe:repeat DataSource="<%= students %>">
+                                    <pe:repeatitem>
+                                        <div style='<%= string.format("position: relative; left: %s; top: %s; line-height: 36; width: 200; height: 50; font-size:24; color: #ff0000; background-color: #3dddc2;", ((index-1)%4)*200, math.floor((index-1)/4)*50) %>'>
+                                            <%= name %>
+                                        </div>
+                                    </pe:repeatitem>
+                                </pe:repeat>
+                            </div>
+                        </div>
+                    </Columns>
+                </pe:gridview>
+            </div>
+
+            <div style="position: relative; left:0; top: 450; line-height: 50; width: 200; height: 50; color: #ff0000; background-color: #ceffd1;">未分组</div>
+            <div style="position: relative; top: 500; width: 1100; height: 350; background-color: #5b288b; color: #ff00ff; line-height: 36;">
+                <pe:gridview name="others" style="" DataSource="<%= GetOtherStudents() %>" CellPadding="0" DefaultNodeHeight="60" ItemsPerLine="4" AllowPaging="false" RememberScrollPos="true" RememberLastPage="true" pagesize="12">
+                    <Columns>
+                        <div name="<%= index %>" onclick="OnClickStudent" style="line-height: 36; width: 200; height: 50; font-size:24; color: #ff0000; background-color: #3dddc2;">
+                            <%= name %>
+                        </div>
+                    </Columns>
+                </pe:gridview>
+            </div>
+
+        </div>
+    </div>
+</pe:container>
+</pe:mcml> 
+</body>
+</html>

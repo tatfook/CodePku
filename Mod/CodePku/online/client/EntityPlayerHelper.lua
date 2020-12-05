@@ -11,6 +11,8 @@ local AppEntityPlayerHelper = commonlib.gettable("Mod.CodePku.Online.Client.Enti
 ]]
 NPL.load("(gl)script/ide/headon_speech.lua");
 local UniString = commonlib.gettable("System.Core.UniString");
+NPL.load("(gl)Mod/CodePku/cellar/GUI/LiveLesson/Basic/LiveLessonBasic.lua")
+local LiveLessonBasic = commonlib.gettable("Mod.CodePku.Common.LiveLessonBasic")
 
 local EntityPlayerHelper = commonlib.inherit(nil, commonlib.gettable("Mod.CodePku.Online.Client.EntityPlayerHelper"));
 
@@ -72,19 +74,28 @@ function EntityPlayerHelper:SetHeadOnDisplay()
     -- local color = state == "online" and (self.isMainPlayer and "#ffffff" or "#0cff05") or "#b1b1b1";
     local color = self.isMainPlayer and "#ffffff" or "#0cff05";
     local playerUsernameStyle = state == "online" and "" or "shadow-quality:8; shadow-color:#2b2b2b;text-shadow:true;";
+
+    --直播课特殊标记
+    local tagColor = userinfo.is_employee and "#ff0000" or "#3CAAF0"
+    local tagName = ""
+    if LiveLessonBasic.windowLeft then
+        tagName = userinfo.is_employee and "教师" or "学生"
+    end
+
     local schoolName = userinfo.schoolName or "";
     if (schoolName ~= "") then schoolName = "&lt;" .. schoolName .. "&gt;" end
     local mcml = string.format([[
-<pe:mcml>
-    <div style="width:200px; margin-left: -100px; margin-top: -30px; color: %s;">
-        <div align="center" style="">
-            %s
-            <div style="float:left; margin-left: 2px; font-weight:bold; font-size: 14px; base-font-size:14px; %s">%s</div>
-        </div>
-        <div style="text-align: center; font-weight: bold; font-size: 12px; base-font-size:12px; margin-top: 0px;">%s</div>
-    </div>
-</pe:mcml>
-    ]], color, usertag, playerUsernameStyle, GetUserName(username), schoolName);
+        <pe:mcml>
+            <div style="width:200px; margin-left: -100px; margin-top: -30px; color: %s;">
+                <div align="center" style="">
+                    %s
+                    <span style="float:left; margin-left: 2px; font-weight:bold; font-size: 14px; base-font-size:14px; color: #ffffff; background-color:%s">%s</span>
+                    <div style="float:left; margin-left: 2px; font-weight:bold; font-size: 14px; base-font-size:14px; %s">%s</div>
+                </div>
+                <div style="text-align: center; font-weight: bold; font-size: 12px; base-font-size:12px; margin-top: 0px;">%s</div>
+            </div>
+        </pe:mcml>
+            ]], color, usertag, tagColor, tagName, playerUsernameStyle, GetUserName(username), schoolName)
     player:SetHeadOnDisplay({url = ParaXML.LuaXML_ParseString(mcml)});
 end
 

@@ -3,6 +3,8 @@ NPL.load("(gl)script/ide/timer.lua");
 NPL.load("(gl)script/apps/Aries/Creator/WorldCommon.lua");
 NPL.load("(gl)Mod/CodePku/cellar/GUI/Home/HomeManage.lua")
 NPL.load("(gl)script/ide/System/Windows/Screen.lua")
+NPL.load("(gl)Mod/CodePku/cellar/GUI/LiveLesson/Basic/LiveLessonBasic.lua")
+local LiveLessonBasic = commonlib.gettable("Mod.CodePku.Common.LiveLessonBasic")
 local HomeManage = commonlib.gettable("Mod.CodePku.Common.HomeManage")
 local AdaptWindow = commonlib.gettable("Mod.CodePku.GUI.Window.AdaptWindow")
 local EntityManager = commonlib.gettable("MyCompany.Aries.Game.EntityManager")
@@ -495,6 +497,8 @@ function MainUIButtons.JudgeNil()
 		MainUIButtons.home_window:CloseWindow()
 		MainUIButtons.home_window = nil
 	end
+
+	LiveLessonBasic:CloseAllWindows()
 end
 
 
@@ -539,6 +543,10 @@ function MainUIButtons.ShowPage()
 			-- end
 			MainUIButtons:show_category(false)
 		end
+	end
+
+	if LiveLessonBasic:IsInLiveLesson() then
+		LiveLessonBasic:ShowPage()
 	end
 end
 

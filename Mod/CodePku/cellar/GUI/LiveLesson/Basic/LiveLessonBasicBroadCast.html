@@ -1,0 +1,51 @@
+<!-- "Mod/CodePku/cellar/Common/TouchMiniButtons/MainUIButtons_common.html" -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" >
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+</head>
+
+<body>
+<pe:mcml>
+<script refresh="false" type="text/npl" src="LiveLessonBasic.lua"><![CDATA[
+NPL.load("(gl)Mod/CodePku/cellar/GUI/LiveLesson/Basic/LiveLessonBasic.lua")
+LiveLessonBasic = commonlib.gettable("Mod.CodePku.Common.LiveLessonBasic")
+
+function GetBroadcastTips()
+    return LiveLessonBasic.broadcastTips
+end
+
+function OnClickTools(index)
+    local text = GetBroadcastTips()[tonumber(index)] and GetBroadcastTips()[tonumber(index)]["text"]
+    if text then
+        LiveLessonBasic:RunGGSCommand("broadcast", {text=text})
+    end
+    OnClose()
+end
+
+function OnClose()
+    Page:CloseWindow()
+    LiveLessonBasic.windowBroadCast = nil
+end
+
+]]></script>
+<style type="text/mcss">
+
+</style>
+<pe:container alignment="_lt" width="100%" height="100%">
+    <div style="width: 200; height: 500; background-color: #ffffff; text-align: center; font-size: 18;">
+        <div onclick="OnClose" style="position: relative; top: 0; width: 200; background-color: #797979;">
+            <pe:repeat DataSource="<%= GetBroadcastTips() %>">
+                <pe:repeatitem>
+                    <pe:if condition="<%= bShow == true %>">
+                        <div name="<%= index %>" onclick="OnClickTools" style="margin-top: 20; width: 200; height: 50; line-height: 50; color: #ff0000; background-color: #a6d4ff;"><%= text %></div>
+                    </pe:if>          
+                </pe:repeatitem>
+            </pe:repeat>
+        </div>
+    </div>
+</pe:container>
+</pe:mcml> 
+</body>
+</html>

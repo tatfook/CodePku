@@ -1,0 +1,101 @@
+<!-- "Mod/CodePku/cellar/Common/TouchMiniButtons/MainUIButtons_common.html" -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" >
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+</head>
+
+<body>
+<pe:mcml>
+<script refresh="false" type="text/npl" src="LiveLessonBasic.lua"><![CDATA[
+NPL.load("(gl)Mod/CodePku/cellar/GUI/LiveLesson/Basic/LiveLessonBasic.lua")
+LiveLessonBasic = commonlib.gettable("Mod.CodePku.Common.LiveLessonBasic")
+
+function GetStudents()
+    return LiveLessonBasic:GetStudents()
+end
+
+function GetIentity()
+    return LiveLessonBasic:GetIentity()
+end
+
+function GetSwitchBtnTop()
+    return GetIentity() and 200 or 150
+end
+
+function OnClickChangeMode()
+    LiveLessonBasic:RunGGSCommand("changeMode")
+end
+
+function OnClickGrouping()
+    LiveLessonBasic:ShowSubPage("group")
+end
+
+function OnClickKickOut(index)
+    local name = GetStudents()[index]["name"]
+    GameLogic.AddBBS(nil, string.format("%s  踢出到主世界",name), 3000, "255 0 0", 21)
+    local userid = GetStudents()[index]["userid"]
+    LiveLessonBasic:RunGGSCommand("kickout", {userid=userid})
+end
+
+function OnClickForcePlayMode(index)
+    local name = GetStudents()[index]["name"]
+    GameLogic.AddBBS(nil, string.format("%s  改成播放模式",name), 3000, "255 0 0", 21)
+    local userid = GetStudents()[index]["userid"]
+    LiveLessonBasic:RunGGSCommand("forceplaymode", {userid=userid})
+end
+
+function OnSwitch()
+    GameLogic.AddBBS("CodeGlobals", L"切换"..tostring(LiveLessonBasic.windowOpenFlag), 1000, "#FF0000")
+    LiveLessonBasic:Switch()
+end
+
+function OnClose()
+    Page:CloseWindow()
+    LiveLessonBasic.windowRight = nil
+end
+
+]]></script>
+<style type="text/mcss">
+
+</style>
+<pe:container alignment="_lt" width="100%" height="100%">
+    <div onclick="OnClose" style='<%= string.format("width: %d; height: 800; background-color: #ffffff; text-align: center; font-size: 24;",LiveLessonBasic.windowRightWidth) %>'>
+        <div onclick="OnSwitch" style='<%= string.format("float: left; top: %d; width: 50; height: 200; background-color: #ff00ff;", GetSwitchBtnTop()) %>'></div>
+
+        <pe:if condition="<%= LiveLessonBasic.windowOpenFlag %>">
+            <div style="float: left; width: 350; height: 800; background-color: #111111;">
+
+                <pe:if condition="<%= GetIentity() %>">
+                    <div style="margin-top: 20; width: 350; height: 50; background-color: #ffff00; color: #ff00ff; line-height: 50;">
+                        <div onclick="OnClickChangeMode" style="position: relative; left: 50; top: 0; width: 100; height: 50; background-color: #00ffff;">模式切换</div>
+                        <div onclick="OnClickGrouping" style="position: relative; left: 200; top: 0; width: 100; height: 50; background-color: #00ffff;">分组</div>
+                    </div>
+                </pe:if>
+    
+                <div style="margin-top: 10; width: 350; height: 50; background-color: #00ff00; color: #ff00ff; line-height: 50;">学员列表</div>
+    
+                <div style="margin-top: 0; width: 350; background-color: #5b288b; color: #ff00ff; line-height: 36;">
+                    <pe:gridview name="students" style="" DataSource="<%= GetStudents() %>" CellPadding="0" DefaultNodeHeight="46" ItemsPerLine="1" AllowPaging="false" RememberScrollPos="true" RememberLastPage="true" pagesize="12">
+                        <Columns>
+                            <div style="margin-bottom: 0; line-height: 36; width: 330; height: 36; font-size:24; color: #ff0000; background-color: #aaaaaa;">
+                                <div style="float: left; width: 36; height: 36; text-align: left; background-color: #3aff75;"><%= behavior %></div>
+                                
+                                <div style="float: left; width: 170; text-align: left; background-color: #3a7fff;"><%= name %></div>
+                                <pe:if condition="<%= GetIentity() %>">
+                                    <div name="<%= index %>" onclick="OnClickKickOut" style="float: left; margin-left: 40; width: 36; background-color: #daff74;">踢</div>
+                                    <div name="<%= index %>" onclick="OnClickForcePlayMode" style="float: left; margin-left: 10; width: 36; background-color: #daff74;">禁</div>
+                                </pe:if>
+                            </div>
+                        </Columns>
+                    </pe:gridview>
+                </div>
+            </div>
+        </pe:if>
+
+    </div>
+</pe:container>
+</pe:mcml> 
+</body>
+</html>
