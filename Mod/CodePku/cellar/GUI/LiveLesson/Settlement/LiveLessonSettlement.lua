@@ -16,7 +16,7 @@ local request = NPL.load("(gl)Mod/CodePku/api/BaseRequest.lua");
 
 -- 常量table
 LiveLessonSettlement.constant = {
-    ExitTime = 300,     -- 老师点击下课后，学生强制退出的时间/秒
+    ExitTime = 5,     -- 老师点击下课后，学生强制退出的时间/秒
 }
 
 -- 获取图标
@@ -37,8 +37,9 @@ function LiveLessonSettlement:ClassOverTimer()
                 GameLogic.AddBBS("CodeGlobals", L"时间到了，强制退出", 3000, "#FF0000");
                 LiveLessonSettlement.TimerTimes = nil
                 timer:Change()
+            else
+                LiveLessonSettlement.TimerTimes = LiveLessonSettlement.TimerTimes + 1
             end
-            LiveLessonSettlement.TimerTimes = LiveLessonSettlement.TimerTimes + 1
         end
     })
     LiveLessonSettlement.class_over_timer:Change(0, 1000)
@@ -97,6 +98,7 @@ function LiveLessonSettlement:TeacherSettlement()
         -- 拼接界面数据
         for k, v in pairs(data) do
             local temp_table = {}
+            temp_table.user_id = v.user_id
             temp_table.nickname = v.nickname or "未知"      -- 用户昵称
             temp_table.rate_of_learn = v.rate_of_learn or "0/0"     -- 学习节点
             if v.answer_count == 0 then
@@ -122,6 +124,11 @@ function LiveLessonSettlement:TeacherSettlement()
         GameLogic.AddBBS("CodeGlobals", e.data.message, 3000, "#FF0000");
         LiveLessonSettlement.TeacherHadSettlement = false
     end);
+end
+
+-- todo 老师评分后保存结算信息
+function LiveLessonSettlement:CommitSettlementResult()
+    
 end
 
 -- todo CMD学生获取结算信息，所有人都会执行，需要判断身份，老师不执行
