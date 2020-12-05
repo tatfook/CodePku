@@ -12,6 +12,22 @@
 NPL.load("(gl)Mod/CodePku/cellar/GUI/LiveLesson/Basic/LiveLessonBasic.lua")
 LiveLessonBasic = commonlib.gettable("Mod.CodePku.Common.LiveLessonBasic")
 
+function GetIcon(index)
+    return LiveLessonBasic:GetIconPath(index)
+end
+
+function GetToolIcon(index)
+    if index == 1 then
+        return GetIcon("live_lesson_expresstools_btn_mat_hands.png")
+    elseif index == 2 then
+        return GetIcon("live_lesson_expresstools_btn_mat_teleporting.png")
+    elseif index == 3 then
+        return GetIcon("live_lesson_expresstools_btn_mat_r.png")
+    elseif index == 4 then
+        return GetIcon("live_lesson_expresstools_btn_mat_x.png")
+    end
+end
+
 function GetTeachTools()
     return LiveLessonBasic.teachTools
 end
@@ -56,14 +72,14 @@ end
 
 </style>
 <pe:container alignment="_lt" width="100%" height="100%">
-    <div onclick="OnClose" style="width: 200; height: 500; background-color: #ffffff; text-align: center; font-size: 26;">
+    <div style="width: 210; height: 563; text-align: center; font-size: 24; font-family: zkklt; color: #845740;">
         <pe:if condition="<%= GetIentity() %>">
-            <div style="position: relative; top: 30; width: 200; height: 50;">教学工具</div>
-            <div style="position: relative; top: 100; width: 200; background-color: #797979;">
+            <div style='<%= string.format("position: relative; top: 0; width: 210; height: 66; padding-left: 50; padding-top: 21; background: url(%s);",GetIcon("live_lesson_expresstools_btn_bot02.png")) %>'>教学工具栏</div>
+            <div style='<%= string.format("position: relative; left: 50; top: 54; width: 141; height: 509; font-size: 30; background: url(%s);",GetIcon("live_lesson_expresstools_bot.png")) %>'>
                 <pe:repeat DataSource="<%= GetTeachTools() %>">
                     <pe:repeatitem>
                         <pe:if condition="<%= bShow == true %>">
-                            <div name="<%= index %>" onclick="OnClickTools" style="margin-top: 20; line-height: 50; width: 200; height: 50; color: #ff0000; background-color: #00ff00;"><%= name %></div>
+                            <div name="<%= index %>" onclick="OnClickTools" style='<%= string.format("margin-left: 5; margin-top: 5; line-height: 67; width: 130; height: 67; background: url(%s);",GetIcon("live_lesson_expresstools_btnbot.png")) %>'><%= name %></div>
                         </pe:if>                  
                     </pe:repeatitem>
                 </pe:repeat>
@@ -71,13 +87,15 @@ end
         </pe:if>
 
         <pe:if condition="<%= GetIentity() == false %>">
-            <div style="position: relative; top: 30; width: 200; height: 50;">快捷操作</div>
-            <div style="position: relative; top: 100; width: 200; background-color: #797979;">
+            <div style='<%= string.format("position: relative; left: 24; top: -1; width: 160; height: 58; padding-left: 33; padding-top: 21; background: url(%s);",GetIcon("live_lesson_expresstools_btn_bot.png")) %>'>快捷操作</div>
+            <div style='<%= string.format("position: relative; left: 41; top: 55; width: 141; height: 509; background: url(%s);",GetIcon("live_lesson_expresstools_bot.png")) %>'>
                 <pe:repeat DataSource="<%= GetStudentTools() %>">
                     <pe:repeatitem>
                         <pe:if condition="<%= bShow == true %>">
-                            <div name="<%= index %>" onclick="OnClickTools" style="margin-top: 20; line-height: 50; width: 200; height: 50; color: #ff0000; background-color: #00ff00;"><%= name %></div>
-                        </pe:if>          
+                            <div name="<%= index %>" onclick="OnClickTools" style='<%= string.format("margin-left: 5; margin-top: 5; line-height: 67; width: 130; height: 67; background: url(%s);",GetIcon("live_lesson_expresstools_btnbot.png")) %>'>
+                                <div style='<%= string.format("position: relative; left: 7; top: 15; width: 111; height: 36; background: url(%s);",GetToolIcon(index)) %>'></div>
+                            </div>
+                        </pe:if>                  
                     </pe:repeatitem>
                 </pe:repeat>
             </div>

@@ -107,6 +107,10 @@ function LiveLessonEntrance:EnterRoom(code)
     request:get(path):next(function(response)
         local data = response.data.data
         System.User.LiveLessonData = data       -- 房间信息存全局，进入房间后需要用到
+
+        --标记正在进入直播课
+        System.Codepku.isLoadingLiveLesson = true
+
         local Config = NPL.load("(gl)Mod/CodePku/online/client/Config.lua");
         if Config.defaultEnv == "RELEASE" then
             local command = "/connectCodePku -no=1 -isSyncBlock -isSyncCmd -host=106.53.147.185 -port=9901 " .. tostring(data.keep_work_id) .. " " .. tostring(data.match_code)

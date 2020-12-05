@@ -11,13 +11,18 @@
 <script refresh="false" type="text/npl" src="LiveLessonBasic.lua"><![CDATA[
 NPL.load("(gl)Mod/CodePku/cellar/GUI/LiveLesson/Basic/LiveLessonBasic.lua")
 LiveLessonBasic = commonlib.gettable("Mod.CodePku.Common.LiveLessonBasic")
+local LiveLessonSettlement = NPL.load("(gl)Mod/CodePku/cellar/GUI/LiveLesson/Settlement/LiveLessonSettlement.lua");
+
+function GetIcon(index)
+    return LiveLessonBasic:GetIconPath(index)
+end
 
 function OnClickData()
     GameLogic.AddBBS(nil, L"答题闯关数据", 3000, "255 0 0", 21)
 end
 
 function OnClickClassOver()
-    GameLogic.AddBBS(nil, L"下课", 3000, "255 0 0", 21)
+    LiveLessonSettlement:TeacherSettlement()
 end
 
 function OnClose()
@@ -29,10 +34,10 @@ end
 
 </style>
 <pe:container alignment="_lt" width="100%" height="100%">
-    <div onclick="OnClose" style="width: 400; height: 50; text-align: center; font-size: 24; background-color: #eaff8f;">
-        <div style="width: 400; height: 50;">
-            <div onclick="OnClickData" style="position: relative; left: 0; width: 150;  height: 50; background-color: #1eff00;">答题闯关数据</div>
-            <div onclick="OnClickClassOver" style="position: relative; left: 250; width: 150; height: 50; background-color: #ff0000;">下课</div>
+    <div onclick="OnClose" style="width: 416; height: 81;">
+        <div style="width: 416; height: 81;">
+            <div onclick="OnClickData" style='<%= string.format("position: relative; left: 0; width: 238;  height: 81; background:url(%s);", GetIcon("live_lesson_btn_data.png")) %>'></div>
+            <div onclick="OnClickClassOver" style='<%= string.format("position: relative; left: 254; width: 162;  height: 81; background:url(%s);", GetIcon("live_lesson_btn_classover.png")) %>'></div>
         </div>
     </div>
 </pe:container>

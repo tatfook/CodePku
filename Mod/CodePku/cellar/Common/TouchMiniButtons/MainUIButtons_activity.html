@@ -24,9 +24,6 @@ function ClickChooseFun(name)
     if (name == "ClickActivity1") then
         -- 沉浸式课堂
 
-        --标记正在进入直播课
-        System.Codepku.isLoadingLiveLesson = true
-
         local LiveLessonEntrance = NPL.load("(gl)Mod/CodePku/cellar/GUI/LiveLesson/Entrance/LiveLessonEntrance.lua");
         LiveLessonEntrance:ShowEntrancePage()
         -- GameLogic.GetFilters():apply_filters("ClickStatistics", {track_id= 62, track_scene =1, track_type=0, }) --直播入口埋点

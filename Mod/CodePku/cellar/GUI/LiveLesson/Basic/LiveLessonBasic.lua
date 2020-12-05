@@ -11,9 +11,11 @@ local UniString = commonlib.gettable("System.Core.UniString")
 NPL.load("(gl)script/ide/System/Windows/Controls/EditBox.lua")
 local EditBox = commonlib.gettable("System.Windows.Controls.EditBox")
 
+local liveLessonImageData = NPL.load("(gl)Mod/CodePku/cellar/imageLuaTable/liveLessonImageData.lua")
 local LiveLessonBasic = commonlib.gettable("Mod.CodePku.Common.LiveLessonBasic")
 
 LiveLessonBasic.userSize = 1
+LiveLessonBasic.behaviorDelay = 3000 -- 举手等行为持续时间
 LiveLessonBasic.teachTools = {
     [1] = {name = L"快速广播", bShow=true},
     [2] = {name = L"集合学生", bShow=true},
@@ -27,11 +29,7 @@ LiveLessonBasic.studentTools = {
     [3] = {name = L"举牌√", bShow=true},
     [4] = {name = L"举牌×", bShow=true},
 }
-LiveLessonBasic.behaviorTable = {
-    [1] = L"举手",
-    [2] = L"举牌√",
-    [3] = L"举牌x",
-}
+
 LiveLessonBasic.broadcastTips = {
     [1] = {text = L"大家请安静", bShow=true},
     [2] = {text = L"大家现在自由练习3分钟", bShow=true},
@@ -61,7 +59,7 @@ LiveLessonBasic.students = {
 LiveLessonBasic.params = {
     left = {
         url="Mod/CodePku/cellar/GUI/LiveLesson/Basic/LiveLessonBasicLeft.html",
-		alignment="_lt", left = 20, top = 20, width = 200, height = 500, zorder=5,
+		alignment="_lt", left = 0, top = 40, width = 210, height = 563, zorder=5,
     },
     right = {
         url="Mod/CodePku/cellar/GUI/LiveLesson/Basic/LiveLessonBasicRight.html",
@@ -74,7 +72,7 @@ LiveLessonBasic.params = {
     bottom = {
         --todo 2个底部按钮
         url="Mod/CodePku/cellar/GUI/LiveLesson/Basic/LiveLessonBasicBottom.html",
-		alignment="_lt", left = 200, top = 1000, width = 400, height = 50, zorder=5,
+		alignment="_lt", left = 182, top = 977, width = 416, height = 81, zorder=5,
     },
     broadcast = {
         url="Mod/CodePku/cellar/GUI/LiveLesson/Basic/LiveLessonBasicBroadCast.html",
@@ -98,11 +96,23 @@ LiveLessonBasic.params = {
     },
 }
 
+-- 获取图标
+function LiveLessonBasic:GetIconPath(index)
+    return liveLessonImageData:GetIconUrl(index)
+end
+
+LiveLessonBasic.behaviorTable = {
+    [1] = {name=L"举手", path=LiveLessonBasic:GetIconPath("live_lesson_studentsection_handsup.png")},
+    [2] = {name=L"举牌√", path=LiveLessonBasic:GetIconPath("live_lesson_studentsection_r.png")},
+    [3] = {name=L"举牌X", path=LiveLessonBasic:GetIconPath("live_lesson_studentsection_x.png")},
+}
+
 -- 返回学员table
 function LiveLessonBasic:GetStudents()
     return LiveLessonBasic.students
 end
 
+-- 返回按组分的学员table
 function LiveLessonBasic:GetGroups()
     local students = self.GetStudents()
     local groups = {}
@@ -119,6 +129,7 @@ function LiveLessonBasic:GetGroups()
     return groups
 end
 
+-- 返回未分组学员table
 function LiveLessonBasic:GetOtherStudents()
     local students = self.GetStudents()
     local others = {}
@@ -132,9 +143,15 @@ function LiveLessonBasic:GetOtherStudents()
     return others
 end
 
--- 身份判定,暂定以is_employee字段判定,创建人
+-- 身份判定
 function LiveLessonBasic:GetIentity()
-    return System.User.info.is_employee == 1
+    if System.User.LiveLessonData and System.User.LiveLessonData.open_user_id then
+        -- 创建人
+        return System.User.LiveLessonData.open_user_id == System.User.info.id
+    else
+        -- is_employee
+        return System.User.info.is_employee == 1
+    end
 end
 
 -- userid获取学生在学员列表里的index
@@ -148,10 +165,11 @@ function LiveLessonBasic:GetStudentIndexByUserId(userid)
 end
 
 function LiveLessonBasic:GetWorldInfo()
+    local liveLessonData = System.User.LiveLessonData or {}
     return {
-        worldId = 52111,
-        curBranch = 1234,
-        matchCode = 1234,
+        worldId = liveLessonData.keep_work_id or "",
+        curBranch = liveLessonData.match_code or "",
+        matchCode = liveLessonData.match_code or "",
     }
 end
 
@@ -161,8 +179,6 @@ function LiveLessonBasic:CopyMatchCode()
 end
 
 function LiveLessonBasic:Grouping()
-    local windowGroup = self.windowGroup ~= nil
-    GameLogic.AddBBS("CodeGlobals", tostring(windowGroup), 3000, "#00FF00")
     self.ifGroupedFlag = true
     -- todo 分组 System.Codepku.liveLessonGroup
     self:ShowSubPage("group")
@@ -252,6 +268,8 @@ function LiveLessonBasic:QuickOperation(index)
     else
         return
     end
+    local text = string.format("%s %s", username, LiveLessonBasic.behaviorTable[_type]["name"])
+    self:RunGGSCommand("broadcast", {text=text, duration=self.behaviorDelay})
     GameLogic.RunCommand(string.format("/ggs cmd liveLesson behavior -type=%s -username=%s -userid=%s -entityid=%s", _type, username, userid, entityid))
 
     self.recordTime = curTime
@@ -416,7 +434,7 @@ function LiveLessonBasic:OnWorldLoaded()
         local mytimer = commonlib.Timer:new({callbackFunc = function(timer)
             self:RunGGSCommand("entrance")
         end})
-        mytimer:Change(3000, nil)  --连上ggs服务器有延迟,需要延迟提示
+        mytimer:Change(self.behaviorDelay, nil)  --连上ggs服务器有延迟,需要延迟提示
 
         --计时
         self.startTime = os.time()
@@ -477,7 +495,7 @@ function LiveLessonBasic:SetHeadOnDisplay(entityid,_type,userid)
         self.windowRight:Refresh(0)
 
     end})
-    mytimer:Change(3000, nil)
+    mytimer:Change(self.behaviorDelay, nil)
 
     self:SetHeadOnDisplaySelf(userid,_type) -- 触发者自己
     self:SetHeadOnDisplayBehaviorOthers(entityid,_type) -- 其他人看到触发者
@@ -501,49 +519,43 @@ function LiveLessonBasic:SetHeadOnDisplayBehaviorOthers(entityid, _type)
     local usertag = state == "online" and userinfo.usertag or ""
     local color = self.isMainPlayer and "#ffffff" or "#0cff05"
     local playerUsernameStyle = state == "online" and "" or "shadow-quality:8; shadow-color:#2b2b2b;text-shadow:true;"
-
-    local tagColor = userinfo.is_employee and "#ff0000" or "#3CAAF0"
-    local tagName = ""
-    if self.windowLeft then
-        --todo test
-        tagName = userinfo.is_employee and "教师"..tostring(_type) or "学生"..tostring(_type)
-    end
-
     local schoolName = userinfo.schoolName or ""
     if (schoolName ~= "") then schoolName = "&lt;" .. schoolName .. "&gt;" end
+
+    local tagName = userinfo.is_employee and LiveLessonBasic:GetIconPath("live_lesson_tag_teacher.png") or LiveLessonBasic:GetIconPath("live_lesson_tag_student.png")
+    local behaviorPath = self.behaviorTable[_type]["path"]
     local mcml_behavior = string.format([[
         <pe:mcml>
-            <div style="width:200px; margin-left: -100px; margin-top: -30px; color: %s;">
-                <div align="center" style="">
+            <div style="width:200px; margin-left: -100px; margin-top: -90px; color: %s;">
+                <div align="center" style="width:40;height:40;background:url(%s);background-animation:url(script/UIAnimation/CommonBounce.lua.table#ShakeUD);"></div>
+                <div align="center" style="margin-top: 20px;">
                     %s
-                    <span style="float:left; margin-left: 2px; font-weight:bold; font-size: 14px; base-font-size:14px; color: #ffffff; background-color:%s">%s</span>
+                    <div style="float:left; margin-left: -11px; margin-top: -2px; width:48;height:23;background:url(%s);"></div>
                     <div style="float:left; margin-left: 2px; font-weight:bold; font-size: 14px; base-font-size:14px; %s">%s</div>
                 </div>
                 <div style="text-align: center; font-weight: bold; font-size: 12px; base-font-size:12px; margin-top: 0px;">%s</div>
             </div>
         </pe:mcml>
-            ]], color, usertag, tagColor, tagName, playerUsernameStyle, GetUserName(username), schoolName)
+        ]], color, behaviorPath, usertag, tagName, playerUsernameStyle, GetUserName(username), schoolName)
     player:SetHeadOnDisplay({url = ParaXML.LuaXML_ParseString(mcml_behavior)})
 
     local mytimer = commonlib.Timer:new({callbackFunc = function(timer)
-        --todo test
-        tagName = userinfo.is_employee and "教师" or "学生"
-        local mcml_original = string.format([[
+        local mcml = string.format([[
             <pe:mcml>
                 <div style="width:200px; margin-left: -100px; margin-top: -30px; color: %s;">
                     <div align="center" style="">
                         %s
-                        <span style="float:left; margin-left: 2px; font-weight:bold; font-size: 14px; base-font-size:14px; color: #ffffff; background-color:%s">%s</span>
+                        <div style="float:left; margin-left: -11px; margin-top: -2px; width:48;height:23;background:url(%s);"></div>
                         <div style="float:left; margin-left: 2px; font-weight:bold; font-size: 14px; base-font-size:14px; %s">%s</div>
                     </div>
                     <div style="text-align: center; font-weight: bold; font-size: 12px; base-font-size:12px; margin-top: 0px;">%s</div>
                 </div>
             </pe:mcml>
-                ]], color, usertag, tagColor, tagName, playerUsernameStyle, GetUserName(username), schoolName)
-        player:SetHeadOnDisplay({url = ParaXML.LuaXML_ParseString(mcml_original)})
+            ]], color, usertag, tagName, playerUsernameStyle, GetUserName(username), schoolName)
+        player:SetHeadOnDisplay({url = ParaXML.LuaXML_ParseString(mcml)});
     end})
 
-    mytimer:Change(3000, nil)
+    mytimer:Change(self.behaviorDelay, nil)
 
 end
 
@@ -562,46 +574,41 @@ function LiveLessonBasic:SetHeadOnDisplaySelf(userid,_type)
     local usertag = state == "online" and userinfo.usertag or ""
     local color = self.isMainPlayer and "#ffffff" or "#0cff05"
     local playerUsernameStyle = state == "online" and "" or "shadow-quality:8; shadow-color:#2b2b2b;text-shadow:true;"
-
-    local tagColor = userinfo.is_employee and "#ff0000" or "#3CAAF0"
-    local tagName = ""
-    if LiveLessonBasic.windowLeft then
-        tagName = userinfo.is_employee and "教师"..tostring(_type) or "学生"..tostring(_type)
-    end
-
     local schoolName = userinfo.schoolName or ""
     if (schoolName ~= "") then schoolName = "&lt;" .. schoolName .. "&gt;" end
+
+    local tagName = userinfo.is_employee and LiveLessonBasic:GetIconPath("live_lesson_tag_teacher.png") or LiveLessonBasic:GetIconPath("live_lesson_tag_student.png")
+    local behaviorPath = self.behaviorTable[_type]["path"]
     local mcml_behavior = string.format([[
         <pe:mcml>
-            <div style="width:200px; margin-left: -100px; margin-top: -30px; color: %s;">
-                <div align="center" style="">
+            <div style="width:200px; margin-left: -100px; margin-top: -90px; color: %s;">
+                <div align="center" style="width:40;height:40;background:url(%s);background-animation:url(script/UIAnimation/CommonBounce.lua.table#ShakeUD);"></div>
+                <div align="center" style="margin-top: 20px;">
                     %s
-                    <span style="float:left; margin-left: 2px; font-weight:bold; font-size: 14px; base-font-size:14px; color: #ffffff; background-color:%s">%s</span>
+                    <div style="float:left; margin-left: -11px; margin-top: -2px; width:48;height:23;background:url(%s);"></div>
                     <div style="float:left; margin-left: 2px; font-weight:bold; font-size: 14px; base-font-size:14px; %s">%s</div>
                 </div>
                 <div style="text-align: center; font-weight: bold; font-size: 12px; base-font-size:12px; margin-top: 0px;">%s</div>
             </div>
         </pe:mcml>
-            ]], color, usertag, tagColor, tagName, playerUsernameStyle, GetUserName(username), schoolName)
+        ]], color, behaviorPath, usertag, tagName, playerUsernameStyle, GetUserName(username), schoolName)
     player:SetHeadOnDisplay({url = ParaXML.LuaXML_ParseString(mcml_behavior)})
 
     local mytimer = commonlib.Timer:new({callbackFunc = function(timer)
-        --todo test
-        tagName = userinfo.is_employee and "教师" or "学生"
-        local mcml_original = string.format([[
+        local mcml = string.format([[
             <pe:mcml>
                 <div style="width:200px; margin-left: -100px; margin-top: -30px; color: %s;">
                     <div align="center" style="">
                         %s
-                        <span style="float:left; margin-left: 2px; font-weight:bold; font-size: 14px; base-font-size:14px; color: #ffffff; background-color:%s">%s</span>
+                        <div style="float:left; margin-left: -11px; margin-top: -2px; width:48;height:23;background:url(%s);"></div>
                         <div style="float:left; margin-left: 2px; font-weight:bold; font-size: 14px; base-font-size:14px; %s">%s</div>
                     </div>
                     <div style="text-align: center; font-weight: bold; font-size: 12px; base-font-size:12px; margin-top: 0px;">%s</div>
                 </div>
             </pe:mcml>
-                ]], color, usertag, tagColor, tagName, playerUsernameStyle, GetUserName(username), schoolName)
-        player:SetHeadOnDisplay({url = ParaXML.LuaXML_ParseString(mcml_original)})
+                ]], color, usertag, tagName, playerUsernameStyle, GetUserName(username), schoolName)
+        player:SetHeadOnDisplay({url = ParaXML.LuaXML_ParseString(mcml)});
     end})
 
-    mytimer:Change(3000, nil)
+    mytimer:Change(self.behaviorDelay, nil)
 end

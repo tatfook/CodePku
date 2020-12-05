@@ -163,9 +163,6 @@ classover 老师下课广播
 			local entityid = options.entityid and tonumber(options.entityid)
 
 			if _type then
-				local text = string.format("%s%s", username, LiveLessonBasic.behaviorTable[_type])
-				LiveLessonBasic:RunGGSCommand("broadcast", {text=text})
-
 				LiveLessonBasic:SetHeadOnDisplay(entityid,_type,userid)
 			end
 
@@ -176,7 +173,6 @@ classover 老师下课广播
 			if player and LiveLessonBasic:GetIentity() then
 				local x, y, z = player:GetBlockPos()
 				local position = string.format("%s,%s,%s",x,y,z)
-				--todo LiveLessonBasic:GetIentity() 额外加一个判定是房间创建者老师
 				GameLogic.RunCommand(string.format("/ggs cmd liveLesson movestudent -userid=%s -position=%s", userid, position))
 			end
 
