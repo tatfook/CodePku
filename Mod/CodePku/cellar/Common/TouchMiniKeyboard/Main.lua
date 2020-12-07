@@ -72,19 +72,16 @@ function TouchMiniKeyboard.CheckShow(show,isDirectionKeyboard )
             DirectionRocker.getSingleton():show(show);
         end
         GameLogic.RunCommand("/show keyboard");
-        -- FeatKeyboard:show(show)
-        -- if isEmployee ~= 1 then    
-        --     if System.Codepku then
-        --         if System.Codepku.isLoadingHome then
-        --             FeatKeyboard:show(show);
-        --         else
-                    
-        --         end
-        --     else
-        --         FeatKeyboard:show(show);
-        --     end
-        -- else
-        --     FeatKeyboard:show(show);
-        -- end
+        if isEmployee ~= 1 then    
+            if System.Codepku and System.Codepku.Coursewares then
+                local category = System.Codepku.Coursewares.category
+                if category == 8 then
+                    GameLogic.RunCommand("/hide keyboard");
+                    local icon = TouchVirtualKeyboardIcon.GetSingleton();
+                    icon:ShowKeyboard(false)
+                end
+            end
+        end
+        FeatKeyboard:show(show)
     end
 end

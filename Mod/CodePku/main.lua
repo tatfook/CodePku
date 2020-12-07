@@ -580,6 +580,10 @@ function CodePku:init()
 	local ClickStatistics = commonlib.gettable("Mod.CodePku.GUI.ClickStatistics")
 	ClickStatistics:StaticInit();
 
+	NPL.load("(gl)Mod/CodePku/cellar/Common/TouchMiniKeyboard/FeatKeyboard.lua")
+	local FeatKeyboard = commonlib.gettable("Mod.CodePku.Common.TouchMiniKeyboard.FeatKeyboard")
+	FeatKeyboard:StaticInit()
+
 	GameLogic.GetFilters():add_filter(
 		"DesktopMenuPage.ShowPage",
 		function(bShow)

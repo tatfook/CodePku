@@ -37,7 +37,7 @@ function MemoryOpt.Clear()
                 ext = string.lower(ext)
                 if(ext == "bmax" or ext == "x" or ext == "fbx") then
                     ParaAsset.LoadParaX("", filename):UnloadAsset();
-                    LOG.std(nil, "info", "Files", "unload unused asset file: %s", filename);
+                    -- LOG.std(nil, "info", "Files", "unload unused asset file: %s", filename);
                 end
             end
         end
@@ -59,7 +59,7 @@ function MemoryOpt.Clear()
                 ext = string.lower(ext)
                 if(ext == "jpg" or ext == "png" or ext == "dds") then
                     ParaAsset.LoadTexture("", filename, 1):UnloadAsset();
-                    LOG.std(nil, "info", "Files", "unload unused asset file: %s", filename);
+                    -- LOG.std(nil, "info", "Files", "unload unused asset file: %s", filename);
                 end
             end
         end

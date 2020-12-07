@@ -161,7 +161,7 @@ function WebSocketClient:HeartBeat()
     if self.pingTimer then self.pingTimer:Change(); end;
 
     self.pingTimer = commonlib.Timer:new({callbackFunc = function(timer)
-        commonlib.log({"onpingTimer", timer.id, timer.delta, timer.lastTick})
+        -- commonlib.log({"onpingTimer", timer.id, timer.delta, timer.lastTick})
         -- LOG.std("", "info", "WebSocketClient", "run pingTimer");         
         if(self.state == "OPEN")then
             self:Ping();             
