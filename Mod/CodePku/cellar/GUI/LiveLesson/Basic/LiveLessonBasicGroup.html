@@ -12,10 +12,46 @@
 NPL.load("(gl)Mod/CodePku/cellar/GUI/LiveLesson/Basic/LiveLessonBasic.lua")
 LiveLessonBasic = commonlib.gettable("Mod.CodePku.Common.LiveLessonBasic")
 
-local windowIndex = 1
+function GetIcon(index)
+    return LiveLessonBasic:GetIconPath(index)
+end
 
 function GetStudents()
-    return LiveLessonBasic:GetStudents()
+    --return LiveLessonBasic:GetStudents()
+    return {
+        [1] = {name="名字最多七个一", userid=1, group=1, redflower=1, bShow=true},
+        [2] = {name="名字最多七个二", userid=2, group=1, redflower=2, bShow=true},
+        [3] = {name="名字最多七个三", userid=3, group=1, redflower=3, bShow=true},
+        [4] = {name="名字最多七个四", userid=4, group=2, redflower=4, bShow=true},
+        [5] = {name="名字最多七个五", userid=5, group=2, redflower=5, bShow=true},
+        [6] = {name="名字最多七个六", userid=6, group=2, redflower=6, bShow=true},
+        [7] = {name="名字最多七个七", userid=7, group=3, redflower=7, bShow=true},
+        [8] = {name="名字最多七个八", userid=8, group=3, redflower=8, bShow=true},
+        [9] = {name="名字最多七个九", userid=9, group=3, redflower=9, bShow=true},
+        [10] = {name="名字最多七个十", userid=10, group=4, redflower=10, bShow=true},
+        [11] = {name="名字最多七十一", userid=11, group=4, redflower=11, bShow=true},
+        [12] = {name="名字最多七十二", userid=12, group=4, redflower=12, bShow=true},
+        [13] = {name="名字最多七十三", userid=13, bShow=true},
+        [14] = {name="名字最多七十四", userid=14, bShow=true},
+        [15] = {name="名字最多七十五", userid=15, bShow=true},
+        [16] = {name="名字最多七十六", userid=16, bShow=true},
+        [17] = {name="名字最多七十七", userid=17, bShow=true},
+        [18] = {name="名字最多七十八", userid=18, bShow=true},
+        [19] = {name="名字最多七十九", userid=19, bShow=true},
+        [20] = {name="名字最多七二十", userid=20, bShow=true},
+        [21] = {name="名字最多二十一", userid=21, bShow=true},
+        [22] = {name="名字最多二十二", userid=22, bShow=true},
+        [23] = {name="名字最多二十三", userid=23, bShow=true},
+        [24] = {name="名字最多二十四", userid=24, bShow=true},
+        [25] = {name="名字最多二十五", userid=25, bShow=true},
+        [26] = {name="名字最多二十六", userid=26, bShow=true},
+        [27] = {name="名字最多二十七", userid=27, bShow=true},
+        [28] = {name="名字最多二十八", userid=28, bShow=true},
+        [29] = {name="名字最多二十九", userid=29, bShow=true},
+        [30] = {name="名字最多多三十", userid=30, bShow=true},
+        [31] = {name="名字最多二十一", userid=31, bShow=true},
+        [32] = {name="名字最多二十二", userid=32, bShow=true},
+    }
 end
 
 function GetOtherStudents()
@@ -27,20 +63,25 @@ function GetGroups()
 end
 
 function OnClickStudent(index)
-    GameLogic.AddBBS(nil, tostring(index), 500, "255 0 0", 21)
-
-    windowIndex = index
     LiveLessonBasic.windowIndex = index
-    local left = 1920/2 + LiveLessonBasic.params.group.left
-    local top = 1080/2 + LiveLessonBasic.params.group.top + 500 --todo 500根据实际调整  "未分组"距离分组页面的高度
-    local positionStr = string.format("left:%s;top:%s;height:%s;", ((windowIndex-1)%4)*200+left, math.floor((windowIndex-1)/4)*50+top, #GetGroups()*50)
-    LiveLessonBasic.styleStr= string.format("position: relative; %s; line-height: 36; width: 150; font-size:24; color: #ff0000; background-color: #3dddc2;", positionStr)
+    windowIndex = index%12
+    local left = 1920/2 + LiveLessonBasic.params.group.left + 50 + 17
+    local top = 1080/2 + LiveLessonBasic.params.group.top + 516 - 53/2
+    if windowIndex == 0 then
+        top = top + 73 * 3
+    end
+    local positionStr = string.format("left:%s;top:%s;height:%s;", ((windowIndex-1)%4)*215+left, math.floor((windowIndex-1)/4)*73+top, #GetGroups()*53)
+    LiveLessonBasic.styleStr= string.format("position: relative; %s; width: 165;", positionStr)
 
     LiveLessonBasic:ShowSubPage("groupwindow")
 end
 
+function GetNumToGroup(num)
+    local a = string.byte("A")
+    return string.char(a+num-1)
+end
+
 function OnClose()
-    OnClickClose()
     Page:CloseWindow()
     LiveLessonBasic.windowGroup = nil
 end
@@ -50,35 +91,37 @@ end
 
 </style>
 <pe:container alignment="_lt" width="100%" height="100%">
-    <div style="width: 1100; height: 850; background-color: #ffffff; text-align: center; font-size: 24;">
-        <div style="position: relative; top: 0; width: 1100; height: 850; background-color: #797979;">
-            <div style="position: relative; left:350; top: 0; line-height: 50; width: 400; height: 50; color: #ff0000; background-color: #ceffd1;">分组管理</div>
+    <div style="width: 1003; height: 788; text-align: center; color: #613f2e; font-size: 20; font-family: zkklt;">
+        <div style='<%= string.format("position: relative; width: 1003; height: 788; background: url(%s);", GetIcon("live_lesson_teamadmin_bot.png"))%>'>
+            <div style="position: relative; left:413; top: 16; width: 136; font-size: 34; color: #ffffff;">分组管理</div>
 
-            <div style="position: relative; left:0; top: 50; line-height: 50; width: 200; height: 50; color: #ff0000; background-color: #ceffd1;">已分组</div>
-            <div style="position: relative; top: 100; width: 1100; height: 350; background-color: #5b288b; color: #ff00ff; line-height: 36;">
-                <pe:gridview name="groups" style="" DataSource="<%= GetGroups() %>" CellPadding="0" DefaultNodeHeight = "175" ItemsPerLine="1" AllowPaging="false" RememberScrollPos="true" RememberLastPage="true" pagesize="2">
+            <div style='<%= string.format("position: relative; left:27; top: 57; line-height: 56; width: 143; height: 56; font-size: 28; background: url(%s);", GetIcon("live_lesson_teamadmin_tag_bot.png"))%>'>已分组</div>
+            <div style="position: relative; left: 25; top: 116; width: 954; height: 304; line-height: 36;">
+                <pe:gridview name="groups" style="" DataSource="<%= GetGroups() %>" CellPadding="0" DefaultNodeHeight = "147" ItemsPerLine="1" AllowPaging="false" RememberScrollPos="true" RememberLastPage="true" pagesize="2">
                     <Columns>
-                        <div style="width: 1080; height: 175; color: #ff00ff; background-color: #3da2dd;">
-                            <div style="height: 35;"><%= index %></div>
-                            <div style="width: 1080; height: 140;">
-                                <pe:repeat DataSource="<%= students %>">
-                                    <pe:repeatitem>
-                                        <div style='<%= string.format("position: relative; left: %s; top: %s; line-height: 36; width: 200; height: 50; font-size:24; color: #ff0000; background-color: #3dddc2;", ((index-1)%4)*200, math.floor((index-1)/4)*50) %>'>
-                                            <%= name %>
-                                        </div>
-                                    </pe:repeatitem>
-                                </pe:repeat>
+                        <div style="width: 929;">   
+                            <div style='<%= string.format("width: 905; height: 143; font-family: zkklt; background: url(%s);", GetIcon("live_lesson_teamadmin_mat_bot.png"))%>'>
+                                <div style="position: relative; left: 8; top: 8; width: 72; height: 24; color: #ffffff; font-size: 24;"><%= string.format("小组%s", GetNumToGroup(index)) %></div>
+                                <div style="position: relative; left: 0; top: 54; width: 905; height: 119;">
+                                    <pe:repeat DataSource="<%= students %>">
+                                        <pe:repeatitem>
+                                            <div style='<%= string.format("position: relative; left: %s; top: %s; width: 228; height: 20; text-align: center; color: #613f2e; font-size:20; line-height: 20;", ((index-1)%4)*228, math.floor((index-1)/4)*45) %>'>
+                                                <%= name %>
+                                            </div>
+                                        </pe:repeatitem>
+                                    </pe:repeat>
+                                </div>
                             </div>
                         </div>
                     </Columns>
                 </pe:gridview>
             </div>
-
-            <div style="position: relative; left:0; top: 450; line-height: 50; width: 200; height: 50; color: #ff0000; background-color: #ceffd1;">未分组</div>
-            <div style="position: relative; top: 500; width: 1100; height: 350; background-color: #5b288b; color: #ff00ff; line-height: 36;">
-                <pe:gridview name="others" style="" DataSource="<%= GetOtherStudents() %>" CellPadding="0" DefaultNodeHeight="60" ItemsPerLine="4" AllowPaging="false" RememberScrollPos="true" RememberLastPage="true" pagesize="12">
+            
+            <div style='<%= string.format("position: relative; left:27; top: 446; line-height: 56; width: 143; height: 56; font-size: 28;  color: #613f2e; background: url(%s);", GetIcon("live_lesson_teamadmin_tag_bot.png"))%>'>未分组</div>
+            <div style="position: relative; left:50; top: 516; width: 860; height: 189;">
+                <pe:gridview name="others" style="" DataSource="<%= GetOtherStudents() %>" CellPadding="0" DefaultNodeHeight="73" ItemsPerLine="4" AllowPaging="false" RememberScrollPos="true" RememberLastPage="true" pagesize="3">
                     <Columns>
-                        <div name="<%= index %>" onclick="OnClickStudent" style="line-height: 36; width: 200; height: 50; font-size:24; color: #ff0000; background-color: #3dddc2;">
+                        <div name="<%= index %>" onclick="OnClickStudent" style='<%= string.format("margin-right: 16; line-height: 53; width: 199; height: 53; text-align: center; color: #613f2e; font-size:20; line-height: 53; font-family: zkklt; background: url(%s);", GetIcon("live_lesson_teamadmin_mat_name_bot.png"))%>'>
                             <%= name %>
                         </div>
                     </Columns>

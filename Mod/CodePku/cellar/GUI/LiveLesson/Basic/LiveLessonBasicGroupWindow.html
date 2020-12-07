@@ -12,6 +12,15 @@
 NPL.load("(gl)Mod/CodePku/cellar/GUI/LiveLesson/Basic/LiveLessonBasic.lua")
 LiveLessonBasic = commonlib.gettable("Mod.CodePku.Common.LiveLessonBasic")
 
+function GetIcon(index)
+    return LiveLessonBasic:GetIconPath(index)
+end
+
+function GetNumToGroup(num)
+    local a = string.byte("A")
+    return string.char(a+num-1)
+end
+
 function GetStudents()
     return LiveLessonBasic:GetStudents()
 end
@@ -26,8 +35,6 @@ end
 
 
 function OnClickGroup(index)
-    GameLogic.AddBBS(nil, tostring(index), 500, "255 0 0", 21)
-
     local others = GetOtherStudents()
     local userid = others[LiveLessonBasic.windowIndex]["userid"]
     local group = index
@@ -51,8 +58,8 @@ end
         <div style="<%= LiveLessonBasic.styleStr %>">
             <pe:gridview name="windowgroup" style="" DataSource="<%= GetGroups() %>" CellPadding="0" DefaultNodeHeight="50" ItemsPerLine="1" AllowPaging="false" RememberScrollPos="true" RememberLastPage="true" pagesize="6">
                 <Columns>
-                    <div name="<%= index %>" onclick="OnClickGroup" style="line-height: 24; width: 150; height: 50; font-size:24; color: #ff0000; background-color: #e4bcd8;">
-                        <%= index %>
+                    <div name="<%= index %>" onclick="OnClickGroup" style='<%= string.format("font-family: zkklt; text-align: center; line-height: 53; width: 165; height: 53; font-size:20; color: #613f2e; background: url(%s);", GetIcon("live_lesson_team_floatingwindow_bot_02.png")) %>'>
+                        <%= string.format("小组%s", GetNumToGroup(index)) %>
                     </div>
                 </Columns>
             </pe:gridview>

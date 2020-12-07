@@ -16,7 +16,6 @@ function GetIcon(index)
     return LiveLessonBasic:GetIconPath(index)
 end
 
-
 function GetStudents()
     return LiveLessonBasic:GetStudents()
 end
@@ -49,10 +48,12 @@ function GetAddGroupTip()
     if index then
         local name = GetStudents()[index]["name"]
         local group = GetNumToGroup(LiveLessonBasic.AddStudentToGroup_group)
-        return string.format("确认要将【%s】同学加入【%s】组吗？", name, group)
+        return {
+            name = name,
+            group = group,
+        }
     end
 end
-
 
 function OnClose()
     Page:CloseWindow()
@@ -64,14 +65,13 @@ function OnClose()
         LiveLessonBasic.windowConfirm = nil
     end
 end
-
 ]]></script>
 <style type="text/mcss">
 
 </style>
 <pe:container alignment="_lt" width="100%" height="100%">
-    <div style="width: 895; height: 389; text-align: center; font-size: 36; font-family: zkklt;">
-        <div style='<%= string.format("position: relative; width: 895; height: 389; background: url(%s);", GetIcon("live_lesson_comm_roommes_team_comm_bot.png"))%>'>
+    <div style="width: 1920; height: 1080; text-align: center; font-size: 36; font-family: zkklt;">
+        <div style='<%= string.format("position: relative; left: 510; top: 248; width: 895; height: 389; background: url(%s);", GetIcon("live_lesson_comm_roommes_team_comm_bot.png"))%>'>
             <pe:if condition="<%= LiveLessonBasic.tipBoardFlag == 'grouping' %>">
                 <div style="position: relative; left: 0; top: 28; width: 895; color: #ffffff; font-size: 36;">分&nbsp;组</div>
 
@@ -107,8 +107,16 @@ end
             </pe:if>
 
             <pe:if condition="<%= LiveLessonBasic.tipBoardFlag == 'confirm' %>">
+                <div style="width:895;">
+                </div>
                 <div style="position: relative; left: 0; top: 28; width: 895; color: #ffffff; font-size: 36;">分组确认</div>
-                <div style="position: relative; left: 0; top: 150; width: 895; color: #ffffff; font-size: 36; font-family: Noto Sans S Chinese Regular;"><%= GetAddGroupTip() %></div>
+                <div style="position: relative; left: 80; top: 150; width: 895; color: #ffffff; font-size: 36; font-family: Noto Sans S Chinese Regular;">
+                    <div style="float: left; height: 36; text-align: left;">确认要将&nbsp;&nbsp;</div>
+                    <div style="float: left; height: 36; text-align: left;color: #ff0000;"><%= GetAddGroupTip().name %></div>
+                    <div style="float: left; height: 36; text-align: left;">&nbsp;&nbsp;同学加入&nbsp;&nbsp;</div>
+                    <div style="float: left; height: 36; text-align: left; color: #0000ff;"><%= GetAddGroupTip().group %></div>
+                    <div style="float: left; height: 36; text-align: left;">&nbsp;&nbsp;组吗？</div>
+                </div>
                 <div onclick="OnClose" style='<%= string.format("position: relative; left:150; top: 270; width: 199; height: 67; color:#ffffff; line-height: 60; background: url(%s);", GetIcon("live_lesson_comm_btn_01.png"))%>'>取消</div>
                 <div onclick="OnConfirm" style='<%= string.format("position: relative; left:536; top: 270; width: 199; height: 67; color:#ffffff; line-height: 60; background: url(%s);", GetIcon("live_lesson_comm_bot_02.png"))%>'>确认</div>
                 

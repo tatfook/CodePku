@@ -61,6 +61,24 @@ LiveLessonBasic.students = {
     [12] = {name="名字最多七十二", userid=12, group=4, redflower=12, bShow=true},
     [13] = {name="名字最多七十三", userid=13, bShow=true},
     [14] = {name="名字最多七十四", userid=14, bShow=true},
+    [15] = {name="名字最多七十五", userid=15, bShow=true},
+    [16] = {name="名字最多七十六", userid=16, bShow=true},
+    [17] = {name="名字最多七十七", userid=17, bShow=true},
+    [18] = {name="名字最多七十八", userid=18, bShow=true},
+    [19] = {name="名字最多七十九", userid=19, bShow=true},
+    [20] = {name="名字最多七二十", userid=20, bShow=true},
+    [21] = {name="名字最多二十一", userid=21, bShow=true},
+    [22] = {name="名字最多二十二", userid=22, bShow=true},
+    [23] = {name="名字最多二十三", userid=23, bShow=true},
+    [24] = {name="名字最多二十四", userid=24, bShow=true},
+    [25] = {name="名字最多二十五", userid=25, bShow=true},
+    [26] = {name="名字最多二十六", userid=26, bShow=true},
+    [27] = {name="名字最多二十七", userid=27, bShow=true},
+    [28] = {name="名字最多二十八", userid=28, bShow=true},
+    [29] = {name="名字最多二十九", userid=29, bShow=true},
+    [30] = {name="名字最多多三十", userid=30, bShow=true},
+    [31] = {name="名字最多三十一", userid=31, bShow=true},
+    [32] = {name="名字最多三十二", userid=32, bShow=true},
 }
 
 LiveLessonBasic.params = {
@@ -95,7 +113,7 @@ LiveLessonBasic.params = {
     },
     tipboard = {
         url="Mod/CodePku/cellar/GUI/LiveLesson/Basic/LiveLessonBasicTipBoard.html",
-		alignment="_lt", left = 510, top = 248, width = 895, height = 389, zorder=9,
+		alignment="_ct", left = -1920/2, top = -1080/2, width = 1920, height = 1080, zorder=9,
     },
     groupwindow = {
         url="Mod/CodePku/cellar/GUI/LiveLesson/Basic/LiveLessonBasicGroupWindow.html",
