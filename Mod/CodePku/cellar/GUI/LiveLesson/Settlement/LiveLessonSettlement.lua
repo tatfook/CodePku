@@ -35,8 +35,9 @@ function LiveLessonSettlement:ClassOverTimer()
     LiveLessonSettlement.class_over_timer = commonlib.Timer:new({
         callbackFunc = function(timer)
             if LiveLessonSettlement.TimerTimes == 0 then
-                -- todo 强制退出
-                GameLogic.AddBBS("CodeGlobals", L"时间到了，强制退出", 3000, "#FF0000");
+                -- 强制退出
+                -- GameLogic.AddBBS("CodeGlobals", L"时间到了，强制退出", 3000, "#FF0000");
+                GameLogic.RunCommand(string.format('/connectCodePku %d', 1));
                 LiveLessonSettlement.TimerTimes = nil
                 timer:Change()
             else
@@ -45,6 +46,40 @@ function LiveLessonSettlement:ClassOverTimer()
         end
     })
     LiveLessonSettlement.class_over_timer:Change(0, 1000)
+end
+
+-- 离开直播课，清除定时器
+function LiveLessonSettlement:LeaveLiveLesson()
+    LiveLessonSettlement.TimerTimes = nil
+    LiveLessonSettlement.class_over_timer:Change()
+    -- 老师退出房间要给接口发送请求
+    if System.User.info.is_employee == 1 and System.User.LiveLessonData.open_user_id == System.User.info.id then
+        local path = "/class-room/logout"
+        local params = {
+            room_id = System.User.LiveLessonData.id
+        }
+        request:post(path,params):next(function(response)
+
+        end):catch(function(e)
+    
+        end);
+    end
+end
+
+-- 老师点击下课
+function LiveLessonSettlement:ClassDismissed()
+    if System.User.LiveLessonData and System.User.LiveLessonData.class_finished == true then
+        return
+    end
+    local path = "/class-room/click-over"
+    local params = {
+        room_id = System.User.LiveLessonData.id
+    }
+    request:post(path,params):next(function(response)
+        System.User.LiveLessonData.class_finished = true
+    end):catch(function(e)
+
+    end);
 end
 
 -- 节点转百分比
@@ -148,8 +183,8 @@ function LiveLessonSettlement:CommitSettlementResult()
     -- 发送数据
     request:post('/class-room/save-class',params):next(function(response)
         GameLogic.AddBBS("CodeGlobals", L"课程结算成功", 3000, "#00FF00")
-        LiveLessonSettlement.had_settlement = true      -- 正常结算的标记，根据该字段判断是否能点击下课
-        LiveLessonSettlement.teacher_settlement_page:Refresh(0)
+        -- LiveLessonSettlement.had_settlement = true      -- 正常结算的标记，根据该字段判断是否能点击下课/20201207转移到H5页面中了
+        -- LiveLessonSettlement.teacher_settlement_page:Refresh(0)
         LiveLessonSettlement.had_commit = false
         GameLogic.RunCommand("/ggs cmd liveLesson settlement")      -- 成功保存信息，发送ggs命令弹出学生结算弹窗
     end):catch(function(e)

@@ -27,14 +27,21 @@ end
 
 -- 课堂结算
 function Settlement()
+    had_settlement = true      -- 正常结算的标记，根据该字段判断是否能点击下课
+    page:Refresh(0)
     LiveLessonSettlement:CommitSettlementResult()
 end
 
 -- 下课
 function Finish()
     -- ggs广播下课信号，分线内所有人全部执行
-    GameLogic.RunCommand("/ggs cmd liveLesson classover")
-    Close()
+    if had_settlement then
+        LiveLessonSettlement:ClassDismissed()
+        GameLogic.RunCommand("/ggs cmd liveLesson classover")
+        Close()
+    else
+        GameLogic.AddBBS("CodeGlobals", L"请先结算", 3000, "#FF0000")
+    end
 end
 
 -- 修改评分
@@ -92,12 +99,12 @@ end
     </div>
 
     <!-- 下课 -->
-    <pe:if condition='<%= LiveLessonSettlement.had_settlement == true %>'>
+    <pe:if condition='<%= had_settlement == true %>'>
         <div onclick="Finish" style="<%=format('position: relative; left: 1218; top: 962; width: 320;height: 105;background:url(%s);', GetIcon('live_lesson_comm_btn_01.png'))%>">
             <div style="<%=format('position: relative; left: 97; top: 21; width: 138;height: 53;background:url(%s);', GetIcon('live_lesson_settlement_mat_finishclass.png'))%>"></div>
         </div>
     </pe:if>
-    <pe:if condition='<%= LiveLessonSettlement.had_settlement ~= true %>'>
+    <pe:if condition='<%= had_settlement ~= true %>'>
         <div style="<%=format('position: relative; left: 1218; top: 962; width: 320;height: 105;background:url(%s);', GetIcon('live_lesson_comm_btn_01.png'))%>">
             <div style="<%=format('position: relative; left: 97; top: 21; width: 138;height: 53;background:url(%s);', GetIcon('live_lesson_settlement_mat_finishclass.png'))%>"></div>
         </div>

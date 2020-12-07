@@ -102,7 +102,7 @@ function LiveLessonEntrance:EnterRoom(code)
         GameLogic.AddBBS("CodeGlobals", L"请输入正确的匹配码", 3000, "#FF0000");
         return
     end
-    local path = "/class-room/enter?match_code=" .. code
+    local path = "/class-room/enter?match_code=" .. temp_code
     LiveLessonEntrance.entre_room = true
     request:get(path):next(function(response)
         local data = response.data.data
