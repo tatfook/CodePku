@@ -110,18 +110,18 @@ worldKey 获取玩学世界当前世界信息
 		name = "liveLesson",
 		quick_ref = "/liveLesson subcmd",
 		desc = [[
-subcmd: 
-redflower 奖励/扣除小红花
-entrance 用户进入直播课世界广播
-behavior 学生举手/举牌√/举牌x
-toteacher 发起学生移动到老师位置的请求需要配合movestudent
-movestudent 配合toteacher移动学生到老师位置
-movegroup 移动一个小组的学生到指定位置
-call 老师集合学生
-kickout 老师踢出学生到主世界
-forceplaymode 老师设置某个学生为播放模式
-settlement 老师结算广播
-classover 老师下课广播
+-- subcmd: 
+-- redflower 奖励/扣除小红花
+-- entrance 用户进入直播课世界广播
+-- behavior 学生举手/举牌√/举牌x
+-- toteacher 发起学生移动到老师位置的请求需要配合movestudent
+-- movestudent 配合toteacher移动学生到老师位置
+-- movegroup 移动一个小组的学生到指定位置
+-- call 老师集合学生
+-- kickout 老师踢出学生到主世界
+-- forceplaymode 老师设置某个学生为播放模式
+-- settlement 老师结算广播
+-- classover 老师下课广播
 	]],
 	handler = function(cmd_name, cmd_text, cmd_params, fromEntity)
 		GGS.INFO.Format(cmd_name .. " " .. cmd_text)
@@ -134,7 +134,7 @@ classover 老师下课广播
 			local username = options.username
 			local userid = options.userid
 
-			local text = string.format("恭喜 %s 获得了老师奖励的小红花", username, num)
+			local text = string.format("%s收到老师奖励的小红花，表现太棒了！", username)
 			if _type == "1" then
 				LiveLessonBasic:RunGGSCommand("broadcast", {text=text})
 			end

@@ -12,6 +12,18 @@
 NPL.load("(gl)Mod/CodePku/cellar/GUI/LiveLesson/Basic/LiveLessonBasic.lua")
 LiveLessonBasic = commonlib.gettable("Mod.CodePku.Common.LiveLessonBasic")
 
+function GetIcon(index)
+    return LiveLessonBasic:GetIconPath(index)
+end
+
+function GetBehaviorIcon(index)
+    if index then
+        return LiveLessonBasic.behaviorTable[index]["path"]
+    else
+        return ""
+    end
+end
+
 function GetStudents()
     return LiveLessonBasic:GetStudents()
 end
@@ -20,8 +32,8 @@ function GetIentity()
     return LiveLessonBasic:GetIentity()
 end
 
-function GetSwitchBtnTop()
-    return GetIentity() and 200 or 150
+function GetTop()
+    return GetIentity() and 248 or 143
 end
 
 function OnClickChangeMode()
@@ -47,7 +59,6 @@ function OnClickForcePlayMode(index)
 end
 
 function OnSwitch()
-    GameLogic.AddBBS("CodeGlobals", L"切换"..tostring(LiveLessonBasic.windowOpenFlag), 1000, "#FF0000")
     LiveLessonBasic:Switch()
 end
 
@@ -61,40 +72,45 @@ end
 
 </style>
 <pe:container alignment="_lt" width="100%" height="100%">
-    <div onclick="OnClose" style='<%= string.format("width: %d; height: 800; background-color: #ffffff; text-align: center; font-size: 24;",LiveLessonBasic.windowRightWidth) %>'>
-        <div onclick="OnSwitch" style='<%= string.format("float: left; top: %d; width: 50; height: 200; background-color: #ff00ff;", GetSwitchBtnTop()) %>'></div>
+    <pe:if condition="<%= not LiveLessonBasic.windowOpenFlag %>">
+        <div onclick="OnSwitch" style='<%= string.format("position: relative; top: 425; width: 34; height: 258; background: url(%s);", GetIcon("live_lesson_icon.png")) %>'></div>
+    </pe:if>
+    <pe:if condition="<%= LiveLessonBasic.windowOpenFlag %>">
+        <div style='<%= string.format("width: %d; height: 1034; text-align: center; font-family: zkklt; background:url(%s);",LiveLessonBasic.windowRightWidth, GetIcon("live_lesson_omm_bot_01.png")) %>'>        
+            <div onclick="OnSwitch" style="position: relative; top: 425; width: 34; height: 258;"></div>
+            <div style='<%= string.format("position: relative; left: -10; top: -16; width: 305; height: 113; padding-left: 10; padding-top: 45; color: #613f2e; font-size: 34; font-family: alhy; background:url(%s);", GetIcon("live_lesson_mat_bot_01.png")) %>'><%= GetIentity() and "集体操作" or "学员列表" %></div>
+            <pe:if condition="<%= GetIentity() %>">
+                <div onclick="OnClickChangeMode" style='<%= string.format("position: relative; left: 48; top: 74; width: 115; height: 108; color: #ffffff; background: url(%s);", GetIcon("live_lesson_but_edit.png")) %>'>
+                    <div align="center" style="position: relative; left: 0; top: 17; font-size: 24;">全员</div>
+                    <div align="center" style="position: relative; left: 0; top: 45; font-size: 17;">编辑模式</div>
+                </div>
 
-        <pe:if condition="<%= LiveLessonBasic.windowOpenFlag %>">
-            <div style="float: left; width: 350; height: 800; background-color: #111111;">
+                <div style='<%= string.format("position: relative; left: 38; top: 194; width: 144; height: 49; background: url(%s);", GetIcon("live_lesson_studentslist_01png.png")) %>'></div>
+                <div onclick="OnClickGrouping" style='<%= string.format("position: relative; left: 238; top: 195; width: 91; height: 47; background: url(%s);", GetIcon("live_lesson_but_grouping.png")) %>'></div>
+            </pe:if>
 
-                <pe:if condition="<%= GetIentity() %>">
-                    <div style="margin-top: 20; width: 350; height: 50; background-color: #ffff00; color: #ff00ff; line-height: 50;">
-                        <div onclick="OnClickChangeMode" style="position: relative; left: 50; top: 0; width: 100; height: 50; background-color: #00ffff;">模式切换</div>
-                        <div onclick="OnClickGrouping" style="position: relative; left: 200; top: 0; width: 100; height: 50; background-color: #00ffff;">分组</div>
-                    </div>
-                </pe:if>
-    
-                <div style="margin-top: 10; width: 350; height: 50; background-color: #00ff00; color: #ff00ff; line-height: 50;">学员列表</div>
-    
-                <div style="margin-top: 0; width: 350; background-color: #5b288b; color: #ff00ff; line-height: 36;">
-                    <pe:gridview name="students" style="" DataSource="<%= GetStudents() %>" CellPadding="0" DefaultNodeHeight="46" ItemsPerLine="1" AllowPaging="false" RememberScrollPos="true" RememberLastPage="true" pagesize="12">
+            <div style='<%= string.format("position: relative; left: 40; top: %s; width: 305; height: 730;", GetTop()) %>'>
+                <div style="width: 305;">
+                    <pe:gridview name="students" style="" DataSource="<%= GetStudents() %>" CellPadding="0" DefaultNodeHeight="73" ItemsPerLine="1" AllowPaging="false" RememberScrollPos="true" RememberLastPage="true" pagesize="10">
                         <Columns>
-                            <div style="margin-bottom: 0; line-height: 36; width: 330; height: 36; font-size:24; color: #ff0000; background-color: #aaaaaa;">
-                                <div style="float: left; width: 36; height: 36; text-align: left; background-color: #3aff75;"><%= behavior %></div>
-                                
-                                <div style="float: left; width: 170; text-align: left; background-color: #3a7fff;"><%= name %></div>
+                            <div style='<%= string.format("margin-left: 15; width: 284; height: 66; font-family: zkklt; font-size:24; color: #dac9ae; background: url(%s);", GetIcon("live_lesson_stundentid_bot_02.png")) %>'>
+
+                                <div style="position: relative; left: 8; top: 20; width: 170; text-align: left;"><%= name %></div>
                                 <pe:if condition="<%= GetIentity() %>">
-                                    <div name="<%= index %>" onclick="OnClickKickOut" style="float: left; margin-left: 40; width: 36; background-color: #daff74;">踢</div>
-                                    <div name="<%= index %>" onclick="OnClickForcePlayMode" style="float: left; margin-left: 10; width: 36; background-color: #daff74;">禁</div>
+                                    <div name="<%= index %>" onclick="OnClickKickOut" style='<%= string.format("position: relative; left: 234; top: 12; width: 43; height: 43; background: url(%s);", GetIcon("live_lesson_but_kick.png")) %>'></div>
+                                    <!-- <div name="<%= index %>" onclick="OnClickForcePlayMode" style="float: left; margin-left: 10; width: 36; background-color: #daff74;">禁</div> -->
+                                </pe:if>
+
+                                <pe:if condition="<%= behavior ~= nil %>">
+                                    <div style='<%= string.format("position: relative; width: 39; height: 38; text-align: left; background: url(%s);", GetBehaviorIcon(behavior)) %>'></div>
                                 </pe:if>
                             </div>
                         </Columns>
                     </pe:gridview>
                 </div>
             </div>
-        </pe:if>
-
-    </div>
+        </div>
+    </pe:if>
 </pe:container>
 </pe:mcml> 
 </body>

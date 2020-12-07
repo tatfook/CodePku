@@ -15,7 +15,14 @@ local liveLessonImageData = NPL.load("(gl)Mod/CodePku/cellar/imageLuaTable/liveL
 local LiveLessonBasic = commonlib.gettable("Mod.CodePku.Common.LiveLessonBasic")
 
 LiveLessonBasic.userSize = 1
-LiveLessonBasic.behaviorDelay = 3000 -- 举手等行为持续时间
+LiveLessonBasic.behaviorDelay = 3000 -- 举手等行为持续时间 毫秒
+LiveLessonBasic.studentBtnDelay = 5 -- 学生快捷操作CD时间d 秒
+
+-- 获取图标
+function LiveLessonBasic:GetIconPath(index)
+    return liveLessonImageData:GetIconUrl(index)
+end
+
 LiveLessonBasic.teachTools = {
     [1] = {name = L"快速广播", bShow=true},
     [2] = {name = L"集合学生", bShow=true},
@@ -31,13 +38,13 @@ LiveLessonBasic.studentTools = {
 }
 
 LiveLessonBasic.broadcastTips = {
-    [1] = {text = L"大家请安静", bShow=true},
-    [2] = {text = L"大家现在自由练习3分钟", bShow=true},
-    [3] = {text = L"还有1分钟, 大家抓紧时间", bShow=true},
-    [4] = {text = L"我们继续上课", bShow=true},
-    [5] = {text = L"有问题, 请举手", bShow=true},
-    [6] = {text = L"上课了", bShow=true},
-    [7] = {text = L"下课了", bShow=true},
+    [1] = {text = L"大家请安静", path = LiveLessonBasic:GetIconPath("live_lesson_quietness.png"), bShow=true},
+    [2] = {text = L"大家现在自由练习3分钟", path = LiveLessonBasic:GetIconPath("live_lesson_exercise.png"), bShow=true},
+    [3] = {text = L"还有1分钟, 大家抓紧时间", path = LiveLessonBasic:GetIconPath("live_lesson_time.png"), bShow=true},
+    [4] = {text = L"我们继续上课", path = LiveLessonBasic:GetIconPath("live_lesson_continue.png"), bShow=true},
+    [5] = {text = L"有问题, 请举手", path = LiveLessonBasic:GetIconPath("live_lesson_hands.png"), bShow=true},
+    [6] = {text = L"上课了", path = LiveLessonBasic:GetIconPath("live_lesson_classbegins.png"), bShow=true},
+    [7] = {text = L"下课了", path = LiveLessonBasic:GetIconPath("live_lesson_classdismissed.png"), bShow=true},
 }
 LiveLessonBasic.students = {
     [1] = {name="名字最多七个一", userid=1, group=1, redflower=1, bShow=true},
@@ -63,11 +70,11 @@ LiveLessonBasic.params = {
     },
     right = {
         url="Mod/CodePku/cellar/GUI/LiveLesson/Basic/LiveLessonBasicRight.html",
-		alignment="_lt", left = 1500, top = 20, width = 400, height = 800, zorder=5,
+		alignment="_lt", left = 1580, top = 20, width = 339, height = 1034, zorder=5,
     },
     right_closed = {
         url="Mod/CodePku/cellar/GUI/LiveLesson/Basic/LiveLessonBasicRight.html",
-		alignment="_lt", left = 1850, top = 20, width = 50, height = 800, zorder=5,
+		alignment="_lt", left = 1886, top = 20, width = 34, height = 1034, zorder=5,
     },
     bottom = {
         --todo 2个底部按钮
@@ -76,11 +83,11 @@ LiveLessonBasic.params = {
     },
     broadcast = {
         url="Mod/CodePku/cellar/GUI/LiveLesson/Basic/LiveLessonBasicBroadCast.html",
-		alignment="_lt", left = 220, top = 120, width = 200, height = 500, zorder=6,
+		alignment="_lt", left = 210, top = 110, width = 340, height = 468, zorder=6,
     },
     award = {
         url="Mod/CodePku/cellar/GUI/LiveLesson/Basic/LiveLessonBasicAward.html",
-		alignment="_lt", left = 220, top = 330, width = 350, height = 600, zorder=6,
+		alignment="_lt", left = 214, top = 126, width = 645, height = 538, zorder=6,
     },
     group = {
         url="Mod/CodePku/cellar/GUI/LiveLesson/Basic/LiveLessonBasicGroup.html",
@@ -88,18 +95,13 @@ LiveLessonBasic.params = {
     },
     tipboard = {
         url="Mod/CodePku/cellar/GUI/LiveLesson/Basic/LiveLessonBasicTipBoard.html",
-		alignment="_ct", left = -800/2, top = -400/2, width = 800, height = 400, zorder=9,
+		alignment="_lt", left = 510, top = 248, width = 895, height = 389, zorder=9,
     },
     groupwindow = {
         url="Mod/CodePku/cellar/GUI/LiveLesson/Basic/LiveLessonBasicGroupWindow.html",
 		alignment="_ct", left = -1920/2, top = -1080/2, width = 1920, height = 1080, zorder=8,
     },
 }
-
--- 获取图标
-function LiveLessonBasic:GetIconPath(index)
-    return liveLessonImageData:GetIconUrl(index)
-end
 
 LiveLessonBasic.behaviorTable = {
     [1] = {name=L"举手", path=LiveLessonBasic:GetIconPath("live_lesson_studentsection_handsup.png")},
@@ -164,9 +166,29 @@ function LiveLessonBasic:GetStudentIndexByUserId(userid)
     end
 end
 
+function LiveLessonBasic:AddStudentToGroup()
+    -- todo api
+    local group = self.AddStudentToGroup_group
+    local userid = self.AddStudentToGroup_userid
+    local students = self:GetStudents()
+
+    for index,student in ipairs(students) do
+        if student.userid == userid then
+            self.students[index]["group"] = group
+            if self.windowGroupWindow then
+                self.windowGroupWindow:CloseWindow()
+                self.windowGroupWindow = nil
+            end
+            self.windowGroup:Refresh(0)
+            return
+        end
+    end
+end
+
 function LiveLessonBasic:GetWorldInfo()
     local liveLessonData = System.User.LiveLessonData or {}
     return {
+        roomName = liveLessonData.room_name or "",
         worldId = liveLessonData.keep_work_id or "",
         curBranch = liveLessonData.match_code or "",
         matchCode = liveLessonData.match_code or "",
@@ -234,7 +256,7 @@ function LiveLessonBasic:RunGGSCommand(commandName, params)
 
         -- 刷新奖励页面
         local num_change = _type == 1 and num or -num
-        self.students[index]["redflower"] = self.students[index]["redflower"] + num_change
+        self.students[index]["redflower"] = (self.students[index]["redflower"] or 0) + num_change
 
         if self.windowAward then
             self.windowAward:Refresh(0)
@@ -248,8 +270,8 @@ end
 function LiveLessonBasic:QuickOperation(index)
     local curTime = os.time()
 
-    if self.recordTime and curTime - self.recordTime < 4 then
-        -- 学生快捷操作加4秒CD
+    if self.recordTime and curTime - self.recordTime < self.studentBtnDelay then
+        -- 学生快捷操作CD
         return
     end
 
@@ -451,6 +473,10 @@ function LiveLessonBasic:OnWorldUnloaded()
     self.ifGroupedFlag = nil
 
     if self:IsInLiveLesson() then
+        -- todo
+        -- local LiveLessonSettlement = NPL.load("(gl)Mod/CodePku/cellar/GUI/LiveLesson/Settlement/LiveLessonSettlement.lua");
+        -- LiveLessonSettlement:CloseTimer()
+
         self.endTime = os.time()
         if self.startTime then
             local retentionTime =  self.endTime - self.startTime

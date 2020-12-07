@@ -12,6 +12,10 @@
 NPL.load("(gl)Mod/CodePku/cellar/GUI/LiveLesson/Basic/LiveLessonBasic.lua")
 LiveLessonBasic = commonlib.gettable("Mod.CodePku.Common.LiveLessonBasic")
 
+function GetIcon(index)
+    return LiveLessonBasic:GetIconPath(index)
+end
+
 function GetStudents()
     return LiveLessonBasic:GetStudents()
 end
@@ -34,18 +38,26 @@ end
 
 </style>
 <pe:container alignment="_lt" width="100%" height="100%">
-    <div style="width: 350; height: 600; background-color: #ffffff; text-align: center; font-size: 18;">
-        <div onclick="OnClose" style="position: relative; top: 0; width: 350; background-color: #797979;">
-            <pe:repeat DataSource="<%= GetStudents() %>">
-                <pe:repeatitem>
-                    <div style="margin-bottom: 6; line-height: 30; width: 350; height: 30; color: #ff0000; background-color: #ceffd1;">
-                        <div style="float: left; width: 150; text-align: left; background-color: #3a7fff;"><%= name %></div>
-                        <div style="float: left; margin-left: 40; width: 60; background-color: #daff74;"><%= string.format("%s朵", redflower or 0) %></div>
-                        <div name="<%= index %>" onclick="OnClickAdd" style="float: left; margin-left: 10; width: 36; background-color: #daff74;">加</div>
-                        <div name="<%= index %>" onclick="OnClickReduce" style="float: left; margin-left: 10; width: 36; background-color: #daff74;">减</div>
-                    </div>    
-                </pe:repeatitem>
-            </pe:repeat>
+    <div style="width: 645; height: 538; text-align: center; font-size: 24; font-family: zkklt;">
+        <div style='<%= string.format("position: relative; top: 0; width: 645; height: 538; background: url(%s);", GetIcon("live_lesson_bottom_shortcut.png")) %>'>
+            <div style='<%= string.format("position: relative; left: 23; top: 13; width: 151; height: 49; color: #613f2e; line-height: 49; background: url(%s);", GetIcon("live_lesson_tag01.png")) %>'>用户昵称</div>
+            <div style='<%= string.format("position: relative; left: 189; top: 13; width: 151; height: 49; color: #613f2e; line-height: 49; background: url(%s);", GetIcon("live_lesson_tag01.png")) %>'>累计奖励</div>
+            <div style='<%= string.format("position: relative; left: 366; top: 13; width: 90; height: 49; color: #613f2e; line-height: 49; background: url(%s);", GetIcon("live_lesson_tag02.png")) %>'>奖励</div>
+            <div style='<%= string.format("position: relative; left: 495; top: 13; width: 90; height: 49; color: #613f2e; line-height: 49; background: url(%s);", GetIcon("live_lesson_tag02.png")) %>'>惩罚</div>
+
+            <pe:gridview name="students" style="position: relative; left: 14; top: 65;" DataSource="<%= GetStudents() %>" CellPadding="0" DefaultNodeHeight="76" ItemsPerLine="1" AllowPaging="false" RememberScrollPos="true" RememberLastPage="true" pagesize="6">
+                <Columns>
+                    <div style="width: 600; height: 76;">
+                        <div style='<%= string.format("position: relative; left: 0; top: 16;width: 594; height: 47; color: #dac9ae; font-size: 24; line-height: 47; background: url(%s);", GetIcon("live_lesson_settlement_mat_bot02.png")) %>'>
+                            <div style="position: relative; left: 0; width: 174; height: 47; text-align: left;"><%= name %></div>
+                            <div style="position: relative; left: 176; width: 146; height: 47; text-align: center;"><%= string.format("%s朵", redflower or 0) %></div>
+                            <div style='<%= string.format("position: relative; left: 276; top: -16; width: 34; height: 35; background: url(%s);", GetIcon("live_lesson_flower.png")) %>'></div>
+                            <div name="<%= index %>" onclick="OnClickAdd" style='<%= string.format("position: relative; left: 326; top: 6; width: 124; height: 34; background: url(%s);", GetIcon("live_lesson_award.png")) %>'></div>
+                            <div name="<%= index %>" onclick="OnClickReduce" style='<%= string.format("position: relative; left: 465; top: 6; width: 124; height: 34; background: url(%s);", GetIcon("live_lesson_deduct.png")) %>'></div>
+                        </div>
+                    </div>   
+                </Columns>
+            </pe:gridview>
         </div>
     </div>
 </pe:container>
