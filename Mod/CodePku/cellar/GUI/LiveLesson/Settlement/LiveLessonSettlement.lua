@@ -193,10 +193,10 @@ end
 
 -- CMD学生获取结算信息，所有人都会执行，需要判断身份，老师不执行
 function LiveLessonSettlement:StudentSettlement()
-    -- if System.User.info.is_employee == 1 then
-    --     --  员工默认为老师，拦截弹窗
-    --     return
-    -- end
+    if System.User.info.is_employee == 1 then
+        --  员工默认为老师，拦截弹窗
+        return
+    end
     if LiveLessonSettlement.StudentHadSettlement then
         return
     end
