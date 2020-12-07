@@ -25,9 +25,9 @@ function Confirm()
     Close()
 end
 
--- todo 分享好友
+-- 分享好友
 function Share()
-    GameLogic.AddBBS("CodeGlobals", L"分享好友", 1000, "#FF0000");
+    LiveLessonSettlement:ShareLogic(LiveLessonSettlement.share_url)
 end
 
 local mainasset = UserInfoPage.mainasset or nil;

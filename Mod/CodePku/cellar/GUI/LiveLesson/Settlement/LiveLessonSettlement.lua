@@ -35,6 +35,7 @@ function LiveLessonSettlement:ClassOverTimer()
     LiveLessonSettlement.class_over_timer = commonlib.Timer:new({
         callbackFunc = function(timer)
             if LiveLessonSettlement.TimerTimes == 0 then
+                -- todo 强制退出
                 GameLogic.AddBBS("CodeGlobals", L"时间到了，强制退出", 3000, "#FF0000");
                 LiveLessonSettlement.TimerTimes = nil
                 timer:Change()
@@ -55,13 +56,13 @@ end
 
 -- 综合评分计算
 local function CalculateGrade(data)
-    local node = ToPercentage(data.rate_of_learn)       -- 课程节点百分比
+    local node = data.current_node == 0 and 0 or data.current_node/data.total_node        -- 课程节点百分比
     local count = 0
     local temp_count = {}
     if data.answer_count == 0 then
         temp_count.accuracy = false
     else
-        temp_count.accuracy = data.right_count/data.answer_count > 0.6     -- 答题正确率
+        temp_count.accuracy = (data.right_count/data.answer_count) > 0.6     -- 答题正确率
     end
     temp_count.team_rank = (data.group_rank or 0)/5 >= 0.5         -- todo 5要换成小组数，暂时没有
     temp_count.reward_num = data.reward_num >= 2      -- 奖励次数
@@ -101,19 +102,18 @@ function LiveLessonSettlement:TeacherSettlement()
             local temp_table = {}
             temp_table.user_id = v.user_id
             temp_table.nickname = v.nickname or "未知"      -- 用户昵称
-            temp_table.rate_of_learn = v.rate_of_learn or "0/0"     -- 学习节点
-            if v.answer_count == 0 then
-                temp_table.accuracy = "0%"
-            else
-                temp_table.accuracy = tostring(string.format("%02d", (v.right_count/v.answer_count)*100)) .. "%"       -- 首次答题正确率
-            end
+
+            temp_table.rate_of_learn = v.current_node == 0 and "0%" or (tostring(string.format("%02d", (v.current_node/v.total_node)*100)) .. "%")      -- 学习节点
+
+            temp_table.accuracy = v.answer_count == 0 and "0%" or (tostring(string.format("%02d", (v.right_count/v.answer_count)*100)) .. "%")       -- 首次答题正确率
+
             if v.right_count == 0 or v.rank_total == 0 then
-                temp_table.rank = "--"
+                temp_table.rank = "——"
             else
                 temp_table.rank = v.rank_total/v.right_count         -- 综合答题排名
             end
-            temp_table.group_rank = v.group_rank or "--"        -- 小组排名
-            temp_table.reward_num = v.reward_num or "--"        -- 奖励次数
+            temp_table.group_rank = v.group_rank or "——"        -- 小组排名
+            temp_table.reward_num = v.reward_num        -- 奖励次数
             temp_table.rate = CalculateGrade(v)       -- 综合评分
             table.insert(LiveLessonSettlement.settlement_result_table, temp_table)
         end
@@ -127,7 +127,7 @@ function LiveLessonSettlement:TeacherSettlement()
     end);
 end
 
--- todo 老师保存结算信息
+-- 老师保存结算信息
 function LiveLessonSettlement:CommitSettlementResult()
     if LiveLessonSettlement.had_commit then
         return
@@ -141,11 +141,10 @@ function LiveLessonSettlement:CommitSettlementResult()
             user_id = v.user_id,
             reward_count = v.reward_num,
             comment_score_final = v.rate,
-            person_average = v.rank
+            person_average = if_else(v.rank == "——", false, v.rank)
         }
     end
     LiveLessonSettlement.had_commit = true
-    --[[
     -- 发送数据
     request:post('/class-room/save-class',params):next(function(response)
         GameLogic.AddBBS("CodeGlobals", L"课程结算成功", 3000, "#00FF00")
@@ -157,19 +156,47 @@ function LiveLessonSettlement:CommitSettlementResult()
         GameLogic.AddBBS("CodeGlobals", e.data.message, 3000, "#FF0000");
         LiveLessonSettlement.had_commit = false
     end);
-    --]]
-    GameLogic.AddBBS("CodeGlobals", L"课程结算成功", 3000, "#00FF00")
-    LiveLessonSettlement.had_settlement = true      -- 正常结算的标记，根据该字段判断是否能点击下课
-    LiveLessonSettlement.teacher_settlement_page:Refresh(0)
-    LiveLessonSettlement.had_commit = false
+end
+
+-- 学生分享好友
+function LiveLessonSettlement:ShareLogic(url)
+    if LiveLessonSettlement.bShare then
+        return
+    end
+    if System.os.IsMobilePlatform() then
+        LiveLessonSettlement.bShare = true
+        LiveLessonSettlement:fire("image", {
+            image = url,
+            title = "课程结算"
+        }, {
+            onStart = function(e)
+                -- 开始分享
+                LiveLessonSettlement.bShare = false
+            end,
+            onResult = function(e)
+                -- 分享结果
+                LiveLessonSettlement.bShare = false
+            end,
+            onError = function(e)
+                -- 分享失败
+                LiveLessonSettlement.bShare = false
+            end,
+            onCancel = function(e)
+                -- 取消分享
+                LiveLessonSettlement.bShare = false
+            end
+        })
+    else
+        GameLogic.AddBBS("CodeGlobals", L"使用手机app才能分享", 3000, "#FF0000");
+    end
 end
 
 -- CMD学生获取结算信息，所有人都会执行，需要判断身份，老师不执行
 function LiveLessonSettlement:StudentSettlement()
-    if System.User.info.is_employee == 1 then
-        --  员工默认为老师，拦截弹窗
-        return
-    end
+    -- if System.User.info.is_employee == 1 then
+    --     --  员工默认为老师，拦截弹窗
+    --     return
+    -- end
     if LiveLessonSettlement.StudentHadSettlement then
         return
     end
@@ -183,20 +210,29 @@ function LiveLessonSettlement:StudentSettlement()
         if data.answer_count == 0 then
             accuracy = "0%"
         else
-            accuracy = tostring(string.format("%02d", (v.right_count/v.answer_count)*100)) .. "%"       -- 首次答题正确率
+            accuracy = tostring(string.format("%02d", (data.right_count/data.answer_count)*100)) .. "%"       -- 首次答题正确率
         end
         
-        local node = tostring(string.format("%02d", ToPercentage(data.rate_of_learn)*100)) .. "%"       -- 学习进度转百分比
+        local current_node, total_node = data.current_node, data.total_node
+        local node
+        if current_node == 0 then
+            node = "0%"
+        else
+            node = tostring(string.format("%02d", (current_node/total_node)*100)) .. "%"       -- 学习进度转百分比
+        end
         
+        LiveLessonSettlement.share_url = data.poster_url        -- 分享的图片
+
         LiveLessonSettlement.StudentSettlementResult = {}
-        LiveLessonSettlement.StudentSettlementResult.course_name = data.course_name or "未知"     -- 课件名称
-        LiveLessonSettlement.StudentSettlementResult.description = data.description or "未知"     -- 知识点描述
+        LiveLessonSettlement.StudentSettlementResult.course_name = ((data.class_room or {}).courseware or {}).name or "未知"     -- 课件名称
+        LiveLessonSettlement.StudentSettlementResult.description = ((data.class_room or {}).courseware or {}).description or "未知"     -- 知识点描述
         LiveLessonSettlement.StudentSettlementResult.grade = {
             {content = node, color = "#2766cf", title = "学习进度", pic = LiveLessonSettlement:GetIconPath('live_lesson_mygrade_01.png')},
             {content = accuracy, color = "#6167e9", title = "首次正确率", pic = LiveLessonSettlement:GetIconPath('live_lesson_mygrade_02.png')},
             {content = data.group_rank, color = "#9766e0", title = "小组排名", pic = LiveLessonSettlement:GetIconPath('live_lesson_mygrade_03.png')},
             {content = data.reward_num, color = "#d568f9", title = "奖励次数", pic = LiveLessonSettlement:GetIconPath('live_lesson_mygrade_04.png')},
-            {content = data.comment_score_final, color = "#f178e7", title = "综合评级", pic = LiveLessonSettlement:GetIconPath('live_lesson_mygrade_05.png')}}
+            {content = data.comment_score_final, color = "#f178e7", title = "综合评级", pic = LiveLessonSettlement:GetIconPath('live_lesson_mygrade_05.png')},
+        }
 
         -- 处理完数据展示学生结算界面
         LiveLessonSettlement:ShowStudentSettlementPage()
