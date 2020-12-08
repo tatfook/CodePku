@@ -218,7 +218,7 @@ function FeatKeyboard:handleTouch(touch)
 	local touchSession = TouchSession.GetTouchSession(touch)
     local item = self:getItem(touch.x, touch.y)
 	if item then
-        GameLogic.AddBBS(nil, item.name..touch.type, 2000, "0 0 255", 21)
+        -- GameLogic.AddBBS(nil, item.name..touch.type, 2000, "0 0 255", 21)
         local uiControl = self:getUIControl(item)
         -- item.type 1按住维持状态的按键  2点击效果按键  3特殊效果按键
 		if touch.type == "WM_POINTERDOWN" then

@@ -17,6 +17,7 @@ NPL.load("(gl)script/ide/System/Windows/Keyboard.lua")
 NPL.load("(gl)script/ide/System/Windows/Mouse.lua")
 NPL.load("(gl)script/apps/Aries/Creator/Game/Commands/CommandManager.lua")
 NPL.load("(gl)script/ide/UIAnim/UIAnimManager.lua")
+local AdaptWindow = commonlib.gettable("Mod.CodePku.GUI.Window.AdaptWindow")
 local CommandManager = commonlib.gettable("MyCompany.Aries.Game.CommandManager")   
 local Mouse = commonlib.gettable("System.Windows.Mouse")
 local Keyboard = commonlib.gettable("System.Windows.Keyboard")
@@ -333,6 +334,13 @@ function TouchFuncKeyboard:handleTouch(touch)
 	local touchSession = TouchSession.GetTouchSession(touch)
 	local button = self:getButtonItem(touch.x, touch.y)
 	if button then
+		if button.name == "questionBtn" then
+			if touch.type == "WM_POINTERDOWN" then
+				self.bshowDesc = not self.bshowDesc
+				self:showDesc(self.bshowDesc)
+			end
+			return
+		end
 		-- GameLogic.AddBBS(nil, button.name, 2000, "0 0 255", 21)
 		if touch.type == "WM_POINTERDOWN" then
 			if self.currClickedBtn and self.currClickedBtn ~= button then
@@ -358,6 +366,28 @@ function TouchFuncKeyboard:handleTouch(touch)
 			return
 		end
 	end
+end
+
+function TouchFuncKeyboard:showDesc(bShow)
+	if TouchFuncKeyboard.descUI then
+        TouchFuncKeyboard.descUI:CloseWindow()
+        TouchFuncKeyboard.descUI = nil
+    end
+    if bShow == false then
+        return
+    end
+    local params = {
+        name = "FuncKeyboardDesc",
+        url = "Mod/CodePku/cellar/Common/TouchMiniKeyboard/FuncKeyboardDesc.html",
+        alignment="_ct",
+        left = -960,
+        top = -540,
+        width = 1920,
+        height = 1080,
+        zorder = 20,
+    }
+
+    TouchFuncKeyboard.descUI = AdaptWindow:QuickWindow(params)
 end
 
 function TouchFuncKeyboard:updataKeyboardBtn(button)
