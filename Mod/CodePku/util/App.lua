@@ -24,17 +24,13 @@ App.callbacks = {}
 
 
 NPL.this(function()
-    if isAndroid then
-        local spltPos = string.find(msg, "_");
-        if spltPos then
-            local params = string.sub(msg, spltPos + 1)
-            local method = string.sub(msg, 1, spltPos - 1);
-            if App.callbacks and App.callbacks[method] then
-                App.callbacks[method](params);
-            end
+    local spltPos = string.find(msg, "_");
+    if spltPos then
+        local params = string.sub(msg, spltPos + 1)
+        local method = string.sub(msg, 1, spltPos - 1);
+        if App.callbacks and App.callbacks[method] then
+            App.callbacks[method](params);
         end
-    elseif isIOS then
-
     end
 end);
 
@@ -58,7 +54,6 @@ function App:init()
             NPL.call("LuaJavaBridge.cpp", {});
         end
     elseif isIOS then
-        -- lua层绑定OC的DeviceMessage类
         echo("App.regNplEngineeBridge.start");
         if LuaObjcBridge == nil then
             NPL.call("LuaObjcBridge.cpp", {});
@@ -86,3 +81,15 @@ function App:closeApp()
     end
 end
 
+function App:cycle(callback)
+    App.callbacks = callback;
+end
+
+-- cycle({
+--     appDidBecomeActive = function(e)
+--         echo("appDidBecomeActive");
+--     end,
+--     appDidEnterBackground = function(e)
+--         echo("appDidEnterBackground");
+--     end
+-- });
