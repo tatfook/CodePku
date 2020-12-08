@@ -161,6 +161,9 @@ function FeatKeyboard:StaticInit()
     -- GameLogic:Connect("WorldLoaded", FeatKeyboard, FeatKeyboard.OnWorldLoaded, "UniqueConnection")
     -- 由于执行顺序的问题要用filter而不是connect
     GameLogic.GetFilters():add_filter("OnWorldLoaded", FeatKeyboard.OnWorldLoaded)
+
+
+    -- GameLogic.events:RemoveEventListener("game_mode_change", FeatKeyboard.OnGameModeChanged, FeatKeyboard)
     -- GameLogic:Connect("WorldUnloaded", FeatKeyboard, FeatKeyboard.OnWorldUnloaded, "UniqueConnection")
 end
 
@@ -171,6 +174,10 @@ function FeatKeyboard.OnWorldLoaded()
         
         FeatKeyboard:show()
     end
+end
+
+function FeatKeyboard.OnGameModeChanged()
+    FeatKeyboard:show()
 end
 
 function FeatKeyboard:getItem(x, y)
@@ -269,16 +276,24 @@ end
 
 function FeatKeyboard:show(_show)
     self:generalUI()
-
     for k,v in pairs(self.btnList) do 
         local uiControl = self:getUIControl(v)
         uiControl.visible = (false == (_show == false))
     end
 
+    local uiControlCtrl = ParaUI.GetUIObject("ctrlFeatBtnUIControl")
+    local uiControlAlt = ParaUI.GetUIObject("altFeatBtnUIControl")
+    local uiControlFunc = ParaUI.GetUIObject("funcFeatBtnUIControl")
     if not GameMode:IsEditor() then
-
-    else
-        
+        if uiControlCtrl and uiControlCtrl:IsValid() then
+            uiControlCtrl.visible = false
+        end
+        if uiControlAlt and uiControlAlt:IsValid() then
+            uiControlAlt.visible = false
+        end
+        if uiControlFunc and uiControlFunc:IsValid() then
+            uiControlFunc.visible = false
+        end
     end
 
     local entity = EntityManager.GetFocus()
@@ -313,6 +328,9 @@ function FeatKeyboard:show(_show)
         end
     end
     self.isClickFly = false
+
+    GameLogic.events:RemoveEventListener("game_mode_change", FeatKeyboard.OnGameModeChanged, FeatKeyboard)
+    GameLogic.events:AddEventListener("game_mode_change", FeatKeyboard.OnGameModeChanged, FeatKeyboard, "FeatKeyboard")
 end
 
 function FeatKeyboard:Destroy()
@@ -337,8 +355,21 @@ function FeatKeyboard.flyBtnDown(self)
 end
 
 function FeatKeyboard.flyBtnUp(self)
-    -- 点击事件会有个异步延迟 需要做个判定
     Keyboard:SendKeyEvent("keyUpEvent", DIK_SCANCODE.DIK_F)
+end
+
+function FeatKeyboard.shitfBtnDown(self)
+    Keyboard:SendKeyEvent("keyDownEvent", DIK_SCANCODE.DIK_X)
+    Keyboard:SendKeyEvent("keyUpEvent", DIK_SCANCODE.DIK_X)
+    Keyboard:SendKeyEvent("keyDownEvent", DIK_SCANCODE.DIK_LSHIFT)
+    local uiControl = self:getUIControl(self.btnList["shitfFeatBtn"])
+    _guihelper.SetUIColor(uiControl, self.colors.pressed)
+end
+
+function FeatKeyboard.shitfBtnUp(self)
+    Keyboard:SendKeyEvent("keyUpEvent", DIK_SCANCODE.DIK_LSHIFT)
+    local uiControl = self:getUIControl(self.btnList["shitfFeatBtn"])
+    _guihelper.SetUIColor(uiControl, self.colors.normal)
 end
 
 FeatKeyboard:InitSingleton()
