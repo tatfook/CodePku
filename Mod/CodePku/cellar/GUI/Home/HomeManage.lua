@@ -171,7 +171,6 @@ function HomeManage:GetHomeWorld()
             end
         end
         GameLogic.GetFilters():apply_filters("TaskSystemList", {type = "home"}); -- 进入家园区后，触发任务系统计数
-        GameLogic.GetFilters():apply_filters("Schoolyard.IncreaseVitality", {type = "home", time = "start"}); -- 进入家园区后，触发活跃度系统
         local world = RemoteWorld.LoadFromHref(url, "self")
         local myHouseId = (response.data.my_house and response.data.my_house.id) or 0;
         local templateKpId = (response.data.default_house and response.data.default_house.keepwork_project_id) or 0;
