@@ -98,6 +98,9 @@ end
         <div style="<%=format('position: relative; left: 52; top: 20; width: 224;height: 53;background:url(%s);', GetIcon('live_lesson_settlement_mat_classroomsettlement.png'))%>"></div>
     </div>
 
+    <!-- 关闭 -->
+    <div onclick="Close" style="<%=format('position: relative; left: 1570; top: 30; width: 77;height: 123;background:url(%s);', GetIcon('live_lesson_comm_x.png'))%>"></div>
+
     <!-- 下课 -->
     <pe:if condition='<%= had_settlement == true %>'>
         <div onclick="Finish" style="<%=format('position: relative; left: 1218; top: 962; width: 320;height: 105;background:url(%s);', GetIcon('live_lesson_comm_btn_01.png'))%>">

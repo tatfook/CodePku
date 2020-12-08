@@ -56,7 +56,7 @@ function LiveLessonSettlement:LeaveLiveLesson()
     if System.User.info.is_employee == 1 and System.User.LiveLessonData.open_user_id == System.User.info.id then
         local path = "/class-room/logout"
         local params = {
-            room_id = System.User.LiveLessonData.id
+            room_id = (System.User.LiveLessonData or {}).id or "7"      -- todo 测试服目前只有7号有数据，最后记得去掉这个
         }
         request:post(path,params):next(function(response)
 
@@ -73,7 +73,7 @@ function LiveLessonSettlement:ClassDismissed()
     end
     local path = "/class-room/click-over"
     local params = {
-        room_id = System.User.LiveLessonData.id
+        room_id = (System.User.LiveLessonData or {}).id or "7"      -- todo 测试服目前只有7号有数据，最后记得去掉这个
     }
     request:post(path,params):next(function(response)
         System.User.LiveLessonData.class_finished = true
