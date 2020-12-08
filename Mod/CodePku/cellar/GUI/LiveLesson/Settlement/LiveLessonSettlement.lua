@@ -50,8 +50,10 @@ end
 
 -- 离开直播课，清除定时器
 function LiveLessonSettlement:LeaveLiveLesson()
-    LiveLessonSettlement.TimerTimes = nil
-    LiveLessonSettlement.class_over_timer:Change()
+    if LiveLessonSettlement.class_over_timer then
+        LiveLessonSettlement.TimerTimes = nil
+        LiveLessonSettlement.class_over_timer:Change()
+    end
     -- 老师退出房间要给接口发送请求
     if System.User.info.is_employee == 1 and System.User.LiveLessonData.open_user_id == System.User.info.id then
         local path = "/class-room/logout"
